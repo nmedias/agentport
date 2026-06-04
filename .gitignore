@@ -6,3 +6,8 @@
 node_modules/
 dist/
 .nx/
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+
+storybook-static
