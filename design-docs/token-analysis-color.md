@@ -16,12 +16,18 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - `base/white` `#FFFFFF`
   - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 500 #6B7585 · 700 #4A5562 · 900 #1A2230` *(Lücken: 600, 800, 950)*
   - `cyan/` `50 #E9F6FC · 500 #009FE3 · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)*
-- **Collection `semantic`** · Mode `light` · **38 Variablen**:
-  - **shadcn-Set vollständig** (`popover`/`popover-foreground` → `overlay`/`overlay-foreground` umbenannt; inkl.
-    `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
+- **Collection `semantic`** · Mode `light` · **40 Variablen**:
+  - **shadcn-Set vollständig** (inkl. `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
+    Die Palette-Fläche heißt bei uns **`overlay`/`overlay-foreground`** (umbenannt von `popover*`).
+  - **`popover`/`popover-foreground`** zusätzlich angelegt (Gruppe `shadcn Default/`), als **Alias auf
+    `overlay`/`overlay-foreground`** — shadcn-Komponenten (Popover/Command/Dropdown/Select) referenzieren
+    `--popover`. Entspricht dem geplanten CSS `--popover: var(--overlay)`.
   - 6 Custom (aliased): `input-placeholder`, `border-subtle`, `border-emphasis`, `border-strong`, `inverse`, `inverse-foreground`.
   - **9 Platzhalter** mit Raw-Hex + Marker ` ⚠` (kein Alias): `secondary`, `secondary-foreground`, `destructive`,
     `destructive-foreground`, `chart-1…5`.
+  - **Gruppen** (vom User in Figma angelegt, rein organisatorisch — Token-Leaf-Namen unverändert):
+    `shadcn Default/` (+ nested `Sidebar/`, `Chart/`), `Overlay/`, `Input/`, `Border/`, `Inverse/`.
+    Beim CSS-Export zählt nur der Leaf-Name (`background`, nicht `shadcn Default/background`).
 
 - **Screen-Binding `1099:9710`:** **402 Solid-Paints** an Semantics gebunden (0 Fehler). Verteilung u. a.
   `muted-foreground` 178, `foreground` 61, `border-subtle` 42, `background` 41, `primary` 11, `card` 10.
