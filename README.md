@@ -38,21 +38,21 @@ npm run storybook    # browse components in isolation
 
 ## Scripts
 
-| Script | What it runs |
-|--------|--------------|
-| `npm run dev` | App dev server (`nx dev agentport`, port 4200) |
-| `npm run build` | App production build |
-| `npm run preview` | Preview the production build locally |
-| `npm test` | All tests (`nx run-many -t test`) |
-| `npm run lint` | Lint all projects |
-| `npm run typecheck` | TypeScript typecheck all projects |
-| `npm run check` | lint + test + typecheck (the CI gate) |
-| `npm run storybook` | Storybook dev server for `@agentport/ui` |
-| `npm run build-storybook` | Build Storybook static site |
-| `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui` |
-| `npm run graph` | Open the Nx project graph |
-| `npm run sync` | Sync tsconfig project references |
-| `npm run reset` | Reset the Nx cache / daemon |
+| Script                     | What it runs                                 |
+|----------------------------|----------------------------------------------|
+| `npm run dev`              | App dev server (`nx dev agentport`, port 4200) |
+| `npm run build`            | App production build                         |
+| `npm run preview`          | Preview the production build locally         |
+| `npm test`                 | All tests (`nx run-many -t test`)            |
+| `npm run lint`             | Lint all projects                            |
+| `npm run typecheck`        | TypeScript typecheck all projects            |
+| `npm run check`            | lint + test + typecheck (the CI gate)        |
+| `npm run storybook`        | Storybook dev server for `@agentport/ui`      |
+| `npm run build-storybook`  | Build Storybook static site                  |
+| `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui`        |
+| `npm run graph`            | Open the Nx project graph                    |
+| `npm run sync`             | Sync tsconfig project references             |
+| `npm run reset`            | Reset the Nx cache / daemon                  |
 
 You can always call Nx directly: `npx nx <target> <project>` (e.g. `npx nx test @agentport/ui`).
 
@@ -66,11 +66,6 @@ Components land in `libs/ui/src/components/ui/`. shadcn does **not** re-export t
 `libs/ui/src/index.ts` so the app can import from `@agentport/ui`. (shadcn re-imports under original
 names; see the gotchas in [`CLAUDE.md`](./CLAUDE.md).)
 
-## Design tokens
-
-`libs/ui/src/styles/globals.css` holds the semantic token layer (`:root` / `.dark`). It currently uses
-shadcn defaults (new-york / neutral); it is the single insertion point for the Figma "Agentport DS"
-semantics once they are locked.
 
 ## Tech Stack
 
