@@ -1,0 +1,14 @@
+{
+  "name": "agentport-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "nx": "^22.7.5",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3"
+  }
+}
