@@ -1,17 +1,29 @@
 # agentport
 
-Workspace for the **Agentport redesign** — a fresh Nx monorepo plus the Figma design
-artefacts, run notes, and handoffs for the redesign work. See [`CLAUDE.md`](./CLAUDE.md) for
-the working setup, design workflow, and key files.
+Workspace for the **Agentport redesign** — an Nx monorepo delivering the **frontend UI layer**
+(React + shadcn/ui + Tailwind) alongside the Figma design artefacts, run notes, and handoffs.
+
+Scope is **UI only**: no Tauri shell, no backend, no live data — states are built against mock/static
+data. See [`CLAUDE.md`](./CLAUDE.md) for the full product context, design pipeline, and key files.
 
 ## Structure
 
 ```
-apps/        Nx applications (empty — add as needed)
-libs/        Nx libraries (empty — add as needed)
-Agentport/     Redesign roadmaps + design direction
-agent-runs/  Sketch / Design-Punk run notes
+apps/
+  agentport/        React + Vite app — harness that composes UI states (port 4200)
+libs/
+  ui/             @agentport/ui — shadcn primitives + Agentport signature components
+                  ├─ src/components/ui/   shadcn components (e.g. button)
+                  ├─ src/styles/globals.css   Tailwind v4 + the design-token layer
+                  ├─ src/lib/utils.ts     cn() helper
+                  └─ .storybook/          component states in isolation
+Agentport/          Redesign roadmaps + design direction
+agent-runs/       Sketch / Design-Punk run notes
+components.json   shadcn config (monorepo: @/ → libs/ui/src)
 ```
+
+Two projects: `agentport` (app) and `@agentport/ui` (lib). The app consumes the lib through its public
+API `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
 
 > The B2B design-system specs and docs site (Astro + Starlight) live in the separate
 > [`<owner>/design-system`](https://github.com/<owner>/design-system) repo.
@@ -20,11 +32,53 @@ agent-runs/  Sketch / Design-Punk run notes
 
 ```bash
 npm install
-npx nx show projects   # currently empty — scaffold an app/lib to begin
+npm run dev          # start the app at http://localhost:4200
+npm run storybook    # browse components in isolation
 ```
+
+## Scripts
+
+| Script | What it runs |
+|--------|--------------|
+| `npm run dev` | App dev server (`nx dev agentport`, port 4200) |
+| `npm run build` | App production build |
+| `npm run preview` | Preview the production build locally |
+| `npm test` | All tests (`nx run-many -t test`) |
+| `npm run lint` | Lint all projects |
+| `npm run typecheck` | TypeScript typecheck all projects |
+| `npm run check` | lint + test + typecheck (the CI gate) |
+| `npm run storybook` | Storybook dev server for `@agentport/ui` |
+| `npm run build-storybook` | Build Storybook static site |
+| `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui` |
+| `npm run graph` | Open the Nx project graph |
+| `npm run sync` | Sync tsconfig project references |
+| `npm run reset` | Reset the Nx cache / daemon |
+
+You can always call Nx directly: `npx nx <target> <project>` (e.g. `npx nx test @agentport/ui`).
+
+## Adding shadcn components
+
+```bash
+npm run ui:add -- button input dialog
+```
+
+Components land in `libs/ui/src/components/ui/`. shadcn does **not** re-export them — add the export to
+`libs/ui/src/index.ts` so the app can import from `@agentport/ui`. (shadcn re-imports under original
+names; see the gotchas in [`CLAUDE.md`](./CLAUDE.md).)
+
+## Design tokens
+
+`libs/ui/src/styles/globals.css` holds the semantic token layer (`:root` / `.dark`). It currently uses
+shadcn defaults (new-york / neutral); it is the single insertion point for the Figma "Agentport DS"
+semantics once they are locked.
 
 ## Tech Stack
 
-- **Nx** — Monorepo management
-- **Changesets** — Versioning (configured under `.changeset/`)
-- **Figma** — Design implementation (Plugin MCP)
+- **Nx** — monorepo management (targets inferred from plugins in `nx.json`)
+- **React 19 + Vite** — app and lib bundling
+- **Tailwind v4** — CSS-first, tokens via `@theme` in `globals.css`
+- **shadcn/ui** — component base (Radix + Tailwind)
+- **Storybook** — component states in isolation (on `@agentport/ui`)
+- **Vitest** — unit tests
+- **Changesets** — versioning (CLI installed; run `npx changeset init` to set up)
+- **Figma** — design source (Plugin MCP)
