@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-/* Tailwind v4 scans the module graph automatically; @source makes the
-   monorepo's component + app sources explicit so classes are never missed. */
-@source '../../../../apps/agentport/src';
+/* Tailwind v4 scans the module graph automatically; @source makes this lib's
+   own sources explicit so classes are never missed. Consuming apps register
+   their own sources from their own entry (see apps/agentport/src/styles.css). */
 @source '../../../ui/src';
 
 @custom-variant dark (&:is(.dark *));
