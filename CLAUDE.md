@@ -29,10 +29,25 @@ description `Agentport/produktbeschreibung-standalone.html`).
 
 - **Scope: frontend UI only** — React + shadcn/ui + Tailwind. No Tauri/Rust, no backend, no live
   data integration; build UI states against mock/static data.
-- **Nx monorepo** — `apps/*` + `libs/*` workspaces (currently empty; scaffold as needed).
-- **shadcn/ui** (Radix + Tailwind) — the component base, **not a ceiling**: the Agentport's
+- **Nx monorepo** — `apps/agentport` (React + Vite harness) + `libs/ui` (`@agentport/ui`).
+- **shadcn/ui** (Radix + Tailwind v4) — the component base, **not a ceiling**: the Agentport's
   signature moves go beyond stock shadcn. Custom components build on the **same tokens**.
-- Tooling: React, TypeScript, tsx, Changesets.
+- Tooling: React 19, TypeScript, Vite, Tailwind v4, Storybook, Vitest, tsx, Changesets.
+
+## Commands
+
+Full table in [`README.md`](./README.md). Essentials:
+
+```
+npm run dev            # app at http://localhost:4200
+npm run storybook      # components in isolation (@agentport/ui)
+npm run check          # lint + test + typecheck — run before committing
+npm run ui:add -- button   # add a shadcn component into libs/ui
+```
+
+- `npm test`/`lint` run via Vitest/ESLint but **don't typecheck** — `npm run check` does. Use it as the gate.
+- After `ui:add`, re-export the component in `libs/ui/src/index.ts` (shadcn won't).
+- `globals.css` (`libs/ui/src/styles/`) is the single seam for the Figma "Agentport DS" semantics.
 
 
 ## shadcn Gotchas
@@ -45,11 +60,13 @@ description `Agentport/produktbeschreibung-standalone.html`).
 ## Repo Structure / Key Files
 
 ```
-apps/        Nx applications (empty)
-libs/        Nx libraries (empty)
-Agentport/     Brief + roadmaps + design direction
-agent-runs/  Sketch / Design-Punk run notes (per chosen direction + rationale)
+apps/agentport/  React + Vite app — composes UI states against mock data (port 4200)
+libs/ui/       @agentport/ui — shadcn primitives + signature components, globals.css token layer
+Agentport/       Brief + roadmaps + design direction
+agent-runs/    Sketch / Design-Punk run notes (per chosen direction + rationale)
 ```
+
+- The app consumes the lib via `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
 
 - `handoff-agentport-design-visual.md` — **current resume doc** for the design strand (Design-Punk
   phase state, chosen directions, Figma node IDs, locked language). Read first to continue design.
