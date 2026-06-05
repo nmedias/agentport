@@ -58,18 +58,22 @@
   /* --- Typography · size scale (modular) ---------------------------------
      Modulare Skala: --font-size-base (14px = Design-Body, Step 0) × --font-scale^n.
      `round(…, 0.0625rem)` rundet jede Stufe auf ganze px (0.0625rem = 1px @ Root 16).
-     Jede Stufe aus der Base berechnet (nicht verkettet → kein Rundungs-Aufschaukeln).
      Browser-Root bleibt 16px; rem skaliert mit. step-4 (34px) ist Reserve (kein Format). */
   --font-scale: 1.25;
+  /* Potenzen einmal vorberechnet → kurze Step-Formeln (statt n× multiplizieren) */
+  --font-scale-2: calc(var(--font-scale) * var(--font-scale));
+  --font-scale-3: calc(var(--font-scale-2) * var(--font-scale));
+  --font-scale-4: calc(var(--font-scale-3) * var(--font-scale));
+  --font-scale-5: calc(var(--font-scale-4) * var(--font-scale));
   --font-size-base: 0.875rem;  /* 14px — Step 0 (Body) */
-  --font-size-step-neg2: round(calc(var(--font-size-base) / var(--font-scale) / var(--font-scale)), 0.0625rem);                                              /* 9px  */
-  --font-size-step-neg1: round(calc(var(--font-size-base) / var(--font-scale)), 0.0625rem);                                                                   /* 11px */
-  --font-size-step-0:    var(--font-size-base);                                                                                                               /* 14px */
-  --font-size-step-1:    round(calc(var(--font-size-base) * var(--font-scale)), 0.0625rem);                                                                   /* 18px */
-  --font-size-step-2:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale)), 0.0625rem);                                               /* 22px */
-  --font-size-step-3:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem);                           /* 27px */
-  --font-size-step-4:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem);       /* 34px — Reserve */
-  --font-size-step-5:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem); /* 43px — Display */
+  --font-size-step-neg2: round(calc(var(--font-size-base) / var(--font-scale-2)), 0.0625rem); /* 9px  */
+  --font-size-step-neg1: round(calc(var(--font-size-base) / var(--font-scale)),   0.0625rem); /* 11px */
+  --font-size-step-0:    var(--font-size-base);                                               /* 14px */
+  --font-size-step-1:    round(calc(var(--font-size-base) * var(--font-scale)),   0.0625rem); /* 18px */
+  --font-size-step-2:    round(calc(var(--font-size-base) * var(--font-scale-2)), 0.0625rem); /* 22px */
+  --font-size-step-3:    round(calc(var(--font-size-base) * var(--font-scale-3)), 0.0625rem); /* 27px */
+  --font-size-step-4:    round(calc(var(--font-size-base) * var(--font-scale-4)), 0.0625rem); /* 34px — Reserve */
+  --font-size-step-5:    round(calc(var(--font-size-base) * var(--font-scale-5)), 0.0625rem); /* 43px — Display */
 
   /* --- Typography · line-heights - */
   --leading-tight: 1;
