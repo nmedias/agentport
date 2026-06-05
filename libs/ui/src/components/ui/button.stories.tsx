@@ -11,9 +11,12 @@ const meta: Meta<typeof Button> = {
       control: 'select',
       options: ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'],
     },
+    // size="icon" is a different anatomy (square, icon child, requires aria-label),
+    // so it's excluded from the generic text-button control — picking it with text
+    // children renders a broken overflow. It's demonstrated in the AllSizes story.
     size: {
       control: 'select',
-      options: ['default', 'sm', 'lg', 'icon'],
+      options: ['default', 'sm', 'lg'],
     },
   },
   args: {
