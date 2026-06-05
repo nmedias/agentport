@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { RiAddLine } from '@remixicon/react';
 import { Button } from './button';
 
 const meta: Meta<typeof Button> = {
@@ -50,9 +51,7 @@ export const AllSizes: Story = {
       <Button size="default">Default</Button>
       <Button size="lg">Large</Button>
       <Button size="icon" aria-label="Add">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-          <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z" />
-        </svg>
+        <RiAddLine />
       </Button>
     </div>
   ),

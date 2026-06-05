@@ -38,16 +38,34 @@ const buttonVariants = cva(
   }
 );
 
+type ButtonBaseProps = Omit<
+  React.ComponentProps<'button'>,
+  'aria-label' | 'aria-labelledby'
+> &
+  Omit<VariantProps<typeof buttonVariants>, 'size'> & {
+    asChild?: boolean;
+  };
+
+// Icon-only buttons (size="icon") carry no text, so an accessible name is
+// mandatory: require aria-label or aria-labelledby at the type level.
+type ButtonProps = ButtonBaseProps &
+  (
+    | {
+        size?: Exclude<NonNullable<VariantProps<typeof buttonVariants>['size']>, 'icon'>;
+        'aria-label'?: string;
+        'aria-labelledby'?: string;
+      }
+    | { size: 'icon'; 'aria-label': string; 'aria-labelledby'?: string }
+    | { size: 'icon'; 'aria-labelledby': string; 'aria-label'?: string }
+  );
+
 function Button({
   className,
   variant,
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
 
   return (
@@ -60,3 +78,4 @@ function Button({
 }
 
 export { Button, buttonVariants };
+export type { ButtonProps };
