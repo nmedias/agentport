@@ -60,10 +60,11 @@ npm run ui:add -- button   # add a shadcn component into libs/ui
 ## Repo Structure / Key Files
 
 ```
-apps/agentport/  React + Vite app — composes UI states against mock data (port 4200)
-libs/ui/       @agentport/ui — shadcn primitives + signature components, globals.css token layer
-Agentport/       Brief + roadmaps + design direction
-agent-runs/    Sketch / Design-Punk run notes (per chosen direction + rationale)
+apps/agentport/       React + Vite app — composes UI states against mock data (port 4200)
+libs/ui/            @agentport/ui — shadcn primitives + signature components, globals.css token layer
+Agentport/            Brief + roadmaps + design direction
+design-docs/   Machine-readable DS data (e.g. design-system/tokens-reference.md)
+agent-runs/         Sketch / Design-Punk / component-port run notes (per direction + rationale)
 ```
 
 - The app consumes the lib via `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
@@ -72,6 +73,10 @@ agent-runs/    Sketch / Design-Punk run notes (per chosen direction + rationale)
   phase state, chosen directions, Figma node IDs, locked language). Read first to continue design.
 - `handoff-agentport-design.md` — earlier handoff (Sketch → Hi-Fi; full sketch inventory).
 - `Agentport/Design-Punk-Roadmap.md` / `Agentport/Sketch-Roadmap.md` — phase + decision logs (Figma IDs).
+- `handoff-agentport-component-port.md` — **resume doc** for the code strand (shadcn→Figma→code
+  pipeline state, ported components, Figma node IDs). Read first to continue component-port work.
+- `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk
+  (Figma var ↔ CSS var ↔ Tailwind utility ↔ value + `use`/`avoid`); data source for `/component-port`.
 
 ## Figma
 
@@ -108,6 +113,12 @@ Installed under `.claude/skills/` (project-local).
 - `/creative-spark` — break out of median/safe options when an exploration is drifting.
 - `/sketch-rules` — resolves Sketching-System library entities for `/sketch-jammer`.
 - `/slop-check` — audit a Figma node for generic AI-design tells before handoff.
+
+**Design → Code:**
+- `/component-port` — port one shadcn component into the Agentport DS: read its anatomy
+  (shadcn MCP / `ui:add`), rebuild it as a token-bound Figma component set, rewrite the code
+  on the DS utility vocabulary. Data source: `design-docs/design-system/tokens-reference.md`.
+  Living skill — fold each new DS-integration learning back into it before finishing a run.
 
 **Figma helpers:**
 - `/figma-status` — check Figma Desktop + Plugin MCP connection.
