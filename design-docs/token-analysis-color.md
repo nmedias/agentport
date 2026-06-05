@@ -14,15 +14,24 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
 
 - **Collection `reference`** · Mode `default` · alle `scopes:[]` (nur via Alias nutzbar):
   - `base/white` `#FFFFFF`
-  - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 500 #6B7585 · 700 #4A5562 · 900 #1A2230` *(Lücken: 600, 800, 950)*
+  - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 450 #79828F · 500 #6B7585 · 600 #636C7B · 700 #4A5562 · 900 #1A2230` *(Lücken: 800, 950; `450` für AA-Input-Border, `600` für `muted-foreground` ergänzt)*
   - `cyan/` `50 #E9F6FC · 500 #009FE3 · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)*
-- **Collection `semantic`** · Mode `light` · **40 Variablen**:
+- **Collection `semantic`** · Mode `light` · **42 Variablen**:
   - **shadcn-Set vollständig** (inkl. `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
     Die Palette-Fläche heißt bei uns **`overlay`/`overlay-foreground`** (umbenannt von `popover*`).
   - **`popover`/`popover-foreground`** zusätzlich angelegt (Gruppe `shadcn Default/`), als **Alias auf
     `overlay`/`overlay-foreground`** — shadcn-Komponenten (Popover/Command/Dropdown/Select) referenzieren
     `--popover`. Entspricht dem geplanten CSS `--popover: var(--overlay)`.
   - 6 Custom (aliased): `input-placeholder`, `border-subtle`, `border-emphasis`, `border-strong`, `inverse`, `inverse-foreground`.
+  - `background-fixed` — **Alias auf `base/white`**, **theme-invariant**: bleibt in Light **und** Dark
+    weiß. Für den **Toggle-Knob** (3× `knob`, vorher an `background` → wäre im Dark Mode dunkel geworden).
+    Fix bleibt erhalten, weil `base/white` in der Single-Mode-`reference`-Collection liegt; beim späteren
+    Hinzufügen eines Dark-Modes muss der Dark-Wert von `background-fixed` **denselben Alias** behalten.
+  - `input-background` (Gruppe `Input/`) — **Alias auf `neutral/100`** (opak), Eingabefeld-Fill
+    (`Property-Suche`), ersetzt `card`. *(Opacity-Ansatz verworfen: Paint-Opacity ist in Figma nicht
+    variable-bindbar; der frühere `background-opacity`-Token wurde wieder entfernt.)* Hinweis aus dem
+    AA-Check: auf fast-weißen Flächen hebt ein heller Fill kaum ab (~1.08:1) — wahrnehmbare Feld-Grenze
+    muss über die **Border** kommen (s. AA-Abschnitt).
   - **9 Platzhalter** mit Raw-Hex + Marker ` ⚠` (kein Alias): `secondary`, `secondary-foreground`, `destructive`,
     `destructive-foreground`, `chart-1…5`.
   - **Gruppen** (vom User in Figma angelegt, rein organisatorisch — Token-Leaf-Namen unverändert):
@@ -41,6 +50,25 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   geändert (User-Entscheidung). Weicht von der Wert-Logik ab (`#0077a8`→`#009fe3`, heller): die freistehende
   Aktiv-Hervorhebung soll das helle Marken-Cyan tragen, nicht das dunkle Text-Cyan. `accent-foreground`
   bleibt für „Text **auf** accent-Tint" (Nav-/Palette-„invoice").
+
+## AA-Check (WCAG, Light Mode)
+
+**Text (4.5):** foreground 15.96 ✅; **muted-foreground** nach Fix (`neutral/600` #636C7B):
+bg 5.30 · card 5.12 · sidebar 4.89 — **überall ✅** (vorher `neutral/500`: card 4.50 / sidebar 4.30 ❌).
+`accent-foreground`/accent 4.53 ✅. **Placeholder** (#979FA8) 2.68 — bewusst dezent (durchgefallen).
+
+**Nicht-Text (3:1, WCAG 1.4.11):**
+- **Eingabefeld-Border** — **gefixt (Option 1):** `input` von `#C4CCD4` → **`neutral/450` #79828F**.
+  Jetzt / bg **3.89** · / card **3.75** · / Fill (neutral/100) **3.59** → **✅ ≥3:1** (BITV-fest, Puffer).
+- **Input-Fill-Abhebung** (`neutral/100`) / bg 1.08 · / card 1.05 → erreicht **kein** 3:1 (auf fast-weißen
+  Flächen unmöglich) — daher trägt die **Border** die Erkennbarkeit (s. o.), der Fill nur einen leichten Hauch.
+- **Fokus-Ring** (`ring` #4A5562) / bg **7.59** · / Fill 7.01 → **✅**.
+- `primary`-Marke / bg **2.97** → **knapp unter 3:1** — *offen:* falls die Cyan-Punkte/Ticks
+  **bedeutungstragend** sind (Status), wäre das ein 1.4.11-Thema; rein dekorativ wäre es ausgenommen.
+- Divider (`border` 1.21) = dekorativ, ausgenommen.
+
+**Status:** Text-AA ✅ (muted-foreground gefixt). Eingabefeld-Border ✅ (neutral/450). **Offen:**
+nur noch `primary`-Marken (2.97) — Entscheidung, ob bedeutungstragend → ggf. Marken-Cyan minimal abdunkeln.
 
 ## Entscheidungs-Log
 
@@ -106,7 +134,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
 | Token | Quelle | Roh-Wert(e) | Wo im Layout |
 |---|---|---|---|
 | `--foreground` | **[shadcn]** | `#1a2230` | Primärtext: Typ-Headline „invoice", Property-Namen, Statusband-Werte, Switcher-Text, aktive Werte |
-| `--muted-foreground` | **[shadcn]** | `#6b7585` (bündelt `#6a7482`, `#737d8c`, **und neu** `#979fa8`, `#8c96a6`, `#9ea8b5`) | Sekundär- **und** Tertiärtext (bewusst zusammengelegt): Tabellen-Zellen, Toggle-Labels, kbd-Text, „…N weitere"; **plus** Eyebrow-Labels (WO DU BIST, SCOPE, JUMP TO), Tabellen-Spaltenköpfe (PROPERTY/TYP…), Palette-Meta-Text |
+| `--muted-foreground` | **[shadcn]** | `#636C7B` (`neutral/600`, **AA-Fix**; vorher `#6b7585`/`neutral/500`) (bündelt `#6a7482`, `#737d8c`, **und neu** `#979fa8`, `#8c96a6`, `#9ea8b5`) | Sekundär- **und** Tertiärtext (bewusst zusammengelegt): Tabellen-Zellen, Toggle-Labels, kbd-Text, „…N weitere"; **plus** Eyebrow-Labels (WO DU BIST, SCOPE, JUMP TO), Tabellen-Spaltenköpfe (PROPERTY/TYP…), Palette-Meta-Text |
 | `--input-placeholder` | **[neu]** → `neutral/400` | `#979fa8` (bündelt `#b8c0c8`) | Platzhalter: „Befehl, Sprung oder Suche eingeben", „Property suchen …", „tippen für …" |
 | `--inverse-foreground` | **[neu]** → `neutral/50` | `#f2f6f9` (≈ `#fafbfc`) | Text auf den dunklen Tastatur-Pillen |
 
@@ -138,7 +166,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
 | Token | Quelle | Roh-Wert(e) | Wo im Layout |
 |---|---|---|---|
 | `--border` | **[shadcn]** | `#e6eaee` (+ `#e6eaef`) | Standard-Kanten: Body/Header/Nav/Rail-Trenner, aktiver-Werkzeug-Marker, Inspektor-Kante, Property-Such-Rahmen |
-| `--input` | **[shadcn]** | `#c4ccd4` | Control-Rahmen: Endpoint-Switcher; kbd-Tasten-Border (`#ccd4db`) |
+| `--input` | **[shadcn]** | `#79828F` (`neutral/450`, **AA**; vorher `#c4ccd4`) | **Eingabefeld-Rahmen** (shadcn: `border-input`) — `Property-Suche` (Stroke `border`→`input`). Auf ≥3:1 abgedunkelt (WCAG 1.4.11 / BITV). Fokus = `ring` (Command-Bar `Cmd+K-Pille`). Input-**Fill** = `input-background` (s. o.), nicht `card`. |
 | `--ring` | **[shadcn]** | `#4a5562` | Fokus/Betonung: 1.5px-Rahmen der Cmd+K-Pille & des Palette-Panels |
 | `--border-subtle` | **[neu]** → `neutral/200` | `#e0e5ed` (bündelt `#dbe3eb` Grid, `#eaeef2` Palette-Divider, `#d4dae0`) | feine Trenner: Tabellen-Zeilentrenner, **vertikale Grid-Linien**, Palette-Divider |
 | `--border-emphasis` | **[neu]** → `neutral/300` | `#bdc7d1` | Tabellen-Kopf-Unterstrich („kopf-rule") + Wire-Konnektoren im Inspektor |
