@@ -105,14 +105,16 @@
   --color-background-fixed: var(--background-fixed);
   --color-destructive-foreground: var(--destructive-foreground);
 
-  /* Radius: Tailwind-Keys → unsere Semantics (tokens.css §3), konsistent zur
-     Color-Brücke. Trotz Namensgleichheit kein Self-Reference: `inline` emittiert
-     keine eigene Var, sondern nutzt den :root-Wert (--radius-sm = var(--radius-4)). */
+  /* Radius */
   --radius-sm:   var(--radius-sm);
   --radius-md:   var(--radius-md);
   --radius-lg:   var(--radius-lg);
   --radius-xl:   var(--radius-xl);
   --radius-full: var(--radius-full);
+
+  /* Shadows  */
+  --shadow-glow:      var(--shadow-glow);
+  --shadow-elevation: var(--shadow-elevation);
 }
 
 @layer base {

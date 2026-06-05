@@ -21,19 +21,19 @@
   /* --- Color · base ------------------------------------------------------- */
   --base-white: #ffffff;
 
-  /* --- Color · neutral ramp (lückig: kein 800/950) ------------------------ */
+  /* --- Color · neutral ramp  ------------------------ */
   --neutral-50:  #fafbfc;
   --neutral-100: #f4f6f8;
   --neutral-200: #e6eaee;
   --neutral-300: #c4ccd4;
   --neutral-400: #979fa8;
-  --neutral-450: #79828f;   /* AA: Input-Border ≥3:1 */
+  --neutral-450: #79828f;
   --neutral-500: #6b7585;
-  --neutral-600: #636c7b;   /* AA: muted-foreground ≥4.5 */
+  --neutral-600: #636c7b;
   --neutral-700: #4a5562;
   --neutral-900: #1a2230;
 
-  /* --- Color · cyan (ECM-Marke; 500 für AA auf #0098DA, Brand #009FE3) -- */
+  /* --- Color · cyan  -- */
   --cyan-50:  #e9f6fc;
   --cyan-500: #0098da;
   --cyan-700: #0077a8;
@@ -55,7 +55,7 @@
   --font-weight-semibold:  600;
   --font-weight-extrabold: 800;
 
-  /* --- Typography · size scale (A-scale) ---------------------------------- */
+  /* --- Typography · size scale  ---------------------------------- */
   --font-size-10: 10px;
   --font-size-12: 12px;
   --font-size-14: 14px;
@@ -64,7 +64,7 @@
   --font-size-32: 32px;
   --font-size-42: 42px;
 
-  /* --- Typography · line-heights (unitless ratios; in Figma nicht bindbar) - */
+  /* --- Typography · line-heights - */
   --leading-tight:   1;
   --leading-snug:    1.2;
   --leading-relaxed: 1.5;
@@ -245,8 +245,10 @@
 
   /* ===========================================================================
      6 · SEMANTIC · SHADOWS  (Collection: reference-effect → Effect Styles)
-     Composite aus den reference-effect-Teilen. Schatten-Farben tragen Alpha.
+     Composite. Schatten-Farbe via color-mix aus dem Color-Primitive + Alpha
+     (so folgt sie automatisch dem Primitive — glow = cyan/500 @50%,
+     elevation = neutral/900 @18%). Geometrie (Blur/Offset/Spread) als Literale.
      =========================================================================== */
-  --shadow-glow:      0 0 4px 0 rgba(0, 152, 218, 0.5);     /* Cyan-Glow (Marken-Ticks) */
-  --shadow-elevation: 0 14px 36px -6px rgba(26, 34, 48, 0.18); /* Command-Palette */
+  --shadow-glow:      0 0 4px 0 color-mix(in srgb, var(--cyan-500) 50%, transparent);
+  --shadow-elevation: 0 14px 36px -6px color-mix(in srgb, var(--neutral-900) 18%, transparent);
 }
