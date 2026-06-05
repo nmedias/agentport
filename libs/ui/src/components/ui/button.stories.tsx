@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RiAddLine } from '@remixicon/react';
+import {
+  RiAddLine,
+  RiSearchLine,
+  RiDownloadLine,
+  RiMore2Line,
+  RiDeleteBinLine,
+} from '@remixicon/react';
 import { Button } from './button';
 
 const meta: Meta<typeof Button> = {
@@ -55,6 +61,30 @@ export const AllSizes: Story = {
       <Button size="lg">Large</Button>
       <Button size="icon" aria-label="Add">
         <RiAddLine />
+      </Button>
+    </div>
+  ),
+};
+
+// Icon-only buttons (size="icon"): square, no text, Remix icon child, and a
+// mandatory accessible name (aria-label) — enforced at the type level.
+export const Icon: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button size="icon" aria-label="Add">
+        <RiAddLine />
+      </Button>
+      <Button size="icon" variant="secondary" aria-label="Search">
+        <RiSearchLine />
+      </Button>
+      <Button size="icon" variant="outline" aria-label="Download">
+        <RiDownloadLine />
+      </Button>
+      <Button size="icon" variant="ghost" aria-label="More options">
+        <RiMore2Line />
+      </Button>
+      <Button size="icon" variant="destructive" aria-label="Delete">
+        <RiDeleteBinLine />
       </Button>
     </div>
   ),
