@@ -15,7 +15,8 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
 - **Collection `reference`** · Mode `default` · alle `scopes:[]` (nur via Alias nutzbar):
   - `base/white` `#FFFFFF`
   - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 450 #79828F · 500 #6B7585 · 600 #636C7B · 700 #4A5562 · 900 #1A2230` *(Lücken: 800, 950; `450` für AA-Input-Border, `600` für `muted-foreground` ergänzt)*
-  - `cyan/` `50 #E9F6FC · 500 #009FE3 · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)*
+  - `cyan/` `50 #E9F6FC · 500 #0098DA · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)* — `500` von
+    Brand-`#009FE3` auf **`#0098DA`** abgedunkelt, damit `primary`-Marken **≥3:1** auf Weiß erreichen (WCAG 1.4.11).
 - **Collection `semantic`** · Mode `light` · **42 Variablen**:
   - **shadcn-Set vollständig** (inkl. `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
     Die Palette-Fläche heißt bei uns **`overlay`/`overlay-foreground`** (umbenannt von `popover*`).
@@ -63,12 +64,12 @@ bg 5.30 · card 5.12 · sidebar 4.89 — **überall ✅** (vorher `neutral/500`:
 - **Input-Fill-Abhebung** (`neutral/100`) / bg 1.08 · / card 1.05 → erreicht **kein** 3:1 (auf fast-weißen
   Flächen unmöglich) — daher trägt die **Border** die Erkennbarkeit (s. o.), der Fill nur einen leichten Hauch.
 - **Fokus-Ring** (`ring` #4A5562) / bg **7.59** · / Fill 7.01 → **✅**.
-- `primary`-Marke / bg **2.97** → **knapp unter 3:1** — *offen:* falls die Cyan-Punkte/Ticks
-  **bedeutungstragend** sind (Status), wäre das ein 1.4.11-Thema; rein dekorativ wäre es ausgenommen.
+- `primary`-Marke / bg — **gefixt:** Marken-Cyan `cyan/500` von `#009FE3` → **`#0098DA`** → **3.23:1** ≥3:1 ✅
+  (betrifft alle primary-Marken/Flächen/Track/Highlight; Shift visuell unmerklich). Glow-Farbe analog angepasst.
 - Divider (`border` 1.21) = dekorativ, ausgenommen.
 
-**Status:** Text-AA ✅ (muted-foreground gefixt). Eingabefeld-Border ✅ (neutral/450). **Offen:**
-nur noch `primary`-Marken (2.97) — Entscheidung, ob bedeutungstragend → ggf. Marken-Cyan minimal abdunkeln.
+**Status:** Text-AA ✅ (muted-foreground), Eingabefeld-Border ✅ (neutral/450), primary-Marken ✅ (cyan/500 #0098DA).
+Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border trägt die Erkennbarkeit).
 
 ## Entscheidungs-Log
 
@@ -101,7 +102,7 @@ nur noch `primary`-Marken (2.97) — Entscheidung, ob bedeutungstragend → ggf.
 
 ## Vorab: Farb-DNA des Screens
 
-- **Monochrom + EIN Akzent.** Neutrale Graustufen-Rampe + ECM-Cyan `#009FE3`, dazu nur zwei
+- **Monochrom + EIN Akzent.** Neutrale Graustufen-Rampe + ECM-Cyan (Brand `#009FE3`, im Token `cyan/500` = `#0098DA` für AA), dazu nur zwei
   Cyan-Ableitungen: dunkle Lesefassung `#0077A8` und Tint `#E9F6FC`. Mehr Buntfarbe gibt es nicht.
 - **Keine Status-Ampel im Screen.** Kein Grün/Rot/Gelb. Der Verbindungs-Punkt ist Cyan (nicht grün),
   das Pflicht-Häkchen ist dunkle Tinte `#1A2230` (nicht grün). → `destructive`/Erfolg/Warnung müssen
@@ -150,7 +151,7 @@ nur noch `primary`-Marken (2.97) — Entscheidung, ob bedeutungstragend → ggf.
 
 | Token | Quelle | Roh-Wert(e) | Wo im Layout |
 |---|---|---|---|
-| `--primary` | **[shadcn]** | `#009fe3` | Marken-Cyan: aktiver Verbindungs-Punkt, Cmd-Caret-Tick, Palette-Caret, „example"-Hervorhebung im Statustext, aktiver Nav-/Achsen-Tick |
+| `--primary` | **[shadcn]** | `#0098DA` (`cyan/500`, AA; Brand `#009FE3`) | Marken-Cyan: aktiver Verbindungs-Punkt, Cmd-Caret-Tick, Palette-Caret, „example"-Hervorhebung im Statustext, aktiver Nav-/Achsen-Tick |
 | `--primary-foreground` | **[shadcn]** | weiß / `#f2f6f9` | Text/Icon auf Cyan-Fläche (im Screen kaum belegt — für Buttons später) |
 | `--accent` | **[shadcn]** | `#e9f6fc` | Selektions-/Aktiv-Fläche: aktive Typ-Zeile in der Nav, ausgewählter Palette-Eintrag „invoice" |
 | `--accent-foreground` | **[shadcn]** | `#0077a8` (≈ `#0377a8`) | Text auf dem Cyan-Tint: „invoice" in aktiver Zeile/Palette, aktiver Wire-Node-Text im Inspektor |
@@ -267,7 +268,7 @@ Noch **nicht** angelegt (kommt als eigenes Design):
 | `#fbfcfd` | Palette Prompt/Footer | `--card` (gebündelt) |
 | `#f2f6f9` | Text auf dunkler Pille | `--inverse-foreground` → `neutral/50` |
 | `#ffffff` | App-Grundfläche / Palette-Liste | `--background` / `--overlay` |
-| `#009fe3` | Marken-Cyan / Status-Punkt / Tick | `--primary` (Status-Punkt & Tick nutzen `primary`) |
+| `#009fe3` | Marken-Cyan / Status-Punkt / Tick | `--primary` (Token-Wert AA-abgedunkelt auf `#0098DA`) |
 | `#0077a8` (≈ `#0377a8`) | Cyan-Text auf Tint | `--accent-foreground` |
 | `#e9f6fc` | Cyan-Selektions-Fläche | `--accent` |
 | `rgba(0,159,227,.5)` | Cyan-Glow (Tick-Shadow) | Effekt-Token (Kategorie Shadow) |
