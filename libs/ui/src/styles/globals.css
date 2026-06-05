@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Design tokens (exportiert aus Figma „Agentport DS"). Liefert die :root-Werte,
+   die die @theme-Brücke unten in Tailwind-Utilities übersetzt. */
+@import './tokens.css';
+
 /* Tailwind v4 scans the module graph automatically; @source makes this lib's
    own sources explicit so classes are never missed. Consuming apps register
    their own sources from their own entry (see apps/agentport/src/styles.css). */
@@ -10,43 +14,20 @@
 
 /*
   ── Figma → Code token seam ────────────────────────────────────────────
-  The :root / .dark blocks below are the *semantic* layer. When the Figma
-  "Agentport DS" Semantics are locked, replace these values with the exported
-  ones (this file is the single insertion point — see CLAUDE.md pipeline).
-  Until then these are shadcn new-york / neutral defaults.
+  Die *semantischen* Werte liefert jetzt tokens.css (oben importiert,
+  exportiert aus Figma „Agentport DS"). Die @theme-inline-Brücke unten
+  übersetzt sie in Tailwind-Utilities.
+  `--radius` bleibt hier vorerst auf dem shadcn-calc-Modell — wird in einem
+  späteren Chunk auf die Token-Radien (--radius-sm…full) umgestellt.
 */
 :root {
   --radius: 0.625rem;
-
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dark Mode: aktuell light-only (Figma hat noch keinen Dark-Mode-Token-Satz).
+   shadcn-Default-Dark vorerst deaktiviert, damit sich Light=Figma nicht mit
+   Dark=shadcn-Neutral mischt. Wird reaktiviert, sobald Dark-Tokens existieren
+   (`--background-fixed` muss dann ausgenommen bleiben).
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -76,6 +57,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+*/
 
 /* Map semantic vars into Tailwind's theme so utilities like bg-background,
    text-muted-foreground, rounded-lg resolve. */
