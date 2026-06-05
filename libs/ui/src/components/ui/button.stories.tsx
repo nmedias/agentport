@@ -40,7 +40,10 @@ export const Ghost: Story = { args: { variant: 'ghost' } };
 export const Destructive: Story = { args: { variant: 'destructive' } };
 export const Link: Story = { args: { variant: 'link' } };
 
+// Gallery stories render a fixed set and ignore args — disable the controls
+// so the panel doesn't show regulators that do nothing here.
 export const AllVariants: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
       <Button>Default</Button>
@@ -54,6 +57,7 @@ export const AllVariants: Story = {
 };
 
 export const AllSizes: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
       <Button size="sm">Small</Button>
@@ -69,6 +73,7 @@ export const AllSizes: Story = {
 // Icon-only buttons (size="icon"): square, no text, Remix icon child, and a
 // mandatory accessible name (aria-label) — enforced at the type level.
 export const Icon: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
       <Button size="icon" aria-label="Add">
