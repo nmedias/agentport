@@ -129,6 +129,12 @@ Collection `semantic-dimension` — `VariableCollectionId:3070:2`, Mode `value` 
 *(Gruppen `Space/` + `Radius/` vom User in Figma angelegt — Leaf-Namen unverändert. Primitive-
 Collection `reference-radius` ebenfalls umbenannt → `reference-dimension`.)*
 
+**Grundeinheit (CSS-Export):** `reference-dimension` enthält zusätzlich `space/base` = 4 (=4px,
+= Tailwinds Spacing-Basis). Im CSS-Export (`tokens.css`) sind die Spacing-Steps in **rem** und
+werden aus dieser Basis berechnet: `--space-base: 0.25rem` (4px), Step = `calc(base × N)`
+(2xs×0.5 · xs×1 · sm×1.5 · md×2 · lg×3 · xl×4 · 2xl×6 · 3xl×8 · 4xl×12 · 5xl×20). In Figma kann
+nicht gerechnet werden → die Steps bleiben dort direkte Werte; `space/base` ist die dokumentierte Einheit.
+
 **Screen-Binding** (`1099:9710`): **fertig** — 344 Spacing-Felder (itemSpacing + 4 Paddings je
 Auto-Layout-Frame) gebunden (0 Fehler), 1 Feld übersprungen (112er-Gap, roh); Radius-Bindings
 auf die neuen Tokens umgehängt (136 Ecken). Bucket-Mapping (final): ≤3→2xs, ≤5→xs, ≤7→sm,

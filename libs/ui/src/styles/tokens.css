@@ -1,28 +1,24 @@
 /* =============================================================================
    Agentport DS — Design Tokens
-   Exportiert aus Figma „Agentport DS" (fileKey FIGMA_FILE_KEY).
+   Exportiert aus Figma „Agentport DS".
 
    Zweistufig:  PRIMITIVES (rohe Werte)  ←  SEMANTICS (referenzieren via var()).
    Quelle der Wahrheit ist Figma; dieses File ist der Export. Single Light-Theme
    (Dark-Mode noch nicht angelegt).
-
-   NOCH NICHT mit Tailwind verdrahtet — das ist der nächste, separate Schritt.
-   Dieses File wird (noch) nirgends importiert.
-
-   ⚠ = shadcn-Default-Platzhalter, noch nicht designt.
    ============================================================================= */
 
+/* ===========================================================================
+   1 · PRIMITIVES  (Collection: reference / reference-dimension /
+                    reference-typo / reference-effect)
+   =========================================================================== */
 :root {
-  /* ===========================================================================
-     1 · PRIMITIVES  (Collection: reference / reference-dimension /
-                      reference-typo / reference-effect)
-     =========================================================================== */
+
 
   /* --- Color · base ------------------------------------------------------- */
   --base-white: #ffffff;
 
   /* --- Color · neutral ramp  ------------------------ */
-  --neutral-50:  #fafbfc;
+  --neutral-50: #fafbfc;
   --neutral-100: #f4f6f8;
   --neutral-200: #e6eaee;
   --neutral-300: #c4ccd4;
@@ -34,15 +30,15 @@
   --neutral-900: #1a2230;
 
   /* --- Color · cyan  -- */
-  --cyan-50:  #e9f6fc;
+  --cyan-50: #e9f6fc;
   --cyan-500: #0098da;
   --cyan-700: #0077a8;
 
   /* --- Radius scale ------------------------------------------------------- */
-  --radius-4:    4px;
-  --radius-6:    6px;
-  --radius-8:    8px;
-  --radius-16:   16px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-16: 16px;
   --radius-pill: 9999px;
 
   /* --- Typography · families ---------------------------------------------- */
@@ -50,9 +46,9 @@
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
   /* --- Typography · weights ----------------------------------------------- */
-  --font-weight-regular:   400;
-  --font-weight-medium:    500;
-  --font-weight-semibold:  600;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
   --font-weight-extrabold: 800;
 
   /* --- Typography · size scale  ---------------------------------- */
@@ -65,19 +61,20 @@
   --font-size-42: 42px;
 
   /* --- Typography · line-heights - */
-  --leading-tight:   1;
-  --leading-snug:    1.2;
+  --leading-tight: 1;
+  --leading-snug: 1.2;
   --leading-relaxed: 1.5;
 
   /* --- Typography · tracking (px) ----------------------------------------- */
-  --tracking-tight:  -0.5px;
+  --tracking-tight: -0.5px;
   --tracking-normal: 0;
-  --tracking-wide:   0.5px;
+  --tracking-wide: 0.5px;
+}
 
+:root{
 
   /* ===========================================================================
-     2 · SEMANTIC · COLOR  (Collection: semantic, mode "light")
-     shadcn-Set + Custom; Aliase → Primitives.
+     2 · SEMANTIC · COLOR  (Collection: semantic)
      =========================================================================== */
 
   /* --- Surfaces & text (shadcn) ------------------------------------------- */
@@ -122,7 +119,7 @@
   --inverse:             var(--neutral-900);
   --inverse-foreground:  var(--neutral-50);
 
-  /* --- Platzhalter (shadcn-Defaults, noch nicht designt) ------------------ */
+  /* --- ⚠ Platzhalter (shadcn-Defaults, noch nicht designt) ------------------ */
   --secondary:              #f5f5f5;  /* ⚠ */
   --secondary-foreground:   #343434;  /* ⚠ */
   --destructive:            #e7000b;  /* ⚠ */
@@ -146,23 +143,22 @@
 
   /* ===========================================================================
      4 · SEMANTIC · SPACING  (Collection: semantic-dimension, Gruppe Space)
-     Gemeinsames System für Gap UND Padding. Direkte Werte (kein Primitive-Tier).
      =========================================================================== */
-  --space-2xs: 2px;
-  --space-xs:  4px;
-  --space-sm:  6px;
-  --space-md:  8px;
-  --space-lg:  12px;
-  --space-xl:  16px;
-  --space-2xl: 24px;
-  --space-3xl: 32px;
-  --space-4xl: 48px;
-  --space-5xl: 80px;
+  --space-base: 0.25rem;                       /* 4px — Grundeinheit */
+  --space-2xs: calc(var(--space-base) * 0.5);  /* 2px */
+  --space-xs:  var(--space-base);              /* 4px */
+  --space-sm:  calc(var(--space-base) * 1.5);  /* 6px */
+  --space-md:  calc(var(--space-base) * 2);    /* 8px */
+  --space-lg:  calc(var(--space-base) * 3);    /* 12px */
+  --space-xl:  calc(var(--space-base) * 4);    /* 16px */
+  --space-2xl: calc(var(--space-base) * 6);    /* 24px */
+  --space-3xl: calc(var(--space-base) * 8);    /* 32px */
+  --space-4xl: calc(var(--space-base) * 12);   /* 48px */
+  --space-5xl: calc(var(--space-base) * 20);   /* 80px */
 
 
   /* ===========================================================================
      5 · SEMANTIC · TYPOGRAPHY  (Collection: semantic-typo + Text Styles)
-     Composition-Tokens je Format. line-height = "normal" wo Figma AUTO nutzt.
      =========================================================================== */
 
   /* Display */
@@ -245,9 +241,6 @@
 
   /* ===========================================================================
      6 · SEMANTIC · SHADOWS  (Collection: reference-effect → Effect Styles)
-     Composite. Schatten-Farbe via color-mix aus dem Color-Primitive + Alpha
-     (so folgt sie automatisch dem Primitive — glow = cyan/500 @50%,
-     elevation = neutral/900 @18%). Geometrie (Blur/Offset/Spread) als Literale.
      =========================================================================== */
   --shadow-glow:      0 0 4px 0 color-mix(in srgb, var(--cyan-500) 50%, transparent);
   --shadow-elevation: 0 14px 36px -6px color-mix(in srgb, var(--neutral-900) 18%, transparent);
