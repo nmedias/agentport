@@ -5,6 +5,10 @@
    Zweistufig:  PRIMITIVES (rohe Werte)  ←  SEMANTICS (referenzieren via var()).
    Quelle der Wahrheit ist Figma; dieses File ist der Export. Single Light-Theme
    (Dark-Mode noch nicht angelegt).
+
+   Verdrahtung: von `globals.css` via `@import` eingebunden; SEMANTICS werden dort
+   über `@theme inline` in Tailwind-Utilities übersetzt (Farbe/Radius/Spacing/Shadow),
+   Typografie über `@utility text-*`. PRIMITIVES bleiben intern (nur :root).
    ============================================================================= */
 
 /* ===========================================================================
