@@ -1,0 +1,438 @@
+# Agentport DS — Token-/Format-Referenz (maschinenlesbar)
+
+Eine Datenquelle für Component-Arbeit (Figma-Nachbau + Code-Verdrahtung). Prosa = Regeln/Architektur;
+**YAML = Token-Daten** (Crosswalk Figma → CSS → Utility → Wert + `use`/`avoid`-Semantik).
+
+Quelle: `token-analysis-{color,radius,spacing,typography,effects}.md`, `libs/ui/src/styles/{tokens.css,globals.css}`,
+`Agentport/design-direction.md`. Bei Drift: **`tokens.css`/`globals.css`** für Werte/Utilities, `token-analysis-*` für Semantik.
+
+## Regeln
+
+- **Semantik nur aus Quelle — kein Raten.** `use` = generische Rolle des Tokens; `avoid` = dokumentierte
+  Einschränkung. Wo die Quelle nichts hergibt: `tbd`, Feld weglassen. Keine screen-spezifischen Beispiele.
+- **`status: placeholder`** = Stock-shadcn-Default, noch nicht designt → nicht als final behandeln.
+- Werte = Light-Mode (einziger Mode); Dark existiert noch nicht.
+- Primitives sind intern (nicht im `@theme`) → in Komponenten nur **Semantics**, keine `bg-cyan-500`/`rounded-4`-Utilities.
+
+## Schema
+
+```
+token | css_var | primitive | value | utilities | use | avoid? | status? | note?
+```
+
+## Architektur
+
+```
+Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
+  reference* = Primitives (scopes:[], alias-only)   semantic* = Semantics (Alias → Primitive)
+        │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
+        │ Brücke → libs/ui/src/styles/globals.css  (@theme inline + @utility → Tailwind-Utilities)
+```
+
+---
+
+## 1 · Farbe
+
+Primitives (intern):
+
+```yaml
+base/white: "#ffffff"
+neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }
+cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand #009FE3 → #0098DA (≥3:1, WCAG 1.4.11)
+```
+
+Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}`. Für
+`border-*`-Namen lautet die Border-Utility `border-border-subtle` usw.
+
+```yaml
+- token: background
+  css_var: --background
+  primitive: base/white
+  value: "#ffffff"
+  utilities: [bg-background]
+  use: "Basis-Flächenfarbe (App-Grundfläche)."
+
+- token: foreground
+  css_var: --foreground
+  primitive: neutral/900
+  value: "#1a2230"
+  utilities: [text-foreground, bg-foreground]
+  use: "Primärtext/-Icon auf Basis-Flächen."
+
+- token: card
+  css_var: --card
+  primitive: neutral/50
+  value: "#fafbfc"
+  utilities: [bg-card]
+  use: "Erhabene/sekundäre Panel-Fläche."
+
+- token: card-foreground
+  css_var: --card-foreground
+  primitive: neutral/900
+  value: "#1a2230"
+  utilities: [text-card-foreground]
+  use: "Text auf card (shadcn-Paarung)."
+
+- token: primary
+  css_var: --primary
+  primitive: cyan/500
+  value: "#0098da"
+  utilities: [bg-primary, text-primary]
+  use: "Brand-Akzent für Selektion/Fokus/Primäraktion und freistehende Aktiv-Hervorhebung. Als Fläche nur, wenn die Fläche „selektiert/primär/hier handeln“ bedeutet."
+  avoid: "Text auf hellem Grund (≥3:1, aber <4.5 → dafür accent-foreground); dekorative Flächen-Einfärbung."
+
+- token: primary-foreground
+  css_var: --primary-foreground
+  primitive: base/white
+  value: "#ffffff"
+  utilities: [text-primary-foreground]
+  use: "Text/Icon auf primary-Fläche."
+
+- token: muted
+  css_var: --muted
+  primitive: neutral/100
+  value: "#f4f6f8"
+  utilities: [bg-muted]
+  use: "Ruhige Chrome-Fläche (Bänder, Chips, Tracks)."
+
+- token: muted-foreground
+  css_var: --muted-foreground
+  primitive: neutral/600
+  value: "#636c7b"
+  utilities: [text-muted-foreground]
+  use: "Sekundär-/Tertiärtext auf hellen Flächen."
+  note: "AA ≥4.5 auf background/card/sidebar."
+
+- token: accent
+  css_var: --accent
+  primitive: cyan/50
+  value: "#e9f6fc"
+  utilities: [bg-accent]
+  use: "Selektions-/Aktiv-Tint-Fläche."
+  note: "Abweichung von Stock-shadcn (dort neutrales Hover-Grau) — hier = Selektion. Neutrales Row-Hover bräuchte eigenen Token."
+
+- token: accent-foreground
+  css_var: --accent-foreground
+  primitive: cyan/700
+  value: "#0077a8"
+  utilities: [text-accent-foreground]
+  use: "Lesbares Cyan für Text auf accent-Tint (≈5:1)."
+  avoid: "Nicht primary für Text-auf-hell."
+
+- token: border
+  css_var: --border
+  primitive: neutral/200
+  value: "#e6eaee"
+  utilities: [border-border]
+  use: "Standard-Kanten/Trenner (global via Base-Layer gesetzt)."
+
+- token: input
+  css_var: --input
+  primitive: neutral/450
+  value: "#79828f"
+  utilities: [border-input]
+  use: "Form-Control-Border; Fokus → ring; Fill → input-background."
+  note: "≥3:1 (WCAG 1.4.11 / BITV)."
+
+- token: ring
+  css_var: --ring
+  primitive: neutral/700
+  value: "#4a5562"
+  utilities: [ring-ring, outline-ring]
+  use: "Fokus-Indikator (Base-Layer setzt outline-ring/50)."
+
+- token: overlay
+  css_var: --overlay
+  primitive: base/white
+  value: "#ffffff"
+  utilities: [bg-overlay]
+  use: "Erhabene Overlay-Fläche (Popover/Command/Menu/Dropdown)."
+
+- token: overlay-foreground
+  css_var: --overlay-foreground
+  primitive: neutral/900
+  value: "#1a2230"
+  utilities: [text-overlay-foreground]
+  use: "Text auf overlay."
+
+- token: popover
+  css_var: --popover
+  primitive: alias → --overlay
+  value: "#ffffff"
+  utilities: [bg-popover]
+  use: "Alias auf overlay für shadcn-Komponenten, die --popover referenzieren."
+  note: "In neuen Komponenten ist overlay der bevorzugte Name."
+
+- token: popover-foreground
+  css_var: --popover-foreground
+  primitive: alias → --overlay-foreground
+  value: "#1a2230"
+  utilities: [text-popover-foreground]
+  use: "s. popover."
+
+- token: sidebar
+  css_var: --sidebar
+  primitive: neutral/100
+  value: "#f4f6f8"
+  utilities: [bg-sidebar]
+  use: "Sidebar-/Rail-Fläche."
+
+- token: sidebar-foreground
+  css_var: --sidebar-foreground
+  primitive: neutral/900
+  value: "#1a2230"
+  utilities: [text-sidebar-foreground]
+  use: "Text auf sidebar."
+
+- token: sidebar-primary
+  css_var: --sidebar-primary
+  primitive: cyan/700
+  value: "#0077a8"
+  utilities: [bg-sidebar-primary]
+  use: "Sidebar-Akzent-Fläche."
+
+- token: sidebar-primary-foreground
+  css_var: --sidebar-primary-foreground
+  primitive: base/white
+  value: "#ffffff"
+  utilities: [text-sidebar-primary-foreground]
+  use: "Text auf sidebar-primary."
+
+- token: sidebar-accent
+  css_var: --sidebar-accent
+  primitive: cyan/50
+  value: "#e9f6fc"
+  utilities: [bg-sidebar-accent]
+  use: "Aktiv-/Selektions-Tint in der Sidebar."
+
+- token: sidebar-accent-foreground
+  css_var: --sidebar-accent-foreground
+  primitive: cyan/700
+  value: "#0077a8"
+  utilities: [text-sidebar-accent-foreground]
+  use: "Text auf sidebar-accent."
+
+- token: sidebar-border
+  css_var: --sidebar-border
+  primitive: neutral/200
+  value: "#e6eaee"
+  utilities: [border-sidebar-border]
+  use: "Sidebar-Trenner."
+
+- token: sidebar-ring
+  css_var: --sidebar-ring
+  primitive: neutral/700
+  value: "#4a5562"
+  utilities: [ring-sidebar-ring]
+  use: "Fokus in der Sidebar."
+
+- token: input-placeholder
+  css_var: --input-placeholder
+  primitive: neutral/400
+  value: "#979fa8"
+  utilities: [text-input-placeholder]
+  use: "Platzhaltertext in Feldern."
+  note: "Bewusst dezent (kein AA-Ziel)."
+
+- token: input-background
+  css_var: --input-background
+  primitive: neutral/100
+  value: "#f4f6f8"
+  utilities: [bg-input-background]
+  use: "Eingabefeld-Fill (opak)."
+  note: "Abhebung gering → Erkennbarkeit trägt die Border (input)."
+
+- token: background-fixed
+  css_var: --background-fixed
+  primitive: base/white
+  value: "#ffffff"
+  utilities: [bg-background-fixed]
+  use: "Theme-invariante weiße Fläche."
+  avoid: "Im künftigen .dark NICHT überschreiben."
+
+- token: border-subtle
+  css_var: --border-subtle
+  primitive: neutral/200
+  value: "#e6eaee"
+  utilities: [border-border-subtle]
+  use: "Feinster Trenner (leichter als border)."
+  note: "Teilt aktuell den Wert mit border; eigener Name hält Divergenz offen."
+
+- token: border-emphasis
+  css_var: --border-emphasis
+  primitive: neutral/300
+  value: "#c4ccd4"
+  utilities: [border-border-emphasis]
+  use: "Betonte Linie (stärker als border)."
+
+- token: border-strong
+  css_var: --border-strong
+  primitive: neutral/700
+  value: "#4a5562"
+  utilities: [border-border-strong]
+  use: "Schwerste/dunkelste Linie."
+
+- token: inverse
+  css_var: --inverse
+  primitive: neutral/900
+  value: "#1a2230"
+  utilities: [bg-inverse]
+  use: "Dunkle Fläche auf hellem Grund (invertierte Chips/Pillen)."
+
+- token: inverse-foreground
+  css_var: --inverse-foreground
+  primitive: neutral/50
+  value: "#fafbfc"
+  utilities: [text-inverse-foreground]
+  use: "Text auf inverse."
+
+- token: secondary
+  css_var: --secondary
+  primitive: raw
+  value: "#f5f5f5"
+  utilities: [bg-secondary, text-secondary]
+  status: placeholder
+  use: tbd
+
+- token: secondary-foreground
+  css_var: --secondary-foreground
+  primitive: raw
+  value: "#343434"
+  utilities: [text-secondary-foreground]
+  status: placeholder
+  use: tbd
+
+- token: destructive
+  css_var: --destructive
+  primitive: raw
+  value: "#e7000b"
+  utilities: [bg-destructive, text-destructive]
+  status: placeholder
+  use: tbd
+
+- token: destructive-foreground
+  css_var: --destructive-foreground
+  primitive: raw
+  value: "#fafafa"
+  utilities: [text-destructive-foreground]
+  status: placeholder
+  use: tbd
+
+- token: chart-1..5
+  css_var: --chart-1 … --chart-5
+  primitive: raw
+  value: ["#e76f51", "#2a9d8f", "#264653", "#e9c46a", "#f4a261"]
+  utilities: [bg-chart-1 … text-chart-5]
+  status: placeholder
+  use: tbd
+```
+
+**Linien-Leiter (aufsteigend):** `border-subtle` < `border` < `border-emphasis` < `border-strong`.
+**Zwei-Cyan-Modell:** helles `primary` (Flächen/Marken) vs. dunkles `accent-foreground` (Text auf Tint) — Verwechslung = AA-Bruch.
+**Kein Token (tbd):** Status-Familie `connected/offline/error/warning`.
+
+---
+
+## 2 · Radius
+
+Primitives (`reference-dimension`, intern): `radius/4·6·8·16·full(9999)`. Semantics aliasen, Scope `CORNER_RADIUS`.
+
+```yaml
+- { token: radius-sm,   css_var: --radius-sm,   value: 4px,    utilities: [rounded-sm],   use: "Kleine Controls/Chips/Marker." }
+- { token: radius-md,   css_var: --radius-md,   value: 6px,    utilities: [rounded-md],   use: "Mittlere Container." }
+- { token: radius-lg,   css_var: --radius-lg,   value: 8px,    utilities: [rounded-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
+- { token: radius-xl,   css_var: --radius-xl,   value: 16px,   utilities: [rounded-xl],   use: "Große Flächen/Fenster." }
+- { token: radius-full, css_var: --radius-full, value: 9999px, utilities: [rounded-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
+```
+
+**`avoid`:** Tailwind-Default-Stufen `rounded` (Base), `rounded-xs/2xl/3xl/none` — nicht DS-gebunden.
+
+---
+
+## 3 · Spacing (Gap + Padding, ein System)
+
+Ein System für Gap **und** Padding (Figma-Scope `GAP`). Kein Primitive-Tier; Grundeinheit
+`--space-base = 0.25rem` (4px). Step nach benötigter Abstandsgröße wählen. Utilities **benannt**
+(`p-md`/`gap-md`/`m-md`/`px-…`/`size-…` aus `--spacing-{step}`) **plus numerisch** (`p-4`/`gap-2`/`h-9`
+über `--spacing`-Basis) — beide gültig, numerische nicht entfernen.
+
+```yaml
+- { token: space-2xs, css_var: --space-2xs, value: 2px,  utilities: [p-2xs, gap-2xs] }
+- { token: space-xs,  css_var: --space-xs,  value: 4px,  utilities: [p-xs,  gap-xs] }
+- { token: space-sm,  css_var: --space-sm,  value: 6px,  utilities: [p-sm,  gap-sm] }
+- { token: space-md,  css_var: --space-md,  value: 8px,  utilities: [p-md,  gap-md] }
+- { token: space-lg,  css_var: --space-lg,  value: 12px, utilities: [p-lg,  gap-lg] }
+- { token: space-xl,  css_var: --space-xl,  value: 16px, utilities: [p-xl,  gap-xl] }
+- { token: space-2xl, css_var: --space-2xl, value: 24px, utilities: [p-2xl, gap-2xl] }
+- { token: space-3xl, css_var: --space-3xl, value: 32px, utilities: [p-3xl, gap-3xl] }
+- { token: space-4xl, css_var: --space-4xl, value: 48px, utilities: [p-4xl, gap-4xl] }
+- { token: space-5xl, css_var: --space-5xl, value: 80px, utilities: [p-5xl, gap-5xl] }
+```
+
+---
+
+## 4 · Typografie — 11 Formate
+
+Composition-Utilities (`@utility`, mehrwertig: family+size+weight+line-height+tracking) → **eine Klasse**
+statt einzelner `text-`/`font-`-Utilities (Letztere durch Theme-Reset tot, §6). Familien `sans` =
+„Hanken Grotesk", `mono` = „Geist Mono". Weights 400/500/600/800. Modulare Skala (Ratio 1.25, Base 14px).
+
+```yaml
+- { format: text-display,     family: sans, size: 43, weight: 800, line_height: 1.0,  tracking: -0.5px, use: "Hero-Headline." }
+- { format: text-heading,     family: sans, size: 27, weight: 800, line_height: 1.2,  tracking: -0.5px, use: "Überschrift." }
+- { format: text-heading-sm,  family: sans, size: 22, weight: 800, line_height: 1.2,  tracking: -0.5px, use: "Kleinere Überschrift." }
+- { format: text-title,       family: sans, size: 18, weight: 600, line_height: auto, tracking: 0,      use: "Abschnitts-/Sektions-Titel." }
+- { format: text-body,        family: sans, size: 14, weight: 400, line_height: 1.5,  tracking: 0,      use: "Fließtext; Body-Default der App." }
+- { format: text-body-strong, family: sans, size: 14, weight: 600, line_height: auto, tracking: 0,      use: "Betonter Fließtext." }
+- { format: text-label,       family: sans, size: 14, weight: 500, line_height: auto, tracking: 0,      use: "Labels: Form-/Toggle-Labels, Button-Text." }
+- { format: text-eyebrow,     family: mono, size: 9,  weight: 500, line_height: auto, tracking: 0.5px,  use: "Uppercase-Mikro-Labels." }
+- { format: text-data,        family: mono, size: 11, weight: 400, line_height: auto, tracking: 0,      use: "Tabellarische Mono-Daten." }
+- { format: text-kbd,         family: mono, size: 11, weight: 500, line_height: auto, tracking: 0,      use: "Tastatur-Tasten-Text." }
+- { format: text-input,       family: mono, size: 18, weight: 400, line_height: auto, tracking: 0,      use: "Command-/Eingabe-Text.", avoid: "Typo-Klasse — nicht als Text-Farbe input missverstehen." }
+```
+
+*Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS `--leading-*` bzw. `normal`.*
+
+---
+
+## 5 · Effekte
+
+Kein semantic-Tier (2 Effekte). Im Code Utilities; in Figma **Effect Styles**. Farbe folgt den
+Color-Primitives via `color-mix`.
+
+```yaml
+- { token: Glow,      css_var: --shadow-glow,      value: "0 0 4px 0 · cyan/500 @ 50%",      utilities: [shadow-glow],      use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)." }
+- { token: Elevation, css_var: --shadow-elevation, value: "0 14px 36px -6px · neutral/900 @ 18%", utilities: [shadow-elevation], use: "Schlagschatten erhabener Overlays/Menüs." }
+```
+
+**Sonst flach:** Tiefe wird angedeutet, nicht gestapelt. Stock-`shadow-xs/sm/md/lg` sind tot (§6).
+
+---
+
+## 6 · Stock-shadcn → Agentport-Vokabular
+
+Der Theme-Reset in `globals.css` setzt mehrere Tailwind-Default-Namespaces auf `initial`. Darauf bauende
+Stock-Klassen sind **tot** → beim Portieren jeder Component übersetzen.
+
+```yaml
+dead_utilities:   # durch Reset entfernt → Ersatz
+  - { stock: "text-xs/sm/base/lg/… (font-size)", reset: "--text-*: initial",        replace: "passende .text-*-Format-Klasse (§4)" }
+  - { stock: "font-normal/medium/semibold/bold", reset: "--font-weight-*: initial",  replace: "Gewicht steckt in der .text-*-Klasse" }
+  - { stock: "tracking-*",                       reset: "--tracking-*: initial",     replace: "steckt in der .text-*-Klasse" }
+  - { stock: "leading-*",                        reset: "--leading-*: initial",      replace: "steckt in der .text-*-Klasse" }
+  - { stock: "shadow-xs/sm/md/lg/xl",            reset: "--shadow-*: initial",       replace: "weglassen (flach) ODER shadow-elevation, wenn Tiefe Bedeutung trägt" }
+  - { stock: "Core-Farben (text-red-500 …)",     reset: "--color-*: initial",        replace: "nur DS-Semantics; text-white/current/transparent bleiben" }
+
+geometry_vs_token:
+  spacing: "Padding/Gap/Margin → benanntes Token MAPPE ÜBER DEN px-WERT: gap-2(8)→gap-md · gap-1.5(6)→gap-sm · px-4(16)→px-xl · py-2(8)→py-md · px-3(12)→px-lg · px-6(24)→px-2xl."
+  control_geometry: "Control-Höhen/Icon-Maße (h-9/h-8/h-10, size-9, size-4) NUMERISCH lassen — nicht auf der Spacing-Skala. Geometrie ≠ Spacing-Token."
+  radius: "rounded-sm/md/lg/xl/full bleiben; rounded(Base)/2xl/3xl/none meiden."
+
+keep_valid:
+  - "Opacity-Modifier auf DS-Tokens: bg-primary/90, ring-ring/50, outline-ring/50"
+  - "Arbitrary values: ring-[3px], size-[18px]"
+  - "Numerische Spacing-Utilities: p-4, gap-2, h-9, size-4"
+  - "Struktur-Namespaces: --breakpoint-*, --container-*, --animate-*, --default-*, --spacing"
+
+border_width_vs_color: "border = 1px Breite, getrennt von der Farbe. Base-Layer `* { @apply border-border outline-ring/50 }` setzt die Default-Farbe; abweichende Linien via zum Beispiel border-border-subtle/-emphasis/-strong."
+```
