@@ -14,15 +14,11 @@
 
 /*
   ── Figma → Code token seam ────────────────────────────────────────────
-  Die *semantischen* Werte liefert jetzt tokens.css (oben importiert,
-  exportiert aus Figma „Agentport DS"). Die @theme-inline-Brücke unten
-  übersetzt sie in Tailwind-Utilities.
-  `--radius` bleibt hier vorerst auf dem shadcn-calc-Modell — wird in einem
-  späteren Chunk auf die Token-Radien (--radius-sm…full) umgestellt.
+  Die *semantischen* Werte liefert tokens.css (oben importiert, exportiert aus
+  Figma „Agentport DS"). Die @theme-inline-Brücke unten übersetzt sie in
+  Tailwind-Utilities. Ein eigenes :root ist nicht mehr nötig — alle Werte
+  stehen in tokens.css.
 */
-:root {
-  --radius: 0.625rem;
-}
 
 /* Dark Mode: aktuell light-only (Figma hat noch keinen Dark-Mode-Token-Satz).
    shadcn-Default-Dark vorerst deaktiviert, damit sich Light=Figma nicht mit
@@ -109,11 +105,14 @@
   --color-background-fixed: var(--background-fixed);
   --color-destructive-foreground: var(--destructive-foreground);
 
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* Radius: Tailwind-Keys → unsere Semantics (tokens.css §3), konsistent zur
+     Color-Brücke. Trotz Namensgleichheit kein Self-Reference: `inline` emittiert
+     keine eigene Var, sondern nutzt den :root-Wert (--radius-sm = var(--radius-4)). */
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-full: var(--radius-full);
 }
 
 @layer base {
