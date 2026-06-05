@@ -83,9 +83,19 @@ dafür, dass die DS-Typo-Utilities in JEDER Component greifen** → gehört als 
 - `npm run check` gesamt **rot nur** wegen `agentport:test` „should render the app title": Working-Tree hat
   uncommitteten Fremd-Edit `Agentport`→`agentport` in `app.tsx` (nicht aus diesem Pilot). Offen für User.
 
+## Nachtrag — Voll-Matrix 24 + Icon-Slot (erledigt)
+
+- Set `.Button` (`3131:2`) auf **alle 24** `variant`×`size` ergänzt (15 Komponenten nachgebaut, an die
+  bestehenden Bindings/Styling-Map angelehnt). `/figma-verify` CLEAN (24 comps, 0 Overflow/Asymmetrie).
+- **Icon = echter Figma-Slot** (nicht Instance-Swap): pro Icon-Größen-Variante `component.createSlot()`,
+  konsistent `Icon` benannt → mergt zu **einer** set-weiten `SLOT`-Property (`Icon#3137:0`). Default-Content
+  = Remix-`add-line`-Vektor (16px) im Slot, Fill je Variante an das Text-Token gebunden. Slots sind
+  per-Component → die Property liegt nur auf den Icon-Varianten (ok). Code-Seitig ist das Pendant das
+  `children`-Slot des Buttons (Remix-Komponente reinreichen).
+
 ## Offen / Folge
 
-- Voll-Matrix 24 (alle variant×size) statt Pilot-9.
+- ~~Voll-Matrix 24~~ erledigt (s. Nachtrag).
 - Visuelle Storybook-Sichtprüfung (`npm run storybook`).
 - Hover/Focus/Disabled sind im Code abgebildet, in Figma nur Default-State gebaut (Figma-Variants später).
 - `secondary`/`destructive` = ⚠-Platzhalter (Stock-Hex), nicht final.
