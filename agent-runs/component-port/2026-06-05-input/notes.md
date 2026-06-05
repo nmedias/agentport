@@ -8,7 +8,7 @@ Stock-shadcn → der einzige sinnvolle Figma-Achsenträger ist `state`.
 
 - **Figma:** Component-Set `.Input` mit Property `state` (5 Varianten: default · focus · filled ·
   disabled · invalid), alle Fills/Strokes/Text/Radius/Padding an DS-Variablen gebunden, Typo via
-  Text-Style `Body`. `/figma-verify` = **CLEAN** (5 Member, 5 TEXT, 0 Flags/Hints).
+  Text-Style `Label`. `/figma-verify` = **CLEAN** (5 Member, 5 TEXT, 0 Flags/Hints).
 - **Code:** `input.tsx` neu auf DS-Utility-Vokabular, `input.stories.tsx`, `input.spec.tsx`,
   Re-Export in `index.ts`. libs/ui **Test+Typecheck+Lint grün** (7 Tests).
 - **Kein cn()-Fix nötig** — die `text-format`/Spacing-Erweiterung aus dem Button-Pilot trägt
@@ -34,7 +34,7 @@ keine Varianten/Sizes. Parts: base · placeholder · `file:`-Pseudo · selection
 | `bg-transparent` | — | **`bg-input-background`** | DS-Felder sind **opak** (Border trägt die Erkennbarkeit) |
 | `px-3` | 12 | `px-lg` | px-Wert-Map |
 | `py-1` | 4 | `py-xs` | px-Wert-Map |
-| `text-base` / `md:text-sm` | 16/14 | **`text-body`** | totes font-size → DS-Typo-Format (14 sans). **Nicht `text-input`** (= mono 18px Command) |
+| `text-base` / `md:text-sm` | 16/14 | **`text-label`** | totes font-size → DS-Typo-Format. **Nicht `text-input`** (= mono 18px Command). *Stil im Figma-DS nachträglich von Body auf Label (Medium 14) gesetzt — wie Button; Code zog nach.* |
 | `shadow-xs` | — | entfernt | tot, DS flach |
 | `transition-[color,box-shadow]` | — | unverändert | Struktur |
 | `placeholder:text-muted-foreground` | — | **`placeholder:text-input-placeholder`** | dedizierter DS-Token |
@@ -54,7 +54,8 @@ Datei `FIGMA_FILE_KEY` · Page `Components` 3126:2.
 
 **Variable-IDs (semantic):** input(border) 3038:5 · input-background 3108:2 · input-placeholder 3043:3 ·
 foreground 3037:3 · ring 3038:6 · destructive ⚠ 3038:3. **(semantic-dimension):** radius-md 3073:3 ·
-space-lg 3070:8 (px) · space-xs 3070:4 (py). **Text-Style:** Body `S:7e1bf8f13c3ffafb998f6bd71a65d8faa52911fb,`.
+space-lg 3070:8 (px) · space-xs 3070:4 (py). **Text-Style:** Label `S:4e034695df7aacfcebc7042471b1b11284b266f0,`
+(nachträglich von Body umgestellt).
 
 **State-Rezept (flach, kein nested Base — Input braucht keinen):**
 - default/filled/disabled = `border-input`; focus = `border-ring` + Ring; invalid = `border-destructive` + Ring.

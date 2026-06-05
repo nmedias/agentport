@@ -7,11 +7,11 @@ describe('Input', () => {
     expect(getByPlaceholderText('Search…')).toBeTruthy();
   });
 
-  // Guards the T1 twMerge setup: without the `text-format` group, `text-body`
+  // Guards the T1 twMerge setup: without the `text-format` group, `text-label`
   // would collapse into text-color and silently drop from the markup.
-  it('keeps the DS typography class (text-body survives twMerge)', () => {
+  it('keeps the DS typography class (text-label survives twMerge)', () => {
     const { getByRole } = render(<Input />);
-    expect(getByRole('textbox').className).toContain('text-body');
+    expect(getByRole('textbox').className).toContain('text-label');
   });
 
   it('reflects aria-invalid for the destructive state', () => {
