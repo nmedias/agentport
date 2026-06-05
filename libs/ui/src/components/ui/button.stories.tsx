@@ -40,30 +40,35 @@ export const Ghost: Story = { args: { variant: 'ghost' } };
 export const Destructive: Story = { args: { variant: 'destructive' } };
 export const Link: Story = { args: { variant: 'link' } };
 
-// Gallery stories render a fixed set and ignore args — disable the controls
-// so the panel doesn't show regulators that do nothing here.
+// Gallery stories consume args so a single relevant control stays live:
+// AllVariants → size, AllSizes/Icon → variant (the other controls are hidden
+// via controls.include). size is cast to the non-icon subset because args.size
+// is typed with 'icon' too, which our a11y union would reject on text buttons.
 export const AllVariants: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="flex flex-wrap items-center gap-3">
-      <Button>Default</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="destructive">Destructive</Button>
-      <Button variant="link">Link</Button>
-    </div>
-  ),
+  parameters: { controls: { include: ['size'] } },
+  render: ({ size }) => {
+    const s = size as 'default' | 'sm' | 'lg';
+    return (
+      <div className="flex flex-wrap items-center gap-3">
+        <Button size={s}>Default</Button>
+        <Button size={s} variant="secondary">Secondary</Button>
+        <Button size={s} variant="outline">Outline</Button>
+        <Button size={s} variant="ghost">Ghost</Button>
+        <Button size={s} variant="destructive">Destructive</Button>
+        <Button size={s} variant="link">Link</Button>
+      </div>
+    );
+  },
 };
 
 export const AllSizes: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
+  parameters: { controls: { include: ['variant'] } },
+  render: ({ variant }) => (
     <div className="flex flex-wrap items-center gap-3">
-      <Button size="sm">Small</Button>
-      <Button size="default">Default</Button>
-      <Button size="lg">Large</Button>
-      <Button size="icon" aria-label="Add">
+      <Button size="sm" variant={variant}>Small</Button>
+      <Button size="default" variant={variant}>Default</Button>
+      <Button size="lg" variant={variant}>Large</Button>
+      <Button size="icon" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
     </div>
@@ -71,24 +76,25 @@ export const AllSizes: Story = {
 };
 
 // Icon-only buttons (size="icon"): square, no text, Remix icon child, and a
-// mandatory accessible name (aria-label) — enforced at the type level.
+// mandatory accessible name (aria-label) — enforced at the type level. The
+// variant control applies to the whole set.
 export const Icon: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
+  parameters: { controls: { include: ['variant'] } },
+  render: ({ variant }) => (
     <div className="flex flex-wrap items-center gap-3">
-      <Button size="icon" aria-label="Add">
+      <Button size="icon" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
-      <Button size="icon" variant="secondary" aria-label="Search">
+      <Button size="icon" variant={variant} aria-label="Search">
         <RiSearchLine />
       </Button>
-      <Button size="icon" variant="outline" aria-label="Download">
+      <Button size="icon" variant={variant} aria-label="Download">
         <RiDownloadLine />
       </Button>
-      <Button size="icon" variant="ghost" aria-label="More options">
+      <Button size="icon" variant={variant} aria-label="More options">
         <RiMore2Line />
       </Button>
-      <Button size="icon" variant="destructive" aria-label="Delete">
+      <Button size="icon" variant={variant} aria-label="Delete">
         <RiDeleteBinLine />
       </Button>
     </div>
