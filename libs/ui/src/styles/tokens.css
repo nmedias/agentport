@@ -55,17 +55,21 @@
   --font-weight-semibold: 600;
   --font-weight-extrabold: 800;
 
-  /* --- Typography · size scale (rem; Anker --font-size-base = 1rem/16px) -----
-     Keine lineare calc-Skala wie Spacing (Typo ist modular) → direkte rem-Werte;
-     16 referenziert die Base. Kommentar = px-Äquivalent. */
-  --font-size-base: 1rem;                /* 16px — Root/Default */
-  --font-size-10: 0.625rem;              /* 10px */
-  --font-size-12: 0.75rem;               /* 12px */
-  --font-size-14: 0.875rem;              /* 14px */
-  --font-size-16: var(--font-size-base); /* 16px */
-  --font-size-22: 1.375rem;              /* 22px */
-  --font-size-32: 2rem;                  /* 32px */
-  --font-size-42: 2.625rem;              /* 42px */
+  /* --- Typography · size scale (modular) ---------------------------------
+     Modulare Skala: --font-size-base (14px = Design-Body, Step 0) × --font-scale^n.
+     `round(…, 0.0625rem)` rundet jede Stufe auf ganze px (0.0625rem = 1px @ Root 16).
+     Jede Stufe aus der Base berechnet (nicht verkettet → kein Rundungs-Aufschaukeln).
+     Browser-Root bleibt 16px; rem skaliert mit. step-4 (34px) ist Reserve (kein Format). */
+  --font-scale: 1.25;
+  --font-size-base: 0.875rem;  /* 14px — Step 0 (Body) */
+  --font-size-step-neg2: round(calc(var(--font-size-base) / var(--font-scale) / var(--font-scale)), 0.0625rem);                                              /* 9px  */
+  --font-size-step-neg1: round(calc(var(--font-size-base) / var(--font-scale)), 0.0625rem);                                                                   /* 11px */
+  --font-size-step-0:    var(--font-size-base);                                                                                                               /* 14px */
+  --font-size-step-1:    round(calc(var(--font-size-base) * var(--font-scale)), 0.0625rem);                                                                   /* 18px */
+  --font-size-step-2:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale)), 0.0625rem);                                               /* 22px */
+  --font-size-step-3:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem);                           /* 27px */
+  --font-size-step-4:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem);       /* 34px — Reserve */
+  --font-size-step-5:    round(calc(var(--font-size-base) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale) * var(--font-scale)), 0.0625rem); /* 43px — Display */
 
   /* --- Typography · line-heights - */
   --leading-tight: 1;
@@ -170,77 +174,77 @@
 
   /* Display */
   --text-display-family:   var(--font-sans);
-  --text-display-size:     var(--font-size-42);
+  --text-display-size:     var(--font-size-step-5);
   --text-display-weight:   var(--font-weight-extrabold);
   --text-display-leading:  var(--leading-tight);
   --text-display-tracking: var(--tracking-tight);
 
   /* Heading */
   --text-heading-family:   var(--font-sans);
-  --text-heading-size:     var(--font-size-32);
+  --text-heading-size:     var(--font-size-step-3);
   --text-heading-weight:   var(--font-weight-extrabold);
   --text-heading-leading:  var(--leading-snug);
   --text-heading-tracking: var(--tracking-tight);
 
   /* Heading-sm */
   --text-heading-sm-family:   var(--font-sans);
-  --text-heading-sm-size:     var(--font-size-22);
+  --text-heading-sm-size:     var(--font-size-step-2);
   --text-heading-sm-weight:   var(--font-weight-extrabold);
   --text-heading-sm-leading:  var(--leading-snug);
   --text-heading-sm-tracking: var(--tracking-tight);
 
   /* Title */
   --text-title-family:   var(--font-sans);
-  --text-title-size:     var(--font-size-16);
+  --text-title-size:     var(--font-size-step-1);
   --text-title-weight:   var(--font-weight-semibold);
   --text-title-leading:  normal;
   --text-title-tracking: var(--tracking-normal);
 
   /* Body */
   --text-body-family:   var(--font-sans);
-  --text-body-size:     var(--font-size-14);
+  --text-body-size:     var(--font-size-step-0);
   --text-body-weight:   var(--font-weight-regular);
   --text-body-leading:  var(--leading-relaxed);
   --text-body-tracking: var(--tracking-normal);
 
   /* Body-strong */
   --text-body-strong-family:   var(--font-sans);
-  --text-body-strong-size:     var(--font-size-14);
+  --text-body-strong-size:     var(--font-size-step-0);
   --text-body-strong-weight:   var(--font-weight-semibold);
   --text-body-strong-leading:  normal;
   --text-body-strong-tracking: var(--tracking-normal);
 
   /* Label */
   --text-label-family:   var(--font-sans);
-  --text-label-size:     var(--font-size-14);
+  --text-label-size:     var(--font-size-step-0);
   --text-label-weight:   var(--font-weight-medium);
   --text-label-leading:  normal;
   --text-label-tracking: var(--tracking-normal);
 
   /* Eyebrow (Uppercase-Mikro-Labels) */
   --text-eyebrow-family:   var(--font-mono);
-  --text-eyebrow-size:     var(--font-size-10);
+  --text-eyebrow-size:     var(--font-size-step-neg2);
   --text-eyebrow-weight:   var(--font-weight-medium);
   --text-eyebrow-leading:  normal;
   --text-eyebrow-tracking: var(--tracking-wide);
 
   /* Data (Mono-Tabellendaten) */
   --text-data-family:   var(--font-mono);
-  --text-data-size:     var(--font-size-12);
+  --text-data-size:     var(--font-size-step-neg1);
   --text-data-weight:   var(--font-weight-regular);
   --text-data-leading:  normal;
   --text-data-tracking: var(--tracking-normal);
 
   /* Kbd (Tastatur-Tasten) */
   --text-kbd-family:   var(--font-mono);
-  --text-kbd-size:     var(--font-size-12);
+  --text-kbd-size:     var(--font-size-step-neg1);
   --text-kbd-weight:   var(--font-weight-medium);
   --text-kbd-leading:  normal;
   --text-kbd-tracking: var(--tracking-normal);
 
   /* Input (Command-/Eingabe-Text) */
   --text-input-family:   var(--font-mono);
-  --text-input-size:     var(--font-size-16);
+  --text-input-size:     var(--font-size-step-1);
   --text-input-weight:   var(--font-weight-regular);
   --text-input-leading:  normal;
   --text-input-tracking: var(--tracking-normal);

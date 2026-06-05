@@ -26,9 +26,11 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 - **Hybrid (III)** — Variablen als Referenz-Teile → in Text Styles gebündelt.
 - **Line-Height ist NICHT bindbar** in Figma → als Referenz-Ratios angelegt (`1.0/1.2/1.5`),
   im Text Style **roh** als % gesetzt (auto, wo das Design auto nutzt).
-- **A-scale** (strenge Type-Scale-Ramp, 7 Steps `10·12·14·16·22·32·42`); Ist-Größen snappen:
-  9→10 · 11/11.5→12 · **13/14/15→14** · 16 · 22 · 32 · 42. Einzige spürbare Verschiebung
-  **15→14** (Property-Werte, SemiBold ×24 — Hierarchie künftig übers Weight statt Größe).
+- **Modulare Skala** (Ratio **1.25**, Base **14px** = Step 0/Body, display-lastig, 8 Steps
+  `step-neg2…step-5`): `9 · 11 · 14 · 18 · 22 · 27 · 34 · 43`. `step-4` (34) ist **Reserve** (kein Format).
+  Im CSS aus der Base berechnet: `round(calc(base × font-scale^n), 0.0625rem)` → gerundet auf ganze px.
+  *(Frühere A-scale 10/12/14/16/22/32/42 abgelöst. Abweichungen: Eyebrow 10→9, Data 12→11, Body 14→14,
+  Title 16→18, Heading-sm 22→22, Heading 32→27, Display 42→43.)*
 - **Weights zusammengelegt:** Bold 700 → ExtraBold 800 (700 kam nur 1× vor). Set:
   `regular 400 · medium 500 · semibold 600 · extrabold 800`.
 - **Line-Height-Set:** `1.0 / 1.2 / 1.5` (+ AUTO). Explizite Ratio nur für `display`,
@@ -36,40 +38,43 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 - **Tracking in px** (nicht %): Binding zwingt Letter-Spacing auf PIXELS → Werte als px.
   `tight −0.5 · normal 0 · wide 0.5` (entspricht den Ist-Werten).
 - **Naming:** Referenz-Teile wert-/rollenbenannt; **Formate rollenbasiert**.
-- Display 42 (Hero „invoice") gehört bewusst ins System; 32 + 42 bleiben getrennte Rollen.
+- Display (Hero „invoice") = Top-Step `step-5` (43). `font-scale` ist als **eine Variable** steuerbar
+  (CSS `--font-scale` + Figma `font-scale`) → ganze Skala über eine Zahl skalierbar.
 
 ## Umsetzungsstand (Figma)
 
 ### `reference-typo` — `VariableCollectionId:3081:2`, Mode `value` (`3081:0`)
-20 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
+22 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
 - `family/` — `sans` = „Hanken Grotesk", `mono` = „Geist Mono" *(STRING)*
 - `weight/` — `regular 400 · medium 500 · semibold 600 · extrabold 800` *(FLOAT)*
-- `size/` — `base 16 · 10 · 12 · 14 · 16 · 22 · 32 · 42` *(FLOAT)*
+- `font-scale` — `1.25` (Modular-Ratio) · `size/base` — `14` *(FLOAT)*
+- `size/` — `step-neg2 9 · step-neg1 11 · step-0 14 · step-1 18 · step-2 22 · step-3 27 ·
+  step-4 34 (Reserve) · step-5 43` *(FLOAT)*
 - `line-height/` — `tight 1.0 · snug 1.2 · relaxed 1.5` *(FLOAT, Ratio; nicht bindbar)*
 - `tracking/` — `tight −0.5 · normal 0 · wide 0.5` *(FLOAT, px)*
 
-**Font-Sizes im CSS-Export:** in **rem** mit Anker `--font-size-base: 1rem` (16px = Root); `size/16`
-referenziert die Base, die übrigen sind direkte rem-Werte (Typo ist modular, **kein** `calc(base × N)`
-wie Spacing). `size/base` = 16 als dokumentierter Anker in Figma (px, kein calc).
+**Font-Sizes im CSS-Export:** modulare Skala in **rem**, berechnet aus `--font-size-base` (0.875rem/14px)
+× `--font-scale` (1.25)^n, gerundet via `round(…, 0.0625rem)` auf ganze px. Figma kann nicht rechnen
+→ dort sind `size/step-*` die gerundeten Werte direkt; `font-scale` + `size/base` als dokumentierte Anker.
 
 ### `semantic-typo` — `VariableCollectionId:3082:2`, Mode `value` (`3082:0`)
 48 Variablen, **11 Format-Gruppen**, jeder Teil aliast `reference-typo`. Scopes: family
 `FONT_FAMILY`, size `FONT_SIZE`, weight `FONT_WEIGHT`, tracking `LETTER_SPACING`,
 line-height `[]` (nicht bindbar). LH-Teil nur bei `Display/Heading/Heading-sm/Body`.
 
-| Format | family | size | weight | line-height | tracking |
+| Format | family | size (step) | weight | line-height | tracking |
 |---|---|---|---|---|---|
-| `Display`     | sans | 42 | extrabold | 1.0 (100%) | tight |
-| `Heading`     | sans | 32 | extrabold | 1.2 (120%) | tight |
-| `Heading-sm`  | sans | 22 | extrabold | 1.2 (120%) | tight |
-| `Title`       | sans | 16 | semibold  | auto | normal |
-| `Body`        | sans | 14 | regular   | 1.5 (150%) | normal |
-| `Body-strong` | sans | 14 | semibold  | auto | normal |
-| `Label`       | sans | 14 | medium    | auto | normal |
-| `Eyebrow`     | mono | 10 | medium    | auto | wide |
-| `Data`        | mono | 12 | regular   | auto | normal |
-| `Kbd`         | mono | 12 | medium    | auto | normal |
-| `Input`       | mono | 16 | regular   | auto | normal |
+| `Display`     | sans | 43 (step-5)    | extrabold | 1.0 (100%) | tight |
+| `Heading`     | sans | 27 (step-3)    | extrabold | 1.2 (120%) | tight |
+| `Heading-sm`  | sans | 22 (step-2)    | extrabold | 1.2 (120%) | tight |
+| `Title`       | sans | 18 (step-1)    | semibold  | auto | normal |
+| `Body`        | sans | 14 (step-0)    | regular   | 1.5 (150%) | normal |
+| `Body-strong` | sans | 14 (step-0)    | semibold  | auto | normal |
+| `Label`       | sans | 14 (step-0)    | medium    | auto | normal |
+| `Eyebrow`     | mono | 9 (step-neg2)  | medium    | auto | wide |
+| `Data`        | mono | 11 (step-neg1) | regular   | auto | normal |
+| `Kbd`         | mono | 11 (step-neg1) | medium    | auto | normal |
+| `Input`       | mono | 18 (step-1)    | regular   | auto | normal |
 
 ### Text Styles (Anwendungs-Ebene)
 11 Figma Text Styles, je 4 gebundene Variablen (`fontFamily`, `fontSize`, `fontWeight`,
@@ -88,6 +93,7 @@ Kbd 12 · Body 12 · Input 5 · Heading 2 · Display 1 · Heading-sm 1 · Title 
 |---|---|---|
 | Architektur | Hybrid (III) | Referenz-Teile → Formate → Text Styles |
 | Size-Scale | A-scale (7 Steps) | `size/10–42`; 15→14 |
+| Size-Scale (Update) | **modular**, Ratio 1.25, Base 14, 8 Steps | `size/step-neg2…step-5` (9–43), step-4 Reserve; `font-scale`+`size/base`; CSS via `round(calc())` |
 | Weights | 700 → 800 zusammengelegt | 4 Weights |
 | Line-Height | nicht bindbar → Ratio-Referenz, roh gesetzt; auto wo Design auto | `1.0/1.2/1.5` |
 | Tracking | px statt % (Binding zwingt PIXELS) | `−0.5 / 0 / 0.5` |
