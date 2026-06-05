@@ -41,12 +41,16 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 ## Umsetzungsstand (Figma)
 
 ### `reference-typo` — `VariableCollectionId:3081:2`, Mode `value` (`3081:0`)
-19 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
+20 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
 - `family/` — `sans` = „Hanken Grotesk", `mono` = „Geist Mono" *(STRING)*
 - `weight/` — `regular 400 · medium 500 · semibold 600 · extrabold 800` *(FLOAT)*
-- `size/` — `10 · 12 · 14 · 16 · 22 · 32 · 42` *(FLOAT)*
+- `size/` — `base 16 · 10 · 12 · 14 · 16 · 22 · 32 · 42` *(FLOAT)*
 - `line-height/` — `tight 1.0 · snug 1.2 · relaxed 1.5` *(FLOAT, Ratio; nicht bindbar)*
 - `tracking/` — `tight −0.5 · normal 0 · wide 0.5` *(FLOAT, px)*
+
+**Font-Sizes im CSS-Export:** in **rem** mit Anker `--font-size-base: 1rem` (16px = Root); `size/16`
+referenziert die Base, die übrigen sind direkte rem-Werte (Typo ist modular, **kein** `calc(base × N)`
+wie Spacing). `size/base` = 16 als dokumentierter Anker in Figma (px, kein calc).
 
 ### `semantic-typo` — `VariableCollectionId:3082:2`, Mode `value` (`3082:0`)
 48 Variablen, **11 Format-Gruppen**, jeder Teil aliast `reference-typo`. Scopes: family
