@@ -1,0 +1,16 @@
+{
+  "_doc": "Fixed values for component-sync. Edit here only; the SKILL and snippets reference these.",
+  "figma": {
+    "fileKey": "FIGMA_FILE_KEY",
+    "fileName": "Agentport DS",
+    "componentsPage": "Components",
+    "comment": "Read-only. Resolve the set .<Component> by name on the 'Components' page; variables resolve by ID (names carry group paths, e.g. 'shadcn Default/primary')."
+  },
+  "code": {
+    "componentsDir": "libs/ui/src/components/ui",
+    "cnUtils": "libs/ui/src/lib/utils.ts",
+    "reference": "design-docs/design-system/tokens-reference.md",
+    "gate": "npx nx test|typecheck|lint @agentport/ui",
+    "comment": "One folder per component: componentsDir/<name>/{<name>.tsx,.stories.tsx,.spec.tsx,index.ts}. cnUtils carries the 'text-format' twMerge group (the DS typo class must survive the rendered markup)."
+  }
+}
