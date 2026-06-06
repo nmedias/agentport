@@ -80,7 +80,8 @@ Land the real source locally, then read it — that file is the rewrite's source
 **No CVA?** A bare element with one class string (e.g. Input = one `<input>`) → the Figma axis is
 **`state`** (default/focus/filled/disabled/invalid) or content, never a faked `variant×size`. Pick
 the states the class string actually expresses (`focus-visible:`, `disabled:`, `aria-invalid:`,
-placeholder-vs-value).
+placeholder-vs-value). A **static, non-interactive** element (`pointer-events-none`/`select-none`,
+no pseudo-class states) has no state axis → the axis is **content** (e.g. text vs icon).
 
 ### T3 — Translate
 
@@ -143,6 +144,12 @@ Pattern (validated on Button):
   on the effect-bearing node; keep ancestors `clipsContent=false` so the ring isn't clipped.
 - **disabled** = member node opacity (dimming the text too is correct here).
 
+### T4b — Exercise the props
+
+Instantiate the set, `setProperties` across every value of every property (variant, text, slot), read
+each back, iterate until it takes effect. A prop that exists but does nothing (slot with no default,
+unbound text) is broken. Delete the test instances.
+
 ### T5 — Verify
 
 `/figma-verify <setId>` → must be **CLEAN** (vectors not text, no clipping/overlap, padding symmetry).
@@ -156,6 +163,8 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
   `get-storybook-story-instructions` first (canonical CSF/imports/conventions), write, then
   `preview-stories` → surface every URL to the user (rendered-output check the gate + `/figma-verify`
   skip). No MCP? Mirror `button/button.stories.tsx`.
+- **No dead controls**: render-only stories ignore args → `parameters: { controls: { disable: true } }`;
+  elsewhere expose only the relevant ones (`controls: { include: [...] }`).
 - **a11y**: an icon-only control (no text child) must require an accessible name — enforce
   `aria-label`/`aria-labelledby` at the **type level** (discriminated props, see `button.tsx` `size="icon"`).
 - **Gate**: `npx nx test|typecheck|lint @agentport/ui` green, and confirm the DS typography class
@@ -175,11 +184,12 @@ the next port reuses it instead of re-deriving it.
 |---|---|
 | Treat `secondary`/`destructive`/`chart-*` as final | ⚠ placeholders (stock hex), not designed — flag, don't finalize. |
 | Read `componentPropertyDefinitions` off a variant | Readable only on the **set** (or a non-variant component) — throws on a single variant. |
+| Decide a Plugin API is missing because it's not in the typings | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed). |
 
 ## Boundaries
 
 - One component per run, **initial port only**. An already-built component whose Figma changed →
   `/component-sync`. Signature redesign is `/design-punk`, not here.
-- **Living skill — never "done".** Every port surfaces new DS-integration gotchas (twMerge groups,
-  Figma slots, grid layout, a11y, the folder convention all came out of real ports). Fold each new
-  learning back in — as a step or a red flag — before finishing the run, or the next port re-hits it.
+- **Never edit this skill mid-run.** When a port surfaces a skill gap or tooling problem, write it to
+  `<run>/skill-feedback.md` (candidate fix, general phrasing) — don't fold it in yourself. The user
+  reviews and applies.

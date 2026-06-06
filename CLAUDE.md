@@ -121,7 +121,7 @@ Installed under `.claude/skills/` (project-local).
 **Design → Code:**
 - `/shadcn-component-port` — **initial** port of one shadcn component into the Agentport DS: read its
   anatomy (shadcn MCP / `ui:add`), build a token-bound Figma component set, write the code on the DS
-  utility vocabulary. First-time creation only. Living skill — fold each new DS-integration learning back in.
+  utility vocabulary. First-time creation only. Per-run skill gaps go to `<run>/skill-feedback.md`, not the skill.
 - `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
