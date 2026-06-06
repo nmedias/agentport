@@ -77,9 +77,10 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
 - `handoff-agentport-design.md` — earlier handoff (Sketch → Hi-Fi; full sketch inventory).
 - `Agentport/Design-Punk-Roadmap.md` / `Agentport/Sketch-Roadmap.md` — phase + decision logs (Figma IDs).
 - `handoff-agentport-component-port.md` — **resume doc** for the code strand (shadcn→Figma→code
-  pipeline state, ported components, Figma node IDs). Read first to continue component-port work.
+  pipeline state, ported components, Figma node IDs). Read first to continue port/sync work.
 - `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk
-  (Figma var ↔ CSS var ↔ Tailwind utility ↔ value + `use`/`avoid`); data source for `/component-port`.
+  (Figma var ↔ CSS var ↔ Tailwind utility ↔ value + `use`/`avoid`); data source for
+  `/shadcn-component-port` + `/component-sync`.
 
 ## Figma
 
@@ -118,10 +119,13 @@ Installed under `.claude/skills/` (project-local).
 - `/slop-check` — audit a Figma node for generic AI-design tells before handoff.
 
 **Design → Code:**
-- `/component-port` — port one shadcn component into the Agentport DS: read its anatomy
-  (shadcn MCP / `ui:add`), rebuild it as a token-bound Figma component set, rewrite the code
-  on the DS utility vocabulary. Data source: `design-docs/design-system/tokens-reference.md`.
-  Living skill — fold each new DS-integration learning back into it before finishing a run.
+- `/shadcn-component-port` — **initial** port of one shadcn component into the Agentport DS: read its
+  anatomy (shadcn MCP / `ui:add`), build a token-bound Figma component set, write the code on the DS
+  utility vocabulary. First-time creation only. Living skill — fold each new DS-integration learning back in.
+- `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
+  per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
+  Figma). Source-agnostic (not shadcn-bound).
+- Both share the data source `design-docs/design-system/tokens-reference.md`.
 
 **Figma helpers:**
 - `/figma-status` — check Figma Desktop + Plugin MCP connection.
