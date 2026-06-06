@@ -46,7 +46,10 @@ npm run ui:add -- button   # add a shadcn component into libs/ui
 ```
 
 - `npm test`/`lint` run via Vitest/ESLint but **don't typecheck** — `npm run check` does. Use it as the gate.
-- After `ui:add`, re-export the component in `libs/ui/src/index.ts` (shadcn won't).
+- **One folder per component:** `libs/ui/src/components/ui/<name>/` holds `<name>.tsx` +
+  `.stories.tsx` + `.spec.tsx` + a barrel `index.ts`. `ui:add` writes **flat**
+  (`components/ui/<name>.tsx`) — move it into its folder, add the barrel, then re-export the folder
+  in `libs/ui/src/index.ts` (shadcn won't).
 - `globals.css` (`libs/ui/src/styles/`) is the single seam for the Figma "Agentport DS" semantics.
 
 
