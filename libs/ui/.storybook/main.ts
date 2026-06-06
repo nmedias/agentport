@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   stories: [
     '../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'
   ],
-  addons: [],
+  addons: ['@storybook/addon-mcp'],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {
