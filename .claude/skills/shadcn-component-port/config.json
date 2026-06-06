@@ -3,7 +3,8 @@
   "figma": {
     "fileKey": "FIGMA_FILE_KEY",
     "fileName": "Agentport DS",
-    "componentsPage": "Components",
+    "componentsPage": "Shadcn Components",
+    "pageId": "3126-2",
     "comment": "Build component sets on the 'Components' page (create if absent). Token variables live in this file."
   },
   "collections": {
