@@ -6,13 +6,13 @@
     "comment": "#FFFFFF white, 12px corner radius (section default is 2). A Figma SECTION supports fill + cornerRadius but NO padding and NO auto-layout — that is why there is no inner frame; the headline is positioned directly."
   },
   "headline": {
-    "fontFamily": "Inter",
-    "fontStyle": "Bold",
-    "fontSize": 36,
-    "lineHeightPct": 120,
+    "fontFamily": "Hanken Grotesk",
+    "fontStyle": "ExtraBold",
+    "fontSize": 43,
+    "lineHeightPct": 100,
     "color": { "r": 0, "g": 0, "b": 0 },
     "inset": 80,
-    "comment": "Headline placed inset px from the section's top-left (section-relative coords). inset is also the content padding callers should respect on all sides. "
+    "comment": "Use Text-format: Display (if applicable). Headline placed inset px from the section's top-left (section-relative coords). inset is also the content padding callers should respect on all sides. "
   },
   "placement": {
     "offsetRight": 120,
