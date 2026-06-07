@@ -114,12 +114,22 @@ group paths like `shadcn Default/primary`):
 - control height → `resize(w,h)` THEN `layoutSizingHorizontal='HUG'`, `…Vertical='FIXED'`.
 - slottable / swappable content (icon, leading/trailing adornment, avatar, …) = a real Figma slot:
   `component.createSlot()`, named consistently so it merges to ONE set-level `SLOT` property; drop a
-  sensible default inside (e.g. an icon → 16px `createNodeFromSvg`, inner VECTOR fill bound per
-  variant). Slots are per-component → the prop appears only on owning variants (fine).
+  sensible default inside (icon → `createNodeFromSvg`, inner VECTOR fill bound per variant). Slots are
+  per-component → the prop appears only on owning variants (fine). **Config the slot — default
+  geometry is unreliable** (seen `100×100/NONE/white-fill` AND `HUG/empty` same session → never
+  assume): `slot.fills=[]` (default fill is opaque white → box behind content); give the slot **its
+  own auto-layout** → slotted content becomes a real layout child (can align AND self-fit via child
+  `FILL`, not just sit at coords). Size by intent: **stable box** (key cap, avatar) = slot
+  `FIXED`/`FILL` to fixed dims, content sits without growing it; **hug content** = slot `HUG/HUG`.
+  Align (`CENTER/CENTER` …) is per-case, not a rule. Bare `resize()` w/o auto-layout freezes size AND
+  leaves content unmanaged — avoid.
 - icons → **Remix only**, never a text glyph (search via the Remix-icon MCP; code = `@remixicon/react`
   as `children`).
 - `combineAsVariants(comps, section)`; name each `propA=valA, propB=valB` → props auto-derive. Append
   more with `set.appendChild(comp)` (merges by name; same-named slots/props collapse).
+- component properties attach by node type, not timing: add TEXT/BOOL/INSTANCE_SWAP on the **set** or a
+  standalone comp, then bind the node (`node.componentPropertyReferences = { characters|visible|mainComponent: id }`); 
+  Prop ids change on combine → re-read.
 
 **Full matrix** — every value of every property, not a representative subset (a partial set reads as broken).
 
