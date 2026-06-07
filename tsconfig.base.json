@@ -20,11 +20,6 @@
     "target": "es2022",
     "customConditions": [
       "agentport-monorepo"
-    ],
-    "paths": {
-      "@/*": [
-        "./libs/ui/src/*"
-      ]
-    }
+    ]
   }
 }
