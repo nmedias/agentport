@@ -15,7 +15,7 @@
     "check": "nx run-many -t lint test typecheck",
     "storybook": "nx storybook @agentport/ui --port 6006",
     "build-storybook": "nx build-storybook @agentport/ui",
-    "ui:add": "npx shadcn@latest add",
+    "ui:add": "npx shadcn@latest add -c libs/ui",
     "graph": "nx graph",
     "sync": "nx sync",
     "reset": "nx reset"
