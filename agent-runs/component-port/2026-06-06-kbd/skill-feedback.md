@@ -3,7 +3,17 @@
 Per-run skill gaps surfaced during the kbd port. Candidate fixes, general phrasing — for the user to
 review and fold into the skill (not edited mid-run).
 
-## 1. T2 — `npm run ui:add -- <component>` does not work in this monorepo (path problem)
+## 1. T2 — `npm run ui:add -- <component>` does not work in this monorepo (path problem) — ✅ CLOSED
+
+**Status: CLOSED — no skill edit needed.** The fix below is committed (`fc046fc`, alias scope refined
+in `1eb20d4`), which makes `npm run ui:add -- <component>` land flat at
+`libs/ui/src/components/ui/<component>.tsx` again — exactly what SKILL.md:72–74 already describes. The
+`-c` / nested-path / `rm -rf libs/ui/libs` caveats were **symptoms of the broken state**, now removed,
+so they must **not** go into the skill. What follows is kept as a root-cause + fix record in case the
+setup ever regresses — not an open to-do.
+
+---
+
 
 **What the skill says (T2.2):** "If `libs/ui/src/components/ui/<component>/` is absent:
 **`npm run ui:add -- <component>`** … shadcn writes it **flat** → move to `components/ui/<component>/…`".
@@ -52,51 +62,107 @@ Two changes remove the footgun at the source so `npm run ui:add -- <component>` 
        "extends": "../../tsconfig.base.json"
      }
    ```
-   Safe because `libs/ui/tsconfig.json` is a solution-style file (compiles nothing); the real builds
-   (`tsconfig.lib/spec/storybook.json`) extend the base **directly** and keep the root-relative `@/*`,
-   so compilation is unaffected. Confirmed: `nx run-many -t typecheck lint test` green across both
-   `@agentport/ui` and `agentport`.
+   Safe because `libs/ui/tsconfig.json` is a solution-style file (compiles nothing). Confirmed:
+   `nx run-many -t typecheck lint test` green across both `@agentport/ui` and `agentport`.
+
+   > **Update (post-refactor, commit `1eb20d4`):** the `@/*` mapping was subsequently moved **out of
+   > `tsconfig.base.json` entirely** and into the three libs/ui build configs (`tsconfig.lib/spec/
+   > storybook.json`) as the workspace-relative `./src/*`, because a repo-global alias pointing into one
+   > lib is the wrong altitude. So the canonical compiler entry now lives in the build configs, not the
+   > base. The `libs/ui/tsconfig.json` override above stays (it serves shadcn-CLI + editor). Net: three
+   > independent resolvers — TS compiler (build configs), Vite (`resolve.alias` in `vite.config.mts`,
+   > hardcoded to `src`, used by Vitest + Storybook), shadcn/editor (`libs/ui/tsconfig.json`).
 
 **Test evidence:** with both changes, `npm run ui:add -- badge` created
 `libs/ui/src/components/ui/badge.tsx` (flat, correct) with **no** `libs/ui/libs/` nesting. (Note: the
 shadcn "✔ Created …" log line is unreliable — it printed a non-nested path even on the broken kbd run.)
 
-**Candidate fix for T2.2:** once the two changes above are committed, the skill can simply say
-> Run `npm run ui:add -- <component>` → lands flat at `libs/ui/src/components/ui/<component>.tsx`. Move
-> it into its folder `components/ui/<component>/<component>.tsx`, add the barrel, re-export in
-> `libs/ui/src/index.ts`.
-
-i.e. the existing "flat → move into folder" wording becomes true again, and the `-c`/nesting/cleanup
-caveats disappear. **Until committed**, the manual path is: `npx shadcn@latest add <component> -c libs/ui`
-→ nested write → `mv libs/ui/libs/ui/src/components/ui/<c>.tsx …/<c>/<c>.tsx` → `rm -rf libs/ui/libs`.
+**Skill edit needed: NONE.** With the fix committed, SKILL.md:72–74 (`npm run ui:add -- <component>`
+→ writes flat → move into `components/ui/<component>/` + barrel) is accurate as-is. No `-c`, nesting,
+or cleanup wording should be added — that was the broken-state symptom, now gone.
 
 **Side effect to watch:** `ui:add` also runs `npm install` for the component's deps (badge pulled in
 `radix-ui`), touching `libs/ui/package.json` + `package-lock.json`. Real ports want that; throwaway
 tests must `git checkout` those two files.
 
-## 2. T4 — slot default size is fixed 100×100 and a slot cannot HUG
+## 2. T4 — slot needs explicit config (geometry + fill + auto-layout) — ✅ written into SKILL.md
 
-**Gap:** T4's slot guidance ("`component.createSlot()` … drop a sensible default inside") omits that a
-fresh `SLOT` node is created at a **fixed 100×100** with `layoutMode='NONE'`. Inside an auto-layout
-parent that blows the component out (the icon cap became 108px wide and the icon floated above the
-cap). A slot **cannot** take `layoutSizingHorizontal='HUG'` (NONE layoutMode), so hugging the parent
-to the icon requires resizing the slot itself.
+**Gap:** T4's slot guidance ("`createSlot()` … drop a sensible default inside") omitted that a fresh
+slot must be configured — and that *how* depends on intent.
 
-**Candidate fix (T4 slot bullet):** add —
-> After `createSlot()` the slot is a **fixed 100×100 / layoutMode NONE** node and cannot HUG. Resize
-> it to the default content's box (`slot.resize(w,h)`) and set `slot.clipsContent=false`, so the
-> auto-layout parent hugs correctly instead of inheriting 100px.
+**Verified (throwaway probes + the live kbd slot):**
+- Default geometry is **unreliable**: in one session a fresh slot came up `100×100 / layoutMode NONE /
+  opaque-white fill`, while the built kbd slot ended up `auto-layout / HUG / empty fill`. Never assume
+  the default — set it explicitly.
+- An unconfigured `100×100` slot inflates the auto-layout parent (icon cap blew to 108px, icon floated
+  above the cap).
+- A slot with `layoutMode='NONE'` **cannot** `HUG` (`"HUG can only be set on auto-layout frames…"`).
+  `FILL` is *accepted* but leaves it at 100 — a trap, not a fix.
+- Default slot fill is **opaque white** (`{1,1,1}`) → a box behind the content unless cleared.
+- Giving the slot its **own auto-layout** makes the slotted content a real layout child: it can be
+  **aligned** AND **self-fit** (child `layoutSizing='FILL'` → scales to the slot box), not just placed
+  at coords.
 
-## 3. T4/T4b — TEXT (and other non-slot) component properties can't be added after `combineAsVariants`
+**Intent decides the sizing (not a one-size fix):**
+- **Stable box** (key cap, avatar — the kbd case): slot keeps its size, content sits inside without
+  growing it → slot `FIXED`/`FILL` to fixed dims, content centered. A swapped 24px icon is centered,
+  not allowed to blow up the cap.
+- **Hug content** (component should grow to whatever's slotted): slot `HUG/HUG`.
+- A bare `resize()` without auto-layout freezes the size **and** leaves the content unmanaged — avoid.
 
-**Gap:** Tried to add a `TEXT` property to a variant *after* combining → `addComponentProperty`
-throws **"Can only set component property definitions on a product component"**. A variant inside a
-set is not a "product component". The `INSTANCE_SWAP` slot prop only survived because `createSlot`
-ran **before** `combineAsVariants`.
+**Resolution:** written into the T4 slot bullet of `SKILL.md` (compact). Supersedes the earlier
+"resize the slot" candidate — that was a workaround for the bad default, not the right model.
 
-**Candidate fix (T4 / red-flags):** add a row —
-> Add every TEXT / BOOLEAN / INSTANCE_SWAP / slot component property **before** `combineAsVariants` —
-> on the standalone component. After combining, `addComponentProperty` throws "Can only set component
-> property definitions on a product component". (VARIANT properties are the exception — they derive
-> from the combine.) If a per-variant text label needs to stay editable and you only realise
-> post-combine, a direct character override on the instance is a valid fallback (not a broken prop).
+## 3. T4 — where component properties can be added (set vs variant) — ✅ written into SKILL.md
+
+**Original (wrong) claim:** "add every TEXT/BOOL/INSTANCE_SWAP/slot prop **before** `combineAsVariants`;
+after combining `addComponentProperty` throws, and the slot only survived because it ran pre-combine."
+That conflated two different APIs and was **doubly wrong** — it is a **target** rule (which node type),
+not a timing rule.
+
+**Verified (throwaway probes):**
+
+| API | standalone (pre-combine) | child variant (post-combine) | set (post-combine) |
+|---|---|---|---|
+| `addComponentProperty` (TEXT/BOOL/INSTANCE_SWAP) | ✅ | ❌ *"product component"* | ✅ |
+| `createSlot` (SLOT) | ✅ | ✅ | ❌ no `createSlot` on a set |
+
+- TEXT/etc. **can** be added post-combine — on the **set**, not a child variant. Binding a variant's
+  node to a set-level prop post-combine works end-to-end (verified: `set.addComponentProperty` → set
+  `node.componentPropertyReferences={characters: id}` → instantiate → `setProperties` → the text node
+  actually changed to "Changed").
+- Slots **can** be added post-combine — on a **child variant** (not restricted). So the kbd slot would
+  have worked post-combine too; "survived because pre-combine" was a false causation.
+- A prop's id **changes on combine** (`Label#…:0` → `Label#…:1`) — re-read it post-combine.
+- The earlier "instance character override as a fallback" is unnecessary — a proper set-level TEXT prop
+  is fully available post-combine.
+
+**Resolution:** written into SKILL.md T4 as a plain **rule bullet** (next to `combineAsVariants`), not a
+red flag — it is a positive "do it this way" rule, not a trap to avoid. Supersedes the original
+pre-combine claim.
+
+## 4. Extract run-logging into a separate, opt-in skill (user request)
+
+**Request (from the user, this run):** pull all run-logging out of `/shadcn-component-port` into a
+**dedicated, toggleable `runlog` skill** that can be switched on alongside any skill. The component-port
+skill should **know nothing** about run-logging anymore — no T7 Notes step, no `skill-feedback.md`
+mechanism baked in. Those concerns move to the separate skill and are only active when it is enabled.
+
+**Why:** run-logging **did not work reliably in this run** — the `skill-feedback.md` was not written
+until the user explicitly asked for it, even though findings had surfaced mid-run (the T7 notes were
+written, the feedback file was forgotten). Baking the logging into the port skill makes it easy to skip
+under task pressure. A separate skill makes the logging an explicit, independent responsibility that can
+be reasoned about (and triggered) on its own, and keeps the port skill focused on the port itself.
+
+**Implication for `/shadcn-component-port`:** remove **T7 — Notes** and the per-run
+`skill-feedback.md` wording (Process box + Boundaries note "Per-run skill gaps go to
+`<run>/skill-feedback.md`"). The Output contract's `notes` line and the agent-run folder convention
+become the new skill's concern.
+
+**Sketch of the `runlog` skill (for the user to design):** generic, source-agnostic run journal —
+given a run dir (`agent-runs/<kind>/<date>-<subject>/`), write `notes.md` (what happened, decisions,
+node/var IDs, gate state) and `skill-feedback.md` (skill gaps surfaced, candidate fixes, general
+phrasing). Opt-in: only runs when explicitly added to a session. Should be usable by *any* skill
+(component-port, component-sync, design-punk…), not bound to shadcn. Open design questions: how it is
+toggled on, how it learns the run dir, and how/when it prompts to capture feedback so it is not
+forgotten (the exact failure mode of this run).
