@@ -121,7 +121,7 @@ Installed under `.claude/skills/` (project-local).
 **Design → Code:**
 - `/shadcn-component-port` — **initial** port of one shadcn component into the Agentport DS: read its
   anatomy (shadcn MCP / `ui:add`), build a token-bound Figma component set, write the code on the DS
-  utility vocabulary. First-time creation only. Per-run skill gaps go to `<run>/skill-feedback.md`, not the skill.
+  utility vocabulary. First-time creation only.
 - `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
@@ -136,6 +136,8 @@ Installed under `.claude/skills/` (project-local).
 **General utils:**
 - `/grill-me` — interview-style stress-test of a plan or design before committing.
 - `/handoff` — freeze the session into a resume doc.
+- `/skill-feedback` — toggle on **before a run** to capture skill-improvement feedback (gaps + candidate
+  fixes) into that run's `skill-feedback.md` as findings surface. Feedback only, not domain notes.
 
 **Writing/editing skills:** follow the rules in [`.claude/skills/CLAUDE.md`](.claude/skills/CLAUDE.md)
 

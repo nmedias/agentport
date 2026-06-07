@@ -200,6 +200,3 @@ the next port reuses it instead of re-deriving it.
 
 - One component per run, **initial port only**. An already-built component whose Figma changed →
   `/component-sync`. Signature redesign is `/design-punk`, not here.
-- **Never edit this skill mid-run.** When a port surfaces a skill gap or tooling problem, write it to
-  `<run>/skill-feedback.md` (candidate fix, general phrasing) — don't fold it in yourself. The user
-  reviews and applies.
