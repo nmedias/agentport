@@ -78,8 +78,7 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
 - `Agentport/Design-Punk-Roadmap.md` / `Agentport/Sketch-Roadmap.md` — phase + decision logs (Figma IDs).
 - `handoff-agentport-component-port.md` — **resume doc** for the code strand (shadcn→Figma→code
   pipeline state, ported components, Figma node IDs). Read first to continue port/sync work.
-- `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk
-  (Figma var ↔ CSS var ↔ Tailwind utility ↔ value + `use`/`avoid`); data source for
+- `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk; data source for
   `/shadcn-component-port` + `/component-sync`.
 
 ## Figma
@@ -106,6 +105,16 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
 | `chore`    | Skills, config, tooling                 |
 
 Scopes: `(figma)` = Figma only, `(tokens)`, or the app/lib name; omit = general.
+
+## Branch Workflow
+
+- **Never commit directly to `main`.** Do the work on a feature branch named `<type>/<topic>`
+  (e.g. `feat/shadcn-kbd-port`, `fix/font-loading`) — same `<type>` vocabulary as commits.
+- **Integrate via fast-forward.** When done, `git checkout main && git merge --ff-only <branch>` —
+  keeps history linear, no merge commit. A rebase is a no-op while `main` hasn't diverged (it usually
+  hasn't in this solo repo), so prefer the fast-forward; only rebase if `main` actually moved ahead.
+- **Push / merge only when the user asks.** Branching and local commits are fine to do proactively;
+  pushing and integrating into `main` are not.
 
 ## Skills
 
