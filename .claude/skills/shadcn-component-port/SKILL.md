@@ -28,6 +28,9 @@ token values into this skill** — it is the procedure, the reference is the dat
 ## Figma rules
 
 Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before every `use_figma`.
+Every `use_figma` call passes four args — `skillNames:'figma-use'`, `fileKey` (`config.figma.fileKey`),
+a non-empty `description`, `code`; the snippets show only the `code` body, the other three are
+mandatory (omitting `fileKey`/`description` → `-32602 … required`).
 Build in file `FIGMA_FILE_KEY` (`config.json`). **Never detach instances** — edit via
 slots / properties / auto-layout only.
 
@@ -83,6 +86,16 @@ the states the class string actually expresses (`focus-visible:`, `disabled:`, `
 placeholder-vs-value). A **static, non-interactive** element (`pointer-events-none`/`select-none`,
 no pseudo-class states) has no state axis → the axis is **content** (e.g. text vs icon).
 
+**Multi-part composition?** (no root element — several `data-slot` parts that render differently).
+Model parts by structure, never one flat `part` axis mixing kinds: parts interchangeable in a single
+position → one component/set on a **`state`** axis (axis values keep the shadcn part names, for code
+parity); structurally distinct parts (icon adornments, …) → their own components. The composition is
+itself a **separate, reusable component** nesting part instances (T4). **Composites only — STOP and
+ask the user before building**, each question carrying your recommended Figma model (recommended
+option first, via `AskUserQuestion`): (1) part split — which parts share a position (→ `state`) vs.
+stand alone; (2) composition as a real reusable component (recommend) vs. example frame; (3) any
+whole-level variants on the composition; (4) variable length → a Slot (T4) + its default content.
+
 ### T3 — Translate
 
 Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6):
@@ -123,8 +136,10 @@ group paths like `shadcn Default/primary`):
   `FIXED`/`FILL` to fixed dims, content sits without growing it; **hug content** = slot `HUG/HUG`.
   Align (`CENTER/CENTER` …) is per-case, not a rule. Bare `resize()` w/o auto-layout freezes size AND
   leaves content unmanaged — avoid.
-- icons → **Remix only**, never a text glyph (search via the Remix-icon MCP; code = `@remixicon/react`
-  as `children`).
+- icons → **Remix only**, never a text glyph. The Remix-icon MCP returns **names only** and **misses
+  some glyphs** (notably the `*-s-line` chevrons) → take the exact path from the installed package
+  (`npm pack remixicon` → `package/icons/<Category>/<name>.svg`) and confirm the React export
+  (`node -e "require('@remixicon/react').Ri<Name>"`). Code = `@remixicon/react` as `children`.
 - `combineAsVariants(comps, section)`; name each `propA=valA, propB=valB` → props auto-derive. Append
   more with `set.appendChild(comp)` (merges by name; same-named slots/props collapse).
 - component properties attach by node type, not timing: add TEXT/BOOL/INSTANCE_SWAP on the **set** or a
@@ -139,6 +154,12 @@ option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP
 
 **Section** — place the set in a Section on the `Components` page; if absent, create it via
 **`/figma-create-section`**  Never hand-roll `figma.createSection()`.
+
+**Composite** (multi-part, per the T2 ask) — the part set/components are not the placeable unit; also
+build the composition the way it is used: a **separate reusable component** nesting the parts as
+**instances** in their real layout (token edits propagate). Variable length / swappable sequence = a
+Figma **Slot** (`createSlot`, auto-layout), prefilled with a typical default the consumer adds to /
+removes from / swaps — never a fixed child count. Whole-level variants ride on the composition component.
 
 **Interaction states** = a `state` axis (Figma has no pseudo-classes → each is an explicit variant).
 Pattern (validated on Button):
