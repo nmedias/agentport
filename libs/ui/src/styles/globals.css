@@ -5,6 +5,14 @@
    die die @theme-Brücke unten in Tailwind-Utilities übersetzt. */
 @import './tokens.css';
 
+/* Self-hosted DS fonts — bundled woff2 (the app is an offline Tauri shell, no CDN).
+   The variable packages register the families as "… Variable"; the :root below
+   resolves the DS font tokens to them (plain names + system fonts kept as fallback).
+   tokens.css (the raw Figma export) stays untouched — the "Variable" name is a
+   font-loading detail, not a design token. */
+@import '@fontsource-variable/hanken-grotesk';
+@import '@fontsource-variable/geist-mono';
+
 /* Tailwind v4 scans the module graph automatically; @source makes this lib's
    own sources explicit so classes are never missed. Consuming apps register
    their own sources from their own entry (see apps/agentport/src/styles.css). */
@@ -133,6 +141,11 @@
   --shadow-glow:      var(--shadow-glow);
   --shadow-elevation: var(--shadow-elevation);
 
+  /* Typography · families — declared explicitly (don't silently ride Tailwind's
+     default --font-* namespace); value owned by tokens.css. */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
   /* Spacing*/
   --spacing: var(--space-base);
   --spacing-2xs: var(--space-2xs);
@@ -239,5 +252,7 @@
   }
   body {
     @apply bg-background text-foreground text-body;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

@@ -45,9 +45,11 @@
   --radius-16: 16px;
   --radius-pill: 9999px;
 
-  /* --- Typography · families ---------------------------------------------- */
-  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  /* --- Typography · families ----------------------------------------------
+     Primary = the self-hosted variable family (@fontsource-variable, registered
+     as "… Variable"); plain name + system fonts as fallback. */
+  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
 
   /* --- Typography · weights ----------------------------------------------- */
   --font-weight-regular: 400;
