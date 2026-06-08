@@ -3,8 +3,9 @@
   "figma": {
     "fileKey": "FIGMA_FILE_KEY",
     "fileName": "Agentport DS",
-    "componentsPage": "Components",
-    "comment": "Read-only. Resolve the set .<Component> by name on the 'Components' page; variables resolve by ID (names carry group paths, e.g. 'shadcn Default/primary')."
+    "componentsPage": "Shadcn Components",
+    "pageId": "3126-2",
+    "comment": "Read-only. Resolve the page by pageId (robust to rename), then the set .<Component> by name on it; variables resolve by ID (names carry group paths, e.g. 'shadcn Default/primary'). Fill the snippet's PAGE_ID from pageId, SET_ID from S1."
   },
   "code": {
     "componentsDir": "libs/ui/src/components/ui",

@@ -42,12 +42,14 @@ S6 Notes    delta + DEVIATIONS (code ≠ Figma binding) + auto-layout/variant ch
 ### S1 — Locate
 
 - Figma: resolve the set **by name** — `search_design_system` for `.<Component>`, or read the
-  `Components` page and match the `COMPONENT_SET` named `.<Component>`. Capture its node id for S2.
+  components page (`config.json` `figma.pageId`) and match the `COMPONENT_SET` named `.<Component>`.
+  Capture its node id for S2.
 - Code: `libs/ui/src/components/ui/<name>/<name>.tsx` (the edit target) + its `.stories.tsx` / `.spec.tsx`.
 
 ### S2 — Read live values
 
-Run `snippets/read-set-values.js` (read-only). Per member: name, fills/strokes (+ bound variable
+Fill the snippet's `PAGE_ID` (`config.json` `figma.pageId`) + `SET_ID` (S1), then run
+`snippets/read-set-values.js` (read-only). Per member: name, fills/strokes (+ bound variable
 name), text node's text-style + fill, bound radius/padding, effects (focus/invalid rings), opacity,
 w/h, **and auto-layout** — `layoutMode`, flex props (`itemSpacing` + bound var,
 `primary/counterAxisAlignItems`) or grid props (`gridRow/ColumnCount`, `gridRow/ColumnGap`),

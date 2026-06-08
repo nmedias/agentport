@@ -1,10 +1,11 @@
 // use_figma (READ-ONLY) — dump the live token bindings of a built component set, for component-sync S2.
-// Fill SET_ID with the .<Component> COMPONENT_SET node id (resolved by name in S1).
+// Fill PAGE_ID (config.json figma.pageId) + SET_ID (the .<Component> COMPONENT_SET id, S1) before running.
 // Returns one row per member: the current Figma truth to diff against the code (S3). Writes nothing.
 
+const PAGE_ID = 'PAGE_ID';   // config.json figma.pageId — resolve by id, NOT a page-name literal (drifts on rename)
 const SET_ID = 'SET_ID';
 
-const page = figma.root.children.find((p) => p.name === 'Components');
+const page = await figma.getNodeByIdAsync(PAGE_ID);
 await figma.setCurrentPageAsync(page);
 const set = await figma.getNodeByIdAsync(SET_ID);
 
@@ -36,14 +37,29 @@ for (const m of set.children.filter((n) => n.type === 'COMPONENT')) {
     layout.colGap = m.gridColumnGap; layout.colGapVar = await bound(m, 'gridColumnGap');
   }
   try { layout.sizeH = m.layoutSizingHorizontal; layout.sizeV = m.layoutSizingVertical; } catch {}
+  // slot (swappable content): slot geometry + its default child read GENERICALLY by type
+  // (vector → fill var · instance → mainComponent · text → text-style/fill) — not just a vector.
+  const slotNode = m.findOne((n) => n.type === 'SLOT');
+  let slot = null;
+  if (slotNode) {
+    slot = { name: slotNode.name, w: slotNode.width, h: slotNode.height, mode: slotNode.layoutMode, fills: (slotNode.fills || []).length };
+    try { slot.sizeH = slotNode.layoutSizingHorizontal; slot.sizeV = slotNode.layoutSizingVertical; } catch {}
+    const c = slotNode.findOne((n) => n.type === 'VECTOR' || n.type === 'INSTANCE' || n.type === 'TEXT');
+    if (c) {
+      slot.content = { type: c.type, name: c.name, w: c.width, h: c.height };
+      if (c.type === 'VECTOR') { const cp = await paint(c.fills); slot.content.fillVar = cp ? cp.var : null; }
+      else if (c.type === 'INSTANCE') { const mc = await c.getMainComponentAsync(); slot.content.mainComponent = mc ? mc.name : null; }
+      else if (c.type === 'TEXT') { const sg = c.getStyledTextSegments(['textStyleId']); slot.content.style = sg[0].textStyleId ? (await figma.getStyleByIdAsync(sg[0].textStyleId))?.name : null; slot.content.fill = await paint(c.fills); }
+    }
+  }
   out.push({
-    name: m.name, w: m.width, h: m.height, opacity: m.opacity, clips: m.clipsContent, layout,
+    name: m.name, w: m.width, h: m.height, minW: m.minWidth, minH: m.minHeight, opacity: m.opacity, clips: m.clipsContent, layout,
     radius: m.cornerRadius, radiusVar: await bound(m, 'topLeftRadius'),
     padL: m.paddingLeft, padR: m.paddingRight, padT: m.paddingTop, padB: m.paddingBottom,
     padXVar: await bound(m, 'paddingLeft'), padYVar: await bound(m, 'paddingTop'),
     fill: await paint(m.fills), stroke: await paint(m.strokes), strokeWeight: m.strokeWeight,
     effects: (m.effects || []).map((e) => ({ type: e.type, spread: e.spread, radius: e.radius, color: e.color, visible: e.visible })),
-    text,
+    text, slot,
   });
 }
 return { set: set.name, members: out };
