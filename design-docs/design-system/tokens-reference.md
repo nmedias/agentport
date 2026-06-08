@@ -436,3 +436,50 @@ keep_valid:
 
 border_width_vs_color: "border = 1px Breite, getrennt von der Farbe. Base-Layer `* { @apply border-border outline-ring/50 }` setzt die Default-Farbe; abweichende Linien via zum Beispiel border-border-subtle/-emphasis/-strong."
 ```
+
+---
+
+## 7 · Auto-Layout → Utilities (Figma → Tailwind)
+
+Figma-Auto-Layout-Properties → className-Utilities.
+Display = `flex`/`inline-flex` (Komponente wählt); die Properties darunter setzen Richtung, Abstand,
+Ausrichtung, Sizing. **Gap und Padding laufen über die Spacing-Skala (§3) — Mapping per px-Wert.**
+
+```yaml
+layoutMode:                # Layout-Modus
+  HORIZONTAL: flex-row
+  VERTICAL:   flex-col
+  GRID:       "grid        # eigene Properties → grid-Block unten"
+  NONE:       "kein Auto-Layout (Block/absolut)"
+itemSpacing: "gap-<step>           # §3, per px-Wert (8→gap-md …)"
+padding:     "p-/px-/py-<step>     # §3, per px-Wert; Einzelseiten pl-/pr-/pt-/pb-"
+primaryAxisAlignItems:     # Hauptachse → justify-*
+  MIN: justify-start · CENTER: justify-center · MAX: justify-end · SPACE_BETWEEN: justify-between
+counterAxisAlignItems:     # Querachse → items-*
+  MIN: items-start · CENTER: items-center · MAX: items-end · BASELINE: items-baseline
+layoutSizingHorizontal:    # Member-Breite
+  FIXED: "w-<n> (numerisch, Control-Geometrie)" · HUG: w-fit · FILL: "w-full / flex-1 (Flex-Child)"
+layoutSizingVertical:      # Member-Höhe
+  FIXED: "h-<n> (numerisch)" · HUG: h-fit · FILL: "h-full / flex-1"
+layoutWrap:                # nur Flex
+  NO_WRAP: "(default)" · WRAP: flex-wrap
+grid:                      # nur layoutMode GRID — eigene Props (NICHT itemSpacing/primary/counter)
+  gridRowCount/gridColumnCount: "grid-rows-<n> / grid-cols-<n>"
+  gridRowGap/gridColumnGap:     "gap-y-<step> / gap-x-<step>   # §3, per px-Wert"
+  gridRow/ColumnSizes:          "FLEX → fr · FIXED → px (arbitrary grid-cols-[…])"
+  per-Child:                    "gridRow/ColumnSpan → row-/col-span-<n> · Anchor (0-based) → row-/col-start-<n+1> · gridChildH/V-Align MIN/CENTER/MAX/AUTO → justify-self-*/self-*"
+```
+
+**`primaryAxis*` = Hauptachse = `justify-*`, `counterAxis*` = Querachse = `items-*`** — richtungsunabhängig
+(Tailwind-`justify`/`items` sind ebenfalls Haupt-/Querachse). FIXED-Maße bleiben **numerisch** (Geometrie ≠ Spacing-Token, vgl. §6).
+
+**`margin` — wann statt gap/padding:** Figma-Auto-Layout liefert nur **gap** (zwischen Kindern) + **padding**
+(Container-Inset) — das ist die **Default-Übersetzung** für Abstände. `margin` (§3 `m-*`) ist kein Ersatz dafür,
+sondern ein Code-Idiom für Intents, die gap/padding nicht tragen — jeder mit eigenem Figma-Signal:
+- **Push-to-end / Verteilen** → Figma `primaryAxisAlignItems = SPACE_BETWEEN/MAX` → `justify-*` (oder `ml-auto`
+  für ein einzelnes trailing-Element), **nicht** aus einem gap abgeleitet.
+- **Überlappung / Einzelversatz**, den ein *uniformer* gap nicht kann → in Figma ein Spacer- oder
+  `ABSOLUTE`-Child (`layoutPositioning`) → strukturell spiegeln, nicht per margin überdecken.
+
+Einen Figma-gap/-padding **nie** in margin umwandeln; Default = gap/padding. Ein
+bestehendes `m-*` im Code ist code-eigen (keine Figma-Quelle → nicht aus Figma diffbar).
