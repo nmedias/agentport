@@ -9,10 +9,11 @@ Reconcile one **already-built** component with its Figma set: read the live toke
 variant, diff against the code, apply **only the delta**. Figma → code only, token-faithful.
 **Source-agnostic** — works for any DS component, not just shadcn ports.
 
-## Input
+## Input / Output
 
 ```
-component: name of an existing component — needs BOTH components/ui/<name>/ AND a Figma set .<Component>   REQUIRED
+in   component: name of an existing component — needs BOTH components/ui/<name>/ AND a Figma set .<Component>   REQUIRED
+out  code delta on <name>.tsx (+ stories/spec); notes  agent-runs/component-sync/<date>-<component>/notes.md
 ```
 
 No Figma set yet, or no code yet → wrong skill (first-time build → `/shadcn-component-port`).
@@ -20,7 +21,7 @@ No Figma set yet, or no code yet → wrong skill (first-time build → `/shadcn-
 ## Data source
 
 `design-docs/design-system/tokens-reference.md` — Figma var ↔ CSS var ↔ utility ↔ value ↔
-`use`/`avoid`; §6 = the translation rules. Don't duplicate values here.
+`use`/`avoid`; §6 = stock→DS translation, §7 = auto-layout → utilities. Don't duplicate values here.
 
 ## Figma rules
 
@@ -31,10 +32,11 @@ Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before a
 
 ```
 S1 Locate   resolve the set .<Component> by NAME + the code file components/ui/<name>/<name>.tsx
-S2 Read     live per-member bindings/values (snippets/read-set-values.js): fills/strokes/text-style/radius/padding/effect/opacity
-S3 Diff     map live values → DS utilities (tokens-reference §6), compare to the current class strings → delta list
+S2 Read     live per-member bindings/values (snippets/read-set-values.js): fills/strokes/text-style/radius/padding/effect/opacity/auto-layout
+S3 Diff     bound var → DS utility (§6 crosswalk, authoritative); use/avoid only for raw/wrong bindings → delta list
 S4 Apply    edit the code to the delta only (+ stories/spec if a variant/state was added/removed); token-faithful
 S5 Gate     nx test|typecheck|lint @agentport/ui green; DS typo class survives markup; storybook MCP up (:6006) → preview-stories, surface URLs
+S6 Notes    delta + DEVIATIONS (code ≠ Figma binding) + auto-layout/variant changes → agent-runs notes.md
 ```
 
 ### S1 — Locate
@@ -46,15 +48,27 @@ S5 Gate     nx test|typecheck|lint @agentport/ui green; DS typo class survives m
 ### S2 — Read live values
 
 Run `snippets/read-set-values.js` (read-only). Per member: name, fills/strokes (+ bound variable
-name), the text node's text-style + fill, bound radius/padding, effects (focus/invalid rings), node
-opacity, w/h. This is the current Figma truth.
+name), text node's text-style + fill, bound radius/padding, effects (focus/invalid rings), opacity,
+w/h, **and auto-layout** — `layoutMode`, flex props (`itemSpacing` + bound var,
+`primary/counterAxisAlignItems`) or grid props (`gridRow/ColumnCount`, `gridRow/ColumnGap`),
+`layoutSizingH/V`. The **bound variable name is the authoritative token** (S3). This is the current
+Figma truth.
 
 ### S3 — Diff
 
-Translate each member's live values back to DS utilities via §6 — **token by `use`/`avoid`, not
-value-match** — and compare against the matching class strings in the code. List **only what differs**:
-e.g. text-style Label↔Body ⇒ `text-label`↔`text-body`, a re-bound stroke ⇒ `border-*` swap, changed
-radius/padding ⇒ `rounded-*`/`p-*` step, added state ⇒ new variant. Ignore Figma-only helper layers.
+Translate each member's live values to DS utilities, compare to the code's class strings, list **only
+what differs**. Two tiers, in order:
+
+1. **Bound variable = authoritative.** Map its name 1:1 to the DS utility via the **§6–§7 crosswalk**
+   (Figma var/property ↔ utility) — no role judgement, the binding is the answer. Applies to every bound
+   property class (colour token, text-style, radius/padding/gap, auto-layout): a changed/re-bound
+   value ⇒ the corresponding utility swap; an added/removed member ⇒ a variant change. The concrete
+   mappings live in §6 — don't restate them here.
+2. **`use`/`avoid` only on a defect.** Raw value (no bound token) ⇒ pick by role (§6). Binding that is
+   semantically wrong (designer error) ⇒ flag it, don't silently propagate. Never re-judge a correct
+   binding.
+
+Ignore Figma-only helper layers.
 
 ### S4 — Apply
 
@@ -68,13 +82,23 @@ structure; change only what the diff demands.
 rendered markup (twMerge drops it otherwise). If the `storybook` MCP is up (:6006), `preview-stories`
 and surface every URL to the user for visual confirmation.
 
+### S6 — Notes
+
+`agent-runs/component-sync/<date>-<component>/notes.md`: the applied delta (per member: Figma value →
+code utility), gate state, preview URLs. **Deviations — prominent, the actionable part:** every place
+the code does **not** match the literal Figma binding — a **raw value** tokenised by role (Figma has no
+token → it should get one), or a **binding judged wrong** that was flagged, not propagated. Table:
+`member · property · Figma says ↔ code uses · why`. Record **auto-layout** (layoutMode/align/gap/sizing)
+and **variant** add/remove/restructure the same way, so the design-side fixes are auditable. A
+delta-free, deviation-free run → one-line note is fine.
+
 ## Red flags
 
 | Trap | Reality |
 |---|---|
 | Write the change back into Figma | Out of scope — sync is **Figma → code** only. A push/redesign is `/shadcn-component-port` or `/design-punk`. |
 | Rewrite beyond the delta | Apply only what differs; opportunistic refactors hide the real change and risk regressions. |
-| Match a value, ignore the role | Re-pick by the new binding's `use`/`avoid` (§6) — a same-value token can mean a different role. |
+| Re-judge a correct binding by `use`/`avoid` | A **bound** var is authoritative — map it 1:1 (§6 crosswalk). Role-picking is only for a **raw/unbound** value or to flag a wrong binding. |
 
 ## Boundaries
 

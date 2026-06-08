@@ -26,8 +26,18 @@ for (const m of set.children.filter((n) => n.type === 'COMPONENT')) {
     const styleName = seg[0].textStyleId ? (await figma.getStyleByIdAsync(seg[0].textStyleId))?.name : null;
     text = { chars: t.characters, style: styleName, font: seg[0].fontName, size: seg[0].fontSize, fill: await paint(t.fills) };
   }
+  const layout = { mode: m.layoutMode };
+  if (m.layoutMode === 'HORIZONTAL' || m.layoutMode === 'VERTICAL') {
+    layout.gap = m.itemSpacing; layout.gapVar = await bound(m, 'itemSpacing');
+    layout.primary = m.primaryAxisAlignItems; layout.counter = m.counterAxisAlignItems;
+  } else if (m.layoutMode === 'GRID') {
+    layout.rows = m.gridRowCount; layout.cols = m.gridColumnCount;
+    layout.rowGap = m.gridRowGap; layout.rowGapVar = await bound(m, 'gridRowGap');
+    layout.colGap = m.gridColumnGap; layout.colGapVar = await bound(m, 'gridColumnGap');
+  }
+  try { layout.sizeH = m.layoutSizingHorizontal; layout.sizeV = m.layoutSizingVertical; } catch {}
   out.push({
-    name: m.name, w: m.width, h: m.height, opacity: m.opacity, clips: m.clipsContent,
+    name: m.name, w: m.width, h: m.height, opacity: m.opacity, clips: m.clipsContent, layout,
     radius: m.cornerRadius, radiusVar: await bound(m, 'topLeftRadius'),
     padL: m.paddingLeft, padR: m.paddingRight, padT: m.paddingTop, padB: m.paddingBottom,
     padXVar: await bound(m, 'paddingLeft'), padYVar: await bound(m, 'paddingTop'),
