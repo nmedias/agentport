@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-/* Design tokens (exportiert aus Figma „Agentport DS"). Liefert die :root-Werte,
-   die die @theme-Brücke unten in Tailwind-Utilities übersetzt. */
+/* Design tokens (exported from Figma "Agentport DS"). Provides the :root values
+   that the @theme bridge below translates into Tailwind utilities. */
 @import './tokens.css';
 
 /* Self-hosted DS fonts — bundled woff2 (the app is an offline Tauri shell, no CDN).
@@ -22,16 +22,16 @@
 
 /*
   ── Figma → Code token seam ────────────────────────────────────────────
-  Die *semantischen* Werte liefert tokens.css (oben importiert, exportiert aus
-  Figma „Agentport DS"). Die @theme-inline-Brücke unten übersetzt sie in
-  Tailwind-Utilities. Ein eigenes :root ist nicht mehr nötig — alle Werte
-  stehen in tokens.css.
+  The *semantic* values come from tokens.css (imported above, exported from
+  Figma "Agentport DS"). The @theme-inline bridge below translates them into
+  Tailwind utilities. A separate :root is no longer needed — all values live
+  in tokens.css.
 */
 
-/* Dark Mode: aktuell light-only (Figma hat noch keinen Dark-Mode-Token-Satz).
-   shadcn-Default-Dark vorerst deaktiviert, damit sich Light=Figma nicht mit
-   Dark=shadcn-Neutral mischt. Wird reaktiviert, sobald Dark-Tokens existieren
-   (`--background-fixed` muss dann ausgenommen bleiben).
+/* Dark mode: currently light-only (Figma has no dark-mode token set yet).
+   shadcn's default dark is disabled for now so Light=Figma doesn't mix with
+   Dark=shadcn-neutral. Re-enable once dark tokens exist
+   (`--background-fixed` must then be excluded).
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -66,10 +66,10 @@
 /* Map semantic vars into Tailwind's theme so utilities like bg-background,
    text-muted-foreground, rounded-lg resolve. */
 @theme inline {
-  /* ── Theme-Reset ─────────────────────────────────────────────────────────
-     Tailwind-Defaults der Namespaces, die wir selbst besitzen, entfernen
-     (Komponenten werden auf den Tokens neu gebaut).  Strukturelles bleibt: --breakpoint-*, --container-*, --animate-*,
-     --default-*, --spacing (s. u.), --radius-* (wird unten überschrieben). */
+  /* ── Theme reset ─────────────────────────────────────────────────────────
+     Remove Tailwind defaults for the namespaces we own (components are rebuilt
+     on the tokens). Structural ones stay: --breakpoint-*, --container-*, --animate-*,
+     --default-*, --spacing (see below), --radius-* (overridden below). */
   --color-*: initial;
   --text-*: initial;
   --font-weight-*: initial;
@@ -77,7 +77,7 @@
   --leading-*: initial;
   --shadow-*: initial;
 
-  /* CSS-weite Farb-Keywords nach dem Color-Reset wieder bereitstellen */
+  /* Re-provide CSS-wide color keywords after the color reset */
   --color-transparent: transparent;
   --color-current: currentColor;
   --color-white: var(--base-white);
@@ -117,7 +117,7 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  /* Agentport-Custom-Semantics  */
+  /* Agentport custom semantics */
   --color-overlay: var(--overlay);
   --color-overlay-foreground: var(--overlay-foreground);
   --color-inverse: var(--inverse);
@@ -162,9 +162,9 @@
 }
 
 
-/* ── Typografie-Formate ──────────────────────────────────────────────────────
-   Mehrwertige Composition-Tokens (family+size+weight+leading+tracking) als
-   Utility-Klassen. Werte aus tokens.css §5. line-height "normal" wo Figma AUTO.
+/* ── Typography formats ──────────────────────────────────────────────────────
+   Multi-value composition tokens (family+size+weight+leading+tracking) as
+   utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.
 */
 @utility text-display {
   font-family: var(--text-display-family);
