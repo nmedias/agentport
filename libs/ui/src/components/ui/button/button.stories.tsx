@@ -22,7 +22,7 @@ const meta: Meta<typeof Button> = {
     // children renders a broken overflow. It's demonstrated in the AllSizes story.
     size: {
       control: 'select',
-      options: ['default', 'sm', 'lg'],
+      options: ['default', 'xs', 'sm', 'lg'],
     },
   },
   args: {
@@ -47,7 +47,7 @@ export const Link: Story = { args: { variant: 'link' } };
 export const AllVariants: Story = {
   parameters: { controls: { include: ['size'] } },
   render: ({ size }) => {
-    const s = size as 'default' | 'sm' | 'lg';
+    const s = size as 'default' | 'xs' | 'sm' | 'lg';
     return (
       <div className="flex flex-wrap items-center gap-3">
         <Button size={s}>Default</Button>
@@ -61,14 +61,38 @@ export const AllVariants: Story = {
   },
 };
 
+// The full radix-nova size ladder — text sizes xs → lg, denser than the
+// new-york default (h-6/7/8/9). Text stays text-label across all (the DS has no
+// sub-14px sans), only the geometry tightens.
 export const AllSizes: Story = {
   parameters: { controls: { include: ['variant'] } },
   render: ({ variant }) => (
     <div className="flex flex-wrap items-center gap-3">
+      <Button size="xs" variant={variant}>Extra small</Button>
       <Button size="sm" variant={variant}>Small</Button>
       <Button size="default" variant={variant}>Default</Button>
       <Button size="lg" variant={variant}>Large</Button>
+    </div>
+  ),
+};
+
+// The icon-only size ladder (icon-xs → icon-lg). Each square scales its Remix
+// icon to match via the per-size [&_svg]:size-N rule; every one requires an
+// accessible name (enforced at the type level).
+export const IconSizes: Story = {
+  parameters: { controls: { include: ['variant'] } },
+  render: ({ variant }) => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button size="icon-xs" variant={variant} aria-label="Add">
+        <RiAddLine />
+      </Button>
+      <Button size="icon-sm" variant={variant} aria-label="Add">
+        <RiAddLine />
+      </Button>
       <Button size="icon" variant={variant} aria-label="Add">
+        <RiAddLine />
+      </Button>
+      <Button size="icon-lg" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
     </div>
@@ -97,6 +121,10 @@ export const Icon: Story = {
       <Button size="icon" variant={variant} aria-label="Delete">
         <RiDeleteBinLine />
       </Button>
+
+        <Button size="xs" variant="link" aria-label="Delete">
+            <RiDeleteBinLine /> sfdsfs
+        </Button>
     </div>
   ),
 };

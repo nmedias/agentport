@@ -4,11 +4,15 @@ import { RiArrowRightSLine, RiMoreLine } from '@remixicon/react';
 
 import { cn } from '@/lib/utils';
 
-// Token-faithful port of the shadcn breadcrumb to the Agentport DS vocabulary
-// (see design-docs/design-system/tokens-reference.md §6):
-//  text-sm + font-normal → text-body · gap-1.5 (6px) → gap-sm · sm:gap-2.5 dropped
-//  (DS is single-density) · icon geometry (size-3.5 / size-4 / size-9) stays numeric ·
-//  lucide ChevronRight/MoreHorizontal → Remix RiArrowRightSLine/RiMoreLine.
+// shadcn breadcrumb on the **radix-nova structure**, re-clothed in DS values
+// (tokens-reference.md §6). Density follows the radix-nova baseline (mapped by
+// NAME to DS tokens, not Nova's raw scale):
+//  · List gap-1.5 (6px) → gap-sm; sm:gap-2.5 already gone (Nova dropped it too) ·
+//    Item gap tightened 1.5→1 (6px→4px) → gap-xs · Ellipsis hit-area shrank
+//    size-9→size-5 (36→20px) with icon-agnostic [&>svg]:size-4 (Nova form).
+//  · text-sm → text-body (Page's redundant font-normal skipped — text-body owns
+//    the weight) · break-words → Nova's v4 wrap-break-word (same CSS) · separator
+//    size-3.5 stays numeric · lucide → Remix RiArrowRightSLine/RiMoreLine.
 //  Multi-part composition: List sets the default muted colour, Link inherits it and
 //  darkens on hover, Page is the current (foreground) leaf.
 
@@ -21,7 +25,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        'flex flex-wrap items-center gap-sm break-words text-body text-muted-foreground',
+        'flex flex-wrap items-center gap-sm wrap-break-word text-body text-muted-foreground',
         className
       )}
       {...props}
@@ -33,7 +37,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn('inline-flex items-center gap-sm', className)}
+      className={cn('inline-flex items-center gap-xs', className)}
       {...props}
     />
   );
@@ -97,10 +101,13 @@ function BreadcrumbEllipsis({
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      className={cn('flex size-9 items-center justify-center', className)}
+      className={cn(
+        'flex size-5 items-center justify-center [&>svg]:size-4',
+        className
+      )}
       {...props}
     >
-      <RiMoreLine className="size-4" />
+      <RiMoreLine />
       <span className="sr-only">More</span>
     </span>
   );

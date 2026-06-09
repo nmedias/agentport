@@ -4,32 +4,41 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-// Token-faithful port of the shadcn button to the Agentport DS vocabulary
-// (see design-docs/design-system/tokens-reference.md §6):
-//  text-sm font-medium → text-label · shadow-xs dropped (DS is flat) ·
-//  gap/padding mapped by px-value to space tokens · control heights stay numeric.
+// shadcn button on the **radix-nova structure**, re-clothed in DS values
+// (tokens-reference.md §6). Adopted from Nova: the denser size ladder (h-8/7/9,
+// + xs and the icon-xs/sm/lg steps), per-size icon sizing via
+// [&_svg:not([class*='size-'])]:size-N, ring-3 focus, active press, aria-invalid
+// + aria-expanded affordances. Kept on DS conventions (NOT Nova's raw values):
+//  · radius by NAME → DS scale (rounded-lg=8, small sizes rounded-md=6), not
+//    Nova's parametric --radius=10 · hover stays the cyan accent (§1 two-cyan /
+//    accent=selection), not Nova's neutral bg-muted · destructive stays the DS
+//    solid fill, not Nova's tint · text stays text-label (DS has no <14px sans).
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-md whitespace-nowrap rounded-md text-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
     variants: {
       variant: {
         default:
           'bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/90',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90 active:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40',
+          'bg-destructive text-white hover:bg-destructive/90 active:bg-destructive/90 focus-visible:ring-destructive/20',
         outline:
-          'border bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+          'border bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/80',
         ghost:
-          'hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground dark:hover:bg-accent/50',
+          'hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline active:underline',
       },
       size: {
-        default: 'h-9 px-xl py-md has-[>svg]:px-lg',
-        sm: 'h-8 rounded-md gap-sm px-lg has-[>svg]:px-2.5',
-        lg: 'h-10 rounded-md px-2xl has-[>svg]:px-xl',
-        icon: 'size-9',
+        default: 'h-8 gap-sm px-md has-[>svg]:px-sm',
+        xs: "h-6 gap-xs rounded-md px-sm [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-xs rounded-md px-md has-[>svg]:px-sm [&_svg:not([class*='size-'])]:size-3.5",
+        lg: 'h-9 gap-sm px-md has-[>svg]:px-sm',
+        icon: 'size-8',
+        'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
+        'icon-sm': "size-7 rounded-md [&_svg:not([class*='size-'])]:size-3.5",
+        'icon-lg': 'size-9',
       },
     },
     defaultVariants: {
@@ -39,6 +48,12 @@ const buttonVariants = cva(
   }
 );
 
+type IconSize = 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+type TextSize = Exclude<
+  NonNullable<VariantProps<typeof buttonVariants>['size']>,
+  IconSize
+>;
+
 type ButtonBaseProps = Omit<
   React.ComponentProps<'button'>,
   'aria-label' | 'aria-labelledby'
@@ -47,17 +62,17 @@ type ButtonBaseProps = Omit<
     asChild?: boolean;
   };
 
-// Icon-only buttons (size="icon") carry no text, so an accessible name is
+// Icon-only buttons (every `icon*` size) carry no text, so an accessible name is
 // mandatory: require aria-label or aria-labelledby at the type level.
 type ButtonProps = ButtonBaseProps &
   (
     | {
-        size?: Exclude<NonNullable<VariantProps<typeof buttonVariants>['size']>, 'icon'>;
+        size?: TextSize;
         'aria-label'?: string;
         'aria-labelledby'?: string;
       }
-    | { size: 'icon'; 'aria-label': string; 'aria-labelledby'?: string }
-    | { size: 'icon'; 'aria-labelledby': string; 'aria-label'?: string }
+    | { size: IconSize; 'aria-label': string; 'aria-labelledby'?: string }
+    | { size: IconSize; 'aria-labelledby': string; 'aria-label'?: string }
   );
 
 function Button({
