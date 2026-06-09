@@ -80,6 +80,9 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
   pipeline state, ported components, Figma node IDs). Read first to continue port/sync work.
 - `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk; data source for
   `/shadcn-component-port` + `/component-sync`.
+- `design-docs/design-system/components-reference.md` — the machine-readable **component catalog**:
+  which components are ported + their status, and where each lives in Figma (set/node IDs) and code
+  (folder/exports/barrel). Read first to locate an existing component before a port/sync.
 
 ## Figma
 
