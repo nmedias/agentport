@@ -28,12 +28,13 @@ export default defineConfig(() => ({
       transformMixedEsModules: true,
     },
     lib: {
-      // Two entry points: the generic primitive surface (.) and the
-      // domain-organism layer (./domain). The keys become the dist file paths
-      // (dist/index.js, dist/domain/index.js), matching package.json `exports`.
+      // Entry points: the generic primitive surface (.) and the blocks layer
+      // (./blocks + per-screen subpaths). The keys become the dist file paths
+      // (dist/index.js, dist/blocks/index.js, …), matching package.json `exports`.
       entry: {
         index: 'src/index.ts',
-        'domain/index': 'src/domain/index.ts',
+        'blocks/index': 'src/blocks/index.ts',
+        'blocks/explorer/index': 'src/blocks/explorer/index.ts',
       },
       name: '@agentport/ui',
       fileName: (_format, entryName) => `${entryName}.js`,
