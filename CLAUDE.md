@@ -108,13 +108,13 @@ Scopes: `(figma)` = Figma only, `(tokens)`, or the app/lib name; omit = general.
 
 ## Branch Workflow
 
-- **Never commit directly to `main`.** Do the work on a feature branch named `<type>/<topic>`
+- **Never commit directly to `master`.** Do the work on a feature branch named `<type>/<topic>`
   (e.g. `feat/shadcn-kbd-port`, `fix/font-loading`) — same `<type>` vocabulary as commits.
-- **Integrate via fast-forward.** When done, `git checkout main && git merge --ff-only <branch>` —
-  keeps history linear, no merge commit. A rebase is a no-op while `main` hasn't diverged (it usually
-  hasn't in this solo repo), so prefer the fast-forward; only rebase if `main` actually moved ahead.
+- **Integrate via fast-forward.** When done, `git checkout master && git merge --ff-only <branch>` —
+  keeps history linear, no merge commit. A rebase is a no-op while `master` hasn't diverged (it usually
+  hasn't in this solo repo), so prefer the fast-forward; only rebase if `master` actually moved ahead.
 - **Push / merge only when the user asks.** Branching and local commits are fine to do proactively;
-  pushing and integrating into `main` are not.
+  pushing and integrating into `master` are not.
 
 ## Skills
 
