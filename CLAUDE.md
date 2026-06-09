@@ -139,7 +139,7 @@ Installed under `.claude/skills/` (project-local).
 **Figma helpers:**
 - `/figma-status` — check Figma Desktop + Plugin MCP connection.
 - `/figma-clone-sibling` — clone a node into a permanent sibling Section.
-- `/figma-create-section` — internal sub-skill: canonical Section wrapper. Not user-invocable.
+- `/figma-create-section` — create figma section. Canonical Section wrapper. 
 - `/figma-verify` — deterministic pre-handoff check (icons are vectors, no clipping/overlap).
 
 **General utils:**
