@@ -72,9 +72,9 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
 
 - The app consumes the lib via `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
 
-- `handoff-agentport-design-visual.md` — **current resume doc** for the design strand (Design-Punk
-  phase state, chosen directions, Figma node IDs, locked language). Read first to continue design.
-- `handoff-agentport-design.md` — earlier handoff (Sketch → Hi-Fi; full sketch inventory).
+- `handoff-agentport-design-visual.md` — **design reference** (not an active to-do): the locked visual
+  language + the decided Explorer component designs (Figma node IDs, exploration file
+  `FIGMA_EXPLORATION_FILE_KEY`). The `blocks/` organisms orient on it; Design-Punk 3e/Phase 4 are shelved.
 - `Agentport/Design-Punk-Roadmap.md` / `Agentport/Sketch-Roadmap.md` — phase + decision logs (Figma IDs).
 - `handoff-agentport-component-port.md` — **resume doc** for the code strand (shadcn→Figma→code
   pipeline state, ported components, Figma node IDs). Read first to continue port/sync work.
