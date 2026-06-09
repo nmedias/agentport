@@ -12,6 +12,16 @@ describe('Kbd', () => {
     expect(container.querySelector('[data-slot="kbd"]')?.className).toContain('text-kbd');
   });
 
+  it('defaults to the high emphasis (inverted keycap)', () => {
+    const { container } = render(<Kbd>K</Kbd>);
+    expect(container.querySelector('[data-slot="kbd"]')?.className).toContain('bg-inverse');
+  });
+
+  it('applies the low emphasis (muted keycap) variant', () => {
+    const { container } = render(<Kbd emphasis="low">K</Kbd>);
+    expect(container.querySelector('[data-slot="kbd"]')?.className).toContain('bg-muted');
+  });
+
   it('groups multiple keys', () => {
     const { container } = render(
       <KbdGroup>

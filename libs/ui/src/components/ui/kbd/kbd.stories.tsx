@@ -9,13 +9,29 @@ const meta: Meta<typeof Kbd> = {
   args: {
     children: 'Esc',
   },
+  argTypes: {
+    emphasis: { control: 'inline-radio', options: ['high', 'low'] },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Kbd>;
 
-// A single text key — the default anatomy: quiet muted cap, mono key glyph.
+// A single text key — the default anatomy (emphasis=high): inverted dark cap,
+// mono key glyph.
 export const Default: Story = {};
+
+// The emphasis axis (Figma `.Kbd`): high (default) is the inverted dark keycap;
+// low is the quiet muted keycap (the stock-shadcn look).
+export const Emphasis: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="flex items-center gap-3">
+      <Kbd emphasis="high">Esc</Kbd>
+      <Kbd emphasis="low">Esc</Kbd>
+    </div>
+  ),
+};
 
 // Single-character keys hit the 20px min-width and read as square caps.
 export const SingleKeys: Story = {
