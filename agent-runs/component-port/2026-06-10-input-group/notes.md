@@ -119,7 +119,10 @@ component"). User flagged it; rebuilt to nest a real ghost `.Button` instance (`
   `.Button Icon` can't be `remove()`d in an instance, and there's no icon-component library). **`swapComponent`** on
   `.Button Icon` → a persistent icon component **works** → the Buttons-example copy button swaps onto
   `.InputGroup/Button Icon · copy` (`3546:677`). This is the "cost": each distinct icon needs a swap-target component.
-- Code unchanged — `input-group.tsx` already composes `<Button variant="ghost">`; the standalone was a Figma-only deviation.
+- Code: `input-group.tsx` always composed `<Button variant="ghost">` (the standalone was a Figma-only deviation).
+  Follow-up `refine(ui)` (`10bd4c2`): InputGroupButton now **forwards a mapped DS Button size** (xs→xs, sm→default,
+  icon-xs→icon-xs, icon-sm→icon) so it inherits the DS geometry; CVA className slimmed to the delta (`rounded-sm` on
+  xs/icon-xs). Mirrors the Figma nest. One `as never` cast bypasses Button's icon-size aria-label union (a11y = consumer's job).
 
 **Build mechanics learned (→ figma-build.md candidates, see skill-feedback):**
 - Slot-fill in an instance: `appendChild` **adds** (does not replace) → clear default children first (`[...slot.children].forEach(c=>c.remove())`), then append.

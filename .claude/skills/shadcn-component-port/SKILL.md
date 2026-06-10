@@ -181,14 +181,21 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 - **Gate**: `npx nx test|typecheck|lint @agentport/ui` green, and confirm the DS typography class
   actually survives in the rendered markup (twMerge drops it if T1 was skipped).
 
-### T7 — Notes
+### T7 — Notes + catalog
 
-`agent-runs/component-port/<date>-<component>/notes.md`: mapping table, Figma node + variable ids,
-findings, gate state, `preview-stories` URLs, the **example-inventory** (each doc usage-example:
-kept-distinct / deduped-as-permutation-of-X / skipped-missing-dep — with reason; makes T5 auditable),
-open items (full matrix, missing states, placeholder ⚠ tokens). For each non-obvious mapping-table row
-record the **why** — the `use`/`avoid` reasoning that picked that token over a same-value lookalike
-(T3), so the decision is auditable and the next port reuses it instead of re-deriving it.
+Two artifacts — a port is **not done** until both exist:
+
+1. **Run notes** — `agent-runs/component-port/<date>-<component>/notes.md`: mapping table, Figma node +
+   variable ids, findings, gate state, `preview-stories` URLs, the **example-inventory** (each doc
+   usage-example: kept-distinct / deduped-as-permutation-of-X / skipped-missing-dep — with reason; makes
+   T5 auditable), open items (full matrix, missing states, placeholder ⚠ tokens). For each non-obvious
+   mapping-table row record the **why** — the `use`/`avoid` reasoning that picked that token over a
+   same-value lookalike (T3), so the decision is auditable and the next port reuses it.
+2. **Component catalog** — `design-docs/design-system/components-reference.md`: add/refresh this
+   component's entry — `status`, `source`, `code` (dir / exports / barrel), `figma` (set + node ids +
+   axes/slots), `skill`, `notes`. This is the **authoritative locator the next port/sync reads first**
+   (per CLAUDE.md), so a stale catalog mis-routes future work — keep it current; on a re-port update the
+   ids/axes in place rather than leaving the old entry.
 
 ## Red flags
 
