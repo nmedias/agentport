@@ -65,8 +65,9 @@ status_note: >
   Branch chore/composite-port-skill (noch nicht auf master): radix-nova-Angleichung der 4 Altkomponenten
   + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea.
   Composite-Port-Verfahren im Skill überarbeitet (3 Dateien). InputGroup wurde nach neuem Verfahren NEU
-  portiert (Figma+Code, Gate grün, Done-Test) — GREEN-Test des Rework. Command (cmdk) bleibt vorerst
-  entfernt; nächster Re-Port (hängt an InputGroup + einem Dialog-Port für CommandDialog).
+  portiert (Figma+Code, Gate grün, Done-Test) — GREEN-Test des Rework. Command (cmdk) NEU portiert nach
+  dem überarbeiteten Composite-Verfahren (Figma+Code, Gate grün 32 Tests, Done-Test) — inline-Palette.
+  CommandDialog deferred bis Dialog portiert ist (Dialog: pending).
 ```
 
 ## Components
@@ -207,6 +208,42 @@ status_note: >
     List- + Segment-Gap → Space/space-xs (4px) Item / Space/space-sm (6px) List; Ellipsis size-5;
     break-words → v4 wrap-break-word. Nova-Dichte wurde im Code entschieden und nach Figma gepusht.
 
+- name: Command
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-10 (Figma + Code zusammen gebaut)
+  source: { registry: "@shadcn", item: command, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/command/
+    exports: [Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
+  figma:
+    section: { name: "Command", id: "3555:679" }
+    item:
+      set: { name: ".Command/Item", id: "3559:2" }
+      axis: { state: [default, selected, disabled, checked] }
+      props: "icon#3559:0 (INSTANCE_SWAP→Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
+      members: { default: "3558:2", selected: "3558:7", disabled: "3558:12", checked: "3558:17" }
+    input: { name: ".Command/Input", id: "3561:2", nests: ".InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-input Placeholder" }
+    separator: { name: ".Command/Separator", id: "3564:2" }
+    empty: { name: ".Command/Empty", id: "3564:3", prop: "message (text)" }
+    group: { name: ".Command/Group", id: "3565:2", prop: "heading (text, eyebrow UPPER)", slot: "items#3565:0" }
+    composition: { name: ".Command", id: "3566:2", slot: "list#3566:0", surface: "bg-overlay + border + shadow-elevation + rounded-xl" }
+    example: { name: "Example · command-demo", id: "3573:2" }
+    icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19" }
+  skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)
+  notes: >
+    Multi-Composite (cmdk). Deps: InputGroup ✓ (als echte Instanz in .Command/Input genestet), Button/Input/
+    Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht). CommandDialog DEFERRED — braucht
+    Dialog-Port (Dialog: pending): Funktion + Export + Story entfernt, re-add nach Dialog-Port. DS-Abweichungen:
+    Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
+    text-input (Mono 18px, DS-Command-Format) auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
+    Selektion = accent-Cyan-Tint (data-selected bg-accent + text-accent-foreground), NICHT Stock-Neutralgrau;
+    Group-Heading = text-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-kbd
+    (tracking-* tot). IconPlaceholder→lucide bei ui:add → @remixicon/react (RiSearchLine/RiCheckLine). Figma:
+    3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
+    Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
+    grün (32 Tests inkl. Typo-Survival text-input/text-body). jsdom-Polyfill lag bereits in test-setup.ts.
+
 - name: Dialog
   status: pending
   figma_synced: false
@@ -215,19 +252,14 @@ status_note: >
   figma: { set: "tbd" }
   skill: /shadcn-component-port (geplant)
   notes: >
-    Noch nicht portiert. Wird für CommandDialog gebraucht, sobald Command (nach der Skill-Überarbeitung)
-    neu portiert ist.
+    Noch nicht portiert. Wird für CommandDialog gebraucht (Command ist inline portiert; CommandDialog
+    bleibt deferred bis Dialog steht).
 ```
 
 ## Pending / Removed
 
 ```yaml
-- name: Command
-  status: removed                                # entfernt 2026-06-09; Composite-Port-Verfahren wird im Skill überarbeitet, dann neu portiert
-  reason: >
-    Multi-Composite (cmdk, baut auf InputGroup). Code + Figma entfernt. Re-Port nach Überarbeitung
-    des /shadcn-component-port-Composite-Verfahrens (Slot/Instance-Swap/Property-Modell, Usage-
-    Examples-First). Hängt an einem neuen InputGroup-Run.
+# Command: re-portiert 2026-06-10 (siehe Components-Liste oben). CommandDialog bleibt deferred bis Dialog steht.
 ```
 
 ## Blocks (Organismen)
