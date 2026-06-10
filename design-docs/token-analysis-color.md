@@ -23,7 +23,8 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - **`popover`/`popover-foreground`** zusätzlich angelegt (Gruppe `shadcn Default/`), als **Alias auf
     `overlay`/`overlay-foreground`** — shadcn-Komponenten (Popover/Command/Dropdown/Select) referenzieren
     `--popover`. Entspricht dem geplanten CSS `--popover: var(--overlay)`.
-  - 6 Custom (aliased): `input-placeholder`, `border-subtle`, `border-emphasis`, `border-strong`, `inverse`, `inverse-foreground`.
+  - 6 Custom: `input-placeholder`, `border-emphasis`, `border-strong`, `inverse`, `inverse-foreground`
+    (aliased) + `scrim` (Raw-RGBA, s. Batch 6). *(`border-subtle` 2026-06-10 entfernt, s. Log.)*
   - `background-fixed` — **Alias auf `base/white`**, **theme-invariant**: bleibt in Light **und** Dark
     weiß. Für den **Toggle-Knob** (3× `knob`, vorher an `background` → wäre im Dark Mode dunkel geworden).
     Fix bleibt erhalten, weil `base/white` in der Single-Mode-`reference`-Collection liegt; beim späteren
@@ -97,6 +98,13 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 - **Custom Batch 5 — Source:** **Option A (monochrom)**. Keine Quell-Farbfamilie. Quelle/Anteils-Leiste
   lösen über `muted-foreground` / `neutral/300` / `foreground` auf. Keine neuen Tokens/Primitives.
   → **Kategorie Farbe abgeschlossen.**
+- **Custom Batch 6 — Scrim (2026-06-10, Dialog-Port):** `scrim` **angelegt** (Gruppe `Overlay/`,
+  `VariableID:3588:2`) für den Modal-Backdrop (Dialog-Overlay; novas `bg-black/10` ist im DS tot).
+  Wert = **Raw-RGBA `#1A2230` @ 10 %** (= `neutral/900` @ 10 %) — **kein Alias möglich**, weil das Alpha
+  im Token lebt und Figma-Aliase keine Opacity ändern können; Ableitung in der Variable-Description
+  dokumentiert (bei Änderung an `neutral/900` manuell nachziehen). Scopes `FRAME_FILL`/`SHAPE_FILL`.
+  CSS: `--scrim: color-mix(in srgb, var(--neutral-900) 10%, transparent)` (tokens.css) →
+  `--color-scrim` (globals.css) → `bg-scrim`. Blur (`backdrop-blur-xs`) bleibt Utility, kein Token.
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter
   (Raw-Hex, shadcn-Defaults) **angelegt**, damit das volle shadcn-Set in Figma steht (waren im Repo-CSS nicht
   enthalten). Semantic-Collection jetzt 38 Variablen, davon 9 Platzhalter.

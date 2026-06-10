@@ -278,6 +278,14 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   utilities: [text-inverse-foreground]
   use: "Text auf inverse."
 
+- token: scrim
+  css_var: --scrim
+  primitive: "raw RGBA — neutral/900 @ 10% (Alias kann kein Alpha tragen; Ableitung in der Figma-Description)"
+  value: "color-mix(in srgb, #1a2230 10%, transparent)"
+  utilities: [bg-scrim]
+  use: "Modal-Backdrop-Dimmer (Dialog-Overlay); Alpha lebt im Token — ohne Opacity-Modifier verwenden."
+  avoid: "Keine Flächen-Tönung unterhalb von Modal-Ebene; nicht mit zusätzlichem /NN-Modifier stapeln."
+
 - token: secondary
   css_var: --secondary
   primitive: raw

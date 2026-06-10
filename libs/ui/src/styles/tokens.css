@@ -134,6 +134,8 @@
   --border-strong:       var(--neutral-700);
   --inverse:             var(--neutral-900);
   --inverse-foreground:  var(--neutral-50);
+  /* modal backdrop dimmer — alpha lives in the token (Figma: raw RGBA, alias can't carry alpha) */
+  --scrim:               color-mix(in srgb, var(--neutral-900) 10%, transparent);
 
   /* --- ⚠ Placeholders (shadcn defaults, not yet designed) ------------------ */
   --secondary:              #f5f5f5;  /* ⚠ */
