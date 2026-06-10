@@ -130,7 +130,6 @@
   --input-placeholder:   var(--neutral-400);
   --input-background:    var(--neutral-100);
   --background-fixed:    var(--base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
-  --border-subtle:       var(--neutral-200);
   --border-emphasis:     var(--neutral-300);
   --border-strong:       var(--neutral-700);
   --inverse:             var(--neutral-900);

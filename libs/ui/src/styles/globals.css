@@ -191,7 +191,6 @@
   --color-overlay-foreground: var(--overlay-foreground);
   --color-inverse: var(--inverse);
   --color-inverse-foreground: var(--inverse-foreground);
-  --color-border-subtle: var(--border-subtle);
   --color-border-emphasis: var(--border-emphasis);
   --color-border-strong: var(--border-strong);
   --color-input-placeholder: var(--input-placeholder);

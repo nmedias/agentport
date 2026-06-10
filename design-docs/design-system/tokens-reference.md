@@ -42,7 +42,7 @@ cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand 
 ```
 
 Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}`. Für
-`border-*`-Namen lautet die Border-Utility `border-border-subtle` usw.
+`border-*`-Namen lautet die Border-Utility `border-border-emphasis` usw.
 
 ```yaml
 - token: background
@@ -250,14 +250,6 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: "Theme-invariante weiße Fläche."
   avoid: "Im künftigen .dark NICHT überschreiben."
 
-- token: border-subtle
-  css_var: --border-subtle
-  primitive: neutral/200
-  value: "#e6eaee"
-  utilities: [border-border-subtle]
-  use: "Feinster Trenner (leichter als border)."
-  note: "Teilt aktuell den Wert mit border; eigener Name hält Divergenz offen."
-
 - token: border-emphasis
   css_var: --border-emphasis
   primitive: neutral/300
@@ -327,7 +319,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: tbd
 ```
 
-**Linien-Leiter (aufsteigend):** `border-subtle` < `border` < `border-emphasis` < `border-strong`.
+**Linien-Leiter (aufsteigend):** `border` < `border-emphasis` < `border-strong`.
 **Zwei-Cyan-Modell:** helles `primary` (Flächen/Marken) vs. dunkles `accent-foreground` (Text auf Tint) — Verwechslung = AA-Bruch.
 **Kein Token (tbd):** Status-Familie `connected/offline/error/warning`.
 

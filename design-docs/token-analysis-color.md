@@ -81,6 +81,9 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
   `border-emphasis` (Kopf-Regel/Wire) **angelegt**; `grid-line` + `divider-faint` **verworfen** (in
   `border-subtle` gebündelt). Keine neuen Primitives — Roh-Werte fallen in `neutral/200` (`#e0e5ed`≈)
   und `neutral/300` (`#bdc7d1`≈). `border-subtle` teilt vorerst den Wert mit `border`.
+  > **Update 2026-06-10:** `border-subtle` **entfernt** (Code + Figma) — wertgleich mit `border` und im
+  > Code nie genutzt; `border` ist bereits der subtile Default. Feine Trenner nutzen `border`. Linie-Leiter
+  > jetzt 3 Stufen: `border` < `border-emphasis` < `border-strong`.
 - **Custom Batch 3 — Inverse/Overlay:** `inverse` (→`neutral/900`) + `inverse-foreground` (→`neutral/50`)
   **angelegt** für die dunklen Tastatur-Pillen (Naming ohne `-surface`-Suffix, shadcn-konform:
   Fläche = bloßer Name, Text = `-foreground`). `popover-muted` **verworfen** — getönte Palette-Zone
