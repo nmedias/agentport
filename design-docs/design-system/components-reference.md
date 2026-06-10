@@ -236,7 +236,8 @@ status_note: >
     Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht). CommandDialog DEFERRED — braucht
     Dialog-Port (Dialog: pending): Funktion + Export + Story entfernt, re-add nach Dialog-Port. DS-Abweichungen:
     Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
-    text-input (Mono 18px, DS-Command-Format) auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
+    text-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
+    auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
     Selektion = accent-Cyan-Tint (data-selected bg-accent + text-accent-foreground), NICHT Stock-Neutralgrau;
     Group-Heading = text-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-kbd
     (tracking-* tot). IconPlaceholder→lucide bei ui:add → @remixicon/react (RiSearchLine/RiCheckLine). Figma:

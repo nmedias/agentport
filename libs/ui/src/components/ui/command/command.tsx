@@ -13,9 +13,9 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 // grouped, selectable items. Re-clothed in DS tokens:
 //  · palette = overlay surface (overlay.use names Command) + border + shadow-elevation
 //    (an overlay carries depth) — DS interpretation of the demo's `border shadow-md`.
-//  · the search field is the command format: text-input (mono 18px — the DS token whose
-//    role IS command/input text), placeholder:text-input-placeholder, on the InputGroup's
-//    opaque DS field (nova's translucent softening dropped).
+//  · the search field uses text-label (sans 14 — the standard DS field text; adjusted in
+//    Figma from the mono text-input command-format), placeholder:text-input-placeholder,
+//    on the InputGroup's opaque DS field (nova's translucent softening dropped).
 //  · selection = the DS accent (cyan) tint, not stock's neutral grey — data-selected
 //    bg-accent + text-accent-foreground (accent.use = "Selektions-/Aktiv-Tint").
 //  · group heading = text-eyebrow + uppercase (the DS mono micro-label for sections;
@@ -55,7 +55,7 @@ function CommandInput({
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
-            'w-full bg-transparent text-input placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+            'w-full bg-transparent text-label placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}
