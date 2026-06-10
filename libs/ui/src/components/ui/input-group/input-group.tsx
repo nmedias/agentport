@@ -8,22 +8,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-// Token-faithful port of the shadcn input-group (radix-nova) to the Agentport DS
-// (tokens-reference.md §6). Composite: a group container that OWNS the surface,
-// border and focus/invalid/disabled treatment, with borderless controls + addons
-// (icons, text, buttons, kbd) inside. Re-clothed in DS tokens:
+// Token-faithful re-port of the shadcn input-group (radix-nova) into the Agentport DS
+// (tokens-reference.md §6). Composite: the GROUP owns the surface, border and
+// focus/invalid/disabled treatment; the controls (input/textarea) go borderless and
+// addons (icons, text, buttons, kbd) sit beside them. Re-clothed in DS tokens:
 //  · the group carries bg-input-background (DS fields are opaque — Input/Textarea
 //    precedent); nova leaves it transparent in light mode. Command overrides the
 //    surface for its palette look.
 //  · text-sm font-medium addon → text-label; plain text-sm Text → text-body
-//    (Medium vs Regular 14, the DS distinction)
+//    (Medium vs Regular 14, the DS distinction).
 //  · gap-2(8)→gap-md, py-1.5(6)→py-sm, pl/pr-2(8)→pl/pr-md, px-2.5(10)→px-md,
-//    pt/pb-2(8)→pt/pb-md, px-1.5(6)→px-sm, pt/pb-3(12)→pt/pb-lg (px-value map)
-//  · ring-3→ring-[3px]; radius by NAME (rounded-lg, small ghost button rounded-sm)
-//  · disabled:bg-input/50 dropped (DS disabled = opacity); dark: dropped;
-//    combobox-content focus overrides dropped (no Combobox in the DS yet);
-//    [&>kbd]:rounded-[calc(--radius-5px)] dropped (DS Kbd owns its radius).
-// Geometry (h-8/h-6, size-6/8, svg sizes) stays numeric.
+//    pl/pr-1.5(6)→pl/pr-sm, pt/pb-3(12)→pt/pb-lg; ring-3→ring-[3px]; radius by NAME.
+//  · invalid bubbles border + ring WIDTH + colour (ring-[3px] ring-destructive/20).
+//  · disabled:bg-input/50 dropped (DS disabled = opacity); dark: + combobox-content
+//    overrides dropped; [&>kbd]:rounded-calc dropped (DS Kbd owns its radius).
+// Geometry (h-8/h-6, size-6/8, svg sizes) stays numeric. destructive is a ⚠ placeholder.
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -33,8 +32,8 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
         'group/input-group relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input bg-input-background transition-[color,box-shadow] outline-none',
         // the control owns focus; the GROUP shows the ring
         'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
-        // invalid + disabled bubble up from any marked child
-        'has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20',
+        // invalid bubbles up from any marked child: border + ring (width + colour)
+        'has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:ring-[3px]',
         'has-[:disabled]:opacity-50',
         // block-aligned addons (and a textarea control) stack the group vertically
         'has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>textarea]:h-auto',
@@ -93,9 +92,9 @@ function InputGroupAddon({
 const inputGroupButtonVariants = cva('flex items-center gap-md', {
   variants: {
     size: {
-      xs: "h-6 gap-xs rounded-sm px-sm [&>svg:not([class*='size-'])]:size-3.5",
+      xs: "[&>svg:not([class*='size-'])]:size-3.5",
       sm: '',
-      'icon-xs': 'size-6 rounded-sm p-0 has-[>svg]:p-0',
+      'icon-xs': 'size-6 p-0 has-[>svg]:p-0',
       'icon-sm': 'size-8 p-0 has-[>svg]:p-0',
     },
   },

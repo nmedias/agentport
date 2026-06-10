@@ -38,7 +38,11 @@ describe('InputGroup', () => {
         </InputGroupAddon>
       </InputGroup>
     );
-    expect(getByText('USD').closest('[data-slot=input-group-addon]')?.getAttribute('data-align')).toBe('inline-end');
+    expect(
+      getByText('USD')
+        .closest('[data-slot=input-group-addon]')
+        ?.getAttribute('data-align')
+    ).toBe('inline-end');
   });
 
   it('renders a ghost button via InputGroupButton', () => {
@@ -50,7 +54,8 @@ describe('InputGroup', () => {
     expect(getByRole('button').getAttribute('type')).toBe('button');
   });
 
-  // Guards the T1 twMerge setup for the textarea control.
+  // Guards the T1 twMerge setup: the DS typography class must survive on the
+  // borderless textarea control (text-format group, else it collapses under text-color).
   it('keeps the DS typography class on the textarea control', () => {
     const { getByRole } = render(
       <InputGroup>

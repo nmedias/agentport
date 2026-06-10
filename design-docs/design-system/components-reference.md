@@ -62,10 +62,11 @@ baseline:
 modes: [light]                       # kein Dark-Mode
 package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
 status_note: >
-  Branch feat/shadcn-command-port (noch nicht auf master): radix-nova-Angleichung der 4 Altkomponenten
-  + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea, InputGroup (6-teilig).
-  Command (cmdk) wurde wieder ENTFERNT (Code + Figma): Composite-Port-Verfahren wird im Skill überarbeitet,
-  danach InputGroup-Run + Command neu. InputGroup steht vorerst zur Analyse.
+  Branch chore/composite-port-skill (noch nicht auf master): radix-nova-Angleichung der 4 Altkomponenten
+  + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea.
+  Composite-Port-Verfahren im Skill überarbeitet (3 Dateien). InputGroup wurde nach neuem Verfahren NEU
+  portiert (Figma+Code, Gate grün, Done-Test) — GREEN-Test des Rework. Command (cmdk) bleibt vorerst
+  entfernt; nächster Re-Port (hängt an InputGroup + einem Dialog-Port für CommandDialog).
 ```
 
 ## Components
@@ -130,28 +131,34 @@ status_note: >
 
 - name: InputGroup
   status: nova-aligned
-  figma_synced: true                            # Code→Figma Werte-Audit 2026-06-09: Container gap+padR entfernt, Addon py-sm ergänzt
+  figma_synced: true                            # Re-port 2026-06-10: Figma komplett neu gebaut (Composition + Slots + Examples)
   source: { registry: "@shadcn", item: input-group, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/input-group/
     exports: [InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input-group'"
   figma:
-    section: { name: "Input Group", id: "3491:674" }
-    container: { name: ".InputGroup", id: "3495:698", axis: "state [default,focus,disabled,invalid]" }
-    addon: { name: ".InputGroup/Addon", id: "3492:686", axis: "align [inline-start,inline-end,block-start,block-end]" }
-    button: { name: ".InputGroup/Button", id: "3494:684", axis: "size [xs,sm,icon-xs,icon-sm]" }
-    input: { name: ".InputGroup/Input", id: "3493:674" }
-    textarea: { name: ".InputGroup/Textarea", id: "3493:676" }
-    text: { name: ".InputGroup/Text", id: "3493:678" }
-  skill: /shadcn-component-port (2026-06-09, Port #2 der Command-Kette)
+    section: { name: "Input Group", id: "3519:590" }                 # alt 3491:674 gelöscht (rebuild fresh)
+    addon: { name: ".InputGroup/Addon", id: "3520:606", axis: "align [inline-start,inline-end,block-start,block-end]", slot: content }
+    button: { name: ".InputGroup/Button", id: "3545:694", axis: "size [xs,sm,icon-xs,icon-sm]",
+              nests: "ghost .Button instance per size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon); Base radius→radius-sm on xs+icon-xs",
+              content: "label = deep text override; icon = swapComponent .Button Icon → swap-target (.InputGroup/Button Icon · copy 3546:677)" }
+    input: { name: ".InputGroup/Input", id: "3522:590", prop: text }
+    textarea: { name: ".InputGroup/Textarea", id: "3522:592", prop: text }
+    text: { name: ".InputGroup/Text", id: "3522:594", prop: text }
+    composition: { name: ".InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid] x layout [horizontal,vertical]", slot: content }
+    examples: { Icons: "3527:613", Text: "3527:650", Buttons: "3546:697", States: "3528:662/681/700", Textarea: "3547:711", Kbd: "3531:676" }
+  skill: /shadcn-component-port (2026-06-10, Re-port; GREEN-Test des überarbeiteten Composite-Verfahrens)
   notes: >
-    6-teiliges Composite. Deps: Button ✓, Input ✓, Textarea ✓. Die GRUPPE besitzt Fläche+Border+
-    Focus/Invalid/Disabled (via has-[control:focus-visible] etc.); Controls sind randlos (border-0
-    bg-transparent, data-slot=input-group-control). DS: Gruppe trägt bg-input-background (opak), nova
-    lässt sie transparent; Command überschreibt. Addon text-label muted; Text text-body muted; Button
-    ghost. ring-3→ring-[3px]; combobox-content-Overrides + [&>kbd]:rounded-calc gedroppt. v4 has-/
-    group-has-/data-align im CSS verifiziert.
+    6-teiliges Composite, RE-PORT nach Skill-Rework. Deps: Button ✓, Input ✓, Textarea ✓, Kbd ✓. Die GRUPPE
+    besitzt Fläche+Border+Focus/Invalid/Disabled (has-[control:focus-visible]/has-[aria-invalid]/has-disabled);
+    Controls randlos (border-0 bg-transparent, data-slot=input-group-control). DS: Gruppe trägt bg-input-background
+    (opak); Addon text-label muted; Text text-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
+    Beispiel-Instanzen (Done-Test): Container-Komposition (state×layout) mit Children-Slot, Addon mit content-Slot,
+    Input/Textarea/Text als Text-Prop. **Button nestet eine echte ghost .Button-Instanz** (nicht standalone re-clothed)
+    → Token+Component-Propagation; Geometrie-Delta via Base-Override, Icon-Content via swapComponent (DS-Button
+    exponiert keinen freien Icon-Slot). FIX ggü. Vor-Port: invalid trägt jetzt ring-[3px] (Breite, vorher gedroppt)
+    + ring-destructive/20. Kbd-⌘ als Vektor (RiCommandLine), nicht Text-Glyph.
 
 - name: Kbd
   status: nova-aligned

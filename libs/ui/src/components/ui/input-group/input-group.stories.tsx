@@ -1,5 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RiSearchLine, RiCloseLine } from '@remixicon/react';
+import {
+  RiSearchLine,
+  RiMailLine,
+  RiBankCardLine,
+  RiCheckLine,
+  RiStarLine,
+  RiFileCopyLine,
+  RiCornerDownLeftLine,
+  RiJavascriptLine,
+  RiRefreshLine,
+  RiCommandLine,
+} from '@remixicon/react';
 
 import {
   InputGroup,
@@ -9,7 +20,10 @@ import {
   InputGroupInput,
   InputGroupTextarea,
 } from './input-group';
+import { Kbd } from '@/components/ui/kbd';
 
+// Canonical usage set = the structurally-distinct, portable shadcn doc examples
+// (see run notes example-inventory). Composition showcases → controls disabled.
 const meta: Meta<typeof InputGroup> = {
   title: 'UI/InputGroup',
   component: InputGroup,
@@ -20,64 +34,156 @@ const meta: Meta<typeof InputGroup> = {
 export default meta;
 type Story = StoryObj<typeof InputGroup>;
 
-// Leading icon addon (inline-start) + control. The group owns the border + focus
-// ring; the input is borderless and fills the row.
+// Hero: leading search icon + borderless input. The group owns the border + focus ring.
 export const Default: Story = {
   render: () => (
     <div className="w-80">
       <InputGroup>
-        <InputGroupAddon align="inline-start">
-          <RiSearchLine />
-        </InputGroupAddon>
         <InputGroupInput placeholder="Search…" />
-      </InputGroup>
-    </div>
-  ),
-};
-
-// Trailing addon with a ghost button.
-export const WithTrailingButton: Story = {
-  render: () => (
-    <div className="w-80">
-      <InputGroup>
-        <InputGroupAddon align="inline-start">
+        <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
-        <InputGroupInput placeholder="Filter types…" />
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Icon addon placements — inline-start, inline-end, both, and two icons in one addon.
+export const Icons: Story = {
+  render: () => (
+    <div className="grid w-80 gap-6">
+      <InputGroup>
+        <InputGroupInput placeholder="Search…" />
+        <InputGroupAddon>
+          <RiSearchLine />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput type="email" placeholder="Enter your email" />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs" aria-label="Clear">
-            <RiCloseLine />
-          </InputGroupButton>
+          <RiMailLine />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="Card number" />
+        <InputGroupAddon>
+          <RiBankCardLine />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          <RiCheckLine />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="Card number" />
+        <InputGroupAddon align="inline-end">
+          <RiStarLine />
+          <RiCheckLine />
         </InputGroupAddon>
       </InputGroup>
     </div>
   ),
 };
 
-// Inline text addon (a prefix/suffix label).
-export const WithText: Story = {
+// Text addons — prefix/suffix labels (currency, URL scheme/TLD, domain suffix).
+export const Text: Story = {
   render: () => (
-    <div className="w-80">
+    <div className="grid w-80 gap-6">
       <InputGroup>
-        <InputGroupAddon align="inline-start">
+        <InputGroupAddon>
+          <InputGroupText>$</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput placeholder="0.00" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>USD</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="momentum.example.com" />
+        <InputGroupInput placeholder="example.com" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>.com</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="username" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>@company.com</InputGroupText>
+        </InputGroupAddon>
       </InputGroup>
     </div>
   ),
 };
 
-// Block-aligned addon → the group stacks vertically (toolbar above a textarea).
-export const WithTextarea: Story = {
+// Keyboard-shortcut hint — leading icon + trailing Kbd group (quiet `low` emphasis).
+export const Kbd_: Story = {
+  name: 'Kbd',
   render: () => (
     <div className="w-80">
       <InputGroup>
-        <InputGroupTextarea placeholder="Add a description…" rows={3} />
-        <InputGroupAddon align="block-end">
-          <InputGroupText>Markdown supported</InputGroupText>
-          <InputGroupButton size="xs" className="ml-auto">
-            Save
+        <InputGroupInput placeholder="Search…" />
+        <InputGroupAddon>
+          <RiSearchLine />
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          <Kbd emphasis="low">
+            <RiCommandLine />
+          </Kbd>
+          <Kbd emphasis="low">K</Kbd>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Trailing action buttons — icon button (copy) and a text button (search).
+export const Buttons: Story = {
+  render: () => (
+      <div className="grid w-80 gap-6">
+        <InputGroup>
+          <InputGroupInput placeholder="https://x.com/shadcn" readOnly/>
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
+              <RiFileCopyLine/>
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+        <InputGroup>
+          <InputGroupInput placeholder="Type to search…"/>
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="sm" variant={"default"}>Search</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+  ),
+};
+
+// Textarea with block-aligned toolbars — the group stacks vertically; addons get borders.
+export const Textarea: Story = {
+  render: () => (
+    <div className="w-96">
+      <InputGroup>
+        <InputGroupTextarea
+          placeholder="console.log('Hello, world!');"
+          className="min-h-[160px]"
+        />
+        <InputGroupAddon align="block-start" className="border-b">
+          <InputGroupText className="font-mono font-medium">
+            <RiJavascriptLine />
+            script.js
+          </InputGroupText>
+          <InputGroupButton className="ml-auto" size="icon-xs">
+            <RiRefreshLine />
+          </InputGroupButton>
+          <InputGroupButton variant="ghost" size="icon-xs">
+            <RiFileCopyLine />
+          </InputGroupButton>
+        </InputGroupAddon>
+        <InputGroupAddon align="block-end" className="border-t">
+          <InputGroupText>Line 1, Column 1</InputGroupText>
+          <InputGroupButton size="sm" className="ml-auto" variant="default">
+            Run <RiCornerDownLeftLine />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
@@ -85,29 +191,27 @@ export const WithTextarea: Story = {
   ),
 };
 
-export const Disabled: Story = {
+// Container states — default / disabled / invalid (focus is an interaction state).
+export const States: Story = {
   render: () => (
-    <div className="w-80">
+    <div className="grid w-80 gap-6">
       <InputGroup>
-        <InputGroupAddon align="inline-start">
+        <InputGroupInput placeholder="Default" />
+        <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
-        <InputGroupInput placeholder="Disabled" disabled />
       </InputGroup>
-    </div>
-  ),
-};
-
-// Invalid bubbles up from the control to the group border + ring. destructive is
-// still a ⚠ placeholder token (stock hex) — see tokens-reference.md.
-export const Invalid: Story = {
-  render: () => (
-    <div className="w-80">
       <InputGroup>
-        <InputGroupAddon align="inline-start">
+        <InputGroupInput placeholder="Disabled" disabled />
+        <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
         <InputGroupInput aria-invalid defaultValue="not-a-valid-value" />
+        <InputGroupAddon>
+          <RiSearchLine />
+        </InputGroupAddon>
       </InputGroup>
     </div>
   ),
