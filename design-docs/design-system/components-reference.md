@@ -63,8 +63,9 @@ modes: [light]                       # kein Dark-Mode
 package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
 status_note: >
   Branch feat/shadcn-command-port (noch nicht auf master): radix-nova-Angleichung der 4 Altkomponenten
-  + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea, InputGroup (6-teilig),
-  Command (cmdk). Dependency-Reihenfolge war Textarea → InputGroup → Command.
+  + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea, InputGroup (6-teilig).
+  Command (cmdk) wurde wieder ENTFERNT (Code + Figma): Composite-Port-Verfahren wird im Skill überarbeitet,
+  danach InputGroup-Run + Command neu. InputGroup steht vorerst zur Analyse.
 ```
 
 ## Components
@@ -199,47 +200,27 @@ status_note: >
     List- + Segment-Gap → Space/space-xs (4px) Item / Space/space-sm (6px) List; Ellipsis size-5;
     break-words → v4 wrap-break-word. Nova-Dichte wurde im Code entschieden und nach Figma gepusht.
 
-- name: Command
-  status: nova-aligned                          # new-york-Port (0602bb3) entfernt (0d81650), nova-re-portiert (2026-06-09)
-  figma_synced: true                            # Code→Figma Werte-Audit 2026-06-09: CommandInput border/30+gap-sm+padR0, Composition root-gap0+input-wrapper+list p-xs
-  source: { registry: "@shadcn", item: command, style: radix-nova }
-  code:
-    dir: libs/ui/src/components/ui/command/
-    exports: [Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator]
-    barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
-  figma:
-    section: { name: "Command", id: "3497:686" }
-    item_set: { name: ".CommandItem", id: "3498:722", axis: "state [default,selected,disabled] × trailing [shortcut,check]" }
-    input: { name: ".CommandInput", id: "3499:689" }
-    separator: { name: ".CommandSeparator", id: "3499:693" }
-    empty: { name: ".CommandEmpty", id: "3499:695" }
-    composition: { name: ".Command", id: "3500:689" }    # Palette: Input + List (Headings + Items + Separator)
-  skill: /shadcn-component-port (2026-06-09, Port #3 der Command-Kette)
-  notes: >
-    cmdk-Composite, nova-re-portiert. CommandInput auf der portierten InputGroup + InputGroupAddon
-    (h-10 für mono text-input). Selektion = DS accent-cyan (bg-accent/text-accent-foreground), NICHT
-    novas neutrales bg-muted. CommandShortcut = Kbd (data-slot=command-shortcut). Gruppen-Heading
-    text-eyebrow. CommandItem: nova checkable Checkmark (RiCheckLine, group-data-[checked]/
-    group-has-[shortcut]:hidden) INKLUDIERT. Root rounded-xl + p-xs bg-popover; List no-scrollbar
-    max-h-72. CommandDialog DEFERRED (Dialog un-portiert; in-data-[slot=dialog-content]-Hook bleibt).
-    test-setup.ts polyfillt ResizeObserver/scrollIntoView für cmdk.
-
 - name: Dialog
-  status: pending                               # CommandDialog blockiert hierauf
+  status: pending
   figma_synced: false
   source: { registry: "@shadcn", item: dialog, style: radix-nova }
   code: { dir: "—", exports: [], barrel: "—" }
   figma: { set: "tbd" }
   skill: /shadcn-component-port (geplant)
   notes: >
-    Noch nicht portiert. Blockiert CommandDialog (Command trägt den Forward-Compat-Hook
-    in-data-[slot=dialog-content]:rounded-lg). Sobald Dialog steht: CommandDialog ergänzen + exportieren.
+    Noch nicht portiert. Wird für CommandDialog gebraucht, sobald Command (nach der Skill-Überarbeitung)
+    neu portiert ist.
 ```
 
 ## Pending / Removed
 
 ```yaml
-- name: (keine offenen)                          # Command nova-re-portiert; Dialog steht oben unter Components als pending
+- name: Command
+  status: removed                                # entfernt 2026-06-09; Composite-Port-Verfahren wird im Skill überarbeitet, dann neu portiert
+  reason: >
+    Multi-Composite (cmdk, baut auf InputGroup). Code + Figma entfernt. Re-Port nach Überarbeitung
+    des /shadcn-component-port-Composite-Verfahrens (Slot/Instance-Swap/Property-Modell, Usage-
+    Examples-First). Hängt an einem neuen InputGroup-Run.
 ```
 
 ## Blocks (Organismen)
