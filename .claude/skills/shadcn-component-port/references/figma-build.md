@@ -36,6 +36,19 @@ same session → never assume):
   without growing it; **hug content** = slot `HUG/HUG`. Align (`CENTER/CENTER` …) is per-case, not a rule.
 - Bare `resize()` w/o auto-layout freezes size AND leaves content unmanaged — avoid.
 
+**Filling a slot IN AN INSTANCE** (what `composites.md` T4 layer-4 — reproduced example instances —
+silently assumes; the build's most error-prone step):
+- **`appendChild` adds, does not replace.** The default content stays AND your node renders → both
+  show. **Clear first:** `[...slot.children].forEach(c => c.remove())`, then append. (`remove()` of a
+  slot's default children IS allowed inside an instance.)
+- **`slot.layoutMode` is locked in an instance** — setting it silently no-ops (stays the main's
+  direction). Bake direction into the component, or make it a **Variant axis** (a CSS `has-[]` that
+  flips `flex-row`↔`flex-col` → a `layout` axis on the composition, not a per-instance edit).
+- **Appending an instance into an instance-slot invalidates the JS reference** — the node gets a new
+  id in the instance context, so a later `child.layoutSizingHorizontal='FILL'` throws "node … does not
+  exist". **Re-resolve the live child** (`slot.children[i]`, or match via `getMainComponentAsync()`)
+  and set sizing/props on that. Set `FILL` AFTER append, on the re-resolved node.
+
 ## Icons
 
 **Remix only**, never a text glyph. The Remix-icon MCP returns **names only** and **misses some

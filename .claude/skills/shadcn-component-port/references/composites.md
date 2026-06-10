@@ -35,8 +35,11 @@ Frontend "slot" (`children`) ≠ Figma Slot. Decide **per consumer-variable cont
 | one of a *finite, author-defined* set | **Variant property** | states / sizes / aligns / disabled / focus / invalid |
 | **one** swappable element, *must* be a component, parent drives look/size | **Instance-Swap** | a leading/trailing adornment, an action control inside a region |
 | **open, variably-many** children; consumer sets count/order/kind | **Slot** | real `children`: list items, free-form region content |
+| **conditional layout** — direction flips on content (CSS `has-[]`/`flex-col`, e.g. row↔column) | **Variant axis** | Figma has no conditional layout AND slot direction is instance-locked (`figma-build.md`) → a `layout: horizontal\|vertical` axis on the composition. **Multiplies the state matrix** (state × layout). |
 
 - **Slot when** consumer sets count/order/kind; variable length; no finite variant set.
+- **Variant-axis when** the *layout* (not just content) changes conditionally — a porter modelling only
+  `state` then can't reproduce the column-stacking examples (the slot won't flip in an instance).
 - **Swap when** exactly one position; content = component; persists across variants;
   parent override drives look/size.
 - Code composes an **already-ported** component X → Figma nests an **instance of X**
@@ -50,10 +53,15 @@ region→Slot, and any composed already-ported component→a nested instance of 
 
 **T2 — Anatomy + Dependency-Audit**
 - As SKILL.md T2, **plus the audit (mandatory):** `ui:add <composite>` writes
-  dependency-components **too**. List every written file, check imports vs installed deps.
-  Per foreign component decide: **port / stub / delete+defer**. Never leave an un-ported
-  foreign component in the tree — breaks the gate (seen: `ui:add` of one composite also wrote a
-  sub-part importing an icon lib that wasn't installed → gate red).
+  dependency-components **too**, always **flat** (`components/ui/<dep>.tsx`). List every written
+  file; per foreign dep decide:
+  - **un-ported** → port / stub / delete+defer. Never leave one in the tree — breaks the gate
+    (seen: a composite's sub-part imported an un-installed icon lib → gate red).
+  - **already ported as a folder** (`components/ui/<dep>/`) → **delete the flat stock copy.** It does
+    NOT collide with the folder, so `ui:add` reports no overwrite — but module resolution prefers
+    `<dep>.tsx` (file) over `<dep>/` (dir), so the flat stock **shadows** the DS version: every import
+    silently resolves to stock, typecheck still passes, the gate validates a lie. **"no overwrite" ≠
+    "no conflict".** (Keep only the composite's own source; move it into its folder.)
 
 **T2.5 — Examples → Stories** — general (SKILL.md). Composite wrinkle: the **skip-rule** bites hardest
 here (a composite example often composes *another* component → skip + log if it isn't ported yet); and
@@ -92,8 +100,9 @@ variation → which mechanism + why) and any open foreign-dependency from the T2
 
 ## 3 · Composite traps *(additive to SKILL.md Red flags)*
 
-- `ui:add <composite>` drags dependency-components in → gate break if an un-ported one is in
-  the tree.
+- `ui:add <composite>` drags dependency-components in (always **flat**) → gate break: an **un-ported**
+  one left in the tree, OR an **already-ported** one whose flat stock copy **shadows** its DS folder
+  (`<dep>.tsx` beats `<dep>/` in resolution; typecheck still green) → delete the flat copy. See §2 T2.
 - Section children: section-relative `x/y`, never add the section's abs-offset.
 - *(`createSlot` untyped + `setBoundVariableForPaint` returns a new paint → `references/figma-build.md`;
   jsdom polyfill once-per-lib → SKILL.md.)*
