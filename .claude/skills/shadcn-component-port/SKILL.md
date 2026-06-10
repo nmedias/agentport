@@ -37,14 +37,19 @@ slots / properties / auto-layout only.
 ## Process
 
 ```
-T1 Setup     cn() carries the text-format + named-spacing twMerge extensions (one-time)
-T2 Anatomy   land the stock source locally → variant axes/slots + every stock class string
-T3 Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
-T4 Figma     recon → token-bound component set, full matrix, sorted grid, in a Section
-T5 Verify    /figma-verify → CLEAN before code
-T6 Code      rewrite per T3; gate green
-T7 Notes     mapping table + node/var ids + findings
+T1   Setup     cn() carries the text-format + named-spacing twMerge extensions (one-time)
+T2   Anatomy   land the stock source locally → variant axes/slots + every stock class string
+T2.5 Stories   shadcn doc usage-examples → Storybook stories, BEFORE Figma (the canonical usage set)
+T3   Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
+T4   Figma     token-bound set: full matrix, sorted grid, in a Section (recipes → figma-build.md)
+T5   Verify    controls live · /figma-verify CLEAN · rebuild every story from the controls (token/values/px)
+T6   Code      rewrite per T3; stories = the T2.5 set; headless lib → jsdom once/lib; gate green
+T7   Notes     mapping table + node/var ids + example-inventory + findings
 ```
+
+**Multi-part composite** (no root element — several `data-slot` parts, e.g. an input with adornments,
+a command palette, a dialog) → **`references/composites.md`** overrides T2–T7 (Examples-First,
+Exposure-Surface, 3-layer build). T1 + T3 and the shared T4 Figma rules still apply.
 
 ### T1 — Setup (verify every run)
 
@@ -70,15 +75,17 @@ Colours (`bg/border/text-*`) and radius (`sm/md/lg/xl`, standard scale) need no 
 Land the real source locally, then read it — that file is the rewrite's source of truth.
 `view_items_in_registries` returns metadata only (no source despite its schema) — don't rely on it.
 
-1. *(name unclear?)* `search_items_in_registries({registries:['@shadcn'], query})` → take the
-   `registry:ui` hit (ignore `registry:example` demos + the broken `[object Promise]` add-command field).
-2. If `libs/ui/src/components/ui/<component>/` is absent: **`npm run ui:add -- <component>`** (real
-   source, project-correct `@/` imports + `data-slot`). shadcn writes it **flat** → move to
-   `components/ui/<component>/<component>.tsx` and add barrel `index.ts` (`export * from './<component>'`).
-   *Offline / no CLI?* `get_item_examples_from_registries({registries:['@shadcn'], query:'<component>'})`
-   (`query` required) for the raw class strings.
-3. Extract: CVA variant axes + defaults, slots/parts (`data-slot`, `[&_svg]`), every stock class
-   string (base + per-variant + per-size).
+1. **Find** *(name unclear?)* — `search_items_in_registries({registries:['@shadcn'], query})`; take
+   the `registry:ui` hit. Ignore the `registry:example` demos and the broken `[object Promise]`
+   add-command field.
+2. **Land** — if `libs/ui/src/components/ui/<component>/` is absent: **`npm run ui:add -- <component>`**
+   (real source: project-correct `@/` imports + `data-slot`).
+   - shadcn writes it **flat** → move to `components/ui/<component>/<component>.tsx` + add a barrel
+     `index.ts` (`export * from './<component>'`).
+   - *Offline / no CLI?* → `get_item_examples_from_registries({registries:['@shadcn'],
+     query:'<component>'})` (`query` required) for the raw class strings.
+3. **Extract** the anatomy — CVA variant axes + defaults · slots/parts (`data-slot`, `[&_svg]`) ·
+   every stock class string (base + per-variant + per-size).
 
 **No CVA?** A bare element with one class string (e.g. Input = one `<input>`) → the Figma axis is
 **`state`** (default/focus/filled/disabled/invalid) or content, never a faked `variant×size`. Pick
@@ -86,15 +93,27 @@ the states the class string actually expresses (`focus-visible:`, `disabled:`, `
 placeholder-vs-value). A **static, non-interactive** element (`pointer-events-none`/`select-none`,
 no pseudo-class states) has no state axis → the axis is **content** (e.g. text vs icon).
 
-**Multi-part composition?** (no root element — several `data-slot` parts that render differently).
-Model parts by structure, never one flat `part` axis mixing kinds: parts interchangeable in a single
-position → one component/set on a **`state`** axis (axis values keep the shadcn part names, for code
-parity); structurally distinct parts (icon adornments, …) → their own components. The composition is
-itself a **separate, reusable component** nesting part instances (T4). **Composites only — STOP and
-ask the user before building**, each question carrying your recommended Figma model (recommended
-option first, via `AskUserQuestion`): (1) part split — which parts share a position (→ `state`) vs.
-stand alone; (2) composition as a real reusable component (recommend) vs. example frame; (3) any
-whole-level variants on the composition; (4) variable length → a Slot (T4) + its default content.
+**Multi-part composition?** (no root element — several `data-slot` parts that render differently —
+e.g. an input with adornments, a command palette, a dialog). **Different procedure — STOP and switch to
+`references/composites.md`**: Exposure-Surface + Done-Test, Examples-First (T2.5), the Slot≠Slot
+mechanism model, the user-ask (part-split / Slot-vs-Swap / whole-level variants / slot defaults), and
+the 3-layer Figma build. T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
+
+### T2.5 — Usage-examples → Stories (before Figma)
+
+Always author the canonical usage set as Storybook stories **before** building Figma, so Figma
+reproduces real usages — not just the variant matrix. Stories run against the T2-landed `ui:add`
+source (working shadcn code); T6 only re-clothes the look to DS tokens, the stories stay.
+
+- **Source:** `ui.shadcn.com/docs/components/<x>` (else `get_item_examples_from_registries`, `query`
+  required). **All structurally distinct** examples, deduped — not every prop permutation.
+- **Write each as a story:** if the `storybook` MCP is up (:6006) `get-storybook-story-instructions`
+  first (canonical CSF/imports), write, then `preview-stories` → surface every URL. No MCP? Mirror an
+  existing component's `.stories.tsx`.
+- **Skip-rule:** an example needing a **not-yet-ported** component → skip + log in `notes.md` (example
+  name, missing dep). Don't stub, don't co-port.
+- Output: the story-set = the canonical usage set — what T5 verifies the Figma component against
+  (composites also reproduce it as permanent Figma instances, see `references/composites.md`).
 
 ### T3 — Translate
 
@@ -113,109 +132,68 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 
 ### T4 — Figma build
 
-Recon (`snippets/recon.js`) then build (`snippets/build-variant-set.js`). Incremental: ≤10 ops per
-`use_figma`, screenshot after each step. Bind every property to DS variables **by ID** (names carry
-group paths like `shadcn Default/primary`):
+Build the token-bound component set and place it in a **Section** on the `Components` page. Full
+Plugin-API recipes — binding by ID, slots, icons, variant assembly, the interaction-state pattern —
+are in **`references/figma-build.md`**. Invariants:
 
-- fills/strokes/text colour → `setBoundVariableForPaint(paint,'color',variable)` — returns a NEW
-  paint, reassign it. **Never clone/spread a bound paint** (`{...boundPaint, opacity}`): it loses live
-  resolution and renders the fallback colour (often black). Build fresh; if you need opacity, pass it
-  plus the real resolved colour as the paint's fallback.
-- radius / padding / gap → `node.setBoundVariable('topLeftRadius'|'paddingLeft'|'itemSpacing'|…, v)`
-  (spacing vars are `GAP`-scoped → cover gap AND padding).
-- typography → `setTextStyleIdAsync(formatId)` after `loadFontAsync` of that format's font.
-- control height → `resize(w,h)` THEN `layoutSizingHorizontal='HUG'`, `…Vertical='FIXED'`.
-- slottable / swappable content (icon, leading/trailing adornment, avatar, …) = a real Figma slot:
-  `component.createSlot()`, named consistently so it merges to ONE set-level `SLOT` property; drop a
-  sensible default inside (icon → `createNodeFromSvg`, inner VECTOR fill bound per variant). Slots are
-  per-component → the prop appears only on owning variants (fine). **Config the slot — default
-  geometry is unreliable** (seen `100×100/NONE/white-fill` AND `HUG/empty` same session → never
-  assume): `slot.fills=[]` (default fill is opaque white → box behind content); give the slot **its
-  own auto-layout** → slotted content becomes a real layout child (can align AND self-fit via child
-  `FILL`, not just sit at coords). Size by intent: **stable box** (key cap, avatar) = slot
-  `FIXED`/`FILL` to fixed dims, content sits without growing it; **hug content** = slot `HUG/HUG`.
-  Align (`CENTER/CENTER` …) is per-case, not a rule. Bare `resize()` w/o auto-layout freezes size AND
-  leaves content unmanaged — avoid.
-- icons → **Remix only**, never a text glyph. The Remix-icon MCP returns **names only** and **misses
-  some glyphs** (notably the `*-s-line` chevrons) → take the exact path from the installed package
-  (`npm pack remixicon` → `package/icons/<Category>/<name>.svg`) and confirm the React export
-  (`node -e "require('@remixicon/react').Ri<Name>"`). Code = `@remixicon/react` as `children`.
-- `combineAsVariants(comps, section)`; name each `propA=valA, propB=valB` → props auto-derive. Append
-  more with `set.appendChild(comp)` (merges by name; same-named slots/props collapse).
-- component properties attach by node type, not timing: add TEXT/BOOL/INSTANCE_SWAP on the **set** or a
-  standalone comp, then bind the node (`node.componentPropertyReferences = { characters|visible|mainComponent: id }`); 
-  Prop ids change on combine → re-read.
-
-**Full matrix** — every value of every property, not a representative subset (a partial set reads as broken).
-
-**Sorted grid** — never leave scattered append order. Reorder primary-property-major, secondary in
-option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP'` and
-`maxWidth = Σ(row widths)+gaps+padding` to wrap one row per primary value. Screenshot to confirm.
-
-**Section** — place the set in a Section on the `Components` page; if absent, create it via
-**`/figma-create-section`**  Never hand-roll `figma.createSection()`.
-
-**Composite** (multi-part, per the T2 ask) — the part set/components are not the placeable unit; also
-build the composition the way it is used: a **separate reusable component** nesting the parts as
-**instances** in their real layout (token edits propagate). Variable length / swappable sequence = a
-Figma **Slot** (`createSlot`, auto-layout), prefilled with a typical default the consumer adds to /
-removes from / swaps — never a fixed child count. Whole-level variants ride on the composition component.
-
-**Interaction states** = a `state` axis (Figma has no pseudo-classes → each is an explicit variant).
-Pattern (validated on Button):
-
-- **Base**: extract `.<Comp>/Base` (a set keyed on `size`) carrying structure/geometry; each
-  `variant×size×state` member nests a base instance and overrides only its delta — base edits propagate.
-- **Tint** = a dedicated `state-layer` Surface under the (always-opaque) content, driven by its
-  **appearance/layer opacity** — never fill-opacity (not variable-bindable) nor node-opacity (dims the
-  text too). Mirrors `bg-…/90`.
-- **active** = tint + content pressed 1px down, absolutely positioned in a fixed-size member → no
-  layout jump (code: `active:translate-y-px`).
-- **focus** = a ring drop-shadow (`ring`/50, spread 3). Spread renders only when `clipsContent=true`
-  on the effect-bearing node; keep ancestors `clipsContent=false` so the ring isn't clipped.
-- **disabled** = member node opacity (dimming the text too is correct here).
-
-### T4b — Exercise the props
-
-Instantiate the set, `setProperties` across every value of every property (variant, text, slot), read
-each back, iterate until it takes effect. A prop that exists but does nothing (slot with no default,
-unbound text) is broken. Delete the test instances.
+- **Full matrix** — every value of every property (a partial set reads as broken).
+- **Sorted grid** — primary-property-major, one wrapped row per primary value (not scattered append order).
+- **Bind every property by variable ID** — `setBoundVariableForPaint` returns a NEW paint (reassign;
+  never spread a bound paint → it renders the fallback colour).
+- **Slots** for swappable / variable content; config them (`fills=[]`, own auto-layout, sensible
+  default) — never trust default geometry.
+- **Interaction states** = a `state` axis (Figma has no pseudo-classes → each is an explicit variant).
+- **Section** via `/figma-create-section` — never hand-roll `figma.createSection()`.
 
 ### T5 — Verify
 
-`/figma-verify <setId>` → must be **CLEAN** (vectors not text, no clipping/overlap, padding symmetry).
+Three checks on the built set, in order — **functional → clean → faithful**:
+
+1. **Controls live** — instantiate the set and drive **every control** the component exposes, not just
+   variant props: each variant / text / boolean / instance-swap property (`setProperties`), **and** each
+   **slot** (fill or replace its content). Read each back, iterate until it takes effect. A control that
+   exists but does nothing — slot with no default, unbound text, swap that won't take — is broken.
+   Delete the test instances. *(Composite: exercise every part set **and** the composition, not just the
+   top level.)*
+2. **Clean** — `/figma-verify <setId>` must be **CLEAN** (vectors not text, no clipping/overlap,
+   padding symmetry).
+3. **Reproduces the usages** — rebuild every T2.5 story from the component's controls (props / variants
+   / slots) and compare token/values/pixels (zoom, raw px). A story you can't rebuild from controls =
+   the surface is incomplete → fix the component (missing variant/slot), never hand-build the example.
 
 ### T6 — Code port
 
 Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export the folder in
 `libs/ui/src/index.ts` if new. Icons = `@remixicon/react`.
 
-- **Stories**: cover every variant×size/state in `.stories.tsx`. If the `storybook` MCP is up (:6006):
-  `get-storybook-story-instructions` first (canonical CSF/imports/conventions), write, then
-  `preview-stories` → surface every URL to the user (rendered-output check the gate + `/figma-verify`
-  skip). No MCP? Mirror `button/button.stories.tsx`.
+- **Stories**: = the T2.5 usage-example set (already written, now running on DS tokens). Ensure every
+  variant×size/state still appears in ≥1 story — add an overview story if the examples don't exercise
+  them all. Re-run `preview-stories` → surface every URL (rendered-output check; the gate + `/figma-verify`
+  don't see it).
+- **Headless lib** (e.g. Radix, cmdk): components that touch `ResizeObserver` /
+  `Element.prototype.scrollIntoView` on mount need a jsdom polyfill in the vitest `setupFile` —
+  **once per lib** (like the `cn()` extension), else specs can't render them.
 - **No dead controls**: render-only stories ignore args → `parameters: { controls: { disable: true } }`;
   elsewhere expose only the relevant ones (`controls: { include: [...] }`).
-- **a11y**: an icon-only control (no text child) must require an accessible name — enforce
-  `aria-label`/`aria-labelledby` at the **type level** (discriminated props, see `button.tsx` `size="icon"`).
 - **Gate**: `npx nx test|typecheck|lint @agentport/ui` green, and confirm the DS typography class
   actually survives in the rendered markup (twMerge drops it if T1 was skipped).
 
 ### T7 — Notes
 
 `agent-runs/component-port/<date>-<component>/notes.md`: mapping table, Figma node + variable ids,
-findings, gate state, `preview-stories` URLs (T6), open items (full matrix, missing states,
-placeholder ⚠ tokens). For each non-obvious mapping-table row record the **why** — the `use`/`avoid`
-reasoning that picked that token over a same-value lookalike (T3), so the decision is auditable and
-the next port reuses it instead of re-deriving it.
+findings, gate state, `preview-stories` URLs, the **example-inventory** (each doc usage-example:
+kept-distinct / deduped-as-permutation-of-X / skipped-missing-dep — with reason; makes T5 auditable),
+open items (full matrix, missing states, placeholder ⚠ tokens). For each non-obvious mapping-table row
+record the **why** — the `use`/`avoid` reasoning that picked that token over a same-value lookalike
+(T3), so the decision is auditable and the next port reuses it instead of re-deriving it.
 
 ## Red flags
 
 | Trap | Reality |
 |---|---|
 | Treat `secondary`/`destructive`/`chart-*` as final | ⚠ placeholders (stock hex), not designed — flag, don't finalize. |
-| Read `componentPropertyDefinitions` off a variant | Readable only on the **set** (or a non-variant component) — throws on a single variant. |
-| Decide a Plugin API is missing because it's not in the typings | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed). |
+
+*(Plugin-API red flags — `componentPropertyDefinitions` only on the set, typings lag the runtime — live in `references/figma-build.md`.)*
 
 ## Boundaries
 
