@@ -142,6 +142,9 @@ are in **`references/figma-build.md`**. Invariants:
   never spread a bound paint → it renders the fallback colour).
 - **Slots** for swappable / variable content; config them (`fills=[]`, own auto-layout, sensible
   default) — never trust default geometry.
+- **Reuse, don't rebuild** — if the component embeds an already-built DS component (icon, sub-part,
+  another ported component), nest a real **instance** of it, never re-clothe a copy (token edits then
+  propagate). For multi-part composites this is build layer 2 — see `references/composites.md`.
 - **Interaction states** = a `state` axis (Figma has no pseudo-classes → each is an explicit variant).
 - **Section** via `/figma-create-section` — never hand-roll `figma.createSection()`.
 
