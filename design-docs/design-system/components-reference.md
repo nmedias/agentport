@@ -62,12 +62,10 @@ baseline:
 modes: [light]                       # kein Dark-Mode
 package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
 status_note: >
-  Branch chore/composite-port-skill (noch nicht auf master): radix-nova-Angleichung der 4 Altkomponenten
-  + die Command-Re-Port-Kette. Neu portiert (nova, Figma+Code, Gate grün): Textarea.
-  Composite-Port-Verfahren im Skill überarbeitet (3 Dateien). InputGroup wurde nach neuem Verfahren NEU
-  portiert (Figma+Code, Gate grün, Done-Test) — GREEN-Test des Rework. Command (cmdk) NEU portiert nach
-  dem überarbeiteten Composite-Verfahren (Figma+Code, Gate grün 32 Tests, Done-Test) — inline-Palette.
-  CommandDialog deferred bis Dialog portiert ist (Dialog: pending).
+  Branch feat/shadcn-dialog-port: Dialog NEU portiert (Composite-Verfahren, Figma+Code, Gate grün,
+  Done-Test) inkl. neuem Semantic-Token `scrim`. Davor (master): Command (cmdk) + InputGroup-Re-Port
+  nach dem überarbeiteten Composite-Verfahren, radix-nova-Angleichung der Altkomponenten, Textarea.
+  CommandDialog weiterhin deferred — Dialog steht jetzt, Re-Add ist der nächste Schritt.
 ```
 
 ## Components
@@ -246,21 +244,44 @@ status_note: >
     grün (32 Tests inkl. Typo-Survival text-input/text-body). jsdom-Polyfill lag bereits in test-setup.ts.
 
 - name: Dialog
-  status: pending
-  figma_synced: false
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-10 (Figma + Code zusammen gebaut)
   source: { registry: "@shadcn", item: dialog, style: radix-nova }
-  code: { dir: "—", exports: [], barrel: "—" }
-  figma: { set: "tbd" }
-  skill: /shadcn-component-port (geplant)
+  code:
+    dir: libs/ui/src/components/ui/dialog/
+    exports: [Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/dialog'"
+  figma:
+    section: { name: "Dialog", id: "3589:788" }
+    composition:
+      name: ".Dialog"
+      id: "3592:794"
+      props: "title#3593:2 (text) · description#3593:3 (text) · showCloseButton#3593:4 · showFooter#3593:5 · showBody#3606:0 (bools)"
+      slots: { body: "3609:890 (leer; Wrapper body-region visible↔showBody)", footer: "3593:795 (Default = .Dialog/Footer-Instanz 3593:796)" }
+      nests: "ghost icon-sm .Button-Instanz 3593:806 als Close (ABSOLUTE top-right, Icon via swapComponent→.Dialog/Icon/Close)"
+    footer: { name: ".Dialog/Footer", id: "3591:788", slot: "actions#3591:789 (Default: Cancel outline + Save default .Button-Instanzen)" }
+    overlay: { name: ".Dialog/Overlay", id: "3590:791", fill: "scrim (VariableID:3588:2, NEU) + BACKGROUND_BLUR 4" }
+    icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
+    examples: { dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
+  skill: /shadcn-component-port (2026-06-10, Composite-Port; nestet Button)
   notes: >
-    Noch nicht portiert. Wird für CommandDialog gebraucht (Command ist inline portiert; CommandDialog
-    bleibt deferred bis Dialog steht).
+    Radix-Composite (radix-ui Dialog). Deps: Button ✓ (genestete ghost-Instanz als X-Close; flacher
+    ui:add-Schatten gelöscht), radix-ui ✓. DS-Abweichungen: Panel = bg-overlay + border + shadow-elevation
+    (novas ring-1 ring-foreground/10 ersetzt — Overlay-Tiefe wie Command); Scrim = NEUER Token `scrim`
+    (neutral/900 @10%, bg-black/10 tot) + backdrop-blur-xs; Titel = text-title (18/600; nova 16/500 ohne
+    DS-Stufe); Body/Description = text-body. Footer = getöntes nova-Band (bg-muted/50, border-t, Bleed
+    -mx-xl/-mb-xl) als EIGENE Komponente, default-instanziiert im footer-Slot (User-Entscheidung).
+    Scrim als eigene .Dialog/Overlay-Komponente, Panel-Komposition bleibt scrim-frei. Figma-Mechanik:
+    SLOT nie direkt visibility-binden (degradiert zu FRAME) → Wrapper-Frame trägt showBody-Boolean.
+    Geometrie numerisch (top-2/right-2, max-w-*). Gate grün (39 Tests inkl. Token-Survival).
+    → CommandDialog kann jetzt un-deferred werden (Command-Katalog-Eintrag).
 ```
 
 ## Pending / Removed
 
 ```yaml
-# Command: re-portiert 2026-06-10 (siehe Components-Liste oben). CommandDialog bleibt deferred bis Dialog steht.
+# Command: re-portiert 2026-06-10 (siehe Components-Liste oben).
+# CommandDialog: deferred — Dialog ist seit 2026-06-10 portiert; Re-Add (Funktion + Export + Story in command/) ist der offene nächste Schritt.
 ```
 
 ## Blocks (Organismen)

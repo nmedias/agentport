@@ -1,6 +1,7 @@
 export * from './components/ui/breadcrumb';
 export * from './components/ui/button';
 export * from './components/ui/command';
+export * from './components/ui/dialog';
 export * from './components/ui/input';
 export * from './components/ui/input-group';
 export * from './components/ui/kbd';
