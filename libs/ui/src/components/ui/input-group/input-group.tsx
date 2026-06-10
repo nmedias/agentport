@@ -89,19 +89,33 @@ function InputGroupAddon({
   );
 }
 
-const inputGroupButtonVariants = cva('flex items-center gap-md', {
+// InputGroupButton maps onto the DS Button's own size scale and forwards the mapped
+// size (code↔Figma parity: the Figma .InputGroup/Button nests a real .Button at the
+// same size). The Button then carries all geometry; the className below adds only the
+// DS delta — rounded-sm on xs/icon-xs (the DS Button uses rounded-md there), else nothing.
+const inputGroupButtonVariants = cva('', {
   variants: {
     size: {
-      xs: "[&>svg:not([class*='size-'])]:size-3.5",
+      xs: 'rounded-sm',
       sm: '',
-      'icon-xs': 'size-6 p-0 has-[>svg]:p-0',
-      'icon-sm': 'size-8 p-0 has-[>svg]:p-0',
+      'icon-xs': 'rounded-sm',
+      'icon-sm': '',
     },
   },
   defaultVariants: {
     size: 'xs',
   },
 });
+
+// InputGroup size → DS Button size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon).
+const igButtonToButtonSize = {
+  xs: 'xs',
+  sm: 'default',
+  'icon-xs': 'icon-xs',
+  'icon-sm': 'icon-sm',
+} as const;
+
+
 
 function InputGroupButton({
   className,
@@ -111,11 +125,15 @@ function InputGroupButton({
   ...props
 }: Omit<React.ComponentProps<typeof Button>, 'size'> &
   VariantProps<typeof inputGroupButtonVariants>) {
+
   return (
     <Button
       type={type}
       data-size={size}
       variant={variant}
+      // Button's icon sizes demand aria-label via a discriminated union; the mapped
+      // value is a valid Button size, so cast past it — a11y stays the consumer's job.
+      size={igButtonToButtonSize[size ?? 'xs'] as never}
       className={cn(inputGroupButtonVariants({ size }), className)}
       {...props}
     />

@@ -144,7 +144,7 @@ export const Buttons: Story = {
         <InputGroup>
           <InputGroupInput placeholder="https://x.com/shadcn" readOnly/>
           <InputGroupAddon align="inline-end">
-            <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
+            <InputGroupButton aria-label="Copy" title="Copy" size="icon-sm">
               <RiFileCopyLine/>
             </InputGroupButton>
           </InputGroupAddon>
@@ -152,7 +152,7 @@ export const Buttons: Story = {
         <InputGroup>
           <InputGroupInput placeholder="Type to search…"/>
           <InputGroupAddon align="inline-end">
-            <InputGroupButton size="sm" variant={"default"}>Search</InputGroupButton>
+            <InputGroupButton size="xs" variant={"default"}>Search</InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
       </div>
