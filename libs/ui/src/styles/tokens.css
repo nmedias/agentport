@@ -10,8 +10,11 @@
    (Color/neutral/50 → --ap-color-neutral-50; Font/family/sans →
    --ap-font-family-sans). SEMANTICS carry `--ap-sys-` + the token leaf —
    Figma groups (shadcn Default/, Overlay/, Input/, …) are organisation only
-   (Overlay/overlay → --ap-sys-overlay). Figma itself has no prefix.
-   Typography semantics (--text-*) and --shadow-* follow in a later pass.
+   (Overlay/overlay → --ap-sys-overlay). Typography semantics follow the
+   Figma path below the org group: Heading/heading-sm/family →
+   --ap-sys-heading-sm-family. Figma itself has no prefix.
+   Only --shadow-glow/--shadow-elevation still follow the old naming (no
+   semantic tier in Figma — Effect Styles bind the reference parts directly).
 
    Wiring: imported by `globals.css` via `@import`; there the SEMANTICS are
    translated into Tailwind utilities via `@theme inline` (color/radius/spacing/shadow),
@@ -196,7 +199,7 @@
   /* ===========================================================================
      4 · SEMANTIC · SPACING  (Collection: semantic-dimension, group Space)
      =========================================================================== */
-    --ap-sys-space-2xs: calc(var(--ap-dimension-space-base) * 0.5);  /* 2px */
+  --ap-sys-space-2xs: calc(var(--ap-dimension-space-base) * 0.5);  /* 2px */
   --ap-sys-space-xs:  var(--ap-dimension-space-base);              /* 4px */
   --ap-sys-space-sm:  calc(var(--ap-dimension-space-base) * 1.5);  /* 6px */
   --ap-sys-space-md:  calc(var(--ap-dimension-space-base) * 2);    /* 8px */
@@ -213,81 +216,81 @@
      =========================================================================== */
 
   /* Display */
-  --text-display-family:   var(--ap-font-family-sans);
-  --text-display-size:     var(--ap-font-size-step-5);
-  --text-display-weight:   var(--ap-font-weight-extrabold);
-  --text-display-leading:  var(--ap-font-line-height-tight);
-  --text-display-tracking: var(--ap-font-tracking-tight);
+  --ap-sys-display-family:   var(--ap-font-family-sans);
+  --ap-sys-display-size:     var(--ap-font-size-step-5);
+  --ap-sys-display-weight:   var(--ap-font-weight-extrabold);
+  --ap-sys-display-line-height:  var(--ap-font-line-height-tight);
+  --ap-sys-display-tracking: var(--ap-font-tracking-tight);
 
   /* Heading */
-  --text-heading-family:   var(--ap-font-family-sans);
-  --text-heading-size:     var(--ap-font-size-step-3);
-  --text-heading-weight:   var(--ap-font-weight-extrabold);
-  --text-heading-leading:  var(--ap-font-line-height-snug);
-  --text-heading-tracking: var(--ap-font-tracking-tight);
+  --ap-sys-heading-family:   var(--ap-font-family-sans);
+  --ap-sys-heading-size:     var(--ap-font-size-step-3);
+  --ap-sys-heading-weight:   var(--ap-font-weight-extrabold);
+  --ap-sys-heading-line-height:  var(--ap-font-line-height-snug);
+  --ap-sys-heading-tracking: var(--ap-font-tracking-tight);
 
   /* Heading-sm */
-  --text-heading-sm-family:   var(--ap-font-family-sans);
-  --text-heading-sm-size:     var(--ap-font-size-step-2);
-  --text-heading-sm-weight:   var(--ap-font-weight-extrabold);
-  --text-heading-sm-leading:  var(--ap-font-line-height-snug);
-  --text-heading-sm-tracking: var(--ap-font-tracking-tight);
+  --ap-sys-heading-sm-family:   var(--ap-font-family-sans);
+  --ap-sys-heading-sm-size:     var(--ap-font-size-step-2);
+  --ap-sys-heading-sm-weight:   var(--ap-font-weight-extrabold);
+  --ap-sys-heading-sm-line-height:  var(--ap-font-line-height-snug);
+  --ap-sys-heading-sm-tracking: var(--ap-font-tracking-tight);
 
   /* Title */
-  --text-title-family:   var(--ap-font-family-sans);
-  --text-title-size:     var(--ap-font-size-step-1);
-  --text-title-weight:   var(--ap-font-weight-semibold);
-  --text-title-leading:  normal;
-  --text-title-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-title-family:   var(--ap-font-family-sans);
+  --ap-sys-title-size:     var(--ap-font-size-step-1);
+  --ap-sys-title-weight:   var(--ap-font-weight-semibold);
+  --ap-sys-title-line-height:  normal;
+  --ap-sys-title-tracking: var(--ap-font-tracking-normal);
 
   /* Body */
-  --text-body-family:   var(--ap-font-family-sans);
-  --text-body-size:     var(--ap-font-size-step-0);
-  --text-body-weight:   var(--ap-font-weight-regular);
-  --text-body-leading:  var(--ap-font-line-height-relaxed);
-  --text-body-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-body-family:   var(--ap-font-family-sans);
+  --ap-sys-body-size:     var(--ap-font-size-step-0);
+  --ap-sys-body-weight:   var(--ap-font-weight-regular);
+  --ap-sys-body-line-height:  var(--ap-font-line-height-relaxed);
+  --ap-sys-body-tracking: var(--ap-font-tracking-normal);
 
   /* Body-strong */
-  --text-body-strong-family:   var(--ap-font-family-sans);
-  --text-body-strong-size:     var(--ap-font-size-step-0);
-  --text-body-strong-weight:   var(--ap-font-weight-semibold);
-  --text-body-strong-leading:  normal;
-  --text-body-strong-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-body-strong-family:   var(--ap-font-family-sans);
+  --ap-sys-body-strong-size:     var(--ap-font-size-step-0);
+  --ap-sys-body-strong-weight:   var(--ap-font-weight-semibold);
+  --ap-sys-body-strong-line-height:  normal;
+  --ap-sys-body-strong-tracking: var(--ap-font-tracking-normal);
 
   /* Label */
-  --text-label-family:   var(--ap-font-family-sans);
-  --text-label-size:     var(--ap-font-size-step-0);
-  --text-label-weight:   var(--ap-font-weight-medium);
-  --text-label-leading:  normal;
-  --text-label-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-label-family:   var(--ap-font-family-sans);
+  --ap-sys-label-size:     var(--ap-font-size-step-0);
+  --ap-sys-label-weight:   var(--ap-font-weight-medium);
+  --ap-sys-label-line-height:  normal;
+  --ap-sys-label-tracking: var(--ap-font-tracking-normal);
 
   /* Eyebrow (uppercase micro-labels) */
-  --text-eyebrow-family:   var(--ap-font-family-mono);
-  --text-eyebrow-size:     var(--ap-font-size-step-neg2);
-  --text-eyebrow-weight:   var(--ap-font-weight-medium);
-  --text-eyebrow-leading:  normal;
-  --text-eyebrow-tracking: var(--ap-font-tracking-wide);
+  --ap-sys-eyebrow-family:   var(--ap-font-family-mono);
+  --ap-sys-eyebrow-size:     var(--ap-font-size-step-neg2);
+  --ap-sys-eyebrow-weight:   var(--ap-font-weight-medium);
+  --ap-sys-eyebrow-line-height:  normal;
+  --ap-sys-eyebrow-tracking: var(--ap-font-tracking-wide);
 
   /* Data (mono table data) */
-  --text-data-family:   var(--ap-font-family-mono);
-  --text-data-size:     var(--ap-font-size-step-neg1);
-  --text-data-weight:   var(--ap-font-weight-regular);
-  --text-data-leading:  normal;
-  --text-data-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-data-family:   var(--ap-font-family-mono);
+  --ap-sys-data-size:     var(--ap-font-size-step-neg1);
+  --ap-sys-data-weight:   var(--ap-font-weight-regular);
+  --ap-sys-data-line-height:  normal;
+  --ap-sys-data-tracking: var(--ap-font-tracking-normal);
 
   /* Kbd (keyboard keys) */
-  --text-kbd-family:   var(--ap-font-family-mono);
-  --text-kbd-size:     var(--ap-font-size-step-neg1);
-  --text-kbd-weight:   var(--ap-font-weight-medium);
-  --text-kbd-leading:  normal;
-  --text-kbd-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-kbd-family:   var(--ap-font-family-mono);
+  --ap-sys-kbd-size:     var(--ap-font-size-step-neg1);
+  --ap-sys-kbd-weight:   var(--ap-font-weight-medium);
+  --ap-sys-kbd-line-height:  normal;
+  --ap-sys-kbd-tracking: var(--ap-font-tracking-normal);
 
   /* Input (command/input text) */
-  --text-input-family:   var(--ap-font-family-mono);
-  --text-input-size:     var(--ap-font-size-step-1);
-  --text-input-weight:   var(--ap-font-weight-regular);
-  --text-input-leading:  normal;
-  --text-input-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-input-family:   var(--ap-font-family-mono);
+  --ap-sys-input-size:     var(--ap-font-size-step-1);
+  --ap-sys-input-weight:   var(--ap-font-weight-regular);
+  --ap-sys-input-line-height:  normal;
+  --ap-sys-input-tracking: var(--ap-font-tracking-normal);
 
 
   /* ===========================================================================

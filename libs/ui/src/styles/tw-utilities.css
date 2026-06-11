@@ -41,81 +41,81 @@
    utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.
 */
 @utility text-display {
-  font-family: var(--text-display-family);
-  font-size: var(--text-display-size);
-  font-weight: var(--text-display-weight);
-  line-height: var(--text-display-leading);
-  letter-spacing: var(--text-display-tracking);
+  font-family: var(--ap-sys-display-family);
+  font-size: var(--ap-sys-display-size);
+  font-weight: var(--ap-sys-display-weight);
+  line-height: var(--ap-sys-display-line-height);
+  letter-spacing: var(--ap-sys-display-tracking);
 }
 @utility text-heading {
-  font-family: var(--text-heading-family);
-  font-size: var(--text-heading-size);
-  font-weight: var(--text-heading-weight);
-  line-height: var(--text-heading-leading);
-  letter-spacing: var(--text-heading-tracking);
+  font-family: var(--ap-sys-heading-family);
+  font-size: var(--ap-sys-heading-size);
+  font-weight: var(--ap-sys-heading-weight);
+  line-height: var(--ap-sys-heading-line-height);
+  letter-spacing: var(--ap-sys-heading-tracking);
 }
 @utility text-heading-sm {
-  font-family: var(--text-heading-sm-family);
-  font-size: var(--text-heading-sm-size);
-  font-weight: var(--text-heading-sm-weight);
-  line-height: var(--text-heading-sm-leading);
-  letter-spacing: var(--text-heading-sm-tracking);
+  font-family: var(--ap-sys-heading-sm-family);
+  font-size: var(--ap-sys-heading-sm-size);
+  font-weight: var(--ap-sys-heading-sm-weight);
+  line-height: var(--ap-sys-heading-sm-line-height);
+  letter-spacing: var(--ap-sys-heading-sm-tracking);
 }
 @utility text-title {
-  font-family: var(--text-title-family);
-  font-size: var(--text-title-size);
-  font-weight: var(--text-title-weight);
-  line-height: var(--text-title-leading);
-  letter-spacing: var(--text-title-tracking);
+  font-family: var(--ap-sys-title-family);
+  font-size: var(--ap-sys-title-size);
+  font-weight: var(--ap-sys-title-weight);
+  line-height: var(--ap-sys-title-line-height);
+  letter-spacing: var(--ap-sys-title-tracking);
 }
 @utility text-body {
-  font-family: var(--text-body-family);
-  font-size: var(--text-body-size);
-  font-weight: var(--text-body-weight);
-  line-height: var(--text-body-leading);
-  letter-spacing: var(--text-body-tracking);
+  font-family: var(--ap-sys-body-family);
+  font-size: var(--ap-sys-body-size);
+  font-weight: var(--ap-sys-body-weight);
+  line-height: var(--ap-sys-body-line-height);
+  letter-spacing: var(--ap-sys-body-tracking);
 }
 @utility text-body-strong {
-  font-family: var(--text-body-strong-family);
-  font-size: var(--text-body-strong-size);
-  font-weight: var(--text-body-strong-weight);
-  line-height: var(--text-body-strong-leading);
-  letter-spacing: var(--text-body-strong-tracking);
+  font-family: var(--ap-sys-body-strong-family);
+  font-size: var(--ap-sys-body-strong-size);
+  font-weight: var(--ap-sys-body-strong-weight);
+  line-height: var(--ap-sys-body-strong-line-height);
+  letter-spacing: var(--ap-sys-body-strong-tracking);
 }
 @utility text-label {
-  font-family: var(--text-label-family);
-  font-size: var(--text-label-size);
-  font-weight: var(--text-label-weight);
-  line-height: var(--text-label-leading);
-  letter-spacing: var(--text-label-tracking);
+  font-family: var(--ap-sys-label-family);
+  font-size: var(--ap-sys-label-size);
+  font-weight: var(--ap-sys-label-weight);
+  line-height: var(--ap-sys-label-line-height);
+  letter-spacing: var(--ap-sys-label-tracking);
 }
 @utility text-eyebrow {
-  font-family: var(--text-eyebrow-family);
-  font-size: var(--text-eyebrow-size);
-  font-weight: var(--text-eyebrow-weight);
-  line-height: var(--text-eyebrow-leading);
-  letter-spacing: var(--text-eyebrow-tracking);
+  font-family: var(--ap-sys-eyebrow-family);
+  font-size: var(--ap-sys-eyebrow-size);
+  font-weight: var(--ap-sys-eyebrow-weight);
+  line-height: var(--ap-sys-eyebrow-line-height);
+  letter-spacing: var(--ap-sys-eyebrow-tracking);
 }
 @utility text-data {
-  font-family: var(--text-data-family);
-  font-size: var(--text-data-size);
-  font-weight: var(--text-data-weight);
-  line-height: var(--text-data-leading);
-  letter-spacing: var(--text-data-tracking);
+  font-family: var(--ap-sys-data-family);
+  font-size: var(--ap-sys-data-size);
+  font-weight: var(--ap-sys-data-weight);
+  line-height: var(--ap-sys-data-line-height);
+  letter-spacing: var(--ap-sys-data-tracking);
 }
 @utility text-kbd {
-  font-family: var(--text-kbd-family);
-  font-size: var(--text-kbd-size);
-  font-weight: var(--text-kbd-weight);
-  line-height: var(--text-kbd-leading);
-  letter-spacing: var(--text-kbd-tracking);
+  font-family: var(--ap-sys-kbd-family);
+  font-size: var(--ap-sys-kbd-size);
+  font-weight: var(--ap-sys-kbd-weight);
+  line-height: var(--ap-sys-kbd-line-height);
+  letter-spacing: var(--ap-sys-kbd-tracking);
 }
 @utility text-input {
-  font-family: var(--text-input-family);
-  font-size: var(--text-input-size);
-  font-weight: var(--text-input-weight);
-  line-height: var(--text-input-leading);
-  letter-spacing: var(--text-input-tracking);
+  font-family: var(--ap-sys-input-family);
+  font-size: var(--ap-sys-input-size);
+  font-weight: var(--ap-sys-input-weight);
+  line-height: var(--ap-sys-input-line-height);
+  letter-spacing: var(--ap-sys-input-tracking);
 }
 
 

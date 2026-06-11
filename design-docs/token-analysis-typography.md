@@ -52,6 +52,12 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 > alle 48 semantic-typo-Aliase umgehängt, Text-Styles unverändert (binden semantic-typo).
 > CSS-Primitives folgen dem Figma-Pfad mit `--ap-`-Präfix: `--ap-font-family-sans`,
 > `--ap-font-line-height-tight` (vorher `--leading-tight`), `--ap-font-scale` usw.
+> **Update 2026-06-11 — semantic-typo umstrukturiert:** Org-Gruppe oben drauf, Token =
+> `format/part`: `Display/display/family`, `Heading/heading/…` + `Heading/heading-sm/…`,
+> `Body/body/…` + `Body/body-strong/…`, Title/Label/Eyebrow/Data/Kbd/Input je eigene Gruppe
+> (48 Renames, IDs/Aliase/Text-Style-Bindings unverändert). CSS: `--text-<format>-<part>` →
+> **`--ap-sys-<format>-<part>`**, `leading` → `line-height` (`--ap-sys-heading-sm-family`,
+> `--ap-sys-body-line-height`). Utility-Klassen `text-<format>` unverändert.
 
 22 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
 - `family/` — `sans` = „Hanken Grotesk", `mono` = „Geist Mono" *(STRING)*

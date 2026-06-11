@@ -33,8 +33,10 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
               Font/family/sans → --ap-font-family-sans). Semantics = --ap-sys-<token-leaf> —
               Figma-Gruppen sind rein organisatorisch (Overlay/overlay → --ap-sys-overlay,
               Input/input-placeholder → --ap-sys-input-placeholder; shadcn Default/ ist flach,
-              Sidebar/Chart-Untergruppen aufgelöst). Figma ohne Präfix. Noch offen: semantic-typo
-              (--text-*) und --shadow-* folgen in einem separaten Pass.
+              Sidebar/Chart-Untergruppen aufgelöst). semantic-typo: Org-Gruppe oben drauf,
+              Token = format/part (Heading/heading-sm/family → --ap-sys-heading-sm-family;
+              leading heißt line-height). Figma ohne Präfix. Noch offen: nur --shadow-glow/
+              --shadow-elevation (kein semantic-Tier in Figma).
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
         │ Brücke → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
         │          tw-variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
@@ -403,6 +405,11 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 Composition-Utilities (`@utility`, mehrwertig: family+size+weight+line-height+tracking) → **eine Klasse**
 statt einzelner `text-`/`font-`-Utilities (Letztere durch Theme-Reset tot, §6). Familien `sans` =
 „Hanken Grotesk", `mono` = „Geist Mono". Weights 400/500/600/800. Modulare Skala (Ratio 1.25, Base 14px).
+
+CSS-Vars pro Format: `--ap-sys-<format>-{family,size,weight,line-height,tracking}` (Figma:
+`<OrgGruppe>/<format>/<part>`, z. B. `Heading/heading-sm/family` → `--ap-sys-heading-sm-family`;
+Org-Gruppen: Display · Heading (heading, heading-sm) · Title · Body (body, body-strong) · Label ·
+Eyebrow · Data · Kbd · Input). Die **Utility-Klassen bleiben `text-<format>`** (unverändert).
 
 ```yaml
 - { format: text-display,     family: sans, size: 43, weight: 800, line_height: 1.0,  tracking: -0.5px, use: "Hero-Headline." }
