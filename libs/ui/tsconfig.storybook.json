@@ -5,6 +5,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
+    "lib": ["es2022", "dom", "dom.iterable"],
     "paths": { "@/*": ["./src/*"] }
   },
   "exclude": [

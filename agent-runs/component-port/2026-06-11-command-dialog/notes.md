@@ -26,10 +26,14 @@ Code-only re-add per handoff-composite-port.md: function + export + story + spec
 
 ## Story (T2.5)
 
-- `InDialog` = the `command-dialog` doc example. **Adaptation:** the demo's global ⌘J
-  `document.addEventListener` can't live in a story (stories tsconfig has no DOM lib — whole file,
-  not just play functions; skill-feedback #2) → DS `Button` trigger + `Kbd ⌘J` keycap hint;
+- `InDialog` = the `command-dialog` doc example. **Adaptation (initial):** the demo's global ⌘J
+  `document.addEventListener` couldn't live in a story (stories tsconfig had no DOM lib — whole
+  file, not just play functions; skill-feedback #2) → DS `Button` trigger + `Kbd ⌘J` keycap hint;
   starts open (`useState(true)`), Esc/overlay close, button re-opens.
+- **Follow-up (same day, user ask):** DOM lib added to `tsconfig.storybook.json` (mirrors
+  tsconfig.lib.json — stories target the browser; the gap was an Nx-preset artefact) → the demo's
+  ⌘J/Ctrl+J listener restored in the story. Button trigger kept as click affordance (also pulls
+  focus into the preview iframe so the hotkey lands). Skill-feedback #2 revised accordingly.
 - No play function — portal renders outside the canvas and the manual trigger has no ARIA
   reflection; consistent with the file's "visual showcases, controls disabled" convention.
 - Header comment's "dialog example is skipped" note removed.

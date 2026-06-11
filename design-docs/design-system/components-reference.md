@@ -235,8 +235,8 @@ status_note: >
     2026-06-11, code-only — KEIN Figma-Artefakt, .Command-Composition bleibt ohne Dialog-Achse; Panel top-1/3 +
     p-0 + overflow-clip, inneres Command border-0/shadow-none, Item in-data-[slot=dialog-content]:corner-lg!;
     Children = Palette-Teile, Wrapper liefert das Command-Root wie new-york-v4 — novas bare-children-Quelle
-    bricht den Doc-Usage-Contract; Story InDialog mit Button+Kbd-Trigger statt ⌘J-document-Listener,
-    Stories-tsconfig hat keine DOM-lib). DS-Abweichungen:
+    bricht den Doc-Usage-Contract; Story InDialog = Doc-Demo inkl. ⌘J/Ctrl+J-Listener — DOM-lib dafür
+    in tsconfig.storybook.json nachgerüstet — plus Button+Kbd-Trigger als Klick-Affordance). DS-Abweichungen:
     Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
     text-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
     auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);

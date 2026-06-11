@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   RiCalendarLine,
@@ -80,13 +80,25 @@ export const Default: Story = {
   ),
 };
 
-// The command-dialog doc example: the same palette inside a CommandDialog. The
-// demo's global ⌘J listener is replaced by a DS Button trigger (the stories
-// tsconfig has no DOM lib, so no document/KeyboardEvent globals here); the Kbd
-// keycap carries the shortcut hint. Starts open so the story shows the palette;
-// Esc / overlay click close it, the button re-opens.
+// The command-dialog doc example: the same palette inside a CommandDialog,
+// toggled with ⌘J / Ctrl+J like the demo. The DS Button (with the Kbd keycap as
+// shortcut hint) stays as a click affordance — it also pulls focus into the
+// preview iframe so the hotkey lands. Starts open so the story shows the
+// palette; Esc / overlay click close it.
 function CommandDialogDemo() {
   const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'j' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>

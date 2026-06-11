@@ -30,10 +30,15 @@ the entire compilation unit — render-helper components in a `.stories.tsx` can
 `document.addEventListener`) cannot be ported into a story as-is.
 **Verified:** tsconfig chain read; story written DOM-free (DS `Button` trigger + `Kbd` hint instead
 of the ⌘J listener) typechecks; the listener variant would reference missing DOM lib types.
-**Candidate fix:** generalize dialog #6 in SKILL.md T2.5: *stories compile without DOM lib — no
-`document`/`window`/DOM event types anywhere in the file; replace doc-example global-listener
-wiring with an in-canvas trigger and note the adaptation.*
-**Status:** open (refines dialog-run #6)
+**Candidate fix (revised):** the constraint is repo-fixable, not a law — stories run in the
+browser, the missing DOM lib was an Nx-preset artefact. SKILL.md T2.5 should say: *if a doc example
+needs DOM globals in a story (global listeners etc.), check the stories tsconfig for the DOM lib
+and add it (mirror tsconfig.lib.json) instead of stripping the example.* Dialog-run #6's
+play-function workaround (trigger-ARIA asserts) remains valid for the separate portal-outside-
+canvas problem.
+**Status:** open for the skill edit; repo gap ✅ closed (DOM lib added to
+`libs/ui/tsconfig.storybook.json`, ⌘J listener restored in the InDialog story — branch
+refine/command-dialog-hotkey)
 
 ## 3. T1/T3 — DS shadow semantics are not in the twMerge extensions
 
