@@ -50,8 +50,8 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
 Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`):
 
 ```yaml
-base/white: "#ffffff"
-neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }
+base/white: "#ffffff"                                        # --ap-color-base-white
+neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }   # --ap-color-neutral-*
 cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand #009FE3 → #0098DA (≥3:1, WCAG 1.4.11)
 opacity: { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --ap-color-opacity-10: 10%" }
 ```
@@ -365,11 +365,11 @@ Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(
 Seiten/Ecken: `corner-t/r/b/l-*` + `corner-tl/tr/br/bl-*`, dazu statisch `corner-none`.
 
 ```yaml
-- { token: corner-sm,   css_var: --ap-sys-corner-sm,   value: 4px,    utilities: [corner-sm],   use: "Kleine Controls/Chips/Marker." }
-- { token: corner-md,   css_var: --ap-sys-corner-md,   value: 6px,    utilities: [corner-md],   use: "Mittlere Container." }
-- { token: corner-lg,   css_var: --ap-sys-corner-lg,   value: 8px,    utilities: [corner-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
-- { token: corner-xl,   css_var: --ap-sys-corner-xl,   value: 16px,   utilities: [corner-xl],   use: "Große Flächen/Fenster." }
-- { token: corner-full, css_var: --ap-sys-corner-full, value: 9999px, utilities: [corner-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
+- { token: corner-sm,   css_var: --ap-sys-corner-sm,   primitive: radius/4, value: 4px,    utilities: [corner-sm],   use: "Kleine Controls/Chips/Marker." }
+- { token: corner-md,   css_var: --ap-sys-corner-md,   primitive: radius/6, value: 6px,    utilities: [corner-md],   use: "Mittlere Container." }
+- { token: corner-lg,   css_var: --ap-sys-corner-lg,   primitive: radius/8, value: 8px,    utilities: [corner-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
+- { token: corner-xl,   css_var: --ap-sys-corner-xl,   primitive: radius/16, value: 16px,   utilities: [corner-xl],   use: "Große Flächen/Fenster." }
+- { token: corner-full, css_var: --ap-sys-corner-full, primitive: radius/full, value: 9999px, utilities: [corner-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
 ```
 
 **Tot:** ALLE `rounded-*` (`--radius-*: initial`, kein Re-Mapping) — das DS-Radius-Vokabular
@@ -380,11 +380,14 @@ ist ausschließlich `corner-*`. twMerge kennt die corner-Gruppen samt Seiten-/Ec
 
 ## 3 · Spacing (Gap + Padding, ein System)
 
-Ein System für Gap **und** Padding (Figma-Scope `GAP`); `m-*` als Code-Idiom (§7). Kein Primitive-Tier;
-Grundeinheit `--ap-dimension-space-base = 0.25rem` (reference) (4px). Step nach benötigter Abstandsgröße wählen. Utilities
-**benannt** (`gap-md`/`p-md`/`m-md`/`px-…` inkl. Negative `-mx-…` — via `@utility` auf
-`--space-step-*`, **nur** für die gap/padding/margin-Familien) **plus numerisch** (`p-4`/`gap-2`/`h-9`
-über die `--spacing`-Basis) — beide gültig, numerische nicht entfernen.
+Ein System für Gap **und** Padding (Figma-Scope `GAP`); `m-*` als Code-Idiom (§7). Einziges
+Primitive ist die Grundeinheit `Dimension/space/base` → `--ap-dimension-space-base` (4px); die
+Steps sind in Figma **direkte Werte** (nur `space-xs` aliast die Grundeinheit), im CSS
+`calc(base × n)`. Step nach benötigter Abstandsgröße wählen. Utilities **benannt** — via
+`@utility` auf `--space-step-*`, **nur** für die Familien `gap/gap-x/gap-y`, `p/px/py/pt/pr/pb/pl`,
+`m/mx/my/mt/mr/mb/ml` inkl. Negative `-m…` (die YAML listet `p-`/`gap-` stellvertretend) — **plus
+numerisch** (`p-4`/`gap-2`/`h-9` über die `--spacing`-Basis); beide gültig, numerische nicht
+entfernen. Kein `use` pro Step — die Wahl läuft über den px-Wert (§6), nicht über Semantik.
 
 **Kollisions-Regel (2026-06-11):** Die Steps liegen bewusst **nicht** auf Tailwinds `--spacing-*` —
 der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf (`max-w-md` wäre sonst
@@ -392,16 +395,16 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 `h-*`/`size-*` kennen keine benannten Steps (Geometrie numerisch, §6).
 
 ```yaml
-- { token: space-2xs, css_var: --ap-sys-space-2xs, value: 2px,  utilities: [p-2xs, gap-2xs] }
-- { token: space-xs,  css_var: --ap-sys-space-xs,  value: 4px,  utilities: [p-xs,  gap-xs] }
-- { token: space-sm,  css_var: --ap-sys-space-sm,  value: 6px,  utilities: [p-sm,  gap-sm] }
-- { token: space-md,  css_var: --ap-sys-space-md,  value: 8px,  utilities: [p-md,  gap-md] }
-- { token: space-lg,  css_var: --ap-sys-space-lg,  value: 12px, utilities: [p-lg,  gap-lg] }
-- { token: space-xl,  css_var: --ap-sys-space-xl,  value: 16px, utilities: [p-xl,  gap-xl] }
-- { token: space-2xl, css_var: --ap-sys-space-2xl, value: 24px, utilities: [p-2xl, gap-2xl] }
-- { token: space-3xl, css_var: --ap-sys-space-3xl, value: 32px, utilities: [p-3xl, gap-3xl] }
-- { token: space-4xl, css_var: --ap-sys-space-4xl, value: 48px, utilities: [p-4xl, gap-4xl] }
-- { token: space-5xl, css_var: --ap-sys-space-5xl, value: 80px, utilities: [p-5xl, gap-5xl] }
+- { token: space-2xs, css_var: --ap-sys-space-2xs, primitive: "— (direkt)", value: 2px,  utilities: [p-2xs, gap-2xs] }
+- { token: space-xs,  css_var: --ap-sys-space-xs,  primitive: space/base,   value: 4px,  utilities: [p-xs,  gap-xs] }
+- { token: space-sm,  css_var: --ap-sys-space-sm,  primitive: "— (direkt)", value: 6px,  utilities: [p-sm,  gap-sm] }
+- { token: space-md,  css_var: --ap-sys-space-md,  primitive: "— (direkt)", value: 8px,  utilities: [p-md,  gap-md] }
+- { token: space-lg,  css_var: --ap-sys-space-lg,  primitive: "— (direkt)", value: 12px, utilities: [p-lg,  gap-lg] }
+- { token: space-xl,  css_var: --ap-sys-space-xl,  primitive: "— (direkt)", value: 16px, utilities: [p-xl,  gap-xl] }
+- { token: space-2xl, css_var: --ap-sys-space-2xl, primitive: "— (direkt)", value: 24px, utilities: [p-2xl, gap-2xl] }
+- { token: space-3xl, css_var: --ap-sys-space-3xl, primitive: "— (direkt)", value: 32px, utilities: [p-3xl, gap-3xl] }
+- { token: space-4xl, css_var: --ap-sys-space-4xl, primitive: "— (direkt)", value: 48px, utilities: [p-4xl, gap-4xl] }
+- { token: space-5xl, css_var: --ap-sys-space-5xl, primitive: "— (direkt)", value: 80px, utilities: [p-5xl, gap-5xl] }
 ```
 
 ---
@@ -431,80 +434,80 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
 
 ```yaml
 - token: display
-  utilities: [text-display]
   css_var: "--ap-sys-display-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-5, weight: weight/extrabold, line-height: line-height/tight, tracking: tracking/tight }
   value: { family: sans, size: 43, weight: 800, line-height: 1.0, tracking: "-0.5px" }
+  utilities: [text-display]
   use: "Hero-Headline."
 
 - token: heading
-  utilities: [text-heading]
   css_var: "--ap-sys-heading-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-3, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
   value: { family: sans, size: 27, weight: 800, line-height: 1.2, tracking: "-0.5px" }
+  utilities: [text-heading]
   use: "Überschrift."
 
 - token: heading-sm
-  utilities: [text-heading-sm]
   css_var: "--ap-sys-heading-sm-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-2, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
   value: { family: sans, size: 22, weight: 800, line-height: 1.2, tracking: "-0.5px" }
+  utilities: [text-heading-sm]
   use: "Kleinere Überschrift."
 
 - token: title
-  utilities: [text-title]
   css_var: "--ap-sys-title-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-1, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 18, weight: 600, line-height: normal, tracking: "0" }
+  utilities: [text-title]
   use: "Abschnitts-/Sektions-Titel."
 
 - token: body
-  utilities: [text-body]
   css_var: "--ap-sys-body-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/regular, line-height: line-height/relaxed, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 400, line-height: 1.5, tracking: "0" }
+  utilities: [text-body]
   use: "Fließtext; Body-Default der App."
 
 - token: body-strong
-  utilities: [text-body-strong]
   css_var: "--ap-sys-body-strong-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 600, line-height: normal, tracking: "0" }
+  utilities: [text-body-strong]
   use: "Betonter Fließtext."
 
 - token: label
-  utilities: [text-label]
   css_var: "--ap-sys-label-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/medium, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 500, line-height: normal, tracking: "0" }
+  utilities: [text-label]
   use: "Labels: Form-/Toggle-Labels, Button-Text."
 
 - token: eyebrow
-  utilities: [text-eyebrow]
   css_var: "--ap-sys-eyebrow-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg2, weight: weight/medium, line-height: normal, tracking: tracking/wide }
   value: { family: mono, size: 9, weight: 500, line-height: normal, tracking: "0.5px" }
+  utilities: [text-eyebrow]
   use: "Uppercase-Mikro-Labels."
 
 - token: data
-  utilities: [text-data]
   css_var: "--ap-sys-data-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 11, weight: 400, line-height: normal, tracking: "0" }
+  utilities: [text-data]
   use: "Tabellarische Mono-Daten (auch Dateinamen u. ä.)."
 
 - token: kbd
-  utilities: [text-kbd]
   css_var: "--ap-sys-kbd-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg1, weight: weight/medium, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 11, weight: 500, line-height: normal, tracking: "0" }
+  utilities: [text-kbd]
   use: "Tastatur-Tasten-Text."
 
 - token: input
-  utilities: [text-input]
   css_var: "--ap-sys-input-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 18, weight: 400, line-height: normal, tracking: "0" }
+  utilities: [text-input]
   use: "Command-/Eingabe-Text."
   avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln."
 ```
@@ -516,12 +519,34 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
 
 ## 5 · Effekte
 
-Kein semantic-Tier (2 Effekte). Im Code Utilities; in Figma **Effect Styles**. Farbe folgt den
+In Figma **Effect Styles** „Glow"/„Elevation", die die `Effect/*`-Primitives direkt binden — das
+sys-Tier (`--ap-sys-shadow-*`) existiert **nur im CSS** (Architektur-Block). Farbe folgt den
 Color-Primitives via `color-mix`.
 
+Primitives (intern; Figma-Gruppe `Effect/`, Scopes EFFECT_COLOR/EFFECT_FLOAT — die YAML nutzt die
+Kurz-Pfade, CSS = `--ap-effect-…`):
+
 ```yaml
-- { token: Glow,      css_var: --ap-sys-shadow-glow,      value: "0 0 4px 0 · cyan/500 @ 50%",      utilities: [shadow-glow],      use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)." }
-- { token: Elevation, css_var: --ap-sys-shadow-elevation, value: "0 14px 36px -6px · neutral/900 @ 18%", utilities: [shadow-elevation], use: "Schlagschatten erhabener Overlays/Menüs." }
+glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "cyan/500 @ 50% (color-mix)" }        # --ap-effect-glow-*
+elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }   # --ap-effect-elevation-*
+```
+
+```yaml
+- token: shadow-glow
+  css_var: --ap-sys-shadow-glow
+  primitive: "glow/* (5 Teile: x y blur spread color)"
+  value: "0 0 4px 0 · cyan/500 @ 50%"
+  utilities: [shadow-glow]
+  use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)."
+  note: "Figma: Effect Style „Glow" bindet die Teile direkt — kein semantic-Var."
+
+- token: shadow-elevation
+  css_var: --ap-sys-shadow-elevation
+  primitive: "elevation/* (5 Teile: x y blur spread color)"
+  value: "0 14px 36px -6px · neutral/900 @ 18%"
+  utilities: [shadow-elevation]
+  use: "Schlagschatten erhabener Overlays/Menüs."
+  note: "Figma: Effect Style „Elevation" bindet die Teile direkt — kein semantic-Var."
 ```
 
 **Sonst flach:** Tiefe wird angedeutet, nicht gestapelt. Stock-`shadow-xs/sm/md/lg` sind tot (§6).
