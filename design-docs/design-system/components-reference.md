@@ -243,7 +243,7 @@ status_note: >
       props: "heading#3640:1 (text, eyebrow UPPER)"
       slot: "items#3640:0"
       members: { default: "3565:2", palette: "3640:2" }
-      palette: "Heading-Row gap-md px-md pt-lg pb-sm + nachlaufende Linie (h1 fill, border) · Container px-md py-0 (Item-Text-Flucht 16px wie Prompt)"
+      palette: "Heading = genestete .Command/Separator[labeled]-Instanz (px auf space-md overridet → Label-Einzug 16px wie Item-Icons) · Container px-md py-0. ACHTUNG: heading-Prop ist im palette-Member inert — Gruppen-Titel via label-Prop der genesteten Separator-Instanz setzen"
     composition:
       set: { name: ".Command", id: "3642:2" }
       axis: { variant: [default, palette] }
@@ -281,9 +281,10 @@ status_note: >
     behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
     Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card/p-xl/gap-lg mit
     statischer Glow-Caret-Bar + text-input/caret-primary + Kbd-Esc; Prompt-Divider = border-b am Wrapper
-    (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) statt der
-    in Figma genesteten labeled-Separator-Instanz mit px-xl (24px) — geflaggt, Figma-Fix offen; Deviations
-    komplett in agent-runs/component-sync/2026-06-11-command/notes.md.
+    (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) — Figma
+    war kurz auf 24px (px-xl-Default der genesteten labeled-Separator-Instanz), Instanz-Padding-Override
+    auf space-md hat das aufgelöst, Figma = Code = C2-Raster; Deviations komplett in
+    agent-runs/component-sync/2026-06-11-command/notes.md.
 
 - name: Dialog
   status: nova-aligned
