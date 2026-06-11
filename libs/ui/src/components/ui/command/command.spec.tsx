@@ -169,6 +169,27 @@ describe('CommandSeparator', () => {
     expect(getByText('Jump to').className).toContain('text-eyebrow');
   });
 
+  // Same hide-on-search contract as the line form: gone while filtering,
+  // alwaysRender keeps it.
+  it('hides the labeled rule while searching, like the line form', async () => {
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <Command>
+        <CommandInput placeholder="Search…" />
+        <CommandList>
+          <CommandSeparator label="Jump to" />
+          <CommandSeparator label="Stays put" alwaysRender />
+          <CommandItem>invoice</CommandItem>
+        </CommandList>
+      </Command>
+    );
+    expect(getByText('Jump to')).toBeTruthy();
+    fireEvent.change(getByPlaceholderText('Search…'), {
+      target: { value: 'inv' },
+    });
+    await waitFor(() => expect(queryByText('Jump to')).toBeNull());
+    expect(getByText('Stays put')).toBeTruthy();
+  });
+
   it('stays the plain hairline without a label and drops the -mx-xs bleed in palette context', () => {
     const inset = render(
       <Command>

@@ -268,9 +268,11 @@ export const PaletteInDialog: Story = {
 };
 
 // The flat alternative to grouped content: CommandSeparator with a label renders the
-// labeled rule (eyebrow + trailing hairline). Trade-off vs. CommandGroup: no cmdk
-// auto-hide — the labels stay while their items filter out, so prefer groups for
-// searchable palettes and labeled separators for static/composed lists.
+// labeled rule (eyebrow + trailing hairline). It hides while searching exactly like
+// the line form (alwaysRender opts out). Trade-off vs. CommandGroup: a group heading
+// tracks ITS items (hides only when its group is empty), a labeled separator has no
+// item scope — prefer groups for searchable palettes, labeled separators for
+// static/composed lists.
 export const PaletteFlat: Story = {
   render: () => (
     <Command variant="palette" className="w-[720px]">

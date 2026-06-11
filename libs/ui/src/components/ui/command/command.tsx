@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Command as CommandPrimitive } from 'cmdk';
+import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
@@ -54,8 +54,9 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //    labeled-separator instance with px-xl (label inset 24) — code keeps the C2 frame's
 //    16px alignment; flagged in the sync notes.
 //  · CommandSeparator: a label prop renders the labeled rule (eyebrow + flex-1 hairline,
-//    gap-md px-xl pt-lg pb-sm) as a plain role=separator div (no cmdk hide-on-search);
-//    the line form drops -mx-xs in palette context (no root padding to bleed into).
+//    gap-md px-xl pt-lg pb-sm) as a role=separator div with the SAME hide-on-search
+//    contract as the line form (useCommandState; alwaysRender opts out); the line form
+//    drops -mx-xs in palette context (no root padding to bleed into).
 //  · CommandItem/CommandShortcut/CommandEmpty unchanged (decided: "items sind gleich").
 type CommandVariant = 'default' | 'palette';
 
@@ -240,7 +241,11 @@ function CommandSeparator({
   label?: React.ReactNode;
 }) {
   const variant = React.useContext(CommandVariantContext);
+  // Same hide-on-search contract as cmdk's line separator: gone while filtering,
+  // alwaysRender opts out — the labeled rule must not behave differently.
+  const search = useCommandState((state) => state.search);
   if (label != null) {
+    if (search && !alwaysRender) return null;
     return (
       <div
         data-slot="command-separator"
