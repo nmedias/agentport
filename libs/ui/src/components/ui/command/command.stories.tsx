@@ -278,7 +278,7 @@ export const PaletteFlat: Story = {
     <Command variant="palette" className="w-[720px]">
       <CommandInput placeholder="type a command, jump or search" />
       <CommandList>
-        <CommandSeparator label="Jump to" />
+        <CommandSeparator label="Jump to" alwaysRender/>
         <CommandItem>
           <RiArrowRightLine />
           <span>invoice</span>
@@ -289,14 +289,13 @@ export const PaletteFlat: Story = {
           <span>customer</span>
           <CommandShortcut>Type · Custom</CommandShortcut>
         </CommandItem>
-        <CommandSeparator label="Search" />
+        <CommandSeparator label="Search" alwaysRender/>
         <CommandItem>
           <RiSearchLine />
           <span>Search all types</span>
           <CommandShortcut>global</CommandShortcut>
         </CommandItem>
       </CommandList>
-      <CommandSeparator alwaysRender />
     </Command>
   ),
 };
