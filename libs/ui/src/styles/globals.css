@@ -215,20 +215,56 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
-  /* Spacing*/
+  /* Spacing — numeric scale base only (p-4, gap-2, h-9 = n × --spacing).
+     The named steps are deliberately NOT on --spacing-*: that namespace feeds
+     every sizing utility and resolves BEFORE --container, so --spacing-md
+     would shadow the container scale (max-w-md → 8px instead of 28rem).
+     The steps live on --space-step-* (no core namespace) and are wired to
+     gap/padding/margin via @utility below; values stay owned by tokens.css. */
   --spacing: var(--space-base);
-  --spacing-2xs: var(--space-2xs);
-  --spacing-xs:  var(--space-xs);
-  --spacing-sm:  var(--space-sm);
-  --spacing-md:  var(--space-md);
-  --spacing-lg:  var(--space-lg);
-  --spacing-xl:  var(--space-xl);
-  --spacing-2xl: var(--space-2xl);
-  --spacing-3xl: var(--space-3xl);
-  --spacing-4xl: var(--space-4xl);
-  --spacing-5xl: var(--space-5xl);
+  --space-step-2xs: var(--space-2xs);
+  --space-step-xs:  var(--space-xs);
+  --space-step-sm:  var(--space-sm);
+  --space-step-md:  var(--space-md);
+  --space-step-lg:  var(--space-lg);
+  --space-step-xl:  var(--space-xl);
+  --space-step-2xl: var(--space-2xl);
+  --space-step-3xl: var(--space-3xl);
+  --space-step-4xl: var(--space-4xl);
+  --space-step-5xl: var(--space-5xl);
 
 }
+
+/* ── Named spacing steps → utilities ─────────────────────────────────────────
+   The t-shirt steps apply ONLY to the spacing-semantic families — gap, padding,
+   margin (tokens-reference §3: one system for gap+padding; margin = code idiom).
+   Sizing utilities keep their stock meaning: max-w-sm/md/… = container scale;
+   w/h/size have no named steps (geometry stays numeric). Numeric spacing
+   utilities (gap-2, p-4, -mx-2) resolve via --spacing, untouched. */
+@utility gap-* { gap: --value(--space-step-*); }
+@utility gap-x-* { column-gap: --value(--space-step-*); }
+@utility gap-y-* { row-gap: --value(--space-step-*); }
+@utility p-*  { padding: --value(--space-step-*); }
+@utility px-* { padding-inline: --value(--space-step-*); }
+@utility py-* { padding-block: --value(--space-step-*); }
+@utility pt-* { padding-top: --value(--space-step-*); }
+@utility pr-* { padding-right: --value(--space-step-*); }
+@utility pb-* { padding-bottom: --value(--space-step-*); }
+@utility pl-* { padding-left: --value(--space-step-*); }
+@utility m-*  { margin: --value(--space-step-*); }
+@utility mx-* { margin-inline: --value(--space-step-*); }
+@utility my-* { margin-block: --value(--space-step-*); }
+@utility mt-* { margin-top: --value(--space-step-*); }
+@utility mr-* { margin-right: --value(--space-step-*); }
+@utility mb-* { margin-bottom: --value(--space-step-*); }
+@utility ml-* { margin-left: --value(--space-step-*); }
+@utility -m-*  { margin: calc(--value(--space-step-*) * -1); }
+@utility -mx-* { margin-inline: calc(--value(--space-step-*) * -1); }
+@utility -my-* { margin-block: calc(--value(--space-step-*) * -1); }
+@utility -mt-* { margin-top: calc(--value(--space-step-*) * -1); }
+@utility -mr-* { margin-right: calc(--value(--space-step-*) * -1); }
+@utility -mb-* { margin-bottom: calc(--value(--space-step-*) * -1); }
+@utility -ml-* { margin-left: calc(--value(--space-step-*) * -1); }
 
 
 /* ── Typography formats ──────────────────────────────────────────────────────

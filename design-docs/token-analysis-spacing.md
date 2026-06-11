@@ -153,3 +153,4 @@ xs ×16 · 2xl ×10 · 5xl ×1`. Screenshot = Struktur intakt.
 | Screen-Binding | Tokens auf `1099:9710` setzen | 344 Felder gebunden, 0 Fehler; Struktur intakt |
 | Nachtrag: `space-lg`=10 raus | Reihe umbenennen | 30 Felder auf 12 umgehängt; 10 Steps |
 | Nachtrag: Radius dazu | semantic radius → `semantic-dimension` | 5 Tokens neu, 136 Ecken umgehängt, `semantic-radius` gelöscht |
+| Nachtrag 2026-06-11: `--spacing-*`-Kollision | Steps von Tailwinds `--spacing-*` auf `@utility`-Blöcke (`--space-step-*`, nur gap/padding/margin) umgestellt — `--spacing-{step}` löste vor `--container` auf und überschrieb `max-w-md`/`w-sm`/`basis-*` (8px statt Container-Skala) | CSS-only (globals.css); Figma unverändert, Steps bleiben GAP-scoped. Details: tokens-reference §3 Kollisions-Regel |

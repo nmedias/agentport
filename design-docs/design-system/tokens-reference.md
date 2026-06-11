@@ -351,10 +351,16 @@ Primitives (`reference-dimension`, intern): `radius/4·6·8·16·full(9999)`. Se
 
 ## 3 · Spacing (Gap + Padding, ein System)
 
-Ein System für Gap **und** Padding (Figma-Scope `GAP`). Kein Primitive-Tier; Grundeinheit
-`--space-base = 0.25rem` (4px). Step nach benötigter Abstandsgröße wählen. Utilities **benannt**
-(`p-md`/`gap-md`/`m-md`/`px-…`/`size-…` aus `--spacing-{step}`) **plus numerisch** (`p-4`/`gap-2`/`h-9`
-über `--spacing`-Basis) — beide gültig, numerische nicht entfernen.
+Ein System für Gap **und** Padding (Figma-Scope `GAP`); `m-*` als Code-Idiom (§7). Kein Primitive-Tier;
+Grundeinheit `--space-base = 0.25rem` (4px). Step nach benötigter Abstandsgröße wählen. Utilities
+**benannt** (`gap-md`/`p-md`/`m-md`/`px-…` inkl. Negative `-mx-…` — via `@utility` auf
+`--space-step-*`, **nur** für die gap/padding/margin-Familien) **plus numerisch** (`p-4`/`gap-2`/`h-9`
+über die `--spacing`-Basis) — beide gültig, numerische nicht entfernen.
+
+**Kollisions-Regel (2026-06-11):** Die Steps liegen bewusst **nicht** auf Tailwinds `--spacing-*` —
+der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf (`max-w-md` wäre sonst
+8px statt 28rem). T-Shirt-Namen auf `w-*`/`max-w-*`/`min-w-*`/`basis-*` = **Container-Skala** (Stock);
+`h-*`/`size-*` kennen keine benannten Steps (Geometrie numerisch, §6).
 
 ```yaml
 - { token: space-2xs, css_var: --space-2xs, value: 2px,  utilities: [p-2xs, gap-2xs] }
@@ -429,6 +435,7 @@ geometry_vs_token:
   radius: "rounded-sm/md/lg/xl/full bleiben; rounded(Base)/2xl/3xl/none meiden."
 
 keep_valid:
+  - "Container-T-Shirt-Namen auf Sizing-Utilities: max-w-sm/md/…, w-lg, basis-md = --container-Skala (24rem/28rem/…), KEINE Spacing-Steps (§3 Kollisions-Regel)"
   - "Opacity-Modifier auf DS-Tokens: bg-primary/90, ring-ring/50, outline-ring/50"
   - "Arbitrary values: ring-[3px], size-[18px]"
   - "Numerische Spacing-Utilities: p-4, gap-2, h-9, size-4"

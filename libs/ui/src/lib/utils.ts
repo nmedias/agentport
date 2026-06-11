@@ -13,8 +13,11 @@ import { extendTailwindMerge } from 'tailwind-merge';
 // 2. Named spacing — our t-shirt spacing steps (gap-md, p-lg, px-2xl …) are not in
 //    twMerge's built-in numeric spacing scale, so it leaves them unrecognised and a
 //    later `gap-lg` would NOT override an earlier `gap-md`. Adding the step names to
-//    the spacing theme folds them into every spacing group (gap/p/m/px/size/…) while
-//    keeping the numeric scale (p-4 etc.) intact.
+//    the spacing theme folds them into every spacing group while keeping the numeric
+//    scale (p-4 etc.) intact. CSS-side the steps exist only on the gap/padding/margin
+//    families (globals.css @utility on --space-step-*; sizing names = container
+//    scale) — the broader twMerge grouping is harmless, it only affects conflict
+//    resolution among classes that exist.
 const TEXT_FORMATS = [
   'display',
   'heading',
