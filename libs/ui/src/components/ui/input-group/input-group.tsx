@@ -29,7 +29,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="input-group"
       role="group"
       className={cn(
-        'group/input-group relative flex h-8 w-full min-w-0 items-center rounded-lg border border-input bg-input-background transition-[color,box-shadow] outline-none',
+        'group/input-group relative flex h-8 w-full min-w-0 items-center corner-lg border border-input bg-input-background transition-[color,box-shadow] outline-none',
         // the control owns focus; the GROUP shows the ring
         'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
         // invalid bubbles up from any marked child: border + ring (width + colour)
@@ -92,13 +92,13 @@ function InputGroupAddon({
 // InputGroupButton maps onto the DS Button's own size scale and forwards the mapped
 // size (code↔Figma parity: the Figma .InputGroup/Button nests a real .Button at the
 // same size). The Button then carries all geometry; the className below adds only the
-// DS delta — rounded-sm on xs/icon-xs (the DS Button uses rounded-md there), else nothing.
+// DS delta — corner-sm on xs/icon-xs (the DS Button uses corner-md there), else nothing.
 const inputGroupButtonVariants = cva('', {
   variants: {
     size: {
-      xs: 'rounded-sm',
+      xs: 'corner-sm',
       sm: '',
-      'icon-xs': 'rounded-sm',
+      'icon-xs': 'corner-sm',
       'icon-sm': '',
     },
   },
@@ -157,7 +157,7 @@ function InputGroupInput({ className, ...props }: React.ComponentProps<'input'>)
     <Input
       data-slot="input-group-control"
       className={cn(
-        'flex-1 rounded-none border-0 bg-transparent ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0',
+        'flex-1 corner-none border-0 bg-transparent ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0',
         className
       )}
       {...props}
@@ -173,7 +173,7 @@ function InputGroupTextarea({
     <Textarea
       data-slot="input-group-control"
       className={cn(
-        'flex-1 resize-none rounded-none border-0 bg-transparent py-md ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0',
+        'flex-1 resize-none corner-none border-0 bg-transparent py-md ring-0 focus-visible:ring-0 disabled:bg-transparent aria-invalid:ring-0',
         className
       )}
       {...props}

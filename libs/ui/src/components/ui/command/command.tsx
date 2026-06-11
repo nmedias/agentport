@@ -33,7 +33,7 @@ function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        'flex size-full flex-col overflow-hidden rounded-xl border bg-overlay p-xs text-overlay-foreground shadow-elevation',
+        'flex size-full flex-col overflow-hidden corner-xl border bg-overlay p-xs text-overlay-foreground shadow-elevation',
         className
       )}
       {...props}
@@ -135,7 +135,7 @@ function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "group/command-item relative flex cursor-default items-center gap-md rounded-sm px-md py-sm text-body outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
+        "group/command-item relative flex cursor-default items-center gap-md corner-sm px-md py-sm text-body outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
         className
       )}
       {...props}

@@ -88,7 +88,7 @@ status_note: >
   skill: /shadcn-component-port
   notes: >
     Nova-Size-Ladder (h-8 default + xs und icon-xs/sm/lg, per-Size-Icon-Sizing, aria-expanded).
-    DS behalten: Radius per NAME (rounded-lg/-md), Akzent-Cyan-Hover, solides destructive, text-label.
+    DS behalten: Radius per NAME (corner-lg/-md, ehem. rounded), Akzent-Cyan-Hover, solides destructive, text-label.
     Icon-only (size=icon*) verlangt aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
 
 - name: Input
@@ -105,7 +105,7 @@ status_note: >
     axis: { state: [default, focus, filled, disabled, invalid] }   # kein CVA im Code
   skill: /shadcn-component-port
   notes: >
-    h-8 / rounded-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
+    h-8 / corner-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
     text → text-label; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
     invalid destructive (⚠ Platzhalter-Token). dark: entfernt.
 
@@ -123,7 +123,7 @@ status_note: >
     axis: { state: [default, focus, filled, disabled, invalid] }   # kein CVA; Sibling von Input
   skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
   notes: >
-    Feld-Zwilling von Input, höher. min-h-16 / rounded-lg / px-md / py-md; field-sizing-content (auto-grow).
+    Feld-Zwilling von Input, höher. min-h-16 / corner-lg / px-md / py-md; field-sizing-content (auto-grow).
     bg-transparent → bg-input-background; text → text-label; placeholder:text-input-placeholder;
     focus border-ring + ring/50 ring-[3px]; invalid destructive (⚠). Figma: Text top-aligned
     (counter=MIN), keine Truncation. dark: + disabled:bg-input/50 entfernt.
@@ -140,7 +140,7 @@ status_note: >
     section: { name: "Input Group", id: "3519:590" }                 # alt 3491:674 gelöscht (rebuild fresh)
     addon: { name: ".InputGroup/Addon", id: "3520:606", axis: "align [inline-start,inline-end,block-start,block-end]", slot: content }
     button: { name: ".InputGroup/Button", id: "3545:694", axis: "size [xs,sm,icon-xs,icon-sm]",
-              nests: "ghost .Button instance per size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon); Base radius→radius-sm on xs+icon-xs",
+              nests: "ghost .Button instance per size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon); Base radius→corner-sm on xs+icon-xs",
               content: "label = deep text override; icon = swapComponent .Button Icon → swap-target (.InputGroup/Button Icon · copy 3546:677)" }
     input: { name: ".InputGroup/Input", id: "3522:590", prop: text }
     textarea: { name: ".InputGroup/Textarea", id: "3522:592", prop: text }
@@ -181,7 +181,7 @@ status_note: >
   notes: >
     Nova-Kbd metrisch identisch zu new-york (keine Dichte-Änderung). emphasis=high (default) =
     invertierte dunkle Keycap (Inverse/inverse + inverse-foreground); emphasis=low = muted Keycap
-    (shadcn muted/muted-foreground). text-kbd (Geist Mono); gap-xs/px-xs; rounded-sm; Tooltip-Kontext
+    (shadcn muted/muted-foreground). text-kbd (Geist Mono); gap-xs/px-xs; corner-sm; Tooltip-Kontext
     via v4 in-data-[slot=tooltip-content]:. content (text|icon) children-getrieben, nicht als Prop.
 
 - name: Breadcrumb
@@ -225,7 +225,7 @@ status_note: >
     separator: { name: ".Command/Separator", id: "3564:2" }
     empty: { name: ".Command/Empty", id: "3564:3", prop: "message (text)" }
     group: { name: ".Command/Group", id: "3565:2", prop: "heading (text, eyebrow UPPER)", slot: "items#3565:0" }
-    composition: { name: ".Command", id: "3566:2", slot: "list#3566:0", surface: "bg-overlay + border + shadow-elevation + rounded-xl" }
+    composition: { name: ".Command", id: "3566:2", slot: "list#3566:0", surface: "bg-overlay + border + shadow-elevation + corner-xl" }
     example: { name: "Example · command-demo", id: "3573:2" }
     icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19" }
   skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)

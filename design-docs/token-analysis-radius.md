@@ -14,6 +14,12 @@ shadcn-Naming passen (`radius` Basis + `sm/md/lg/xl`, ergänzt um `xs`/`full`).
 > Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Dimension/radius/*`**
 > (+ `Dimension/space/base`). Neue Variable-IDs (`3623:2…7`); die 6 semantic-dimension-Aliase wurden
 > umgehängt, File-Sweep: 0 Rest-Bindungen.
+> **Update 2026-06-11 — Corner-Vokabular:** Semantics in Figma umbenannt `Radius/radius-*` →
+> **`Corner/corner-*`** (IDs unverändert); CSS `--ap-sys-corner-*`. Utilities sind jetzt
+> **Custom-Utilities `corner-*`** (+ Seiten/Ecken `corner-b-*` … und `corner-none`) via
+> `--corner-step-*`-Lookup — gleiches Muster wie die Space-Steps. **ALLE `rounded-*` sind tot**
+> (`--radius-*: initial`, kein Re-Mapping); twMerge kennt die corner-Gruppen samt
+> Seiten-/Ecken-Konflikten (cn()-Extension).
 
 ## Befund (Screen-Scan)
 

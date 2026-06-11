@@ -357,20 +357,24 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
 
 ---
 
-## 2 · Radius
+## 2 · Corner (Radius)
 
-Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(9999)`. Semantics aliasen, Scope `CORNER_RADIUS`.
+Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(9999)`. Semantics
+(Figma-Gruppe `Corner/`) aliasen, Scope `CORNER_RADIUS`. Utilities = **Custom-Utilities
+`corner-*`** via `--corner-step-*`-Lookup (gleiches Muster wie die Space-Steps);
+Seiten/Ecken: `corner-t/r/b/l-*` + `corner-tl/tr/br/bl-*`, dazu statisch `corner-none`.
 
 ```yaml
-- { token: radius-sm,   css_var: --ap-sys-radius-sm,   value: 4px,    utilities: [rounded-sm],   use: "Kleine Controls/Chips/Marker." }
-- { token: radius-md,   css_var: --ap-sys-radius-md,   value: 6px,    utilities: [rounded-md],   use: "Mittlere Container." }
-- { token: radius-lg,   css_var: --ap-sys-radius-lg,   value: 8px,    utilities: [rounded-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
-- { token: radius-xl,   css_var: --ap-sys-radius-xl,   value: 16px,   utilities: [rounded-xl],   use: "Große Flächen/Fenster." }
-- { token: radius-full, css_var: --ap-sys-radius-full, value: 9999px, utilities: [rounded-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
+- { token: corner-sm,   css_var: --ap-sys-corner-sm,   value: 4px,    utilities: [corner-sm],   use: "Kleine Controls/Chips/Marker." }
+- { token: corner-md,   css_var: --ap-sys-corner-md,   value: 6px,    utilities: [corner-md],   use: "Mittlere Container." }
+- { token: corner-lg,   css_var: --ap-sys-corner-lg,   value: 8px,    utilities: [corner-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
+- { token: corner-xl,   css_var: --ap-sys-corner-xl,   value: 16px,   utilities: [corner-xl],   use: "Große Flächen/Fenster." }
+- { token: corner-full, css_var: --ap-sys-corner-full, value: 9999px, utilities: [corner-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
 ```
 
-**Tot (nicht nur avoid):** Tailwind-Default-Stufen `rounded` (Base), `rounded-xs/2xl/3xl` —
-`--radius-*: initial`, nur die DS-Stufen sind re-mapped. `rounded-none` bleibt (kein Theme-Wert).
+**Tot:** ALLE `rounded-*` (`--radius-*: initial`, kein Re-Mapping) — das DS-Radius-Vokabular
+ist ausschließlich `corner-*`. twMerge kennt die corner-Gruppen samt Seiten-/Ecken-Konflikten
+(cn()-Extension in `libs/ui/src/lib/utils.ts`).
 
 ---
 
@@ -463,7 +467,7 @@ dead_utilities:   # durch Reset entfernt → Ersatz
 geometry_vs_token:
   spacing: "Padding/Gap/Margin → benanntes Token MAPPE ÜBER DEN px-WERT: gap-2(8)→gap-md · gap-1.5(6)→gap-sm · px-4(16)→px-xl · py-2(8)→py-md · px-3(12)→px-lg · px-6(24)→px-2xl."
   control_geometry: "Control-Höhen/Icon-Maße (h-9/h-8/h-10, size-9, size-4) NUMERISCH lassen — nicht auf der Spacing-Skala. Geometrie ≠ Spacing-Token."
-  radius: "rounded-sm/md/lg/xl/full bleiben (DS-Re-Mapping); rounded(Base)/xs/2xl/3xl sind TOT (--radius-*: initial, nur DS-Stufen re-mapped)."
+  radius: "Radius-Vokabular = corner-sm/md/lg/xl/full (+ corner-none, Seiten corner-b-* usw.); ALLE rounded-* sind TOT (--radius-*: initial, kein Re-Mapping)."
 
 keep_valid:
   - "Container-T-Shirt-Namen auf Sizing-Utilities: max-w-sm/md/…, w-lg, basis-md = --container-Skala (24rem/28rem/…), KEINE Spacing-Steps (§3 Kollisions-Regel)"

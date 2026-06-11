@@ -36,6 +36,22 @@
 @utility -ml-* { margin-left: calc(--value(--space-step-*) * -1); }
 
 
+/* ── Corner radius → utilities ───────────────────────────────────────────────
+   DS radius vocabulary: corner-<step> (sm/md/lg/xl/full) + corner-none, via
+   --corner-step-* lookup keys (tw-theme.css) — same pattern as the named
+   spacing steps. rounded-* is dead (--radius-*: initial, no re-mapping). */
+@utility corner-* { border-radius: --value(--corner-step-*); }
+@utility corner-t-* { border-top-left-radius: --value(--corner-step-*); border-top-right-radius: --value(--corner-step-*); }
+@utility corner-r-* { border-top-right-radius: --value(--corner-step-*); border-bottom-right-radius: --value(--corner-step-*); }
+@utility corner-b-* { border-bottom-right-radius: --value(--corner-step-*); border-bottom-left-radius: --value(--corner-step-*); }
+@utility corner-l-* { border-top-left-radius: --value(--corner-step-*); border-bottom-left-radius: --value(--corner-step-*); }
+@utility corner-tl-* { border-top-left-radius: --value(--corner-step-*); }
+@utility corner-tr-* { border-top-right-radius: --value(--corner-step-*); }
+@utility corner-br-* { border-bottom-right-radius: --value(--corner-step-*); }
+@utility corner-bl-* { border-bottom-left-radius: --value(--corner-step-*); }
+@utility corner-none { border-radius: 0; }
+
+
 /* ── Typography formats ──────────────────────────────────────────────────────
    Multi-value composition tokens (family+size+weight+leading+tracking) as
    utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.

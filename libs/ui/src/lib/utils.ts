@@ -18,6 +18,10 @@ import { extendTailwindMerge } from 'tailwind-merge';
 //    families (tw-utilities.css @utility on --space-step-*; sizing names = container
 //    scale) — the broader twMerge grouping is harmless, it only affects conflict
 //    resolution among classes that exist.
+// 3. Corner radius — the DS radius vocabulary is the custom corner-* utilities
+//    (tw-utilities.css; rounded-* is dead). twMerge doesn't know them, so corner-lg
+//    + corner-xl would not collapse. Registered with the same side/corner conflict
+//    map as stock rounded (corner beats corner-t beats corner-tl, …).
 const TEXT_FORMATS = [
   'display',
   'heading',
@@ -34,11 +38,40 @@ const TEXT_FORMATS = [
 
 const SPACING_STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'];
 
-const twMerge = extendTailwindMerge<'text-format'>({
+const CORNER_STEPS = ['sm', 'md', 'lg', 'xl', 'full'];
+
+type CornerGroup =
+  | 'corner'
+  | 'corner-t'
+  | 'corner-r'
+  | 'corner-b'
+  | 'corner-l'
+  | 'corner-tl'
+  | 'corner-tr'
+  | 'corner-br'
+  | 'corner-bl';
+
+const twMerge = extendTailwindMerge<'text-format' | CornerGroup>({
   extend: {
     theme: { spacing: SPACING_STEPS },
     classGroups: {
       'text-format': [{ text: TEXT_FORMATS }],
+      corner: [{ corner: [...CORNER_STEPS, 'none'] }],
+      'corner-t': [{ 'corner-t': CORNER_STEPS }],
+      'corner-r': [{ 'corner-r': CORNER_STEPS }],
+      'corner-b': [{ 'corner-b': CORNER_STEPS }],
+      'corner-l': [{ 'corner-l': CORNER_STEPS }],
+      'corner-tl': [{ 'corner-tl': CORNER_STEPS }],
+      'corner-tr': [{ 'corner-tr': CORNER_STEPS }],
+      'corner-br': [{ 'corner-br': CORNER_STEPS }],
+      'corner-bl': [{ 'corner-bl': CORNER_STEPS }],
+    },
+    conflictingClassGroups: {
+      corner: ['corner-t', 'corner-r', 'corner-b', 'corner-l', 'corner-tl', 'corner-tr', 'corner-br', 'corner-bl'],
+      'corner-t': ['corner-tl', 'corner-tr'],
+      'corner-r': ['corner-tr', 'corner-br'],
+      'corner-b': ['corner-br', 'corner-bl'],
+      'corner-l': ['corner-tl', 'corner-bl'],
     },
   },
 });

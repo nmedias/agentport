@@ -188,13 +188,13 @@
 
 
   /* ===========================================================================
-     3 · SEMANTIC · RADIUS  (Collection: semantic-dimension, group Radius)
+     3 · SEMANTIC · CORNER  (Collection: semantic-dimension, group Corner)
      =========================================================================== */
-  --ap-sys-radius-sm:   var(--ap-dimension-radius-4);
-  --ap-sys-radius-md:   var(--ap-dimension-radius-6);
-  --ap-sys-radius-lg:   var(--ap-dimension-radius-8);
-  --ap-sys-radius-xl:   var(--ap-dimension-radius-16);
-  --ap-sys-radius-full: var(--ap-dimension-radius-full);
+  --ap-sys-corner-sm:   var(--ap-dimension-radius-4);
+  --ap-sys-corner-md:   var(--ap-dimension-radius-6);
+  --ap-sys-corner-lg:   var(--ap-dimension-radius-8);
+  --ap-sys-corner-xl:   var(--ap-dimension-radius-16);
+  --ap-sys-corner-full: var(--ap-dimension-radius-full);
 
 
   /* ===========================================================================

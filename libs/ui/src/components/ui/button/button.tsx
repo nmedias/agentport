@@ -9,12 +9,12 @@ import { cn } from '@/lib/utils';
 // + xs and the icon-xs/sm/lg steps), per-size icon sizing via
 // [&_svg:not([class*='size-'])]:size-N, ring-3 focus, active press, aria-invalid
 // + aria-expanded affordances. Kept on DS conventions (NOT Nova's raw values):
-//  · radius by NAME → DS scale (rounded-lg=8, small sizes rounded-md=6), not
+//  · radius by NAME → DS scale (corner-lg=8, small sizes corner-md=6), not
 //    Nova's parametric --radius=10 · hover stays the cyan accent (§1 two-cyan /
 //    accent=selection), not Nova's neutral bg-muted · destructive stays the DS
 //    solid fill, not Nova's tint · text stays text-label (DS has no <14px sans).
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+  "inline-flex items-center justify-center whitespace-nowrap corner-lg text-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
     variants: {
       variant: {
@@ -32,12 +32,12 @@ const buttonVariants = cva(
       },
       size: {
         default: 'h-8 gap-sm px-md has-[>svg]:px-sm',
-        xs: "h-6 gap-xs rounded-md px-sm [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-xs rounded-md px-md has-[>svg]:px-sm [&_svg:not([class*='size-'])]:size-3.5",
+        xs: "h-6 gap-xs corner-md px-sm [&_svg:not([class*='size-'])]:size-3",
+        sm: "h-7 gap-xs corner-md px-md has-[>svg]:px-sm [&_svg:not([class*='size-'])]:size-3.5",
         lg: 'h-9 gap-sm px-md has-[>svg]:px-sm',
         icon: 'size-8',
-        'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
-        'icon-sm': "size-7 rounded-md [&_svg:not([class*='size-'])]:size-3.5",
+        'icon-xs': "size-6 corner-md [&_svg:not([class*='size-'])]:size-3",
+        'icon-sm': "size-7 corner-md [&_svg:not([class*='size-'])]:size-3.5",
         'icon-lg': 'size-9',
       },
     },

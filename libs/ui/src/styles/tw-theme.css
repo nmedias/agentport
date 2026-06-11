@@ -47,8 +47,8 @@
   /* ── Theme reset ─────────────────────────────────────────────────────────
      Remove Tailwind defaults for the namespaces we own (components are rebuilt
      on the tokens). Structural ones stay: --breakpoint-*, --container-*, --animate-*,
-     --default-*, --spacing (see below). --radius-* is reset and re-mapped below
-     (only the DS steps exist; stock rounded-xs/2xl/3xl are dead). --font-* is
+     --default-*, --spacing (see below). --radius-* is fully dead — the DS radius
+     vocabulary is the custom corner-* utilities (tw-utilities.css). --font-* is
      fully dead — font-sans/font-mono have no DS meaning, typography runs
      exclusively through the text-* format utilities. */
   --color-*: initial;
@@ -113,12 +113,14 @@
   --color-background-fixed: var(--ap-sys-background-fixed);
   --color-destructive-foreground: var(--ap-sys-destructive-foreground);
 
-  /* Radius */
-  --radius-sm:   var(--ap-sys-radius-sm);
-  --radius-md:   var(--ap-sys-radius-md);
-  --radius-lg:   var(--ap-sys-radius-lg);
-  --radius-xl:   var(--ap-sys-radius-xl);
-  --radius-full: var(--ap-sys-radius-full);
+  /* Corner — lookup keys for the corner-* utilities (tw-utilities.css), same
+     pattern as --space-step-*. rounded-* is dead (--radius-*: initial, no
+     re-mapping); the DS radius vocabulary is corner-sm/md/lg/xl/full/none. */
+  --corner-step-sm:   var(--ap-sys-corner-sm);
+  --corner-step-md:   var(--ap-sys-corner-md);
+  --corner-step-lg:   var(--ap-sys-corner-lg);
+  --corner-step-xl:   var(--ap-sys-corner-xl);
+  --corner-step-full: var(--ap-sys-corner-full);
 
   /* Shadows  */
   --shadow-glow:      var(--ap-sys-shadow-glow);
