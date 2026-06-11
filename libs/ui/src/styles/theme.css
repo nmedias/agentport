@@ -1,0 +1,145 @@
+/*
+  ── Figma → Code token seam · @theme bridge ────────────────────────────────
+  The *semantic* values come from tokens.css (imported by globals.css, exported
+  from Figma "Agentport DS"). The @theme-inline bridge below translates them into
+  Tailwind utilities. A separate :root is not needed — all values live in
+  tokens.css.
+*/
+
+/* Dark mode: currently light-only (Figma has no dark-mode token set yet).
+   shadcn's default dark is disabled for now so Light=Figma doesn't mix with
+   Dark=shadcn-neutral. Re-enable once dark tokens exist
+   (`--background-fixed` must then be excluded).
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+*/
+
+/* Map semantic vars into Tailwind's theme so utilities like bg-background,
+   text-muted-foreground, rounded-lg resolve. */
+@theme inline {
+  /* ── Theme reset ─────────────────────────────────────────────────────────
+     Remove Tailwind defaults for the namespaces we own (components are rebuilt
+     on the tokens). Structural ones stay: --breakpoint-*, --container-*, --animate-*,
+     --default-*, --spacing (see below), --radius-* (overridden below). */
+  --color-*: initial;
+  --text-*: initial;
+  --font-weight-*: initial;
+  --tracking-*: initial;
+  --leading-*: initial;
+  --shadow-*: initial;
+
+  /* Re-provide CSS-wide color keywords after the color reset */
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: var(--base-white);
+
+  /* Color */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Agentport custom semantics */
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+  --color-inverse: var(--inverse);
+  --color-inverse-foreground: var(--inverse-foreground);
+  --color-scrim: var(--scrim);
+  --color-border-emphasis: var(--border-emphasis);
+  --color-border-strong: var(--border-strong);
+  --color-input-placeholder: var(--input-placeholder);
+  --color-input-background: var(--input-background);
+  --color-background-fixed: var(--background-fixed);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  /* Radius */
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-full: var(--radius-full);
+
+  /* Shadows  */
+  --shadow-glow:      var(--shadow-glow);
+  --shadow-elevation: var(--shadow-elevation);
+
+  /* Typography · families — declared explicitly (don't silently ride Tailwind's
+     default --font-* namespace); value owned by tokens.css. */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Spacing — numeric scale base only (p-4, gap-2, h-9 = n × --spacing).
+     The named steps are deliberately NOT on --spacing-*: that namespace feeds
+     every sizing utility and resolves BEFORE --container, so --spacing-md
+     would shadow the container scale (max-w-md → 8px instead of 28rem).
+     The steps live on --space-step-* (no core namespace) and are wired to
+     gap/padding/margin via @utility in utilities.css; values stay owned by
+     tokens.css. */
+  --spacing: var(--space-base);
+  --space-step-2xs: var(--space-2xs);
+  --space-step-xs:  var(--space-xs);
+  --space-step-sm:  var(--space-sm);
+  --space-step-md:  var(--space-md);
+  --space-step-lg:  var(--space-lg);
+  --space-step-xl:  var(--space-xl);
+  --space-step-2xl: var(--space-2xl);
+  --space-step-3xl: var(--space-3xl);
+  --space-step-4xl: var(--space-4xl);
+  --space-step-5xl: var(--space-5xl);
+}

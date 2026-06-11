@@ -1,355 +1,37 @@
+/*
+  ── Agentport DS · style entry ────────────────────────────────────────────────
+  Single import target for app + Storybook. The Figma→Code seam is split by
+  concern:
+    tokens.css     :root values (exported from Figma "Agentport DS")
+    theme.css      @theme bridge — semantics → Tailwind namespaces
+    utilities.css  DS @utility classes — typo formats, named spacing steps
+    variants.css   @custom-variant selector plumbing (dark, nova data-state)
+*/
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 /* Design tokens (exported from Figma "Agentport DS"). Provides the :root values
-   that the @theme bridge below translates into Tailwind utilities. */
+   that the theme.css bridge translates into Tailwind utilities. */
 @import './tokens.css';
 
 /* Self-hosted DS fonts — bundled woff2 (the app is an offline Tauri shell, no CDN).
-   The variable packages register the families as "… Variable"; the :root below
-   resolves the DS font tokens to them (plain names + system fonts kept as fallback).
-   tokens.css (the raw Figma export) stays untouched — the "Variable" name is a
-   font-loading detail, not a design token. */
+   The variable packages register the families as "… Variable"; tokens.css
+   resolves the DS font tokens to them (plain names + system fonts kept as
+   fallback). tokens.css (the raw Figma export) stays untouched — the "Variable"
+   name is a font-loading detail, not a design token. */
 @import '@fontsource-variable/hanken-grotesk';
 @import '@fontsource-variable/geist-mono';
+
+/* Tailwind config, split by concern (see header). */
+@import './theme.css';
+@import './utilities.css';
+@import './variants.css';
 
 /* Tailwind v4 scans the module graph automatically; @source makes this lib's
    own sources explicit so classes are never missed. Consuming apps register
    their own sources from their own entry (see apps/agentport/src/styles.css). */
 @source '../../../ui/src';
-
-@custom-variant dark (&:is(.dark *));
-
-/* ── Nova baseline · data-state custom variants ──────────────────────────────
-   Verbatim from shadcn/tailwind.css (the radix-nova porting baseline; see
-   components.json style). Token-free infrastructure: lets Nova-source classes
-   like data-open:… / data-disabled:… / data-selected:… / data-vertical:…
-   resolve, so ports need fewer rewrites. Design VALUES stay Figma-owned — this
-   adds only selector plumbing, no colours/spacing. Not pulled by ui:add (that
-   carries no css); init would, but we never run init under radix-nova. */
-@custom-variant data-open {
-  &:where([data-state='open']),
-  &:where([data-open]:not([data-open='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-closed {
-  &:where([data-state='closed']),
-  &:where([data-closed]:not([data-closed='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-checked {
-  &:where([data-state='checked']),
-  &:where([data-checked]:not([data-checked='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-unchecked {
-  &:where([data-state='unchecked']),
-  &:where([data-unchecked]:not([data-unchecked='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-selected {
-  &:where([data-selected='true']) {
-    @slot;
-  }
-}
-@custom-variant data-disabled {
-  &:where([data-disabled='true']),
-  &:where([data-disabled]:not([data-disabled='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-active {
-  &:where([data-state='active']),
-  &:where([data-active]:not([data-active='false'])) {
-    @slot;
-  }
-}
-@custom-variant data-horizontal {
-  &:where([data-orientation='horizontal']) {
-    @slot;
-  }
-}
-@custom-variant data-vertical {
-  &:where([data-orientation='vertical']) {
-    @slot;
-  }
-}
-
-/* Hidden-scrollbar utility (scrollable regions without a visible bar) — from
-   shadcn/tailwind.css. */
-@utility no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-/*
-  ── Figma → Code token seam ────────────────────────────────────────────
-  The *semantic* values come from tokens.css (imported above, exported from
-  Figma "Agentport DS"). The @theme-inline bridge below translates them into
-  Tailwind utilities. A separate :root is no longer needed — all values live
-  in tokens.css.
-*/
-
-/* Dark mode: currently light-only (Figma has no dark-mode token set yet).
-   shadcn's default dark is disabled for now so Light=Figma doesn't mix with
-   Dark=shadcn-neutral. Re-enable once dark tokens exist
-   (`--background-fixed` must then be excluded).
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-*/
-
-/* Map semantic vars into Tailwind's theme so utilities like bg-background,
-   text-muted-foreground, rounded-lg resolve. */
-@theme inline {
-  /* ── Theme reset ─────────────────────────────────────────────────────────
-     Remove Tailwind defaults for the namespaces we own (components are rebuilt
-     on the tokens). Structural ones stay: --breakpoint-*, --container-*, --animate-*,
-     --default-*, --spacing (see below), --radius-* (overridden below). */
-  --color-*: initial;
-  --text-*: initial;
-  --font-weight-*: initial;
-  --tracking-*: initial;
-  --leading-*: initial;
-  --shadow-*: initial;
-
-  /* Re-provide CSS-wide color keywords after the color reset */
-  --color-transparent: transparent;
-  --color-current: currentColor;
-  --color-white: var(--base-white);
-
-  /* Color */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
-  /* Agentport custom semantics */
-  --color-overlay: var(--overlay);
-  --color-overlay-foreground: var(--overlay-foreground);
-  --color-inverse: var(--inverse);
-  --color-inverse-foreground: var(--inverse-foreground);
-  --color-scrim: var(--scrim);
-  --color-border-emphasis: var(--border-emphasis);
-  --color-border-strong: var(--border-strong);
-  --color-input-placeholder: var(--input-placeholder);
-  --color-input-background: var(--input-background);
-  --color-background-fixed: var(--background-fixed);
-  --color-destructive-foreground: var(--destructive-foreground);
-
-  /* Radius */
-  --radius-sm:   var(--radius-sm);
-  --radius-md:   var(--radius-md);
-  --radius-lg:   var(--radius-lg);
-  --radius-xl:   var(--radius-xl);
-  --radius-full: var(--radius-full);
-
-  /* Shadows  */
-  --shadow-glow:      var(--shadow-glow);
-  --shadow-elevation: var(--shadow-elevation);
-
-  /* Typography · families — declared explicitly (don't silently ride Tailwind's
-     default --font-* namespace); value owned by tokens.css. */
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-
-  /* Spacing — numeric scale base only (p-4, gap-2, h-9 = n × --spacing).
-     The named steps are deliberately NOT on --spacing-*: that namespace feeds
-     every sizing utility and resolves BEFORE --container, so --spacing-md
-     would shadow the container scale (max-w-md → 8px instead of 28rem).
-     The steps live on --space-step-* (no core namespace) and are wired to
-     gap/padding/margin via @utility below; values stay owned by tokens.css. */
-  --spacing: var(--space-base);
-  --space-step-2xs: var(--space-2xs);
-  --space-step-xs:  var(--space-xs);
-  --space-step-sm:  var(--space-sm);
-  --space-step-md:  var(--space-md);
-  --space-step-lg:  var(--space-lg);
-  --space-step-xl:  var(--space-xl);
-  --space-step-2xl: var(--space-2xl);
-  --space-step-3xl: var(--space-3xl);
-  --space-step-4xl: var(--space-4xl);
-  --space-step-5xl: var(--space-5xl);
-
-}
-
-/* ── Named spacing steps → utilities ─────────────────────────────────────────
-   The t-shirt steps apply ONLY to the spacing-semantic families — gap, padding,
-   margin (tokens-reference §3: one system for gap+padding; margin = code idiom).
-   Sizing utilities keep their stock meaning: max-w-sm/md/… = container scale;
-   w/h/size have no named steps (geometry stays numeric). Numeric spacing
-   utilities (gap-2, p-4, -mx-2) resolve via --spacing, untouched. */
-@utility gap-* { gap: --value(--space-step-*); }
-@utility gap-x-* { column-gap: --value(--space-step-*); }
-@utility gap-y-* { row-gap: --value(--space-step-*); }
-@utility p-*  { padding: --value(--space-step-*); }
-@utility px-* { padding-inline: --value(--space-step-*); }
-@utility py-* { padding-block: --value(--space-step-*); }
-@utility pt-* { padding-top: --value(--space-step-*); }
-@utility pr-* { padding-right: --value(--space-step-*); }
-@utility pb-* { padding-bottom: --value(--space-step-*); }
-@utility pl-* { padding-left: --value(--space-step-*); }
-@utility m-*  { margin: --value(--space-step-*); }
-@utility mx-* { margin-inline: --value(--space-step-*); }
-@utility my-* { margin-block: --value(--space-step-*); }
-@utility mt-* { margin-top: --value(--space-step-*); }
-@utility mr-* { margin-right: --value(--space-step-*); }
-@utility mb-* { margin-bottom: --value(--space-step-*); }
-@utility ml-* { margin-left: --value(--space-step-*); }
-@utility -m-*  { margin: calc(--value(--space-step-*) * -1); }
-@utility -mx-* { margin-inline: calc(--value(--space-step-*) * -1); }
-@utility -my-* { margin-block: calc(--value(--space-step-*) * -1); }
-@utility -mt-* { margin-top: calc(--value(--space-step-*) * -1); }
-@utility -mr-* { margin-right: calc(--value(--space-step-*) * -1); }
-@utility -mb-* { margin-bottom: calc(--value(--space-step-*) * -1); }
-@utility -ml-* { margin-left: calc(--value(--space-step-*) * -1); }
-
-
-/* ── Typography formats ──────────────────────────────────────────────────────
-   Multi-value composition tokens (family+size+weight+leading+tracking) as
-   utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.
-*/
-@utility text-display {
-  font-family: var(--text-display-family);
-  font-size: var(--text-display-size);
-  font-weight: var(--text-display-weight);
-  line-height: var(--text-display-leading);
-  letter-spacing: var(--text-display-tracking);
-}
-@utility text-heading {
-  font-family: var(--text-heading-family);
-  font-size: var(--text-heading-size);
-  font-weight: var(--text-heading-weight);
-  line-height: var(--text-heading-leading);
-  letter-spacing: var(--text-heading-tracking);
-}
-@utility text-heading-sm {
-  font-family: var(--text-heading-sm-family);
-  font-size: var(--text-heading-sm-size);
-  font-weight: var(--text-heading-sm-weight);
-  line-height: var(--text-heading-sm-leading);
-  letter-spacing: var(--text-heading-sm-tracking);
-}
-@utility text-title {
-  font-family: var(--text-title-family);
-  font-size: var(--text-title-size);
-  font-weight: var(--text-title-weight);
-  line-height: var(--text-title-leading);
-  letter-spacing: var(--text-title-tracking);
-}
-@utility text-body {
-  font-family: var(--text-body-family);
-  font-size: var(--text-body-size);
-  font-weight: var(--text-body-weight);
-  line-height: var(--text-body-leading);
-  letter-spacing: var(--text-body-tracking);
-}
-@utility text-body-strong {
-  font-family: var(--text-body-strong-family);
-  font-size: var(--text-body-strong-size);
-  font-weight: var(--text-body-strong-weight);
-  line-height: var(--text-body-strong-leading);
-  letter-spacing: var(--text-body-strong-tracking);
-}
-@utility text-label {
-  font-family: var(--text-label-family);
-  font-size: var(--text-label-size);
-  font-weight: var(--text-label-weight);
-  line-height: var(--text-label-leading);
-  letter-spacing: var(--text-label-tracking);
-}
-@utility text-eyebrow {
-  font-family: var(--text-eyebrow-family);
-  font-size: var(--text-eyebrow-size);
-  font-weight: var(--text-eyebrow-weight);
-  line-height: var(--text-eyebrow-leading);
-  letter-spacing: var(--text-eyebrow-tracking);
-}
-@utility text-data {
-  font-family: var(--text-data-family);
-  font-size: var(--text-data-size);
-  font-weight: var(--text-data-weight);
-  line-height: var(--text-data-leading);
-  letter-spacing: var(--text-data-tracking);
-}
-@utility text-kbd {
-  font-family: var(--text-kbd-family);
-  font-size: var(--text-kbd-size);
-  font-weight: var(--text-kbd-weight);
-  line-height: var(--text-kbd-leading);
-  letter-spacing: var(--text-kbd-tracking);
-}
-@utility text-input {
-  font-family: var(--text-input-family);
-  font-size: var(--text-input-size);
-  font-weight: var(--text-input-weight);
-  line-height: var(--text-input-leading);
-  letter-spacing: var(--text-input-tracking);
-}
-
-
 
 @layer base {
   * {

@@ -50,7 +50,9 @@ npm run ui:add -- button   # add a shadcn component into libs/ui
   `.stories.tsx` + `.spec.tsx` + a barrel `index.ts`. `ui:add` writes **flat**
   (`components/ui/<name>.tsx`) — move it into its folder, add the barrel, then re-export the folder
   in `libs/ui/src/index.ts` (shadcn won't).
-- `globals.css` (`libs/ui/src/styles/`) is the single seam for the Figma "Agentport DS" semantics.
+- `globals.css` (`libs/ui/src/styles/`) is the single entry/seam for the Figma "Agentport DS"
+  semantics — internally split into `theme.css` (@theme bridge), `utilities.css` (DS @utility
+  classes) and `variants.css` (@custom-variant plumbing), all imported by `globals.css`.
 
 
 ## shadcn Gotchas

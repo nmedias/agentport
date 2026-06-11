@@ -1,0 +1,130 @@
+/*
+  ── DS utility classes ──────────────────────────────────────────────────────
+  Custom @utility definitions on top of the theme bridge (theme.css):
+  named spacing steps, the 11 typography formats, no-scrollbar.
+*/
+
+/* ── Named spacing steps → utilities ─────────────────────────────────────────
+   The t-shirt steps apply ONLY to the spacing-semantic families — gap, padding,
+   margin (tokens-reference §3: one system for gap+padding; margin = code idiom).
+   Sizing utilities keep their stock meaning: max-w-sm/md/… = container scale;
+   w/h/size have no named steps (geometry stays numeric). Numeric spacing
+   utilities (gap-2, p-4, -mx-2) resolve via --spacing, untouched. */
+@utility gap-* { gap: --value(--space-step-*); }
+@utility gap-x-* { column-gap: --value(--space-step-*); }
+@utility gap-y-* { row-gap: --value(--space-step-*); }
+@utility p-*  { padding: --value(--space-step-*); }
+@utility px-* { padding-inline: --value(--space-step-*); }
+@utility py-* { padding-block: --value(--space-step-*); }
+@utility pt-* { padding-top: --value(--space-step-*); }
+@utility pr-* { padding-right: --value(--space-step-*); }
+@utility pb-* { padding-bottom: --value(--space-step-*); }
+@utility pl-* { padding-left: --value(--space-step-*); }
+@utility m-*  { margin: --value(--space-step-*); }
+@utility mx-* { margin-inline: --value(--space-step-*); }
+@utility my-* { margin-block: --value(--space-step-*); }
+@utility mt-* { margin-top: --value(--space-step-*); }
+@utility mr-* { margin-right: --value(--space-step-*); }
+@utility mb-* { margin-bottom: --value(--space-step-*); }
+@utility ml-* { margin-left: --value(--space-step-*); }
+@utility -m-*  { margin: calc(--value(--space-step-*) * -1); }
+@utility -mx-* { margin-inline: calc(--value(--space-step-*) * -1); }
+@utility -my-* { margin-block: calc(--value(--space-step-*) * -1); }
+@utility -mt-* { margin-top: calc(--value(--space-step-*) * -1); }
+@utility -mr-* { margin-right: calc(--value(--space-step-*) * -1); }
+@utility -mb-* { margin-bottom: calc(--value(--space-step-*) * -1); }
+@utility -ml-* { margin-left: calc(--value(--space-step-*) * -1); }
+
+
+/* ── Typography formats ──────────────────────────────────────────────────────
+   Multi-value composition tokens (family+size+weight+leading+tracking) as
+   utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.
+*/
+@utility text-display {
+  font-family: var(--text-display-family);
+  font-size: var(--text-display-size);
+  font-weight: var(--text-display-weight);
+  line-height: var(--text-display-leading);
+  letter-spacing: var(--text-display-tracking);
+}
+@utility text-heading {
+  font-family: var(--text-heading-family);
+  font-size: var(--text-heading-size);
+  font-weight: var(--text-heading-weight);
+  line-height: var(--text-heading-leading);
+  letter-spacing: var(--text-heading-tracking);
+}
+@utility text-heading-sm {
+  font-family: var(--text-heading-sm-family);
+  font-size: var(--text-heading-sm-size);
+  font-weight: var(--text-heading-sm-weight);
+  line-height: var(--text-heading-sm-leading);
+  letter-spacing: var(--text-heading-sm-tracking);
+}
+@utility text-title {
+  font-family: var(--text-title-family);
+  font-size: var(--text-title-size);
+  font-weight: var(--text-title-weight);
+  line-height: var(--text-title-leading);
+  letter-spacing: var(--text-title-tracking);
+}
+@utility text-body {
+  font-family: var(--text-body-family);
+  font-size: var(--text-body-size);
+  font-weight: var(--text-body-weight);
+  line-height: var(--text-body-leading);
+  letter-spacing: var(--text-body-tracking);
+}
+@utility text-body-strong {
+  font-family: var(--text-body-strong-family);
+  font-size: var(--text-body-strong-size);
+  font-weight: var(--text-body-strong-weight);
+  line-height: var(--text-body-strong-leading);
+  letter-spacing: var(--text-body-strong-tracking);
+}
+@utility text-label {
+  font-family: var(--text-label-family);
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  line-height: var(--text-label-leading);
+  letter-spacing: var(--text-label-tracking);
+}
+@utility text-eyebrow {
+  font-family: var(--text-eyebrow-family);
+  font-size: var(--text-eyebrow-size);
+  font-weight: var(--text-eyebrow-weight);
+  line-height: var(--text-eyebrow-leading);
+  letter-spacing: var(--text-eyebrow-tracking);
+}
+@utility text-data {
+  font-family: var(--text-data-family);
+  font-size: var(--text-data-size);
+  font-weight: var(--text-data-weight);
+  line-height: var(--text-data-leading);
+  letter-spacing: var(--text-data-tracking);
+}
+@utility text-kbd {
+  font-family: var(--text-kbd-family);
+  font-size: var(--text-kbd-size);
+  font-weight: var(--text-kbd-weight);
+  line-height: var(--text-kbd-leading);
+  letter-spacing: var(--text-kbd-tracking);
+}
+@utility text-input {
+  font-family: var(--text-input-family);
+  font-size: var(--text-input-size);
+  font-weight: var(--text-input-weight);
+  line-height: var(--text-input-leading);
+  letter-spacing: var(--text-input-tracking);
+}
+
+
+/* Hidden-scrollbar utility (scrollable regions without a visible bar) — from
+   shadcn/tailwind.css. */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

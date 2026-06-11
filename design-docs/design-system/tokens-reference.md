@@ -3,8 +3,10 @@
 Eine Datenquelle für Component-Arbeit (Figma-Nachbau + Code-Verdrahtung). Prosa = Regeln/Architektur;
 **YAML = Token-Daten** (Crosswalk Figma → CSS → Utility → Wert + `use`/`avoid`-Semantik).
 
-Quelle: `token-analysis-{color,radius,spacing,typography,effects}.md`, `libs/ui/src/styles/{tokens.css,globals.css}`,
-`Agentport/design-direction.md`. Bei Drift: **`tokens.css`/`globals.css`** für Werte/Utilities, `token-analysis-*` für Semantik.
+Quelle: `token-analysis-{color,radius,spacing,typography,effects}.md`, `libs/ui/src/styles/`
+(`tokens.css` + Tailwind-Config `theme.css`/`utilities.css`/`variants.css`, Entry `globals.css`),
+`Agentport/design-direction.md`. Bei Drift: **`tokens.css`/`theme.css`/`utilities.css`** für
+Werte/Utilities, `token-analysis-*` für Semantik.
 
 ## Regeln
 
@@ -26,7 +28,8 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
   reference* = Primitives (scopes:[], alias-only)   semantic* = Semantics (Alias → Primitive)
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
-        │ Brücke → libs/ui/src/styles/globals.css  (@theme inline + @utility → Tailwind-Utilities)
+        │ Brücke → libs/ui/src/styles/theme.css (@theme inline) + utilities.css (@utility) +
+        │          variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
 ```
 
 ---
