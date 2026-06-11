@@ -44,6 +44,13 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 ## Umsetzungsstand (Figma)
 
 ### `reference-typo` — `VariableCollectionId:3081:2`, Mode `value` (`3081:0`)
+
+> **Update 2026-06-11 — reference-Konsolidierung:** `reference-typo` ist aufgelöst — die 22
+> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Typo/*`** (gleiche
+> Unterstruktur: `Typo/family/…`, `Typo/weight/…`, `Typo/size/…`, `Typo/line-height/…`,
+> `Typo/tracking/…`, `Typo/font-scale`). Neue Variable-IDs (`3623:8…29`); alle 48
+> semantic-typo-Aliase umgehängt, Text-Styles unverändert (binden semantic-typo).
+
 22 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
 - `family/` — `sans` = „Hanken Grotesk", `mono` = „Geist Mono" *(STRING)*
 - `weight/` — `regular 400 · medium 500 · semibold 600 · extrabold 800` *(FLOAT)*

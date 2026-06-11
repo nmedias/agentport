@@ -26,7 +26,9 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 
 ```
 Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
-  reference* = Primitives (scopes:[], alias-only)   semantic* = Semantics (Alias → Primitive)
+  reference = Primitives, EINE Collection mit Gruppen Color/ Dimension/ Typo/ Effect (scopes:[]
+              alias-only; Ausnahme Effect/* = EFFECT_*-Scopes, direkt von den Effect Styles gebunden)
+  semantic* = Semantics (Alias → Primitive)
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
         │ Brücke → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
         │          tw-variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
@@ -348,7 +350,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
 
 ## 2 · Radius
 
-Primitives (`reference-dimension`, intern): `radius/4·6·8·16·full(9999)`. Semantics aliasen, Scope `CORNER_RADIUS`.
+Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(9999)`. Semantics aliasen, Scope `CORNER_RADIUS`.
 
 ```yaml
 - { token: radius-sm,   css_var: --radius-sm,   value: 4px,    utilities: [rounded-sm],   use: "Kleine Controls/Chips/Marker." }

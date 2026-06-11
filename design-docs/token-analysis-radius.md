@@ -10,6 +10,10 @@ shadcn-Naming passen (`radius` Basis + `sm/md/lg/xl`, ergänzt um `xs`/`full`).
 > **Nachtrag:** die Semantics sind in die Collection `semantic-dimension` umgezogen
 > (zusammen mit Spacing) — `semantic-radius` gelöscht, `reference-dimension` (Primitive, vorher
 > `reference-radius`) bleibt.
+> **Update 2026-06-11 — reference-Konsolidierung:** `reference-dimension` ist aufgelöst — die
+> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Dimension/radius/*`**
+> (+ `Dimension/space/base`). Neue Variable-IDs (`3623:2…7`); die 6 semantic-dimension-Aliase wurden
+> umgehängt, File-Sweep: 0 Rest-Bindungen.
 
 ## Befund (Screen-Scan)
 

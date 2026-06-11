@@ -12,8 +12,8 @@
    ============================================================================= */
 
 /* ===========================================================================
-   1 · PRIMITIVES  (Collection: reference / reference-dimension /
-                    reference-typo / reference-effect)
+   1 · PRIMITIVES  (Figma-Collection: reference — Gruppen Color / Dimension /
+                    Typo / Effect; konsolidiert 2026-06-11)
    =========================================================================== */
 :root {
 
@@ -266,7 +266,7 @@
 
 
   /* ===========================================================================
-     6 · SEMANTIC · SHADOWS  (Collection: reference-effect → Effect Styles)
+     6 · SEMANTIC · SHADOWS  (Figma: reference, Gruppe Effect → Effect Styles)
      =========================================================================== */
   --shadow-glow:      0 0 4px 0 color-mix(in srgb, var(--cyan-500) 50%, transparent);
   --shadow-elevation: 0 14px 36px -6px color-mix(in srgb, var(--neutral-900) 18%, transparent);

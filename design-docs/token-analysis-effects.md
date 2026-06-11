@@ -33,6 +33,12 @@ Nur **2 Effekte** (beide Drop-Shadows; keine Blurs; keine vorhandenen Effect Sty
 ## Umsetzungsstand (Figma)
 
 ### `reference-effect` — `VariableCollectionId:3088:2`, Mode `value` (`3088:0`)
+
+> **Update 2026-06-11 — reference-Konsolidierung:** `reference-effect` ist aufgelöst — die 10
+> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Effect/*`**
+> (`Effect/glow/…`, `Effect/elevation/…`; Scopes unverändert EFFECT_COLOR/EFFECT_FLOAT). Neue
+> Variable-IDs (`3623:30…39`); beide Effect Styles (Glow, Elevation) auf die neuen Vars umgebunden.
+
 10 Variablen, gruppiert nach Effekt; Scopes `EFFECT_COLOR` / `EFFECT_FLOAT`:
 - `glow/` — `color` rgba(0,159,227,.5) · `blur 4` · `spread 0` · `x 0` · `y 0`
 - `elevation/` — `color` rgba(26,34,48,.18) · `blur 36` · `spread −6` · `x 0` · `y 14`

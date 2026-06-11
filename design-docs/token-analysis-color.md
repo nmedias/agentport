@@ -13,6 +13,11 @@
 Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) → **`semantic`** (Alias) → später CSS-Export.
 
 - **Collection `reference`** · Mode `default` · alle `scopes:[]` (nur via Alias nutzbar):
+  > **Update 2026-06-11 — Konsolidierung:** `reference` ist jetzt die **einzige** Primitive-Collection
+  > mit den Top-Gruppen **`Color/ · Dimension/ · Typo/ · Effect/`** (`reference-dimension`/`-typo`/
+  > `-effect` aufgelöst; deren Primitives neu angelegt → neue IDs, 54 Aliase + 2 Effect-Styles
+  > umgehängt, Sweep 0 Rest-Bindungen). Die Farb-Primitives unten heißen seither `Color/base/white`,
+  > `Color/neutral/*`, `Color/cyan/*`, `Color/opacity/*` — nur Rename, **IDs unverändert**.
   - `base/white` `#FFFFFF`
   - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 450 #79828F · 500 #6B7585 · 600 #636C7B · 700 #4A5562 · 900 #1A2230` *(Lücken: 800, 950; `450` für AA-Input-Border, `600` für `muted-foreground` ergänzt)*
   - `cyan/` `50 #E9F6FC · 500 #0098DA · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)* — `500` von
