@@ -137,8 +137,8 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
   `--ap-sys-radius-lg`, `--ap-sys-space-md`) — Figma-Gruppen sind reine Organisation, der Token
   ist der Leaf. `shadcn Default/Sidebar/` + `/Chart/` in Figma **aufgelöst** (flach unter
   `shadcn Default/`). Gilt für `semantic` + `semantic-dimension`; `semantic-typo` am selben Tag
-  nachgezogen (Org-Gruppe + format/part — s. token-analysis-typography). Offen: nur `--shadow-*`
-  (kein semantic-Tier). CSS-Helfer `--space-base` entfällt — die Space-Steps rechnen direkt
+  nachgezogen (Org-Gruppe + format/part — s. token-analysis-typography); `--shadow-*` ebenfalls →
+  `--ap-sys-shadow-glow/-elevation` (sys-Tier nur im CSS, kein Figma-Pendant). CSS-Helfer `--space-base` entfällt — die Space-Steps rechnen direkt
   mit `--ap-dimension-space-base`. Tailwind-Theme-Keys (`--color-*`, `--radius-*` in tw-theme.css)
   bleiben unpräfixt (Tailwind-Namespaces), nur ihre **Werte** zeigen auf `--ap-sys-*`.
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter

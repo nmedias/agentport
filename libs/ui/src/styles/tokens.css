@@ -13,8 +13,9 @@
    (Overlay/overlay → --ap-sys-overlay). Typography semantics follow the
    Figma path below the org group: Heading/heading-sm/family →
    --ap-sys-heading-sm-family. Figma itself has no prefix.
-   Only --shadow-glow/--shadow-elevation still follow the old naming (no
-   semantic tier in Figma — Effect Styles bind the reference parts directly).
+   --ap-sys-shadow-glow/--ap-sys-shadow-elevation have no Figma semantic
+   counterpart (Effect Styles bind the Effect/* reference parts directly) —
+   the sys tier exists only in CSS there.
 
    Wiring: imported by `globals.css` via `@import`; there the SEMANTICS are
    translated into Tailwind utilities via `@theme inline` (color/radius/spacing/shadow),
@@ -296,6 +297,6 @@
   /* ===========================================================================
      6 · SEMANTIC · SHADOWS  (Figma: reference, Gruppe Effect → Effect Styles)
      =========================================================================== */
-  --shadow-glow:      var(--ap-effect-glow-x) var(--ap-effect-glow-y) var(--ap-effect-glow-blur) var(--ap-effect-glow-spread) var(--ap-effect-glow-color);
-  --shadow-elevation: var(--ap-effect-elevation-x) var(--ap-effect-elevation-y) var(--ap-effect-elevation-blur) var(--ap-effect-elevation-spread) var(--ap-effect-elevation-color);
+  --ap-sys-shadow-glow:      var(--ap-effect-glow-x) var(--ap-effect-glow-y) var(--ap-effect-glow-blur) var(--ap-effect-glow-spread) var(--ap-effect-glow-color);
+  --ap-sys-shadow-elevation: var(--ap-effect-elevation-x) var(--ap-effect-elevation-y) var(--ap-effect-elevation-blur) var(--ap-effect-elevation-spread) var(--ap-effect-elevation-color);
 }

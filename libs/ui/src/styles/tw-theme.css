@@ -116,8 +116,8 @@
   --radius-full: var(--ap-sys-radius-full);
 
   /* Shadows  */
-  --shadow-glow:      var(--shadow-glow);
-  --shadow-elevation: var(--shadow-elevation);
+  --shadow-glow:      var(--ap-sys-shadow-glow);
+  --shadow-elevation: var(--ap-sys-shadow-elevation);
 
   /* Typography · families — declared explicitly (don't silently ride Tailwind's
      default --font-* namespace); value owned by tokens.css. */

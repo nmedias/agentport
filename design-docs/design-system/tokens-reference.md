@@ -35,8 +35,9 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
               Input/input-placeholder → --ap-sys-input-placeholder; shadcn Default/ ist flach,
               Sidebar/Chart-Untergruppen aufgelöst). semantic-typo: Org-Gruppe oben drauf,
               Token = format/part (Heading/heading-sm/family → --ap-sys-heading-sm-family;
-              leading heißt line-height). Figma ohne Präfix. Noch offen: nur --shadow-glow/
-              --shadow-elevation (kein semantic-Tier in Figma).
+              leading heißt line-height). Schatten: --ap-sys-shadow-glow/-elevation — sys-Tier
+              nur im CSS (kein Figma-Pendant; Effect Styles binden die Effect/*-Teile direkt).
+              Figma ohne Präfix.
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
         │ Brücke → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
         │          tw-variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
@@ -435,8 +436,8 @@ Kein semantic-Tier (2 Effekte). Im Code Utilities; in Figma **Effect Styles**. F
 Color-Primitives via `color-mix`.
 
 ```yaml
-- { token: Glow,      css_var: --shadow-glow,      value: "0 0 4px 0 · cyan/500 @ 50%",      utilities: [shadow-glow],      use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)." }
-- { token: Elevation, css_var: --shadow-elevation, value: "0 14px 36px -6px · neutral/900 @ 18%", utilities: [shadow-elevation], use: "Schlagschatten erhabener Overlays/Menüs." }
+- { token: Glow,      css_var: --ap-sys-shadow-glow,      value: "0 0 4px 0 · cyan/500 @ 50%",      utilities: [shadow-glow],      use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)." }
+- { token: Elevation, css_var: --ap-sys-shadow-elevation, value: "0 14px 36px -6px · neutral/900 @ 18%", utilities: [shadow-elevation], use: "Schlagschatten erhabener Overlays/Menüs." }
 ```
 
 **Sonst flach:** Tiefe wird angedeutet, nicht gestapelt. Stock-`shadow-xs/sm/md/lg` sind tot (§6).
