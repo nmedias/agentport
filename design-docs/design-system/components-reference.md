@@ -208,7 +208,7 @@ status_note: >
 
 - name: Command
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-10 (Figma + Code zusammen gebaut)
+  figma_synced: false                           # Erstport 2026-06-10 synced; palette-Variante nur Figma (2026-06-11) — Code-Teil ausstehend (User-Gate)
   source: { registry: "@shadcn", item: command, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/command/
@@ -221,13 +221,31 @@ status_note: >
       axis: { state: [default, selected, disabled, checked] }
       props: "icon#3559:0 (INSTANCE_SWAP→Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
       members: { default: "3558:2", selected: "3558:7", disabled: "3558:12", checked: "3558:17" }
-    input: { name: ".Command/Input", id: "3561:2", nests: ".InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-input Placeholder" }
-    separator: { name: ".Command/Separator", id: "3564:2" }
+    input:
+      set: { name: ".Command/Input", id: "3639:2" }
+      axis: { variant: [default, palette] }
+      props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
+      members: { default: "3561:2", palette: "3638:8" }
+      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-input Placeholder"
+      palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
+    separator: { name: ".Command/Separator", id: "3564:2" }   # unverändert; full-bleed ergibt sich aus p-0-Panel der palette-Composition
     empty: { name: ".Command/Empty", id: "3564:3", prop: "message (text)" }
-    group: { name: ".Command/Group", id: "3565:2", prop: "heading (text, eyebrow UPPER)", slot: "items#3565:0" }
-    composition: { name: ".Command", id: "3566:2", slot: "list#3566:0", surface: "bg-overlay + border + shadow-elevation + corner-xl" }
-    example: { name: "Example · command-demo", id: "3573:2" }
-    icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19" }
+    group:
+      set: { name: ".Command/Group", id: "3640:9" }
+      axis: { variant: [default, palette] }
+      props: "heading#3640:1 (text, eyebrow UPPER)"
+      slot: "items#3640:0"
+      members: { default: "3565:2", palette: "3640:2" }
+      palette: "Heading-Row gap-md px-md pt-lg pb-sm + nachlaufende Linie (h1 fill, border) · Container px-md py-0 (Item-Text-Flucht 16px wie Prompt)"
+    composition:
+      set: { name: ".Command", id: "3642:2" }
+      axis: { variant: [default, palette] }
+      slot: "list#3642:0"
+      members: { default: "3566:2", palette: "3641:2" }
+      default: "bg-overlay + border + shadow-elevation + corner-xl + p-xs"
+      palette: "bg-overlay + border 1.5px + shadow-elevation + corner-md + p-0 · Prompt-Divider + Footer-Divider (.Command/Separator-Instanzen, fill) · list-Slot py-md · Default-Slot-Content = C2-Demo (SPRINGE ZU / SUCHE / FÜHRE AUS)"
+    examples: { command-demo: "3573:2", palette-demo: "3650:63" }
+    icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19", ArrowRight: "3644:4", Swap: "3644:7", Search: "3644:10", Play: "3644:13", Download: "3644:16" }
   skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)
   notes: >
     Multi-Composite (cmdk). Deps: InputGroup ✓ (als echte Instanz in .Command/Input genestet), Button/Input/
@@ -246,6 +264,14 @@ status_note: >
     3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
     Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
     grün (32 Tests inkl. Typo-Survival text-input/text-body). jsdom-Polyfill lag bereits in test-setup.ts.
+    PALETTE-VARIANTE (2026-06-11, Figma-only): variant-Achse [default, palette] auf Input/Group/Composition,
+    Quelle = C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Member per Clone aus dem Frame gebaut
+    → Token-Bindings (space/corner/shadcn-default/overlay/inverse, Effect-Styles Glow+Elevation, Text-Styles
+    Input/Eyebrow/Kbd) mitgereist. Item-Set UNVERÄNDERT (User-Entscheid „items sind gleich"); 16px-Flucht via
+    Group px-md statt Item-Padding. Demo-Inhalt lebt im palette-Member (DS-Konvention: Examples = pure
+    Instanzen, Instanz-Slot-Content nicht editierbar). Geplante Code-Abweichungen vom Frame im Plan
+    festgehalten (Standard-Placeholder statt Ghost-Hint, caret-primary statt Glow-Caret im Textfluss,
+    Caret-Bar-Radius 1px entfällt). Code-Teil + Stories/Specs folgen nach User-Gate.
 
 - name: Dialog
   status: nova-aligned
