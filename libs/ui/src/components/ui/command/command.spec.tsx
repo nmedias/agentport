@@ -77,6 +77,124 @@ describe('Command', () => {
   });
 });
 
+function PalettePanel() {
+  return (
+    <Command variant="palette">
+      <CommandInput placeholder="type a command…" />
+      <CommandList>
+        <CommandEmpty>No results.</CommandEmpty>
+        <CommandGroup heading="Jump to">
+          <CommandItem>
+            invoice
+            <CommandShortcut>Type · System</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  );
+}
+
+describe('Command palette variant', () => {
+  // Default regression: without variant the root keeps the original surface.
+  it('keeps the default surface untouched without a variant', () => {
+    const { container } = render(<Palette />);
+    const root = container.querySelector('[data-slot=command]');
+    expect(root?.getAttribute('data-variant')).toBe('default');
+    const cls = root?.className.split(/\s+/) ?? [];
+    expect(cls).toContain('corner-xl');
+    expect(cls).toContain('p-xs');
+    expect(cls).toContain('border');
+  });
+
+  it('re-shapes the root surface (corner-md, 1.5px border, full-bleed) and tags data-variant', () => {
+    const { container } = render(<PalettePanel />);
+    const root = container.querySelector('[data-slot=command]');
+    expect(root?.getAttribute('data-variant')).toBe('palette');
+    const cls = root?.className.split(/\s+/) ?? [];
+    expect(cls).toContain('corner-md');
+    expect(cls).not.toContain('corner-xl');
+    expect(cls).toContain('border-[1.5px]');
+    expect(cls).not.toContain('p-xs');
+  });
+
+  // Context inheritance: the input switches anatomy from the root variant alone —
+  // prompt row instead of InputGroup, with caret bar, Kbd Esc and the mono text-input
+  // format (text-format twMerge group must keep it alive next to text-foreground).
+  it('switches the input to the prompt row via context', () => {
+    const { getByPlaceholderText, getByText, container } = render(
+      <PalettePanel />
+    );
+    const input = getByPlaceholderText('type a command…');
+    expect(input.className).toContain('text-input');
+    expect(input.className).toContain('caret-primary');
+    const wrapper = container.querySelector('[data-slot=command-input-wrapper]');
+    expect(wrapper?.className).toContain('bg-card');
+    expect(wrapper?.className).toContain('border-b');
+    expect(wrapper?.querySelector('[data-slot=input-group]')).toBeNull();
+    expect(getByText('Esc')).toBeTruthy();
+  });
+
+  // The heading styling rides on the group element via the **:[[cmdk-group-heading]]:
+  // descendant variant (cmdk renders the heading div without own classes).
+  it('renders the group heading as a labeled rule with palette rhythm', () => {
+    const { getByText } = render(<PalettePanel />);
+    const group = getByText('Jump to').closest('[data-slot=command-group]');
+    expect(group?.className).toContain('[[cmdk-group-heading]]:after:flex-1');
+    expect(group?.className).toContain('[[cmdk-group-heading]]:after:bg-border');
+    expect(group?.className).toContain('[[cmdk-group-heading]]:pt-lg');
+    expect(group?.className).toContain('[[cmdk-group-heading]]:text-eyebrow');
+    expect(group?.className.split(/\s+/)).toContain('px-md');
+  });
+
+  it('gives the list its palette breathing room (py-md)', () => {
+    const { container } = render(<PalettePanel />);
+    expect(
+      container.querySelector('[data-slot=command-list]')?.className
+    ).toContain('py-md');
+  });
+});
+
+describe('CommandSeparator', () => {
+  it('renders the labeled rule (eyebrow + trailing hairline) when label is set', () => {
+    const { container, getByText } = render(
+      <Command>
+        <CommandList>
+          <CommandSeparator label="Jump to" />
+        </CommandList>
+      </Command>
+    );
+    const sep = container.querySelector('[data-slot=command-separator]');
+    expect(sep?.getAttribute('role')).toBe('separator');
+    expect(sep?.className).toContain('px-xl');
+    expect(getByText('Jump to').className).toContain('text-eyebrow');
+  });
+
+  it('stays the plain hairline without a label and drops the -mx-xs bleed in palette context', () => {
+    const inset = render(
+      <Command>
+        <CommandList>
+          <CommandSeparator alwaysRender />
+        </CommandList>
+      </Command>
+    );
+    expect(
+      inset.container.querySelector('[data-slot=command-separator]')?.className
+    ).toContain('-mx-xs');
+
+    const fullBleed = render(
+      <Command variant="palette">
+        <CommandList>
+          <CommandSeparator alwaysRender />
+        </CommandList>
+      </Command>
+    );
+    expect(
+      fullBleed.container.querySelector('[data-slot=command-separator]')
+        ?.className
+    ).not.toContain('-mx-xs');
+  });
+});
+
 function DialogPalette() {
   return (
     <CommandDialog open>
@@ -131,5 +249,20 @@ describe('CommandDialog', () => {
     });
     expect(await findByText('Profile')).toBeTruthy();
     await waitFor(() => expect(queryByText('Calendar')).toBeNull());
+  });
+
+  it('passes the palette variant through to the panel and the inner Command', () => {
+    const { getByRole } = render(
+      <CommandDialog open variant="palette">
+        <CommandInput placeholder="Search…" />
+      </CommandDialog>
+    );
+    const dialog = getByRole('dialog');
+    expect(dialog.className.split(/\s+/)).toContain('corner-md');
+    expect(
+      dialog
+        .querySelector('[data-slot=command]')
+        ?.getAttribute('data-variant')
+    ).toBe('palette');
   });
 });

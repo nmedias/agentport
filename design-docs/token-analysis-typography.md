@@ -7,6 +7,11 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 
 > **Status:** Architektur entschieden, **3 Collections + 11 Text Styles gebaut + Screen angewandt**
 > (223 Text-Nodes klassifiziert, 0 Fehler). Kategorie komplett.
+>
+> **Update 2026-06-11 — erster Code-Konsument für `Input`:** Die Command-palette-Variante (libs/ui)
+> nutzt `text-input` (Mono 18) auf dem Prompt-Feld — erster Code-Konsument des Input-Formats
+> (der Default-Command nutzt bewusst `text-label`, vgl. components-reference). Figma-Pendant:
+> Text Style `Input` auf value/placeholder im `.Command/Input`-palette-Member 3638:8.
 
 ## Befund (Screen-Scan, read-only)
 

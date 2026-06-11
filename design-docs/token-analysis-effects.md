@@ -7,6 +7,11 @@ Ziel: keine rohen Effekt-Werte mehr — Schatten/Glow hängen an **Effect Styles
 
 > **Status:** Entschieden (**A-lean · B-token · glow/elevation**), gebaut + am Screen angewandt.
 > Kategorie komplett.
+>
+> **Update 2026-06-11 — erster Code-Konsument für Glow:** Die Command-palette-Variante (libs/ui)
+> nutzt `shadow-glow` auf der Prompt-Caret-Bar — erster `--ap-sys-shadow-glow`-Konsument im Code
+> (Figma-Pendant: Effect Style `Glow` auf `palette-caret` im `.Command/Input`-palette-Member 3638:8).
+> `shadow-elevation` war bereits seit dem Command-Erstport am Command-Root im Einsatz.
 
 ## Befund (Screen-Scan, read-only)
 

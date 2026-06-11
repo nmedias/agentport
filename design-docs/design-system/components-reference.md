@@ -208,12 +208,13 @@ status_note: >
 
 - name: Command
   status: nova-aligned
-  figma_synced: false                           # Erstport 2026-06-10 synced; palette-Variante nur Figma (2026-06-11) — Code-Teil ausstehend (User-Gate)
+  figma_synced: true                            # Erstport 2026-06-10; palette/labeled-Varianten 2026-06-11 via /component-sync nachgezogen
   source: { registry: "@shadcn", item: command, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/command/
-    exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator]
+    exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, commandVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
+    variants: "variant: default | palette — NUR auf Command-Root/CommandDialog (cva); Input/List/Group/Separator erben via modul-internem CommandVariantContext (ToggleGroup-Idiom); data-variant am Root. CommandSeparator zusätzlich label-Prop (Labeled Rule, role=separator-div ohne cmdk-hide-on-search)"
   figma:
     section: { name: "Command", id: "3555:679" }
     item:
@@ -270,17 +271,19 @@ status_note: >
     3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
     Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
     grün (32 Tests inkl. Typo-Survival text-input/text-body). jsdom-Polyfill lag bereits in test-setup.ts.
-    PALETTE-VARIANTE (2026-06-11, Figma-only): variant-Achse [default, palette] auf Input/Group/Composition,
-    Quelle = C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Member per Clone aus dem Frame gebaut
+    PALETTE-VARIANTE (2026-06-11): variant-Achse [default, palette] auf Input/Group/Composition, Quelle =
+    C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Figma-Member per Clone aus dem Frame gebaut
     → Token-Bindings (space/corner/shadcn-default/overlay/inverse, Effect-Styles Glow+Elevation, Text-Styles
     Input/Eyebrow/Kbd) mitgereist. Item-Set UNVERÄNDERT (User-Entscheid „items sind gleich"); 16px-Flucht via
     Group px-md statt Item-Padding. Demo-Inhalt lebt im palette-Member (DS-Konvention: Examples = pure
-    Instanzen, Instanz-Slot-Content nicht editierbar). Geplante Code-Abweichungen vom Frame im Plan
-    festgehalten (Standard-Placeholder statt Ghost-Hint, caret-primary statt Glow-Caret im Textfluss,
-    Caret-Bar-Radius 1px entfällt). NACHTRAG (User-Gate-Review): .Command/Separator zusätzlich als Set mit
-    variant=labeled (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading
-    (User-Entscheid: Gruppen-Weg behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen; Code:
-    <CommandSeparator label="…">). Code-Teil + Stories/Specs folgen nach User-Gate.
+    Instanzen, Instanz-Slot-Content nicht editierbar). .Command/Separator als Set mit variant=labeled
+    (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading (Gruppen-Weg
+    behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
+    Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card/p-xl/gap-lg mit
+    statischer Glow-Caret-Bar + text-input/caret-primary + Kbd-Esc; Prompt-Divider = border-b am Wrapper
+    (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) statt der
+    in Figma genesteten labeled-Separator-Instanz mit px-xl (24px) — geflaggt, Figma-Fix offen; Deviations
+    komplett in agent-runs/component-sync/2026-06-11-command/notes.md.
 
 - name: Dialog
   status: nova-aligned
