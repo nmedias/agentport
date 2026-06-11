@@ -8,8 +8,10 @@
 
    Naming: PRIMITIVES carry the `--ap-` prefix + the Figma path with dashes
    (Color/neutral/50 → --ap-color-neutral-50; Font/family/sans →
-   --ap-font-family-sans). Figma itself has no prefix. SEMANTICS stay
-   unprefixed (shadcn-compatible names).
+   --ap-font-family-sans). SEMANTICS carry `--ap-sys-` + the token leaf —
+   Figma groups (shadcn Default/, Overlay/, Input/, …) are organisation only
+   (Overlay/overlay → --ap-sys-overlay). Figma itself has no prefix.
+   Typography semantics (--text-*) and --shadow-* follow in a later pass.
 
    Wiring: imported by `globals.css` via `@import`; there the SEMANTICS are
    translated into Tailwind utilities via `@theme inline` (color/radius/spacing/shadow),
@@ -124,87 +126,86 @@
      =========================================================================== */
 
   /* --- Surfaces & text (shadcn) ------------------------------------------- */
-  --background:          var(--ap-color-base-white);
-  --foreground:          var(--ap-color-neutral-900);
-  --card:                var(--ap-color-neutral-50);
-  --card-foreground:     var(--ap-color-neutral-900);
-  --primary:             var(--ap-color-cyan-500);
-  --primary-foreground:  var(--ap-color-base-white);
-  --muted:               var(--ap-color-neutral-100);
-  --muted-foreground:    var(--ap-color-neutral-600);
-  --accent:              var(--ap-color-cyan-50);
-  --accent-foreground:   var(--ap-color-cyan-700);
-  --border:              var(--ap-color-neutral-200);
-  --input:               var(--ap-color-neutral-450);   /* form control border (AA ≥3:1) */
-  --ring:                var(--ap-color-neutral-700);    /* focus */
-  /* shadcn components reference --popover → mapped onto overlay */
-  --popover:             var(--overlay);
-  --popover-foreground:  var(--overlay-foreground);
+  --ap-sys-background:          var(--ap-color-base-white);
+  --ap-sys-foreground:          var(--ap-color-neutral-900);
+  --ap-sys-card:                var(--ap-color-neutral-50);
+  --ap-sys-card-foreground:     var(--ap-color-neutral-900);
+  --ap-sys-primary:             var(--ap-color-cyan-500);
+  --ap-sys-primary-foreground:  var(--ap-color-base-white);
+  --ap-sys-muted:               var(--ap-color-neutral-100);
+  --ap-sys-muted-foreground:    var(--ap-color-neutral-600);
+  --ap-sys-accent:              var(--ap-color-cyan-50);
+  --ap-sys-accent-foreground:   var(--ap-color-cyan-700);
+  --ap-sys-border:              var(--ap-color-neutral-200);
+  --ap-sys-input:               var(--ap-color-neutral-450);   /* form control border (AA ≥3:1) */
+  --ap-sys-ring:                var(--ap-color-neutral-700);    /* focus */
+  /* shadcn components reference --ap-sys-popover → mapped onto overlay */
+  --ap-sys-popover:             var(--ap-sys-overlay);
+  --ap-sys-popover-foreground:  var(--ap-sys-overlay-foreground);
 
   /* --- Sidebar (shadcn) --------------------------------------------------- */
-  --sidebar:                     var(--ap-color-neutral-100);
-  --sidebar-foreground:          var(--ap-color-neutral-900);
-  --sidebar-primary:             var(--ap-color-cyan-700);
-  --sidebar-primary-foreground:  var(--ap-color-base-white);
-  --sidebar-accent:              var(--ap-color-cyan-50);
-  --sidebar-accent-foreground:   var(--ap-color-cyan-700);
-  --sidebar-border:              var(--ap-color-neutral-200);
-  --sidebar-ring:                var(--ap-color-neutral-700);
+  --ap-sys-sidebar:                     var(--ap-color-neutral-100);
+  --ap-sys-sidebar-foreground:          var(--ap-color-neutral-900);
+  --ap-sys-sidebar-primary:             var(--ap-color-cyan-700);
+  --ap-sys-sidebar-primary-foreground:  var(--ap-color-base-white);
+  --ap-sys-sidebar-accent:              var(--ap-color-cyan-50);
+  --ap-sys-sidebar-accent-foreground:   var(--ap-color-cyan-700);
+  --ap-sys-sidebar-border:              var(--ap-color-neutral-200);
+  --ap-sys-sidebar-ring:                var(--ap-color-neutral-700);
 
   /* --- Custom (Agentport) --------------------------------------------------- */
-  --input-placeholder:   var(--ap-color-neutral-400);
-  --input-background:    var(--ap-color-neutral-100);
-  --background-fixed:    var(--ap-color-base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
-  --border-emphasis:     var(--ap-color-neutral-300);
-  --border-strong:       var(--ap-color-neutral-700);
-  --inverse:             var(--ap-color-neutral-900);
-  --inverse-foreground:  var(--ap-color-neutral-50);
+  --ap-sys-input-placeholder:   var(--ap-color-neutral-400);
+  --ap-sys-input-background:    var(--ap-color-neutral-100);
+  --ap-sys-background-fixed:    var(--ap-color-base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
+  --ap-sys-border-emphasis:     var(--ap-color-neutral-300);
+  --ap-sys-border-strong:       var(--ap-color-neutral-700);
+  --ap-sys-inverse:             var(--ap-color-neutral-900);
+  --ap-sys-inverse-foreground:  var(--ap-color-neutral-50);
   /* --- Overlay (= shadcn popover, renamed) -------------------------------- */
-  --overlay:             var(--ap-color-base-white);
-  --overlay-foreground:  var(--ap-color-neutral-900);
+  --ap-sys-overlay:             var(--ap-color-base-white);
+  --ap-sys-overlay-foreground:  var(--ap-color-neutral-900);
   /* modal backdrop dimmer — colour (alias neutral/900) × strength (scrim-opacity,
      alias opacity/10) composed via color-mix. Figma composes the same pair on
      .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */
-  --scrim-opacity:       var(--ap-color-opacity-10);
-  --scrim:               color-mix(in srgb, var(--ap-color-neutral-900) var(--scrim-opacity), transparent);
+  --ap-sys-scrim-opacity:       var(--ap-color-opacity-10);
+  --ap-sys-scrim:               color-mix(in srgb, var(--ap-color-neutral-900) var(--ap-sys-scrim-opacity), transparent);
 
 
   /* --- ⚠ Placeholders (shadcn defaults, not yet designed) ------------------ */
-  --secondary:              #f5f5f5;  /* ⚠ */
-  --secondary-foreground:   #343434;  /* ⚠ */
-  --destructive:            #e7000b;  /* ⚠ */
-  --destructive-foreground: #fafafa;  /* ⚠ */
-  --chart-1: #e76f51;  /* ⚠ */
-  --chart-2: #2a9d8f;  /* ⚠ */
-  --chart-3: #264653;  /* ⚠ */
-  --chart-4: #e9c46a;  /* ⚠ */
-  --chart-5: #f4a261;  /* ⚠ */
+  --ap-sys-secondary:              #f5f5f5;  /* ⚠ */
+  --ap-sys-secondary-foreground:   #343434;  /* ⚠ */
+  --ap-sys-destructive:            #e7000b;  /* ⚠ */
+  --ap-sys-destructive-foreground: #fafafa;  /* ⚠ */
+  --ap-sys-chart-1: #e76f51;  /* ⚠ */
+  --ap-sys-chart-2: #2a9d8f;  /* ⚠ */
+  --ap-sys-chart-3: #264653;  /* ⚠ */
+  --ap-sys-chart-4: #e9c46a;  /* ⚠ */
+  --ap-sys-chart-5: #f4a261;  /* ⚠ */
 
 
   /* ===========================================================================
      3 · SEMANTIC · RADIUS  (Collection: semantic-dimension, group Radius)
      =========================================================================== */
-  --radius-sm:   var(--ap-dimension-radius-4);
-  --radius-md:   var(--ap-dimension-radius-6);
-  --radius-lg:   var(--ap-dimension-radius-8);
-  --radius-xl:   var(--ap-dimension-radius-16);
-  --radius-full: var(--ap-dimension-radius-full);
+  --ap-sys-radius-sm:   var(--ap-dimension-radius-4);
+  --ap-sys-radius-md:   var(--ap-dimension-radius-6);
+  --ap-sys-radius-lg:   var(--ap-dimension-radius-8);
+  --ap-sys-radius-xl:   var(--ap-dimension-radius-16);
+  --ap-sys-radius-full: var(--ap-dimension-radius-full);
 
 
   /* ===========================================================================
      4 · SEMANTIC · SPACING  (Collection: semantic-dimension, group Space)
      =========================================================================== */
-  --space-base: var(--ap-dimension-space-base); /* 4px — base unit (reference) */
-  --space-2xs: calc(var(--space-base) * 0.5);  /* 2px */
-  --space-xs:  var(--space-base);              /* 4px */
-  --space-sm:  calc(var(--space-base) * 1.5);  /* 6px */
-  --space-md:  calc(var(--space-base) * 2);    /* 8px */
-  --space-lg:  calc(var(--space-base) * 3);    /* 12px */
-  --space-xl:  calc(var(--space-base) * 4);    /* 16px */
-  --space-2xl: calc(var(--space-base) * 6);    /* 24px */
-  --space-3xl: calc(var(--space-base) * 8);    /* 32px */
-  --space-4xl: calc(var(--space-base) * 12);   /* 48px */
-  --space-5xl: calc(var(--space-base) * 20);   /* 80px */
+    --ap-sys-space-2xs: calc(var(--ap-dimension-space-base) * 0.5);  /* 2px */
+  --ap-sys-space-xs:  var(--ap-dimension-space-base);              /* 4px */
+  --ap-sys-space-sm:  calc(var(--ap-dimension-space-base) * 1.5);  /* 6px */
+  --ap-sys-space-md:  calc(var(--ap-dimension-space-base) * 2);    /* 8px */
+  --ap-sys-space-lg:  calc(var(--ap-dimension-space-base) * 3);    /* 12px */
+  --ap-sys-space-xl:  calc(var(--ap-dimension-space-base) * 4);    /* 16px */
+  --ap-sys-space-2xl: calc(var(--ap-dimension-space-base) * 6);    /* 24px */
+  --ap-sys-space-3xl: calc(var(--ap-dimension-space-base) * 8);    /* 32px */
+  --ap-sys-space-4xl: calc(var(--ap-dimension-space-base) * 12);   /* 48px */
+  --ap-sys-space-5xl: calc(var(--ap-dimension-space-base) * 20);   /* 80px */
 
 
   /* ===========================================================================

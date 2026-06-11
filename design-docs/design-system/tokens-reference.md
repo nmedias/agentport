@@ -30,7 +30,11 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
               alias-only; Ausnahme Effect/* = EFFECT_*-Scopes, direkt von den Effect Styles gebunden)
   semantic* = Semantics (Alias → Primitive)
   CSS-Naming: Primitives = --ap-<figma-pfad-mit-dashes> (Color/neutral/50 → --ap-color-neutral-50,
-              Font/family/sans → --ap-font-family-sans); Figma ohne Präfix; Semantics unpräfixt.
+              Font/family/sans → --ap-font-family-sans). Semantics = --ap-sys-<token-leaf> —
+              Figma-Gruppen sind rein organisatorisch (Overlay/overlay → --ap-sys-overlay,
+              Input/input-placeholder → --ap-sys-input-placeholder; shadcn Default/ ist flach,
+              Sidebar/Chart-Untergruppen aufgelöst). Figma ohne Präfix. Noch offen: semantic-typo
+              (--text-*) und --shadow-* folgen in einem separaten Pass.
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
         │ Brücke → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
         │          tw-variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
@@ -54,35 +58,35 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
 
 ```yaml
 - token: background
-  css_var: --background
+  css_var: --ap-sys-background
   primitive: base/white
   value: "#ffffff"
   utilities: [bg-background]
   use: "Basis-Flächenfarbe (App-Grundfläche)."
 
 - token: foreground
-  css_var: --foreground
+  css_var: --ap-sys-foreground
   primitive: neutral/900
   value: "#1a2230"
   utilities: [text-foreground, bg-foreground]
   use: "Primärtext/-Icon auf Basis-Flächen."
 
 - token: card
-  css_var: --card
+  css_var: --ap-sys-card
   primitive: neutral/50
   value: "#fafbfc"
   utilities: [bg-card]
   use: "Erhabene/sekundäre Panel-Fläche."
 
 - token: card-foreground
-  css_var: --card-foreground
+  css_var: --ap-sys-card-foreground
   primitive: neutral/900
   value: "#1a2230"
   utilities: [text-card-foreground]
   use: "Text auf card (shadcn-Paarung)."
 
 - token: primary
-  css_var: --primary
+  css_var: --ap-sys-primary
   primitive: cyan/500
   value: "#0098da"
   utilities: [bg-primary, text-primary]
@@ -90,21 +94,21 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   avoid: "Text auf hellem Grund (≥3:1, aber <4.5 → dafür accent-foreground); dekorative Flächen-Einfärbung."
 
 - token: primary-foreground
-  css_var: --primary-foreground
+  css_var: --ap-sys-primary-foreground
   primitive: base/white
   value: "#ffffff"
   utilities: [text-primary-foreground]
   use: "Text/Icon auf primary-Fläche."
 
 - token: muted
-  css_var: --muted
+  css_var: --ap-sys-muted
   primitive: neutral/100
   value: "#f4f6f8"
   utilities: [bg-muted]
   use: "Ruhige Chrome-Fläche (Bänder, Chips, Tracks)."
 
 - token: muted-foreground
-  css_var: --muted-foreground
+  css_var: --ap-sys-muted-foreground
   primitive: neutral/600
   value: "#636c7b"
   utilities: [text-muted-foreground]
@@ -112,7 +116,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "AA ≥4.5 auf background/card/sidebar."
 
 - token: accent
-  css_var: --accent
+  css_var: --ap-sys-accent
   primitive: cyan/50
   value: "#e9f6fc"
   utilities: [bg-accent]
@@ -120,7 +124,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "Abweichung von Stock-shadcn (dort neutrales Hover-Grau) — hier = Selektion. Neutrales Row-Hover bräuchte eigenen Token."
 
 - token: accent-foreground
-  css_var: --accent-foreground
+  css_var: --ap-sys-accent-foreground
   primitive: cyan/700
   value: "#0077a8"
   utilities: [text-accent-foreground]
@@ -128,14 +132,14 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   avoid: "Nicht primary für Text-auf-hell."
 
 - token: border
-  css_var: --border
+  css_var: --ap-sys-border
   primitive: neutral/200
   value: "#e6eaee"
   utilities: [border-border]
   use: "Standard-Kanten/Trenner (global via Base-Layer gesetzt)."
 
 - token: input
-  css_var: --input
+  css_var: --ap-sys-input
   primitive: neutral/450
   value: "#79828f"
   utilities: [border-input]
@@ -143,99 +147,99 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "≥3:1 (WCAG 1.4.11 / BITV)."
 
 - token: ring
-  css_var: --ring
+  css_var: --ap-sys-ring
   primitive: neutral/700
   value: "#4a5562"
   utilities: [ring-ring, outline-ring]
   use: "Fokus-Indikator (Base-Layer setzt outline-ring/50)."
 
 - token: overlay
-  css_var: --overlay
+  css_var: --ap-sys-overlay
   primitive: base/white
   value: "#ffffff"
   utilities: [bg-overlay]
   use: "Erhabene Overlay-Fläche (Popover/Command/Menu/Dropdown)."
 
 - token: overlay-foreground
-  css_var: --overlay-foreground
+  css_var: --ap-sys-overlay-foreground
   primitive: neutral/900
   value: "#1a2230"
   utilities: [text-overlay-foreground]
   use: "Text auf overlay."
 
 - token: popover
-  css_var: --popover
-  primitive: alias → --overlay
+  css_var: --ap-sys-popover
+  primitive: alias → --ap-sys-overlay
   value: "#ffffff"
   utilities: [bg-popover]
   use: "Alias auf overlay für shadcn-Komponenten, die --popover referenzieren."
   note: "In neuen Komponenten ist overlay der bevorzugte Name."
 
 - token: popover-foreground
-  css_var: --popover-foreground
-  primitive: alias → --overlay-foreground
+  css_var: --ap-sys-popover-foreground
+  primitive: alias → --ap-sys-overlay-foreground
   value: "#1a2230"
   utilities: [text-popover-foreground]
   use: "s. popover."
 
 - token: sidebar
-  css_var: --sidebar
+  css_var: --ap-sys-sidebar
   primitive: neutral/100
   value: "#f4f6f8"
   utilities: [bg-sidebar]
   use: "Sidebar-/Rail-Fläche."
 
 - token: sidebar-foreground
-  css_var: --sidebar-foreground
+  css_var: --ap-sys-sidebar-foreground
   primitive: neutral/900
   value: "#1a2230"
   utilities: [text-sidebar-foreground]
   use: "Text auf sidebar."
 
 - token: sidebar-primary
-  css_var: --sidebar-primary
+  css_var: --ap-sys-sidebar-primary
   primitive: cyan/700
   value: "#0077a8"
   utilities: [bg-sidebar-primary]
   use: "Sidebar-Akzent-Fläche."
 
 - token: sidebar-primary-foreground
-  css_var: --sidebar-primary-foreground
+  css_var: --ap-sys-sidebar-primary-foreground
   primitive: base/white
   value: "#ffffff"
   utilities: [text-sidebar-primary-foreground]
   use: "Text auf sidebar-primary."
 
 - token: sidebar-accent
-  css_var: --sidebar-accent
+  css_var: --ap-sys-sidebar-accent
   primitive: cyan/50
   value: "#e9f6fc"
   utilities: [bg-sidebar-accent]
   use: "Aktiv-/Selektions-Tint in der Sidebar."
 
 - token: sidebar-accent-foreground
-  css_var: --sidebar-accent-foreground
+  css_var: --ap-sys-sidebar-accent-foreground
   primitive: cyan/700
   value: "#0077a8"
   utilities: [text-sidebar-accent-foreground]
   use: "Text auf sidebar-accent."
 
 - token: sidebar-border
-  css_var: --sidebar-border
+  css_var: --ap-sys-sidebar-border
   primitive: neutral/200
   value: "#e6eaee"
   utilities: [border-sidebar-border]
   use: "Sidebar-Trenner."
 
 - token: sidebar-ring
-  css_var: --sidebar-ring
+  css_var: --ap-sys-sidebar-ring
   primitive: neutral/700
   value: "#4a5562"
   utilities: [ring-sidebar-ring]
   use: "Fokus in der Sidebar."
 
 - token: input-placeholder
-  css_var: --input-placeholder
+  css_var: --ap-sys-input-placeholder
   primitive: neutral/400
   value: "#979fa8"
   utilities: [text-input-placeholder]
@@ -243,7 +247,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "Bewusst dezent (kein AA-Ziel)."
 
 - token: input-background
-  css_var: --input-background
+  css_var: --ap-sys-input-background
   primitive: neutral/100
   value: "#f4f6f8"
   utilities: [bg-input-background]
@@ -251,7 +255,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "Abhebung gering → Erkennbarkeit trägt die Border (input)."
 
 - token: background-fixed
-  css_var: --background-fixed
+  css_var: --ap-sys-background-fixed
   primitive: base/white
   value: "#ffffff"
   utilities: [bg-background-fixed]
@@ -259,44 +263,44 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   avoid: "Im künftigen .dark NICHT überschreiben."
 
 - token: border-emphasis
-  css_var: --border-emphasis
+  css_var: --ap-sys-border-emphasis
   primitive: neutral/300
   value: "#c4ccd4"
   utilities: [border-border-emphasis]
   use: "Betonte Linie (stärker als border)."
 
 - token: border-strong
-  css_var: --border-strong
+  css_var: --ap-sys-border-strong
   primitive: neutral/700
   value: "#4a5562"
   utilities: [border-border-strong]
   use: "Schwerste/dunkelste Linie."
 
 - token: inverse
-  css_var: --inverse
+  css_var: --ap-sys-inverse
   primitive: neutral/900
   value: "#1a2230"
   utilities: [bg-inverse]
   use: "Dunkle Fläche auf hellem Grund (invertierte Chips/Pillen)."
 
 - token: inverse-foreground
-  css_var: --inverse-foreground
+  css_var: --ap-sys-inverse-foreground
   primitive: neutral/50
   value: "#fafbfc"
   utilities: [text-inverse-foreground]
   use: "Text auf inverse."
 
 - token: scrim
-  css_var: --scrim
+  css_var: --ap-sys-scrim
   primitive: "neutral/900 (Farbe) — Stärke komponiert via scrim-opacity"
-  value: "color-mix(in srgb, #1a2230 var(--scrim-opacity), transparent)"
+  value: "color-mix(in srgb, #1a2230 var(--ap-sys-scrim-opacity), transparent)"
   utilities: [bg-scrim]
   use: "Modal-Backdrop-Dimmer (Dialog-Overlay); Alpha komponiert via scrim-opacity — ohne Opacity-Modifier verwenden."
   avoid: "Keine Flächen-Tönung unterhalb von Modal-Ebene; nicht mit zusätzlichem /NN-Modifier stapeln."
   note: "Figma: scrim = Alias → neutral/900 (voll-opak); die 10% liegen als Layer-Opacity-Binding (scrim-opacity) auf .Dialog/Overlay — als Fill ohne dieses Binding ist scrim voll-opak dunkel."
 
 - token: scrim-opacity
-  css_var: --scrim-opacity
+  css_var: --ap-sys-scrim-opacity
   primitive: opacity/10
   value: "10%"
   utilities: []
@@ -304,7 +308,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   note: "FLOAT-Token, Scope OPACITY. Figma-Wert 10 (Opacity-Variablen = 0–100-Prozent-Skala) ↔ CSS 10%."
 
 - token: secondary
-  css_var: --secondary
+  css_var: --ap-sys-secondary
   primitive: raw
   value: "#f5f5f5"
   utilities: [bg-secondary, text-secondary]
@@ -312,7 +316,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: tbd
 
 - token: secondary-foreground
-  css_var: --secondary-foreground
+  css_var: --ap-sys-secondary-foreground
   primitive: raw
   value: "#343434"
   utilities: [text-secondary-foreground]
@@ -320,7 +324,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: tbd
 
 - token: destructive
-  css_var: --destructive
+  css_var: --ap-sys-destructive
   primitive: raw
   value: "#e7000b"
   utilities: [bg-destructive, text-destructive]
@@ -328,7 +332,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: tbd
 
 - token: destructive-foreground
-  css_var: --destructive-foreground
+  css_var: --ap-sys-destructive-foreground
   primitive: raw
   value: "#fafafa"
   utilities: [text-destructive-foreground]
@@ -336,7 +340,7 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
   use: tbd
 
 - token: chart-1..5
-  css_var: --chart-1 … --chart-5
+  css_var: --ap-sys-chart-1 … --ap-sys-chart-5
   primitive: raw
   value: ["#e76f51", "#2a9d8f", "#264653", "#e9c46a", "#f4a261"]
   utilities: [bg-chart-1 … text-chart-5]
@@ -355,11 +359,11 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
 Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(9999)`. Semantics aliasen, Scope `CORNER_RADIUS`.
 
 ```yaml
-- { token: radius-sm,   css_var: --radius-sm,   value: 4px,    utilities: [rounded-sm],   use: "Kleine Controls/Chips/Marker." }
-- { token: radius-md,   css_var: --radius-md,   value: 6px,    utilities: [rounded-md],   use: "Mittlere Container." }
-- { token: radius-lg,   css_var: --radius-lg,   value: 8px,    utilities: [rounded-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
-- { token: radius-xl,   css_var: --radius-xl,   value: 16px,   utilities: [rounded-xl],   use: "Große Flächen/Fenster." }
-- { token: radius-full, css_var: --radius-full, value: 9999px, utilities: [rounded-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
+- { token: radius-sm,   css_var: --ap-sys-radius-sm,   value: 4px,    utilities: [rounded-sm],   use: "Kleine Controls/Chips/Marker." }
+- { token: radius-md,   css_var: --ap-sys-radius-md,   value: 6px,    utilities: [rounded-md],   use: "Mittlere Container." }
+- { token: radius-lg,   css_var: --ap-sys-radius-lg,   value: 8px,    utilities: [rounded-lg],   use: "Buttons, Felder, Icon-Buttons, Toggles." }
+- { token: radius-xl,   css_var: --ap-sys-radius-xl,   value: 16px,   utilities: [rounded-xl],   use: "Große Flächen/Fenster." }
+- { token: radius-full, css_var: --ap-sys-radius-full, value: 9999px, utilities: [rounded-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
 ```
 
 **`avoid`:** Tailwind-Default-Stufen `rounded` (Base), `rounded-xs/2xl/3xl/none` — nicht DS-gebunden.
@@ -369,7 +373,7 @@ Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(
 ## 3 · Spacing (Gap + Padding, ein System)
 
 Ein System für Gap **und** Padding (Figma-Scope `GAP`); `m-*` als Code-Idiom (§7). Kein Primitive-Tier;
-Grundeinheit `--space-base = 0.25rem` (4px). Step nach benötigter Abstandsgröße wählen. Utilities
+Grundeinheit `--ap-dimension-space-base = 0.25rem` (reference) (4px). Step nach benötigter Abstandsgröße wählen. Utilities
 **benannt** (`gap-md`/`p-md`/`m-md`/`px-…` inkl. Negative `-mx-…` — via `@utility` auf
 `--space-step-*`, **nur** für die gap/padding/margin-Familien) **plus numerisch** (`p-4`/`gap-2`/`h-9`
 über die `--spacing`-Basis) — beide gültig, numerische nicht entfernen.
@@ -380,16 +384,16 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 `h-*`/`size-*` kennen keine benannten Steps (Geometrie numerisch, §6).
 
 ```yaml
-- { token: space-2xs, css_var: --space-2xs, value: 2px,  utilities: [p-2xs, gap-2xs] }
-- { token: space-xs,  css_var: --space-xs,  value: 4px,  utilities: [p-xs,  gap-xs] }
-- { token: space-sm,  css_var: --space-sm,  value: 6px,  utilities: [p-sm,  gap-sm] }
-- { token: space-md,  css_var: --space-md,  value: 8px,  utilities: [p-md,  gap-md] }
-- { token: space-lg,  css_var: --space-lg,  value: 12px, utilities: [p-lg,  gap-lg] }
-- { token: space-xl,  css_var: --space-xl,  value: 16px, utilities: [p-xl,  gap-xl] }
-- { token: space-2xl, css_var: --space-2xl, value: 24px, utilities: [p-2xl, gap-2xl] }
-- { token: space-3xl, css_var: --space-3xl, value: 32px, utilities: [p-3xl, gap-3xl] }
-- { token: space-4xl, css_var: --space-4xl, value: 48px, utilities: [p-4xl, gap-4xl] }
-- { token: space-5xl, css_var: --space-5xl, value: 80px, utilities: [p-5xl, gap-5xl] }
+- { token: space-2xs, css_var: --ap-sys-space-2xs, value: 2px,  utilities: [p-2xs, gap-2xs] }
+- { token: space-xs,  css_var: --ap-sys-space-xs,  value: 4px,  utilities: [p-xs,  gap-xs] }
+- { token: space-sm,  css_var: --ap-sys-space-sm,  value: 6px,  utilities: [p-sm,  gap-sm] }
+- { token: space-md,  css_var: --ap-sys-space-md,  value: 8px,  utilities: [p-md,  gap-md] }
+- { token: space-lg,  css_var: --ap-sys-space-lg,  value: 12px, utilities: [p-lg,  gap-lg] }
+- { token: space-xl,  css_var: --ap-sys-space-xl,  value: 16px, utilities: [p-xl,  gap-xl] }
+- { token: space-2xl, css_var: --ap-sys-space-2xl, value: 24px, utilities: [p-2xl, gap-2xl] }
+- { token: space-3xl, css_var: --ap-sys-space-3xl, value: 32px, utilities: [p-3xl, gap-3xl] }
+- { token: space-4xl, css_var: --ap-sys-space-4xl, value: 48px, utilities: [p-4xl, gap-4xl] }
+- { token: space-5xl, css_var: --ap-sys-space-5xl, value: 80px, utilities: [p-5xl, gap-5xl] }
 ```
 
 ---

@@ -42,9 +42,11 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
     muss über die **Border** kommen (s. AA-Abschnitt).
   - **9 Platzhalter** mit Raw-Hex + Marker ` ⚠` (kein Alias): `secondary`, `secondary-foreground`, `destructive`,
     `destructive-foreground`, `chart-1…5`.
-  - **Gruppen** (vom User in Figma angelegt, rein organisatorisch — Token-Leaf-Namen unverändert):
-    `shadcn Default/` (+ nested `Sidebar/`, `Chart/`), `Overlay/`, `Input/`, `Border/`, `Inverse/`.
-    Beim CSS-Export zählt nur der Leaf-Name (`background`, nicht `shadcn Default/background`).
+  - **Gruppen** (rein organisatorisch — Token-Leaf-Namen unverändert):
+    `shadcn Default/` (seit 2026-06-11 **flach** — `Sidebar/`/`Chart/`-Untergruppen aufgelöst),
+    `Overlay/`, `Input/`, `Border/`, `Inverse/`; `background-fixed` gruppenlos.
+    Beim CSS-Export zählt nur der Leaf-Name, geprefixt: `shadcn Default/background` →
+    `--ap-sys-background`, `Overlay/overlay` → `--ap-sys-overlay`.
 
 - **Screen-Binding `1099:9710`:** **402 Solid-Paints** an Semantics gebunden (0 Fehler). Verteilung u. a.
   `muted-foreground` 178, `foreground` 61, `border-subtle` 42, `background` 41, `primary` 11, `card` 10.
@@ -124,12 +126,20 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 - **Naming-Konvention CSS-Primitives (2026-06-11):** alle Reference-CSS-Vars heißen
   **`--ap-<figma-pfad-mit-dashes>`** (`Color/neutral/50` → `--ap-color-neutral-50`,
   `Font/family/sans` → `--ap-font-family-sans`, `Effect/glow/spread` → `--ap-effect-glow-spread`);
-  Figma trägt **keinen** Präfix. Semantics bleiben unpräfixt (shadcn-kompatibel). Dabei angeglichen:
+  Figma trägt **keinen** Präfix. Dabei angeglichen:
   Figma-Gruppe `Typo/` → **`Font/`**, `Typo/font-scale` → **`Font/scale`**; CSS `--leading-*` →
   `--ap-font-line-height-*`, `--radius-pill` → `--ap-dimension-radius-full` (= Figma `radius/full`),
   `--space-base`-Wert → Primitive `--ap-dimension-space-base`; die 10 **Effect-Primitives**
   (`--ap-effect-{glow,elevation}-{x,y,blur,spread,color}`) existieren jetzt auch im CSS und
   komponieren `--shadow-glow`/`--shadow-elevation`.
+- **Naming-Konvention CSS-Semantics (2026-06-11, gleicher Tag):** Semantics heißen
+  **`--ap-sys-<token-leaf>`** (`--ap-sys-background`, `--ap-sys-input-placeholder`,
+  `--ap-sys-radius-lg`, `--ap-sys-space-md`) — Figma-Gruppen sind reine Organisation, der Token
+  ist der Leaf. `shadcn Default/Sidebar/` + `/Chart/` in Figma **aufgelöst** (flach unter
+  `shadcn Default/`). Gilt für `semantic` + `semantic-dimension`; `semantic-typo` (`--text-*`) und
+  `--shadow-*` folgen separat. CSS-Helfer `--space-base` entfällt — die Space-Steps rechnen direkt
+  mit `--ap-dimension-space-base`. Tailwind-Theme-Keys (`--color-*`, `--radius-*` in tw-theme.css)
+  bleiben unpräfixt (Tailwind-Namespaces), nur ihre **Werte** zeigen auf `--ap-sys-*`.
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter
   (Raw-Hex, shadcn-Defaults) **angelegt**, damit das volle shadcn-Set in Figma steht (waren im Repo-CSS nicht
   enthalten). Semantic-Collection jetzt 38 Variablen, davon 9 Platzhalter.
