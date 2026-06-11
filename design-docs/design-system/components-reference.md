@@ -228,7 +228,13 @@ status_note: >
       members: { default: "3561:2", palette: "3638:8" }
       default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-input Placeholder"
       palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
-    separator: { name: ".Command/Separator", id: "3564:2" }   # unverändert; full-bleed ergibt sich aus p-0-Panel der palette-Composition
+    separator:
+      set: { name: ".Command/Separator", id: "3653:6" }
+      axis: { variant: [default, labeled] }
+      props: "label#3653:1 (text) — nur labeled-Member gebunden"
+      members: { default: "3564:2", labeled: "3653:5" }
+      default: "1px-Linie (border), full-bleed ergibt sich aus p-0-Panel der palette-Composition"
+      labeled: "Labeled Rule: Eyebrow-Label (textCase UPPER, muted-foreground) + nachlaufende Linie (h1 fill, border) · gap-md px-xl pt-lg pb-sm — für freie/flache Kompositionen; CommandGroup[palette] zeichnet sein Heading weiterhin selbst (cmdk-Auto-Hide bleibt beim Gruppen-Weg)"
     empty: { name: ".Command/Empty", id: "3564:3", prop: "message (text)" }
     group:
       set: { name: ".Command/Group", id: "3640:9" }
@@ -271,7 +277,10 @@ status_note: >
     Group px-md statt Item-Padding. Demo-Inhalt lebt im palette-Member (DS-Konvention: Examples = pure
     Instanzen, Instanz-Slot-Content nicht editierbar). Geplante Code-Abweichungen vom Frame im Plan
     festgehalten (Standard-Placeholder statt Ghost-Hint, caret-primary statt Glow-Caret im Textfluss,
-    Caret-Bar-Radius 1px entfällt). Code-Teil + Stories/Specs folgen nach User-Gate.
+    Caret-Bar-Radius 1px entfällt). NACHTRAG (User-Gate-Review): .Command/Separator zusätzlich als Set mit
+    variant=labeled (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading
+    (User-Entscheid: Gruppen-Weg behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen; Code:
+    <CommandSeparator label="…">). Code-Teil + Stories/Specs folgen nach User-Gate.
 
 - name: Dialog
   status: nova-aligned
