@@ -129,7 +129,7 @@
      every sizing utility and resolves BEFORE --container, so --spacing-md
      would shadow the container scale (max-w-md → 8px instead of 28rem).
      The steps live on --space-step-* (no core namespace) and are wired to
-     gap/padding/margin via @utility in utilities.css; values stay owned by
+     gap/padding/margin via @utility in tw-utilities.css; values stay owned by
      tokens.css. */
   --spacing: var(--space-base);
   --space-step-2xs: var(--space-2xs);

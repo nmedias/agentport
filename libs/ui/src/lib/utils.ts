@@ -15,7 +15,7 @@ import { extendTailwindMerge } from 'tailwind-merge';
 //    later `gap-lg` would NOT override an earlier `gap-md`. Adding the step names to
 //    the spacing theme folds them into every spacing group while keeping the numeric
 //    scale (p-4 etc.) intact. CSS-side the steps exist only on the gap/padding/margin
-//    families (globals.css @utility on --space-step-*; sizing names = container
+//    families (tw-utilities.css @utility on --space-step-*; sizing names = container
 //    scale) — the broader twMerge grouping is harmless, it only affects conflict
 //    resolution among classes that exist.
 const TEXT_FORMATS = [

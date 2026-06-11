@@ -2,17 +2,17 @@
   ── Agentport DS · style entry ────────────────────────────────────────────────
   Single import target for app + Storybook. The Figma→Code seam is split by
   concern:
-    tokens.css     :root values (exported from Figma "Agentport DS")
-    theme.css      @theme bridge — semantics → Tailwind namespaces
-    utilities.css  DS @utility classes — typo formats, named spacing steps
-    variants.css   @custom-variant selector plumbing (dark, nova data-state)
+    tokens.css        :root values (exported from Figma "Agentport DS")
+    tw-theme.css      @theme bridge — semantics → Tailwind namespaces
+    tw-utilities.css  DS @utility classes — typo formats, named spacing steps
+    tw-variants.css   @custom-variant selector plumbing (dark, nova data-state)
 */
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 /* Design tokens (exported from Figma "Agentport DS"). Provides the :root values
-   that the theme.css bridge translates into Tailwind utilities. */
+   that the tw-theme.css bridge translates into Tailwind utilities. */
 @import './tokens.css';
 
 /* Self-hosted DS fonts — bundled woff2 (the app is an offline Tauri shell, no CDN).
@@ -24,9 +24,9 @@
 @import '@fontsource-variable/geist-mono';
 
 /* Tailwind config, split by concern (see header). */
-@import './theme.css';
-@import './utilities.css';
-@import './variants.css';
+@import './tw-theme.css';
+@import './tw-utilities.css';
+@import './tw-variants.css';
 
 /* Tailwind v4 scans the module graph automatically; @source makes this lib's
    own sources explicit so classes are never missed. Consuming apps register
