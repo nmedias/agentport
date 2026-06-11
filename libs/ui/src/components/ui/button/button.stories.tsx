@@ -24,6 +24,10 @@ const meta: Meta<typeof Button> = {
       control: 'select',
       options: ['default', 'xs', 'sm', 'lg'],
     },
+    // asChild swaps the rendered element for the child (Radix Slot) and needs a
+    // SINGLE element child — toggling it onto the stories' plain-text children
+    // crashes the Slot. No control; demonstrated in the AsChild story.
+    asChild: { control: false },
   },
   args: {
     children: 'Button',
@@ -57,6 +61,22 @@ export const AllVariants: Story = {
         <Button size={s} variant="destructive">Destructive</Button>
         <Button size={s} variant="link">Link</Button>
       </div>
+    );
+  },
+};
+
+// asChild merges the Button styling onto its single child element instead of
+// rendering a <button> — canonical use: a link styled as a button. Requires
+// exactly one element child (Radix Slot contract), hence no boolean control
+// on the text stories.
+export const AsChild: Story = {
+  parameters: { controls: { include: ['variant', 'size'] } },
+  render: ({ variant, size }) => {
+    const s = size as 'default' | 'xs' | 'sm' | 'lg';
+    return (
+      <Button asChild variant={variant} size={s}>
+        <a href="#explorer">Open explorer</a>
+      </Button>
     );
   },
 };
