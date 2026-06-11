@@ -369,7 +369,8 @@ Primitives (`reference`, Gruppe `Dimension/radius`, intern): `4·6·8·16·full(
 - { token: radius-full, css_var: --ap-sys-radius-full, value: 9999px, utilities: [rounded-full], use: "Pillen (Radius ≈ min(w,h)/2)." }
 ```
 
-**`avoid`:** Tailwind-Default-Stufen `rounded` (Base), `rounded-xs/2xl/3xl/none` — nicht DS-gebunden.
+**Tot (nicht nur avoid):** Tailwind-Default-Stufen `rounded` (Base), `rounded-xs/2xl/3xl` —
+`--radius-*: initial`, nur die DS-Stufen sind re-mapped. `rounded-none` bleibt (kein Theme-Wert).
 
 ---
 
@@ -453,6 +454,7 @@ Stock-Klassen sind **tot** → beim Portieren jeder Component übersetzen.
 dead_utilities:   # durch Reset entfernt → Ersatz
   - { stock: "text-xs/sm/base/lg/… (font-size)", reset: "--text-*: initial",        replace: "passende .text-*-Format-Klasse (§4)" }
   - { stock: "font-normal/medium/semibold/bold", reset: "--font-weight-*: initial",  replace: "Gewicht steckt in der .text-*-Klasse" }
+  - { stock: "font-sans/font-mono (family)",     reset: "--font-*: initial",         replace: "Familie steckt in der .text-*-Klasse (mono → text-data/-kbd/-eyebrow/-input)" }
   - { stock: "tracking-*",                       reset: "--tracking-*: initial",     replace: "steckt in der .text-*-Klasse" }
   - { stock: "leading-*",                        reset: "--leading-*: initial",      replace: "steckt in der .text-*-Klasse" }
   - { stock: "shadow-xs/sm/md/lg/xl",            reset: "--shadow-*: initial",       replace: "weglassen (flach) ODER shadow-elevation, wenn Tiefe Bedeutung trägt" }
@@ -461,7 +463,7 @@ dead_utilities:   # durch Reset entfernt → Ersatz
 geometry_vs_token:
   spacing: "Padding/Gap/Margin → benanntes Token MAPPE ÜBER DEN px-WERT: gap-2(8)→gap-md · gap-1.5(6)→gap-sm · px-4(16)→px-xl · py-2(8)→py-md · px-3(12)→px-lg · px-6(24)→px-2xl."
   control_geometry: "Control-Höhen/Icon-Maße (h-9/h-8/h-10, size-9, size-4) NUMERISCH lassen — nicht auf der Spacing-Skala. Geometrie ≠ Spacing-Token."
-  radius: "rounded-sm/md/lg/xl/full bleiben; rounded(Base)/2xl/3xl/none meiden."
+  radius: "rounded-sm/md/lg/xl/full bleiben (DS-Re-Mapping); rounded(Base)/xs/2xl/3xl sind TOT (--radius-*: initial, nur DS-Stufen re-mapped)."
 
 keep_valid:
   - "Container-T-Shirt-Namen auf Sizing-Utilities: max-w-sm/md/…, w-lg, basis-md = --container-Skala (24rem/28rem/…), KEINE Spacing-Steps (§3 Kollisions-Regel)"

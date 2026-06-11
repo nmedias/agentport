@@ -169,7 +169,7 @@ export const Textarea: Story = {
           className="min-h-[160px]"
         />
         <InputGroupAddon align="block-start" className="border-b">
-          <InputGroupText className="font-mono font-medium">
+          <InputGroupText className="text-data">
             <RiJavascriptLine />
             script.js
           </InputGroupText>
