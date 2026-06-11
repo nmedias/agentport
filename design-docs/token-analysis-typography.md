@@ -46,10 +46,12 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 ### `reference-typo` — `VariableCollectionId:3081:2`, Mode `value` (`3081:0`)
 
 > **Update 2026-06-11 — reference-Konsolidierung:** `reference-typo` ist aufgelöst — die 22
-> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Typo/*`** (gleiche
-> Unterstruktur: `Typo/family/…`, `Typo/weight/…`, `Typo/size/…`, `Typo/line-height/…`,
-> `Typo/tracking/…`, `Typo/font-scale`). Neue Variable-IDs (`3623:8…29`); alle 48
-> semantic-typo-Aliase umgehängt, Text-Styles unverändert (binden semantic-typo).
+> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Font/*`** (gleiche
+> Unterstruktur: `Font/family/…`, `Font/weight/…`, `Font/size/…`, `Font/line-height/…`,
+> `Font/tracking/…`; `font-scale` heißt jetzt **`Font/scale`**). Neue Variable-IDs (`3623:8…29`);
+> alle 48 semantic-typo-Aliase umgehängt, Text-Styles unverändert (binden semantic-typo).
+> CSS-Primitives folgen dem Figma-Pfad mit `--ap-`-Präfix: `--ap-font-family-sans`,
+> `--ap-font-line-height-tight` (vorher `--leading-tight`), `--ap-font-scale` usw.
 
 22 Variablen, alle `scopes:[]` (nur via Alias), gruppiert:
 - `family/` — `sans` = „Hanken Grotesk", `mono` = „Geist Mono" *(STRING)*

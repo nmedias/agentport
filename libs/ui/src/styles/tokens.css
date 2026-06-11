@@ -6,6 +6,11 @@
    Source of truth is Figma; this file is the export. Single light theme
    (dark mode not set up yet).
 
+   Naming: PRIMITIVES carry the `--ap-` prefix + the Figma path with dashes
+   (Color/neutral/50 → --ap-color-neutral-50; Font/family/sans →
+   --ap-font-family-sans). Figma itself has no prefix. SEMANTICS stay
+   unprefixed (shadcn-compatible names).
+
    Wiring: imported by `globals.css` via `@import`; there the SEMANTICS are
    translated into Tailwind utilities via `@theme inline` (color/radius/spacing/shadow),
    typography via `@utility text-*`. PRIMITIVES stay internal (:root only).
@@ -13,84 +18,103 @@
 
 /* ===========================================================================
    1 · PRIMITIVES  (Figma-Collection: reference — Gruppen Color / Dimension /
-                    Typo / Effect; konsolidiert 2026-06-11)
+                    Font / Effect; konsolidiert 2026-06-11)
    =========================================================================== */
 :root {
 
 
   /* --- Color · base ------------------------------------------------------- */
-  --base-white: #ffffff;
+  --ap-color-base-white: #ffffff;
 
   /* --- Color · neutral ramp  ------------------------ */
-  --neutral-50: #fafbfc;
-  --neutral-100: #f4f6f8;
-  --neutral-200: #e6eaee;
-  --neutral-300: #c4ccd4;
-  --neutral-400: #979fa8;
-  --neutral-450: #79828f;
-  --neutral-500: #6b7585;
-  --neutral-600: #636c7b;
-  --neutral-700: #4a5562;
-  --neutral-900: #1a2230;
+  --ap-color-neutral-50: #fafbfc;
+  --ap-color-neutral-100: #f4f6f8;
+  --ap-color-neutral-200: #e6eaee;
+  --ap-color-neutral-300: #c4ccd4;
+  --ap-color-neutral-400: #979fa8;
+  --ap-color-neutral-450: #79828f;
+  --ap-color-neutral-500: #6b7585;
+  --ap-color-neutral-600: #636c7b;
+  --ap-color-neutral-700: #4a5562;
+  --ap-color-neutral-900: #1a2230;
 
   /* --- Color · cyan  -- */
-  --cyan-50: #e9f6fc;
-  --cyan-500: #0098da;
-  --cyan-700: #0077a8;
+  --ap-color-cyan-50: #e9f6fc;
+  --ap-color-cyan-500: #0098da;
+  --ap-color-cyan-700: #0077a8;
 
-  /* --- Opacity ------------------------------------------------------------
-     Figma mirror: reference opacity/10 = 10 (opacity variables use the 0–100
-     percent scale there); CSS keeps the % unit. */
-  --opacity-10: 10%;
+  /* --- Color · opacity ------------------------------------------------------
+     Figma mirror: reference Color/opacity/10 = 10 (opacity variables use the
+     0–100 percent scale there); CSS keeps the % unit. */
+  --ap-color-opacity-10: 10%;
 
-  /* --- Radius scale ------------------------------------------------------- */
-  --radius-4: 4px;
-  --radius-6: 6px;
-  --radius-8: 8px;
-  --radius-16: 16px;
-  --radius-pill: 9999px;
+  /* --- Dimension · radius scale -------------------------------------------- */
+  --ap-dimension-radius-4: 4px;
+  --ap-dimension-radius-6: 6px;
+  --ap-dimension-radius-8: 8px;
+  --ap-dimension-radius-16: 16px;
+  --ap-dimension-radius-full: 9999px;
 
-  /* --- Typography · families ----------------------------------------------
+  /* --- Dimension · space base ----------------------------------------------
+     4px base unit; the semantic space steps multiply it (§4). */
+  --ap-dimension-space-base: 0.25rem;
+
+  /* --- Font · families ------------------------------------------------------
      Primary = the self-hosted variable family (@fontsource-variable, registered
      as "… Variable"); plain name + system fonts as fallback. */
-  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, sans-serif;
-  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  --ap-font-family-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, sans-serif;
+  --ap-font-family-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
 
-  /* --- Typography · weights ----------------------------------------------- */
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-extrabold: 800;
+  /* --- Font · weights ------------------------------------------------------ */
+  --ap-font-weight-regular: 400;
+  --ap-font-weight-medium: 500;
+  --ap-font-weight-semibold: 600;
+  --ap-font-weight-extrabold: 800;
 
-  /* --- Typography · size scale (modular) ---------------------------------
-     Modular scale: --font-size-base (14px = design body, Step 0) × --font-scale^n.
-     `round(…, 0.0625rem)` rounds each step to whole px (0.0625rem = 1px @ root 16).
-     Browser root stays 16px; rem scales with it. step-4 (34px) is spare (no format). */
-  --font-scale: 1.25;
-  /* Powers precomputed once → short step formulas (instead of multiplying n×) */
-  --font-scale-2: calc(var(--font-scale) * var(--font-scale));
-  --font-scale-3: calc(var(--font-scale-2) * var(--font-scale));
-  --font-scale-4: calc(var(--font-scale-3) * var(--font-scale));
-  --font-scale-5: calc(var(--font-scale-4) * var(--font-scale));
-  --font-size-base: 0.875rem;  /* 14px — Step 0 (Body) */
-  --font-size-step-neg2: round(calc(var(--font-size-base) / var(--font-scale-2)), 0.0625rem); /* 9px  */
-  --font-size-step-neg1: round(calc(var(--font-size-base) / var(--font-scale)),   0.0625rem); /* 11px */
-  --font-size-step-0:    var(--font-size-base);                                               /* 14px */
-  --font-size-step-1:    round(calc(var(--font-size-base) * var(--font-scale)),   0.0625rem); /* 18px */
-  --font-size-step-2:    round(calc(var(--font-size-base) * var(--font-scale-2)), 0.0625rem); /* 22px */
-  --font-size-step-3:    round(calc(var(--font-size-base) * var(--font-scale-3)), 0.0625rem); /* 27px */
-  --font-size-step-4:    round(calc(var(--font-size-base) * var(--font-scale-4)), 0.0625rem); /* 34px — spare */
-  --font-size-step-5:    round(calc(var(--font-size-base) * var(--font-scale-5)), 0.0625rem); /* 43px — Display */
+  /* --- Font · size scale (modular) -----------------------------------------
+     Modular scale: --ap-font-size-base (14px = design body, Step 0) ×
+     --ap-font-scale^n. `round(…, 0.0625rem)` rounds each step to whole px
+     (0.0625rem = 1px @ root 16). Browser root stays 16px; rem scales with it.
+     step-4 (34px) is spare (no format). Figma: Font/scale, Font/size/*. */
+  --ap-font-scale: 1.25;
+  /* Powers precomputed once → short step formulas (CSS-only helpers, no Figma vars) */
+  --ap-font-scale-2: calc(var(--ap-font-scale) * var(--ap-font-scale));
+  --ap-font-scale-3: calc(var(--ap-font-scale-2) * var(--ap-font-scale));
+  --ap-font-scale-4: calc(var(--ap-font-scale-3) * var(--ap-font-scale));
+  --ap-font-scale-5: calc(var(--ap-font-scale-4) * var(--ap-font-scale));
+  --ap-font-size-base: 0.875rem;  /* 14px — Step 0 (Body) */
+  --ap-font-size-step-neg2: round(calc(var(--ap-font-size-base) / var(--ap-font-scale-2)), 0.0625rem); /* 9px  */
+  --ap-font-size-step-neg1: round(calc(var(--ap-font-size-base) / var(--ap-font-scale)),   0.0625rem); /* 11px */
+  --ap-font-size-step-0:    var(--ap-font-size-base);                                                   /* 14px */
+  --ap-font-size-step-1:    round(calc(var(--ap-font-size-base) * var(--ap-font-scale)),   0.0625rem); /* 18px */
+  --ap-font-size-step-2:    round(calc(var(--ap-font-size-base) * var(--ap-font-scale-2)), 0.0625rem); /* 22px */
+  --ap-font-size-step-3:    round(calc(var(--ap-font-size-base) * var(--ap-font-scale-3)), 0.0625rem); /* 27px */
+  --ap-font-size-step-4:    round(calc(var(--ap-font-size-base) * var(--ap-font-scale-4)), 0.0625rem); /* 34px — spare */
+  --ap-font-size-step-5:    round(calc(var(--ap-font-size-base) * var(--ap-font-scale-5)), 0.0625rem); /* 43px — Display */
 
-  /* --- Typography · line-heights - */
-  --leading-tight: 1;
-  --leading-snug: 1.2;
-  --leading-relaxed: 1.5;
+  /* --- Font · line-heights - */
+  --ap-font-line-height-tight: 1;
+  --ap-font-line-height-snug: 1.2;
+  --ap-font-line-height-relaxed: 1.5;
 
-  /* --- Typography · tracking (px) ----------------------------------------- */
-  --tracking-tight: -0.5px;
-  --tracking-normal: 0;
-  --tracking-wide: 0.5px;
+  /* --- Font · tracking (px) ------------------------------------------------ */
+  --ap-font-tracking-tight: -0.5px;
+  --ap-font-tracking-normal: 0;
+  --ap-font-tracking-wide: 0.5px;
+
+  /* --- Effect · shadow parts ------------------------------------------------
+     Figma: Effect/glow/* + Effect/elevation/* (bound by the Effect Styles).
+     Colours carry their alpha via color-mix on the colour primitives. */
+  --ap-effect-glow-x: 0px;
+  --ap-effect-glow-y: 0px;
+  --ap-effect-glow-blur: 4px;
+  --ap-effect-glow-spread: 0px;
+  --ap-effect-glow-color: color-mix(in srgb, var(--ap-color-cyan-500) 50%, transparent);
+  --ap-effect-elevation-x: 0px;
+  --ap-effect-elevation-y: 14px;
+  --ap-effect-elevation-blur: 36px;
+  --ap-effect-elevation-spread: -6px;
+  --ap-effect-elevation-color: color-mix(in srgb, var(--ap-color-neutral-900) 18%, transparent);
 }
 
 :root{
@@ -100,49 +124,49 @@
      =========================================================================== */
 
   /* --- Surfaces & text (shadcn) ------------------------------------------- */
-  --background:          var(--base-white);
-  --foreground:          var(--neutral-900);
-  --card:                var(--neutral-50);
-  --card-foreground:     var(--neutral-900);
-  --primary:             var(--cyan-500);
-  --primary-foreground:  var(--base-white);
-  --muted:               var(--neutral-100);
-  --muted-foreground:    var(--neutral-600);
-  --accent:              var(--cyan-50);
-  --accent-foreground:   var(--cyan-700);
-  --border:              var(--neutral-200);
-  --input:               var(--neutral-450);   /* form control border (AA ≥3:1) */
-  --ring:                var(--neutral-700);    /* focus */
+  --background:          var(--ap-color-base-white);
+  --foreground:          var(--ap-color-neutral-900);
+  --card:                var(--ap-color-neutral-50);
+  --card-foreground:     var(--ap-color-neutral-900);
+  --primary:             var(--ap-color-cyan-500);
+  --primary-foreground:  var(--ap-color-base-white);
+  --muted:               var(--ap-color-neutral-100);
+  --muted-foreground:    var(--ap-color-neutral-600);
+  --accent:              var(--ap-color-cyan-50);
+  --accent-foreground:   var(--ap-color-cyan-700);
+  --border:              var(--ap-color-neutral-200);
+  --input:               var(--ap-color-neutral-450);   /* form control border (AA ≥3:1) */
+  --ring:                var(--ap-color-neutral-700);    /* focus */
   /* shadcn components reference --popover → mapped onto overlay */
   --popover:             var(--overlay);
   --popover-foreground:  var(--overlay-foreground);
 
   /* --- Sidebar (shadcn) --------------------------------------------------- */
-  --sidebar:                     var(--neutral-100);
-  --sidebar-foreground:          var(--neutral-900);
-  --sidebar-primary:             var(--cyan-700);
-  --sidebar-primary-foreground:  var(--base-white);
-  --sidebar-accent:              var(--cyan-50);
-  --sidebar-accent-foreground:   var(--cyan-700);
-  --sidebar-border:              var(--neutral-200);
-  --sidebar-ring:                var(--neutral-700);
+  --sidebar:                     var(--ap-color-neutral-100);
+  --sidebar-foreground:          var(--ap-color-neutral-900);
+  --sidebar-primary:             var(--ap-color-cyan-700);
+  --sidebar-primary-foreground:  var(--ap-color-base-white);
+  --sidebar-accent:              var(--ap-color-cyan-50);
+  --sidebar-accent-foreground:   var(--ap-color-cyan-700);
+  --sidebar-border:              var(--ap-color-neutral-200);
+  --sidebar-ring:                var(--ap-color-neutral-700);
 
   /* --- Custom (Agentport) --------------------------------------------------- */
-  --input-placeholder:   var(--neutral-400);
-  --input-background:    var(--neutral-100);
-  --background-fixed:    var(--base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
-  --border-emphasis:     var(--neutral-300);
-  --border-strong:       var(--neutral-700);
-  --inverse:             var(--neutral-900);
-  --inverse-foreground:  var(--neutral-50);
+  --input-placeholder:   var(--ap-color-neutral-400);
+  --input-background:    var(--ap-color-neutral-100);
+  --background-fixed:    var(--ap-color-base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
+  --border-emphasis:     var(--ap-color-neutral-300);
+  --border-strong:       var(--ap-color-neutral-700);
+  --inverse:             var(--ap-color-neutral-900);
+  --inverse-foreground:  var(--ap-color-neutral-50);
   /* --- Overlay (= shadcn popover, renamed) -------------------------------- */
-  --overlay:             var(--base-white);
-  --overlay-foreground:  var(--neutral-900);
+  --overlay:             var(--ap-color-base-white);
+  --overlay-foreground:  var(--ap-color-neutral-900);
   /* modal backdrop dimmer — colour (alias neutral/900) × strength (scrim-opacity,
      alias opacity/10) composed via color-mix. Figma composes the same pair on
      .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */
-  --scrim-opacity:       var(--opacity-10);
-  --scrim:               color-mix(in srgb, var(--neutral-900) var(--scrim-opacity), transparent);
+  --scrim-opacity:       var(--ap-color-opacity-10);
+  --scrim:               color-mix(in srgb, var(--ap-color-neutral-900) var(--scrim-opacity), transparent);
 
 
   /* --- ⚠ Placeholders (shadcn defaults, not yet designed) ------------------ */
@@ -160,17 +184,17 @@
   /* ===========================================================================
      3 · SEMANTIC · RADIUS  (Collection: semantic-dimension, group Radius)
      =========================================================================== */
-  --radius-sm:   var(--radius-4);
-  --radius-md:   var(--radius-6);
-  --radius-lg:   var(--radius-8);
-  --radius-xl:   var(--radius-16);
-  --radius-full: var(--radius-pill);
+  --radius-sm:   var(--ap-dimension-radius-4);
+  --radius-md:   var(--ap-dimension-radius-6);
+  --radius-lg:   var(--ap-dimension-radius-8);
+  --radius-xl:   var(--ap-dimension-radius-16);
+  --radius-full: var(--ap-dimension-radius-full);
 
 
   /* ===========================================================================
      4 · SEMANTIC · SPACING  (Collection: semantic-dimension, group Space)
      =========================================================================== */
-  --space-base: 0.25rem;                       /* 4px — base unit */
+  --space-base: var(--ap-dimension-space-base); /* 4px — base unit (reference) */
   --space-2xs: calc(var(--space-base) * 0.5);  /* 2px */
   --space-xs:  var(--space-base);              /* 4px */
   --space-sm:  calc(var(--space-base) * 1.5);  /* 6px */
@@ -188,86 +212,86 @@
      =========================================================================== */
 
   /* Display */
-  --text-display-family:   var(--font-sans);
-  --text-display-size:     var(--font-size-step-5);
-  --text-display-weight:   var(--font-weight-extrabold);
-  --text-display-leading:  var(--leading-tight);
-  --text-display-tracking: var(--tracking-tight);
+  --text-display-family:   var(--ap-font-family-sans);
+  --text-display-size:     var(--ap-font-size-step-5);
+  --text-display-weight:   var(--ap-font-weight-extrabold);
+  --text-display-leading:  var(--ap-font-line-height-tight);
+  --text-display-tracking: var(--ap-font-tracking-tight);
 
   /* Heading */
-  --text-heading-family:   var(--font-sans);
-  --text-heading-size:     var(--font-size-step-3);
-  --text-heading-weight:   var(--font-weight-extrabold);
-  --text-heading-leading:  var(--leading-snug);
-  --text-heading-tracking: var(--tracking-tight);
+  --text-heading-family:   var(--ap-font-family-sans);
+  --text-heading-size:     var(--ap-font-size-step-3);
+  --text-heading-weight:   var(--ap-font-weight-extrabold);
+  --text-heading-leading:  var(--ap-font-line-height-snug);
+  --text-heading-tracking: var(--ap-font-tracking-tight);
 
   /* Heading-sm */
-  --text-heading-sm-family:   var(--font-sans);
-  --text-heading-sm-size:     var(--font-size-step-2);
-  --text-heading-sm-weight:   var(--font-weight-extrabold);
-  --text-heading-sm-leading:  var(--leading-snug);
-  --text-heading-sm-tracking: var(--tracking-tight);
+  --text-heading-sm-family:   var(--ap-font-family-sans);
+  --text-heading-sm-size:     var(--ap-font-size-step-2);
+  --text-heading-sm-weight:   var(--ap-font-weight-extrabold);
+  --text-heading-sm-leading:  var(--ap-font-line-height-snug);
+  --text-heading-sm-tracking: var(--ap-font-tracking-tight);
 
   /* Title */
-  --text-title-family:   var(--font-sans);
-  --text-title-size:     var(--font-size-step-1);
-  --text-title-weight:   var(--font-weight-semibold);
+  --text-title-family:   var(--ap-font-family-sans);
+  --text-title-size:     var(--ap-font-size-step-1);
+  --text-title-weight:   var(--ap-font-weight-semibold);
   --text-title-leading:  normal;
-  --text-title-tracking: var(--tracking-normal);
+  --text-title-tracking: var(--ap-font-tracking-normal);
 
   /* Body */
-  --text-body-family:   var(--font-sans);
-  --text-body-size:     var(--font-size-step-0);
-  --text-body-weight:   var(--font-weight-regular);
-  --text-body-leading:  var(--leading-relaxed);
-  --text-body-tracking: var(--tracking-normal);
+  --text-body-family:   var(--ap-font-family-sans);
+  --text-body-size:     var(--ap-font-size-step-0);
+  --text-body-weight:   var(--ap-font-weight-regular);
+  --text-body-leading:  var(--ap-font-line-height-relaxed);
+  --text-body-tracking: var(--ap-font-tracking-normal);
 
   /* Body-strong */
-  --text-body-strong-family:   var(--font-sans);
-  --text-body-strong-size:     var(--font-size-step-0);
-  --text-body-strong-weight:   var(--font-weight-semibold);
+  --text-body-strong-family:   var(--ap-font-family-sans);
+  --text-body-strong-size:     var(--ap-font-size-step-0);
+  --text-body-strong-weight:   var(--ap-font-weight-semibold);
   --text-body-strong-leading:  normal;
-  --text-body-strong-tracking: var(--tracking-normal);
+  --text-body-strong-tracking: var(--ap-font-tracking-normal);
 
   /* Label */
-  --text-label-family:   var(--font-sans);
-  --text-label-size:     var(--font-size-step-0);
-  --text-label-weight:   var(--font-weight-medium);
+  --text-label-family:   var(--ap-font-family-sans);
+  --text-label-size:     var(--ap-font-size-step-0);
+  --text-label-weight:   var(--ap-font-weight-medium);
   --text-label-leading:  normal;
-  --text-label-tracking: var(--tracking-normal);
+  --text-label-tracking: var(--ap-font-tracking-normal);
 
   /* Eyebrow (uppercase micro-labels) */
-  --text-eyebrow-family:   var(--font-mono);
-  --text-eyebrow-size:     var(--font-size-step-neg2);
-  --text-eyebrow-weight:   var(--font-weight-medium);
+  --text-eyebrow-family:   var(--ap-font-family-mono);
+  --text-eyebrow-size:     var(--ap-font-size-step-neg2);
+  --text-eyebrow-weight:   var(--ap-font-weight-medium);
   --text-eyebrow-leading:  normal;
-  --text-eyebrow-tracking: var(--tracking-wide);
+  --text-eyebrow-tracking: var(--ap-font-tracking-wide);
 
   /* Data (mono table data) */
-  --text-data-family:   var(--font-mono);
-  --text-data-size:     var(--font-size-step-neg1);
-  --text-data-weight:   var(--font-weight-regular);
+  --text-data-family:   var(--ap-font-family-mono);
+  --text-data-size:     var(--ap-font-size-step-neg1);
+  --text-data-weight:   var(--ap-font-weight-regular);
   --text-data-leading:  normal;
-  --text-data-tracking: var(--tracking-normal);
+  --text-data-tracking: var(--ap-font-tracking-normal);
 
   /* Kbd (keyboard keys) */
-  --text-kbd-family:   var(--font-mono);
-  --text-kbd-size:     var(--font-size-step-neg1);
-  --text-kbd-weight:   var(--font-weight-medium);
+  --text-kbd-family:   var(--ap-font-family-mono);
+  --text-kbd-size:     var(--ap-font-size-step-neg1);
+  --text-kbd-weight:   var(--ap-font-weight-medium);
   --text-kbd-leading:  normal;
-  --text-kbd-tracking: var(--tracking-normal);
+  --text-kbd-tracking: var(--ap-font-tracking-normal);
 
   /* Input (command/input text) */
-  --text-input-family:   var(--font-mono);
-  --text-input-size:     var(--font-size-step-1);
-  --text-input-weight:   var(--font-weight-regular);
+  --text-input-family:   var(--ap-font-family-mono);
+  --text-input-size:     var(--ap-font-size-step-1);
+  --text-input-weight:   var(--ap-font-weight-regular);
   --text-input-leading:  normal;
-  --text-input-tracking: var(--tracking-normal);
+  --text-input-tracking: var(--ap-font-tracking-normal);
 
 
   /* ===========================================================================
      6 · SEMANTIC · SHADOWS  (Figma: reference, Gruppe Effect → Effect Styles)
      =========================================================================== */
-  --shadow-glow:      0 0 4px 0 color-mix(in srgb, var(--cyan-500) 50%, transparent);
-  --shadow-elevation: 0 14px 36px -6px color-mix(in srgb, var(--neutral-900) 18%, transparent);
+  --shadow-glow:      var(--ap-effect-glow-x) var(--ap-effect-glow-y) var(--ap-effect-glow-blur) var(--ap-effect-glow-spread) var(--ap-effect-glow-color);
+  --shadow-elevation: var(--ap-effect-elevation-x) var(--ap-effect-elevation-y) var(--ap-effect-elevation-blur) var(--ap-effect-elevation-spread) var(--ap-effect-elevation-color);
 }

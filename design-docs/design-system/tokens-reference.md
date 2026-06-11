@@ -26,9 +26,11 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 
 ```
 Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
-  reference = Primitives, EINE Collection mit Gruppen Color/ Dimension/ Typo/ Effect (scopes:[]
+  reference = Primitives, EINE Collection mit Gruppen Color/ Dimension/ Font/ Effect (scopes:[]
               alias-only; Ausnahme Effect/* = EFFECT_*-Scopes, direkt von den Effect Styles gebunden)
   semantic* = Semantics (Alias → Primitive)
+  CSS-Naming: Primitives = --ap-<figma-pfad-mit-dashes> (Color/neutral/50 → --ap-color-neutral-50,
+              Font/family/sans → --ap-font-family-sans); Figma ohne Präfix; Semantics unpräfixt.
         │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, dann SEMANTICS via var())
         │ Brücke → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
         │          tw-variants.css (@custom-variant) — Entry/Seam: globals.css (importiert alle)
@@ -38,13 +40,13 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
 
 ## 1 · Farbe
 
-Primitives (intern):
+Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`):
 
 ```yaml
 base/white: "#ffffff"
 neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }
 cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand #009FE3 → #0098DA (≥3:1, WCAG 1.4.11)
-opacity: { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --opacity-10: 10%" }
+opacity: { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --ap-color-opacity-10: 10%" }
 ```
 
 Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}`. Für
@@ -412,7 +414,7 @@ statt einzelner `text-`/`font-`-Utilities (Letztere durch Theme-Reset tot, §6).
 - { format: text-input,       family: mono, size: 18, weight: 400, line_height: auto, tracking: 0,      use: "Command-/Eingabe-Text.", avoid: "Typo-Klasse — nicht als Text-Farbe input missverstehen." }
 ```
 
-*Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS `--leading-*` bzw. `normal`.*
+*Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS `--ap-font-line-height-*` bzw. `normal`.*
 
 ---
 

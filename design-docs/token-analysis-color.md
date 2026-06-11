@@ -14,7 +14,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
 
 - **Collection `reference`** · Mode `default` · alle `scopes:[]` (nur via Alias nutzbar):
   > **Update 2026-06-11 — Konsolidierung:** `reference` ist jetzt die **einzige** Primitive-Collection
-  > mit den Top-Gruppen **`Color/ · Dimension/ · Typo/ · Effect/`** (`reference-dimension`/`-typo`/
+  > mit den Top-Gruppen **`Color/ · Dimension/ · Font/ · Effect/`** (`reference-dimension`/`-typo`/
   > `-effect` aufgelöst; deren Primitives neu angelegt → neue IDs, 54 Aliase + 2 Effect-Styles
   > umgehängt, Sweep 0 Rest-Bindungen). Die Farb-Primitives unten heißen seither `Color/base/white`,
   > `Color/neutral/*`, `Color/cyan/*`, `Color/opacity/*` — nur Rename, **IDs unverändert**.
@@ -121,6 +121,15 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
   > `--opacity-10: 10%` (Primitive) · `--scrim-opacity: var(--opacity-10)` ·
   > `--scrim: color-mix(in srgb, var(--neutral-900) var(--scrim-opacity), transparent)` —
   > `bg-scrim` für Konsumenten unverändert.
+- **Naming-Konvention CSS-Primitives (2026-06-11):** alle Reference-CSS-Vars heißen
+  **`--ap-<figma-pfad-mit-dashes>`** (`Color/neutral/50` → `--ap-color-neutral-50`,
+  `Font/family/sans` → `--ap-font-family-sans`, `Effect/glow/spread` → `--ap-effect-glow-spread`);
+  Figma trägt **keinen** Präfix. Semantics bleiben unpräfixt (shadcn-kompatibel). Dabei angeglichen:
+  Figma-Gruppe `Typo/` → **`Font/`**, `Typo/font-scale` → **`Font/scale`**; CSS `--leading-*` →
+  `--ap-font-line-height-*`, `--radius-pill` → `--ap-dimension-radius-full` (= Figma `radius/full`),
+  `--space-base`-Wert → Primitive `--ap-dimension-space-base`; die 10 **Effect-Primitives**
+  (`--ap-effect-{glow,elevation}-{x,y,blur,spread,color}`) existieren jetzt auch im CSS und
+  komponieren `--shadow-glow`/`--shadow-elevation`.
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter
   (Raw-Hex, shadcn-Defaults) **angelegt**, damit das volle shadcn-Set in Figma steht (waren im Repo-CSS nicht
   enthalten). Semantic-Collection jetzt 38 Variablen, davon 9 Platzhalter.

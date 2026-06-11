@@ -58,7 +58,7 @@
   /* Re-provide CSS-wide color keywords after the color reset */
   --color-transparent: transparent;
   --color-current: currentColor;
-  --color-white: var(--base-white);
+  --color-white: var(--ap-color-base-white);
 
   /* Color */
   --color-background: var(--background);
@@ -121,8 +121,8 @@
 
   /* Typography · families — declared explicitly (don't silently ride Tailwind's
      default --font-* namespace); value owned by tokens.css. */
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --font-sans: var(--ap-font-family-sans);
+  --font-mono: var(--ap-font-family-mono);
 
   /* Spacing — numeric scale base only (p-4, gap-2, h-9 = n × --spacing).
      The named steps are deliberately NOT on --spacing-*: that namespace feeds
