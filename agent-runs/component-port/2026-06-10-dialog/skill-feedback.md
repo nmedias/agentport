@@ -89,3 +89,19 @@ Lösung: Assertion über canvas-interne Zustände (Trigger-`aria-expanded` via j
 canvas-interne ARIA-Zustände des Triggers asserten (Deep-Assertions ins Portal gehören in die Spec,
 nicht in die Story)."
 **Status:** open
+
+## 7. T6 — „rendered-output check" ist zahnlos, wenn nur URLs gereicht werden
+
+**Gap:** T6 sagt „preview-stories → surface every URL (rendered-output check)" — der Run hat die URLs
+gereicht, das Rendering aber nie inspiziert. So shippte der Port `sm:max-w-sm`, das durch die
+`--spacing-*`/`--container`-Kollision (benannte Steps schatteten die Container-Skala in
+w/min-w/max-w/basis) als **6px** statt 24rem kompilierte. Gate (lint/test/typecheck) und Spec-
+Klassen-Assertions sehen kompilierte CSS-Werte prinzipiell nicht; /figma-verify prüft nur Figma.
+Der User fand den Bug, nicht das Verfahren. (Kollision inzwischen gefixt: Steps via @utility nur auf
+gap/p/m — tokens-reference §3 Kollisions-Regel.)
+**Verified:** Dialog-Run + Folge-Fix 2026-06-11; Dist-CSS zeigte `max-width: var(--spacing-sm)` = 6px.
+**Candidate fix:** T6 verschärfen: mindestens eine Story **gerendert prüfen** (Browser/Screenshot,
+nicht nur URL ausgeben) mit Blick auf Geometrie (Breiten/Höhen plausibel?); zusätzlich bei Nutzung
+von T-Shirt-Namen auf Sizing-Utilities (`max-w-*`, `w-*`, `basis-*`) gegen tokens-reference §3
+Kollisions-Regel prüfen. Alternativ ein Dist-CSS-Grep der neuen Klassen auf erwartete Werte.
+**Status:** open (Kollision selbst gefixt `5b62f77`; das Verfahrens-Loch bleibt offen)
