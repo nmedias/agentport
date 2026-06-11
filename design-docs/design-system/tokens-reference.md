@@ -411,9 +411,12 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 
 ## 4 · Typografie — 11 Formate
 
-Composition-Utilities (`@utility text-<format>` in tw-utilities.css, mehrwertig:
+Composition-Utilities (`@utility text-format-<format>` in tw-utilities.css, mehrwertig:
 family+size+weight+line-height+tracking) → **eine Klasse** statt einzelner `text-`/`font-`-Utilities
-(Letztere durch Theme-Reset tot, §6). Jedes Format besteht aus **5 Teil-Tokens**: Figma
+(Letztere durch Theme-Reset tot, §6). **Naming `text-format-*` (seit 2026-06-11):** der frühere
+Name `text-<format>` kollidierte mit Tailwinds generierten Farb-Utilities — `text-input` war
+gleichzeitig Format-Klasse und Farbe aus `--color-input` (beide Regeln im CSS). Jedes Format
+besteht aus **5 Teil-Tokens**: Figma
 `<OrgGruppe>/<format>/<part>` (semantic-typo; Text-Styles binden sie) ↔ CSS
 `--ap-sys-<format>-<part>`. Org-Gruppen: Display · Heading (heading, heading-sm) · Title ·
 Body (body, body-strong) · Label · Eyebrow · Data · Kbd · Input.
@@ -437,79 +440,79 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
   css_var: "--ap-sys-display-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-5, weight: weight/extrabold, line-height: line-height/tight, tracking: tracking/tight }
   value: { family: sans, size: 43, weight: 800, line-height: 1.0, tracking: "-0.5px" }
-  utilities: [text-display]
+  utilities: [text-format-display]
   use: "Hero-Headline."
 
 - token: heading
   css_var: "--ap-sys-heading-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-3, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
   value: { family: sans, size: 27, weight: 800, line-height: 1.2, tracking: "-0.5px" }
-  utilities: [text-heading]
+  utilities: [text-format-heading]
   use: "Überschrift."
 
 - token: heading-sm
   css_var: "--ap-sys-heading-sm-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-2, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
   value: { family: sans, size: 22, weight: 800, line-height: 1.2, tracking: "-0.5px" }
-  utilities: [text-heading-sm]
+  utilities: [text-format-heading-sm]
   use: "Kleinere Überschrift."
 
 - token: title
   css_var: "--ap-sys-title-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-1, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 18, weight: 600, line-height: normal, tracking: "0" }
-  utilities: [text-title]
+  utilities: [text-format-title]
   use: "Abschnitts-/Sektions-Titel."
 
 - token: body
   css_var: "--ap-sys-body-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/regular, line-height: line-height/relaxed, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 400, line-height: 1.5, tracking: "0" }
-  utilities: [text-body]
+  utilities: [text-format-body]
   use: "Fließtext; Body-Default der App."
 
 - token: body-strong
   css_var: "--ap-sys-body-strong-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 600, line-height: normal, tracking: "0" }
-  utilities: [text-body-strong]
+  utilities: [text-format-body-strong]
   use: "Betonter Fließtext."
 
 - token: label
   css_var: "--ap-sys-label-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/medium, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 500, line-height: normal, tracking: "0" }
-  utilities: [text-label]
+  utilities: [text-format-label]
   use: "Labels: Form-/Toggle-Labels, Button-Text."
 
 - token: eyebrow
   css_var: "--ap-sys-eyebrow-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg2, weight: weight/medium, line-height: normal, tracking: tracking/wide }
   value: { family: mono, size: 9, weight: 500, line-height: normal, tracking: "0.5px" }
-  utilities: [text-eyebrow]
+  utilities: [text-format-eyebrow]
   use: "Uppercase-Mikro-Labels."
 
 - token: data
   css_var: "--ap-sys-data-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 11, weight: 400, line-height: normal, tracking: "0" }
-  utilities: [text-data]
+  utilities: [text-format-data]
   use: "Tabellarische Mono-Daten (auch Dateinamen u. ä.)."
 
 - token: kbd
   css_var: "--ap-sys-kbd-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg1, weight: weight/medium, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 11, weight: 500, line-height: normal, tracking: "0" }
-  utilities: [text-kbd]
+  utilities: [text-format-kbd]
   use: "Tastatur-Tasten-Text."
 
 - token: input
   css_var: "--ap-sys-input-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 18, weight: 400, line-height: normal, tracking: "0" }
-  utilities: [text-input]
+  utilities: [text-format-input]
   use: "Command-/Eingabe-Text."
-  avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln."
+  avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln; die alte Klasse text-input kollidierte genau damit (Grund des text-format-*-Renames)."
 ```
 
 *Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS
@@ -560,11 +563,11 @@ Stock-Klassen sind **tot** → beim Portieren jeder Component übersetzen.
 
 ```yaml
 dead_utilities:   # durch Reset entfernt → Ersatz
-  - { stock: "text-xs/sm/base/lg/… (font-size)", reset: "--text-*: initial",        replace: "passende .text-*-Format-Klasse (§4)" }
-  - { stock: "font-normal/medium/semibold/bold", reset: "--font-weight-*: initial",  replace: "Gewicht steckt in der .text-*-Klasse" }
-  - { stock: "font-sans/font-mono (family)",     reset: "--font-*: initial",         replace: "Familie steckt in der .text-*-Klasse (mono → text-data/-kbd/-eyebrow/-input)" }
-  - { stock: "tracking-*",                       reset: "--tracking-*: initial",     replace: "steckt in der .text-*-Klasse" }
-  - { stock: "leading-*",                        reset: "--leading-*: initial",      replace: "steckt in der .text-*-Klasse" }
+  - { stock: "text-xs/sm/base/lg/… (font-size)", reset: "--text-*: initial",        replace: "passende .text-format-*-Klasse (§4)" }
+  - { stock: "font-normal/medium/semibold/bold", reset: "--font-weight-*: initial",  replace: "Gewicht steckt in der .text-format-*-Klasse" }
+  - { stock: "font-sans/font-mono (family)",     reset: "--font-*: initial",         replace: "Familie steckt in der .text-format-*-Klasse (mono → text-format-data/-kbd/-eyebrow/-input)" }
+  - { stock: "tracking-*",                       reset: "--tracking-*: initial",     replace: "steckt in der .text-format-*-Klasse" }
+  - { stock: "leading-*",                        reset: "--leading-*: initial",      replace: "steckt in der .text-format-*-Klasse" }
   - { stock: "shadow-xs/sm/md/lg/xl",            reset: "--shadow-*: initial",       replace: "weglassen (flach) ODER shadow-elevation, wenn Tiefe Bedeutung trägt" }
   - { stock: "Core-Farben (text-red-500 …)",     reset: "--color-*: initial",        replace: "nur DS-Semantics; text-white/current/transparent bleiben" }
 

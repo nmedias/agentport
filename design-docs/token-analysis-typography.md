@@ -9,9 +9,15 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 > (223 Text-Nodes klassifiziert, 0 Fehler). Kategorie komplett.
 >
 > **Update 2026-06-11 — erster Code-Konsument für `Input`:** Die Command-palette-Variante (libs/ui)
-> nutzt `text-input` (Mono 18) auf dem Prompt-Feld — erster Code-Konsument des Input-Formats
-> (der Default-Command nutzt bewusst `text-label`, vgl. components-reference). Figma-Pendant:
+> nutzt `text-format-input` (Mono 18) auf dem Prompt-Feld — erster Code-Konsument des Input-Formats
+> (der Default-Command nutzt bewusst `text-format-label`, vgl. components-reference). Figma-Pendant:
 > Text Style `Input` auf value/placeholder im `.Command/Input`-palette-Member 3638:8.
+>
+> **Update 2026-06-11 — Utility-Rename `text-<format>` → `text-format-<format>`:** der alte Name
+> kollidierte mit Tailwinds generierten Farb-Utilities (`text-input` = Format-Klasse UND Farbe aus
+> `--color-input` — beide Regeln im CSS). Alle 11 `@utility`-Klassen, alle Code-Nutzungen und der
+> twMerge-Gruppen-Matcher (`utils.ts`) umbenannt; CSS-Variablen, Figma-Variablen und Text Styles
+> unverändert. Details: tokens-reference §4.
 
 ## Befund (Screen-Scan, read-only)
 

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 // (see design-docs/design-system/tokens-reference.md §6). Sibling of Input
 // — same field tokens, same state language, taller box:
 //  bg-transparent → bg-input-background (DS fields are opaque, carried by the
-//  input border) · text-base/md:text-sm → text-label (Label format, Medium 14 —
+//  input border) · text-base/md:text-sm → text-format-label (Label format, Medium 14 —
 //  the DS form-control text, same as Input/Button) · placeholder:text-muted-
 //  foreground → placeholder:text-input-placeholder (dedicated field token) ·
 //  disabled:bg-input/50 dropped (DS disabled = opacity dim only) · dark: dropped.
@@ -19,7 +19,7 @@ function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
     <textarea
       data-slot="textarea"
       className={cn(
-        'field-sizing-content min-h-16 w-full corner-lg border border-input bg-input-background px-md py-md text-label transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-input-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        'field-sizing-content min-h-16 w-full corner-lg border border-input bg-input-background px-md py-md text-format-label transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-input-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
         'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
         className

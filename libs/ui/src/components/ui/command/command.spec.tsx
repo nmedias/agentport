@@ -68,12 +68,12 @@ describe('Command', () => {
 
   // Guards the T1 twMerge setup: the DS typography classes must survive in the markup
   // (text-format group, else they collapse under text-color and get dropped).
-  it('keeps the DS typography classes (text-label on the field, text-body on items)', () => {
+  it('keeps the DS typography classes (text-format-label on the field, text-format-body on items)', () => {
     const { getByPlaceholderText, getByText } = render(<Palette />);
-    expect(getByPlaceholderText('Search…').className).toContain('text-label');
+    expect(getByPlaceholderText('Search…').className).toContain('text-format-label');
     expect(
       getByText('Profile').closest('[data-slot=command-item]')?.className
-    ).toContain('text-body');
+    ).toContain('text-format-body');
   });
 });
 
@@ -118,15 +118,14 @@ describe('Command palette variant', () => {
   });
 
   // Context inheritance: the input switches anatomy from the root variant alone —
-  // prompt row instead of InputGroup, with caret bar, Kbd Esc and the mono text-input
+  // prompt row instead of InputGroup, with caret bar, Kbd Esc and the mono text-format-input
   // format (text-format twMerge group must keep it alive next to text-foreground).
   it('switches the input to the prompt row via context', () => {
     const { getByPlaceholderText, getByText, container } = render(
       <PalettePanel />
     );
     const input = getByPlaceholderText('type a command…');
-    expect(input.className).toContain('text-input');
-    expect(input.className).toContain('caret-primary');
+    expect(input.className).toContain('text-format-input');
     const wrapper = container.querySelector('[data-slot=command-input-wrapper]');
     expect(wrapper?.className).toContain('bg-card');
     expect(wrapper?.className).toContain('border-b');
@@ -142,7 +141,7 @@ describe('Command palette variant', () => {
     expect(group?.className).toContain('[[cmdk-group-heading]]:after:flex-1');
     expect(group?.className).toContain('[[cmdk-group-heading]]:after:bg-border');
     expect(group?.className).toContain('[[cmdk-group-heading]]:pt-lg');
-    expect(group?.className).toContain('[[cmdk-group-heading]]:text-eyebrow');
+    expect(group?.className).toContain('[[cmdk-group-heading]]:text-format-eyebrow');
     expect(group?.className.split(/\s+/)).toContain('px-md');
   });
 
@@ -166,7 +165,7 @@ describe('CommandSeparator', () => {
     const sep = container.querySelector('[data-slot=command-separator]');
     expect(sep?.getAttribute('role')).toBe('separator');
     expect(sep?.className).toContain('px-xl');
-    expect(getByText('Jump to').className).toContain('text-eyebrow');
+    expect(getByText('Jump to').className).toContain('text-format-eyebrow');
   });
 
   // Same hide-on-search contract as the line form: gone while filtering,
@@ -253,8 +252,8 @@ describe('CommandDialog', () => {
     const dialogClasses = dialog.className.split(/\s+/);
     expect(dialogClasses).toContain('p-0');
     expect(dialogClasses).not.toContain('p-xl');
-    expect(dialogClasses).toContain('top-1/3');
-    expect(dialogClasses).not.toContain('top-1/2');
+    expect(dialogClasses).toContain('top-1/2');
+    expect(dialogClasses).toContain('-translate-y-1/2');
     const command = dialog.querySelector('[data-slot=command]');
     const commandClasses = command?.className.split(/\s+/) ?? [];
     expect(commandClasses).toContain('border-0');

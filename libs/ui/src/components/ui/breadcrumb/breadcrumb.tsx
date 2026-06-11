@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 //  · List gap-1.5 (6px) → gap-sm; sm:gap-2.5 already gone (Nova dropped it too) ·
 //    Item gap tightened 1.5→1 (6px→4px) → gap-xs · Ellipsis hit-area shrank
 //    size-9→size-5 (36→20px) with icon-agnostic [&>svg]:size-4 (Nova form).
-//  · text-sm → text-body (Page's redundant font-normal skipped — text-body owns
+//  · text-sm → text-format-body (Page's redundant font-normal skipped — text-format-body owns
 //    the weight) · break-words → Nova's v4 wrap-break-word (same CSS) · separator
 //    size-3.5 stays numeric · lucide → Remix RiArrowRightSLine/RiMoreLine.
 //  Multi-part composition: List sets the default muted colour, Link inherits it and
@@ -25,7 +25,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        'flex flex-wrap items-center gap-sm wrap-break-word text-body text-muted-foreground',
+        'flex flex-wrap items-center gap-sm wrap-break-word text-format-body text-muted-foreground',
         className
       )}
       {...props}

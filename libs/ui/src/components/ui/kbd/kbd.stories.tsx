@@ -85,7 +85,7 @@ export const Combo: Story = {
   render: () => (
     <KbdGroup>
       <Kbd>Ctrl</Kbd>
-      <span className="text-muted-foreground text-kbd">+</span>
+      <span className="text-muted-foreground text-format-kbd">+</span>
       <Kbd>B</Kbd>
     </KbdGroup>
   ),
@@ -95,7 +95,7 @@ export const Combo: Story = {
 export const InText: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <p className="text-body text-foreground">
+    <p className="text-format-body text-foreground">
       Press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd> to open the command palette.
     </p>
   ),

@@ -5,11 +5,13 @@ import { extendTailwindMerge } from 'tailwind-merge';
 // built-in knowledge of class groups for conflict resolution. Two DS additions must
 // be taught to it manually, or className overrides misbehave:
 //
-// 1. Typography formats — the 11 multi-property @utility classes (.text-display …
-//    .text-input) live in the `text-*` namespace but set font/size/weight, NOT
-//    colour. Stock twMerge files any `text-*` under text-color, so `text-label` +
-//    `text-primary-foreground` collapse and the typography class is dropped.
-//    Registering them as their own group makes them conflict only with each other.
+// 1. Typography formats — the 11 multi-property @utility classes (.text-format-display
+//    … .text-format-input) set font/size/weight, NOT colour. The text-format-* prefix
+//    keeps them out of the way of Tailwind's generated colour utilities (text-input
+//    from --color-input collided with the old text-input format class). twMerge still
+//    files any `text-*` under text-color, so `text-format-label` + `text-foreground`
+//    would collapse — registering the formats as their own group makes them conflict
+//    only with each other.
 // 2. Named spacing — our t-shirt spacing steps (gap-md, p-lg, px-2xl …) are not in
 //    twMerge's built-in numeric spacing scale, so it leaves them unrecognised and a
 //    later `gap-lg` would NOT override an earlier `gap-md`. Adding the step names to
@@ -55,7 +57,7 @@ const twMerge = extendTailwindMerge<'text-format' | CornerGroup>({
   extend: {
     theme: { spacing: SPACING_STEPS },
     classGroups: {
-      'text-format': [{ text: TEXT_FORMATS }],
+      'text-format': [{ 'text-format': TEXT_FORMATS }],
       corner: [{ corner: [...CORNER_STEPS, 'none'] }],
       'corner-t': [{ 'corner-t': CORNER_STEPS }],
       'corner-r': [{ 'corner-r': CORNER_STEPS }],

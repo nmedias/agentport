@@ -56,77 +56,77 @@
    Multi-value composition tokens (family+size+weight+leading+tracking) as
    utility classes. Values from tokens.css §5. line-height "normal" where Figma AUTO.
 */
-@utility text-display {
+@utility text-format-display {
   font-family: var(--ap-sys-display-family);
   font-size: var(--ap-sys-display-size);
   font-weight: var(--ap-sys-display-weight);
   line-height: var(--ap-sys-display-line-height);
   letter-spacing: var(--ap-sys-display-tracking);
 }
-@utility text-heading {
+@utility text-format-heading {
   font-family: var(--ap-sys-heading-family);
   font-size: var(--ap-sys-heading-size);
   font-weight: var(--ap-sys-heading-weight);
   line-height: var(--ap-sys-heading-line-height);
   letter-spacing: var(--ap-sys-heading-tracking);
 }
-@utility text-heading-sm {
+@utility text-format-heading-sm {
   font-family: var(--ap-sys-heading-sm-family);
   font-size: var(--ap-sys-heading-sm-size);
   font-weight: var(--ap-sys-heading-sm-weight);
   line-height: var(--ap-sys-heading-sm-line-height);
   letter-spacing: var(--ap-sys-heading-sm-tracking);
 }
-@utility text-title {
+@utility text-format-title {
   font-family: var(--ap-sys-title-family);
   font-size: var(--ap-sys-title-size);
   font-weight: var(--ap-sys-title-weight);
   line-height: var(--ap-sys-title-line-height);
   letter-spacing: var(--ap-sys-title-tracking);
 }
-@utility text-body {
+@utility text-format-body {
   font-family: var(--ap-sys-body-family);
   font-size: var(--ap-sys-body-size);
   font-weight: var(--ap-sys-body-weight);
   line-height: var(--ap-sys-body-line-height);
   letter-spacing: var(--ap-sys-body-tracking);
 }
-@utility text-body-strong {
+@utility text-format-body-strong {
   font-family: var(--ap-sys-body-strong-family);
   font-size: var(--ap-sys-body-strong-size);
   font-weight: var(--ap-sys-body-strong-weight);
   line-height: var(--ap-sys-body-strong-line-height);
   letter-spacing: var(--ap-sys-body-strong-tracking);
 }
-@utility text-label {
+@utility text-format-label {
   font-family: var(--ap-sys-label-family);
   font-size: var(--ap-sys-label-size);
   font-weight: var(--ap-sys-label-weight);
   line-height: var(--ap-sys-label-line-height);
   letter-spacing: var(--ap-sys-label-tracking);
 }
-@utility text-eyebrow {
+@utility text-format-eyebrow {
   font-family: var(--ap-sys-eyebrow-family);
   font-size: var(--ap-sys-eyebrow-size);
   font-weight: var(--ap-sys-eyebrow-weight);
   line-height: var(--ap-sys-eyebrow-line-height);
   letter-spacing: var(--ap-sys-eyebrow-tracking);
 }
-@utility text-data {
+@utility text-format-data {
   font-family: var(--ap-sys-data-family);
   font-size: var(--ap-sys-data-size);
   font-weight: var(--ap-sys-data-weight);
   line-height: var(--ap-sys-data-line-height);
   letter-spacing: var(--ap-sys-data-tracking);
 }
-@utility text-kbd {
+@utility text-format-kbd {
   font-family: var(--ap-sys-kbd-family);
   font-size: var(--ap-sys-kbd-size);
   font-weight: var(--ap-sys-kbd-weight);
   line-height: var(--ap-sys-kbd-line-height);
   letter-spacing: var(--ap-sys-kbd-tracking);
 }
-@utility text-input {
+@utility text-format-input {
   font-family: var(--ap-sys-input-family);
   font-size: var(--ap-sys-input-size);
   font-weight: var(--ap-sys-input-weight);

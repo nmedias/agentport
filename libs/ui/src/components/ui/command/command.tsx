@@ -22,18 +22,19 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 // grouped, selectable items. Re-clothed in DS tokens:
 //  · palette = overlay surface (overlay.use names Command) + border + shadow-elevation
 //    (an overlay carries depth) — DS interpretation of the demo's `border shadow-md`.
-//  · the search field uses text-label (sans 14 — the standard DS field text; adjusted in
-//    Figma from the mono text-input command-format), placeholder:text-input-placeholder,
+//  · the search field uses text-format-label (sans 14 — the standard DS field text; adjusted in
+//    Figma from the mono text-format-input command-format), placeholder:text-input-placeholder,
 //    on the InputGroup's opaque DS field (nova's translucent softening dropped).
 //  · selection = the DS accent (cyan) tint, not stock's neutral grey — data-selected
 //    bg-accent + text-accent-foreground (accent.use = "Selektions-/Aktiv-Tint").
-//  · group heading = text-eyebrow + uppercase (the DS mono micro-label for sections;
+//  · group heading = text-format-eyebrow + uppercase (the DS mono micro-label for sections;
 //    text-xs/font-medium are dead under the theme reset).
-//  · shortcut hint = text-kbd (keyboard text); tracking-* is dead → dropped.
-//  · empty = text-body muted. gap-2(8)→gap-md, px-2(8)→px-md, py-1.5(6)→py-sm,
+//  · shortcut hint = text-format-kbd (keyboard text); tracking-* is dead → dropped.
+//  · empty = text-format-body muted. gap-2(8)→gap-md, px-2(8)→px-md, py-1.5(6)→py-sm,
 //    p-1(4)→p-xs, py-6(24)→py-2xl, -mx-1(4)→-mx-xs; radius by NAME.
 //  · CommandDialog nests the ported Dialog (sr-only header; panel re-shaped to the
-//    palette: top-1/3, p-0, overflow clip). The panel owns the frame, so the inner
+//    palette: centered via top-1/2 -translate-y-1/2, p-0, overflow clip). The panel
+//    owns the frame, so the inner
 //    Command drops its own border/shadow; items widen to corner-lg inside the
 //    dialog (nova's in-data-[slot=dialog-content] override on the DS corner scale).
 // Geometry (h-px, max-h-72, scroll-py-1, size-4) stays numeric.
@@ -46,8 +47,8 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //    fill + elevation stay from the base.
 //  · palette input = terminal prompt row (bg-card p-xl gap-lg): static glow caret bar
 //    (bg-primary shadow-glow; 2.5×18 numeric geometry, the frame's 1px radius is dropped),
-//    mono text-input field with caret-primary (the frame's typed+ghost-hint state is a
-//    mid-typing mock → standard placeholder), Kbd "Esc". The prompt divider is border-b on
+//    mono text-format-input field (the frame's typed+ghost-hint state is a mid-typing
+//    mock → standard placeholder; default caret colour), Kbd "Esc". The prompt divider is border-b on
 //    the wrapper — Figma models it as a separator instance in the composition.
 //  · palette group = px-md container (items keep px-md → 16px text inset like the prompt);
 //    heading = labeled rule (gap-md px-md pt-lg pb-sm + after: hairline). Figma nests a
@@ -122,7 +123,7 @@ function CommandDialog({
       </DialogHeader>
       <DialogContent
         className={cn(
-          'top-1/3 translate-y-0 overflow-hidden p-0',
+          'top-1/2 -translate-y-1/2 overflow-hidden p-0',
           variant === 'palette' && 'corner-md border-[1.5px]',
           className
         )}
@@ -154,7 +155,7 @@ function CommandInput({
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
-            'min-w-0 flex-1 bg-transparent text-input text-foreground caret-primary placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+            'min-w-0 flex-1 bg-transparent text-format-input text-foreground placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}
@@ -169,13 +170,13 @@ function CommandInput({
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
-            'w-full bg-transparent text-label placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+            'w-full bg-transparent text-format-label placeholder:text-input-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}
         />
         <InputGroupAddon>
-          <RiSearchLine className="size-4 shrink-0 opacity-50" />
+          <RiSearchLine className="size-4 shrink-0 text-foreground" />
         </InputGroupAddon>
       </InputGroup>
     </div>
@@ -191,7 +192,7 @@ function CommandList({
     <CommandPrimitive.List
       data-slot="command-list"
       className={cn(
-        'no-scrollbar max-h-72 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
+        'no-scrollbar max-h-96 scroll-py-1 overflow-x-hidden overflow-y-auto outline-none',
         variant === 'palette' && 'py-md',
         className
       )}
@@ -207,7 +208,7 @@ function CommandEmpty({
   return (
     <CommandPrimitive.Empty
       data-slot="command-empty"
-      className={cn('py-2xl text-center text-body text-muted-foreground', className)}
+      className={cn('py-2xl text-center text-format-body text-muted-foreground', className)}
       {...props}
     />
   );
@@ -223,8 +224,8 @@ function CommandGroup({
       data-slot="command-group"
       className={cn(
         variant === 'palette'
-          ? "overflow-hidden px-md text-foreground **:[[cmdk-group-heading]]:flex **:[[cmdk-group-heading]]:items-center **:[[cmdk-group-heading]]:gap-md **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:pt-lg **:[[cmdk-group-heading]]:pb-sm **:[[cmdk-group-heading]]:text-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:after:h-px **:[[cmdk-group-heading]]:after:flex-1 **:[[cmdk-group-heading]]:after:bg-border **:[[cmdk-group-heading]]:after:content-['']"
-          : "overflow-hidden p-xs text-foreground **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:py-sm **:[[cmdk-group-heading]]:text-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-foreground",
+          ? "overflow-hidden px-md text-foreground **:[[cmdk-group-heading]]:flex **:[[cmdk-group-heading]]:items-center **:[[cmdk-group-heading]]:gap-md **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:pt-lg **:[[cmdk-group-heading]]:pb-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:after:h-px **:[[cmdk-group-heading]]:after:flex-1 **:[[cmdk-group-heading]]:after:bg-border **:[[cmdk-group-heading]]:after:content-['']"
+          : "overflow-hidden p-xs text-foreground **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:py-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-foreground",
         className
       )}
       {...props}
@@ -253,7 +254,7 @@ function CommandSeparator({
         className={cn('flex items-center gap-md px-xl pt-lg pb-sm', className)}
         {...props}
       >
-        <span className="text-eyebrow uppercase text-muted-foreground">
+        <span className="text-format-eyebrow uppercase text-muted-foreground">
           {label}
         </span>
         <span className="h-px flex-1 bg-border" />
@@ -282,7 +283,7 @@ function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "group/command-item relative flex cursor-default items-center gap-md corner-sm px-md py-sm text-body outline-hidden select-none in-data-[slot=dialog-content]:corner-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
+        "group/command-item relative flex cursor-default items-center gap-md corner-sm px-md py-sm text-format-body outline-hidden select-none in-data-[slot=dialog-content]:corner-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
         className
       )}
       {...props}
@@ -301,7 +302,7 @@ function CommandShortcut({
     <span
       data-slot="command-shortcut"
       className={cn(
-        'ml-auto text-kbd text-muted-foreground group-data-selected/command-item:text-accent-foreground',
+        'ml-auto text-format-kbd text-muted-foreground group-data-selected/command-item:text-accent-foreground',
         className
       )}
       {...props}

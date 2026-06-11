@@ -76,11 +76,11 @@ describe('Dialog', () => {
     const { getByText, getByRole } = render(<Demo />);
     fireEvent.click(getByText('Open'));
     await waitFor(() => getByRole('dialog'));
-    expect(getByText('Edit profile').className).toContain('text-title');
+    expect(getByText('Edit profile').className).toContain('text-format-title');
     expect(getByText('Make changes to your profile.').className).toContain(
-      'text-body'
+      'text-format-body'
     );
-    expect(getByRole('dialog').className).toContain('text-body');
+    expect(getByRole('dialog').className).toContain('text-format-body');
     expect(getByRole('dialog').className).toContain('bg-overlay');
   });
 

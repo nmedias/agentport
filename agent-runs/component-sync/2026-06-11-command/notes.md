@@ -39,6 +39,15 @@ Bestands-Specs unverändert grün).
 Palette-Surface, Context-Vererbung Input, Labeled-Rule-Heading, List py-md, Separator labeled/mx,
 Dialog-Pass-Through). Typo-Survival: `text-input` + `caret-primary` im Markup verifiziert.
 
+## Nachtrag (gleicher Tag, nach dem Run)
+
+User-Refinements direkt im Code (Tabellen oben = Stand zur Run-Zeit, nicht umgeschrieben):
+`caret-primary` wieder entfernt (Standard-Caret), CommandDialog mittig zentriert
+(`top-1/2 -translate-y-1/2` statt `top-1/3`), Liste `max-h-96` statt `max-h-72`, Such-Icon
+`text-foreground` statt `opacity-50`. Außerdem repo-weiter Utility-Rename
+`text-<format>` → `text-format-<format>` (Kollision mit Tailwind-Farb-Utility `text-input`
+aus `--color-input`; s. tokens-reference §4) — betrifft alle Klassen-Nennungen oben.
+
 ## Storybook-Previews
 
 - Palette: http://localhost:6006/?path=/story/ui-command--palette

@@ -62,7 +62,7 @@ export const AllVariants: Story = {
 };
 
 // The full radix-nova size ladder — text sizes xs → lg, denser than the
-// new-york default (h-6/7/8/9). Text stays text-label across all (the DS has no
+// new-york default (h-6/7/8/9). Text stays text-format-label across all (the DS has no
 // sub-14px sans), only the geometry tightens.
 export const AllSizes: Story = {
   parameters: { controls: { include: ['variant'] } },

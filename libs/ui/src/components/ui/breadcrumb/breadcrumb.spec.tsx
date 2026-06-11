@@ -34,7 +34,7 @@ describe('Breadcrumb', () => {
   it('carries the DS body typography format + muted default colour on the list', () => {
     const { container } = render(<Trail />);
     const list = container.querySelector('[data-slot="breadcrumb-list"]');
-    expect(list?.className).toContain('text-body');
+    expect(list?.className).toContain('text-format-body');
     expect(list?.className).toContain('text-muted-foreground');
   });
 

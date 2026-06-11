@@ -10,13 +10,13 @@ import { cn } from '@/lib/utils';
 // variant `emphasis`, default high):
 //  · high = inverted dark keycap — Inverse/inverse + Inverse/inverse-foreground.
 //  · low  = quiet muted keycap   — shadcn muted + muted-foreground (stock look).
-// Other bindings: text-kbd (Geist Mono Medium, "Kbd" style), gap-xs/px-xs
+// Other bindings: text-format-kbd (Geist Mono Medium, "Kbd" style), gap-xs/px-xs
 // (Space/space-xs), corner-sm (Radius/radius-sm), tooltip context via v4
 // in-data-[slot=tooltip-content]:. The content axis (text|icon) is children-driven,
 // not a prop; modifier symbols (⌘ ⇧ …) belong here as an icon (the svg inherits
 // the keycap colour via currentColor), not a text glyph.
 const kbdVariants = cva(
-  "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-xs corner-sm px-xs text-kbd select-none in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background [&_svg:not([class*='size-'])]:size-3",
+  "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-xs corner-sm px-xs text-format-kbd select-none in-data-[slot=tooltip-content]:bg-background/20 in-data-[slot=tooltip-content]:text-background [&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       emphasis: {

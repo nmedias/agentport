@@ -9,11 +9,11 @@ describe('Textarea', () => {
     expect(getByPlaceholderText('Add a description…')).toBeTruthy();
   });
 
-  // Guards the T1 twMerge setup: without the `text-format` group, `text-label`
+  // Guards the T1 twMerge setup: without the `text-format` group, `text-format-label`
   // would collapse into text-color and silently drop from the markup.
-  it('keeps the DS typography class (text-label survives twMerge)', () => {
+  it('keeps the DS typography class (text-format-label survives twMerge)', () => {
     const { getByRole } = render(<Textarea />);
-    expect(getByRole('textbox').className).toContain('text-label');
+    expect(getByRole('textbox').className).toContain('text-format-label');
   });
 
   it('reflects aria-invalid for the destructive state', () => {

@@ -88,7 +88,7 @@ status_note: >
   skill: /shadcn-component-port
   notes: >
     Nova-Size-Ladder (h-8 default + xs und icon-xs/sm/lg, per-Size-Icon-Sizing, aria-expanded).
-    DS behalten: Radius per NAME (corner-lg/-md, ehem. rounded), Akzent-Cyan-Hover, solides destructive, text-label.
+    DS behalten: Radius per NAME (corner-lg/-md, ehem. rounded), Akzent-Cyan-Hover, solides destructive, text-format-label.
     Icon-only (size=icon*) verlangt aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
 
 - name: Input
@@ -106,7 +106,7 @@ status_note: >
   skill: /shadcn-component-port
   notes: >
     h-8 / corner-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
-    text → text-label; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
+    text → text-format-label; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
     invalid destructive (⚠ Platzhalter-Token). dark: entfernt.
 
 - name: Textarea
@@ -124,7 +124,7 @@ status_note: >
   skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
   notes: >
     Feld-Zwilling von Input, höher. min-h-16 / corner-lg / px-md / py-md; field-sizing-content (auto-grow).
-    bg-transparent → bg-input-background; text → text-label; placeholder:text-input-placeholder;
+    bg-transparent → bg-input-background; text → text-format-label; placeholder:text-input-placeholder;
     focus border-ring + ring/50 ring-[3px]; invalid destructive (⚠). Figma: Text top-aligned
     (counter=MIN), keine Truncation. dark: + disabled:bg-input/50 entfernt.
 
@@ -152,7 +152,7 @@ status_note: >
     6-teiliges Composite, RE-PORT nach Skill-Rework. Deps: Button ✓, Input ✓, Textarea ✓, Kbd ✓. Die GRUPPE
     besitzt Fläche+Border+Focus/Invalid/Disabled (has-[control:focus-visible]/has-[aria-invalid]/has-disabled);
     Controls randlos (border-0 bg-transparent, data-slot=input-group-control). DS: Gruppe trägt bg-input-background
-    (opak); Addon text-label muted; Text text-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
+    (opak); Addon text-format-label muted; Text text-format-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
     Beispiel-Instanzen (Done-Test): Container-Komposition (state×layout) mit Children-Slot, Addon mit content-Slot,
     Input/Textarea/Text als Text-Prop. **Button nestet eine echte ghost .Button-Instanz** (nicht standalone re-clothed)
     → Token+Component-Propagation; Geometrie-Delta via Base-Override, Icon-Content via swapComponent (DS-Button
@@ -181,7 +181,7 @@ status_note: >
   notes: >
     Nova-Kbd metrisch identisch zu new-york (keine Dichte-Änderung). emphasis=high (default) =
     invertierte dunkle Keycap (Inverse/inverse + inverse-foreground); emphasis=low = muted Keycap
-    (shadcn muted/muted-foreground). text-kbd (Geist Mono); gap-xs/px-xs; corner-sm; Tooltip-Kontext
+    (shadcn muted/muted-foreground). text-format-kbd (Geist Mono); gap-xs/px-xs; corner-sm; Tooltip-Kontext
     via v4 in-data-[slot=tooltip-content]:. content (text|icon) children-getrieben, nicht als Prop.
 
 - name: Breadcrumb
@@ -202,7 +202,7 @@ status_note: >
     axis: { segment_state: [link, link-hover, page] }
   skill: /shadcn-component-port (+ Code→Figma-Push via use_figma)
   notes: >
-    Multipart. Farben: link=muted-foreground, link-hover/page=foreground (Body→text-body).
+    Multipart. Farben: link=muted-foreground, link-hover/page=foreground (Body→text-format-body).
     List- + Segment-Gap → Space/space-xs (4px) Item / Space/space-sm (6px) List; Ellipsis size-5;
     break-words → v4 wrap-break-word. Nova-Dichte wurde im Code entschieden und nach Figma gepusht.
 
@@ -227,8 +227,8 @@ status_note: >
       axis: { variant: [default, palette] }
       props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
       members: { default: "3561:2", palette: "3638:8" }
-      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-input Placeholder"
-      palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
+      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-input Placeholder"
+      palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
     separator:
       set: { name: ".Command/Separator", id: "3653:6" }
       axis: { variant: [default, labeled] }
@@ -257,20 +257,21 @@ status_note: >
   notes: >
     Multi-Composite (cmdk). Deps: InputGroup ✓ (als echte Instanz in .Command/Input genestet), Button/Input/
     Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht), Dialog ✓ (CommandDialog nachgerüstet
-    2026-06-11, code-only — KEIN Figma-Artefakt, .Command-Composition bleibt ohne Dialog-Achse; Panel top-1/3 +
-    p-0 + overflow-clip, inneres Command border-0/shadow-none, Item in-data-[slot=dialog-content]:corner-lg!;
+    2026-06-11, code-only — KEIN Figma-Artefakt, .Command-Composition bleibt ohne Dialog-Achse; Panel mittig
+    zentriert (top-1/2 -translate-y-1/2, seit 2026-06-11 — vorher top-1/3) + p-0 + overflow-clip, inneres
+    Command border-0/shadow-none, Item in-data-[slot=dialog-content]:corner-lg!;
     Children = Palette-Teile, Wrapper liefert das Command-Root wie new-york-v4 — novas bare-children-Quelle
     bricht den Doc-Usage-Contract; Story InDialog = Doc-Demo inkl. ⌘J/Ctrl+J-Listener — DOM-lib dafür
     in tsconfig.storybook.json nachgerüstet — plus Button+Kbd-Trigger als Klick-Affordance). DS-Abweichungen:
     Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
-    text-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
+    text-format-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
     auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
     Selektion = accent-Cyan-Tint (data-selected bg-accent + text-accent-foreground), NICHT Stock-Neutralgrau;
-    Group-Heading = text-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-kbd
+    Group-Heading = text-format-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-format-kbd
     (tracking-* tot). IconPlaceholder→lucide bei ui:add → @remixicon/react (RiSearchLine/RiCheckLine). Figma:
     3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
     Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
-    grün (32 Tests inkl. Typo-Survival text-input/text-body). jsdom-Polyfill lag bereits in test-setup.ts.
+    grün (32 Tests inkl. Typo-Survival text-format-input/text-format-body). jsdom-Polyfill lag bereits in test-setup.ts.
     PALETTE-VARIANTE (2026-06-11): variant-Achse [default, palette] auf Input/Group/Composition, Quelle =
     C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Figma-Member per Clone aus dem Frame gebaut
     → Token-Bindings (space/corner/shadcn-default/overlay/inverse, Effect-Styles Glow+Elevation, Text-Styles
@@ -280,7 +281,9 @@ status_note: >
     (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading (Gruppen-Weg
     behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
     Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card/p-xl/gap-lg mit
-    statischer Glow-Caret-Bar + text-input/caret-primary + Kbd-Esc; Prompt-Divider = border-b am Wrapper
+    statischer Glow-Caret-Bar + text-format-input + Kbd-Esc (caret-primary wieder entfernt — Standard-Caret,
+    User-Refinement 2026-06-11, ebenso Liste max-h-96 statt max-h-72 + Such-Icon text-foreground statt
+    opacity-50); Prompt-Divider = border-b am Wrapper
     (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) — Figma
     war kurz auf 24px (px-xl-Default der genesteten labeled-Separator-Instanz), Instanz-Padding-Override
     auf space-md hat das aufgelöst, Figma = Code = C2-Raster; Deviations komplett in
@@ -311,8 +314,8 @@ status_note: >
     Radix-Composite (radix-ui Dialog). Deps: Button ✓ (genestete ghost-Instanz als X-Close; flacher
     ui:add-Schatten gelöscht), radix-ui ✓. DS-Abweichungen: Panel = bg-overlay + border + shadow-elevation
     (novas ring-1 ring-foreground/10 ersetzt — Overlay-Tiefe wie Command); Scrim = NEUER Token `scrim`
-    (neutral/900 @10%, bg-black/10 tot) + backdrop-blur-xs; Titel = text-title (18/600; nova 16/500 ohne
-    DS-Stufe); Body/Description = text-body. Footer = getöntes nova-Band (bg-muted/50, border-t, Bleed
+    (neutral/900 @10%, bg-black/10 tot) + backdrop-blur-xs; Titel = text-format-title (18/600; nova 16/500 ohne
+    DS-Stufe); Body/Description = text-format-body. Footer = getöntes nova-Band (bg-muted/50, border-t, Bleed
     -mx-xl/-mb-xl) als EIGENE Komponente, default-instanziiert im footer-Slot (User-Entscheidung).
     Scrim als eigene .Dialog/Overlay-Komponente, Panel-Komposition bleibt scrim-frei. Figma-Mechanik:
     SLOT nie direkt visibility-binden (degradiert zu FRAME) → Wrapper-Frame trägt showBody-Boolean.

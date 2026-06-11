@@ -9,7 +9,7 @@ describe('Kbd', () => {
 
   it('carries the DS keyboard typography format', () => {
     const { container } = render(<Kbd>K</Kbd>);
-    expect(container.querySelector('[data-slot="kbd"]')?.className).toContain('text-kbd');
+    expect(container.querySelector('[data-slot="kbd"]')?.className).toContain('text-format-kbd');
   });
 
   it('defaults to the high emphasis (inverted keycap)', () => {

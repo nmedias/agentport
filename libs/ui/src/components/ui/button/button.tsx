@@ -12,9 +12,9 @@ import { cn } from '@/lib/utils';
 //  · radius by NAME → DS scale (corner-lg=8, small sizes corner-md=6), not
 //    Nova's parametric --radius=10 · hover stays the cyan accent (§1 two-cyan /
 //    accent=selection), not Nova's neutral bg-muted · destructive stays the DS
-//    solid fill, not Nova's tint · text stays text-label (DS has no <14px sans).
+//    solid fill, not Nova's tint · text stays text-format-label (DS has no <14px sans).
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap corner-lg text-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+  "inline-flex items-center justify-center whitespace-nowrap corner-lg text-format-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
     variants: {
       variant: {

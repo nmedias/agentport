@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 //  · the group carries bg-input-background (DS fields are opaque — Input/Textarea
 //    precedent); nova leaves it transparent in light mode. Command overrides the
 //    surface for its palette look.
-//  · text-sm font-medium addon → text-label; plain text-sm Text → text-body
+//  · text-sm font-medium addon → text-format-label; plain text-sm Text → text-format-body
 //    (Medium vs Regular 14, the DS distinction).
 //  · gap-2(8)→gap-md, py-1.5(6)→py-sm, pl/pr-2(8)→pl/pr-md, px-2.5(10)→px-md,
 //    pl/pr-1.5(6)→pl/pr-sm, pt/pb-3(12)→pt/pb-lg; ring-3→ring-[3px]; radius by NAME.
@@ -47,7 +47,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-md py-sm text-label text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4",
+  "flex h-auto cursor-text items-center justify-center gap-md py-sm text-format-label text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -144,7 +144,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       className={cn(
-        "flex items-center gap-md text-body text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-md text-format-body text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
