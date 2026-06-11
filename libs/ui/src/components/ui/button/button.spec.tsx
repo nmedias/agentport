@@ -21,3 +21,33 @@ describe('Button', () => {
     expect(getByRole('link').getAttribute('href')).toBe('/schema');
   });
 });
+
+describe('Button asChild', () => {
+  // Slot contract: the button styling merges onto the single child element —
+  // no <button> wrapper appears, the child keeps its own className.
+  it('merges the button styling onto the child instead of wrapping it', () => {
+    const { container, getByRole } = render(
+      <Button asChild variant="outline" size="xs">
+        <a href="/schema" className="custom-marker">
+          Schema
+        </a>
+      </Button>
+    );
+    expect(container.querySelector('button')).toBeNull();
+    const link = getByRole('link');
+    expect(link.getAttribute('data-slot')).toBe('button');
+    const cls = link.className.split(/\s+/);
+    expect(cls).toContain('h-6'); // size=xs geometry
+    expect(cls).toContain('corner-md'); // xs radius step
+    expect(cls).toContain('text-format-label'); // DS typography survives the merge
+    expect(cls).toContain('custom-marker'); // child className preserved
+  });
+
+  // The reason the Storybook control is disabled: Radix Slot requires exactly
+  // ONE element child — the stories' plain-text children crash it.
+  it('throws on a plain-text child (Radix Slot contract)', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(() => render(<Button asChild>Just text</Button>)).toThrow();
+    spy.mockRestore();
+  });
+});
