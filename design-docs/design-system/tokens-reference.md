@@ -408,30 +408,109 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 
 ## 4 · Typografie — 11 Formate
 
-Composition-Utilities (`@utility`, mehrwertig: family+size+weight+line-height+tracking) → **eine Klasse**
-statt einzelner `text-`/`font-`-Utilities (Letztere durch Theme-Reset tot, §6). Familien `sans` =
-„Hanken Grotesk", `mono` = „Geist Mono". Weights 400/500/600/800. Modulare Skala (Ratio 1.25, Base 14px).
+Composition-Utilities (`@utility text-<format>` in tw-utilities.css, mehrwertig:
+family+size+weight+line-height+tracking) → **eine Klasse** statt einzelner `text-`/`font-`-Utilities
+(Letztere durch Theme-Reset tot, §6). Jedes Format besteht aus **5 Teil-Tokens**: Figma
+`<OrgGruppe>/<format>/<part>` (semantic-typo; Text-Styles binden sie) ↔ CSS
+`--ap-sys-<format>-<part>`. Org-Gruppen: Display · Heading (heading, heading-sm) · Title ·
+Body (body, body-strong) · Label · Eyebrow · Data · Kbd · Input.
 
-CSS-Vars pro Format: `--ap-sys-<format>-{family,size,weight,line-height,tracking}` (Figma:
-`<OrgGruppe>/<format>/<part>`, z. B. `Heading/heading-sm/family` → `--ap-sys-heading-sm-family`;
-Org-Gruppen: Display · Heading (heading, heading-sm) · Title · Body (body, body-strong) · Label ·
-Eyebrow · Data · Kbd · Input). Die **Utility-Klassen bleiben `text-<format>`** (unverändert).
+Primitives (intern; Figma-Gruppe `Font/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-font-…`):
 
 ```yaml
-- { format: text-display,     family: sans, size: 43, weight: 800, line_height: 1.0,  tracking: -0.5px, use: "Hero-Headline." }
-- { format: text-heading,     family: sans, size: 27, weight: 800, line_height: 1.2,  tracking: -0.5px, use: "Überschrift." }
-- { format: text-heading-sm,  family: sans, size: 22, weight: 800, line_height: 1.2,  tracking: -0.5px, use: "Kleinere Überschrift." }
-- { format: text-title,       family: sans, size: 18, weight: 600, line_height: auto, tracking: 0,      use: "Abschnitts-/Sektions-Titel." }
-- { format: text-body,        family: sans, size: 14, weight: 400, line_height: 1.5,  tracking: 0,      use: "Fließtext; Body-Default der App." }
-- { format: text-body-strong, family: sans, size: 14, weight: 600, line_height: auto, tracking: 0,      use: "Betonter Fließtext." }
-- { format: text-label,       family: sans, size: 14, weight: 500, line_height: auto, tracking: 0,      use: "Labels: Form-/Toggle-Labels, Button-Text." }
-- { format: text-eyebrow,     family: mono, size: 9,  weight: 500, line_height: auto, tracking: 0.5px,  use: "Uppercase-Mikro-Labels." }
-- { format: text-data,        family: mono, size: 11, weight: 400, line_height: auto, tracking: 0,      use: "Tabellarische Mono-Daten." }
-- { format: text-kbd,         family: mono, size: 11, weight: 500, line_height: auto, tracking: 0,      use: "Tastatur-Tasten-Text." }
-- { format: text-input,       family: mono, size: 18, weight: 400, line_height: auto, tracking: 0,      use: "Command-/Eingabe-Text.", avoid: "Typo-Klasse — nicht als Text-Farbe input missverstehen." }
+family:      { sans: "Hanken Grotesk", mono: "Geist Mono" }                 # --ap-font-family-sans/-mono
+weight:      { regular: 400, medium: 500, semibold: 600, extrabold: 800 }   # --ap-font-weight-*
+size:        { base: 14, step-neg2: 9, step-neg1: 11, step-0: 14, step-1: 18, step-2: 22, step-3: 27, step-4: "34 (spare)", step-5: 43 }
+             # --ap-font-size-step-* — modulare Skala: base × scale^n; Font/scale = 1.25 → --ap-font-scale
+line-height: { tight: 1.0, snug: 1.2, relaxed: 1.5 }                        # --ap-font-line-height-*
+tracking:    { tight: "-0.5px", normal: "0", wide: "0.5px" }                # --ap-font-tracking-*
 ```
 
-*Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS `--ap-font-line-height-*` bzw. `normal`.*
+Formate (`primitive` = Kurz-Pfade unter `Font/`; `line-height: normal` = nur CSS, **kein**
+Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
+
+```yaml
+- token: display
+  utilities: [text-display]
+  css_var: "--ap-sys-display-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-5, weight: weight/extrabold, line-height: line-height/tight, tracking: tracking/tight }
+  value: { family: sans, size: 43, weight: 800, line-height: 1.0, tracking: "-0.5px" }
+  use: "Hero-Headline."
+
+- token: heading
+  utilities: [text-heading]
+  css_var: "--ap-sys-heading-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-3, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
+  value: { family: sans, size: 27, weight: 800, line-height: 1.2, tracking: "-0.5px" }
+  use: "Überschrift."
+
+- token: heading-sm
+  utilities: [text-heading-sm]
+  css_var: "--ap-sys-heading-sm-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-2, weight: weight/extrabold, line-height: line-height/snug, tracking: tracking/tight }
+  value: { family: sans, size: 22, weight: 800, line-height: 1.2, tracking: "-0.5px" }
+  use: "Kleinere Überschrift."
+
+- token: title
+  utilities: [text-title]
+  css_var: "--ap-sys-title-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-1, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
+  value: { family: sans, size: 18, weight: 600, line-height: normal, tracking: "0" }
+  use: "Abschnitts-/Sektions-Titel."
+
+- token: body
+  utilities: [text-body]
+  css_var: "--ap-sys-body-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-0, weight: weight/regular, line-height: line-height/relaxed, tracking: tracking/normal }
+  value: { family: sans, size: 14, weight: 400, line-height: 1.5, tracking: "0" }
+  use: "Fließtext; Body-Default der App."
+
+- token: body-strong
+  utilities: [text-body-strong]
+  css_var: "--ap-sys-body-strong-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-0, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
+  value: { family: sans, size: 14, weight: 600, line-height: normal, tracking: "0" }
+  use: "Betonter Fließtext."
+
+- token: label
+  utilities: [text-label]
+  css_var: "--ap-sys-label-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-0, weight: weight/medium, line-height: normal, tracking: tracking/normal }
+  value: { family: sans, size: 14, weight: 500, line-height: normal, tracking: "0" }
+  use: "Labels: Form-/Toggle-Labels, Button-Text."
+
+- token: eyebrow
+  utilities: [text-eyebrow]
+  css_var: "--ap-sys-eyebrow-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-neg2, weight: weight/medium, line-height: normal, tracking: tracking/wide }
+  value: { family: mono, size: 9, weight: 500, line-height: normal, tracking: "0.5px" }
+  use: "Uppercase-Mikro-Labels."
+
+- token: data
+  utilities: [text-data]
+  css_var: "--ap-sys-data-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-neg1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
+  value: { family: mono, size: 11, weight: 400, line-height: normal, tracking: "0" }
+  use: "Tabellarische Mono-Daten (auch Dateinamen u. ä.)."
+
+- token: kbd
+  utilities: [text-kbd]
+  css_var: "--ap-sys-kbd-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-neg1, weight: weight/medium, line-height: normal, tracking: tracking/normal }
+  value: { family: mono, size: 11, weight: 500, line-height: normal, tracking: "0" }
+  use: "Tastatur-Tasten-Text."
+
+- token: input
+  utilities: [text-input]
+  css_var: "--ap-sys-input-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
+  value: { family: mono, size: 18, weight: 400, line-height: normal, tracking: "0" }
+  use: "Command-/Eingabe-Text."
+  avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln."
+```
+
+*Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS
+`--ap-font-line-height-*` bzw. `normal`.*
 
 ---
 
