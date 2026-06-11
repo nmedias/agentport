@@ -260,7 +260,7 @@ status_note: >
       slots: { body: "3609:890 (leer; Wrapper body-region visible↔showBody)", footer: "3593:795 (Default = .Dialog/Footer-Instanz 3593:796)" }
       nests: "ghost icon-sm .Button-Instanz 3593:806 als Close (ABSOLUTE top-right, Icon via swapComponent→.Dialog/Icon/Close)"
     footer: { name: ".Dialog/Footer", id: "3591:788", slot: "actions#3591:789 (Default: Cancel outline + Save default .Button-Instanzen)" }
-    overlay: { name: ".Dialog/Overlay", id: "3590:791", fill: "scrim (VariableID:3588:2, NEU) + BACKGROUND_BLUR 4" }
+    overlay: { name: ".Dialog/Overlay", id: "3590:791", fill: "scrim (3588:2, Alias→neutral/900) × Layer-Opacity scrim-opacity (3618:3, Alias→opacity/10) + BACKGROUND_BLUR 4" }
     icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
     examples: { dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
   skill: /shadcn-component-port (2026-06-10, Composite-Port; nestet Button)

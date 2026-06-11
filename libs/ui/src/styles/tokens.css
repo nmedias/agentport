@@ -38,6 +38,11 @@
   --cyan-500: #0098da;
   --cyan-700: #0077a8;
 
+  /* --- Opacity ------------------------------------------------------------
+     Figma mirror: reference opacity/10 = 10 (opacity variables use the 0–100
+     percent scale there); CSS keeps the % unit. */
+  --opacity-10: 10%;
+
   /* --- Radius scale ------------------------------------------------------- */
   --radius-4: 4px;
   --radius-6: 6px;
@@ -108,10 +113,6 @@
   --border:              var(--neutral-200);
   --input:               var(--neutral-450);   /* form control border (AA ≥3:1) */
   --ring:                var(--neutral-700);    /* focus */
-
-  /* --- Overlay (= shadcn popover, renamed) -------------------------------- */
-  --overlay:             var(--base-white);
-  --overlay-foreground:  var(--neutral-900);
   /* shadcn components reference --popover → mapped onto overlay */
   --popover:             var(--overlay);
   --popover-foreground:  var(--overlay-foreground);
@@ -134,8 +135,15 @@
   --border-strong:       var(--neutral-700);
   --inverse:             var(--neutral-900);
   --inverse-foreground:  var(--neutral-50);
-  /* modal backdrop dimmer — alpha lives in the token (Figma: raw RGBA, alias can't carry alpha) */
-  --scrim:               color-mix(in srgb, var(--neutral-900) 10%, transparent);
+  /* --- Overlay (= shadcn popover, renamed) -------------------------------- */
+  --overlay:             var(--base-white);
+  --overlay-foreground:  var(--neutral-900);
+  /* modal backdrop dimmer — colour (alias neutral/900) × strength (scrim-opacity,
+     alias opacity/10) composed via color-mix. Figma composes the same pair on
+     .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */
+  --scrim-opacity:       var(--opacity-10);
+  --scrim:               color-mix(in srgb, var(--neutral-900) var(--scrim-opacity), transparent);
+
 
   /* --- ⚠ Placeholders (shadcn defaults, not yet designed) ------------------ */
   --secondary:              #f5f5f5;  /* ⚠ */

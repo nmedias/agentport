@@ -42,6 +42,7 @@ Primitives (intern):
 base/white: "#ffffff"
 neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }
 cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand #009FE3 → #0098DA (≥3:1, WCAG 1.4.11)
+opacity: { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --opacity-10: 10%" }
 ```
 
 Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}`. Für
@@ -283,11 +284,20 @@ Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ri
 
 - token: scrim
   css_var: --scrim
-  primitive: "raw RGBA — neutral/900 @ 10% (Alias kann kein Alpha tragen; Ableitung in der Figma-Description)"
-  value: "color-mix(in srgb, #1a2230 10%, transparent)"
+  primitive: "neutral/900 (Farbe) — Stärke komponiert via scrim-opacity"
+  value: "color-mix(in srgb, #1a2230 var(--scrim-opacity), transparent)"
   utilities: [bg-scrim]
-  use: "Modal-Backdrop-Dimmer (Dialog-Overlay); Alpha lebt im Token — ohne Opacity-Modifier verwenden."
+  use: "Modal-Backdrop-Dimmer (Dialog-Overlay); Alpha komponiert via scrim-opacity — ohne Opacity-Modifier verwenden."
   avoid: "Keine Flächen-Tönung unterhalb von Modal-Ebene; nicht mit zusätzlichem /NN-Modifier stapeln."
+  note: "Figma: scrim = Alias → neutral/900 (voll-opak); die 10% liegen als Layer-Opacity-Binding (scrim-opacity) auf .Dialog/Overlay — als Fill ohne dieses Binding ist scrim voll-opak dunkel."
+
+- token: scrim-opacity
+  css_var: --scrim-opacity
+  primitive: opacity/10
+  value: "10%"
+  utilities: []
+  use: "Stärke des Modal-Backdrops — komponiert --scrim (color-mix) bzw. die Layer-Opacity der Overlay-Komponente."
+  note: "FLOAT-Token, Scope OPACITY. Figma-Wert 10 (Opacity-Variablen = 0–100-Prozent-Skala) ↔ CSS 10%."
 
 - token: secondary
   css_var: --secondary

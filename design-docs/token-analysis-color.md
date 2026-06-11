@@ -23,8 +23,9 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - **`popover`/`popover-foreground`** zusätzlich angelegt (Gruppe `shadcn Default/`), als **Alias auf
     `overlay`/`overlay-foreground`** — shadcn-Komponenten (Popover/Command/Dropdown/Select) referenzieren
     `--popover`. Entspricht dem geplanten CSS `--popover: var(--overlay)`.
-  - 6 Custom: `input-placeholder`, `border-emphasis`, `border-strong`, `inverse`, `inverse-foreground`
-    (aliased) + `scrim` (Raw-RGBA, s. Batch 6). *(`border-subtle` 2026-06-10 entfernt, s. Log.)*
+  - 7 Custom (aliased): `input-placeholder`, `border-emphasis`, `border-strong`, `inverse`,
+    `inverse-foreground`, `scrim` (→ `neutral/900`) + `scrim-opacity` (FLOAT → `opacity/10`;
+    s. Batch 6 Update). *(`border-subtle` 2026-06-10 entfernt, s. Log.)*
   - `background-fixed` — **Alias auf `base/white`**, **theme-invariant**: bleibt in Light **und** Dark
     weiß. Für den **Toggle-Knob** (3× `knob`, vorher an `background` → wäre im Dark Mode dunkel geworden).
     Fix bleibt erhalten, weil `base/white` in der Single-Mode-`reference`-Collection liegt; beim späteren
@@ -105,6 +106,16 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
   dokumentiert (bei Änderung an `neutral/900` manuell nachziehen). Scopes `FRAME_FILL`/`SHAPE_FILL`.
   CSS: `--scrim: color-mix(in srgb, var(--neutral-900) 10%, transparent)` (tokens.css) →
   `--color-scrim` (globals.css) → `bg-scrim`. Blur (`backdrop-blur-xs`) bleibt Utility, kein Token.
+  > **Update 2026-06-11 — scrim-opacity:** Raw-RGBA **aufgelöst**. Neu: Primitive **`opacity/10` = 10**
+  > (reference, alias-only; Figma-Opacity-Variablen nutzen die **0–100-Prozent-Skala** — 0.1 ergäbe
+  > 0,1 %) + Semantic **`scrim-opacity`** (`Overlay/`, `VariableID:3618:3`, Alias → opacity/10, Scope
+  > OPACITY). `scrim` ist jetzt **echter Alias → neutral/900** (voll-opak); die 10 % liegen als
+  > **Layer-Opacity-Binding** auf `.Dialog/Overlay` — **Node-Opacity IST variable-bindbar** (anders
+  > als Paint-Opacity, vgl. die input-background-Entscheidung oben). Konsequenz: scrim als Fill
+  > allein ist voll-opak dunkel; die Stärke trägt die Komponente. CSS komponiert beides:
+  > `--opacity-10: 10%` (Primitive) · `--scrim-opacity: var(--opacity-10)` ·
+  > `--scrim: color-mix(in srgb, var(--neutral-900) var(--scrim-opacity), transparent)` —
+  > `bg-scrim` für Konsumenten unverändert.
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter
   (Raw-Hex, shadcn-Defaults) **angelegt**, damit das volle shadcn-Set in Figma steht (waren im Repo-CSS nicht
   enthalten). Semantic-Collection jetzt 38 Variablen, davon 9 Platzhalter.
