@@ -46,13 +46,6 @@ npm run ui:add -- button   # add a shadcn component into libs/ui
 ```
 
 - `npm test`/`lint` run via Vitest/ESLint but **don't typecheck** — `npm run check` does. Use it as the gate.
-- **One folder per component:** `libs/ui/src/components/ui/<name>/` holds `<name>.tsx` +
-  `.stories.tsx` + `.spec.tsx` + a barrel `index.ts`. `ui:add` writes **flat**
-  (`components/ui/<name>.tsx`) — move it into its folder, add the barrel, then re-export the folder
-  in `libs/ui/src/index.ts` (shadcn won't).
-- `globals.css` (`libs/ui/src/styles/`) is the single entry/seam for the Figma "Agentport DS"
-  semantics — internally split into `tw-theme.css` (@theme bridge), `tw-utilities.css` (DS
-  @utility classes) and `tw-variants.css` (@custom-variant plumbing), all imported by `globals.css`.
 
 
 ## shadcn Gotchas
@@ -73,6 +66,13 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
 ```
 
 - The app consumes the lib via `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
+- **One folder per component:** `libs/ui/src/components/ui/<name>/` holds `<name>.tsx` +
+  `.stories.tsx` + `.spec.tsx` + a barrel `index.ts`. `ui:add` writes **flat**
+  (`components/ui/<name>.tsx`) — move it into its folder, add the barrel, then re-export the folder
+  in `libs/ui/src/index.ts` (shadcn won't).
+- `globals.css` (`libs/ui/src/styles/`) is the single entry/seam for the Figma "Agentport DS"
+  semantics — internally split into `tw-theme.css` (@theme bridge), `tw-utilities.css` (DS
+  @utility classes) and `tw-variants.css` (@custom-variant plumbing), all imported by `globals.css`.
 
 - `handoff-agentport-design-visual.md` — **design reference** (not an active to-do): the locked visual
   language + the decided Explorer component designs (Figma node IDs, exploration file
