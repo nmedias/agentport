@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   RiCalendarLine,
@@ -8,8 +9,11 @@ import {
   RiSettings3Line,
 } from '@remixicon/react';
 
+import { Button } from '../button';
+import { Kbd } from '../kbd';
 import {
   Command,
+  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
@@ -20,8 +24,7 @@ import {
 } from './command';
 
 // Canonical usage set = the structurally-distinct, portable shadcn doc examples
-// (see run notes example-inventory). CommandDialog is deferred (needs a Dialog port),
-// so the dialog example is skipped. Visual showcases → controls disabled.
+// (see run notes example-inventory). Visual showcases → controls disabled.
 const meta: Meta<typeof Command> = {
   title: 'UI/Command',
   component: Command,
@@ -75,6 +78,65 @@ export const Default: Story = {
       </CommandList>
     </Command>
   ),
+};
+
+// The command-dialog doc example: the same palette inside a CommandDialog. The
+// demo's global ⌘J listener is replaced by a DS Button trigger (the stories
+// tsconfig has no DOM lib, so no document/KeyboardEvent globals here); the Kbd
+// keycap carries the shortcut hint. Starts open so the story shows the palette;
+// Esc / overlay click close it, the button re-opens.
+function CommandDialogDemo() {
+  const [open, setOpen] = useState(true);
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        Open Command Palette
+        <Kbd>⌘J</Kbd>
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a command or search…" />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            <CommandItem>
+              <RiCalendarLine />
+              <span>Calendar</span>
+            </CommandItem>
+            <CommandItem>
+              <RiEmotionLine />
+              <span>Search Emoji</span>
+            </CommandItem>
+            <CommandItem>
+              <RiCalculatorLine />
+              <span>Calculator</span>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem>
+              <RiUserLine />
+              <span>Profile</span>
+              <CommandShortcut>⌘P</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <RiBankCardLine />
+              <span>Billing</span>
+              <CommandShortcut>⌘B</CommandShortcut>
+            </CommandItem>
+            <CommandItem>
+              <RiSettings3Line />
+              <span>Settings</span>
+              <CommandShortcut>⌘S</CommandShortcut>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
+    </>
+  );
+}
+
+export const InDialog: Story = {
+  render: () => <CommandDialogDemo />,
 };
 
 // Empty state — a search term that matches nothing surfaces CommandEmpty in place

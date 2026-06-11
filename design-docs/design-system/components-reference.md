@@ -62,10 +62,10 @@ baseline:
 modes: [light]                       # kein Dark-Mode
 package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
 status_note: >
-  Branch feat/shadcn-dialog-port: Dialog NEU portiert (Composite-Verfahren, Figma+Code, Gate grün,
-  Done-Test) inkl. neuem Semantic-Token `scrim`. Davor (master): Command (cmdk) + InputGroup-Re-Port
-  nach dem überarbeiteten Composite-Verfahren, radix-nova-Angleichung der Altkomponenten, Textarea.
-  CommandDialog weiterhin deferred — Dialog steht jetzt, Re-Add ist der nächste Schritt.
+  Dialog portiert (Composite-Verfahren, Figma+Code, Gate grün, Done-Test) inkl. Semantic-Token
+  `scrim`; CommandDialog 2026-06-11 nachgerüstet (code-only, Branch feat/command-dialog-readd).
+  Davor: Command (cmdk) + InputGroup-Re-Port nach dem überarbeiteten Composite-Verfahren,
+  radix-nova-Angleichung der Altkomponenten, Textarea.
 ```
 
 ## Components
@@ -212,7 +212,7 @@ status_note: >
   source: { registry: "@shadcn", item: command, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/command/
-    exports: [Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator]
+    exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
   figma:
     section: { name: "Command", id: "3555:679" }
@@ -231,8 +231,12 @@ status_note: >
   skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)
   notes: >
     Multi-Composite (cmdk). Deps: InputGroup ✓ (als echte Instanz in .Command/Input genestet), Button/Input/
-    Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht). CommandDialog DEFERRED — braucht
-    Dialog-Port (Dialog: pending): Funktion + Export + Story entfernt, re-add nach Dialog-Port. DS-Abweichungen:
+    Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht), Dialog ✓ (CommandDialog nachgerüstet
+    2026-06-11, code-only — KEIN Figma-Artefakt, .Command-Composition bleibt ohne Dialog-Achse; Panel top-1/3 +
+    p-0 + overflow-clip, inneres Command border-0/shadow-none, Item in-data-[slot=dialog-content]:corner-lg!;
+    Children = Palette-Teile, Wrapper liefert das Command-Root wie new-york-v4 — novas bare-children-Quelle
+    bricht den Doc-Usage-Contract; Story InDialog mit Button+Kbd-Trigger statt ⌘J-document-Listener,
+    Stories-tsconfig hat keine DOM-lib). DS-Abweichungen:
     Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
     text-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
     auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
@@ -274,14 +278,14 @@ status_note: >
     Scrim als eigene .Dialog/Overlay-Komponente, Panel-Komposition bleibt scrim-frei. Figma-Mechanik:
     SLOT nie direkt visibility-binden (degradiert zu FRAME) → Wrapper-Frame trägt showBody-Boolean.
     Geometrie numerisch (top-2/right-2, max-w-*). Gate grün (39 Tests inkl. Token-Survival).
-    → CommandDialog kann jetzt un-deferred werden (Command-Katalog-Eintrag).
+    CommandDialog nutzt diesen Dialog seit 2026-06-11 (Command-Katalog-Eintrag).
 ```
 
 ## Pending / Removed
 
 ```yaml
 # Command: re-portiert 2026-06-10 (siehe Components-Liste oben).
-# CommandDialog: deferred — Dialog ist seit 2026-06-10 portiert; Re-Add (Funktion + Export + Story in command/) ist der offene nächste Schritt.
+# CommandDialog: nachgerüstet 2026-06-11 (Funktion + Export + Story InDialog in command/, code-only — siehe Command-Eintrag).
 ```
 
 ## Blocks (Organismen)

@@ -1,6 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import {
   Command,
+  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
@@ -73,5 +74,62 @@ describe('Command', () => {
     expect(
       getByText('Profile').closest('[data-slot=command-item]')?.className
     ).toContain('text-body');
+  });
+});
+
+function DialogPalette() {
+  return (
+    <CommandDialog open>
+      <CommandInput placeholder="Search…" />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Suggestions">
+          <CommandItem>Calendar</CommandItem>
+          <CommandItem>Profile</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </CommandDialog>
+  );
+}
+
+describe('CommandDialog', () => {
+  it('renders the palette inside an open dialog labelled by the sr-only header', () => {
+    const { getByRole, getByText } = render(<DialogPalette />);
+    const dialog = getByRole('dialog');
+    expect(dialog.querySelector('[data-slot=command]')).toBeTruthy();
+    expect(dialog.getAttribute('aria-labelledby')).toBe(
+      getByText('Command Palette').id
+    );
+    expect(dialog.getAttribute('aria-describedby')).toBe(
+      getByText('Search for a command to run…').id
+    );
+  });
+
+  // The panel owns the frame: the inner Command must shed its border (twMerge
+  // border → border-0) and the panel padding must collapse to p-0 (named-spacing
+  // extension: p-xl vs p-0 conflict).
+  it('re-shapes the panel and sheds the inner Command frame', () => {
+    const { getByRole } = render(<DialogPalette />);
+    const dialog = getByRole('dialog');
+    const dialogClasses = dialog.className.split(/\s+/);
+    expect(dialogClasses).toContain('p-0');
+    expect(dialogClasses).not.toContain('p-xl');
+    expect(dialogClasses).toContain('top-1/3');
+    expect(dialogClasses).not.toContain('top-1/2');
+    const command = dialog.querySelector('[data-slot=command]');
+    const commandClasses = command?.className.split(/\s+/) ?? [];
+    expect(commandClasses).toContain('border-0');
+    expect(commandClasses).not.toContain('border');
+  });
+
+  it('filters inside the dialog as the search value changes', async () => {
+    const { getByPlaceholderText, queryByText, findByText } = render(
+      <DialogPalette />
+    );
+    fireEvent.change(getByPlaceholderText('Search…'), {
+      target: { value: 'Profile' },
+    });
+    expect(await findByText('Profile')).toBeTruthy();
+    await waitFor(() => expect(queryByText('Calendar')).toBeNull());
   });
 });

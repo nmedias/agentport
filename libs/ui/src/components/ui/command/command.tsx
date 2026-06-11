@@ -4,6 +4,13 @@ import * as React from 'react';
 import { Command as CommandPrimitive } from 'cmdk';
 
 import { cn } from '@/lib/utils';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { InputGroup, InputGroupAddon } from '@/components/ui/input-group';
 import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 
@@ -23,8 +30,11 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //  · shortcut hint = text-kbd (keyboard text); tracking-* is dead → dropped.
 //  · empty = text-body muted. gap-2(8)→gap-md, px-2(8)→px-md, py-1.5(6)→py-sm,
 //    p-1(4)→p-xs, py-6(24)→py-2xl, -mx-1(4)→-mx-xs; radius by NAME.
-//  · CommandDialog is deferred (needs a ported Dialog) — see the note below.
-// Geometry (h-px, max-h-72, scroll-py-1, size-4) stays numeric. dialog-content override dropped.
+//  · CommandDialog nests the ported Dialog (sr-only header; panel re-shaped to the
+//    palette: top-1/3, p-0, overflow clip). The panel owns the frame, so the inner
+//    Command drops its own border/shadow; items widen to corner-lg inside the
+//    dialog (nova's in-data-[slot=dialog-content] override on the DS corner scale).
+// Geometry (h-px, max-h-72, scroll-py-1, size-4) stays numeric.
 function Command({
   className,
   ...props
@@ -41,9 +51,41 @@ function Command({
   );
 }
 
-// CommandDialog (palette inside a Dialog) is deferred: it requires a ported Dialog
-// component, which does not exist yet (catalog status: pending). Re-add once Dialog
-// is ported — wrap <Command> in <Dialog><DialogContent> with an sr-only header.
+// The palette inside the ported Dialog. Children are the palette parts
+// (CommandInput/CommandList …) — the wrapper supplies the <Command> root, like
+// new-york-v4 (nova's registry source renders children bare, which breaks the
+// canonical doc usage; deliberate deviation). nova deltas: the rounded-xl!
+// override is dropped (DialogContent is already corner-xl); the inner Command
+// sheds its frame (border-0 — the panel owns border + elevation; the inner
+// shadow is clipped by the panel's overflow-hidden either way).
+function CommandDialog({
+  title = 'Command Palette',
+  description = 'Search for a command to run…',
+  children,
+  className,
+  showCloseButton = false,
+  ...props
+}: React.ComponentProps<typeof Dialog> & {
+  title?: string;
+  description?: string;
+  className?: string;
+  showCloseButton?: boolean;
+}) {
+  return (
+    <Dialog {...props}>
+      <DialogHeader className="sr-only">
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
+      </DialogHeader>
+      <DialogContent
+        className={cn('top-1/3 translate-y-0 overflow-hidden p-0', className)}
+        showCloseButton={showCloseButton}
+      >
+        <Command className="border-0 shadow-none">{children}</Command>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 function CommandInput({
   className,
@@ -135,7 +177,7 @@ function CommandItem({
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        "group/command-item relative flex cursor-default items-center gap-md corner-sm px-md py-sm text-body outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
+        "group/command-item relative flex cursor-default items-center gap-md corner-sm px-md py-sm text-body outline-hidden select-none in-data-[slot=dialog-content]:corner-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-accent data-selected:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-accent-foreground",
         className
       )}
       {...props}
@@ -164,6 +206,7 @@ function CommandShortcut({
 
 export {
   Command,
+  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
