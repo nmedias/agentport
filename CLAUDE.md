@@ -78,8 +78,9 @@ agent-runs/         Sketch / Design-Punk / component-port run notes (per directi
   language + the decided Explorer component designs (Figma node IDs, exploration file
   `FIGMA_EXPLORATION_FILE_KEY`). The `blocks/` organisms orient on it; Design-Punk 3e/Phase 4 are shelved.
 - `Agentport/Design-Punk-Roadmap.md` / `Agentport/Sketch-Roadmap.md` — phase + decision logs (Figma IDs).
-- `handoff-agentport-component-port.md` — **resume doc** for the code strand (shadcn→Figma→code
-  pipeline state, ported components, Figma node IDs). Read first to continue port/sync work.
+- `handoff-component-port-open.md` — **resume doc** for the code strand: open items + the
+  consolidated skill findings from the port runs. Component locations/status live in the
+  components-reference catalog below.
 - `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk; data source for
   `/shadcn-component-port` + `/component-sync`.
 - `design-docs/design-system/components-reference.md` — the machine-readable **component catalog**:

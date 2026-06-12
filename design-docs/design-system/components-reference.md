@@ -6,14 +6,14 @@ Prosa = Regeln/Architektur; **YAML = Component-Daten**. Schwester-Doc: `tokens-r
 (Token-Crosswalk) — die hier referenzierten Utilities/Werte dort nachschlagen.
 
 Quelle: `libs/ui/src/components/ui/*`, `libs/ui/src/index.ts`, `libs/ui/{components.json,package.json}`,
-`handoff-agentport-component-port.md`, Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
+Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 (dieses Doc nachziehen, nicht umgekehrt). Figma-Lesen ist read-only (Pipeline-Regel).
 
 ## Regeln
 
 - **Baseline = `radix-nova`** (`components.json` `style`). `ui:add` zieht dichtere Nova-Source; im Code
   in DS-Tokens re-clothen (per NAME, nicht Novas Rohskala). Nie `shadcn init` unter radix-nova. Details
-  + globals-Plumbing (data-state Custom-Variants): siehe `handoff-agentport-component-port.md` §Nova-Pivot.
+  + globals-Plumbing (data-state Custom-Variants): siehe `handoff-component-port-open.md` §Nova-Baseline.
 - **Ein Ordner pro Component:** `components/ui/<name>/` = `<name>.tsx` + `.stories.tsx` + `.spec.tsx` +
   `index.ts` (Barrel `export * from './<name>'`). Re-Export der Component im Wurzel-Barrel
   `libs/ui/src/index.ts` (sonst nicht über `@agentport/ui` erreichbar).
