@@ -128,7 +128,7 @@ status_note: >
   figma:
     section: { name: "Input", id: "3176:302" }
     set: { name: ".Input", id: "3177:302" }
-    axis: { state: [default, focus, filled, disabled, invalid] }   # kein CVA im Code
+    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # focus-invalid = focus+invalid kombiniert (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid: zusammen, kein Sync). kein CVA im Code
   skill: /shadcn-component-port
   notes: >
     h-8 / corner-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
@@ -146,7 +146,7 @@ status_note: >
   figma:
     section: { name: "Textarea", id: "3487:674" }
     set: { name: ".Textarea", id: "3488:684" }
-    axis: { state: [default, focus, filled, disabled, invalid] }   # kein CVA; Sibling von Input
+    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # kein CVA; Sibling von Input; focus-invalid wie Input (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid:)
   skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
   notes: >
     Feld-Zwilling von Input, höher. min-h-16 / corner-lg / px-md / py-md; field-sizing-content (auto-grow).
@@ -171,7 +171,7 @@ status_note: >
     input: { name: ".InputGroup/Input", id: "3522:590", prop: text }
     textarea: { name: ".InputGroup/Textarea", id: "3522:592", prop: text }
     text: { name: ".InputGroup/Text", id: "3522:594", prop: text }
-    composition: { name: ".InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid] x layout [horizontal,vertical]", slot: content }
+    composition: { name: ".InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid,focus-invalid] x layout [horizontal,vertical]", slot: content }   # +focus-invalid 2026-06-12 (Figma-Member; Code via has-[control:focus-visible]+has-[aria-invalid], kein Sync)
     examples: { Icons: "3527:613", Text: "3527:650", Buttons: "3546:697", States: "3528:662/681/700", Textarea: "3547:711", Kbd: "3531:676" }
   skill: /shadcn-component-port (2026-06-10, Re-port; GREEN-Test des überarbeiteten Composite-Verfahrens)
   notes: >
