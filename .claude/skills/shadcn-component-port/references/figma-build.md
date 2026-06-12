@@ -64,6 +64,12 @@ glyphs** (notably the `*-s-line` chevrons) → take the exact path from the inst
   or a standalone comp, then bind the node
   (`node.componentPropertyReferences = { characters|visible|mainComponent: id }`); prop ids change on
   combine → re-read.
+- **Name every TEXT prop semantically + set its default — ALWAYS, every port, never the Figma default
+  `text`:** name = the part's **semantic role** (`label`/`description`/`error`/`legend`/… — `label` is
+  just an example); default value = that name in curly brackets, **`{Semantic}`** (`label`→`{Label}`,
+  `error`→`{Error}`). If the text IS the comp's whole content/children (single-text comp) suffix the
+  name **`(children)`** (`<name> (children)` = `{Name}`); a plain TEXT prop inside a larger comp keeps
+  the bare name.
 - **Full matrix** — every value of every property, not a representative subset (a partial set reads as broken).
 - **Sorted grid** — never leave scattered append order. Reorder primary-property-major, secondary in
   option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP'` and

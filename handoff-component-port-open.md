@@ -19,13 +19,12 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 
 ## Offene Punkte
 
-1. **Skill-Findings einarbeiten** (Block unten) — User wendet an; Stand 2026-06-12 ist **nichts**
-   davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien). Neu am
-   2026-06-12: Findings **15–29** aus den Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21),
-   dem Field-Composite-Run (22–28: Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-
-   Rezept, Slot-statt-Text-Property, lokales Nesting via `createInstance`, 2px-Spacing-Rung,
-   16px-Typo-Rolle) und der Text-Property-Konvention (29, User-Direktive) — alle offen. Ausnahme:
-   InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
+1. **Skill-Findings einarbeiten** (Block unten) — User wendet an. **Noch offen: Findings 15–28** aus den
+   Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21) und dem Field-Composite-Run (22–28:
+   Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-Rezept, Slot-statt-Text-Property,
+   lokales Nesting via `createInstance`, 2px-Spacing-Rung, 16px-Typo-Rolle) — geprüft: keine davon im
+   Skill (kein lucide/radix-ui/SizingMode-Treffer). **Eingearbeitet:** InputGroup #1–#3 (2026-06-10) +
+   #29 Text-Property-Konvention (figma-build.md, 2026-06-12) — s. „Bereits eingearbeitet".
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: **Select + Checkbox**
    porten (Controls, nicht Composites — schalten die meiste zurückgestellte Field-Arbeit frei, s. #6),
    weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
@@ -75,6 +74,14 @@ nie mid-run editiert.
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *durch Dialog #3–#5
   unten teilweise überholt; der Abschnitt braucht das Update aus Findings 7–9.*
 - **Conditional-Layout → Variant-Achse** (`has-[]`-Direction-Flip; InputGroup #3 → composites.md §1).
+- **Text-Property-Konvention** ✅ *(User-Direktive #29; gilt für ALLE Ports, nicht nur Composites)* —
+  jede Figma-TEXT-Property sprechend benennen + Default mit Curly-Brackets: Name = semantische Rolle
+  (`label`/`description`/`error`/… — `label` nur Beispiel, nie der Default `text`), Value = `{Semantic}`
+  (`label`→`{Label}`, `error`→`{Error}`); children-getrieben (Text = ganzer Content der Component) →
+  Suffix `(children)`. **Eingearbeitet** in `figma-build.md §Variant set assembly` (Heimat — jeder Port
+  via T4; NICHT composites-spezifisch, daher kein Eintrag in composites.md). **Backlog-Sweep offen:**
+  bestehende Components mit generischem `text`-Property nachziehen. *(Angewandt auf `.Field`-Familie
+  06-12; `.Label` = `label (children)`/`{Label}`.)*
 
 ### Offen — T2 Dependency-Audit (SKILL.md / composites.md §2)
 
@@ -304,22 +311,6 @@ nie mid-run editiert.
     label-variant bleibt `text-format-label`/14). Fix: #20 verallgemeinern — *jede Stock-Size ohne exakte
     DS-Rung (12, 16, …) per ROLLE wählen + notieren: 16px Section-Captions → text-format-title, 12px
     Micro-Labels → text-format-label.* *(Verified: §4-Ladder hat keine Stufe zwischen 14 und 18.)*
-
-### Offen — figma-build.md / composites.md §1 (Text-Property-Konvention) — User-Direktive 06-12
-
-29. **Text-Properties IMMER sprechend benennen + Value mit Curly-Brackets initialisieren**
-    *(User-Direktive 06-12; ergänzt #25)* — beim Anlegen einer Figma-TEXT-Property (oder eines
-    children-getriebenen Text-Defaults) NIE den generischen Default-Namen `text` stehen lassen:
-    - **Name = sprechend/semantisch** (`label`, `description`, `error` …), nie `text`.
-    - **Value initial mit Curly-Brackets**: `{Label}` (Semantik-Name kapitalisiert in `{…}`).
-    - **Children-getrieben** (der Text IST der Content/children der Component, z. B. `.Label`):
-      Name-Suffix `(children)` → `label (children)`, Value `{Label}`.
-    - **Nicht-children** (eigenständige TEXT-Property innerhalb einer größeren Component):
-      Name `label`, Value `{Label}`.
-    Gilt **immer** — jede Component, jeder Port. Fix: als Regel in figma-build.md
-    (Text-Property-/Slot-Rezept) + composites.md §1 (Slot≠Slot) aufnehmen. **Backlog-Sweep:**
-    bestehende Components mit generischem `text`-Property nachziehen. *(Angewandt auf die
-    `.Field`-Familie 06-12 — s. component-sync-Note.)*
 
 ## Quellen
 
