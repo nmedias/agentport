@@ -19,9 +19,10 @@ references/composites.md + references/figma-build.md); Pflege via `/component-sy
 
 1. **Skill-Findings einarbeiten** (Block unten) — User wendet an; Stand 2026-06-12 ist **nichts**
    davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien). Neu am
-   2026-06-12: Findings **15–20** aus den Badge-/Separator-Runs (Page-Set-Invariante, Section-relative
-   Koords, ⚠-Suffix-Bindung, Tinted-Surface-Resolve, Achsen-Kardinalität, 12px-Typo-Lücke) — ebenfalls
-   offen. Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
+   2026-06-12: Findings **15–21** aus den Badge-/Separator-Runs + Badge-Stories-Refine (Page-Set-
+   Invariante, Section-relative Koords, ⚠-Suffix-Bindung, Tinted-Surface-Resolve, Achsen-Kardinalität,
+   12px-Typo-Lücke, asChild-Control-Footgun) — ebenfalls offen. Ausnahme: InputGroup #1–#3 wurden
+   bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: weiteres Composite
    porten (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den neuen Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -212,6 +213,26 @@ nie mid-run editiert.
     `label` (14, +2px) ohne Guidance zum Tradeoff. Fix (§4/§6): Off-Ladder-Fallback benennen — *kein
     exaktes Format → per ROLLE wählen (Badge-Label = `text-format-label`, 14px-Snap akzeptiert) ODER
     ein fehlendes DS-Micro-Label-Format als Open Item flaggen.* Aktuell rät der Agent.
+
+### Offen — SKILL.md T2.5/T6 (Stories / Verify) — Folgebefund 06-12 (ergänzt #10–#11)
+
+21. **Strukturiert-Children-Boolean-Controls (`asChild`) auf Text-Stories disablen — Gegenmuster war
+    längst etabliert** *(Badge, Folgebefund 06-12 — nicht aus dem Run-`skill-feedback`, beim Stories-
+    Refine aufgetaucht)* — ein Boolean-Prop, das das gerenderte Element gegen sein Kind tauscht und
+    **genau ein Element-Kind** braucht (`asChild` via Radix Slot), MUSS auf Stories mit Text-`children`
+    als Storybook-Control **deaktiviert** sein — sonst crasht das Umschalten den Slot
+    (`React.Children.only`) direkt im Controls-Panel. Der Badge-Port shippte eine `Default`-Story mit
+    live `asChild`-Control über String-Children (`children:'Badge'`) → Toggle auf `true` ⇒ `Slot.Root`
+    + String-Kind ⇒ Crash. Das Gegenmuster stand schon in `button.stories.tsx`
+    (`argTypes.asChild: { control: false }` + dedizierte `AsChild`-Story mit hartkodiertem
+    Single-Element-Kind), wird im Skill aber nirgends benannt → ein Agent, der nicht von einem bereits
+    portierten Sibling abschreibt, baut den Footgun neu ein. Fix (T2.5/T6): *jedes Boolean-Prop, das ein
+    strukturiertes Kind verlangt (`asChild` & Co.), in argTypes `control: false` setzen und in einer
+    eigenen Story mit genau einem Element-Kind demonstrieren; vor dem Stories-Schreiben die
+    Control-Scoping-Konventionen (`controls.include`, disablete Controls) von einem schon portierten
+    Sibling übernehmen — Button ist die asChild-Referenz.* *(Repo-Fix: badge `Default` entschärft +
+    `AsLink`→`AsChild` promotet auf Branch `refine/badge-aschild-story`, Commit folgt nach dem
+    Field-Run; Skill-Edit offen.)*
 
 ## Quellen
 
