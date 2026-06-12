@@ -321,6 +321,31 @@ status_note: >
     SLOT nie direkt visibility-binden (degradiert zu FRAME) → Wrapper-Frame trägt showBody-Boolean.
     Geometrie numerisch (top-2/right-2, max-w-*). Gate grün (39 Tests inkl. Token-Survival).
     CommandDialog nutzt diesen Dialog seit 2026-06-11 (Command-Katalog-Eintrag).
+
+- name: Separator
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code zusammen)
+  source: { registry: "@shadcn", item: separator, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/separator/
+    exports: [Separator]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/separator'"
+  figma:
+    section: { name: "Separator", id: "3675:1016" }
+    set: { name: ".Separator", id: "3676:1018" }
+    members: { "orientation=horizontal": "3676:1016", "orientation=vertical": "3676:1017" }
+    axis: { orientation: [horizontal, vertical] }   # statisch/non-interaktiv → Content-Achse, KEIN CVA
+  skill: /shadcn-component-port (2026-06-12)
+  notes: >
+    Statisches, non-interaktives Element (Radix Separator.Root, decorative=true → role=none;
+    decorative=false → role=separator + aria-orientation). Keine State-Achse, kein variant×size —
+    Content-Achse = orientation. Volle Matrix = 2 Member. Beide Member: 1px-Linie, SOLID-Fill an
+    border gebunden (VariableID:3038:4 = shadcn Default/border) — `border` ist der Trenner-Token
+    (use: "Standard-Kanten/Trenner"), NICHT border-emphasis/-strong. Klassenstring unverändert ggü.
+    nova (bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch): bg-border nennt
+    bereits den DS-Token, Rest ist reine Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
+    Linie im Flex-Row. Kein jsdom-Polyfill nötig (Radix Separator trivial). Gate grün (4 Tests:
+    default-horizontal, vertical, decorative/role, bg-border-Survival).
 ```
 
 ## Pending / Removed
