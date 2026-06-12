@@ -15,6 +15,10 @@ const meta: Meta<typeof Badge> = {
       control: 'inline-radio',
       options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link'],
     },
+    // asChild swaps the rendered element for the child (Radix Slot) and needs a
+    // SINGLE element child — toggling it onto the stories' plain-text children
+    // crashes the Slot. No control; demonstrated in the AsChild story.
+    asChild: { control: false },
   },
 };
 
@@ -81,13 +85,14 @@ export const Count: Story = {
   ),
 };
 
-// `asChild` renders the badge styling onto a different element via Radix Slot —
-// here an <a>, so the badge becomes a real link (and picks up the [a]:hover
-// tint). The label slot is the anchor's children.
-export const AsLink: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <Badge asChild>
+// asChild merges the Badge styling onto its single child element instead of the
+// <span> (Radix Slot) — here an <a>, so the badge becomes a real link and picks
+// up the [a]:hover tint. Requires exactly one element child (Slot contract),
+// hence no boolean control on the text stories.
+export const AsChild: Story = {
+  parameters: { controls: { include: ['variant'] } },
+  render: ({ variant }) => (
+    <Badge asChild variant={variant}>
       <a href="#badge">Link badge</a>
     </Badge>
   ),
