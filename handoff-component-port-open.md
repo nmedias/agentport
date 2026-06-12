@@ -21,11 +21,11 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 
 1. **Skill-Findings einarbeiten** (Block unten) — User wendet an; Stand 2026-06-12 ist **nichts**
    davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien). Neu am
-   2026-06-12: Findings **15–28** aus den Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21) und
+   2026-06-12: Findings **15–29** aus den Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21),
    dem Field-Composite-Run (22–28: Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-
    Rezept, Slot-statt-Text-Property, lokales Nesting via `createInstance`, 2px-Spacing-Rung,
-   16px-Typo-Rolle) — alle offen. Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet
-   (s. „Bereits eingearbeitet").
+   16px-Typo-Rolle) und der Text-Property-Konvention (29, User-Direktive) — alle offen. Ausnahme:
+   InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: **Select + Checkbox**
    porten (Controls, nicht Composites — schalten die meiste zurückgestellte Field-Arbeit frei, s. #6),
    weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
@@ -304,6 +304,22 @@ nie mid-run editiert.
     label-variant bleibt `text-format-label`/14). Fix: #20 verallgemeinern — *jede Stock-Size ohne exakte
     DS-Rung (12, 16, …) per ROLLE wählen + notieren: 16px Section-Captions → text-format-title, 12px
     Micro-Labels → text-format-label.* *(Verified: §4-Ladder hat keine Stufe zwischen 14 und 18.)*
+
+### Offen — figma-build.md / composites.md §1 (Text-Property-Konvention) — User-Direktive 06-12
+
+29. **Text-Properties IMMER sprechend benennen + Value mit Curly-Brackets initialisieren**
+    *(User-Direktive 06-12; ergänzt #25)* — beim Anlegen einer Figma-TEXT-Property (oder eines
+    children-getriebenen Text-Defaults) NIE den generischen Default-Namen `text` stehen lassen:
+    - **Name = sprechend/semantisch** (`label`, `description`, `error` …), nie `text`.
+    - **Value initial mit Curly-Brackets**: `{Label}` (Semantik-Name kapitalisiert in `{…}`).
+    - **Children-getrieben** (der Text IST der Content/children der Component, z. B. `.Label`):
+      Name-Suffix `(children)` → `label (children)`, Value `{Label}`.
+    - **Nicht-children** (eigenständige TEXT-Property innerhalb einer größeren Component):
+      Name `label`, Value `{Label}`.
+    Gilt **immer** — jede Component, jeder Port. Fix: als Regel in figma-build.md
+    (Text-Property-/Slot-Rezept) + composites.md §1 (Slot≠Slot) aufnehmen. **Backlog-Sweep:**
+    bestehende Components mit generischem `text`-Property nachziehen. *(Angewandt auf die
+    `.Field`-Familie 06-12 — s. component-sync-Note.)*
 
 ## Quellen
 

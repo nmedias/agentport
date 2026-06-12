@@ -385,7 +385,7 @@ status_note: >
     section: { name: "Label", id: "3733:1022" }
     set: { name: ".Label", id: "3735:1024" }
     members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
-    props: "text#3735:0 (TEXT, default 'Label') · state (VARIANT [default, disabled])"
+    props: "label (children)#3735:0 (TEXT, default '{Label}' — Text-Property-Konvention 2026-06-12: children-getrieben → (children)-Suffix + {…}-Default) · state (VARIANT [default, disabled])"
     axis: { state: [default, disabled] }
     nests_into: ".Field label-Slot (alle 4 Member: 3737:1022/1024/1026/1028) — bare TEXT-Default 2026-06-12 durch echte .Label-Instanz ersetzt"
   skill: /shadcn-component-port (2026-06-12, Co-Dep von Field) + Figma-Revision (2026-06-12)
