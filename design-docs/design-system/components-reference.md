@@ -71,6 +71,32 @@ status_note: >
 ## Components
 
 ```yaml
+- name: Badge
+  status: nova-aligned
+  figma_synced: false
+  source: { registry: "@shadcn", item: badge, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/badge/
+    exports: [Badge, badgeVariants]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/badge'"
+  figma:
+    section: { name: "Badge", id: "3687:1016" }
+    set: { name: ".Badge", id: "3697:1016" }
+    members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
+    slots: { icon: "icon#3697:0" }                  # leading-icon SLOT; default 12px check vector, empty→text-only
+    axis: { variant: [default, secondary, destructive, outline, ghost, link] }
+  skill: /shadcn-component-port (2026-06-12)
+  notes: >
+    Single-element CVA span (asChild via Radix Slot, data-slot/data-variant, [&>svg]:size-3 icon).
+    Landed radix-nova source = 6 variants (ghost/link are Nova extras over the doc's 4) — all kept in
+    code AND the full Figma matrix. DS: rounded-4xl→corner-full (full pill); text-xs font-medium→
+    text-format-label (no 12px sans format → picked by role, snaps to 14px); px-2→px-md, py-0.5→py-2xs,
+    gap-1→gap-xs, icon-side pr-1.5/pl-1.5→pr-sm/pl-sm; h-5/size-3 numeric; focus border-ring + ring/50
+    ring-[3px]; dark: dropped. ⚠ secondary + destructive = stock PLACEHOLDER tokens (raw hex,
+    Figma var name suffix " ⚠") — bound but NOT finalized. destructive surface = bg-destructive/10
+    (paint opacity 0.1 + resolved fallback). asChild + count-pill (font-mono tabular min-w-5) are
+    code-level overrides, not Figma variants. /figma-verify CLEAN, gate green (8 specs).
+
 - name: Button
   status: nova-aligned
   figma_synced: false
