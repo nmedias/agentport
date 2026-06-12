@@ -3,7 +3,7 @@ name: shadcn-component-port
 description: "Initial, first-time port of a shadcn/ui component into the Agentport DS — read its anatomy from the shadcn MCP, build a token-bound Figma component set with variants, then write the code on the DS utility vocabulary. Trigger when the user wants to add / port / rebuild / nachbauen a shadcn component (Button, Input, Card, Badge …) that does NOT exist in the DS yet, Figma + code together. To reconcile an ALREADY-built component after a Figma change, use /component-sync instead."
 ---
 
-# shadcn Component Port (initial · shadcn → Figma → Code)
+# Shadcn Component Port (Initial · Shadcn → Figma → Code)
 
 **First-time** port of one shadcn/ui component into the Agentport DS, **token-faithful**: keep shadcn
 structure + variant logic, re-clothe in DS tokens only. For an already-built component whose Figma
@@ -19,13 +19,13 @@ out  figma  .<Component> set on the Components page, every property bound to DS 
      notes  agent-runs/component-port/<YYYY-MM-DD>-<component>/notes.md
 ```
 
-## Data source
+## Data Source
 
 `design-docs/design-system/tokens-reference.md` = the only source for Figma var ↔ CSS var ↔
 Tailwind utility ↔ value ↔ `use`/`avoid`; §6 = stock-shadcn → DS translation. **Never duplicate
 token values into this skill** — it is the procedure, the reference is the data.
 
-## Figma rules
+## Figma Rules
 
 Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before every `use_figma`.
 Every `use_figma` call passes four args — `skillNames:'figma-use'`, `fileKey` (`config.figma.fileKey`),
@@ -51,9 +51,9 @@ T7   Notes     mapping table + node/var ids + example-inventory + findings
 a command palette, a dialog) → **`references/composites.md`** overrides T2–T7 (Examples-First,
 Exposure-Surface, 3-layer build). T1 + T3 and the shared T4 Figma rules still apply.
 
-### T1 — Setup (verify every run)
+### T1 — Setup (Verify Every Run)
 
-tailwind-merge ignores globals.css / the config, so `libs/ui/src/lib/utils.ts` `cn()` MUST extend
+Tailwind-merge ignores globals.css / the config, so `libs/ui/src/lib/utils.ts` `cn()` MUST extend
 twMerge with **both** — add whichever is missing before porting:
 
 ```ts
@@ -131,7 +131,7 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 - Control heights / icon sizes (`h-9`, `size-4`) stay **numeric** — geometry ≠ spacing token.
 - Form fields: `bg-transparent` → `bg-input-background`. Field text = `text-label` — **not** `text-input` (that's the mono-18px command format).
 
-### T4 — Figma build
+### T4 — Figma Build
 
 Build the token-bound component set and place it in a **Section** on the `Components` page. Which Figma
 property per code construct = **`figma-build.md §Mechanism`**; the Plugin-API recipes (binding by ID,
@@ -165,7 +165,7 @@ Three checks on the built set, in order — **functional → clean → faithful*
    / slots) and compare token/values/pixels (zoom, raw px). A story you can't rebuild from controls =
    the surface is incomplete → fix the component (missing variant/slot), never hand-build the example.
 
-### T6 — Code port
+### T6 — Code Port
 
 Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export the folder in
 `libs/ui/src/index.ts` if new. Icons = `@remixicon/react`.
@@ -182,7 +182,7 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 - **Gate**: `npx nx test|typecheck|lint @agentport/ui` green, and confirm the DS typography class
   actually survives in the rendered markup (twMerge drops it if T1 was skipped).
 
-### T7 — Notes + catalog
+### T7 — Notes + Catalog
 
 Two artifacts — a port is **not done** until both exist:
 
@@ -198,7 +198,7 @@ Two artifacts — a port is **not done** until both exist:
    (per CLAUDE.md), so a stale catalog mis-routes future work — keep it current; on a re-port update the
    ids/axes in place rather than leaving the old entry.
 
-## Red flags
+## Red Flags
 
 | Trap | Reality |
 |---|---|
