@@ -171,11 +171,22 @@ export const Invalid: Story = {
 // trailing, on one baseline-centered row.
 export const Horizontal: Story = {
   render: () => (
-    <div className="w-full max-w-md">
-      <Field orientation="horizontal">
-        <FieldLabel htmlFor="optin">Subscribe to updates</FieldLabel>
-        <Input id="optin" type="text" placeholder="you@example.com" className="max-w-[200px]" />
-      </Field>
+    <div className="w-full max-w-4xl">
+      <FieldSet>
+        <FieldGroup>
+          <Field orientation="horizontal">
+            <FieldLabel htmlFor="optin" className="min-w-1/3" >Subscribe to updates</FieldLabel>
+            <Input id="optin" type="text" placeholder="you@example.com"  />
+          </Field>
+        </FieldGroup>
+        <FieldSeparator />
+        <FieldGroup>
+          <Field orientation="horizontal">
+            <FieldLabel htmlFor="optin">Subscribe to updates</FieldLabel>
+            <Input id="optin" type="text" placeholder="you@example.com" className="max-w-1/3" />
+          </Field>
+        </FieldGroup>
+      </FieldSet>
     </div>
   ),
 };
