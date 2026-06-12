@@ -5,24 +5,27 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-12:** master-Strang gemergt (ff-only, kein Remote); **Badge + Separator** frisch
-portiert auf Branch `feat/shadcn-badge-separator-port` (2 Commits `fd9d049`+`0a222c5`, **noch nicht
-gemergt**), Gates grün (65 Tests, `npm run check`). **10 Components** portiert + nova-aligned (Button,
-Input, Textarea, Kbd, Breadcrumb, InputGroup, Command inkl. Palette-Variante + CommandDialog, Dialog,
-**Badge, Separator**) + Blocks-Layer (`explorer/metadata-list`). Badge trägt 6 nova-Varianten
-(`ghost`/`link` über die 4 des Briefs hinaus, bewusst behalten) mit `secondary`/`destructive` an
-⚠-Platzhalter-Vars gebunden (nicht finalisiert); Separator-Achse = `orientation` (h/v). Composite-
-Verfahren validiert (3× bestanden), operativ in `/shadcn-component-port` (SKILL.md +
-references/composites.md + references/figma-build.md); Pflege via `/component-sync` (Figma→Code).
+**Stand 2026-06-12:** alles ff in `master` (kein Remote), Gates grün (`npm run check`, 74 Tests).
+**12 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
+Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
+Label)**) + Blocks-Layer (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
+über die Brief-4, bewusst) mit `secondary`/`destructive` an ⚠-Platzhalter gebunden; Separator-Achse =
+`orientation` (h/v); AsChild-Control-Footgun gefixt (#21). **Field = Surface-less Composite**
+(`orientation × invalid` + 4 Slots, nur Spacing+Typo gebunden; FieldSet/Group/Legend/Title +
+`responsive` = Code-only; FieldError→`destructive ⚠`); **Label public** (Hard-Dep von Field).
+Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operativ in
+`/shadcn-component-port` (SKILL.md + references/composites.md + references/figma-build.md); Pflege via
+`/component-sync` (Figma→Code).
 
 ## Offene Punkte
 
 1. **Skill-Findings einarbeiten** (Block unten) — User wendet an; Stand 2026-06-12 ist **nichts**
    davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien). Neu am
-   2026-06-12: Findings **15–21** aus den Badge-/Separator-Runs + Badge-Stories-Refine (Page-Set-
-   Invariante, Section-relative Koords, ⚠-Suffix-Bindung, Tinted-Surface-Resolve, Achsen-Kardinalität,
-   12px-Typo-Lücke, asChild-Control-Footgun) — ebenfalls offen. Ausnahme: InputGroup #1–#3 wurden
-   bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
+   2026-06-12: Findings **15–28** aus den Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21) und
+   dem Field-Composite-Run (22–28: Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-
+   Rezept, Slot-statt-Text-Property, lokales Nesting via `createInstance`, 2px-Spacing-Rung,
+   16px-Typo-Rolle) — alle offen. Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet
+   (s. „Bereits eingearbeitet").
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: weiteres Composite
    porten (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den neuen Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -53,8 +56,8 @@ references/composites.md + references/figma-build.md); Pflege via `/component-sy
 ## Skill-Findings (konsolidiert)
 
 Quelle: `agent-runs/component-port/*/skill-feedback.md` — Breadcrumb (06-08) · InputGroup (06-10) ·
-Command (06-10) · Dialog (06-10) · CommandDialog (06-11) · Badge (06-12) · Separator (06-12).
-Verified-Belege stehen in den Run-Dateien;
+Command (06-10) · Dialog (06-10) · CommandDialog (06-11) · Badge (06-12) · Separator (06-12) ·
+Field (06-12, + co-port Label). Verified-Belege stehen in den Run-Dateien;
 hier der deduplizierte Stand, gruppiert nach Ziel-Datei. **User reviewt + wendet an** — Skills werden
 nie mid-run editiert.
 
@@ -231,14 +234,75 @@ nie mid-run editiert.
     eigenen Story mit genau einem Element-Kind demonstrieren; vor dem Stories-Schreiben die
     Control-Scoping-Konventionen (`controls.include`, disablete Controls) von einem schon portierten
     Sibling übernehmen — Button ist die asChild-Referenz.* *(Repo-Fix: badge `Default` entschärft +
-    `AsLink`→`AsChild` promotet auf Branch `refine/badge-aschild-story`, Commit folgt nach dem
-    Field-Run; Skill-Edit offen.)*
+    `AsLink`→`AsChild` promotet auf Branch `refine/badge-aschild-story` (committet, ff in `master`);
+    Skill-Edit offen.)*
+
+### Offen — composites.md (Field = Surface-less Composite) — neu 06-12
+
+22. **Hard-importierte Dep MUSS portiert werden — nicht stub/defer** *(Field #1)* — der Dep-Audit
+    (§2 T2) listet für eine un-portierte Foreign-Dep drei Dispositionen (port / stub / delete+defer)
+    als *Wahl*. Importiert die Composite-eigene Source die Dep aber direkt (hier `FieldLabel` →
+    `@/components/ui/label`), brechen stub UND delete+defer das Composite (Runtime/Typecheck) → einzig
+    gültig ist **porten**. Fix: §2 T2 splitten — *importiert die behaltene Composite-Source die Dep →
+    porten (harte Co-Dependency, nicht optional); stub/delete+defer gelten nur für Deps, die bloß
+    nicht-behaltene Sibling-Example/Demo-Files nutzen.* Label auf die „co-ported primitives"-Watchlist
+    (Field/Form ziehen es rein). *(Verified: `label` nur in field.tsx:5 importiert.)*
+23. **Flat-Shadow-Copy ist STOCK, nicht harmlos — Delete-Schritt nie überspringen** *(Field #2 — Regel
+    schon eingearbeitet, InputGroup #1; hier nur Evidenz)* — `ui:add field` schrieb ein flaches
+    `separator.tsx` = **stock new-york** (ohne DS-Kommentare/Bindings), das den DS-Ordner
+    `separator/separator.tsx` via Modul-Resolution (File vor Dir) **still auf Stock zurückdreht**. Regel
+    stimmt; Zusatz: *die flache Kopie ist Stock → der Shadow downgradet die DS-Dep still; Delete nicht
+    überspringen, auch wenn `ui:add` „no overwrite" meldet.* *(Verified: `diff` flat vs folder → unterschiedlich.)*
+24. **Surface-less Composite — was in Figma modellieren?** *(Field #6)* — composites.md nimmt an, das
+    Composite habe *irgendeine* Token-Fläche (InputGroup bg+border, Dialog Panel+Scrim). Field ist das
+    erste **rein Layout/Typo/Spacing/a11y — null eigene Fläche** (Border/bg trägt das genestete Control).
+    Was funktioniert hat: die **strukturelle ROW** modellieren (`orientation × invalid` + Slots +
+    genestete echte Control-Instanz), **nur** Spacing-Gaps + Typo-Formate binden, und die reinen
+    Grouping-Teile (FieldSet/Group/Legend) + Container-Query (`responsive`) explizit als **Code-only**
+    deklarieren (kein Figma-Set). Fix: Surface-less-Composite-Regel in composites.md + Code↔Figma-Gap
+    notieren (known-trap #19). *(Verified: alle Member + Slots `fills=[]`; nur itemSpacing + Text-Style-
+    Bindings tragen Tokens; verify CLEAN.)*
+25. **Text-Regionen als SLOT (mit Text-Default), nicht als Text-Property** *(Field #7)* — §1 mappt
+    „editierbarer String → Text-Property". Für Field wurden label/description/error als echte **Slots**
+    (Text-Default am Format-Style) gebaut: konsistentes Slot-Naming merged sie über alle 4 Member zu
+    **einer** Set-Level-SLOT-Prop pro Region (Done-Test-Vertrag) und erlaubt Struktur-Swaps (z. B. Label
+    + Trailing-Badge), die eine Text-Property sperren würde. Fix: §1-Note — *für Text-Regionen eines
+    Composites einen **Slot-mit-Text-Default** der Text-Property vorziehen, wenn der Consumer
+    Content/Struktur tauschen können soll (nicht nur den String); Text-Property nur bei strikt einzelnem
+    editierbarem String.* *(Verified: 4 Slots → 4 Set-Level-SLOT-Props, je clear+append in der Instanz.)*
+
+### Offen — figma-build.md (Reuse / Nesting) — neu 06-12
+
+26. **Lokale Component nesten = `.createInstance()` per Node-ID, NICHT `importComponentByKeyAsync`**
+    *(Field #5)* — figma-build.md „Reuse, don't rebuild" sagt „nest a real instance", aber nicht WIE
+    für eine **lokale** (unpublished) Component im selben File. `importComponentByKeyAsync(key)` (der
+    offensichtliche Weg, Key kommt aus recon) wirft `Component with key "…" not found` — Import-by-Key
+    löst NUR publizierte Library-Components. Für Same-File die Variant-COMPONENT-Node per
+    `getNodeByIdAsync('<variantNodeId>')` holen und `.createInstance()` darauf. Fix: in „Reuse"/Slots
+    aufnehmen; recon soll die Variant-Node-**IDs** liefern, nicht nur Keys. *(Verified: importByKey auf
+    lokale `.Input`-Default → „not found"; node `3176:303` + `.createInstance()` ok.)*
+
+### Offen — tokens-reference §6/§4 (Spacing- + Typo-Rungs) — neu 06-12
+
+27. **§6-Spacing-Beispiele: untere Rung `gap-0.5`(2px)→`gap-2xs` fehlt** *(Field #3)* — §6 listet
+    Beispiele runter bis `gap-1.5(6)→gap-sm`, aber nicht die 2px-Rung. Field nutzt `gap-0.5`=2px
+    (FieldContent-Stack) → `gap-2xs` (space-2xs, einzige 2px-Stufe). Die px-Wert-Regel löst es, aber die
+    Beispiel-Liste stoppt bei 6px → ein Porter rundet evtl. auf `gap-xs`(4) oder lässt es numerisch. Fix:
+    §6-Liste um die Bottom-Rung erweitern: `gap-0.5(2)→gap-2xs · py-0.5(2)→py-2xs`. **(Wiederkehrend —
+    Badge traf schon `py-0.5→py-2xs`.)**
+28. **16px Sans hat keine exakte Rung → per ROLLE wählen (verallgemeinert #20)** *(Field #4)* —
+    `FieldLegend` (legend-variant) ist `text-base`=16px; die Sans-Ladder ist 14/18/22/27/43 — **kein
+    16px**. #20 deckt 12→14 (Label-Rolle); 16→18 ist dieselbe Klasse eine Stufe höher. Ein `<legend>`
+    über einem `<fieldset>` = Section-Heading-Rolle → `text-format-title` (18/600), nicht body/label (die
+    label-variant bleibt `text-format-label`/14). Fix: #20 verallgemeinern — *jede Stock-Size ohne exakte
+    DS-Rung (12, 16, …) per ROLLE wählen + notieren: 16px Section-Captions → text-format-title, 12px
+    Micro-Labels → text-format-label.* *(Verified: §4-Ladder hat keine Stufe zwischen 14 und 18.)*
 
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
-  2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator}/skill-feedback.md`
+  2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
   §4 `text-format-*`, §6 stock→DS, §7 Auto-Layout→Utilities)
