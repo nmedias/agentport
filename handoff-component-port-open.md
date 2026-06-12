@@ -5,17 +5,23 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-12:** master `fdfa7a9`, alles gemergt (ff-only, kein Remote), Gates grün (53 Tests).
-8 Components portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
-Command inkl. Palette-Variante + CommandDialog, Dialog) + Blocks-Layer (`explorer/metadata-list`).
-Composite-Verfahren validiert (3× bestanden), operativ in `/shadcn-component-port` (SKILL.md +
+**Stand 2026-06-12:** master-Strang gemergt (ff-only, kein Remote); **Badge + Separator** frisch
+portiert auf Branch `feat/shadcn-badge-separator-port` (2 Commits `fd9d049`+`0a222c5`, **noch nicht
+gemergt**), Gates grün (65 Tests, `npm run check`). **10 Components** portiert + nova-aligned (Button,
+Input, Textarea, Kbd, Breadcrumb, InputGroup, Command inkl. Palette-Variante + CommandDialog, Dialog,
+**Badge, Separator**) + Blocks-Layer (`explorer/metadata-list`). Badge trägt 6 nova-Varianten
+(`ghost`/`link` über die 4 des Briefs hinaus, bewusst behalten) mit `secondary`/`destructive` an
+⚠-Platzhalter-Vars gebunden (nicht finalisiert); Separator-Achse = `orientation` (h/v). Composite-
+Verfahren validiert (3× bestanden), operativ in `/shadcn-component-port` (SKILL.md +
 references/composites.md + references/figma-build.md); Pflege via `/component-sync` (Figma→Code).
 
 ## Offene Punkte
 
 1. **Skill-Findings einarbeiten** (Block unten) — User wendet an; Stand 2026-06-12 ist **nichts**
-   davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien).
-   Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
+   davon im Skill (geprüft: kein lucide/radix-ui/SizingMode-Treffer in den Skill-Dateien). Neu am
+   2026-06-12: Findings **15–20** aus den Badge-/Separator-Runs (Page-Set-Invariante, Section-relative
+   Koords, ⚠-Suffix-Bindung, Tinted-Surface-Resolve, Achsen-Kardinalität, 12px-Typo-Lücke) — ebenfalls
+   offen. Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet (s. „Bereits eingearbeitet").
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: weiteres Composite
    porten (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den neuen Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -46,7 +52,8 @@ references/composites.md + references/figma-build.md); Pflege via `/component-sy
 ## Skill-Findings (konsolidiert)
 
 Quelle: `agent-runs/component-port/*/skill-feedback.md` — Breadcrumb (06-08) · InputGroup (06-10) ·
-Command (06-10) · Dialog (06-10) · CommandDialog (06-11). Verified-Belege stehen in den Run-Dateien;
+Command (06-10) · Dialog (06-10) · CommandDialog (06-11) · Badge (06-12) · Separator (06-12).
+Verified-Belege stehen in den Run-Dateien;
 hier der deduplizierte Stand, gruppiert nach Ziel-Datei. **User reviewt + wendet an** — Skills werden
 nie mid-run editiert.
 
@@ -152,11 +159,65 @@ nie mid-run editiert.
     Text-Segment-Set, Icon-Adornment, `createSlot()` + Instance-Prefill sind nur als Prosa
     gedeckt; ein Scaffold (mind. fürs Slot+Prefill-Muster) fehlt.
 
+### Offen — figma-build.md (Build-Mechanik: Page / Koordinaten / Platzhalter-Bindung) — neu 06-12
+
+15. **`setCurrentPageAsync` als Invariante pro `use_figma`-Call** *(Badge #4)* — `figma.currentPage`
+    resettet je Call auf die erste Page; teilt ein Agent den Build über mehrere Calls (das empfohlene
+    Muster) und vergisst den Page-Set am Call-Anfang, landet `createComponent()` still auf der ersten
+    Page → `combineAsVariants` wirft erst später `"must be in the same page as the parent"` (Ursache
+    weit weg). `build-variant-set.js` macht es korrekt; fehlt als explizite Checklist-Zeile für den
+    inkrementellen Multi-Call-Build. *(Verified: 6 Comps über 2 Calls ohne Page-Set → alle auf erster
+    Page, combine rot; Re-Parenting fixte es.)*
+16. **Section-Kinder in SECTION-RELATIVEN Koords positionieren** *(Separator #1)* — nach
+    `combineAsVariants(comps, section)` ist das Set Section-Kind; `.x/.y` werden dann **relativ zur
+    Section-Top-Left** interpretiert, nicht page-absolut. Eine absolute x
+    (`section.absoluteBoundingBox.x + 80`) schiebt das Set tausende px aus der Section, der Fit-Resize
+    bläst die Section auf. Fit über `child.x+width / .y+height` (section-relativ) + Inset rechnen; nie
+    `absoluteBoundingBox` (page-absolut) mischen. Gehört an die Section-Invariante **und** an die
+    `set.x/set.y`-Zeilen im Snippet. *(Verified: `.x=80` → `absoluteBoundingBox.x=9153` = sectionAbsX
+    9073 + 80.)*
+17. **Platzhalter-Variablen tragen ` ⚠`-Namens-Suffix → `endsWith('/'+token)` verfehlt sie**
+    *(Badge #3)* — die Placeholder-Color-Tokens heißen in Figma `shadcn Default/secondary ⚠`,
+    `…/destructive ⚠`, `…/destructive-foreground ⚠`, `chart-1…5 ⚠` (Space + Emoji). recon.js + die
+    Binding-Beispiele matchen per `name.endsWith('/'+token)` → still `[]` → Agent bindet fälschlich
+    Roh-Hex (genau die Red-Flag-Zeile). Fix: looser matchen (`includes` / trailing ` ⚠` strippen) UND
+    notieren, dass die DS Platzhalter mit ` ⚠`-Suffix markiert — sie SIND bindbar (an die echte
+    ⚠-Var, nicht Roh-Hex; „nicht finalisieren" gilt weiter). tokens-reference §1 könnte den Suffix an
+    den Platzhalter-Zeilen vermerken. *(Verified: `endsWith('/secondary')` → `[]`; voller Namens-Scan
+    fand die ⚠-Vars.)*
+18. **Tinted bound surface (`bg-X/10`) braucht ein Alias-Resolve-Rezept, nicht nur „die aufgelöste
+    Farbe setzen"** *(Badge #5)* — figma-build.md sagt „Opacity + reale aufgelöste Farbe als Fallback",
+    aber der Var-Wert ist meist `VARIABLE_ALIAS` → Primitive → Color, also nicht direkt aus
+    `valuesByMode` lesbar; man muss die Alias-Kette rekursiv laufen. Ohne Snippet spreadet ein Agent
+    den gebundenen Paint (verbotener Move) oder setzt schwarz. Fix: „tinted bound surface"-Rezept in
+    figma-build.md (+ `tintVar`/`tintOpacity`-Branch in `build-variant-set.js`): binden → Farbe
+    rekursiv über die Alias-Kette auflösen → als Paint-Fallback setzen → Paint-Level-`opacity`.
+    Abgrenzen vom Node-Level-`opacity` (dimmt Content mit — nur für disabled). *(Verified:
+    `bg-destructive/10` brauchte `resolveColor` über den Alias → 10%-Rot mit erhaltener Bindung.)*
+
+### Offen — SKILL.md T2 (Achsen-Scope) + tokens-reference §4/§6 (Typo-Ladder) — neu 06-12
+
+19. **Gelandete CVA kann die Doc/Brief-Matrix übersteigen — Achsen-Kardinalität festlegen** *(Badge #1)*
+    — die nova-`ui:add`-Source ist dichter als Stock und trägt CVA-Optionen, die die Doc-Page nie zeigt
+    (Badge: 6 Varianten `default|secondary|destructive|outline|ghost|link` vs 4 in Doc/Brief). Kein
+    Skill-Rule für „gelandete CVA > kanonischer Usage-Set / Brief-Matrix" → Agent droppt entweder
+    Code-Optionen (bricht die Component) oder sprengt die Figma-Matrix. Fix (T2): *Code behält die volle
+    gelandete CVA (nie Optionen droppen); Figma deckt mind. die Brief/Doc-Optionen, SOLL alle
+    gelandeten decken, außer der Brief scopt runter — dann den Code↔Figma-Achsen-Gap in notes.md
+    vermerken.* Festlegen, welches Artefakt für die Achsen-Kardinalität autoritativ ist. *(Badge: 6
+    Code-Varianten voll in Figma gebaut, im Code belassen — nicht getrimmt.)*
+20. **Typo-Ladder hat kein 12px-Sans für Micro-Labels** *(Badge #2)* — §6 mappt totes `text-xs` →
+    „passende `text-format-*`", aber die 11 DS-Formate haben kein 12px-Sans: `label`/`body`=14,
+    `eyebrow`=9 (mono/upper), `data`=11 (mono). Ein 12px-Sans-Label (Badge, kleine Chips) snappt auf
+    `label` (14, +2px) ohne Guidance zum Tradeoff. Fix (§4/§6): Off-Ladder-Fallback benennen — *kein
+    exaktes Format → per ROLLE wählen (Badge-Label = `text-format-label`, 14px-Snap akzeptiert) ODER
+    ein fehlendes DS-Micro-Label-Format als Open Item flaggen.* Aktuell rät der Agent.
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
-  2026-06-11-command-dialog}/skill-feedback.md`
+  2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
   §4 `text-format-*`, §6 stock→DS, §7 Auto-Layout→Utilities)
