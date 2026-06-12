@@ -372,6 +372,59 @@ status_note: >
     bereits den DS-Token, Rest ist reine Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
     Linie im Flex-Row. Kein jsdom-Polyfill nötig (Radix Separator trivial). Gate grün (4 Tests:
     default-horizontal, vertical, decorative/role, bg-border-Survival).
+
+- name: Label
+  status: nova-aligned
+  figma_synced: false                           # kein eigenes Figma-Set (lebt im .Field-Slot)
+  source: { registry: "@shadcn", item: label, style: radix-nova }   # co-portiert via `ui:add field`
+  code:
+    dir: libs/ui/src/components/ui/label/
+    exports: [Label]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/label'"
+  figma: { note: "Kein eigenständiges Set. Erscheint als label-Slot-Default (text-format-label) in .Field 3716:1020." }
+  skill: /shadcn-component-port (2026-06-12, Co-Dep von Field)
+  notes: >
+    Radix Label (LabelPrimitive.Root), als HARTE Field-Dependency mitportiert (FieldLabel wrappt Label;
+    delete/defer würde Field brechen). Single-Element, kein CVA. DS: text-sm leading-none font-medium →
+    text-format-label (14/500, Rolle Form-/Toggle-Labels); gap-2→gap-md. select-none + group/peer-disabled
+    Opacity unverändert. Eigene Stories (Default/WithControl/Disabled) + Spec (3 Tests inkl. text-format-label-
+    Survival). OFFENER PUNKT: falls ein dedizierter Label-Port geplant war, ist dieser hier vorweggenommen.
+
+- name: Field
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-12 (Composite, Variant A; Figma + Code)
+  source: { registry: "@shadcn", item: field, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/field/
+    exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
+    code_only_parts: [FieldSet, FieldLegend, FieldGroup, FieldTitle, "orientation=responsive"]   # kein Figma-Pendant (reine Gruppierung / Container-Query)
+  figma:
+    section: { name: "Field", id: "3710:1016" }
+    set: { name: ".Field", id: "3716:1020" }
+    members:
+      "orientation=vertical, invalid=false":   "3712:1016"
+      "orientation=vertical, invalid=true":    "3713:1017"
+      "orientation=horizontal, invalid=false": "3714:1018"
+      "orientation=horizontal, invalid=true":  "3715:1019"
+    slots: { label: "label#3716:0", control: "control#3716:1", description: "description#3716:2", error: "error#3716:3" }
+    nests: ".Input (state=default 3176:303 / state=invalid 3176:311) als control-Slot-Default; FieldSeparator-Idiom = .Separator 3676:1018 (nicht nachgebaut)"
+    axis: { orientation: [vertical, horizontal], invalid: [false, true] }
+  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12)
+  notes: >
+    Multi-Part-Composite OHNE Root-Element (~10 reine Layout/Typo/Spacing/a11y-Parts, KEINE eigene
+    Fläche/Border/Schatten). VARIANT A: Figma = nur die Field-ROW (orientation×invalid, 4 Slots, genestete
+    .Input-Instanzen, kein Fill/Stroke/Shadow); Code = VOLLE Familie (10 Exporte, known-trap #19 — Code↔Figma-
+    Kardinalitätslücke bewusst). Code-only (kein Figma-Set): FieldSet/FieldLegend/FieldGroup/FieldTitle +
+    orientation=responsive (Container-Query @md → Figma kann das nicht). Deps: Input ✓, Textarea ✓, Separator ✓,
+    Button ✓; Label NEU co-portiert (harte Field-Dep). Flacher separator.tsx-Schatten gelöscht (sonst Stock-
+    Shadowing der DS-Folder). DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter);
+    Typo text-sm→text-format-label/-body, legend text-base(16, kein Rung)→text-format-title (Rolle Section-
+    Caption); FieldError = ⚠ destructive-PLATZHALTER (VariableID:3038:3, bound aber NICHT final). dark: entfernt.
+    4 Slots mergen set-level (konsistente Namen). figma-verify CLEAN, Controls-live (orientation/invalid +
+    4 Slots, control nimmt .Textarea-Swap an). Stories: InputField/TextareaField/Fieldset/Responsive (Doc-
+    Beispiele, nur portierte Deps) + Invalid/Horizontal (DS-authored). Skip-Log: Select/Checkbox/Radio/Switch/
+    Slider/Choice-Card-Beispiele (un-ported Deps). Gate grün (6 Field-Specs). Kein jsdom-Polyfill nötig.
 ```
 
 ## Pending / Removed
