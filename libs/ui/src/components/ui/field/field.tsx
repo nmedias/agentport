@@ -23,6 +23,10 @@ import { Separator } from '@/components/ui/separator';
 //    description/error → text-format-body (14/400/1.5). Standalone leading-* dropped.
 //  · FieldError colour = the destructive token (text-destructive) — a ⚠ stock
 //    PLACEHOLDER (raw hex, not designed); bound but NOT finalized.
+//  · invalid state keeps label + description NEUTRAL (foreground / muted) — only the
+//    control (aria-invalid border/ring) + FieldError go destructive, matching the
+//    Figma .Field design (3716:1020). This deviates from stock shadcn's group-wide
+//    data-[invalid=true]:text-destructive, which reddened the label by inheritance.
 //  · rounded-lg→corner-lg; every dark: variant dropped (light is the only mode).
 //  · responsive orientation (container-query @md flips column→row) is CODE-ONLY —
 //    not modelled in Figma (Figma has no container queries); kept verbatim here.
@@ -71,7 +75,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-const fieldVariants = cva('group/field flex w-full gap-md data-[invalid=true]:text-destructive', {
+const fieldVariants = cva('group/field flex w-full gap-md', {
   variants: {
     orientation: {
       vertical: 'flex-col *:w-full [&>.sr-only]:w-auto',

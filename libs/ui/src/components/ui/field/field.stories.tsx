@@ -144,9 +144,9 @@ export const Responsive: Story = {
   ),
 };
 
-// DS-authored (no standalone doc example): the invalid state. data-invalid on the
-// Field turns the whole group destructive (text-destructive), aria-invalid drives
-// the control's own destructive border/ring, and FieldError renders the message.
+// DS-authored (no standalone doc example): the invalid state. data-invalid marks the
+// group invalid; per the Figma .Field design only the control (aria-invalid border/ring)
+// and FieldError go destructive — label + description stay neutral (foreground / muted).
 // The destructive token is a ⚠ stock PLACEHOLDER — see tokens-reference.md.
 export const Invalid: Story = {
   render: () => (
