@@ -75,7 +75,7 @@ export const AsChild: Story = {
     const s = size as 'default' | 'xs' | 'sm' | 'lg';
     return (
       <Button asChild variant={variant} size={s}>
-        <a href="#explorer">Open explorer</a>
+        <div role="button">Open explorer</div>
       </Button>
     );
   },
@@ -141,10 +141,6 @@ export const Icon: Story = {
       <Button size="icon" variant={variant} aria-label="Delete">
         <RiDeleteBinLine />
       </Button>
-
-        <Button size="xs" variant="link" aria-label="Delete">
-            <RiDeleteBinLine /> sfdsfs
-        </Button>
     </div>
   ),
 };
