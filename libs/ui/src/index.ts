@@ -1,6 +1,7 @@
 export * from './components/ui/badge';
 export * from './components/ui/breadcrumb';
 export * from './components/ui/button';
+export * from './components/ui/checkbox';
 export * from './components/ui/command';
 export * from './components/ui/dialog';
 export * from './components/ui/field';
@@ -8,7 +9,9 @@ export * from './components/ui/input';
 export * from './components/ui/label';
 export * from './components/ui/input-group';
 export * from './components/ui/kbd';
+export * from './components/ui/radio-group';
 export * from './components/ui/separator';
+export * from './components/ui/switch';
 export * from './components/ui/textarea';
 export { cn } from './lib/utils';
 export type { Prettify } from './lib/types';
