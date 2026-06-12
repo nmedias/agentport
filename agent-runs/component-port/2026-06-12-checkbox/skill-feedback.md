@@ -143,7 +143,7 @@ hand-build or re-clothe copies (example-instance slot content is non-editable pe
 convention). Lay them out in a labelled vertical auto-layout group below the set using DS
 spacing tokens, mirroring the sibling Sections (Input/Command/InputGroup)."*
 
-**Status:** open (rebuilt the four examples as permanent real-instance group in this run)
+**Status:** ✅ written into `/shadcn-component-port` 2026-06-12 — Output/T5 + `figma-build.md §Usage-examples` (the permanent-examples deliverable + Done-Test lifted OUT of `composites.md` into the general path; applies to every port now).
 
 ## 6. figma-build §interaction-state — a glow-correctness fix must sweep ALL glow-bearing members, not just the reported one
 
@@ -197,5 +197,6 @@ basic/Default row). Before simplifying, check whether the needed composition pri
 ported. An example needing an un-ported dep (Table, react-hook-form) → skip AND log it in notes; never
 silently simplify or omit."*
 
-**Status:** ✅ closed for this batch (all three `.stories.tsx` reworked to Field composition, gate
-green, 92 specs); open as the skill edit (orchestrator does not edit the target skill).
+**Status:** ✅ written into `/shadcn-component-port` 2026-06-12 — T2.5 fidelity rule (reproduce the doc's
+actual composition from the already-ported DS composition primitives; "mirror a sibling" = CSF boilerplate
+only). Batch already reworked (all three `.stories.tsx`, gate green, 92 specs).

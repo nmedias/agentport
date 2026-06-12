@@ -13,7 +13,8 @@ set changed, this is the wrong skill — use `/component-sync`.
 
 ```
 in   component: shadcn item name (button, input, badge…)   REQUIRED
-out  figma  .<Component> set on the Components page, every property bound to DS variables
+out  figma  .<Component> set on the Components page (every property bound to DS variables)
+            + a permanent Usage-Examples group (real instances reproducing the stories) in its Section
      code   components/ui/<component>/ — <component>.tsx + .stories.tsx + .spec.tsx + barrel index.ts,
             on DS utilities; `npx nx test|typecheck|lint @agentport/ui` green
      notes  agent-runs/component-port/<YYYY-MM-DD>-<component>/notes.md
@@ -42,7 +43,7 @@ T2   Anatomy   land the stock source locally → variant axes/slots + every stoc
 T2.5 Stories   shadcn doc usage-examples → Storybook stories, BEFORE Figma (the canonical usage set)
 T3   Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
 T4   Figma     token-bound set: full matrix, sorted grid, in a Section (recipes → figma-build.md)
-T5   Verify    controls live · /figma-verify CLEAN · rebuild every story from the controls (token/values/px)
+T5   Verify    controls live · /figma-verify CLEAN · build every story as a permanent example + verify (token/values/px)
 T6   Code      rewrite per T3; stories = the T2.5 set; headless lib → jsdom once/lib; gate green
 T7   Notes     mapping table + node/var ids + example-inventory + findings
 ```
@@ -108,13 +109,18 @@ source (working shadcn code); T6 only re-clothes the look to DS tokens, the stor
 
 - **Source:** `ui.shadcn.com/docs/components/<x>` (else `get_item_examples_from_registries`, `query`
   required). **All structurally distinct** examples, deduped — not every prop permutation.
+- **Reproduce each example's ACTUAL composition**, not a simplified layout: build it from the
+  already-ported DS composition/layout primitives the doc uses (e.g. a field/form-field family for form
+  controls), never a hand-rolled `div`+label. "Mirror an existing `.stories.tsx`" is for the CSF/meta
+  boilerplate only — not the example composition.
 - **Write each as a story:** if the `storybook` MCP is up (:6006) `get-storybook-story-instructions`
-  first (canonical CSF/imports), write, then `preview-stories` → surface every URL. No MCP? Mirror an
-  existing component's `.stories.tsx`.
+  first (canonical CSF/imports), write, then `preview-stories` → surface every URL.
 - **Skip-rule:** an example needing a **not-yet-ported** component → skip + log in `notes.md` (example
-  name, missing dep). Don't stub, don't co-port.
-- Output: the story-set = the canonical usage set — what T5 verifies the Figma component against
-  (composites also reproduce it as permanent Figma instances, see `references/composites.md`).
+  name, missing dep). Don't stub, don't co-port. Confirm the composition primitive is genuinely
+  un-ported *before* simplifying — a ported one must be used, not hand-rolled around.
+- Output: the story-set = the canonical usage set. T5 verifies the Figma component against it **and**
+  reproduces it as a **permanent Usage-Examples instance group** in the Section — **every port**, not
+  just composites (recipe: `figma-build.md §Usage-examples`).
 
 ### T3 — Translate
 
@@ -161,9 +167,12 @@ Three checks on the built set, in order — **functional → clean → faithful*
    top level.)*
 2. **Clean** — `/figma-verify <setId>` must be **CLEAN** (vectors not text, no clipping/overlap,
    padding symmetry).
-3. **Reproduces the usages** — rebuild every T2.5 story from the component's controls (props / variants
-   / slots) and compare token/values/pixels (zoom, raw px). A story you can't rebuild from controls =
-   the surface is incomplete → fix the component (missing variant/slot), never hand-build the example.
+3. **Reproduces the usages (permanent)** — build every T2.5 story as a **permanent** instance in the
+   Section (a labeled group below the set; recipe `figma-build.md §Usage-examples`), each from the
+   component's controls alone (props / variants / slots), then compare token/values/pixels (zoom, raw
+   px). A standing deliverable, not throwaway scaffolding — don't delete after verifying. A story you
+   can't rebuild from controls = the surface is incomplete → fix the component (missing variant/slot),
+   never hand-build or re-clothe the example.
 
 ### T6 — Code Port
 

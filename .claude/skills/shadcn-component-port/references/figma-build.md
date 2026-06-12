@@ -114,6 +114,21 @@ real port):
   on the effect-bearing node; keep ancestors `clipsContent=false` so the ring isn't clipped.
 - **disabled** — member node opacity (dimming the text too is correct here).
 
+## Usage-examples group (every port)
+
+The Section holds the variant set **and** a permanent **Usage-Examples** group reproducing the T2.5
+stories as real instances — the standing proof the surface is complete. **Every port**, not just composites.
+
+- One **instance per structurally-distinct story**, composed **only** from the component's controls
+  (Properties / Variants / Slots / nested instances) — never a hand-built or re-clothed copy.
+- Nest **real instances** of the set + any already-ported partner (label, field, …); drive state via
+  `setProperties`. Example-instance slot content is non-editable → compose via instances, not by editing
+  internals.
+- Lay out in a labeled **vertical auto-layout** group below the set, DS spacing-token gaps, one labeled
+  block per example (mirror the sibling Sections).
+- **Done-Test:** a story you can't rebuild from controls alone = incomplete surface → fix the component
+  (missing variant / slot / swap), never hand-place the missing piece.
+
 ## Red flags (Plugin-API)
 
 | Trap | Reality |

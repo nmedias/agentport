@@ -6,22 +6,11 @@ SKILL.md unchanged.
 
 **How to read:** SKILL.md is the spine. This file adds the **composite delta**; everything else is
 unchanged. **General — not repeated here:** the **usage-example/story lifecycle** (SKILL.md — T2.5
-stories-from-docs *before Figma*, T5 rebuild-each-story-from-controls, jsdom polyfill once-per-lib, T7
-example-inventory); and the **Figma build mechanics** (`references/figma-build.md` — binding by ID,
-slot config, the Base + `state`-axis interaction patterns, `setBoundVariableForPaint`, `createSlot`,
-`combineAsVariants`, full matrix, sorted grid, Section).
-
-## 0 · Principle — Exposure-Surface + Done-Test
-
-Deliverable = the **Exposure-Surface**: the set of Figma controls (Properties /
-Instance-Swaps / Slots) a Figma user recomposes **every** portable code-usage from.
-
-**Done-Test (provable):** each *portable* doc-usage-example is reproducible in Figma from
-the composition component's controls **alone**. One that isn't → surface incomplete →
-iterate. Dropping an instance **into a slot counts as a control**; a hand-placed element
-beside/without a slot does not. *(Past failure: example hand-built as a Frame, not
-rebuildable from controls.)* This is SKILL.md T5's rebuild-check — **non-trivial here** because
-reproduction runs through slots / swaps / nested instances, not props alone.
+stories-from-docs *before Figma*, in the doc's real composition; T5 build-each-story-as-a-permanent-example;
+jsdom polyfill once-per-lib; T7 example-inventory); and the **Figma build mechanics**
+(`references/figma-build.md` — binding by ID, slot config, the Base + `state`-axis interaction patterns,
+`setBoundVariableForPaint`, `createSlot`, `combineAsVariants`, full matrix, sorted grid, Section, the
+permanent **Usage-Examples** group + Done-Test).
 
 ## 1 · Mechanism — Slot ≠ Slot
 
@@ -53,9 +42,10 @@ moved to **`figma-build.md §Mechanism`** (applies to every port). Composite-spe
 here (a composite example often composes *another* component → skip + log if it isn't ported yet); and
 write **one story per structurally-distinct composition**, not per part.
 
-**T2.6 — Derive the Exposure-Surface**
-- Union of what the stories vary = the exact set of Properties/Swaps/Slots (apply §1 per
-  variation point).
+**T2.6 — Derive the Exposure-Surface** — a single-element port reads its control set straight off the
+CVA (T2); a composite has **no CVA / no root**, so reconstruct it: union of what the stories vary = the
+control set (Properties / Instance-Swaps / Slots), mapped per `figma-build.md §Mechanism`. *(That the
+surface must reproduce every usage is the general Done-Test, `§Usage-examples`.)*
 
 **T2.7 — Composition-Plan → ask the user** *(this IS the composite-ask SKILL.md T2 defers here)*
 - Plan in plain language (user doesn't know shadcn): parts list, how they interplay, the
@@ -73,13 +63,16 @@ write **one story per structurally-distinct composition**, not per part.
    never a rebuild (token edits propagate).
 3. **Flexible composition component** — the composite as **one** recompose-able component
    (Props/Swap/Slots from §1); whole-level variants ride on it. Slot config per `references/figma-build.md`.
-4. **Reproduced example instances** — **one instance per portable doc-example**, built
-   **only** from the component's controls (= the §0 Done-Test proof).
+4. **Usage-Examples group** — the general permanent group (`references/figma-build.md §Usage-examples`);
+   here it is build **layer 4**, reproduction running through slots / swaps / nested instances (= the
+   Done-Test proof).
 - Bind every property by variable **ID**. Section children = **section-relative** coords.
 
-**T5 — Verify** — general (SKILL.md). Composite: the **permanent reproduced example instances** (T4
-layer 4) are the standing proof; a story that can't be rebuilt from the composition's controls →
-surface incomplete → back to T2.6.
+**T5 — Verify** — general (SKILL.md). Composite: the **permanent reproduced example instances** (T4 layer
+4) are the standing proof — **non-trivial here** because reproduction runs through slots / swaps / nested
+instances, not props alone (dropping an instance **into a slot** counts as a control; a hand-placed element
+beside/without a slot does not). A story that can't be rebuilt from the composition's controls → surface
+incomplete → back to T2.6.
 
 **T7 — Notes** — general inventory in SKILL.md T7. Composite adds: **exposure-model per part** (which
 variation → which mechanism + why) and any open foreign-dependency from the T2 audit.

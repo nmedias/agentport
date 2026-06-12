@@ -35,6 +35,8 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    `ring-[3px]`-Sibling-Konvention, Rollen-Token-Kontrast-Ausnahme, no-CVA-State-Achse, Examples =
    permanenter Deliverable, Stories in Doc-Komposition (Field-Familie), Geometrie-Toggle-Rezept, +
    `/component-sync` (bound≠Deviation, ADD-Diff-Form, no-delta-Outcome, Snippet-Indicator-Kind).
+   **Davon 06-12 eingearbeitet:** #34 (Examples-Deliverable) + #36 (Doc-Komposition) — s. „Bereits
+   eingearbeitet". Rest (30–33, 35, 37–45) offen.
 2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
    Branch `feat/form-toggles-port`). Kandidaten für den nächsten Schritt: **Select** + **Slider** porten
    (Controls — schalten den Rest der zurückgestellten Field-Arbeit frei, s. #6), weiteres Composite
@@ -118,6 +120,14 @@ nie mid-run editiert.
   layout→Variant-axis) + When-Regeln aus `composites.md §1` nach **`figma-build.md §Mechanism`**
   verschoben (gilt für ALLE Ports, nicht nur Composites). `composites.md §1` behält nur die
   Composite-Pointe („combines several" + state×layout-Matrix); `SKILL.md` T2/T4-Pointer angepasst.
+- **Usage-Examples = Deliverable für JEDEN Port + Doc-Treue** ✅ *(06-12; Findings 34 + 36)* — der
+  „reproduce examples as permanent instances"-Deliverable + Done-Test aus `composites.md` **herausgehoben**
+  nach **`figma-build.md §Usage-examples`** (generell, nicht mehr Composite-only); `SKILL.md` Output +
+  T2.5 + T5 + Process-Tabelle ziehen nach (T2.5 fordert die echte Doc-Komposition aus geporteten
+  Composition-Primitives statt `div`+Label; T5/Output machen die permanente Usage-Examples-Group zum
+  Vertrag). `composites.md` behält nur die Composite-Nuance (Layer 4, läuft über Slots/Swaps + Pointer
+  auf den generellen §Usage-examples). Generisch formuliert (keine Component-/Run-Referenzen, per Memory
+  `skill-writing-style`).
 
 ### Offen — T2 Dependency-Audit (SKILL.md / composites.md §2)
 
@@ -391,6 +401,8 @@ Runs zusammengezogen.
 34. **T5 Story-Reproduktionen = permanenter Section-Deliverable für JEDE Component-Art** *(Checkbox #5)* —
     nicht nur Composites; nach dem Verifizieren NICHT löschen, als echte genestete Instanzen bauen (+ `.Label`),
     gelabelte AL-Group unter dem Set. *(War der ursprüngliche „examples fehlen"-Bug; Checkbox nachgezogen.)*
+    **✅ Eingearbeitet 06-12** → SKILL.md Output/T2.5/T5 + figma-build.md §Usage-examples (Deliverable aus
+    composites.md herausgehoben → gilt für jeden Port).
 35. **Single-Achsen-State-Set kann orthogonale Kombis (checked×disabled) nicht ausdrücken → Instanz-Override**
     *(Radio #4)* — z. B. „erste Option checked unter disabled Group": Instanz auf `state:checked` +
     `opacity:0.5`-Override (legitim — kein Member, kein Detach), in notes vermerken.
@@ -404,6 +416,7 @@ Runs zusammengezogen.
     vorziehen; nur wo das Doc-Beispiel selbst bare ist (basic/Default) bare bleiben. Un-ported-Dep-Beispiele
     (Table, react-hook-form) **skippen UND in notes loggen**, nie still vereinfachen. *(Alle 3 Stories 06-12
     auf Field-Komposition umgebaut, `field.stories.tsx` = In-Repo-Idiom, Gate grün.)*
+    **✅ Eingearbeitet 06-12** → SKILL.md T2.5 (Fidelity-Regel, generisch formuliert).
 37. **`mv`, nicht `git mv`, für die frisch-gelandete (untracked) Source** *(Radio #1)* — `git mv` wirft
     `not under version control` auf der untracked `ui:add`/orchestrator-Source; plain `mv`. *(Verified: exit 128.)*
 38. **twMerge-Survival-Guard → „at-risk DS-Custom-Utility", nicht nur `text-format-*`** *(Radio #2)* — ein
