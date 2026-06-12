@@ -26,15 +26,22 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    Rezept, Slot-statt-Text-Property, lokales Nesting via `createInstance`, 2px-Spacing-Rung,
    16px-Typo-Rolle) — alle offen. Ausnahme: InputGroup #1–#3 wurden bereits am 2026-06-10 eingearbeitet
    (s. „Bereits eingearbeitet").
-2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: weiteres Composite
-   porten (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den neuen Palette-Bausteinen.
+2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: **Select + Checkbox**
+   porten (Controls, nicht Composites — schalten die meiste zurückgestellte Field-Arbeit frei, s. #6),
+   weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
-   (`destructive` = invalid-State von `.Input`/`.Textarea`). *(Übernommen aus
-   `handoff-agentport-tokens-color.md`.)*
+   (`destructive` = invalid-State von `.Input`/`.Textarea`, jetzt auch Badge `secondary`/`destructive`-
+   Varianten + Field `FieldError`). *(Übernommen aus `handoff-agentport-tokens-color.md`.)*
 5. **Status-Familie** `connected/offline/error/warning`, **Anteils-Balken**, **Rail-Aktiv-Icons**.
    *(Ebenfalls aus dem Token-Handoff.)*
+6. **Field-Folgearbeit (zurückgestellte Beispiele).** Beim Field-Port mangels Dependencies geskippt —
+   nachziehen, sobald die Controls portiert sind: `field-demo` (Voll-Formular, braucht **Select +
+   Checkbox**) · `field-choice-card` (**Card-Surface + Checkbox**; der FieldLabel-`has-[data-slot=field]`-
+   Branch ist Code-only/ungetestet, `p-2.5`→`p-md` genähert) · weitere geskippte (`field-select`,
+   `field-checkbox`, `field-group`, `field-switch`, `field-radio`, `field-slider`). Detail +
+   Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md` (Open items #4/#5).
 
 ## Nova-Baseline — Standing Notes (aus den gelöschten Handoffs übernommen)
 
