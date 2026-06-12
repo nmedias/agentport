@@ -135,7 +135,7 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 - Dead utilities (theme-reset) → DS replacement: `text-*` size / `font-*` / core colours → the right
   token; `shadow-*` → drop (DS is flat), use `shadow-elevation` if depth carries meaning.
 - Control heights / icon sizes (`h-9`, `size-4`) stay **numeric** — geometry ≠ spacing token.
-- Form fields: `bg-transparent` → `bg-input-background`. Field text = `text-label` — **not** `text-input` (that's the mono-18px command format).
+
 
 ### T4 — Figma Build
 

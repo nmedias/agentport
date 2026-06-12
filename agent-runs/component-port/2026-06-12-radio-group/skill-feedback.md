@@ -84,3 +84,50 @@ combinations (checked×disabled); when an example needs one, layer it via an
 **instance opacity/appearance override** on the nearest base state, and call it
 out in notes — don't add a combinatorial member or detach.
 **Status:** open
+
+---
+
+# Skill-Feedback — RadioGroup usage-examples rebuild (Field-composed) · 2026-06-12
+
+Run: rebuilt the Figma "Usage Examples" group of the RadioGroup Section to the
+new Field-composed stories, reusing real `.Field` / `.FieldLegend` instances.
+Target skills: `/figma-verify`, `figma-build.md §Slots`.
+
+## 5. `/figma-verify` clipped-child check flags invisible (toggled-off) nodes
+
+**Gap:** Step 3 (clipped child) walks every container's direct children and flags
+`child.y + child.height > parent.height - paddingBottom`. It does NOT exclude
+`visible:false` children. A `.Field` instance with `Show description=false`
+keeps its `description-wrapper` node at full height (21px) but `visible:false` —
+the parent hugs *without* it, so the hidden wrapper reads as "clipped" (overB≈23)
+on every Field that toggles a slot off. Four false-positive FLAGs this run, all
+on hidden description-wrappers inside the Invalid block's Fields.
+**Verified:** `getNodeByIdAsync` on the two flagged wrappers → `visible:false`,
+`propRef: Show description#3692:15`. Not rendered, cannot clip.
+**Candidate fix:** figma-verify Step 3 (and Step 4 overlap) — add a guard at the
+top of the per-child loop: `if (ch.visible === false) continue;` and don't
+descend into hidden subtrees. Hidden = not rendered = cannot clip or overlap.
+Without it, every Field-composed port that toggles a boolean slot off risks a
+spurious `FIX` verdict.
+**Status:** open
+
+## 6. figma-build.md §Slots — locate sibling slots with `query(name)`, not a `findOne` reading `componentPropertyReferences`
+
+**Gap:** §Slots "Filling a slot IN AN INSTANCE" warns that appending into an
+instance-slot invalidates JS references (re-resolve the live child). It doesn't
+warn that the *resolution method itself* can throw. After clearing+appending into
+one slot of a freshly-instanced `.Field`, a second
+`findOne(n => n.componentPropertyReferences.slotContentId === key)` to locate the
+NEXT slot threw `Node with id "I…;…" not found` — the `componentPropertyReferences`
+getter fired on a stale nested-instance sibling id surfaced by the just-applied
+mutation. Atomic, so nothing applied; but it cost a retry.
+**Verified:** crash on the label-slot `findSlot` call (predicate touching
+`componentPropertyReferences`) immediately after the control-slot fill. Switching
+to `field.query('SLOT[name=control]')` / `query('SLOT[name=label] > INSTANCE')`
+and setting text slots BEFORE the control slot ran clean across all 5 Field rows.
+**Candidate fix:** §Slots — add: *"Resolve each slot via `instance.query('SLOT[name=…]')`
+by slot name, NOT a `findOne` predicate that reads `componentPropertyReferences`
+on siblings — that getter throws on stale nested-instance ids surfaced by an
+in-progress mutation. Set text/label/description slots FIRST, the control slot
+LAST (mutating control shifts nested ids)."*
+**Status:** open

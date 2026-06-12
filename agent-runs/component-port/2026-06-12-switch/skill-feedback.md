@@ -88,3 +88,88 @@ the thumb child's offset numerically, then `combineAsVariants`. Reserve Base+sta
 with a content surface that tints/presses (buttons, inputs)."
 
 **Status:** open
+
+---
+
+# Skill Feedback — Switch Usage-Examples REBUILD (2026-06-12, separate run)
+
+Capture for the follow-up run: rebuild the Switch "Usage Examples" group as Field-composed stories
+nesting **real `.Field`[trailing]** instances (control slot ← `.Switch`). Target: `figma-build.md
+§Slots` + §Usage-examples. Feedback only. (The findings 1–4 above are from the original port — these
+5–8 are new.)
+
+## 5. §Slots — slot-DEFAULT text inside an instance is NOT editable; the `.characters` SETTER throws
+
+**Gap:** §Slots covers filling a slot in an instance for *appended* nodes, but is silent on the
+inverse: when a slot ships a **default text node** (`.Field`'s description `{Field Description}`, the
+trailing-invalid `{Error Message}`), you cannot mutate that default's `.characters` in the instance.
+
+- Symptom: `get_characters: Node with id "…" not found` on the **setter** line. The *read* of the
+  same node works (font, style, segments all readable) — only the write throws. Looks like a stale-id
+  bug; it isn't. Cost me 3 failed atomic scripts before diagnosing.
+- Discriminator: does the text node carry `componentPropertyReferences.characters`? **Yes** → it's a
+  component TEXT property, edit via `instance.setProperties({...})` (this is how `.Label`'s label
+  worked first try). **No** (raw slot default) → must clear-and-append.
+
+**Candidate fix:** one row under §Slots "Filling a slot IN AN INSTANCE":
+> Slot **default text** is read-only in the instance — its `.characters` setter throws
+> "node not found" (the *read* still works, which misleads). Drive editable text only via a
+> component TEXT property (`setProperties`); for a plain-text slot default, clear the slot and
+> append your own TEXT, carrying the style via `await node.setTextStyleIdAsync(styleId)` (read the
+> style id off the **main** component's text node — that one is readable) + `layoutSizingHorizontal='FILL'`.
+
+**Status:** open
+
+## 6. §Slots — clearing a slot co-removes/re-injects sibling defaults; `[...children].forEach(remove)` is unsafe
+
+**Gap:** §Slots prescribes `[...slot.children].forEach(c => c.remove())`. Broke twice:
+
+- The trailing-**invalid** control slot ships TWO defaults (`.Input` + `error-wrapper`). Removing the
+  first (`.Input`) **also drops** the sibling `error-wrapper` → the forEach's 2nd iteration hits a dead
+  id → `remove: Node … not found`.
+- After appending my switch into the emptied slot, Figma **re-injected** the default `error-wrapper`
+  as a sibling of the switch (stray red `{Error Message}` rendered in the control column). Had to
+  re-fetch the slot and remove the resurrected wrapper by name.
+
+**Candidate fix:** replace the bare forEach in §Slots with a guarded per-id loop + a post-append sweep:
+> Clear via id-snapshot, not a live forEach: `const ids = slot.children.map(c=>c.id); for (const id
+> of ids){ const c = await figma.getNodeByIdAsync(id); if (c && !c.removed) c.remove(); }`. Removing
+> one slot default can co-remove siblings, so iterate defensively. **After appending**, re-fetch the
+> slot and remove any **re-injected default** (match by name) — Figma can resurrect slot defaults when
+> the slot is emptied then refilled.
+
+## 7. §Slots — `setProperties` re-renders the subtree; re-resolve in a SEPARATE `use_figma` call
+
+**Gap:** §Slots' "re-resolve the live child" note is scoped to *append*. But any `setProperties` that
+changes a variant or derived structure (e.g. `.Label` `state=disabled`, `.Field` `invalid=true`) also
+re-renders the subtree. `setProperties(...)` then `findOne(control slot)` in the **same script**
+crashed traversal (`findOne callback crashed: get_name: Node … not found` — transient dead nodes
+mid-render). Splitting into two calls (set props → next call: re-resolve + fill) fixed it every time.
+
+**Candidate fix:** generalize the re-resolve note: "Re-resolution must happen in a **fresh `use_figma`
+call** after ANY `setProperties` that changes variant/derived structure — not only after append. Same
+script = transient dead nodes during the re-render."
+
+## 8. §Slots — narrow control in an `.Input`-sized slot needs NO sizing fight; don't HUG a control instance
+
+The task warned the `.Field` control slot (built for `.Input`, FIXED ~160/174) might fight a narrow
+32px `.Switch`. In practice the trailing member's control slot is already `lsh=HUG, lsv=HUG`: dropping
+the switch let the slot hug to 32px and the FILL `FieldContent` pushed it to the right edge
+automatically — **zero sizing intervention**. Also: `switchInstance.layoutSizingHorizontal='HUG'`
+throws ("HUG can only be set on auto-layout frames or text children") — leave control **instances** at
+their intrinsic FIXED size, never set HUG on them.
+
+**Candidate fix (minor):** §Slots note: "A HUG control slot auto-hugs a narrow swapped-in control while
+a sibling FILL region right-aligns it — no resize needed. Don't set HUG/FILL on the control **instance**
+itself (instances reject it); size via the slot."
+
+## Non-finding (component definition, out of scope — for the caller, no skill change)
+
+`.Field` trailing-**invalid** places its `error-wrapper` **inside the control slot** (right column),
+not in FieldContent — contrary to the task's stated assumption. Filling the control with a switch wipes
+that error-wrapper, and its text is non-editable (Finding 5). So the **Invalid** story fell back to a
+**manually composed error TEXT** appended below the field (style `S:7e1bf8f1…`, fill bound to error var
+`VariableID:3038:3`). Field reuse stays clean for the label+switch row; only the error line is hand-placed.
+This is a `.Field` definition trait, not a skill gap.
+
+**Status:** all open

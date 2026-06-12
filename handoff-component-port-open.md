@@ -5,11 +5,15 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-12:** `master` = 12 Components ff (kein Remote, `npm run check` grün, 74 Tests).
-**Form-Toggle-Batch (Checkbox · Switch · RadioGroup) auf Branch `feat/form-toggles-port`, UNCOMMITTED** —
-Code + token-gebundene Figma-Sets (+ permanente Usage-Examples) + Figma→Code-Sync + Field-komponierte
-Stories, Gate grün (92 Tests). Etablierter Standard: Glow = literal-Alpha DROP_SHADOW mit
-`showShadowBehindNode:false` (verbatim vom `.Input`-Focus); Stories in Doc-Komposition (Field-Familie).
+**Stand 2026-06-12:** `master` = **15 Components** ff (kein Remote, `npm run check` grün, 92 Tests).
+Form-Toggle-Batch (Checkbox · Switch · RadioGroup) **gemerged** (Code + token-gebundene Figma-Sets +
+permanente Usage-Examples + Figma→Code-Sync + Field-komponierte Stories) + Skill-Edit (usage-examples-
+Deliverable + Doc-Treue ins `/shadcn-component-port` gehoben) gemerged. Standard: Glow = literal-Alpha
+DROP_SHADOW `showShadowBehindNode:false` (verbatim vom `.Input`-Focus); Stories in Doc-Komposition (Field-Familie).
+**FIGMA-NACHLAUF (extern, NICHT in git):** die 3 Usage-Example-Gruppen auf echtes `.Field`-Reuse umgebaut;
+dafür `.Field` erweitert — `controlPosition [trailing,leading]`-Achse (control-leading für Checkbox/Radio) +
+neues `.FieldLegend`-Set + invalid-error-Slot-Fix (Ursache: `clone()` degradiert SLOT→FRAME). `controlPosition`
+= **Figma-only Fork** (kein Code-Prop). Details: Katalog `.Field`/`.FieldLegend` + die 3 `examples`-Einträge.
 **15 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
 Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
 Label)**, **Checkbox, Switch, RadioGroup**) + Blocks-Layer (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
@@ -459,6 +463,35 @@ Sync-Findings im Handoff (S1–S6 = Figma-read → Diff → Code-Delta, read-onl
     die prefixed Klassen diffen.
 45. **`use_figma`-Wrapper braucht `fileKey` + `description`** *(Radio-sync #3 — minor/env)* — in S2 /
     Snippet-Header notieren (`fileKey` aus config.json + kurze `description`).
+
+### Offen — figma-build.md §Slots + §Usage-examples (Figma example-groups + `.Field` control-leading) — neu 06-12
+
+Quelle: `agent-runs/component-port/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md` (Figma-Examples-
+Runs) + `agent-runs/figma-field-controllead/2026-06-12/notes.md`. Aus dem Umbau der Usage-Example-Gruppen auf
+echtes `.Field`-Reuse + dem `.Field`-control-leading/error-Slot-Fix.
+
+46. **`clone()` degradiert einen SLOT still zu FRAME** (verliert `slotContentId`) *(field-controllead/invalid-fix)*
+    — clone-derived Variant-Member, die einen Slot enthalten, haben hinterher KEINEN funktionierenden Slot mehr
+    (nur ein FRAME ohne Bindung); typecheck/visuell unauffällig. **War die Ursache des `.Field`-invalid-Flaws.**
+    Fix: nach dem Klonen den Slot neu via `createSlot()` bauen + an die Set-Slot-Property rebinden
+    (`componentPropertyReferences = { slotContentId: '<slot>#id' }`) + Wrapper-`visible` an das Show-Boolean.
+47. **`createSlot()` hinterlässt je Aufruf eine verwaiste Slot-Property** *(invalid-fix)* — nach dem Rebind an
+    eine bestehende Slot-ID die zero-referenced Auto-Property löschen, sonst Junk auf jeder Instanz.
+48. **Fill-slot-in-instance — Zusätze zum §Slots-Rezept** *(switch/radio/checkbox-examples)* — Slot-Default-Text-
+    Setter wirft „node not found" → clear+append, Read-back im SEPARATEN Call (Instanz-Slot-Mutation invalidiert
+    die Node-ID im selben Tick); Clearing eines Slots ko-entfernt/re-injiziert Sibling-Defaults → guarded
+    per-id-Loop + Post-Append-Sweep; Text-Slots VOR dem control-Slot setzen; HUG-control-Slot hugt einen schmalen
+    Control automatisch (nie die Instanz HUGen); Sibling-Slots via `query('SLOT[name=…]')`, nicht `findOne` über
+    `componentPropertyReferences` (wirft auf stale nested-instance-IDs).
+49. **`/figma-verify` sollte `visible:false`-Nodes überspringen** *(radio-examples)* — toggled-off Slots
+    (`Show error/description=false`) erzeugen sonst False-Positives bei clipped/overlap.
+50. **Selektions-Control + Field = control-leading; control-trailing-Field passt nicht** *(checkbox-examples)* —
+    eine Checkbox/Radio-Reihe ist control-LEADING; das Input-geformte `.Field` war nur control-trailing → die
+    `controlPosition`-Achse gebaut (s. Katalog, Figma-only Fork). Example-Groups für Selektions-Controls nesten
+    control-leading `.Field`; Group-/Fieldset-Beispiele mit abweichender Item-Zahl vertikal komponieren (`.FieldSet`
+    nestet fix 2 Fields). Per-field-Error → `.Field`-error-Slot; Gruppen-Error (FieldSet-Ebene) → separater Text.
+51. **`getVariableByIdAsync` braucht das `VariableID:`-Präfix** *(checkbox-examples)* — bare ID → still schwarzer
+    unbound Paint.
 
 ## Quellen
 

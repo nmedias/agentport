@@ -200,3 +200,121 @@ silently simplify or omit."*
 **Status:** ✅ written into `/shadcn-component-port` 2026-06-12 — T2.5 fidelity rule (reproduce the doc's
 actual composition from the already-ported DS composition primitives; "mirror a sibling" = CSF boilerplate
 only). Batch already reworked (all three `.stories.tsx`, gate green, 92 specs).
+
+## 8. figma-build §Usage-examples — the `.Field` row is control-TRAILING; a checkbox/radio row is control-LEADING (no Field variant for it)
+
+*(Surfaced rebuilding the Checkbox Usage-Examples group to match the Field-composed stories — Figma side.)*
+
+**Gap.** §Usage-examples says "nest real instances of the set + any already-ported partner (label,
+**field**, …)". For a checkbox/radio row that instruction is a trap: the ported `.Field` horizontal
+orientation (`3714:1018`) is **control-TRAILING** — label/FieldContent LEFT, control RIGHT — because it
+was built for an Input (text field with a trailing control). A checkbox/radio row is **control-LEADING**
+(the box sits LEFT of the label). There is **no control-leading variant** of `.Field`, and its
+`orientation` axis only offers horizontal(trailing)/vertical. A builder who dutifully nests the
+`.Field` instance to "use the ported partner" gets the box on the wrong side. The skill never warns
+that the Field row component encodes a control-position assumption that doesn't hold for selection
+controls.
+
+Compounding it: the **`.FieldSet`/`.FieldGroup`** components are single COMPONENTs exposing only
+**generic slots** (`legend#…`, `Slot#…` body) — and **no standalone `.FieldLegend`/`.FieldLabel`
+component exists** to reuse as a group legend/eyebrow. So for the "Group" (FieldSet) example there is
+nothing component-shaped to reuse for the legend either; it's slotted text whichever way you go, and
+filling those body/legend slots in an instance hits the locked-`layoutMode` + clear-defaults +
+re-resolve-refs friction (§Slots) for no fidelity gain over composing the stack directly.
+
+**Verified.** `.Field` `3714:1018` screenshot = `{Label}` LEFT, `{Placeholder}` input RIGHT
+(control-trailing). `.FieldSet` `3739:1026` props = `{legend: SLOT, Slot: SLOT}` (two generic slots,
+no variant for legend style). Page scan for `legend|fieldlabel` components → **none** (only `.FieldSet`,
+`.FieldGroup`, `.Field`). Code cross-check (`field.tsx`): the checkbox row IS control-leading there —
+`fieldVariants` horizontal is `flex-row items-center` with the Checkbox first in DOM and an
+`[role=checkbox]:mt-px` nudge; the Figma `.Field` simply never modelled that DOM-order/leading case.
+Built all 5 checkbox rows by **composing manually** — a real `.Checkbox` instance (left) + real `.Label`
+instance (right) in a HORIZONTAL auto-layout, `itemSpacing` = `gap-md` (8, the code Field row's gap),
+`counterAxisAlignItems=CENTER` (single-line) / `MIN` (label+secondary stack). The Group legend/desc +
+checkbox list were composed manually too (legend = `Label`/eyebrow text style, desc = `Body`+
+muted-foreground, list gap = `gap-lg` 12 matching `data-[slot=checkbox-group]:gap-lg`).
+
+**Candidate fix (skill).** Add to §Usage-examples: *"The ported `.Field` horizontal row is
+**control-trailing** (built for Input: label left, control right). For a **control-leading** row
+(checkbox / radio / switch — box left, label right) do NOT nest `.Field`; compose the row directly —
+a real control instance + a real `.Label` instance in a HORIZONTAL auto-layout, `itemSpacing`=`gap-md`,
+`counterAxisAlignItems=CENTER` (or `MIN` when a description/error stacks under the label). `.FieldSet`/
+`.FieldGroup` expose only generic slots and there is no standalone `.FieldLegend`/`.FieldLabel`
+component — for a legend/grouped example, compose the legend (Label/eyebrow style) + description
+(Body/muted) + the row list (gap-lg) as a vertical auto-layout rather than fighting the locked
+instance slots."*
+
+**Candidate fix (DS — for the orchestrator/user to decide).** Does `.Field` need a **control-leading
+variant** (e.g. an `orientation=horizontal-leading`, or a `control-position: leading|trailing` axis)?
+The code already supports control-leading rows for selection controls (checkbox/radio/switch all
+compose `Field orientation="horizontal"` with the control first), so the Figma component is missing a
+case the code relies on. Without it, every selection-control Usage-Examples group (Checkbox done here,
+Radio + Switch pending) must hand-compose rows instead of nesting the Field partner — duplicated layout
+logic, drift risk. **Recommendation: warranted** — add a control-leading horizontal case to `.Field`
+(and ideally expose `.FieldLegend`/`.FieldLabel` as reusable text components) so selection-control rows
+can nest a real Field instance like Input does.
+
+**Status:** open (build worked around it by manual control-leading composition; DS change is a
+recommendation for the orchestrator/user).
+
+## 9. figma-build §Binding-recipes — `getVariableByIdAsync` needs the full `VariableID:` prefix; a bare id silently yields a black, unbound paint
+
+**Gap.** §Binding-recipes says "bind every property by variable ID" and the recon tools return ids in
+two shapes: variant/prop `boundVariables` come back as `VariableID:3037:13`, but
+`getLocalVariablesAsync()` etc. expose the same id and it's tempting to pass the bare `3037:13`.
+`figma.variables.getVariableByIdAsync('3037:13')` returns **`null`** (no throw), and
+`setBoundVariableForPaint(paint,'color', null)` then produces a plain **black, unbound** paint — a
+silent miss, not an error. The skill never states the canonical id form for the variable lookup, so the
+first bind attempt produced a black description/error text that only the readback caught.
+
+**Verified.** `getVariableByIdAsync('3037:13')` → null; readback of the text fill showed
+`color:{0,0,0}, boundVariables:{}`. Re-running with `getVariableByIdAsync('VariableID:3037:13')` → the
+real variable; readback then showed the resolved colour + `boundVariables.color = VariableID:3037:13`.
+
+**Candidate fix.** Add to §Binding-recipes: *"`getVariableByIdAsync` requires the full
+`VariableID:<x>:<y>` form — a bare `<x>:<y>` returns `null` (no throw), and binding with `null` yields a
+silent black unbound paint. Always pass the `VariableID:`-prefixed id (the form `boundVariables` and
+the recon dumps already use) and read the fill back to confirm `boundVariables.color` is set, not just
+that a colour appeared."*
+
+**Status:** open (fix applied in this build: re-bound with the prefixed id, readback confirms muted-foreground + destructive bound).
+
+## 10. `.Field` invalid+leading member nests the error slot INSIDE the control slot → a control-leading row with an error renders the error under the control, clipping the label
+
+*(Surfaced rebuilding the Checkbox Usage-Examples group to nest real `.Field` instances now that the
+control-LEADING variant exists — finding #8's DS recommendation was acted on, so 4 of 5 blocks now reuse
+a real `.Field`. This is the one block that still can't.)*
+
+**Gap.** The new control-leading members (`3897:1240` invalid=false, `3897:1249` invalid=true) work
+cleanly for Basic / Description / Disabled / Group rows — clear the control slot's default `.Input`,
+append a `.Checkbox`, set the label, done. But the **invalid=true / leading** member (`3897:1249`)
+places the `error-wrapper` as a **sibling of the control INSIDE the control slot** (the control slot is a
+VERTICAL auto-layout containing `[Input, error-wrapper]`). That layout is correct for control-TRAILING
+(control column is on the right, error stacks under the whole row), but for control-LEADING the control
+column is on the LEFT, so the error text — which hugs to the full message width (~340px) — widens the
+left control column and squeezes the `FieldContent`/label column to a few px, clipping
+"Accept terms and conditions". The error also sits visually under the **checkbox**, not under the label
+(measured: error text `absoluteBoundingBox.x` == instance left edge == checkbox x; label is ~348px to the
+right). So a leading checkbox + error is both clipped and semantically wrong (error belongs under the
+label span, not under the box).
+
+**Verified.** Built the Invalid block from `3897:1249` (invalid=true, leading), filled control with
+`.Checkbox` state=invalid, `Show error=true`, set the error text. Readback: control slot `HUG`, width
+340 (= error width); `FieldContent` `FILL` collapsed to 44px; label text intrinsic 181px → clipped.
+Screenshot confirmed: red box top-left, red error full-width below it, label "Accept terms and
+conditions" not visible. The other 4 blocks (false/leading member) have no error slot in the control, so
+they compose perfectly. Fell back to a **manual** Invalid row for this one block only — `.Checkbox`
+state=invalid (left) + a vertical text column [`.Label` instance, destructive error text cloned from the
+prior block to keep text-style + `VariableID:3038:3` binding] — per the task's "try `.Field` first, fall
+back if blocked" rule.
+
+**Candidate fix (DS — for the orchestrator/user to decide).** The error slot's parent should follow the
+control POSITION: for control-leading, the `error-wrapper` belongs under `FieldContent` (the
+label/description column), not under the control slot. Either (a) move the error-wrapper into
+`FieldContent` for the leading members, or (b) make the error a full-row-width element below the
+horizontal row rather than a child of the control column. As-is, the control-leading variant is usable
+for label-only and label+description rows but NOT for label+error rows — every selection-control invalid
+example (Checkbox here, Radio/Switch pending) must hand-compose the error row.
+
+**Status:** open (build worked around it: Invalid block composed manually; Basic/Description/Disabled/Group
+all reuse a real `.Field` leading instance. DS structural fix is a recommendation for the orchestrator/user).

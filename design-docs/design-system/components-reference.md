@@ -416,21 +416,23 @@ status_note: >
     dir: libs/ui/src/components/ui/field/
     exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
-    code_only_parts: [FieldLegend, FieldTitle, "orientation=responsive"]   # FieldSet/FieldGroup jetzt MIT Figma (s.u.); responsive bleibt Container-Query-only (Wrap kein faithful Proxy)
+    code_only_parts: [FieldTitle, "orientation=responsive"]   # FieldSet/FieldGroup/FieldLegend jetzt MIT Figma; responsive bleibt Container-Query-only (Wrap kein faithful Proxy)
   figma:
     section: { name: "Field", id: "3710:1016" }
     set: { name: ".Field", id: "3716:1020" }
     members:
-      "orientation=vertical, invalid=false":   "3712:1016"
-      "orientation=vertical, invalid=true":    "3713:1017"
-      "orientation=horizontal, invalid=false": "3714:1018"
-      "orientation=horizontal, invalid=true":  "3715:1019"
+      "orientation=vertical, invalid=false, controlPosition=trailing":   "3712:1016"
+      "orientation=vertical, invalid=true, controlPosition=trailing":    "3713:1017"
+      "orientation=horizontal, invalid=false, controlPosition=trailing": "3714:1018"
+      "orientation=horizontal, invalid=true, controlPosition=trailing":  "3715:1019"
+      "orientation=horizontal, invalid=false, controlPosition=leading":  "3897:1240"   # NEU 06-12 control-leading
+      "orientation=horizontal, invalid=true, controlPosition=leading":   "3897:1249"   # NEU 06-12 control-leading
     slots: { label: "label#3716:0", control: "control#3716:1", description: "description#3716:2", error: "error#3716:3" }
     bool_props: { "Show description": "Show description#3692:15 (default true)", "Show error": "Show error#3692:20 (default true)" }   # NEU: Sichtbarkeit description-/error-Slot
     nests: ".Input (state=default 3176:303 / state=invalid 3176:311) als control-Slot-Default; label-Slot nestet jetzt echte .Label-Instanz (3737:1022/1024/1026/1028); FieldSeparator-Idiom = .Separator 3676:1018 (nicht nachgebaut)"
     horizontal_structure: "shadcn-canonical (field.tsx:79 + Responsive-Story): FieldContent-Spalte LINKS (label + description + [error], VERTICAL gap-2xs) · control-Slot als SIBLING rechts daneben · Field-Row flex-row items-start (counterAxis MIN) · FieldContent FILL/flex-1, control FIXED 160 · Member HUG-Höhe (damit die Bool-Toggles die Spalte reflowen). FieldContent-FRAMEs: 3714:1021 (horiz/false), 3715:1022 (horiz/true). error-Slot sitzt IN der FieldContent-Spalte UNTER description. Vertikale Member: label→control→description→[error] gestapelt (unverändert)."
-    axis: { orientation: [vertical, horizontal], invalid: [false, true] }
-  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12) + Figma-Revision (2026-06-12)
+    axis: { orientation: [vertical, horizontal], invalid: [false, true], controlPosition: [trailing, leading] }   # controlPosition nur für horizontal real; vertical = trailing-Default (Figma-only Fork, kein Code-Prop)
+  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12) + Figma-Revision (2026-06-12) + control-leading-Revision (2026-06-12)
   notes: >
     Multi-Part-Composite OHNE Root-Element (~10 reine Layout/Typo/Spacing/a11y-Parts, KEINE eigene
     Fläche/Border/Schatten). VARIANT A: Figma = nur die Field-ROW (orientation×invalid, 4 Slots, genestete
@@ -456,6 +458,41 @@ status_note: >
     tauscht Caption). Stories: InputField/TextareaField/Fieldset/Responsive (Doc-Beispiele, nur portierte Deps)
     + Invalid/Horizontal (DS-authored). Skip-Log: Select/Checkbox/Radio/Switch/Slider/Choice-Card-Beispiele
     (un-ported Deps). Gate grün (6 Field-Specs). Kein jsdom-Polyfill nötig.
+    FIGMA-REVISION 2026-06-12 (control-leading): additive controlPosition-Achse [trailing, leading] —
+    bestehende 4 Member = trailing (IDs erhalten, nur umbenannt), 2 neue horizontale leading-Member (3897:1240
+    h/f, 3897:1249 h/t): control LINKS + FieldContent RECHTS, top-aligned (= Code [role=checkbox]:mt-px).
+    Schließt die Lücke (Code komponiert control-leading für Checkbox/Radio via child-order, Figma modellierte
+    nur control-trailing). DESIGN-FORK: controlPosition ist Figma-Konvenienz (Code hat KEIN solches Prop) —
+    beim /component-sync NICHT als CVA zurückspielen. Nestings (.FieldSet/.FieldGroup/Checkbox-Examples)
+    verifiziert intakt. FieldLabel = .Label-Reuse (kein Duplikat); Choice-Card = Folge-Komposition (braucht Card).
+    FIX 2026-06-12 (invalid error-slot): auf den 2 HORIZONTALEN invalid-Membern (3715:1019 trailing, 3897:1249
+    leading) saß der error-Slot fälschlich IN der control-Spalte → Control-Befüllen sprengte das Layout. Ursache:
+    clone() degradiert einen SLOT still zu FRAME (drop slotContentId) — die horizontalen Member waren clone-
+    derived. Echten error#3716:3-SLOT in die FieldContent-Spalte (unter description) restauriert, an Show error
+    gebunden; verifiziert (Control-Fill → error unter Label, kein Clip; Nestings intakt; figma-verify CLEAN).
+    Damit reusen Checkbox+Switch-Invalid-Examples den .Field-error-Slot; Radio-Invalid = Gruppen-Error
+    (FieldSet-Ebene → separater destructive-Text, kein per-field-Slot).
+
+- name: FieldLegend
+  status: nova-aligned
+  figma_synced: true                            # Figma-Set 2026-06-12 (control-leading-Revision; vorher code-only)
+  source: { registry: "@shadcn", item: field, style: radix-nova }   # Teil der Field-Familie (field.tsx)
+  code:
+    dir: libs/ui/src/components/ui/field/
+    exports: [FieldLegend]
+    barrel: "via field-Barrel"
+  figma:
+    section: { name: "Field Legend", id: "3904:1246" }
+    set: { name: ".FieldLegend", id: "3909:1246" }
+    members: { "variant=legend": "3908:1246", "variant=label": "3908:1248" }
+    props: "legend (children)#3909:2 (TEXT, default '{Legend}'); variant (VARIANT [legend, label])"
+    axis: { variant: [legend, label] }
+  skill: Figma-Revision (2026-06-12)
+  notes: >
+    Text-Component (war .Field code_only_part, jetzt eigenes Set — aus code_only_parts entfernt). variant=legend
+    → text-format-title (18/600, Section-Caption-Rolle); variant=label → text-format-label (14/500); fill
+    foreground (VariableID:3037:3). variant MAPPT aufs Code-Prop FieldLegend.variant (KEIN Fork — anders als
+    Field.controlPosition). Text-Property-Konvention: legend (children)/{Legend}. figma-verify CLEAN.
 
 - name: FieldSet
   status: nova-aligned
@@ -510,7 +547,7 @@ status_note: >
     members: { default: "3792:1184", checked: "3792:1185", focus: "3794:1184", disabled: "3794:1185", invalid: "3794:1186", checked-invalid: "3794:1187" }
     indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar nur checked (3792:1187) + checked-invalid (3794:1189)" }
     axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA → State-Achse (Sibling von Input)
-    examples: { group: "Usage Examples 3822:2", WithLabel: "3823:2", WithDescription: "3825:2", Disabled: "3825:12", AllStates: "3826:2" }
+    examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
   skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
   notes: >
@@ -551,7 +588,7 @@ status_note: >
       "size=sm, state=disabled":       "3838:8"
       "size=sm, state=invalid":        "3838:10"
     axis: { size: [default, sm], state: [unchecked, checked, focus, disabled, invalid] }   # size = manuelle Code-Prop (kein CVA); state = Interaktions-Achse
-    examples: { group: "Usage Examples 3840:2", WithLabel: "3841:2", Disabled: "3841:10", Sizes: "3842:2", AllStates: "3842:15" }
+    examples: { group: "Usage Examples 3840:2 (REBUILT 06-12 = Field-composed, control-trailing)", AirplaneMode: "3948:2", Description: "3952:2", ChoiceCard: "3979:2 (Card + .Field)", Sizes: "3959:2", Disabled: "3961:2", Invalid: "3966:2 (.Field error-slot)", AllStates: "3842:15" }   # alle via echte .Field-Instanzen
     vars: { primary: "3037:8", input: "3038:5", background: "3037:2", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6" }
   skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
   notes: >
@@ -583,7 +620,7 @@ status_note: >
     dot: { shape: "ELLIPSE 8px (size-2), fill primary-foreground; sichtbar checked (3850:1209) + checked-invalid (3851:1210)" }
     group_container: "Layout-only (grid w-full gap-md) → KEIN Variant-Set; in den Examples als VERTICAL auto-layout itemSpacing=space-md repräsentiert"
     axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA; Item-State-Achse wie Checkbox
-    examples: { group: "Usage Examples 3854:1206", Default: "3854:1208", Disabled: "3856:1211", WithDescription: "3856:1222", AllStates: "3857:1218" }
+    examples: { group: "Usage Examples 3854:1206 (REBUILT 06-12 = Field-composed)", Default: "3992:1324 (bare, per Doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + Gruppen-Error)", AllStates: "3857:1218" }
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", destructive-foreground⚠: "bound (checked-invalid Dot)", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6", space-md: "3070:6", muted-foreground: "3037:13" }
   skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
   notes: >
