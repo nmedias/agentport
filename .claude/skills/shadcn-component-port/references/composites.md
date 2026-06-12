@@ -25,29 +25,15 @@ reproduction runs through slots / swaps / nested instances, not props alone.
 
 ## 1 · Mechanism — Slot ≠ Slot
 
-Frontend "slot" (`children`) ≠ Figma Slot. Decide **per consumer-variable content** by the
-**nature of the variation**:
+Frontend "slot" (`children`) ≠ Figma Slot. The general **code-construct → Figma-property** table
+(Text / Boolean / Variant / Instance-Swap / Slot / conditional-layout→Variant-axis) + its when-rules
+moved to **`figma-build.md §Mechanism`** (applies to every port). Composite-specific here:
 
-| Code construct | Figma | Rule |
-|---|---|---|
-| editable string | **Text property** | one label (placeholder, text) |
-| fixed element on/off | **Boolean property** | always-same optional element |
-| one of a *finite, author-defined* set | **Variant property** | states / sizes / aligns / disabled / focus / invalid |
-| **one** swappable element, *must* be a component, parent drives look/size | **Instance-Swap** | a leading/trailing adornment, an action control inside a region |
-| **open, variably-many** children; consumer sets count/order/kind | **Slot** | real `children`: list items, free-form region content |
-| **conditional layout** — direction flips on content (CSS `has-[]`/`flex-col`, e.g. row↔column) | **Variant axis** | Figma has no conditional layout AND slot direction is instance-locked (`figma-build.md`) → a `layout: horizontal\|vertical` axis on the composition. **Multiplies the state matrix** (state × layout). |
-
-- **Slot when** consumer sets count/order/kind; variable length; no finite variant set.
-- **Variant-axis when** the *layout* (not just content) changes conditionally — a porter modelling only
-  `state` then can't reproduce the column-stacking examples (the slot won't flip in an instance).
-- **Swap when** exactly one position; content = component; persists across variants;
-  parent override drives look/size.
-- Code composes an **already-ported** component X → Figma nests an **instance of X**
-  (never re-clothe); Swap only if several X-types should be choosable.
-
-**One composite usually combines several** — e.g. an editable string→Text, an optional element→Boolean,
-a finite choice (align/size/state)→Variant, a one-off swappable element→Instance-Swap, an open
-region→Slot, and any composed already-ported component→a nested instance of it.
+- **One composite usually combines several** — an editable string→Text, an optional element→Boolean,
+  a finite choice (align/size/state)→Variant, a one-off swappable element→Instance-Swap, an open
+  region→Slot, and any composed already-ported component→a nested instance of it.
+- The **conditional-layout → Variant-axis** row bites hardest here: it **multiplies the matrix**
+  (state × layout) — a porter modelling only `state` can't reproduce the column-stacking examples.
 
 ## 2 · Flow — overrides/extends T2–T7
 

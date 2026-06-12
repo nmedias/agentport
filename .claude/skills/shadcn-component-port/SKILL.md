@@ -96,8 +96,9 @@ no pseudo-class states) has no state axis → the axis is **content** (e.g. text
 **Multi-part composition?** (no root element — several `data-slot` parts that render differently —
 e.g. an input with adornments, a command palette, a dialog). **Different procedure — STOP and switch to
 `references/composites.md`**: Exposure-Surface + Done-Test, Examples-First (T2.5), the Slot≠Slot
-mechanism model, the user-ask (part-split / Slot-vs-Swap / whole-level variants / slot defaults), and
-the 3-layer Figma build. T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
+combination (the general construct→property table → `figma-build.md §Mechanism`), the user-ask
+(part-split / Slot-vs-Swap / whole-level variants / slot defaults), and the 3-layer Figma build.
+T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
 
 ### T2.5 — Usage-examples → Stories (before Figma)
 
@@ -132,9 +133,9 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 
 ### T4 — Figma build
 
-Build the token-bound component set and place it in a **Section** on the `Components` page. Full
-Plugin-API recipes — binding by ID, slots, icons, variant assembly, the interaction-state pattern —
-are in **`references/figma-build.md`**. Invariants:
+Build the token-bound component set and place it in a **Section** on the `Components` page. Which Figma
+property per code construct = **`figma-build.md §Mechanism`**; the Plugin-API recipes (binding by ID,
+slots, icons, variant assembly, the interaction-state pattern) are in the same file. Invariants:
 
 - **Full matrix** — every value of every property (a partial set reads as broken).
 - **Sorted grid** — primary-property-major, one wrapped row per primary value (not scattered append order).

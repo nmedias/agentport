@@ -9,6 +9,27 @@ Recon (`snippets/recon.js`) → build (`snippets/build-variant-set.js`). **Incre
 `use_figma`, screenshot after each step. Bind every property to DS variables **by ID** (names carry
 group paths like `shadcn Default/primary`).
 
+## Mechanism — code construct → Figma property
+
+What to model (**every port**, not just composites): decide **per consumer-variable content** by the
+**nature of the variation**.
+
+| Code construct | Figma | Rule |
+|---|---|---|
+| editable string | **Text property** | one label (placeholder, text) |
+| fixed element on/off | **Boolean property** | always-same optional element |
+| one of a *finite, author-defined* set | **Variant property** | states / sizes / aligns / disabled / focus / invalid |
+| **one** swappable element, *must* be a component, parent drives look/size | **Instance-Swap** | a leading/trailing adornment, an action control inside a region |
+| **open, variably-many** children; consumer sets count/order/kind | **Slot** | real `children`: list items, free-form region content |
+| **conditional layout** — direction flips on content (CSS `has-[]`/`flex-col`, e.g. row↔column) | **Variant axis** | Figma has no conditional layout AND slot direction is instance-locked (§Slots) → a `layout: horizontal\|vertical` axis. **Multiplies the matrix** (state × layout). |
+
+- **Slot when** consumer sets count/order/kind; variable length; no finite variant set.
+- **Variant-axis when** the *layout* (not just content) changes conditionally — modelling only `state`
+  then can't reproduce the column-stacking examples (the slot won't flip in an instance).
+- **Swap when** exactly one position; content = component; persists across variants; parent override drives look/size.
+- Code composes an **already-ported** component X → Figma nests an **instance of X** (never re-clothe);
+  Swap only if several X-types should be choosable.
+
 ## Binding recipes
 
 - **fills / strokes / text colour** → `setBoundVariableForPaint(paint,'color',variable)` — returns a

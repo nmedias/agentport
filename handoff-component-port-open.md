@@ -82,6 +82,11 @@ nie mid-run editiert.
   via T4; NICHT composites-spezifisch, daher kein Eintrag in composites.md). **Backlog-Sweep offen:**
   bestehende Components mit generischem `text`-Property nachziehen. *(Angewandt auf `.Field`-Familie
   06-12; `.Label` = `label (children)`/`{Label}`.)*
+- **Mechanismus-Tabelle → figma-build.md** ✅ *(Struktur-Refactor 06-12)* — die generelle
+  „Code-Konstrukt → Figma-Property"-Tabelle (Text/Boolean/Variant/Instance-Swap/Slot/conditional-
+  layout→Variant-axis) + When-Regeln aus `composites.md §1` nach **`figma-build.md §Mechanism`**
+  verschoben (gilt für ALLE Ports, nicht nur Composites). `composites.md §1` behält nur die
+  Composite-Pointe („combines several" + state×layout-Matrix); `SKILL.md` T2/T4-Pointer angepasst.
 
 ### Offen — T2 Dependency-Audit (SKILL.md / composites.md §2)
 
