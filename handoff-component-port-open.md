@@ -24,7 +24,8 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-Rezept, Slot-statt-Text-Property,
    lokales Nesting via `createInstance`, 2px-Spacing-Rung, 16px-Typo-Rolle) — geprüft: keine davon im
    Skill (kein lucide/radix-ui/SizingMode-Treffer). **Eingearbeitet:** InputGroup #1–#3 (2026-06-10) +
-   #29 Text-Property-Konvention (figma-build.md, 2026-06-12) — s. „Bereits eingearbeitet".
+   #29 Text-Property-Konvention + Mechanismus-Tabellen-Refactor (composites.md §1 → figma-build.md
+   §Mechanism), beide figma-build.md 2026-06-12 — s. „Bereits eingearbeitet".
 2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: **Select + Checkbox**
    porten (Controls, nicht Composites — schalten die meiste zurückgestellte Field-Arbeit frei, s. #6),
    weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
@@ -73,7 +74,7 @@ nie mid-run editiert.
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *durch Dialog #3–#5
   unten teilweise überholt; der Abschnitt braucht das Update aus Findings 7–9.*
-- **Conditional-Layout → Variant-Achse** (`has-[]`-Direction-Flip; InputGroup #3 → composites.md §1).
+- **Conditional-Layout → Variant-Achse** (`has-[]`-Direction-Flip; InputGroup #3 → figma-build.md §Mechanism, ex composites.md §1).
 - **Text-Property-Konvention** ✅ *(User-Direktive #29; gilt für ALLE Ports, nicht nur Composites)* —
   jede Figma-TEXT-Property sprechend benennen + Default mit Curly-Brackets: Name = semantische Rolle
   (`label`/`description`/`error`/… — `label` nur Beispiel, nie der Default `text`), Value = `{Semantic}`
