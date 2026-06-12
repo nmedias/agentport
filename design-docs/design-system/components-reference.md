@@ -375,20 +375,32 @@ status_note: >
 
 - name: Label
   status: nova-aligned
-  figma_synced: false                           # kein eigenes Figma-Set (lebt im .Field-Slot)
+  figma_synced: true                            # eigenes .Label-Set gebaut 2026-06-12 (Figma-Revision)
   source: { registry: "@shadcn", item: label, style: radix-nova }   # co-portiert via `ui:add field`
   code:
     dir: libs/ui/src/components/ui/label/
     exports: [Label]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/label'"
-  figma: { note: "Kein eigenständiges Set. Erscheint als label-Slot-Default (text-format-label) in .Field 3716:1020." }
-  skill: /shadcn-component-port (2026-06-12, Co-Dep von Field)
+  figma:
+    section: { name: "Label", id: "3733:1022" }
+    set: { name: ".Label", id: "3735:1024" }
+    members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
+    props: "text#3735:0 (TEXT, default 'Label') · state (VARIANT [default, disabled])"
+    axis: { state: [default, disabled] }
+    nests_into: ".Field label-Slot (alle 4 Member: 3737:1022/1024/1026/1028) — bare TEXT-Default 2026-06-12 durch echte .Label-Instanz ersetzt"
+  skill: /shadcn-component-port (2026-06-12, Co-Dep von Field) + Figma-Revision (2026-06-12)
   notes: >
     Radix Label (LabelPrimitive.Root), als HARTE Field-Dependency mitportiert (FieldLabel wrappt Label;
-    delete/defer würde Field brechen). Single-Element, kein CVA. DS: text-sm leading-none font-medium →
-    text-format-label (14/500, Rolle Form-/Toggle-Labels); gap-2→gap-md. select-none + group/peer-disabled
-    Opacity unverändert. Eigene Stories (Default/WithControl/Disabled) + Spec (3 Tests inkl. text-format-label-
-    Survival). OFFENER PUNKT: falls ein dedizierter Label-Port geplant war, ist dieser hier vorweggenommen.
+    delete/defer würde Field brechen). Single-Element, kein CVA im Code. DS: text-sm leading-none font-medium →
+    text-format-label (14/500, Rolle Form-/Toggle-Labels, fill=foreground); gap-2→gap-md (itemSpacing bound).
+    select-none + group/peer-disabled Opacity unverändert. Eigene Stories (Default/WithControl/Disabled) + Spec
+    (3 Tests inkl. text-format-label-Survival). FIGMA-REVISION 2026-06-12: eigenes .Label-Set gebaut (HORIZONTAL
+    auto-layout gap-md, Title→nein, Label-Style + foreground; text-Prop). Achse state=[default,disabled] —
+    disabled = opacity 0.5 (das einzige reale Label-State; im Code group/peer-disabled-getrieben, kein CVA → in
+    Figma als state-Achse modelliert, damit ein echtes Set statt Einzel-Component). Als label-Slot-Default in
+    allen 4 .Field-Membern genestet (finding #26: lokale Component via getNodeByIdAsync+createInstance). figma-verify CLEAN.
+    DESIGN-FORK: state-Achse ist eine Figma-Konvenienz (Code hat kein label-state-Prop) — beim Code-Sync NICHT
+    als CVA zurückspielen. OFFENER PUNKT bleibt: falls dedizierter Label-Port geplant war, hier vorweggenommen.
 
 - name: Field
   status: nova-aligned
@@ -398,7 +410,7 @@ status_note: >
     dir: libs/ui/src/components/ui/field/
     exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
-    code_only_parts: [FieldSet, FieldLegend, FieldGroup, FieldTitle, "orientation=responsive"]   # kein Figma-Pendant (reine Gruppierung / Container-Query)
+    code_only_parts: [FieldLegend, FieldTitle, "orientation=responsive"]   # FieldSet/FieldGroup jetzt MIT Figma (s.u.); responsive bleibt Container-Query-only (Wrap kein faithful Proxy)
   figma:
     section: { name: "Field", id: "3710:1016" }
     set: { name: ".Field", id: "3716:1020" }
@@ -408,23 +420,75 @@ status_note: >
       "orientation=horizontal, invalid=false": "3714:1018"
       "orientation=horizontal, invalid=true":  "3715:1019"
     slots: { label: "label#3716:0", control: "control#3716:1", description: "description#3716:2", error: "error#3716:3" }
-    nests: ".Input (state=default 3176:303 / state=invalid 3176:311) als control-Slot-Default; FieldSeparator-Idiom = .Separator 3676:1018 (nicht nachgebaut)"
+    bool_props: { "Show description": "Show description#3692:15 (default true)", "Show error": "Show error#3692:20 (default true)" }   # NEU: Sichtbarkeit description-/error-Slot
+    nests: ".Input (state=default 3176:303 / state=invalid 3176:311) als control-Slot-Default; label-Slot nestet jetzt echte .Label-Instanz (3737:1022/1024/1026/1028); FieldSeparator-Idiom = .Separator 3676:1018 (nicht nachgebaut)"
+    horizontal_structure: "shadcn-canonical (field.tsx:79 + Responsive-Story): FieldContent-Spalte LINKS (label + description + [error], VERTICAL gap-2xs) · control-Slot als SIBLING rechts daneben · Field-Row flex-row items-start (counterAxis MIN) · FieldContent FILL/flex-1, control FIXED 160 · Member HUG-Höhe (damit die Bool-Toggles die Spalte reflowen). FieldContent-FRAMEs: 3714:1021 (horiz/false), 3715:1022 (horiz/true). error-Slot sitzt IN der FieldContent-Spalte UNTER description. Vertikale Member: label→control→description→[error] gestapelt (unverändert)."
     axis: { orientation: [vertical, horizontal], invalid: [false, true] }
-  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12)
+  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12) + Figma-Revision (2026-06-12)
   notes: >
     Multi-Part-Composite OHNE Root-Element (~10 reine Layout/Typo/Spacing/a11y-Parts, KEINE eigene
     Fläche/Border/Schatten). VARIANT A: Figma = nur die Field-ROW (orientation×invalid, 4 Slots, genestete
     .Input-Instanzen, kein Fill/Stroke/Shadow); Code = VOLLE Familie (10 Exporte, known-trap #19 — Code↔Figma-
-    Kardinalitätslücke bewusst). Code-only (kein Figma-Set): FieldSet/FieldLegend/FieldGroup/FieldTitle +
-    orientation=responsive (Container-Query @md → Figma kann das nicht). Deps: Input ✓, Textarea ✓, Separator ✓,
-    Button ✓; Label NEU co-portiert (harte Field-Dep). Flacher separator.tsx-Schatten gelöscht (sonst Stock-
-    Shadowing der DS-Folder). DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter);
-    Typo text-sm→text-format-label/-body, legend text-base(16, kein Rung)→text-format-title (Rolle Section-
-    Caption); FieldError = ⚠ destructive-PLATZHALTER (VariableID:3038:3, bound aber NICHT final). dark: entfernt.
-    4 Slots mergen set-level (konsistente Namen). figma-verify CLEAN, Controls-live (orientation/invalid +
-    4 Slots, control nimmt .Textarea-Swap an). Stories: InputField/TextareaField/Fieldset/Responsive (Doc-
-    Beispiele, nur portierte Deps) + Invalid/Horizontal (DS-authored). Skip-Log: Select/Checkbox/Radio/Switch/
-    Slider/Choice-Card-Beispiele (un-ported Deps). Gate grün (6 Field-Specs). Kein jsdom-Polyfill nötig.
+    Kardinalitätslücke bewusst). Code-only (kein Figma-Set): FieldLegend (lebt als Slot in .FieldSet),
+    FieldTitle + orientation=responsive (Container-Query @md → Figma kann das nicht; Wrap-Proxy verworfen, s.
+    Revision-Note). Deps: Input ✓, Textarea ✓, Separator ✓, Button ✓; Label NEU co-portiert (harte Field-Dep).
+    DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter); Typo text-sm→text-format-label/
+    -body, legend text-base(16, kein Rung)→text-format-title (Rolle Section-Caption); FieldError = ⚠
+    destructive-PLATZHALTER (VariableID:3038:3, bound aber NICHT final). dark: entfernt.
+    4 Slots mergen set-level (konsistente Namen). figma-verify CLEAN.
+    FIGMA-REVISION 2026-06-12: (1a) FieldDescription-Fill war fälschlich solid-black/unbound → an
+    muted-foreground (VariableID:3037:13) gebunden über alle 4 Member; FieldError bleibt destructive ⚠.
+    (1b) Horizontale Member umgebaut auf die shadcn-canonical Struktur: FieldContent-Spalte (label +
+    description + [error]) LINKS, control-Slot als SIBLING rechts daneben (vorher invers: label führend,
+    FieldContent=control+desc+error). Quelle = Responsive-Story (field.stories.tsx:111–117) +
+    horizontal-Variante (field.tsx:79 flex-row items-start has-[field-content]). Member auf HUG-Höhe gesetzt,
+    damit die Bool-Toggles die Spalte reflowen (verifiziert 64→41→32px). error im horiz Member sitzt in der
+    FieldContent-Spalte unter description. (3) label-Slot-Default = echte .Label-Instanz statt bare TEXT.
+    (5) zwei Bool-Props Show description / Show error toggeln description-/error-Slot-Sichtbarkeit — über
+    WRAPPER-FRAME gebunden (finding #8: visible NIE direkt am SLOT; finding #9: Wrapper kollabiert Resthöhe
+    sauber). Controls-live (orientation/invalid + 2 Bools + 4 Slots; control nimmt Swap an; Label-Instanz
+    tauscht Caption). Stories: InputField/TextareaField/Fieldset/Responsive (Doc-Beispiele, nur portierte Deps)
+    + Invalid/Horizontal (DS-authored). Skip-Log: Select/Checkbox/Radio/Switch/Slider/Choice-Card-Beispiele
+    (un-ported Deps). Gate grün (6 Field-Specs). Kein jsdom-Polyfill nötig.
+
+- name: FieldSet
+  status: nova-aligned
+  figma_synced: true                            # Figma-Set 2026-06-12 gebaut (Revision; vorher code-only)
+  source: { registry: "@shadcn", item: field, style: radix-nova }   # Teil der Field-Familie (field.tsx)
+  code:
+    dir: libs/ui/src/components/ui/field/        # Export aus field/, kein eigener Ordner
+    exports: [FieldSet]
+    barrel: "via field-Barrel"
+  figma:
+    section: { name: "Field Set & Group", id: "3738:1026" }
+    component: { name: ".FieldSet", id: "3739:1026" }   # Einzel-Component (keine Variant-Achse)
+    slots: { legend: "legend#3741:0 (Title-Text-Default 'Address', finding #25)" }
+    nests: "2× echte .Field-Instanz (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL-Breite)"
+  skill: Figma-Revision (2026-06-12)
+  notes: >
+    Surface-less Composite (finding #24): VERTICAL auto-layout gap-xl (space-xl/16, bound), w-FIXED/h-HUG,
+    KEIN Fill/Stroke. legend = SLOT mit Title-Text-Default (text-format-title 18/600 by role, finding #28).
+    Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<fieldset>` flex-col gap-xl + FieldLegend.
+    figma-verify CLEAN, instanziierbar (h≈229). Build: redundante TEXT-Legend-Prop entfernt → nur legend-SLOT.
+
+- name: FieldGroup
+  status: nova-aligned
+  figma_synced: true                            # Figma-Component 2026-06-12 gebaut (Revision; vorher code-only)
+  source: { registry: "@shadcn", item: field, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/field/
+    exports: [FieldGroup]
+    barrel: "via field-Barrel"
+  figma:
+    section: { name: "Field Set & Group", id: "3738:1026" }
+    component: { name: ".FieldGroup", id: "3742:1044" }
+    nests: "Field 3742:1045 → .Separator 3742:1055 (horizontal, FieldSeparator-Idiom = reuse, task 4) → Field 3742:1056; alle FILL-Breite"
+  skill: Figma-Revision (2026-06-12)
+  notes: >
+    Surface-less Container (finding #24): VERTICAL auto-layout gap-xl (space-xl/16, bound), w-full, KEIN
+    Fill/Stroke. Gruppiert mehrere Fields mit Divider — FieldSeparator = genestete echte .Separator-Instanz
+    (kein eigenes Set, task 4). Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<div>` @container/
+    field-group flex-col gap-xl. figma-verify CLEAN, instanziierbar (h≈207).
 ```
 
 ## Pending / Removed
