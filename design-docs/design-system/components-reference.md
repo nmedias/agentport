@@ -62,6 +62,12 @@ baseline:
 modes: [light]                       # kein Dark-Mode
 package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
 status_note: >
+  Form-Toggle-Batch 2026-06-12 (Branch feat/form-toggles-port): Checkbox · Switch · RadioGroup
+  parallel portiert (Code-Seite 3 Agents parallel, Figma seriell wg. einer Plugin-Verbindung; Gate
+  grün 92 Specs). Alle drei = State-Achse (kein CVA, Sibling von Input); Switch zusätzlich size-Achse.
+  Standard etabliert: Focus-/Invalid-Glow = literal-alpha DROP_SHADOW mit showShadowBehindNode:false
+  (verbatim von .Input-Focus 3176:305) + permanente Usage-Examples-Group mit echten .Label-Instanzen.
+  Davor 2026-06-12: Field-Familie (+ Label/FieldSet/FieldGroup), Separator.
   Dialog portiert (Composite-Verfahren, Figma+Code, Gate grün, Done-Test) inkl. Semantic-Token
   `scrim`; CommandDialog 2026-06-11 nachgerüstet (code-only, Branch feat/command-dialog-readd).
   Davor: Command (cmdk) + InputGroup-Re-Port nach dem überarbeiteten Composite-Verfahren,
@@ -489,6 +495,109 @@ status_note: >
     Fill/Stroke. Gruppiert mehrere Fields mit Divider — FieldSeparator = genestete echte .Separator-Instanz
     (kein eigenes Set, task 4). Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<div>` @container/
     field-group flex-col gap-xl. figma-verify CLEAN, instanziierbar (h≈207).
+
+- name: Checkbox
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code; Focus-/Examples-Fix nachgezogen)
+  source: { registry: "@shadcn", item: checkbox, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/checkbox/
+    exports: [Checkbox]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
+  figma:
+    section: { name: "Checkbox", id: "3791:1184" }
+    set: { name: ".Checkbox", id: "3795:1184" }
+    members: { default: "3792:1184", checked: "3792:1185", focus: "3794:1184", disabled: "3794:1185", invalid: "3794:1186", checked-invalid: "3794:1187" }
+    indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar nur checked (3792:1187) + checked-invalid (3794:1189)" }
+    axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA → State-Achse (Sibling von Input)
+    examples: { group: "Usage Examples 3822:2", WithLabel: "3823:2", WithDescription: "3825:2", Disabled: "3825:12", AllStates: "3826:2" }
+    vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
+  skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
+  notes: >
+    Single-Element + Indicator (radix-ui Checkbox.Root/Indicator), kein CVA → State-Achse wie Input.
+    box 16×16 numerisch, corner-sm (4px). DS: border-input; checked = primary Fill+Border + primary-foreground
+    Glyph; Glyph = RiCheckLine VEKTOR (lucide CheckIcon → @remixicon/react, [&>svg]:size-3.5 numerisch).
+    focus = border-ring + ring@50% 3px DROP_SHADOW (literal-alpha, showShadowBehindNode:false — gebundene
+    Effekt-Farbe clobbert die /opacity, daher Effekt-Objekt VERBATIM von .Input-Focus 3176:305 kopiert);
+    invalid + checked-invalid = destructive ⚠ PLATZHALTER (raw hex, NICHT final) Border + destructive@20%
+    Glow (sbn:false über alle 3 Glow-Member). dark: entfernt; group-has-disabled/field:opacity-50 behalten.
+    Usage-Examples-Group = permanente echte .Checkbox- + .Label-Instanzen (WithLabel/WithDescription/Disabled/
+    AllStates). figma-verify CLEAN, Gate grün (6 Specs inkl. corner-sm-Survival).
+    SYNC 2026-06-12 (/component-sync): unchecked/focus/disabled/invalid-Box = bg-input-background
+    (vorher transparent); checked-invalid = solides destructive Fill+Border
+    (aria-invalid:aria-checked:bg/border-destructive, überschreibt data-checked:primary), Glyph
+    bleibt primary-foreground (reitet auf der roten Fläche).
+
+- name: Switch
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code)
+  source: { registry: "@shadcn", item: switch, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/switch/
+    exports: [Switch]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/switch'"
+  figma:
+    section: { name: "Switch", id: "3835:1193" }
+    set: { name: ".Switch", id: "3839:2" }                 # 2 Achsen → 10 Member, size-major Grid
+    members:
+      "size=default, state=unchecked": "3837:2"
+      "size=default, state=checked":   "3837:4"
+      "size=default, state=focus":     "3837:6"
+      "size=default, state=disabled":  "3837:8"
+      "size=default, state=invalid":   "3837:10"
+      "size=sm, state=unchecked":      "3838:2"
+      "size=sm, state=checked":        "3838:4"
+      "size=sm, state=focus":          "3838:6"
+      "size=sm, state=disabled":       "3838:8"
+      "size=sm, state=invalid":        "3838:10"
+    axis: { size: [default, sm], state: [unchecked, checked, focus, disabled, invalid] }   # size = manuelle Code-Prop (kein CVA); state = Interaktions-Achse
+    examples: { group: "Usage Examples 3840:2", WithLabel: "3841:2", Disabled: "3841:10", Sizes: "3842:2", AllStates: "3842:15" }
+    vars: { primary: "3037:8", input: "3038:5", background: "3037:2", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6" }
+  skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
+  notes: >
+    Track (Root) + Thumb (radix-ui Switch). 2 Achsen: size [default,sm] (manuelle Prop, kein CVA) × state.
+    Geometrie numerisch: Track default 32×18.4 / sm 24×14, Thumb 16/12, corner-full, Thumb-Offset =
+    trackW−thumbW−2px (default x≈14, sm x≈10). DS: checked Track = primary, unchecked Track = input (als
+    FILL — muted #f4f6f8 wäre auf Weiß unsichtbar, input neutral/450 hält ≥3:1; Rolle≠Name, s. skill-feedback);
+    Thumb = background (weiß). focus = border-ring + ring@50% 3px Glow (VERBATIM von .Input 3176:305,
+    showShadowBehindNode:false); invalid = destructive ⚠ + destructive@20% (sbn:false). dark: entfernt.
+    Usage-Examples-Group = echte .Switch- + .Label-Instanzen (WithLabel/Disabled/Sizes/AllStates).
+    figma-verify CLEAN (Thumb clippt Track am Offset nicht), Gate grün (6 Specs).
+    SYNC 2026-06-12 (/component-sync): invalid = destructive TRACK FILL in BEIDEN Positionen
+    (aria-invalid:data-checked:bg-destructive + aria-invalid:data-unchecked:bg-destructive — 2-Attr-Selektoren
+    überschreiben primary/input) — der Figma-Invalid-Member bindet die ganze Track-Fläche an destructive.
+    Korrigiert eine Sync-Agent-Deviation (vorher nur Border+Ring, checked-invalid blieb cyan → User-Report).
+
+- name: RadioGroup
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code) — "RadioItem" = RadioGroupItem
+  source: { registry: "@shadcn", item: radio-group, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/radio-group/
+    exports: [RadioGroup, RadioGroupItem]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/radio-group'"
+  figma:
+    section: { name: "RadioGroup", id: "3849:1206" }
+    set: { name: ".RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; die Gruppe ist Layout-only
+    members: { default: "3850:1206", checked: "3850:1207", focus: "3850:1210", disabled: "3851:1206", invalid: "3851:1207", checked-invalid: "3851:1208" }
+    dot: { shape: "ELLIPSE 8px (size-2), fill primary-foreground; sichtbar checked (3850:1209) + checked-invalid (3851:1210)" }
+    group_container: "Layout-only (grid w-full gap-md) → KEIN Variant-Set; in den Examples als VERTICAL auto-layout itemSpacing=space-md repräsentiert"
+    axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA; Item-State-Achse wie Checkbox
+    examples: { group: "Usage Examples 3854:1206", Default: "3854:1208", Disabled: "3856:1211", WithDescription: "3856:1222", AllStates: "3857:1218" }
+    vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", destructive-foreground⚠: "bound (checked-invalid Dot)", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6", space-md: "3070:6", muted-foreground: "3037:13" }
+  skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
+  notes: >
+    Zwei Teile: RadioGroup (Layout-Container, grid w-full gap-2→gap-md) + RadioGroupItem (interaktiv, State-Achse
+    wie Checkbox, aber corner-full Kreis + Innen-Dot statt Glyph). Item 16×16 Kreis numerisch; Dot = ELLIPSE 8px
+    (size-2), bg-primary-foreground. DS: border-input; checked = primary Border+Fill + primary-foreground Dot;
+    focus = border-ring + ring@50% 3px Glow (VERBATIM von .Input 3176:305, showShadowBehindNode:false — kritisch,
+    Item ist fill-less); invalid + checked-invalid = destructive ⚠ PLATZHALTER + destructive@20% (sbn:false).
+    dark: entfernt. Gruppe = Layout-only (kein Set), als VERTICAL AL repräsentiert. Usage-Examples-Group =
+    echte .RadioGroupItem- + .Label-Instanzen (Default/Disabled/WithDescription/AllStates). figma-verify CLEAN
+    (Dot = Vektor), Gate grün (6 Specs).
+    SYNC 2026-06-12 (/component-sync): unchecked-Kreis = bg-input-background (vorher transparent); checked-invalid
+    voll destructive-getönt — Border+Fill (aria-invalid:aria-checked:bg/border-destructive) + Dot
+    bg-destructive-foreground (group-aria-invalid/radio-group-item:), kehrt den vorherigen primary-Border-Override um.
 ```
 
 ## Pending / Removed

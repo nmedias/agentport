@@ -5,10 +5,14 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-12:** alles ff in `master` (kein Remote), Gates grün (`npm run check`, 74 Tests).
-**12 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
+**Stand 2026-06-12:** `master` = 12 Components ff (kein Remote, `npm run check` grün, 74 Tests).
+**Form-Toggle-Batch (Checkbox · Switch · RadioGroup) auf Branch `feat/form-toggles-port`, UNCOMMITTED** —
+Code + token-gebundene Figma-Sets (+ permanente Usage-Examples) + Figma→Code-Sync + Field-komponierte
+Stories, Gate grün (92 Tests). Etablierter Standard: Glow = literal-Alpha DROP_SHADOW mit
+`showShadowBehindNode:false` (verbatim vom `.Input`-Focus); Stories in Doc-Komposition (Field-Familie).
+**15 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
 Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
-Label)**) + Blocks-Layer (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
+Label)**, **Checkbox, Switch, RadioGroup**) + Blocks-Layer (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
 über die Brief-4, bewusst) mit `secondary`/`destructive` an ⚠-Platzhalter gebunden; Separator-Achse =
 `orientation` (h/v); AsChild-Control-Footgun gefixt (#21). **Field = Surface-less Composite**
 (`orientation × invalid` + 4 Slots, nur Spacing+Typo gebunden; FieldSet/Group/Legend/Title +
@@ -26,9 +30,15 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    Skill (kein lucide/radix-ui/SizingMode-Treffer). **Eingearbeitet:** InputGroup #1–#3 (2026-06-10) +
    #29 Text-Property-Konvention + Mechanismus-Tabellen-Refactor (composites.md §1 → figma-build.md
    §Mechanism), beide figma-build.md 2026-06-12 — s. „Bereits eingearbeitet".
-2. **Composite-Strang: nichts offen.** Kandidaten für den nächsten Schritt: **Select + Checkbox**
-   porten (Controls, nicht Composites — schalten die meiste zurückgestellte Field-Arbeit frei, s. #6),
-   weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
+   **Neu 06-12 (Form-Toggle-Batch + erste `/component-sync`): Findings 30–45** — Glow-Rezept-Cluster
+   (literal-Alpha / `showShadowBehindNode:false` / invalid-synthetisieren / Sweep-all-Member),
+   `ring-[3px]`-Sibling-Konvention, Rollen-Token-Kontrast-Ausnahme, no-CVA-State-Achse, Examples =
+   permanenter Deliverable, Stories in Doc-Komposition (Field-Familie), Geometrie-Toggle-Rezept, +
+   `/component-sync` (bound≠Deviation, ADD-Diff-Form, no-delta-Outcome, Snippet-Indicator-Kind).
+2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
+   Branch `feat/form-toggles-port`). Kandidaten für den nächsten Schritt: **Select** + **Slider** porten
+   (Controls — schalten den Rest der zurückgestellten Field-Arbeit frei, s. #6), weiteres Composite
+   (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
@@ -36,12 +46,12 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    Varianten + Field `FieldError`). *(Übernommen aus `handoff-agentport-tokens-color.md`.)*
 5. **Status-Familie** `connected/offline/error/warning`, **Anteils-Balken**, **Rail-Aktiv-Icons**.
    *(Ebenfalls aus dem Token-Handoff.)*
-6. **Field-Folgearbeit (zurückgestellte Beispiele).** Beim Field-Port mangels Dependencies geskippt —
-   nachziehen, sobald die Controls portiert sind: `field-demo` (Voll-Formular, braucht **Select +
-   Checkbox**) · `field-choice-card` (**Card-Surface + Checkbox**; der FieldLabel-`has-[data-slot=field]`-
-   Branch ist Code-only/ungetestet, `p-2.5`→`p-md` genähert) · weitere geskippte (`field-select`,
-   `field-checkbox`, `field-group`, `field-switch`, `field-radio`, `field-slider`). Detail +
-   Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md` (Open items #4/#5).
+6. **Field-Folgearbeit (zurückgestellte Beispiele).** **Update 06-12:** Checkbox/Switch/RadioGroup jetzt
+   portiert → `field-checkbox`/`-switch`/`-radio` + `field-choice-card` sind baubar; die Field-komponierten
+   Stories der drei Controls decken Choice-Card-/Group-/Fieldset-/Invalid-Muster bereits ab (der
+   FieldLabel-`has-[data-slot=field]`-Branch ist damit erstmals real gerendert — Storybook). Offen bleibt
+   `field-demo` (Voll-Formular, braucht **Select**) · `field-slider` (braucht **Slider**) · `field-select`.
+   Detail + Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md` (Open items #4/#5).
 
 ## Nova-Baseline — Standing Notes (aus den gelöschten Handoffs übernommen)
 
@@ -64,7 +74,8 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 
 Quelle: `agent-runs/component-port/*/skill-feedback.md` — Breadcrumb (06-08) · InputGroup (06-10) ·
 Command (06-10) · Dialog (06-10) · CommandDialog (06-11) · Badge (06-12) · Separator (06-12) ·
-Field (06-12, + co-port Label). Verified-Belege stehen in den Run-Dateien;
+Field (06-12, + co-port Label) · **Checkbox/Switch/RadioGroup (06-12, Port + erstmals `/component-sync`)**.
+Verified-Belege stehen in den Run-Dateien;
 hier der deduplizierte Stand, gruppiert nach Ziel-Datei. **User reviewt + wendet an** — Skills werden
 nie mid-run editiert.
 
@@ -80,9 +91,28 @@ nie mid-run editiert.
   (`label`/`description`/`error`/… — `label` nur Beispiel, nie der Default `text`), Value = `{Semantic}`
   (`label`→`{Label}`, `error`→`{Error}`); children-getrieben (Text = ganzer Content der Component) →
   Suffix `(children)`. **Eingearbeitet** in `figma-build.md §Variant set assembly` (Heimat — jeder Port
-  via T4; NICHT composites-spezifisch, daher kein Eintrag in composites.md). **Backlog-Sweep offen:**
-  bestehende Components mit generischem `text`-Property nachziehen. *(Angewandt auf `.Field`-Familie
+  via T4; NICHT composites-spezifisch, daher kein Eintrag in composites.md). *(Angewandt auf `.Field`-Familie
   06-12; `.Label` = `label (children)`/`{Label}`.)*
+  **Backlog-Sweep (teilweise, 06-12):** Input-Familie nachgezogen — `.Input` (`3177:302`), `.Textarea`
+  (`3488:684`), `.InputGroupInput` (`3522:590`), `.InputGroupTextarea` (`3522:592`): je Set/Component
+  `placeholder` `{Placeholder}` + `value` `{Value}` + `filled` (bool, default false); Token
+  placeholder=`input-placeholder`, value=`foreground` (beide gebunden, kein Raw-Hex). InputGroupInput/
+  -Textarea trugen das **literale** generische `text`-Prop (`text#3522:0` / `text#3522:1`) → auf
+  `placeholder` umgehängt + gelöscht (genau das #29-Ziel); Input/Textarea hatten gar kein Text-Prop →
+  frisch ergänzt. **Toggle-Mechanik (User-Entscheid „Option 2"):** `filled` → `value.visible`, value als
+  **absolut überlagernder** Text-Knoten OHNE bg-Cover — ein Figma-Boolean kann nicht invertieren
+  (`componentPropertyReferences.visible` ist reine Referenz auf einen Prop-Namen, kein Negate; in den
+  Plugin-Typings verifiziert), also überlappen placeholder+value bei `filled:true` sichtbar → akzeptiert
+  (placeholder-Text beim Füllen leeren). Verworfen: bg-Cover-Frame (Hack, TEXT-Knoten trägt kein bg),
+  `content`-Variante (sauber, aber Grid ×2). **Nebeneffekt:** `filled` hat EINEN Set-Default → das
+  Varianten-Raster zeigt uniform `{Placeholder}`; die alten dunklen Demo-Strings (`invoice_2024` etc.)
+  wandern in den value-Overlay (`filled:true`). **`.CommandInput` (`3639:2`) bewusst geskippt** (User):
+  hat placeholder/value schon (dt. Defaults), kein `filled`; `palette` flach mit nicht-überlappendem
+  value, `default` nestet eine `InputGroup`-Instanz → Overlay nur via Shared-Main-Edit/Detach → out of
+  scope. **Noch offen:** weitere Components mit generischem `text`-Prop (falls vorhanden); Code-Parität
+  nicht gesynct (`filled` = reines Figma-Modeling, `placeholder`/`value` sind im Code native Input-Props
+  → kein zwingender `/component-sync`). Build via 4 parallele Agents + Input-Referenz (Recipe: 2 Steps —
+  Props am Set/Component, dann value-Overlay absolut mirrored auf Placeholder-Geometrie).
 - **Mechanismus-Tabelle → figma-build.md** ✅ *(Struktur-Refactor 06-12)* — die generelle
   „Code-Konstrukt → Figma-Property"-Tabelle (Text/Boolean/Variant/Instance-Swap/Slot/conditional-
   layout→Variant-axis) + When-Regeln aus `composites.md §1` nach **`figma-build.md §Mechanism`**
@@ -318,11 +348,112 @@ nie mid-run editiert.
     DS-Rung (12, 16, …) per ROLLE wählen + notieren: 16px Section-Captions → text-format-title, 12px
     Micro-Labels → text-format-label.* *(Verified: §4-Ladder hat keine Stufe zwischen 14 und 18.)*
 
+### Offen — Form-Toggle-Batch (Checkbox/Switch/RadioGroup) — neu 06-12
+
+Quelle: `agent-runs/component-port/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`. Drei
+State-Achsen-Controls (kein CVA, Sibling von Input; Switch zusätzlich `size`-Achse). Dups über die drei
+Runs zusammengezogen.
+
+**figma-build.md §Interaction-states (Glow-/Ring-Rezept — Cluster):**
+
+30. **Ring/Glow: literal-Alpha + `showShadowBehindNode:false` + focus-copy/invalid-synth + Sweep-all**
+    *(Checkbox #3/#4/#6 · Switch #3 · Radio #3 — zusammengefasst)* — vier Fallen, die §Interaction-states
+    auslässt: **(a)** Effekt-Farbe NIE binden — `setBoundVariableForEffect(…,'color',…)` löst die Variable
+    bei voller Deckkraft auf und verwirft `/50`,`/20` → Ring rendert 100 %. Literal-Farbe @ Alpha setzen
+    (`ring` RGB @ a:0.5, `destructive` @ a:0.2, `boundVariables.color:null`); der Border-STROKE wird normal
+    gebunden. **(b)** `showShadowBehindNode:false` auf transparenten/fill-losen Controls (Checkbox-Box,
+    Radio-Kreis, Ghost) — Default `true` lässt den Halo durch den leeren Body bluten, der äußere Ring liest
+    nie. **(c)** focus = Effekt-Objekt VERBATIM vom `.Input`-Focus-Member `3176:305` kopieren (Spread/Radius/
+    Offset/Alpha UND das Flag, nicht rekonstruieren); invalid = aus demselben Template SYNTHETISIEREN
+    (`destructive` @ a:0.2) — der `.Input`-`invalid`-Member `3176:311` trägt `effects:[]`, nichts zu kopieren.
+    **(d)** eine Glow-Korrektur betrifft JEDEN Glow-Member (focus UND invalid UND checked-invalid), nicht nur
+    den gemeldeten — transparente Member zeigen den Defekt, opake verstecken ihn (ein Member-Screenshot
+    reicht nicht). Fix: focus/invalid-Bullets um (a)–(d) erweitern. *(Verified: `3176:311` effects:[]; Bind →
+    a:1; Checkbox-invalid `sbn:true` vs `.Input` `false`.)*
+
+**SKILL.md T3 (Ring-Width + Rollen-Token-Kontrast):**
+
+31. **`ring-N` → `ring-[Npx]` (Sibling-Konvention)** *(Checkbox #2 · Switch #1)* — Stock liefert `ring-3`; die
+    Field-Familie (input/checkbox/input-group/textarea) standardisiert auf `ring-[3px]`. Auf die Sibling-Form
+    normalisieren, nicht `ring-N` verbatim. *(Verified: alle 4 Siblings = `ring-[3px]`.)*
+32. **Rollen-Token verfehlt Kontrast → Stock-Farb-Token als FILL behalten + Why notieren** *(Switch #2)* —
+    Switch-Off-Track = `bg-input`; das rollen-korrekte `muted` ("Tracks", #f4f6f8) ist auf Weiß unsichtbar,
+    `input` (neutral/450) hält ≥3:1. Nicht blind auf den rollen-benannten Token umbiegen wenn der den nötigen
+    Kontrast verfehlt — Stock-Token als Fill behalten, Begründung in notes. *(Verified: muted ≈1.04:1 vs input
+    ≥3:1 auf Weiß.)*
+
+**SKILL.md T2 (State-Achse) + T5 (Examples) + figma-build (orthogonale Kombis):**
+
+33. **No-CVA State-Achse: mutually-exclusive Member vs. komponierende Overlays trennen** *(Checkbox #1)* —
+    `disabled:`/`focus-visible:` überlagern BEIDE default+checked; `aria-invalid:aria-checked:` ist eine echte
+    kombinierte Zelle. Nicht in ein flaches Enum zwingen (explodiert oder droppt Zellen): mutually-exclusive =
+    `state`-Achsen-Member, komponierende = Boolean-Overlays / Interaction-State-Pattern.
+34. **T5 Story-Reproduktionen = permanenter Section-Deliverable für JEDE Component-Art** *(Checkbox #5)* —
+    nicht nur Composites; nach dem Verifizieren NICHT löschen, als echte genestete Instanzen bauen (+ `.Label`),
+    gelabelte AL-Group unter dem Set. *(War der ursprüngliche „examples fehlen"-Bug; Checkbox nachgezogen.)*
+35. **Single-Achsen-State-Set kann orthogonale Kombis (checked×disabled) nicht ausdrücken → Instanz-Override**
+    *(Radio #4)* — z. B. „erste Option checked unter disabled Group": Instanz auf `state:checked` +
+    `opacity:0.5`-Override (legitim — kein Member, kein Detach), in notes vermerken.
+
+**SKILL.md T2.5 (Stories) + T2/T6 (Move / twMerge / Geometrie-Toggle):**
+
+36. **Stories in der ECHTEN Doc-Komposition bauen (Field-Familie), nicht div+Label** *(Checkbox #7, gilt für
+    alle 3 — User-Report)* — die `radix/*`-Docs komponieren Form-Controls mit der geporteten Field-Familie
+    (`Field`/`FieldContent`/`FieldLabel`/`FieldDescription`/`FieldGroup`/`FieldSet`/`FieldLegend`; `FieldLabel`
+    umschließt ein `Field` für Choice Cards). Geportete DS-Composition-Primitives den hand-gerollten Layouts
+    vorziehen; nur wo das Doc-Beispiel selbst bare ist (basic/Default) bare bleiben. Un-ported-Dep-Beispiele
+    (Table, react-hook-form) **skippen UND in notes loggen**, nie still vereinfachen. *(Alle 3 Stories 06-12
+    auf Field-Komposition umgebaut, `field.stories.tsx` = In-Repo-Idiom, Gate grün.)*
+37. **`mv`, nicht `git mv`, für die frisch-gelandete (untracked) Source** *(Radio #1)* — `git mv` wirft
+    `not under version control` auf der untracked `ui:add`/orchestrator-Source; plain `mv`. *(Verified: exit 128.)*
+38. **twMerge-Survival-Guard → „at-risk DS-Custom-Utility", nicht nur `text-format-*`** *(Radio #2)* — ein
+    grafik-only Control (Radio: Kreis+Dot, kein Text) hat keine Typo-Klasse; der Risiko-Kandidat ist
+    `corner-full` (Custom-`corner-*`). Guard auf die at-risk-Utility der Component keyen (Typo für Text,
+    `corner-*`/named-spacing für grafik-only).
+39. **Two-Part-Geometrie-Toggle (Track+Thumb) braucht KEINE Base/state-layer-Maschinerie** *(Switch #4)* — kein
+    Content/Tint/Active-State; N flache Member (size×state) via `combineAsVariants`, Fill/Stroke/Effect/Layer-
+    Opacity pro Member binden, Thumb-Kind-x numerisch versetzen. Base+state-layer nur für Content-Flächen
+    (Buttons/Inputs). *(Verified: 10 flache Member, kein Base, controls-live + verify CLEAN.)*
+
+### Offen — /component-sync (NEUE Skill-Quelle) — neu 06-12
+
+Quelle: `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`. Erste
+Sync-Findings im Handoff (S1–S6 = Figma-read → Diff → Code-Delta, read-only Figma).
+
+40. **S3 dritte Diff-Form: Property neu gebunden wo Code KEINE Klasse hatte → ADD** *(Checkbox-sync #1 ·
+    Radio-sync #2)* — S3 nennt nur „Wert re-bound → Swap" + „Member +/- → Variant". Fehlt: eine Figma-Bindung
+    die der Code als impliziten Default (gar keine Klasse) ausdrückt (hier: unchecked-Box/-Kreis bekam
+    `input-background`-Fill, Code hatte kein `bg-*`) → mappierte Utility **ADD**en (Gegenfall: Figma entfernt
+    einen vom Code hartkodierten Fill → REMOVE). Den **Satz gebundener Properties** diffen, nicht nur Werte
+    benannter Klassen.
+41. **Eine gebundene Bindung die der Code anders rendert ist ein DELTA, keine „Deviation"** *(Switch-sync #3)*
+    — der Sync-Agent las den Invalid-Track-Fill = `destructive` (gebunden), legte ihn als „Deviation" ab und
+    meldete no-delta → checked-invalid-Switch blieb cyan (User-Report). S3-Tier-1: gebundener Var = autoritativ,
+    1:1 mappen. „Deviation"-Status NUR für rohe/ungebundene Werte oder geflaggte Designer-Fehler — nie als
+    Ausrede einen Live-Bound-Wert nicht zu propagieren. *(Orchestrator-Fix: `aria-invalid:data-checked/unchecked:bg-destructive`.)*
+42. **No-Delta / Premise-Mismatch ist ein First-Class-Outcome** *(Switch-sync #1)* — der Live-Read überschreibt
+    den im Task behaupteten Grund; matcht alles, ist das Delta leer (auch wenn „User hat X geändert"). No-delta
+    melden, einmal re-readen (stale/falscher Node ausschließen), KEINE Änderung erfinden um die Prämisse zu
+    erfüllen (= der `/component-sync`-Red-Flag „rewrite beyond the delta").
+43. **`read-set-values.js` verfehlt non-slot Indicator-Kinder (Thumb-ELLIPSE, Radio-Dot)** *(Switch-sync #2 ·
+    Radio-sync #1)* — das Snippet liest Member-Fill/Stroke + einen SLOT-Kind (vector/instance/text), aber NICHT
+    eine non-slotted ELLIPSE/RECT (Switch-Thumb, Radio-Dot) → deren Fill-Bindung unsichtbar. Snippet erweitern:
+    direkte `['ELLIPSE','RECTANGLE','VECTOR']`-Kinder mit gebundenem Fill mitlaufen; bei Two-Part-Controls den
+    beweglichen/Indicator-Kind separat lesen.
+44. **S3 Member→Variant-Prefix-Mapping benennen** *(Checkbox-sync #2)* — bei Single-Element-State-Achse mappt
+    jeder Figma-Member auf ein Code-State-Prefix (`state=checked`→`data-checked:`, `state=invalid`→
+    `aria-invalid:`, kombiniert → gestapelt `aria-invalid:aria-checked:`); je Member die gebundenen Props gegen
+    die prefixed Klassen diffen.
+45. **`use_figma`-Wrapper braucht `fileKey` + `description`** *(Radio-sync #3 — minor/env)* — in S2 /
+    Snippet-Header notieren (`fileKey` aus config.json + kurze `description`).
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
-  2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field}/skill-feedback.md`
+  2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
+  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group}/skill-feedback.md` +
+  `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
   §4 `text-format-*`, §6 stock→DS, §7 Auto-Layout→Utilities)
