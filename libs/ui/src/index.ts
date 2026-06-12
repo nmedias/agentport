@@ -7,3 +7,4 @@ export * from './components/ui/input-group';
 export * from './components/ui/kbd';
 export * from './components/ui/textarea';
 export { cn } from './lib/utils';
+export type { Prettify } from './lib/types';
