@@ -547,7 +547,7 @@ status_note: >
     members: { default: "3792:1184", checked: "3792:1185", focus: "3794:1184", disabled: "3794:1185", invalid: "3794:1186", checked-invalid: "3794:1187" }
     indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar nur checked (3792:1187) + checked-invalid (3794:1189)" }
     axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA → State-Achse (Sibling von Input)
-    examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
+    examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-TRAILING per family, checked .Checkbox; 2026-06-13)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
   skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
   notes: >
@@ -564,6 +564,14 @@ status_note: >
     (vorher transparent); checked-invalid = solides destructive Fill+Border
     (aria-invalid:aria-checked:bg/border-destructive, überschreibt data-checked:primary), Glyph
     bleibt primary-foreground (reitet auf der roten Fläche).
+    CHOICE-CARD 2026-06-13 (Code→Figma-Push, Branch feat/checkbox-choice-card): DS-authored Story
+    (radix-Checkbox-Docs haben KEINE Choice-Card; Parität zu Switch/Radio) — FieldLabel wrappt ein
+    horizontales control-TRAILING Field (FieldContent: FieldTitle + FieldDescription, checked Checkbox
+    rechts), Tint (has-data-checked:bg-primary/5 border-primary/30) ist Code-only Interaktions-State.
+    Figma-Example 4044:1515 aus der Switch-ChoiceCard 3979:2 geklont (Card + .Field trailing geerbt),
+    .Switch→.Checkbox checked via swapComponent (16×16, kein Stretch), 2 Texte gesetzt; zwischen
+    Description und Group eingehängt. Card un-getinted = bewusst (Familien-Konsistenz; Switch/Radio-
+    Cards ebenso). figma-verify CLEAN, Gate grün (92 Specs).
 
 - name: Switch
   status: nova-aligned

@@ -11,12 +11,16 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
+  FieldTitle,
 } from '../field';
 
 // Usage examples mirror ui.shadcn.com/docs/components/radix/checkbox, which composes
 // the checkbox with the ported Field family (Field / FieldGroup / FieldSet), not a
 // bare div + Label. Skipped (un-ported dep / locale): the docs "Table" example
 // (needs the un-ported Table component) and the "RTL" Arabic locale demo.
+// The radix checkbox docs ship no Choice Card example — ChoiceCard below is
+// DS-authored for parity with the Switch/RadioGroup choice cards, reusing the same
+// FieldLabel-wraps-Field branch (copy from shadcn's own new-york-v4 checkbox-demo).
 const meta: Meta<typeof Checkbox> = {
   title: 'UI/Checkbox',
   component: Checkbox,
@@ -59,6 +63,27 @@ export const Description: Story = {
         </FieldContent>
       </Field>
     </FieldGroup>
+  ),
+};
+
+// DS-authored "Choice Card" (the radix checkbox docs omit it): FieldLabel wraps the
+// whole Field → a clickable, bordered card that tints when the checkbox is checked
+// (has-data-checked:border-primary/30 bg-primary/5). Control trails, matching the
+// Switch/RadioGroup choice cards and the Figma .Field control-trailing member.
+export const ChoiceCard: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <FieldLabel htmlFor="enable-notifications" className="max-w-sm">
+      <Field orientation="horizontal">
+        <FieldContent>
+          <FieldTitle>Enable notifications</FieldTitle>
+          <FieldDescription>
+            You can enable or disable notifications at any time.
+          </FieldDescription>
+        </FieldContent>
+        <Checkbox id="enable-notifications" defaultChecked />
+      </Field>
+    </FieldLabel>
   ),
 };
 
