@@ -22,8 +22,14 @@ import { cn } from '@/lib/utils';
 //    (ring-[3px], not ring-3, to match the sibling field convention).
 //  · default/focus/disabled/invalid box fill → bg-input-background (DS Input fill,
 //    bound in Figma; the unchecked box is no longer transparent).
-//  · aria-invalid → destructive border + ring/20 (⚠ PLACEHOLDER token — stock hex,
-//    not designed; bound but not finalized, same as Input/Badge).
+//  · aria-invalid → destructive border (⚠ PLACEHOLDER token — stock hex, not
+//    designed; bound but not finalized, same as Input/Badge). The destructive ring
+//    (ring-destructive/20) is FOCUS-GATED: its width comes from focus-visible:ring-[3px]
+//    only, so invalid-resting shows the border alone and the red ring appears on
+//    invalid+focus — matching .Input (which omits aria-invalid:ring-[3px]). This
+//    deviates from default-shadcn-checkbox (it ships an always-on aria-invalid:ring-3);
+//    the Figma .Checkbox invalid member still carries the always-on glow → a dedicated
+//    invalid-focus member is the pending Figma re-sync.
 //  · aria-invalid:aria-checked → destructive fill + border (the checked-and-invalid
 //    box is solid destructive in Figma; the white glyph rides the red fill, the
 //    destructive ring carries the error). Overrides data-checked:bg/border-primary.
@@ -40,7 +46,7 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        'peer relative flex size-4 shrink-0 items-center justify-center corner-sm border border-input bg-input-background transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground',
+        'peer relative flex size-4 shrink-0 items-center justify-center corner-sm border border-input bg-input-background transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground',
         className,
       )}
       {...props}
