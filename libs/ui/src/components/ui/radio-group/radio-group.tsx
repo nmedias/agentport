@@ -21,7 +21,12 @@ import { cn } from '@/lib/utils';
 //   · focus-visible:border-ring + ring-ring/50 ring-3 → ring-[3px] (match the
 //     Input focus convention; ring-3 ≈ 3px).
 //   · aria-invalid:border-destructive + ring-destructive/20 — ⚠ destructive is a
-//     PLACEHOLDER token (stock hex, not designed); bound but not finalized.
+//     PLACEHOLDER token (stock hex, not designed); bound but not finalized. The
+//     destructive ring is FOCUS-GATED (width from focus-visible:ring-[3px] only, no
+//     aria-invalid:ring-[3px]): invalid alone = destructive border, the red ring
+//     appears on invalid+focus — matches .Input / .Checkbox. Deviates from
+//     default-shadcn (ships ring-3); Figma invalid member still has the always-on
+//     glow → invalid-focus member is the pending Figma re-sync.
 //   · aria-invalid:aria-checked:{border,bg}-destructive + the dot's
 //     group-aria-invalid/…:bg-destructive-foreground — checked-invalid is fully
 //     error-tinted (error wins over selection); overrides the data-checked primary
@@ -49,7 +54,7 @@ function RadioGroupItem({
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
       className={cn(
-        'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 corner-full border border-input bg-input-background outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive',
+        'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 corner-full border border-input bg-input-background outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive',
         className,
       )}
       {...props}

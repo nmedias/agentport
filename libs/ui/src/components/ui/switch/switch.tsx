@@ -17,8 +17,13 @@ import { cn } from '@/lib/utils';
 //  · rounded-full → corner-full (DS radius vocab; all rounded-* dead, §2/§6).
 //  · focus = border-ring + ring-ring/50 ring-[3px]; invalid = destructive
 //    (⚠ placeholder token, stock hex — bound but NOT finalized) TRACK FILL +
-//    border + ring/20. The Figma .Switch invalid member binds the whole track
-//    fill to destructive, so aria-invalid:data-checked:bg-destructive +
+//    border. The destructive ring (ring/20) is FOCUS-GATED — its width comes
+//    from focus-visible:ring-[3px] only (no aria-invalid:ring-[3px]), so invalid
+//    alone shows track+border and the red ring appears on invalid+focus, matching
+//    .Input / .Checkbox. Deviates from default-shadcn-switch (ships ring-3); the
+//    Figma .Switch invalid member still carries the always-on glow → invalid-focus
+//    member is the pending Figma re-sync. The Figma invalid member binds the whole
+//    track fill to destructive, so aria-invalid:data-checked:bg-destructive +
 //    aria-invalid:data-unchecked:bg-destructive override primary/input in BOTH
 //    positions (2-attr selectors beat the 1-attr data-checked/unchecked fills).
 //    (ring-[3px], not stock ring-3, to match the sibling field convention —
@@ -40,7 +45,7 @@ function Switch({
       data-slot="switch"
       data-size={size}
       className={cn(
-        'peer group/switch relative inline-flex shrink-0 items-center corner-full border border-transparent transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-[size=default]:h-[18.4px] data-[size=default]:w-[32px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] data-checked:bg-primary data-unchecked:bg-input aria-invalid:data-checked:bg-destructive aria-invalid:data-unchecked:bg-destructive data-disabled:cursor-not-allowed data-disabled:opacity-50',
+        'peer group/switch relative inline-flex shrink-0 items-center corner-full border border-transparent transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[size=default]:h-[18.4px] data-[size=default]:w-[32px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] data-checked:bg-primary data-unchecked:bg-input aria-invalid:data-checked:bg-destructive aria-invalid:data-unchecked:bg-destructive data-disabled:cursor-not-allowed data-disabled:opacity-50',
         className
       )}
       {...props}
