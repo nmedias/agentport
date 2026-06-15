@@ -543,10 +543,20 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
   figma:
     section: { name: "Checkbox", id: "3791:1184" }
-    set: { name: ".Checkbox", id: "3795:1184" }
-    members: { default: "3792:1184", checked: "3792:1185", focus: "3794:1184", disabled: "3794:1185", invalid: "3794:1186", checked-invalid: "3794:1187" }
-    indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar nur checked (3792:1187) + checked-invalid (3794:1189)" }
-    axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA → State-Achse (Sibling von Input)
+    set: { name: ".Checkbox", id: "3795:1184" }   # 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP-Grid
+    members:   # Reihe checked=off, dann checked=on
+      "checked=off, state=default":       "3792:1184"
+      "checked=off, state=focus":         "3794:1184"
+      "checked=off, state=disabled":      "3794:1185"
+      "checked=off, state=invalid":       "3794:1186"   # Glow gestrippt (border-only)
+      "checked=off, state=focus-invalid": "4063:2"       # NEU (Border + destructive@20% Glow)
+      "checked=on, state=default":        "3792:1185"
+      "checked=on, state=focus":          "4063:6"       # NEU (primary-Border + ring@50% Halo)
+      "checked=on, state=disabled":       "4063:9"       # NEU (opacity 0.5)
+      "checked=on, state=invalid":        "3794:1187"    # war checked-invalid; Glow gestrippt
+      "checked=on, state=focus-invalid":  "4063:3"       # NEU (destructive Fill+Border + Glow)
+    indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar auf allen checked=on Membern" }
+    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
     examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-TRAILING per family, checked .Checkbox; 2026-06-13)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
   skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
@@ -575,8 +585,13 @@ status_note: >
     FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
     destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
     destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn-checkbox
-    ab (ring-3). **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on Glow → dedizierter
-    invalid-focus-Member = offener Figma-Re-Sync (Schritt 2, Background-Agent). Stories: Default + ChoiceCard jetzt
+    ab (ring-3).
+    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 2 Achsen umgebaut (checked × state). Resting invalid
+    (checked=off/on, state=invalid) = Glow gestrippt (effects:[], border-only wie .Input); NEU focus-invalid je checked
+    = destructive Border + destructive@20% Glow (sbn:false, verbatim vom .Input-Recipe). Matrix-Vollständigkeit:
+    checked=on × {focus, disabled} ergänzt — checked=on,focus = primary-Border + ring@50% Halo (bei focus+checked
+    bewusst primary-Border behalten; FLAG, falls kompilierter Code dort ring-Border zeigt). Instanzen folgen per
+    Node-Identität (kein Remap, verifiziert). Galerie 3826:2 zeigt weiter die kuratierten 6 (neue 4 optional). Stories: Default + ChoiceCard jetzt
     controllbar (5 State-Controls checked/disabled/invalid/hover/focus; hover/focus via
     storybook-addon-pseudo-states, arg-getrieben über pseudo-*-all-Wrapper) + ChoiceCardStates-Galerie.
     Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
@@ -591,19 +606,29 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/switch'"
   figma:
     section: { name: "Switch", id: "3835:1193" }
-    set: { name: ".Switch", id: "3839:2" }                 # 2 Achsen → 10 Member, size-major Grid
-    members:
-      "size=default, state=unchecked": "3837:2"
-      "size=default, state=checked":   "3837:4"
-      "size=default, state=focus":     "3837:6"
-      "size=default, state=disabled":  "3837:8"
-      "size=default, state=invalid":   "3837:10"
-      "size=sm, state=unchecked":      "3838:2"
-      "size=sm, state=checked":        "3838:4"
-      "size=sm, state=focus":          "3838:6"
-      "size=sm, state=disabled":       "3838:8"
-      "size=sm, state=invalid":        "3838:10"
-    axis: { size: [default, sm], state: [unchecked, checked, focus, disabled, invalid] }   # size = manuelle Code-Prop (kein CVA); state = Interaktions-Achse
+    set: { name: ".Switch", id: "3839:2" }                 # 2026-06-15 umgebaut → 3 Achsen (size × checked × state), 20 Member, 5×4 WRAP-Grid
+    members:   # je size: Reihe checked=off, dann checked=on
+      "size=default, checked=off, state=default":       "3837:2"
+      "size=default, checked=off, state=focus":         "3837:6"
+      "size=default, checked=off, state=disabled":      "3837:8"
+      "size=default, checked=off, state=invalid":       "3837:10"   # Glow gestrippt (border-only, Track destructive)
+      "size=default, checked=off, state=focus-invalid": "4069:2"     # NEU
+      "size=default, checked=on, state=default":        "3837:4"
+      "size=default, checked=on, state=focus":          "4069:4"     # NEU (primary Track + ring@50% Halo)
+      "size=default, checked=on, state=disabled":       "4069:6"     # NEU (opacity 0.5)
+      "size=default, checked=on, state=invalid":        "4069:8"     # NEU synthetisiert (destructive Track, Thumb rechts)
+      "size=default, checked=on, state=focus-invalid":  "4069:10"    # NEU
+      "size=sm, checked=off, state=default":            "3838:2"
+      "size=sm, checked=off, state=focus":              "3838:6"
+      "size=sm, checked=off, state=disabled":           "3838:8"
+      "size=sm, checked=off, state=invalid":            "3838:10"    # Glow gestrippt
+      "size=sm, checked=off, state=focus-invalid":      "4070:2"     # NEU
+      "size=sm, checked=on, state=default":             "3838:4"
+      "size=sm, checked=on, state=focus":               "4070:4"     # NEU
+      "size=sm, checked=on, state=disabled":            "4070:6"     # NEU
+      "size=sm, checked=on, state=invalid":             "4070:8"     # NEU synthetisiert
+      "size=sm, checked=on, state=focus-invalid":       "4070:10"    # NEU
+    axis: { size: [default, sm], checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked aus state herausgezogen (war unchecked/checked Sammelwerte)
     examples: { group: "Usage Examples 3840:2 (REBUILT 06-12 = Field-composed, control-trailing)", AirplaneMode: "3948:2", Description: "3952:2", ChoiceCard: "3979:2 (Card + .Field)", Sizes: "3959:2", Disabled: "3961:2", Invalid: "3966:2 (.Field error-slot)", AllStates: "3842:15" }   # alle via echte .Field-Instanzen
     vars: { primary: "3037:8", input: "3038:5", background: "3037:2", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6" }
   skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
@@ -623,10 +648,14 @@ status_note: >
     FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
     destructive-Ring (ring/20) ist jetzt focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting
     = destructive Track+Border ohne Ring, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von
-    default-shadcn-switch ab (ring-3). **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on
-    Glow → ein dedizierter invalid-focus-Member ist der offene Figma-Re-Sync (Schritt 2, Background-Agent).
-    Stories: Default + ChoiceCard jetzt controllbar (5 State-Controls checked/disabled/invalid/hover/focus;
-    hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie. Gate grün.
+    default-shadcn-switch ab (ring-3).
+    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 3 Achsen umgebaut (size × checked × state). Resting
+    invalid = Glow gestrippt (border-only); NEU focus-invalid je size×checked = + destructive@20% Glow. checked=on
+    hatte KEINEN invalid-Member → synthetisiert: Checked-Member (Thumb rechts, primary Track) geklont, Track-Fill +
+    Border auf destructive (Paints von off-invalid kopiert), kein/mit Glow. Außerdem checked=on × {focus, disabled}
+    ergänzt. Instanzen (unchecked/checked) folgen per Node-Identität → checked=off/on, state=default (verifiziert).
+    Galerie 3842:15 zeigt weiter die kuratierten States. Stories: Default + ChoiceCard jetzt controllbar (5 State-Controls
+    checked/disabled/invalid/hover/focus; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie. Gate grün.
 
 - name: RadioGroup
   status: nova-aligned
@@ -638,11 +667,21 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/radio-group'"
   figma:
     section: { name: "RadioGroup", id: "3849:1206" }
-    set: { name: ".RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; die Gruppe ist Layout-only
-    members: { default: "3850:1206", checked: "3850:1207", focus: "3850:1210", disabled: "3851:1206", invalid: "3851:1207", checked-invalid: "3851:1208" }
-    dot: { shape: "ELLIPSE 8px (size-2), fill primary-foreground; sichtbar checked (3850:1209) + checked-invalid (3851:1210)" }
+    set: { name: ".RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP
+    members:   # Reihe checked=off, dann checked=on
+      "checked=off, state=default":       "3850:1206"
+      "checked=off, state=focus":         "3850:1210"
+      "checked=off, state=disabled":      "3851:1206"
+      "checked=off, state=invalid":       "3851:1207"   # Glow gestrippt (border-only)
+      "checked=off, state=focus-invalid": "4066:2"       # NEU
+      "checked=on, state=default":        "3850:1207"
+      "checked=on, state=focus":          "4066:6"       # NEU (primary-Border + ring@50% Halo)
+      "checked=on, state=disabled":       "4066:9"       # NEU (opacity 0.5)
+      "checked=on, state=invalid":        "3851:1208"    # war checked-invalid; Glow gestrippt
+      "checked=on, state=focus-invalid":  "4066:3"       # NEU (destructive Fill+Border + Dot destructive-fg + Glow)
+    dot: { shape: "ELLIPSE 8px (size-2), fill primary-foreground; sichtbar auf allen checked=on Membern (checked-invalid: destructive-foreground)" }
     group_container: "Layout-only (grid w-full gap-md) → KEIN Variant-Set; in den Examples als VERTICAL auto-layout itemSpacing=space-md repräsentiert"
-    axis: { state: [default, checked, focus, disabled, invalid, checked-invalid] }   # kein CVA; Item-State-Achse wie Checkbox
+    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
     examples: { group: "Usage Examples 3854:1206 (REBUILT 06-12 = Field-composed)", Default: "3992:1324 (bare, per Doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + Gruppen-Error)", AllStates: "3857:1218" }
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", destructive-foreground⚠: "bound (checked-invalid Dot)", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6", space-md: "3070:6", muted-foreground: "3037:13" }
   skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
@@ -661,8 +700,10 @@ status_note: >
     FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
     destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
     destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn ab (ring-3).
-    **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on Glow → dedizierter invalid-focus-Member
-    = offener Figma-Re-Sync (Schritt 2, Background-Agent). Stories: ChoiceCard jetzt controllbare Single-Card
+    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 2 Achsen umgebaut (checked × state). Resting invalid
+    (checked=off/on) = Glow gestrippt (border-only); NEU focus-invalid je checked = + destructive@20% Glow. checked=on
+    × {focus, disabled} ergänzt (Matrix-Vollständigkeit). checked=on,focus = primary-Border + ring@50% Halo (FLAG s. Checkbox).
+    Instanzen folgen per Node-Identität (kein Remap). Galerie 3857:1218 zeigt weiter die kuratierten 6. Stories: ChoiceCard jetzt controllbare Single-Card
     (5 State-Controls; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie; die alte
     Zwei-Card-Doc-Demo lebt weiter als ChoiceCardGroup. Default bleibt Doc-Gruppe (kein bare-single-Item). Gate grün.
 
