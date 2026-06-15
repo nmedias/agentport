@@ -81,22 +81,19 @@ export default meta;
 type Story = StoryObj<typeof RadioGroup>;
 
 type pseudoState = {
-  hover: boolean;
   focus: boolean;
   invalid: boolean;
 };
 
 const pseudoStateArgTypes = {
   invalid: { control: 'boolean' },
-  hover: { control: 'boolean' },
   focus: { control: 'boolean' },
 } satisfies Record<keyof pseudoState, { control: 'boolean' }>;
 
 // RadioGroup is value-driven (no `checked` prop), so — unlike Checkbox/Switch — the card's
 // checked/disabled can't be Picked from the component; they're explicit booleans here. The
-// hover / focus pseudo-states are forced via PseudoWrap (storybook-addon-pseudo-states:
-// pseudo-hover-all / pseudo-focus-visible-all simulate :hover / :focus-visible on every
-// descendant). In default shadcn the radio item has no hover style, so hover is a no-op today.
+// focus pseudo-state is forced via PseudoWrap (storybook-addon-pseudo-states:
+// pseudo-focus-visible-all simulates :focus-visible on every descendant).
 type RadioCardArgs = {
   checked: boolean;
   disabled: boolean;
@@ -109,17 +106,13 @@ const radioCardArgTypes = {
 } satisfies Record<keyof RadioCardArgs, { control: 'boolean' }>;
 
 function PseudoWrap({
-  hover,
   focus,
   children,
 }: {
-  hover: pseudoState['hover'];
   focus: pseudoState['focus'];
   children: ReactNode;
 }) {
-  const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
-    .filter(Boolean)
-    .join(' ');
+  const className = focus ? 'pseudo-focus-visible-all' : '';
   return <div className={className}>{children}</div>;
 }
 
@@ -178,8 +171,8 @@ export const Description: Story = {
 
 // Choice Card — interactive state preview (single card). FieldLabel wraps the Field → a
 // clickable, bordered card that tints when its item is selected (has-data-checked). All
-// five interaction states are Controls (checked / disabled / invalid + hover / focus
-// pseudo-states via PseudoWrap), so every combination — incl. invalid + focus — is
+// four interaction states are Controls (checked / disabled / invalid + focus
+// pseudo-state via PseudoWrap), so every combination — incl. invalid + focus — is
 // reachable. DEFAULT shadcn: card reacts only to checked (tint) + disabled (dim); the radio
 // item carries focus (ring) + invalid (destructive border + focus-gated red ring). Each
 // card sits in its own RadioGroup (className="contents") so its checked state is independent.
@@ -224,12 +217,12 @@ function ChoiceCardCell({
 
 export const ChoiceCard: StoryObj<RadioCardArgs> = {
   parameters: {
-    controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
+    controls: { include: ['checked', 'disabled', 'invalid', 'focus'] },
   },
-  args: { checked: true, disabled: false, invalid: false, hover: false, focus: false },
+  args: { checked: true, disabled: false, invalid: false, focus: false },
   argTypes: radioCardArgTypes,
-  render: ({ checked, disabled, invalid, hover, focus }) => (
-    <PseudoWrap hover={hover} focus={focus}>
+  render: ({ checked, disabled, invalid, focus }) => (
+    <PseudoWrap focus={focus}>
       <ChoiceCardCell
         id="cc-plan"
         checked={checked}

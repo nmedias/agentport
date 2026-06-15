@@ -16,14 +16,12 @@ import {
 } from '../field';
 
 type pseudoState =  {
-  hover: boolean;
   focus: boolean;
   invalid: boolean;
 };
 
 const pseudoStateArgTypes = {
   invalid: { control: 'boolean' },
-  hover:   { control: 'boolean' },
   focus:   { control: 'boolean' },
 } satisfies Record<keyof  pseudoState, { control: 'boolean' }>;
 
@@ -88,26 +86,20 @@ export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
 // Shared state controls for the interactive previews (Default + ChoiceCard). checked /
-// disabled / invalid are real props; hover / focus are CSS pseudo-states a plain boolean
-// can't set, so PseudoWrap forces them via storybook-addon-pseudo-states' classes
-// (pseudo-hover-all / pseudo-focus-visible-all simulate :hover / :focus-visible on every
-// descendant — the addon rewrites the stylesheet on each render). This is the same
-// mechanism the addon's toolbar uses, just bound to args so all states are togglable
-// from the Controls panel. In default shadcn the checkbox has no hover style, so the
-// hover toggle is a no-op today (kept for the Figma state axis + future hover).
+// disabled / invalid are real props; focus is a CSS pseudo-state a plain boolean can't
+// set, so PseudoWrap forces it via storybook-addon-pseudo-states' class
+// (pseudo-focus-visible-all simulates :focus-visible on every descendant — the addon
+// rewrites the stylesheet on each render). This is the same mechanism the addon's toolbar
+// uses, just bound to an arg so focus is togglable from the Controls panel.
 
 function PseudoWrap({
-  hover,
   focus,
   children,
 }: {
-  hover: pseudoState['hover'];
   focus: pseudoState["focus"];
   children: ReactNode;
 }) {
-  const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
-    .filter(Boolean)
-    .join(' ');
+  const className = focus ? 'pseudo-focus-visible-all' : '';
   return <div className={className}>{children}</div>;
 }
 
@@ -153,8 +145,8 @@ export const Description: Story = {
 
 // Choice Card — interactive state preview. The radix checkbox docs ship no choice card;
 // this mirrors the Switch/RadioGroup choice cards (same FieldLabel-wraps-Field branch,
-// control trailing). All five interaction states are Controls (checked / disabled /
-// invalid props + hover / focus pseudo-states via PseudoWrap), so every combination —
+// control trailing). All four interaction states are Controls (checked / disabled /
+// invalid props + focus pseudo-state via PseudoWrap), so every combination —
 // including invalid + focus — is reachable from the panel.
 //
 // DEFAULT shadcn, NOT a custom design: at the CARD level only checked (→ primary tint)
@@ -205,16 +197,15 @@ function ChoiceCardCell({
 
 export const ChoiceCard: StoryObj<ComponentProps<typeof Checkbox> & pseudoState> = {
   parameters: {
-    controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
+    controls: { include: ['checked', 'disabled', 'invalid', 'focus'] },
   },
   argTypes: pseudoStateArgTypes,
   args: {
     invalid: false,
-    hover: false,
     focus: false
   },
-  render: ({ checked, disabled, invalid, hover, focus }) => (
-    <PseudoWrap hover={hover} focus={focus}>
+  render: ({ checked, disabled, invalid, focus }) => (
+    <PseudoWrap focus={focus}>
       <ChoiceCardCell
         id="cc-notifications"
         checked={checked}

@@ -13,14 +13,12 @@ import {
 } from '../field';
 
 type pseudoState = {
-  hover: boolean;
   focus: boolean;
   invalid: boolean;
 };
 
 const pseudoStateArgTypes = {
   invalid: { control: 'boolean' },
-  hover: { control: 'boolean' },
   focus: { control: 'boolean' },
 } satisfies Record<keyof pseudoState, { control: 'boolean' }>;
 
@@ -86,22 +84,17 @@ const meta: Meta<typeof Switch> = {
 export default meta;
 type Story = StoryObj<typeof Switch>;
 
-// hover / focus are CSS pseudo-states a plain boolean can't set, so PseudoWrap forces them
-// via storybook-addon-pseudo-states (pseudo-hover-all / pseudo-focus-visible-all simulate
-// :hover / :focus-visible on every descendant — the addon rewrites the stylesheet on each
-// render). In default shadcn the switch has no hover style, so hover is a no-op today.
+// focus is a CSS pseudo-state a plain boolean can't set, so PseudoWrap forces it via
+// storybook-addon-pseudo-states (pseudo-focus-visible-all simulates :focus-visible on
+// every descendant — the addon rewrites the stylesheet on each render).
 function PseudoWrap({
-  hover,
   focus,
   children,
 }: {
-  hover: pseudoState['hover'];
   focus: pseudoState['focus'];
   children: ReactNode;
 }) {
-  const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
-    .filter(Boolean)
-    .join(' ');
+  const className = focus ? 'pseudo-focus-visible-all' : '';
   return <div className={className}>{children}</div>;
 }
 
@@ -143,8 +136,8 @@ export const Description: Story = {
 };
 
 // Choice Card — interactive state preview. FieldLabel wraps the whole Field → a clickable,
-// bordered card that tints when the switch is on (has-data-checked). All five interaction
-// states are Controls (checked / disabled / invalid props + hover / focus pseudo-states via
+// bordered card that tints when the switch is on (has-data-checked). All four interaction
+// states are Controls (checked / disabled / invalid props + focus pseudo-state via
 // PseudoWrap), so every combination — incl. invalid + focus — is reachable. DEFAULT shadcn:
 // card reacts only to checked (tint) + disabled (dim); the switch carries focus (ring) +
 // invalid (destructive track + focus-gated red ring).
@@ -190,12 +183,12 @@ function ChoiceCardCell({
 
 export const ChoiceCard: StoryObj<ComponentProps<typeof Switch> & pseudoState> = {
   parameters: {
-    controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
+    controls: { include: ['checked', 'disabled', 'invalid', 'focus'] },
   },
   argTypes: pseudoStateArgTypes,
-  args: { invalid: false, hover: false, focus: false },
-  render: ({ checked, disabled, invalid, hover, focus }) => (
-    <PseudoWrap hover={hover} focus={focus}>
+  args: { invalid: false, focus: false },
+  render: ({ checked, disabled, invalid, focus }) => (
+    <PseudoWrap focus={focus}>
       <ChoiceCardCell
         id="cc-share"
         checked={checked}
