@@ -22,49 +22,99 @@ const meta: Meta<typeof RadioGroup> = {
   title: 'UI/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
-  parameters: { controls: { disable: true } },
+  args: { defaultValue: 'comfortable' },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
+  // `ComponentProps<typeof RadioGroupPrimitive.Root>` (a Radix type reference), so the public
+  // API is documented here by hand. The table documents RadioGroup (the container); the
+  // RadioGroupItem props live in the component description block. Interactive stories scope
+  // their panel via controls.include.
+  argTypes: {
+    value: {
+      control: 'text',
+      description: 'Controlled selected value (pair with `onValueChange`).',
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      control: 'text',
+      description: 'Selected value when uncontrolled.',
+      table: { type: { summary: 'string' } },
+    },
+    onValueChange: {
+      control: false,
+      description: 'Called when the selected value changes.',
+      table: { type: { summary: '(value: string) => void' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disables every item in the group.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      control: 'boolean',
+      description: 'Marks the group required for native form validation.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    name: {
+      control: 'text',
+      description: 'Form field name submitted with the form.',
+      table: { type: { summary: 'string' } },
+    },
+    orientation: {
+      control: 'inline-radio',
+      options: ['horizontal', 'vertical'],
+      description: 'Arrow-key navigation direction.',
+      table: { type: { summary: '"horizontal" | "vertical"' }, defaultValue: { summary: '"vertical"' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'The value-driven container documented below. Each option is a **`RadioGroupItem`** with its own props: `value: string` *(required)* — value selected when chosen · `disabled?: boolean` — disables just this item · `id?: string` — pairs with a `<label htmlFor>`.',
+      },
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof RadioGroup>;
 
-// Shared state controls for the interactive ChoiceCard preview — same as the Checkbox /
-// Switch stories. checked / disabled / invalid are driven by the RadioGroup value + props;
-// hover / focus are CSS pseudo-states a plain boolean can't set, so PseudoWrap forces them
-// via storybook-addon-pseudo-states (pseudo-hover-all / pseudo-focus-visible-all simulate
-// :hover / :focus-visible on every descendant). disable:false re-enables the panel that the
-// meta turns off for the doc-example stories. In default shadcn the radio item has no hover
-// style, so the hover toggle is a no-op today (kept for the Figma state axis).
-type StateArgs = {
-  checked: boolean;
-  disabled: boolean;
-  invalid: boolean;
+type pseudoState = {
   hover: boolean;
   focus: boolean;
+  invalid: boolean;
 };
 
-const stateArgTypes = {
-  checked: { control: 'boolean' as const },
-  disabled: { control: 'boolean' as const },
-  invalid: { control: 'boolean' as const },
-  hover: { control: 'boolean' as const },
-  focus: { control: 'boolean' as const },
-};
+const pseudoStateArgTypes = {
+  invalid: { control: 'boolean' },
+  hover: { control: 'boolean' },
+  focus: { control: 'boolean' },
+} satisfies Record<keyof pseudoState, { control: 'boolean' }>;
 
-const stateControls = {
-  controls: {
-    disable: false,
-    include: ['checked', 'disabled', 'invalid', 'hover', 'focus'],
-  },
-};
+// RadioGroup is value-driven (no `checked` prop), so — unlike Checkbox/Switch — the card's
+// checked/disabled can't be Picked from the component; they're explicit booleans here. The
+// hover / focus pseudo-states are forced via PseudoWrap (storybook-addon-pseudo-states:
+// pseudo-hover-all / pseudo-focus-visible-all simulate :hover / :focus-visible on every
+// descendant). In default shadcn the radio item has no hover style, so hover is a no-op today.
+type RadioCardArgs = {
+  checked: boolean;
+  disabled: boolean;
+} & pseudoState;
+
+const radioCardArgTypes = {
+  checked: { control: 'boolean' },
+  disabled: { control: 'boolean' },
+  ...pseudoStateArgTypes,
+} satisfies Record<keyof RadioCardArgs, { control: 'boolean' }>;
 
 function PseudoWrap({
   hover,
   focus,
   children,
 }: {
-  hover: boolean;
-  focus: boolean;
+  hover: pseudoState['hover'];
+  focus: pseudoState['focus'];
   children: ReactNode;
 }) {
   const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
@@ -73,10 +123,13 @@ function PseudoWrap({
   return <div className={className}>{children}</div>;
 }
 
-// docs "Default": bare item + Label rows in a RadioGroup.
+// Bare group — the API playground. Renders <RadioGroup {...args}> with three items, so every
+// prop documented in the meta argTypes shows in the ArgsTable AND as a live control (no
+// controls.include — that would also filter the table). The Field-composed examples + the
+// pseudo-state preview live in the stories below.
 export const Default: Story = {
-  render: () => (
-    <RadioGroup defaultValue="comfortable" className="max-w-sm">
+  render: (args) => (
+      <RadioGroup {...args} className="max-w-sm">
       <div className="flex items-center gap-lg">
         <RadioGroupItem value="default" id="r1" />
         <Label htmlFor="r1">Default</Label>
@@ -95,6 +148,7 @@ export const Default: Story = {
 
 // docs "Description": each option carries helper text via Field + FieldContent.
 export const Description: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup defaultValue="comfortable" className="max-w-sm">
       <Field orientation="horizontal">
@@ -168,10 +222,12 @@ function ChoiceCardCell({
   );
 }
 
-export const ChoiceCard: StoryObj<StateArgs> = {
-  parameters: stateControls,
+export const ChoiceCard: StoryObj<RadioCardArgs> = {
+  parameters: {
+    controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
+  },
   args: { checked: true, disabled: false, invalid: false, hover: false, focus: false },
-  argTypes: stateArgTypes,
+  argTypes: radioCardArgTypes,
   render: ({ checked, disabled, invalid, hover, focus }) => (
     <PseudoWrap hover={hover} focus={focus}>
       <ChoiceCardCell
@@ -187,6 +243,7 @@ export const ChoiceCard: StoryObj<StateArgs> = {
 // docs "Choice Card" (multi): FieldLabel wraps each Field → clickable cards that tint when
 // their item is selected; one RadioGroup, single selection across the cards.
 export const ChoiceCardGroup: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup defaultValue="pro" className="max-w-sm">
       <FieldLabel htmlFor="plan-starter">
@@ -265,6 +322,7 @@ export const ChoiceCardStates: Story = {
 
 // docs "Fieldset": FieldSet + FieldLegend group the items with a caption + description.
 export const Fieldset: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <FieldSet className="max-w-sm">
       <FieldLegend>Billing cycle</FieldLegend>
@@ -285,6 +343,7 @@ export const Fieldset: Story = {
 
 // docs "Disabled": a disabled group — every item non-interactive and dimmed.
 export const Disabled: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup defaultValue="one" disabled className="max-w-sm">
       <div className="flex items-center gap-lg">
@@ -301,6 +360,7 @@ export const Disabled: Story = {
 
 // docs "Invalid": aria-invalid on the items + data-invalid on the Field + FieldError.
 export const Invalid: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <FieldSet data-invalid className="max-w-sm">
       <FieldLegend variant="label">Notifications</FieldLegend>
@@ -323,6 +383,7 @@ export const Invalid: Story = {
 // Each item lives in its own RadioGroup (className="contents") so its checked state
 // is independent. Focus is a live pseudo-state.
 export const AllStates: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex flex-col gap-lg">
       <RadioGroup defaultValue="" className="contents">

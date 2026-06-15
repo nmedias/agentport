@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type {ComponentProps, ReactNode} from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Checkbox } from './checkbox';
@@ -15,6 +15,18 @@ import {
   FieldTitle,
 } from '../field';
 
+type pseudoState =  {
+  hover: boolean;
+  focus: boolean;
+  invalid: boolean;
+};
+
+const pseudoStateArgTypes = {
+  invalid: { control: 'boolean' },
+  hover:   { control: 'boolean' },
+  focus:   { control: 'boolean' },
+} satisfies Record<keyof  pseudoState, { control: 'boolean' }>;
+
 // Usage examples mirror ui.shadcn.com/docs/components/radix/checkbox, which composes
 // the checkbox with the ported Field family (Field / FieldGroup / FieldSet), not a
 // bare div + Label. Skipped (un-ported dep / locale): the docs "Table" example
@@ -26,9 +38,49 @@ const meta: Meta<typeof Checkbox> = {
   title: 'UI/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
+  args: { checked: true, disabled: false },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
+  // `ComponentProps<typeof CheckboxPrimitive.Root>` (a Radix type reference), so the public
+  // API is documented here by hand. Interactive stories scope their panel via controls.include.
   argTypes: {
-    checked: { control: 'boolean' },
-    disabled: { control: 'boolean' },
+    checked: {
+      control: 'boolean',
+      description: 'Controlled checked state (pair with `onCheckedChange`). Accepts `"indeterminate"`.',
+      table: { type: { summary: 'boolean | "indeterminate"' } },
+    },
+    defaultChecked: {
+      control: 'boolean',
+      description: 'Checked state when uncontrolled.',
+      table: { type: { summary: 'boolean | "indeterminate"' }, defaultValue: { summary: 'false' } },
+    },
+    onCheckedChange: {
+      control: false,
+      description: 'Called when the checked state changes.',
+      table: { type: { summary: '(checked: boolean | "indeterminate") => void' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Prevents interaction and dims the control (and its Field label via group styling).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      control: 'boolean',
+      description: 'Marks the control required for native form validation.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    name: {
+      control: 'text',
+      description: 'Form field name submitted with the form.',
+      table: { type: { summary: 'string' } },
+    },
+    value: {
+      control: 'text',
+      description: 'Value submitted when checked.',
+      table: { type: { summary: 'string' }, defaultValue: { summary: '"on"' } },
+    },
+  },
+  parameters: {
+    docs: { source: { type: 'code' } },
   },
 };
 
@@ -43,33 +95,14 @@ type Story = StoryObj<typeof Checkbox>;
 // mechanism the addon's toolbar uses, just bound to args so all states are togglable
 // from the Controls panel. In default shadcn the checkbox has no hover style, so the
 // hover toggle is a no-op today (kept for the Figma state axis + future hover).
-type StateArgs = {
-  checked: boolean;
-  disabled: boolean;
-  invalid: boolean;
-  hover: boolean;
-  focus: boolean;
-};
-
-const stateArgTypes = {
-  checked: { control: 'boolean' as const },
-  disabled: { control: 'boolean' as const },
-  invalid: { control: 'boolean' as const },
-  hover: { control: 'boolean' as const },
-  focus: { control: 'boolean' as const },
-};
-
-const stateControls = {
-  controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
-};
 
 function PseudoWrap({
   hover,
   focus,
   children,
 }: {
-  hover: boolean;
-  focus: boolean;
+  hover: pseudoState['hover'];
+  focus: pseudoState["focus"];
   children: ReactNode;
 }) {
   const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
@@ -78,22 +111,15 @@ function PseudoWrap({
   return <div className={className}>{children}</div>;
 }
 
-// Bare box — all interaction states as controls (checked / disabled / invalid props +
-// hover / focus pseudo-states via PseudoWrap). invalid + focus shows the focus-gated
-// destructive ring; invalid alone shows only the destructive border.
-export const Default: StoryObj<StateArgs> = {
-  parameters: stateControls,
-  args: { checked: false, disabled: false, invalid: false, hover: false, focus: false },
-  argTypes: stateArgTypes,
-  render: ({ checked, disabled, invalid, hover, focus }) => (
-    <PseudoWrap hover={hover} focus={focus}>
-      <Checkbox
-        checked={checked}
-        disabled={disabled}
-        aria-invalid={invalid || undefined}
-      />
-    </PseudoWrap>
-  ),
+// Bare checkbox — the API playground. With `component: Checkbox` and no custom render,
+// Storybook auto-renders <Checkbox {...args} />, so every prop documented in the meta
+// argTypes shows in the ArgsTable AND as a live control (no controls.include — that would
+// also filter the table). source.type:'dynamic' overrides the meta's 'code' so the snippet
+// shows the generated <Checkbox …/> (reflecting the controls) instead of the literal `{}`.
+// The Field-composed examples + the pseudo-state preview live in the stories below.
+export const Default: Story = {
+
+  render: (args) => <Checkbox {...args} />,
 };
 
 // docs "Basic": checkbox + label on one row via a horizontal Field.
@@ -141,10 +167,8 @@ function ChoiceCardCell({
   checked,
   disabled,
   invalid,
-}: {
+}: Pick<ComponentProps<typeof Checkbox>, 'checked' | 'disabled'> & {
   id: string;
-  checked: boolean;
-  disabled: boolean;
   invalid: boolean;
 }) {
   return (
@@ -178,10 +202,17 @@ function ChoiceCardCell({
   );
 }
 
-export const ChoiceCard: StoryObj<StateArgs> = {
-  parameters: stateControls,
-  args: { checked: true, disabled: false, invalid: false, hover: false, focus: false },
-  argTypes: stateArgTypes,
+
+export const ChoiceCard: StoryObj<ComponentProps<typeof Checkbox> & pseudoState> = {
+  parameters: {
+    controls: { include: ['checked', 'disabled', 'invalid', 'hover', 'focus'] },
+  },
+  argTypes: pseudoStateArgTypes,
+  args: {
+    invalid: false,
+    hover: false,
+    focus: false
+  },
   render: ({ checked, disabled, invalid, hover, focus }) => (
     <PseudoWrap hover={hover} focus={focus}>
       <ChoiceCardCell
@@ -203,7 +234,7 @@ const STATE_ROWS = [
   { key: 'focus', label: 'Focus', disabled: false, invalid: false, focus: true },
   { key: 'disabled', label: 'Disabled', disabled: true, invalid: false, focus: false },
   { key: 'invalid', label: 'Invalid', disabled: false, invalid: true, focus: false },
-  { key: 'invalidfocus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
+  { key: 'invalid-focus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
 ];
 
 export const ChoiceCardStates: Story = {
