@@ -9,15 +9,13 @@ const config: StorybookConfig = {
   stories: [
     '../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'
   ],
-  addons: ['@storybook/addon-mcp', 'storybook-addon-pseudo-states'],
+  addons: ['@storybook/addon-mcp', '@storybook/addon-docs',  'storybook-addon-pseudo-states'],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {
-      
       builder: {
         viteConfigPath: 'vite.config.mts',
       },
-      
     },
   },
   
