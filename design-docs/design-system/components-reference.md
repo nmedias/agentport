@@ -572,6 +572,14 @@ status_note: >
     .Switch→.Checkbox checked via swapComponent (16×16, kein Stretch), 2 Texte gesetzt; zwischen
     Description und Group eingehängt. Card un-getinted = bewusst (Familien-Konsistenz; Switch/Radio-
     Cards ebenso). figma-verify CLEAN, Gate grün (92 Specs).
+    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
+    destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
+    destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn-checkbox
+    ab (ring-3). **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on Glow → dedizierter
+    invalid-focus-Member = offener Figma-Re-Sync (Schritt 2, Background-Agent). Stories: Default + ChoiceCard jetzt
+    controllbar (5 State-Controls checked/disabled/invalid/hover/focus; hover/focus via
+    storybook-addon-pseudo-states, arg-getrieben über pseudo-*-all-Wrapper) + ChoiceCardStates-Galerie.
+    Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
 
 - name: Switch
   status: nova-aligned
@@ -612,6 +620,13 @@ status_note: >
     (aria-invalid:data-checked:bg-destructive + aria-invalid:data-unchecked:bg-destructive — 2-Attr-Selektoren
     überschreiben primary/input) — der Figma-Invalid-Member bindet die ganze Track-Fläche an destructive.
     Korrigiert eine Sync-Agent-Deviation (vorher nur Border+Ring, checked-invalid blieb cyan → User-Report).
+    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
+    destructive-Ring (ring/20) ist jetzt focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting
+    = destructive Track+Border ohne Ring, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von
+    default-shadcn-switch ab (ring-3). **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on
+    Glow → ein dedizierter invalid-focus-Member ist der offene Figma-Re-Sync (Schritt 2, Background-Agent).
+    Stories: Default + ChoiceCard jetzt controllbar (5 State-Controls checked/disabled/invalid/hover/focus;
+    hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie. Gate grün.
 
 - name: RadioGroup
   status: nova-aligned
@@ -643,7 +658,13 @@ status_note: >
     SYNC 2026-06-12 (/component-sync): unchecked-Kreis = bg-input-background (vorher transparent); checked-invalid
     voll destructive-getönt — Border+Fill (aria-invalid:aria-checked:bg/border-destructive) + Dot
     bg-destructive-foreground (group-aria-invalid/radio-group-item:), kehrt den vorherigen primary-Border-Override um.
-```
+    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
+    destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
+    destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn ab (ring-3).
+    **CODE↔FIGMA-DIVERGENZ:** Figma-Invalid-Member trägt noch den always-on Glow → dedizierter invalid-focus-Member
+    = offener Figma-Re-Sync (Schritt 2, Background-Agent). Stories: ChoiceCard jetzt controllbare Single-Card
+    (5 State-Controls; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie; die alte
+    Zwei-Card-Doc-Demo lebt weiter als ChoiceCardGroup. Default bleibt Doc-Gruppe (kein bare-single-Item). Gate grün.
 
 ## Pending / Removed
 

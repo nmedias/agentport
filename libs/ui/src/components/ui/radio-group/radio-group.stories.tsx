@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { RadioGroup, RadioGroupItem } from './radio-group';
@@ -26,6 +27,51 @@ const meta: Meta<typeof RadioGroup> = {
 
 export default meta;
 type Story = StoryObj<typeof RadioGroup>;
+
+// Shared state controls for the interactive ChoiceCard preview — same as the Checkbox /
+// Switch stories. checked / disabled / invalid are driven by the RadioGroup value + props;
+// hover / focus are CSS pseudo-states a plain boolean can't set, so PseudoWrap forces them
+// via storybook-addon-pseudo-states (pseudo-hover-all / pseudo-focus-visible-all simulate
+// :hover / :focus-visible on every descendant). disable:false re-enables the panel that the
+// meta turns off for the doc-example stories. In default shadcn the radio item has no hover
+// style, so the hover toggle is a no-op today (kept for the Figma state axis).
+type StateArgs = {
+  checked: boolean;
+  disabled: boolean;
+  invalid: boolean;
+  hover: boolean;
+  focus: boolean;
+};
+
+const stateArgTypes = {
+  checked: { control: 'boolean' as const },
+  disabled: { control: 'boolean' as const },
+  invalid: { control: 'boolean' as const },
+  hover: { control: 'boolean' as const },
+  focus: { control: 'boolean' as const },
+};
+
+const stateControls = {
+  controls: {
+    disable: false,
+    include: ['checked', 'disabled', 'invalid', 'hover', 'focus'],
+  },
+};
+
+function PseudoWrap({
+  hover,
+  focus,
+  children,
+}: {
+  hover: boolean;
+  focus: boolean;
+  children: ReactNode;
+}) {
+  const className = [hover && 'pseudo-hover-all', focus && 'pseudo-focus-visible-all']
+    .filter(Boolean)
+    .join(' ');
+  return <div className={className}>{children}</div>;
+}
 
 // docs "Default": bare item + Label rows in a RadioGroup.
 export const Default: Story = {
@@ -76,9 +122,71 @@ export const Description: Story = {
   ),
 };
 
-// docs "Choice Card": FieldLabel wraps each Field → clickable cards that tint when
-// their item is selected (has-data-checked accent).
-export const ChoiceCard: Story = {
+// Choice Card — interactive state preview (single card). FieldLabel wraps the Field → a
+// clickable, bordered card that tints when its item is selected (has-data-checked). All
+// five interaction states are Controls (checked / disabled / invalid + hover / focus
+// pseudo-states via PseudoWrap), so every combination — incl. invalid + focus — is
+// reachable. DEFAULT shadcn: card reacts only to checked (tint) + disabled (dim); the radio
+// item carries focus (ring) + invalid (destructive border + focus-gated red ring). Each
+// card sits in its own RadioGroup (className="contents") so its checked state is independent.
+function ChoiceCardCell({
+  id,
+  checked,
+  disabled,
+  invalid,
+}: {
+  id: string;
+  checked: boolean;
+  disabled: boolean;
+  invalid: boolean;
+}) {
+  return (
+    <RadioGroup
+      value={checked ? id : '__none'}
+      disabled={disabled}
+      className="contents"
+    >
+      <FieldLabel
+        htmlFor={id}
+        className="max-w-sm"
+        data-disabled={disabled ? 'true' : undefined}
+      >
+        <Field
+          orientation="horizontal"
+          data-disabled={disabled ? 'true' : undefined}
+          data-invalid={invalid || undefined}
+        >
+          <FieldContent>
+            <FieldTitle>Pro</FieldTitle>
+            <FieldDescription>For growing teams that need more room.</FieldDescription>
+            {invalid && <FieldError>Please choose a plan to continue.</FieldError>}
+          </FieldContent>
+          <RadioGroupItem id={id} value={id} aria-invalid={invalid || undefined} />
+        </Field>
+      </FieldLabel>
+    </RadioGroup>
+  );
+}
+
+export const ChoiceCard: StoryObj<StateArgs> = {
+  parameters: stateControls,
+  args: { checked: true, disabled: false, invalid: false, hover: false, focus: false },
+  argTypes: stateArgTypes,
+  render: ({ checked, disabled, invalid, hover, focus }) => (
+    <PseudoWrap hover={hover} focus={focus}>
+      <ChoiceCardCell
+        id="cc-plan"
+        checked={checked}
+        disabled={disabled}
+        invalid={invalid}
+      />
+    </PseudoWrap>
+  ),
+};
+
+// docs "Choice Card" (multi): FieldLabel wraps each Field → clickable cards that tint when
+// their item is selected; one RadioGroup, single selection across the cards.
+export const ChoiceCardGroup: Story = {
   render: () => (
     <RadioGroup defaultValue="pro" className="max-w-sm">
       <FieldLabel htmlFor="plan-starter">
@@ -100,6 +208,58 @@ export const ChoiceCard: Story = {
         </Field>
       </FieldLabel>
     </RadioGroup>
+  ),
+};
+
+// At-a-glance gallery, columns = unchecked vs checked. The Focus rows force :focus-visible
+// on the radio item via the pseudo-states addon, so the focus ring — and the focus-gated
+// invalid red ring (invalid alone shows only the destructive border) — is visible statically.
+const STATE_ROWS = [
+  { key: 'enabled', label: 'Enabled', disabled: false, invalid: false, focus: false },
+  { key: 'focus', label: 'Focus', disabled: false, invalid: false, focus: true },
+  { key: 'disabled', label: 'Disabled', disabled: true, invalid: false, focus: false },
+  { key: 'invalid', label: 'Invalid', disabled: false, invalid: true, focus: false },
+  { key: 'invalidfocus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
+];
+
+export const ChoiceCardStates: Story = {
+  parameters: {
+    controls: { disable: true },
+    // force :focus-visible on the focus rows' radio items (storybook-addon-pseudo-states)
+    pseudo: {
+      focusVisible: STATE_ROWS.filter((r) => r.focus).flatMap((r) => [
+        `#cc-${r.key}-off`,
+        `#cc-${r.key}-on`,
+      ]),
+    },
+  },
+  render: () => (
+    <div className="flex max-w-2xl flex-col gap-xl">
+      <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
+        <span />
+        <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
+        <span className="text-format-eyebrow text-muted-foreground">Checked</span>
+      </div>
+      {STATE_ROWS.map((r) => (
+        <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
+          <span className="pt-md text-format-eyebrow text-muted-foreground">
+            {r.label}
+          </span>
+          <ChoiceCardCell
+            id={`cc-${r.key}-off`}
+            checked={false}
+            disabled={r.disabled}
+            invalid={r.invalid}
+          />
+          <ChoiceCardCell
+            id={`cc-${r.key}-on`}
+            checked
+            disabled={r.disabled}
+            invalid={r.invalid}
+          />
+        </div>
+      ))}
+    </div>
   ),
 };
 
