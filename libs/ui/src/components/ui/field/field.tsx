@@ -121,7 +121,10 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex w-fit gap-md group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:corner-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-md',
+        // checked choice-card tint = the two-cyan selection model (Figma-synced 2026-06-16):
+        // card fill → accent (cyan/50), stroke → primary (cyan/500); the title recolours to
+        // accent-foreground (see FieldTitle). Replaces the earlier primary/5 + primary/30 alpha.
+        'group/field-label peer/field-label flex w-fit gap-md group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary has-data-checked:bg-accent has-[>[data-slot=field]]:corner-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-md',
         'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
         className,
       )}
@@ -135,7 +138,9 @@ function FieldTitle({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="field-label"
       className={cn(
-        'flex w-fit items-center gap-md text-format-label group-data-[disabled=true]/field:opacity-50',
+        // in a checked choice-card the title reads as accent-foreground (cyan/700) on the
+        // accent tint — scoped to the FieldLabel card group so plain field rows are unaffected.
+        'flex w-fit items-center gap-md text-format-label group-data-[disabled=true]/field:opacity-50 group-has-data-checked/field-label:text-accent-foreground',
         className,
       )}
       {...props}
