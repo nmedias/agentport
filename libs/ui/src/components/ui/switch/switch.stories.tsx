@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 
 import { Switch } from './switch';
 import {
@@ -107,6 +108,9 @@ export const Default: Story = {
 };
 
 // docs "Airplane Mode" (basic): a labeled switch in a horizontal Field.
+// Interaction test — drives the switch like a user (mirrors Checkbox `Basic`). Uncontrolled
+// (Radix toggles itself on userEvent click — raw/fireEvent clicks don't), queried by role +
+// accessible name (FieldLabel's htmlFor names the button[role=switch]); we assert aria-checked.
 export const AirplaneMode: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -115,6 +119,25 @@ export const AirplaneMode: Story = {
       <Switch id="airplane-mode" />
     </Field>
   ),
+  play: async ({ canvas, step }) => {
+    const toggle = canvas.getByRole('switch', { name: /airplane mode/i });
+
+    await step('starts off', async () => {
+      await expect(toggle).not.toBeChecked();
+    });
+
+    await step('clicking turns it on', async () => {
+      await userEvent.click(toggle);
+      await expect(toggle).toBeChecked();
+    });
+
+    // userEvent.click leaves the switch programmatically focused (→ :focus-visible ring);
+    // blur() drops the focus so the end state matches a real mouse user (no ring).
+    await step('blurring clears the focus', async () => {
+      toggle.blur();
+      await expect(toggle).not.toHaveFocus();
+    });
+  },
 };
 
 // docs "Description": label + helper text on the left, switch on the right.

@@ -1,5 +1,6 @@
 import {ComponentProps} from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 
 import { RadioGroup, RadioGroupItem } from './radio-group';
 import { Label } from '../label';
@@ -293,6 +294,10 @@ export const ChoiceCardStates: Story = {
 };
 
 // docs "Fieldset": FieldSet + FieldLegend group the items with a caption + description.
+// Interaction test — drives the group like a user (mirrors Checkbox `Basic`). Uncontrolled
+// (Radix moves selection on userEvent click — raw/fireEvent clicks don't), queried by role +
+// accessible name (each Label's htmlFor names its button[role=radio]); asserts single-select:
+// clicking Yearly checks it AND unchecks the defaultValue Monthly (mutual exclusion).
 export const Fieldset: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -311,6 +316,28 @@ export const Fieldset: Story = {
       </RadioGroup>
     </FieldSet>
   ),
+  play: async ({ canvas, step }) => {
+    const monthly = canvas.getByRole('radio', { name: /monthly/i });
+    const yearly = canvas.getByRole('radio', { name: /yearly/i });
+
+    await step('defaultValue selects Monthly', async () => {
+      await expect(monthly).toBeChecked();
+      await expect(yearly).not.toBeChecked();
+    });
+
+    await step('clicking Yearly moves the selection (single-select)', async () => {
+      await userEvent.click(yearly);
+      await expect(yearly).toBeChecked();
+      await expect(monthly).not.toBeChecked();
+    });
+
+    // userEvent.click leaves the item programmatically focused (→ :focus-visible ring);
+    // blur() drops the focus so the end state matches a real mouse user (no ring).
+    await step('blurring clears the focus', async () => {
+      yearly.blur();
+      await expect(yearly).not.toHaveFocus();
+    });
+  },
 };
 
 // docs "Disabled": a disabled group — every item non-interactive and dimmed.
