@@ -656,6 +656,9 @@ status_note: >
     ergänzt. Instanzen (unchecked/checked) folgen per Node-Identität → checked=off/on, state=default (verifiziert).
     Galerie 3842:15 zeigt weiter die kuratierten States. Stories: Default + ChoiceCard jetzt controllbar (5 State-Controls
     checked/disabled/invalid/hover/focus; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie. Gate grün.
+    SYNC 2026-06-16 (/component-sync, Figma→Code): unchecked-invalid Track auf `input` (grau) zurückgesetzt — nur
+    Border destructive; checked-invalid bleibt destructive Track. `aria-invalid:data-unchecked:bg-destructive` ENTFERNT
+    (hebt den 06-12-„beide-Positionen-rot"-Sync auf → wieder border-only wie .Input/.Checkbox). Per shoot verifiziert.
 
 - name: RadioGroup
   status: nova-aligned
