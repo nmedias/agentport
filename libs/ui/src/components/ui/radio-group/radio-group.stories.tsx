@@ -115,6 +115,7 @@ export const Default: Story = {
   ),
 };
 
+// docs "Description": each option carries helper text via Field + FieldContent.
 export const Description: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -144,7 +145,9 @@ export const Description: Story = {
   ),
 };
 
-
+// Choice Card — interactive single-card preview. ChoiceCardRadioItem is the FieldLabel-wrapped
+// card; ChoiceCard drives checked via the wrapping RadioGroup's value (id when checked, else
+// '__none'). Card tints on checked + dims on disabled; the item carries focus + invalid.
 function ChoiceCardRadioItem({
   id,
   disabled,
@@ -228,9 +231,10 @@ export const ChoiceCardGroup: Story = {
   ),
 };
 
-// At-a-glance gallery, columns = unchecked vs checked. The Focus rows force :focus-visible
-// on the radio item via the pseudo-states addon, so the focus ring — and the focus-gated
-// invalid red ring (invalid alone shows only the destructive border) — is visible statically.
+// At-a-glance gallery, columns = unchecked vs checked. Each row is its own RadioGroup whose
+// value selects the -on item → the Checked column renders selected. The Focus rows force
+// :focus-visible via the pseudo-states addon, so the focus ring — and the focus-gated invalid
+// red ring (invalid alone shows only the destructive border) — is visible statically.
 const STATE_ROWS = [
   { key: 'enabled', label: 'Enabled', disabled: false, invalid: false, focus: false },
   { key: 'focus', label: 'Focus', disabled: false, invalid: false, focus: true },
@@ -260,13 +264,13 @@ export const ChoiceCardStates: Story = {
               <span className="text-format-eyebrow text-muted-foreground">Checked</span>
             </div>
             {STATE_ROWS.map((r) => (
-
               <RadioGroup
+                    key={r.key}
                     value={`cc-${r.key}-on`}
                     disabled={r.disabled}
                     className="contents"
                 >
-                  <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
+                  <div className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
                     <span className="pt-md text-format-eyebrow text-muted-foreground">
                       {r.label}
                     </span>
