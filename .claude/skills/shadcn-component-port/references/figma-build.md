@@ -45,7 +45,8 @@ What to model (**every port**, not just composites): decide **per consumer-varia
 
 Slottable content (icon, leading/trailing adornment, avatar, …) = a real Figma slot:
 `component.createSlot()`, named consistently so it merges to ONE set-level `SLOT` property; drop a
-sensible default inside (icon → `createNodeFromSvg`, inner VECTOR fill bound per variant). Slots are
+sensible default inside (icon → `createNodeFromSvg`, inner VECTOR fill bound per variant; TEXT default →
+a `{Semantic}` placeholder, never committed copy — §Variant set assembly). Slots are
 per-component → the prop appears only on owning variants (fine).
 
 **Config the slot — default geometry is unreliable** (seen `100×100/NONE/white-fill` AND `HUG/empty`
@@ -85,12 +86,16 @@ glyphs** (notably the `*-s-line` chevrons) → take the exact path from the inst
   or a standalone comp, then bind the node
   (`node.componentPropertyReferences = { characters|visible|mainComponent: id }`); prop ids change on
   combine → re-read.
-- **Name every TEXT prop semantically + set its default — ALWAYS, every port, never the Figma default
-  `text`:** name = the part's **semantic role** (`label`/`description`/`error`/`legend`/… — `label` is
-  just an example); default value = that name in curly brackets, **`{Semantic}`** (`label`→`{Label}`,
-  `error`→`{Error}`). If the text IS the comp's whole content/children (single-text comp) suffix the
-  name **`(children)`** (`<name> (children)` = `{Name}`); a plain TEXT prop inside a larger comp keeps
-  the bare name.
+- **Every author-set default text = a `{Semantic}` placeholder — ALWAYS, every port; never committed
+  copy nor the Figma default `text`.** TEXT prop: name = the part's **semantic role** (`label`/
+  `description`/`error`/`legend`/… — `label` is just an example); default value = that name in curly
+  brackets, **`{Semantic}`** (`label`→`{Label}`, `error`→`{Error}`). If the text IS the comp's whole
+  content/children (single-text comp) suffix the name **`(children)`** (`<name> (children)` = `{Name}`);
+  a plain TEXT prop inside a larger comp keeps the bare name. **Slot-default / nested-instance text**
+  (NOT an exposed prop — e.g. a card title via a nested `.Label`, a description in a `.Field` slot) → set
+  its `characters` to the same placeholder, mirroring the text node's layer name (**name = value**, like
+  `.Label` is `{Label}`=`{Label}`). Committed copy lives ONLY in the permanent usage-examples (T5
+  §Usage-examples), never in set members.
 - **Full matrix** — every value of every property, not a representative subset (a partial set reads as broken).
 - **Sorted grid** — never leave scattered append order. Reorder primary-property-major, secondary in
   option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP'` and
