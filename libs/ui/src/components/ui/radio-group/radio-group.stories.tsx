@@ -385,7 +385,7 @@ export const Invalid: Story = {
 export const AllStates: Story = {
   parameters: {
     controls: { disable: true },
-    pseudo: { focusVisible: ['#s-checked-focus', '#s-focus-invalid'] },
+    pseudo: { focusVisible: ['#s-focus', '#s-checked-focus', '#s-focus-invalid', '#s-checked-focus-invalid'] },
   },
   render: () => (
     <div className="flex flex-col gap-lg">
@@ -393,6 +393,12 @@ export const AllStates: Story = {
         <div className="flex items-center gap-lg">
           <RadioGroupItem value="unchecked" id="s1" />
           <Label htmlFor="s1">Unchecked (default)</Label>
+        </div>
+      </RadioGroup>
+      <RadioGroup defaultValue="" className="contents">
+        <div className="flex items-center gap-lg">
+          <RadioGroupItem value="focus" id="s-focus" />
+          <Label htmlFor="s-focus">Focus</Label>
         </div>
       </RadioGroup>
       <RadioGroup defaultValue="checked" className="contents">
@@ -435,6 +441,12 @@ export const AllStates: Story = {
         <div className="flex items-center gap-lg">
           <RadioGroupItem value="focus-invalid" id="s-focus-invalid" aria-invalid />
           <Label htmlFor="s-focus-invalid">Invalid + focus</Label>
+        </div>
+      </RadioGroup>
+      <RadioGroup defaultValue="checked-focus-invalid" className="contents">
+        <div className="flex items-center gap-lg">
+          <RadioGroupItem value="checked-focus-invalid" id="s-checked-focus-invalid" aria-invalid />
+          <Label htmlFor="s-checked-focus-invalid">Checked + invalid + focus</Label>
         </div>
       </RadioGroup>
     </div>

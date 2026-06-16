@@ -197,13 +197,17 @@ export const Invalid: Story = {
 export const AllStates: Story = {
   parameters: {
     controls: { disable: true },
-    pseudo: { focusVisible: ['#s-checked-focus', '#s-focus-invalid'] },
+    pseudo: { focusVisible: ['#s-focus', '#s-checked-focus', '#s-focus-invalid', '#s-checked-focus-invalid'] },
   },
   render: () => (
     <div className="flex flex-col gap-lg">
       <div className="flex items-center gap-lg">
         <Checkbox id="s-default" />
         <Label htmlFor="s-default">Default (unchecked)</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <Checkbox id="s-focus" />
+        <Label htmlFor="s-focus">Focus</Label>
       </div>
       <div className="flex items-center gap-lg">
         <Checkbox id="s-checked" defaultChecked />
@@ -232,6 +236,10 @@ export const AllStates: Story = {
       <div className="flex items-center gap-lg">
         <Checkbox id="s-focus-invalid" aria-invalid />
         <Label htmlFor="s-focus-invalid">Invalid + focus</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <Checkbox id="s-checked-focus-invalid" defaultChecked aria-invalid />
+        <Label htmlFor="s-checked-focus-invalid">Checked + invalid + focus</Label>
       </div>
     </div>
   ),

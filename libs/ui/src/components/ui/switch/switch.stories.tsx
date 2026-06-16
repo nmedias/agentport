@@ -324,13 +324,17 @@ export const Invalid: Story = {
 export const AllStates: Story = {
   parameters: {
     controls: { include: [] },
-    pseudo: { focusVisible: ['#sw-checked-focus', '#sw-focus-invalid'] },
+    pseudo: { focusVisible: ['#sw-focus', '#sw-checked-focus', '#sw-focus-invalid', '#sw-checked-focus-invalid'] },
   },
   render: () => (
     <div className="flex flex-col gap-lg">
       <div className="flex items-center gap-md">
         <Switch />
         <span className="text-format-body text-muted-foreground">Unchecked</span>
+      </div>
+      <div className="flex items-center gap-md">
+        <Switch id="sw-focus" />
+        <span className="text-format-body text-muted-foreground">Focus</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch defaultChecked />
@@ -359,6 +363,10 @@ export const AllStates: Story = {
       <div className="flex items-center gap-md">
         <Switch id="sw-focus-invalid" aria-invalid />
         <span className="text-format-body text-muted-foreground">Invalid + focus</span>
+      </div>
+      <div className="flex items-center gap-md">
+        <Switch id="sw-checked-focus-invalid" aria-invalid defaultChecked />
+        <span className="text-format-body text-muted-foreground">Checked + invalid + focus</span>
       </div>
     </div>
   ),
