@@ -41,6 +41,32 @@ Each member = a **COMPONENT acting as the FieldLabel card surface** (HORIZONTAL 
     text shows in the FieldContent column under the description.
   - control slot cleared of its default `.Input` and filled with the control instance.
   - title set via the nested `.Label` instance's `{Label}` text; description set in the description slot.
+
+## Slot-default placeholder copy (2026-06-16, follow-up)
+
+Per the DS placeholder convention (a component's default text must be a `{Semantic}` placeholder, like
+`.Label`'s default `{Label}`="{Label}" — never committed copy), **all 30 set members** carry braced
+placeholders matching their layer name (name=value):
+- title node (layer `{Label}`, in the label slot) → `{Label}`
+- description node (layer `{Field Description}`, in the description slot) → `{Field Description}`
+60 text nodes updated (30 members × 2). Chose to mirror the layer names (`{Label}` / `{Field
+Description}`) rather than card-semantic `{Title}`/`{Description}` — keeps name=value exactly like
+`.Label`, and the layer names come from the nested `.Field`/`.Label` instances (can't be renamed
+without structural edits to those instances).
+
+**FieldError placeholder (follow-up):** the `{Error Message}` text node — present only in the 4
+invalid/focus-invalid members per set (12 total) — also carried committed copy ("Please make a
+selection" / "Please select an option"). Set all 12 → `{Error Message}` (name=value, mirrors layer name).
+Verified single distinct value. Usage examples don't render errors → nothing to preserve there.
+
+The **permanent usage-example instances keep realistic copy** (placeholders are for set members only):
+Checkbox "Enable notifications" / "Get notified when something changes"; Switch "Marketing emails" /
+"Receive emails…"; Radio group Standard/Express(selected)/Overnight with their descriptions. These are
+explicit per-instance text overrides — when the member default was changed to the placeholder, the two
+single-card examples (which had NO own override) inherited the placeholder, so their copy was
+re-applied as explicit overrides. (Trap: editing a text node's `characters` inside a nested instance
+invalidates sibling node IDs mid-`findAll` → resolve each target text by exact ID via
+`getNodeByIdAsync`, one at a time, don't hold a `findAll` array across edits.)
 - **Nested control** (per (checked,state), reused as instances of the existing sets — never rebuilt):
   - Checkbox set `3795:1184` — members per catalog (off/on × 5 states).
   - Switch set `3839:2` — `size=default` members per catalog.
