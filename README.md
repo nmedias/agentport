@@ -16,9 +16,10 @@ libs/
                   ├─ src/components/ui/   shadcn components (e.g. button)
                   ├─ src/styles/globals.css   Tailwind v4 + the design-token layer
                   ├─ src/lib/utils.ts     cn() helper
-                  └─ .storybook/          component states in isolation
+                  └─ .storybook/          component states in isolation (+ browser story tests)
 Agentport/          Redesign roadmaps + design direction
 agent-runs/       Sketch / Design-Punk run notes
+tools/            shoot-stories.mjs — Playwright screenshots of running Storybook (visual verify)
 components.json   shadcn config (monorepo: @/ → libs/ui/src)
 ```
 
@@ -43,12 +44,15 @@ npm run storybook    # browse components in isolation
 | `npm run dev`              | App dev server (`nx dev agentport`, port 4200) |
 | `npm run build`            | App production build                         |
 | `npm run preview`          | Preview the production build locally         |
-| `npm test`                 | All tests (`nx run-many -t test`)            |
+| `npm test`                 | All tests — jsdom unit + browser story tests (`nx run-many -t test`) |
+| `npm run test:unit`        | Unit specs only, jsdom (`@agentport/ui` Vitest project) |
+| `npm run test:stories`     | Storybook stories as browser tests (Playwright/Chromium) |
 | `npm run lint`             | Lint all projects                            |
 | `npm run typecheck`        | TypeScript typecheck all projects            |
 | `npm run check`            | lint + test + typecheck (the CI gate)        |
 | `npm run storybook`        | Storybook dev server for `@agentport/ui`      |
 | `npm run build-storybook`  | Build Storybook static site                  |
+| `npm run shoot -- <id>`    | Screenshot a story from running Storybook (visual check) |
 | `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui`        |
 | `npm run graph`            | Open the Nx project graph                    |
 | `npm run sync`             | Sync tsconfig project references             |
@@ -73,7 +77,9 @@ names; see the gotchas in [`CLAUDE.md`](./CLAUDE.md).)
 - **React 19 + Vite** — app and lib bundling
 - **Tailwind v4** — CSS-first, tokens via `@theme` in `globals.css`
 - **shadcn/ui** — component base (Radix + Tailwind)
-- **Storybook** — component states in isolation (on `@agentport/ui`)
-- **Vitest** — unit tests
+- **Storybook** — component states in isolation (on `@agentport/ui`); stories double as browser tests
+- **Vitest** — two projects: unit specs (jsdom) + Storybook stories as browser tests (`@storybook/addon-vitest`)
+- **Playwright** — browser engine for the story tests + `npm run shoot` screenshots (visual verification)
+- **addon-a11y** — axe accessibility checks on every story (currently `test: 'todo'` — reports, doesn't fail)
 - **Changesets** — versioning (CLI installed; run `npx changeset init` to set up)
 - **Figma** — design source (Plugin MCP)

@@ -20,9 +20,9 @@ description `Agentport/produktbeschreibung-standalone.html`).
 ## The Pipeline (design → code)
 
 ```
-1. Design exploration in Figma   /sketch-jammer (structure) → /design-punk (visual language)
-2. Token consolidation in Figma  free Design-Punk designs → Variables: Primitives + Semantics
-3. Code in the Nx monorepo       shadcn init → globals.css ← Figma semantics → build components
+1. Design exploration in Figma              /sketch-jammer (structure) → /design-punk (visual language)
+2. Token/Component consolidation in Figma   free Design-Punk designs → Variables: Primitives + Semantics; Components
+3. Code in the Nx monorepo                  shadcn init → globals.css ← Figma semantics → build components
 ```
 
 ## Stack
@@ -32,20 +32,31 @@ description `Agentport/produktbeschreibung-standalone.html`).
 - **Nx monorepo** — `apps/agentport` (React + Vite harness) + `libs/ui` (`@agentport/ui`).
 - **shadcn/ui** (Radix + Tailwind v4) — the component base, **not a ceiling**: the Agentport's
   signature moves go beyond stock shadcn. Custom components build on the **same tokens**.
-- Tooling: React 19, TypeScript, Vite, Tailwind v4, Storybook, Vitest, tsx, Changesets.
+- Tooling: React 19, TypeScript, Vite, Tailwind v4, Storybook, Vitest, Playwright, tsx, Changesets.
 
 ## Commands
 
 Full table in [`README.md`](./README.md). Essentials:
 
 ```
-npm run dev            # app at http://localhost:4200
-npm run storybook      # components in isolation (@agentport/ui)
-npm run check          # lint + test + typecheck — run before committing
-npm run ui:add -- button   # add a shadcn component into libs/ui
+npm run dev                       # app at http://localhost:4200
+npm run storybook                 # components in isolation (@agentport/ui)
+npm run check                     # lint + test + typecheck — THE GATE (test/lint alone don't typecheck)
+npm run test:unit                 # jsdom .spec units only (@agentport/ui project)
+npm run test:stories              # stories as browser tests (storybook project → Chromium + axe a11y)
+npm run shoot -- <storyId>        # screenshot a story from a RUNNING Storybook → tools/screenshots/
+npm run ui:add -- <component>     # add a shadcn component into libs/ui
 ```
 
-- `npm test`/`lint` run via Vitest/ESLint but **don't typecheck** — `npm run check` does. Use it as the gate.
+### Testing = two Vitest projects under one `npm run test`:
+  - @agentport/ui — jsdom .spec units
+  - storybook    — every story rendered in Chromium (@storybook/addon-vitest) + axe a11y
+A story that throws/regresses fails the gate. `test:unit` / `test:stories` scope to one project.
+
+### Visual verification: 
+`npm run shoot -- <storyId> …` drives headless Chromium over a RUNNING
+Storybook → PNGs in tools/screenshots; Claude eyeballs the render itself.
+SELECTOR=.docblock-argstable crops to one element. Start `npm run storybook` first.
 
 
 ## shadcn Gotchas
@@ -63,6 +74,7 @@ libs/ui/            @agentport/ui — shadcn primitives + signature components, 
 Agentport/            Brief + roadmaps + design direction
 design-docs/   Machine-readable DS data (e.g. design-system/tokens-reference.md)
 agent-runs/         Sketch / Design-Punk / component-port run notes (per direction + rationale)
+tools/              shoot-stories.mjs — Playwright screenshots of running Storybook (visual verify)
 ```
 
 - The app consumes the lib via `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
@@ -153,6 +165,8 @@ Installed under `.claude/skills/` (project-local).
 - `/handoff` — freeze the session into a resume doc.
 - `/skill-feedback` — toggle on **before a run** to capture skill-improvement feedback (gaps + candidate
   fixes) into that run's `skill-feedback.md` as findings surface. Feedback only, not domain notes.
+- `/react-coach` — React coaching mode (mental models · patterns · ecosystem · architecture) for an
+  Angular/Vue dev learning React; explains/mentors, not for quick code-only asks.
 
 **Writing/editing skills:** follow the rules in [`.claude/skills/CLAUDE.md`](.claude/skills/CLAUDE.md)
 

@@ -181,15 +181,19 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 
 - **Stories**: = the T2.5 usage-example set (already written, now running on DS tokens). Ensure every
   variant×size/state still appears in ≥1 story — add an overview story if the examples don't exercise
-  them all. Re-run `preview-stories` → surface every URL (rendered-output check; the gate + `/figma-verify`
-  don't see it).
-- **Headless lib** (e.g. Radix, cmdk): components that touch `ResizeObserver` /
-  `Element.prototype.scrollIntoView` on mount need a jsdom polyfill in the vitest `setupFile` —
-  **once per lib** (like the `cn()` extension), else specs can't render them.
+  them all. **Interactive component** → add a `play` interaction test (`storybook/test`: `userEvent` +
+  `expect`, role/label queries; runs as a browser test in the gate). Rendered-output check: `npm run shoot
+  -- <storyId>` screenshots a **running** Storybook → eyeball it yourself; also `preview-stories` → surface
+  every URL. (The lint/typecheck gate + `/figma-verify` don't see the render.)
+- **Headless lib** (e.g. Radix, cmdk): components that touch any browser API jsdom doesn't implement on
+  mount (e.g. `ResizeObserver`, `Element.prototype.scrollIntoView`, `matchMedia`, …) need a stub/polyfill
+  in the vitest `setupFile` — **once per lib**, else **jsdom specs** can't
+  render them. The `storybook` browser project runs in real Chromium → needs no polyfill.
 - **No dead controls**: render-only stories ignore args → `parameters: { controls: { disable: true } }`;
   elsewhere expose only the relevant ones (`controls: { include: [...] }`).
-- **Gate**: `npx nx test|typecheck|lint @agentport/ui` green, and confirm the DS typography class
-  actually survives in the rendered markup (twMerge drops it if T1 was skipped).
+- **Gate**: `npx nx test|typecheck|lint @agentport/ui` green. `nx test` runs **two Vitest projects** —
+  jsdom `.spec` units **and** the `storybook` browser project (every story rendered in Chromium via
+  `@storybook/addon-vitest` + axe a11y), so a story that throws/regresses fails the gate. 
 
 ### T7 — Notes + Catalog
 
