@@ -3,6 +3,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import dts from 'vite-plugin-dts';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
 import * as path from 'path';
 
 export default defineConfig(() => ({
@@ -48,16 +50,41 @@ export default defineConfig(() => ({
     },
   },
   test: {
-    name: '@agentport/ui',
+    // Shared defaults — inherited by every project below.
     watch: false,
     globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test-setup.ts'],
-    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
     coverage: {
       reportsDirectory: './test-output/vitest/coverage',
       provider: 'v8' as const,
-    }
+    },
+    projects: [
+      {
+        // Unit specs in jsdom (the existing  *.spec.tsx). extends: true pulls
+        // in this file's react/tailwind plugins + the @ alias.
+        extends: true,
+        test: {
+          name: '@agentport/ui',
+          environment: 'jsdom',
+          setupFiles: ['./src/test-setup.ts'],
+          include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+        },
+      },
+      {
+        // Stories-as-tests in a real browser. storybookTest() turns each story
+        // into a test; the browser runs via @vitest/browser-playwright (chromium).
+        extends: true,
+        plugins: [storybookTest({ configDir: path.join(import.meta.dirname, '.storybook') })],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+    ],
   },
 }));

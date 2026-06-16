@@ -1,5 +1,6 @@
 import type {ComponentProps, ReactNode} from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 
 import { Checkbox } from './checkbox';
 import { Label } from '../label';
@@ -115,15 +116,40 @@ export const Default: Story = {
 };
 
 // docs "Basic": checkbox + label on one row via a horizontal Field.
+// Interaction test — drives the checkbox like a user. The play function IS the body of
+// this story's Vitest browser test, and it also animates step-by-step in the Interactions
+// tab. Uncontrolled checkbox (Radix toggles itself on click); we query by role + accessible
+// name (the FieldLabel's htmlFor gives the box its name) and assert the aria-checked outcome.
+
 export const Basic: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <Field orientation="horizontal" className="max-w-sm">
-      <Checkbox id="terms" defaultChecked />
+      <Checkbox id="terms"  />
       <FieldLabel htmlFor="terms">Accept terms and conditions</FieldLabel>
     </Field>
   ),
+  play: async ({ canvas, step }) => {
+    const checkbox = canvas.getByRole('checkbox', { name: /accept terms/i });
+
+    await step('starts unchecked', async () => {
+      await expect(checkbox).not.toBeChecked();
+    });
+
+    await step('clicking toggles it on', async () => {
+      await userEvent.click(checkbox);
+      await expect(checkbox).toBeChecked();
+    });
+
+    // userEvent.click leaves the box programmatically focused (→ :focus-visible ring);
+    // blur() drops the focus so the end state matches a real mouse user (no ring).
+    await step('blurring clears the focus', async () => {
+      checkbox.blur();
+      await expect(checkbox).not.toHaveFocus();
+    });
+  },
 };
+
 
 // docs "Description": label + helper text stacked in a FieldContent column.
 export const Description: Story = {

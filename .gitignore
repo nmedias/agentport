@@ -14,3 +14,4 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
 storybook-static
+tools/screenshots/

@@ -9,6 +9,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    // addon-a11y runs axe-core on every story. test mode drives the Vitest story tests:
+    //   'todo'  → violations reported (UI panel + test annotation), but DON'T fail the run
+    //   'error' → violations FAIL `npm run test:stories` (production gate, after triage)
+    //   'off'   → skip a11y in tests entirely
+    a11y: { test: 'todo' },
   },
 };
 
