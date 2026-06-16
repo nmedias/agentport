@@ -82,7 +82,7 @@ type Story = StoryObj<typeof Checkbox>;
 // The Field-composed examples + the pseudo-state preview live in the stories below.
 export const Default: Story = {
 
-  render: (args) => <Checkbox {...args} />,
+  render: (args) => <Checkbox aria-label="Checkbox" {...args} />,
 };
 
 // docs "Basic": checkbox + label on one row via a horizontal Field.

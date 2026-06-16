@@ -591,10 +591,10 @@ status_note: >
     = destructive Border + destructive@20% Glow (sbn:false, verbatim vom .Input-Recipe). Matrix-Vollständigkeit:
     checked=on × {focus, disabled} ergänzt — checked=on,focus = primary-Border + ring@50% Halo (bei focus+checked
     bewusst primary-Border behalten; FLAG, falls kompilierter Code dort ring-Border zeigt). Instanzen folgen per
-    Node-Identität (kein Remap, verifiziert). Galerie 3826:2 zeigt weiter die kuratierten 6 (neue 4 optional). Stories: Default + ChoiceCard jetzt
-    controllbar (5 State-Controls checked/disabled/invalid/hover/focus; hover/focus via
-    storybook-addon-pseudo-states, arg-getrieben über pseudo-*-all-Wrapper) + ChoiceCardStates-Galerie.
-    Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
+    Node-Identität (kein Remap, verifiziert). Galerie 3826:2 zeigt weiter die kuratierten 6 (neue 4 optional). Stories: Default
+    (Playground, aria-label) + Basic (play) + Description/Group/Disabled/Invalid + AllStates-Galerie. Die klickbare Choice-Card
+    ist eine eigene DS-Komponente (ChoiceCardCheckbox, choice-card/) — die früheren Inline-ChoiceCard/ChoiceCardStates-Stories
+    sind migriert/entfernt. Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
 
 - name: Switch
   status: nova-aligned
@@ -654,8 +654,9 @@ status_note: >
     hatte KEINEN invalid-Member → synthetisiert: Checked-Member (Thumb rechts, primary Track) geklont, Track-Fill +
     Border auf destructive (Paints von off-invalid kopiert), kein/mit Glow. Außerdem checked=on × {focus, disabled}
     ergänzt. Instanzen (unchecked/checked) folgen per Node-Identität → checked=off/on, state=default (verifiziert).
-    Galerie 3842:15 zeigt weiter die kuratierten States. Stories: Default + ChoiceCard jetzt controllbar (5 State-Controls
-    checked/disabled/invalid/hover/focus; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie. Gate grün.
+    Galerie 3842:15 zeigt weiter die kuratierten States. Stories: Default (Playground, aria-label) + AirplaneMode (play) +
+    Description/Sizes/Disabled/Invalid + AllStates-Galerie (bare Controls mit aria-label). Inline-ChoiceCard/ChoiceCardStates
+    2026-06-16 ENTFERNT (a11y-Harness-Cleanup; kanonisch jetzt ChoiceCardSwitch in choice-card/). Gate grün.
     SYNC 2026-06-16 (/component-sync, Figma→Code): unchecked-invalid Track auf `input` (grau) zurückgesetzt — nur
     Border destructive; checked-invalid bleibt destructive Track. `aria-invalid:data-unchecked:bg-destructive` ENTFERNT
     (hebt den 06-12-„beide-Positionen-rot"-Sync auf → wieder border-only wie .Input/.Checkbox). Per shoot verifiziert.
@@ -706,9 +707,9 @@ status_note: >
     FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 2 Achsen umgebaut (checked × state). Resting invalid
     (checked=off/on) = Glow gestrippt (border-only); NEU focus-invalid je checked = + destructive@20% Glow. checked=on
     × {focus, disabled} ergänzt (Matrix-Vollständigkeit). checked=on,focus = primary-Border + ring@50% Halo (FLAG s. Checkbox).
-    Instanzen folgen per Node-Identität (kein Remap). Galerie 3857:1218 zeigt weiter die kuratierten 6. Stories: ChoiceCard jetzt controllbare Single-Card
-    (5 State-Controls; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie; die alte
-    Zwei-Card-Doc-Demo lebt weiter als ChoiceCardGroup. Default bleibt Doc-Gruppe (kein bare-single-Item). Gate grün.
+    Instanzen folgen per Node-Identität (kein Remap). Galerie 3857:1218 zeigt weiter die kuratierten 6. Stories: Default
+    (Playground) + Description + Fieldset (play) + Disabled + Invalid + AllStates. Inline-ChoiceCard/ChoiceCardGroup/
+    ChoiceCardStates 2026-06-16 ENTFERNT (a11y-Harness-Cleanup; kanonisch jetzt ChoiceCardRadio in choice-card/). Gate grün.
 
 - name: ChoiceCard
   status: nova-aligned

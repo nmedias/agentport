@@ -173,10 +173,10 @@ export const Textarea: Story = {
             <RiJavascriptLine />
             script.js
           </InputGroupText>
-          <InputGroupButton className="ml-auto" size="icon-xs">
+          <InputGroupButton aria-label="Refresh" className="ml-auto" size="icon-xs">
             <RiRefreshLine />
           </InputGroupButton>
-          <InputGroupButton variant="ghost" size="icon-xs">
+          <InputGroupButton aria-label="Copy" variant="ghost" size="icon-xs">
             <RiFileCopyLine />
           </InputGroupButton>
         </InputGroupAddon>
@@ -196,19 +196,19 @@ export const States: Story = {
   render: () => (
     <div className="grid w-80 gap-6">
       <InputGroup>
-        <InputGroupInput placeholder="Default" />
+        <InputGroupInput aria-label="Default" placeholder="Default" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="Disabled" disabled />
+        <InputGroupInput aria-label="Disabled" placeholder="Disabled" disabled />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput aria-invalid defaultValue="not-a-valid-value" />
+        <InputGroupInput aria-label="Invalid" aria-invalid defaultValue="not-a-valid-value" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>

@@ -1,4 +1,3 @@
-import {ComponentProps} from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent } from 'storybook/test';
 
@@ -12,13 +11,13 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-  FieldTitle,
 } from '../field';
 
 // Usage examples mirror ui.shadcn.com/docs/components/radix/radio-group. The docs
 // "Default" is the one example NOT Field-composed (bare item + Label); the rest use
 // the ported Field family (Field / FieldContent / FieldSet / FieldLegend). Skipped:
-// the "RTL" Arabic locale demo.
+// the "RTL" Arabic locale demo. The clickable Choice Card lives in its own DS component
+// (UI/ChoiceCards/ChoiceCardRadio).
 const meta: Meta<typeof RadioGroup> = {
   title: 'UI/RadioGroup',
   component: RadioGroup,
@@ -81,22 +80,10 @@ const meta: Meta<typeof RadioGroup> = {
 export default meta;
 type Story = StoryObj<typeof RadioGroup>;
 
-type pseudoState = {
-  focus: boolean;
-  invalid: boolean;
-  checked: boolean;
-};
-
-const pseudoStateArgTypes = {
-  invalid: { control: 'boolean' },
-  focus: { control: 'boolean' },
-  checked: { control: 'boolean' },
-} satisfies Record<keyof pseudoState, { control: 'boolean' }>;
-
 // Bare group — the API playground. Renders <RadioGroup {...args}> with three items, so every
 // prop documented in the meta argTypes shows in the ArgsTable AND as a live control (no
-// controls.include — that would also filter the table). The Field-composed examples + the
-// pseudo-state preview live in the stories below.
+// controls.include — that would also filter the table). The Field-composed examples live
+// in the stories below.
 export const Default: Story = {
   render: (args) => (
       <RadioGroup {...args} className="max-w-sm">
@@ -144,153 +131,6 @@ export const Description: Story = {
       </Field>
     </RadioGroup>
   ),
-};
-
-// Choice Card — interactive single-card preview. ChoiceCardRadioItem is the FieldLabel-wrapped
-// card; ChoiceCard drives checked via the wrapping RadioGroup's value (id when checked, else
-// '__none'). Card tints on checked + dims on disabled; the item carries focus + invalid.
-function ChoiceCardRadioItem({
-  id,
-  disabled,
-  invalid,
-}: {
-  id: string;
-  disabled: boolean;
-  invalid: boolean;
-}) {
-  return (
-      <FieldLabel
-        htmlFor={id}
-        className="max-w-sm"
-        data-disabled={disabled ? 'true' : undefined}
-      >
-        <Field
-          orientation="horizontal"
-          data-disabled={disabled ? 'true' : undefined}
-          data-invalid={invalid || undefined}
-        >
-          <FieldContent>
-            <FieldTitle>Pro</FieldTitle>
-            <FieldDescription>For growing teams that need more room.</FieldDescription>
-            {invalid && <FieldError>Please choose a plan to continue.</FieldError>}
-          </FieldContent>
-          <RadioGroupItem id={id} value={id} aria-invalid={invalid || undefined} />
-        </Field>
-      </FieldLabel>
-  );
-}
-
-export const ChoiceCard: StoryObj<ComponentProps<typeof RadioGroup> & pseudoState> = {
-  parameters: {
-    controls: { include: ['checked', 'disabled', 'invalid', 'focus'] },
-  },
-  args: {checked: false, invalid: false, focus: false, disabled: false },
-  argTypes: pseudoStateArgTypes,
-  render: ({checked, disabled, invalid, focus }) => {
-    const id = "cc-plan";
-    return (
-        <div className={focus ? 'pseudo-focus-visible-all' : ''}>
-          <RadioGroup
-              value={checked ? id : '__none'}
-              disabled={disabled}
-              className="contents">
-            <ChoiceCardRadioItem
-                id={id}
-                disabled={disabled ?? false}
-                invalid={invalid}
-            />
-          </RadioGroup>
-        </div>
-    )
-  }
-};
-// docs "Choice Card" (multi): FieldLabel wraps each Field → clickable cards that tint when
-// their item is selected; one RadioGroup, single selection across the cards.
-export const ChoiceCardGroup: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <RadioGroup defaultValue="pro" className="max-w-sm">
-      <FieldLabel htmlFor="plan-starter">
-        <Field orientation="horizontal">
-          <FieldContent>
-            <FieldTitle>Starter</FieldTitle>
-            <FieldDescription>For individuals getting started.</FieldDescription>
-          </FieldContent>
-          <RadioGroupItem value="starter" id="plan-starter" />
-        </Field>
-      </FieldLabel>
-      <FieldLabel htmlFor="plan-pro">
-        <Field orientation="horizontal">
-          <FieldContent>
-            <FieldTitle>Pro</FieldTitle>
-            <FieldDescription>For growing teams that need more room.</FieldDescription>
-          </FieldContent>
-          <RadioGroupItem value="pro" id="plan-pro" />
-        </Field>
-      </FieldLabel>
-    </RadioGroup>
-  ),
-};
-
-// At-a-glance gallery, columns = unchecked vs checked. Each row is its own RadioGroup whose
-// value selects the -on item → the Checked column renders selected. The Focus rows force
-// :focus-visible via the pseudo-states addon, so the focus ring — and the focus-gated invalid
-// red ring (invalid alone shows only the destructive border) — is visible statically.
-const STATE_ROWS = [
-  { key: 'enabled', label: 'Enabled', disabled: false, invalid: false, focus: false },
-  { key: 'focus', label: 'Focus', disabled: false, invalid: false, focus: true },
-  { key: 'disabled', label: 'Disabled', disabled: true, invalid: false, focus: false },
-  { key: 'invalid', label: 'Invalid', disabled: false, invalid: true, focus: false },
-  { key: 'invalid-focus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
-];
-
-export const ChoiceCardStates: Story = {
-  parameters: {
-    controls: { disable: true },
-    // force :focus-visible on the focus rows' radio items (storybook-addon-pseudo-states)
-    pseudo: {
-      focusVisible: STATE_ROWS.filter((r) => r.focus).flatMap((r) => [
-        `#cc-${r.key}-off`,
-        `#cc-${r.key}-on`,
-      ]),
-    },
-  },
-  render: () => {
-
-      return (
-          <div className="flex max-w-2xl flex-col gap-xl">
-            <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
-              <span />
-              <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
-              <span className="text-format-eyebrow text-muted-foreground">Checked</span>
-            </div>
-            {STATE_ROWS.map((r) => (
-              <RadioGroup
-                    key={r.key}
-                    value={`cc-${r.key}-on`}
-                    disabled={r.disabled}
-                    className="contents"
-                >
-                  <div className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
-                    <span className="pt-md text-format-eyebrow text-muted-foreground">
-                      {r.label}
-                    </span>
-                    <ChoiceCardRadioItem
-                      id={`cc-${r.key}-off`}
-                      disabled={r.disabled}
-                      invalid={r.invalid}
-                    />
-                    <ChoiceCardRadioItem
-                      id={`cc-${r.key}-on`}
-                      disabled={r.disabled}
-                      invalid={r.invalid}
-                    />
-                  </div>
-                </RadioGroup>
-            ))}
-          </div>
-      )
-  },
 };
 
 // docs "Fieldset": FieldSet + FieldLegend group the items with a caption + description.

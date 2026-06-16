@@ -31,7 +31,7 @@ export const Invalid: Story = {
   args: { 'aria-invalid': true, defaultValue: 'not-a-valid-value' },
 };
 
-export const File: Story = { args: { type: 'file', placeholder: undefined } };
+export const File: Story = { args: { type: 'file', placeholder: undefined, 'aria-label': 'Upload file' } };
 
 // Gallery: every state side by side. Matches the Figma .Input variant set
 // (state = default | focus | filled | disabled | invalid). Focus is a live
@@ -40,10 +40,10 @@ export const AllStates: Story = {
   parameters: { controls: { include: [] } },
   render: () => (
     <div className="flex w-80 flex-col gap-3">
-      <Input placeholder="Default" />
-      <Input defaultValue="invoice_2024" />
-      <Input placeholder="Disabled" disabled />
-      <Input aria-invalid defaultValue="not-a-valid-value" />
+      <Input aria-label="Default" placeholder="Default" />
+      <Input aria-label="Filled" defaultValue="invoice_2024" />
+      <Input aria-label="Disabled" placeholder="Disabled" disabled />
+      <Input aria-label="Invalid" aria-invalid defaultValue="not-a-valid-value" />
     </div>
   ),
 };

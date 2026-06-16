@@ -40,13 +40,14 @@ export const AllStates: Story = {
   parameters: { controls: { include: [] } },
   render: () => (
     <div className="flex w-80 flex-col gap-3">
-      <Textarea placeholder="Default" rows={3} />
+      <Textarea aria-label="Default" placeholder="Default" rows={3} />
       <Textarea
+        aria-label="Filled"
         defaultValue={'Draft notes for the invoice type.\nReviewed with the team.'}
         rows={3}
       />
-      <Textarea placeholder="Disabled" rows={3} disabled />
-      <Textarea aria-invalid defaultValue="not-a-valid-value" rows={3} />
+      <Textarea aria-label="Disabled" placeholder="Disabled" rows={3} disabled />
+      <Textarea aria-label="Invalid" aria-invalid defaultValue="not-a-valid-value" rows={3} />
     </div>
   ),
 };
