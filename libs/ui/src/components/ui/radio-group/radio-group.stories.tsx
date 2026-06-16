@@ -71,7 +71,7 @@ const meta: Meta<typeof RadioGroup> = {
       source: { type: 'code' },
       description: {
         component:
-          'The value-driven container documented below. Each option is a **`RadioGroupItem`** with its own props: `value: string` *(required)* — value selected when chosen · `disabled?: boolean` — disables just this item · `id?: string` — pairs with a `<label htmlFor>`.',
+          'The value-driven container documented below. Each option is a **`RadioGroupItem`** — its props get their own ArgsTable on the [`UI/RadioGroup/Item`](?path=/docs/ui-radiogroup-item--docs) page.',
       },
     },
   },
