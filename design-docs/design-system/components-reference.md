@@ -707,6 +707,62 @@ status_note: >
     (5 State-Controls; hover/focus via storybook-addon-pseudo-states) + ChoiceCardStates-Galerie; die alte
     Zwei-Card-Doc-Demo lebt weiter als ChoiceCardGroup. Default bleibt Doc-Gruppe (kein bare-single-Item). Gate grün.
 
+- name: ChoiceCard
+  status: nova-aligned
+  figma_synced: true                            # Figma-Sets 2026-06-16 gebaut (Background-Agent, Port-Skill-Regeln); checked-Tint Figma→Code-synced
+  source: { registry: "DS-authored", item: choice-card, style: radix-nova }   # KEIN Stock-shadcn-Item; komponiert Field + Checkbox/Switch/RadioGroupItem + Label
+  code:
+    dir: libs/ui/src/components/ui/choice-card/
+    exports: [ChoiceCardCheckbox, ChoiceCardSwitch, ChoiceCardRadio]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/choice-card'"
+    internal: "ChoiceCardShell (presentational, NICHT exportiert) + useFieldId (Hook). Verschachtelte Subfolder je Wrapper + choice-card-shell/ + use-field-id.ts; je eigener index.ts-Barrel"
+  figma:
+    section: { name: "Choice Card", id: "4107:1526" }   # Page "Shadcn Components" 3126:2
+    checkbox:
+      set: { name: ".ChoiceCard/Checkbox", id: "4112:1638" }
+      members:
+        "checked=off": { default: "4110:1535", focus: "4110:1556", disabled: "4110:1577", invalid: "4110:1598", focus-invalid: "4110:1624" }
+        "checked=on":  { default: "4111:1577", focus: "4111:1602", disabled: "4111:1627", invalid: "4111:1652", focus-invalid: "4111:1682" }
+      usage_example: "4128:1862 (selected single card)"
+    switch:
+      set: { name: ".ChoiceCard/Switch", id: "4119:1750" }   # control size=default, KEINE size-Achse
+      members:
+        "checked=off": { default: "4117:1638", focus: "4117:1661", disabled: "4117:1684", invalid: "4117:1707", focus-invalid: "4117:1735" }
+        "checked=on":  { default: "4118:1694", focus: "4118:1717", disabled: "4118:1740", invalid: "4118:1763", focus-invalid: "4118:1791" }
+      usage_example: "4128:1877 (selected single card)"
+    radio:
+      set: { name: ".ChoiceCard/Radio", id: "4124:1862" }
+      members:
+        "checked=off": { default: "4122:1750", focus: "4122:1771", disabled: "4122:1792", invalid: "4122:1813", focus-invalid: "4122:1839" }
+        "checked=on":  { default: "4123:1801", focus: "4123:1826", disabled: "4123:1851", invalid: "4123:1876", focus-invalid: "4123:1906" }
+      usage_example: "4129:1886 (single-selection group: Standard/Express/Overnight)"
+    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # kein hover; Set-Props = checked + state
+    nests: "echte .Field-Instanz im FieldLabel-Card (horizontal control-trailing: 3714:1018 invalid=false / 3715:1019 invalid=true); control-Slot = echte Instanz des passenden Control-Members (.Checkbox 3795:1184 / .Switch 3839:2 / .RadioGroupItem 3852:1206 je checked×state); Titel = genestete .Label. Controls WIEDERVERWENDET, nichts detacht."
+    tint: "checked-Tint = Zwei-Cyan-Token-Modell, voll variabel-gebunden: Card-Fill accent (3037:14, cyan/50) · Stroke primary (3037:8, cyan/500) · Titel accent-foreground (3038:2, cyan/700). Ersetzt das frühere primary/5+/30 (gebundene Alpha-Paints überleben Instanziierung nicht → re-resolven zu opacity 1). Ersetzt auch die alten statischen ChoiceCard-Examples (4044:1515/3979:2/3997:1358) als kanonische Quelle."
+  skill: Background-Figma-Agent (2026-06-16) + Figma→Code-Sync des checked-Tints (2026-06-16)
+  notes: >
+    DS-authored Composite (kein Stock-shadcn-Item): die klickbare Choice-Card (Titel + Beschreibung +
+    Form-Control). Code = 3 dünne Wrapper über eine geteilte interne ChoiceCardShell (FieldLabel > Field);
+    stateless pass-through (checked/defaultChecked/onCheckedChange bzw. Radios value durchgereicht →
+    controlled/uncontrolled entscheidet der Consumer, kein eigener State/„double source of truth").
+    title/description/error = ReactNode-Props (kein Compound/Slot-Pattern; Escape = rohe Field-Primitives);
+    invalid = !!error (EINE Regel für data-invalid + FieldError-Render + aria-invalid; leerer String = valide).
+    Typ-Falle: ComponentProps<Control> bringt HTML-`title` mit → Omit<…,'title'>, sonst verengt es ReactNode→string.
+    a11y-BEFUND + FIX: das `.Field` rendert role="group", und ein <label for> kann seinen Namen NICHT durch ein
+    role="group" hindurch an den Button vergeben → axe button-name VIOLATION (dom-accessibility-api war großzügig
+    → Story-Test falsch-grün). Fix: jeder Wrapper setzt aria-labelledby auf die FieldTitle-id (`${id}-title`,
+    geteilt via useFieldId-Hook); per axe gegen die echte Komponente verifiziert. Radio: value REQUIRED, lebt in
+    <RadioGroup> (Auswahl + onValueChange auf der Gruppe).
+    CHECKED-TINT 2026-06-16 (Figma→Code): User-Entscheid Zwei-Cyan-Modell (accent/primary/accent-foreground,
+    voll token-gebunden — löst das Alpha-in-Instanzen-Problem des primary/5-Ansatzes). Code nachgezogen in
+    field.tsx (geteilt, betrifft die ganze FieldLabel-Choice-Card-Familie): FieldLabel
+    has-data-checked:bg-accent + has-data-checked:border-primary; FieldTitle
+    group-has-data-checked/field-label:text-accent-foreground (scoped auf die Card-Gruppe → plain Field-Rows
+    unberührt). Per `npm run shoot` visuell bestätigt (Cyan-Tint + Cyan-Titel; invalid = Card-Tint bleibt,
+    Signal über roten Control + roten FieldError). Stories je Wrapper: Default (Playground + State-Preview +
+    play-Smoke-Test) + ChoiceCardStates-Galerie; Radio zusätzlich Group (Exklusivitäts-play). Gate grün
+    (210 Tests: 124 jsdom-Specs + 84 Story-Tests). Branch feat/choice-card.
+
 ## Pending / Removed
 
 ```yaml
