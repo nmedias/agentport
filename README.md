@@ -26,9 +26,6 @@ components.json   shadcn config (monorepo: @/ → libs/ui/src)
 Two projects: `agentport` (app) and `@agentport/ui` (lib). The app consumes the lib through its public
 API `@agentport/ui`; shadcn internals use the `@/` alias (→ `libs/ui/src`).
 
-> The B2B design-system specs and docs site (Astro + Starlight) live in the separate
-> [`<owner>/design-system`](https://github.com/<owner>/design-system) repo.
-
 ## Getting Started
 
 ```bash
