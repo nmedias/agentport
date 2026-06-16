@@ -2,13 +2,12 @@ import type { ComponentProps, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent } from 'storybook/test';
 
-import { ChoiceCardCheckbox } from './choice-card-checkbox';
+import { ChoiceCardSwitch } from './choice-card-switch';
 
-// ChoiceCardCheckbox bundles the FieldLabel-wraps-Field choice card with a Checkbox
-// control (the composition the checkbox.stories ChoiceCard hand-rolled). The card tints
-// on checked + dims on disabled via CSS :has() (field.tsx); the control carries focus +
-// invalid. invalid is driven by the `error` prop (truthy → FieldError + data-invalid +
-// aria-invalid); the red ring is focus-gated (checkbox.tsx, aligned with .Input).
+// Switch choice card. Mirrors ChoiceCardCheckbox: card tints on checked + dims on disabled
+// via CSS :has() (field.tsx); the switch carries focus + invalid; invalid is driven by the
+// `error` prop (truthy → FieldError + data-invalid + aria-invalid). The accessible name comes
+// from aria-labelledby → the FieldTitle id (past the Field's role="group").
 
 type pseudoState = {
   focus: boolean;
@@ -18,18 +17,17 @@ const pseudoStateArgTypes = {
   focus: { control: 'boolean' },
 } satisfies Record<keyof pseudoState, { control: 'boolean' }>;
 
-const meta: Meta<typeof ChoiceCardCheckbox> = {
-  title: 'UI/ChoiceCards/ChoiceCardCheckbox',
-  component: ChoiceCardCheckbox,
+const meta: Meta<typeof ChoiceCardSwitch> = {
+  title: 'UI/ChoiceCards/ChoiceCardSwitch',
+  component: ChoiceCardSwitch,
   tags: ['autodocs'],
   args: {
-    title: 'Enable notifications',
-    description: 'You can enable or disable notifications at any time.',
+    title: 'Airplane mode',
+    description: 'Disable all wireless connections.',
     disabled: false,
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
-  // the Pick<…> & Omit<ComponentProps<typeof Checkbox>> type, so the public API is
-  // documented here by hand (same approach as checkbox.stories).
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
+  // Pick<…> & Omit<ComponentProps<typeof Switch>> type, so document the public API by hand.
   argTypes: {
     title: {
       control: 'text',
@@ -50,17 +48,23 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     checked: {
       control: 'boolean',
       description: 'Controlled checked state (pair with `onCheckedChange`).',
-      table: { type: { summary: 'boolean | "indeterminate"' } },
+      table: { type: { summary: 'boolean' } },
     },
     defaultChecked: {
       control: 'boolean',
       description: 'Checked state when uncontrolled.',
-      table: { type: { summary: 'boolean | "indeterminate"' }, defaultValue: { summary: 'false' } },
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     onCheckedChange: {
       control: false,
       description: 'Called when the checked state changes.',
-      table: { type: { summary: '(checked: boolean | "indeterminate") => void' } },
+      table: { type: { summary: '(checked: boolean) => void' } },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['sm', 'default'],
+      description: 'Track size.',
+      table: { type: { summary: '"sm" | "default"' }, defaultValue: { summary: '"default"' } },
     },
     disabled: {
       control: 'boolean',
@@ -69,7 +73,7 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     },
     id: {
       control: false,
-      description: 'Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted.',
+      description: 'Links the label to the control. Auto-generated via `useId` if omitted.',
       table: { type: { summary: 'string' } },
     },
   },
@@ -79,58 +83,50 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ChoiceCardCheckbox>;
+type Story = StoryObj<typeof ChoiceCardSwitch>;
 
-// focus is a CSS pseudo-state a plain boolean can't set, so PseudoWrap forces
-// :focus-visible on every descendant via storybook-addon-pseudo-states (same mechanism
-// as the checkbox.stories ChoiceCard preview).
 function PseudoWrap({ focus, children }: { focus: pseudoState['focus']; children: ReactNode }) {
   return <div className={focus ? 'pseudo-focus-visible-all' : ''}>{children}</div>;
 }
 
-// Default — the one interactive story: API playground (full ArgsTable), state preview, and
-// the canonical interaction smoke test in one. Renders <ChoiceCardCheckbox {...args}/> so
-// every prop is a live control; `focus` is the synthetic pseudo-state (PseudoWrap forces
-// :focus-visible since a boolean can't). Uncontrolled (no checked arg) → the play function
-// can click-toggle it, and `error` (text) flips invalid. No controls.include — the full
-// ArgsTable stays intact (include would filter the table, not just the panel).
-export const Default: StoryObj<ComponentProps<typeof ChoiceCardCheckbox> & pseudoState> = {
+// Default — playground + state preview + interaction smoke test in one. Uncontrolled (no
+// checked arg) → the play function can click-toggle it; type into `error` to flip invalid.
+export const Default: StoryObj<ComponentProps<typeof ChoiceCardSwitch> & pseudoState> = {
   argTypes: pseudoStateArgTypes,
   args: { focus: false },
   render: ({ focus, ...args }) => (
     <PseudoWrap focus={focus}>
-      <ChoiceCardCheckbox {...args} />
+      <ChoiceCardSwitch {...args} />
     </PseudoWrap>
   ),
   play: async ({ canvas, step }) => {
-    const checkbox = canvas.getByRole('checkbox', { name: /enable notifications/i });
+    const sw = canvas.getByRole('switch', { name: /airplane mode/i });
 
-    await step('starts unchecked', async () => {
-      await expect(checkbox).not.toBeChecked();
+    await step('starts off', async () => {
+      await expect(sw).not.toBeChecked();
     });
 
     await step('clicking toggles it on', async () => {
-      await userEvent.click(checkbox);
-      await expect(checkbox).toBeChecked();
+      await userEvent.click(sw);
+      await expect(sw).toBeChecked();
     });
 
     await step('clicking again toggles it back off', async () => {
-      await userEvent.click(checkbox);
-      await expect(checkbox).not.toBeChecked();
+      await userEvent.click(sw);
+      await expect(sw).not.toBeChecked();
     });
 
     await step('blurring clears the focus', async () => {
-      checkbox.blur();
-      await expect(checkbox).not.toHaveFocus();
+      sw.blur();
+      await expect(sw).not.toHaveFocus();
     });
   },
 };
 
-// At-a-glance gallery, columns = unchecked vs checked. The two Focus rows force
-// :focus-visible on their checkbox via the pseudo-states addon, so the focus ring — and
-// the focus-gated invalid red ring (invalid alone shows only the destructive border) — is
-// visible statically. hover is omitted: default shadcn adds none to the card/control.
-const ERROR = 'You must enable notifications to continue.';
+// At-a-glance gallery, columns = off vs on. The two Focus rows force :focus-visible via the
+// pseudo-states addon, so the focus ring — and the focus-gated invalid red ring — is visible
+// statically.
+const ERROR = 'Airplane mode must be enabled to continue.';
 const STATE_ROWS = [
   { key: 'enabled', label: 'Enabled', disabled: false, error: undefined, focus: false },
   { key: 'focus', label: 'Focus', disabled: false, error: undefined, focus: true },
@@ -153,24 +149,24 @@ export const ChoiceCardStates: Story = {
     <div className="flex max-w-2xl flex-col gap-xl">
       <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
         <span />
-        <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
-        <span className="text-format-eyebrow text-muted-foreground">Checked</span>
+        <span className="text-format-eyebrow text-muted-foreground">Off</span>
+        <span className="text-format-eyebrow text-muted-foreground">On</span>
       </div>
       {STATE_ROWS.map((r) => (
         <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
           <span className="pt-md text-format-eyebrow text-muted-foreground">{r.label}</span>
-          <ChoiceCardCheckbox
+          <ChoiceCardSwitch
             id={`cc-${r.key}-off`}
-            title="Enable notifications"
-            description="You can enable or disable notifications at any time."
+            title="Airplane mode"
+            description="Disable all wireless connections."
             checked={false}
             disabled={r.disabled}
             error={r.error}
           />
-          <ChoiceCardCheckbox
+          <ChoiceCardSwitch
             id={`cc-${r.key}-on`}
-            title="Enable notifications"
-            description="You can enable or disable notifications at any time."
+            title="Airplane mode"
+            description="Disable all wireless connections."
             checked
             disabled={r.disabled}
             error={r.error}

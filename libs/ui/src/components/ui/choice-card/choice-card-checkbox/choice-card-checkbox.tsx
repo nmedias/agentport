@@ -1,37 +1,28 @@
 import * as React from 'react';
-import {useId} from "react";
-import {Field, FieldContent, FieldDescription, FieldError, FieldLabel, FieldTitle} from "@/components/ui/field";
+
+import {ChoiceCardShell} from "@/components/ui/choice-card/choice-card-shell";
+import {useFieldId} from "@/components/ui/choice-card/use-field-id";
+import {Checkbox} from "@/components/ui/checkbox";
 
 
 
-type ShellProps = {
-    title: React.ReactNode;
-    children: React.ReactNode;
-    id?: string,
-    description?: React.ReactNode;
-    error?: React.ReactNode;
-    disabled?: boolean;
-}
+type Props = Pick<React.ComponentProps<typeof ChoiceCardShell>, 'title' | 'description' | 'error'>
+    & Omit<React.ComponentProps<typeof Checkbox>, 'title'>;
 
-function ChoiceCardShell({id, title, description, error, disabled, children}: ShellProps) {
-    const invalid = error != null;
-    const reactId = useId();
-    const _id = id ?? reactId;
+function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, ...props}: Props) {
+    const id = useFieldId(idProp);
 
     return (
-      <FieldLabel htmlFor={_id} data-disabled={disabled || undefined}>
-        <Field orientation="horizontal"
-               data-disabled={disabled || undefined}
-               data-invalid={invalid || undefined}>
-          <FieldContent>
-            <FieldTitle>{title}</FieldTitle>
-            {description && <FieldDescription>{description}</FieldDescription>}
-            {error && <FieldError>{error}</FieldError>}
-          </FieldContent>
-          {children}   {/* ← hier kommt der Control rein */}
-        </Field>
-      </FieldLabel>
+      <ChoiceCardShell id={id} title={title} description={description} disabled={disabled} error={error}>
+          <Checkbox
+              id={id}
+              aria-labelledby={`${id}-title`}
+              disabled={disabled}
+              aria-invalid={!!error || undefined }
+              {...props}
+          />
+      </ChoiceCardShell>
   );
 }
 
-export { ChoiceCardShell };
+export { ChoiceCardCheckbox };

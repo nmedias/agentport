@@ -1,1 +1,1 @@
-export * from './choice-card-shell'
+export * from './choice-card-checkbox'
