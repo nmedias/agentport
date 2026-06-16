@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import {ComponentProps} from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { RadioGroup, RadioGroupItem } from './radio-group';
@@ -83,38 +83,14 @@ type Story = StoryObj<typeof RadioGroup>;
 type pseudoState = {
   focus: boolean;
   invalid: boolean;
+  checked: boolean;
 };
 
 const pseudoStateArgTypes = {
   invalid: { control: 'boolean' },
   focus: { control: 'boolean' },
-} satisfies Record<keyof pseudoState, { control: 'boolean' }>;
-
-// RadioGroup is value-driven (no `checked` prop), so — unlike Checkbox/Switch — the card's
-// checked/disabled can't be Picked from the component; they're explicit booleans here. The
-// focus pseudo-state is forced via PseudoWrap (storybook-addon-pseudo-states:
-// pseudo-focus-visible-all simulates :focus-visible on every descendant).
-type RadioCardArgs = {
-  checked: boolean;
-  disabled: boolean;
-} & pseudoState;
-
-const radioCardArgTypes = {
   checked: { control: 'boolean' },
-  disabled: { control: 'boolean' },
-  ...pseudoStateArgTypes,
-} satisfies Record<keyof RadioCardArgs, { control: 'boolean' }>;
-
-function PseudoWrap({
-  focus,
-  children,
-}: {
-  focus: pseudoState['focus'];
-  children: ReactNode;
-}) {
-  const className = focus ? 'pseudo-focus-visible-all' : '';
-  return <div className={className}>{children}</div>;
-}
+} satisfies Record<keyof pseudoState, { control: 'boolean' }>;
 
 // Bare group — the API playground. Renders <RadioGroup {...args}> with three items, so every
 // prop documented in the meta argTypes shows in the ArgsTable AND as a live control (no
@@ -139,7 +115,6 @@ export const Default: Story = {
   ),
 };
 
-// docs "Description": each option carries helper text via Field + FieldContent.
 export const Description: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -169,30 +144,17 @@ export const Description: Story = {
   ),
 };
 
-// Choice Card — interactive state preview (single card). FieldLabel wraps the Field → a
-// clickable, bordered card that tints when its item is selected (has-data-checked). All
-// four interaction states are Controls (checked / disabled / invalid + focus
-// pseudo-state via PseudoWrap), so every combination — incl. invalid + focus — is
-// reachable. DEFAULT shadcn: card reacts only to checked (tint) + disabled (dim); the radio
-// item carries focus (ring) + invalid (destructive border + focus-gated red ring). Each
-// card sits in its own RadioGroup (className="contents") so its checked state is independent.
-function ChoiceCardCell({
+
+function ChoiceCardRadioItem({
   id,
-  checked,
   disabled,
   invalid,
 }: {
   id: string;
-  checked: boolean;
   disabled: boolean;
   invalid: boolean;
 }) {
   return (
-    <RadioGroup
-      value={checked ? id : '__none'}
-      disabled={disabled}
-      className="contents"
-    >
       <FieldLabel
         htmlFor={id}
         className="max-w-sm"
@@ -211,28 +173,33 @@ function ChoiceCardCell({
           <RadioGroupItem id={id} value={id} aria-invalid={invalid || undefined} />
         </Field>
       </FieldLabel>
-    </RadioGroup>
   );
 }
 
-export const ChoiceCard: StoryObj<RadioCardArgs> = {
+export const ChoiceCard: StoryObj<ComponentProps<typeof RadioGroup> & pseudoState> = {
   parameters: {
     controls: { include: ['checked', 'disabled', 'invalid', 'focus'] },
   },
-  args: { checked: true, disabled: false, invalid: false, focus: false },
-  argTypes: radioCardArgTypes,
-  render: ({ checked, disabled, invalid, focus }) => (
-    <PseudoWrap focus={focus}>
-      <ChoiceCardCell
-        id="cc-plan"
-        checked={checked}
-        disabled={disabled}
-        invalid={invalid}
-      />
-    </PseudoWrap>
-  ),
+  args: {checked: false, invalid: false, focus: false, disabled: false },
+  argTypes: pseudoStateArgTypes,
+  render: ({checked, disabled, invalid, focus }) => {
+    const id = "cc-plan";
+    return (
+        <div className={focus ? 'pseudo-focus-visible-all' : ''}>
+          <RadioGroup
+              value={checked ? id : '__none'}
+              disabled={disabled}
+              className="contents">
+            <ChoiceCardRadioItem
+                id={id}
+                disabled={disabled ?? false}
+                invalid={invalid}
+            />
+          </RadioGroup>
+        </div>
+    )
+  }
 };
-
 // docs "Choice Card" (multi): FieldLabel wraps each Field → clickable cards that tint when
 // their item is selected; one RadioGroup, single selection across the cards.
 export const ChoiceCardGroup: Story = {
@@ -269,7 +236,7 @@ const STATE_ROWS = [
   { key: 'focus', label: 'Focus', disabled: false, invalid: false, focus: true },
   { key: 'disabled', label: 'Disabled', disabled: true, invalid: false, focus: false },
   { key: 'invalid', label: 'Invalid', disabled: false, invalid: true, focus: false },
-  { key: 'invalidfocus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
+  { key: 'invalid-focus', label: 'Invalid + Focus', disabled: false, invalid: true, focus: true },
 ];
 
 export const ChoiceCardStates: Story = {
@@ -283,34 +250,42 @@ export const ChoiceCardStates: Story = {
       ]),
     },
   },
-  render: () => (
-    <div className="flex max-w-2xl flex-col gap-xl">
-      <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
-        <span />
-        <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
-        <span className="text-format-eyebrow text-muted-foreground">Checked</span>
-      </div>
-      {STATE_ROWS.map((r) => (
-        <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
-          <span className="pt-md text-format-eyebrow text-muted-foreground">
-            {r.label}
-          </span>
-          <ChoiceCardCell
-            id={`cc-${r.key}-off`}
-            checked={false}
-            disabled={r.disabled}
-            invalid={r.invalid}
-          />
-          <ChoiceCardCell
-            id={`cc-${r.key}-on`}
-            checked
-            disabled={r.disabled}
-            invalid={r.invalid}
-          />
-        </div>
-      ))}
-    </div>
-  ),
+  render: () => {
+
+      return (
+          <div className="flex max-w-2xl flex-col gap-xl">
+            <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
+              <span />
+              <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
+              <span className="text-format-eyebrow text-muted-foreground">Checked</span>
+            </div>
+            {STATE_ROWS.map((r) => (
+
+              <RadioGroup
+                    value={`cc-${r.key}-on`}
+                    disabled={r.disabled}
+                    className="contents"
+                >
+                  <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
+                    <span className="pt-md text-format-eyebrow text-muted-foreground">
+                      {r.label}
+                    </span>
+                    <ChoiceCardRadioItem
+                      id={`cc-${r.key}-off`}
+                      disabled={r.disabled}
+                      invalid={r.invalid}
+                    />
+                    <ChoiceCardRadioItem
+                      id={`cc-${r.key}-on`}
+                      disabled={r.disabled}
+                      invalid={r.invalid}
+                    />
+                  </div>
+                </RadioGroup>
+            ))}
+          </div>
+      )
+  },
 };
 
 // docs "Fieldset": FieldSet + FieldLegend group the items with a caption + description.
