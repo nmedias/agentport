@@ -204,10 +204,21 @@ function CommandList({
 function CommandEmpty({
   className,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Empty>) {
+}: React.ComponentProps<'div'>) {
+  // cmdk's Empty hard-codes role="presentation" (applied AFTER our props, so a prop can't
+  // override it), leaving CommandList (role="listbox") with no option/group child →
+  // aria-required-children. Replicate cmdk's render condition (filtered.count === 0) on our
+  // own node and expose the no-results message as a non-interactive (disabled) option: the
+  // listbox owns a permitted child AND screen readers announce it. Not a cmdk item, so it
+  // never joins keyboard navigation.
+  const isEmpty = useCommandState((state) => state.filtered.count === 0);
+  if (!isEmpty) return null;
   return (
-    <CommandPrimitive.Empty
+    <div
       data-slot="command-empty"
+      role="option"
+      aria-disabled
+      aria-selected={false}
       className={cn('py-2xl text-center text-format-body text-muted-foreground', className)}
       {...props}
     />
@@ -238,19 +249,22 @@ function CommandSeparator({
   label,
   alwaysRender,
   ...props
-}: React.ComponentProps<typeof CommandPrimitive.Separator> & {
+}: React.ComponentProps<'div'> & {
   label?: React.ReactNode;
+  alwaysRender?: boolean;
 }) {
   const variant = React.useContext(CommandVariantContext);
-  // Same hide-on-search contract as cmdk's line separator: gone while filtering,
-  // alwaysRender opts out — the labeled rule must not behave differently.
+  // Both forms render as our own div with role="presentation": cmdk's CommandPrimitive.Separator
+  // hard-codes role="separator" (applied after our props), a disallowed child of the listbox
+  // CommandList renders (aria-required-children). We replicate cmdk's hide-on-search contract —
+  // the separator is gone while filtering; alwaysRender opts out (e.g. the labeled rule).
   const search = useCommandState((state) => state.search);
+  if (search && !alwaysRender) return null;
   if (label != null) {
-    if (search && !alwaysRender) return null;
     return (
       <div
         data-slot="command-separator"
-        role="separator"
+        role="presentation"
         className={cn('flex items-center gap-md px-xl pt-lg pb-sm', className)}
         {...props}
       >
@@ -262,9 +276,9 @@ function CommandSeparator({
     );
   }
   return (
-    <CommandPrimitive.Separator
+    <div
       data-slot="command-separator"
-      alwaysRender={alwaysRender}
+      role="presentation"
       className={cn(
         variant === 'palette' ? 'h-px bg-border' : '-mx-xs h-px bg-border',
         className

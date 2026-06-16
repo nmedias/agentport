@@ -320,6 +320,14 @@ status_note: >
     war kurz auf 24px (px-xl-Default der genesteten labeled-Separator-Instanz), Instanz-Padding-Override
     auf space-md hat das aufgelöst, Figma = Code = C2-Raster; Deviations komplett in
     agent-runs/component-sync/2026-06-11-command/notes.md.
+    A11Y 2026-06-16 (axe aria-required-children): CommandList rendert role="listbox" → erlaubt nur
+    option/group-Kinder. Fix code-only: (1) CommandSeparator (beide Formen — labeled + line) rendert jetzt
+    ein eigenes role="presentation"-div statt cmdks role="separator" (cmdk setzt role NACH dem Prop-Spread →
+    per Prop nicht überschreibbar; Line-Form baut cmdks hide-on-search via useCommandState(search) nach).
+    (2) CommandEmpty rendert ein eigenes div (Bedingung useCommandState(filtered.count===0) wie cmdk) als
+    role="option" aria-disabled aria-selected=false → die sonst options-lose Listbox hat ein erlaubtes Kind +
+    SR liest die No-Results-Meldung; kein cmdk-Item → außerhalb der Tastatur-Navigation. Spec auf
+    role=presentation nachgezogen; Gate grün (205). Verbleibend bei a11y='error' nur noch color-contrast (Token).
 
 - name: Dialog
   status: nova-aligned

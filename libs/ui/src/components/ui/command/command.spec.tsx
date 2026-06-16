@@ -163,7 +163,9 @@ describe('CommandSeparator', () => {
       </Command>
     );
     const sep = container.querySelector('[data-slot=command-separator]');
-    expect(sep?.getAttribute('role')).toBe('separator');
+    // role=presentation, not separator: a separator is a disallowed child of the listbox
+    // CommandList renders (aria-required-children) — the label text carries the section copy.
+    expect(sep?.getAttribute('role')).toBe('presentation');
     expect(sep?.className).toContain('px-xl');
     expect(getByText('Jump to').className).toContain('text-format-eyebrow');
   });
