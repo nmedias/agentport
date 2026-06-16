@@ -353,9 +353,13 @@ export const Invalid: Story = {
 
 // DS-authored gallery: the item state axis (maps the Figma .RadioGroupItem set).
 // Each item lives in its own RadioGroup (className="contents") so its checked state
-// is independent. Focus is a live pseudo-state.
+// is independent. The focus rows force :focus-visible via the pseudo-states addon, so
+// the focus ring — and the focus-gated invalid red ring — is visible statically.
 export const AllStates: Story = {
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    pseudo: { focusVisible: ['#s-checked-focus', '#s-focus-invalid'] },
+  },
   render: () => (
     <div className="flex flex-col gap-lg">
       <RadioGroup defaultValue="" className="contents">
@@ -370,10 +374,22 @@ export const AllStates: Story = {
           <Label htmlFor="s2">Checked</Label>
         </div>
       </RadioGroup>
+      <RadioGroup defaultValue="checked-focus" className="contents">
+        <div className="flex items-center gap-lg">
+          <RadioGroupItem value="checked-focus" id="s-checked-focus" />
+          <Label htmlFor="s-checked-focus">Checked + focus</Label>
+        </div>
+      </RadioGroup>
       <RadioGroup defaultValue="" disabled className="contents">
         <div className="flex items-center gap-lg">
           <RadioGroupItem value="disabled" id="s3" />
           <Label htmlFor="s3">Disabled</Label>
+        </div>
+      </RadioGroup>
+      <RadioGroup defaultValue="checked-disabled" disabled className="contents">
+        <div className="flex items-center gap-lg">
+          <RadioGroupItem value="checked-disabled" id="s-checked-disabled" />
+          <Label htmlFor="s-checked-disabled">Checked + disabled</Label>
         </div>
       </RadioGroup>
       <RadioGroup defaultValue="" className="contents">
@@ -386,6 +402,12 @@ export const AllStates: Story = {
         <div className="flex items-center gap-lg">
           <RadioGroupItem value="checked-invalid" id="s5" aria-invalid />
           <Label htmlFor="s5">Checked + invalid</Label>
+        </div>
+      </RadioGroup>
+      <RadioGroup defaultValue="" className="contents">
+        <div className="flex items-center gap-lg">
+          <RadioGroupItem value="focus-invalid" id="s-focus-invalid" aria-invalid />
+          <Label htmlFor="s-focus-invalid">Invalid + focus</Label>
         </div>
       </RadioGroup>
     </div>

@@ -295,9 +295,14 @@ export const Invalid: Story = {
 };
 
 // DS-authored gallery: the state matrix (maps the Figma .Switch variant set). Invalid
-// now shows the destructive track (per the Figma invalid member); focus is live.
+// now shows the destructive track (per the Figma invalid member); the focus rows force
+// :focus-visible via the pseudo-states addon, so the focus ring — and the focus-gated
+// invalid red ring — is visible statically.
 export const AllStates: Story = {
-  parameters: { controls: { include: [] } },
+  parameters: {
+    controls: { include: [] },
+    pseudo: { focusVisible: ['#sw-checked-focus', '#sw-focus-invalid'] },
+  },
   render: () => (
     <div className="flex flex-col gap-lg">
       <div className="flex items-center gap-md">
@@ -309,8 +314,16 @@ export const AllStates: Story = {
         <span className="text-format-body text-muted-foreground">Checked</span>
       </div>
       <div className="flex items-center gap-md">
+        <Switch id="sw-checked-focus" defaultChecked />
+        <span className="text-format-body text-muted-foreground">Checked + focus</span>
+      </div>
+      <div className="flex items-center gap-md">
         <Switch disabled />
         <span className="text-format-body text-muted-foreground">Disabled</span>
+      </div>
+      <div className="flex items-center gap-md">
+        <Switch defaultChecked disabled />
+        <span className="text-format-body text-muted-foreground">Checked + disabled</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-invalid />
@@ -319,6 +332,10 @@ export const AllStates: Story = {
       <div className="flex items-center gap-md">
         <Switch aria-invalid defaultChecked />
         <span className="text-format-body text-muted-foreground">Invalid (checked)</span>
+      </div>
+      <div className="flex items-center gap-md">
+        <Switch id="sw-focus-invalid" aria-invalid />
+        <span className="text-format-body text-muted-foreground">Invalid + focus</span>
       </div>
     </div>
   ),

@@ -347,9 +347,14 @@ export const Invalid: Story = {
 };
 
 // DS-authored (no standalone doc example): every state side by side, mirroring the
-// Figma .Checkbox variant set. Focus is a live pseudo-state (focus ring on tab-in).
+// Figma .Checkbox variant set (checked × state). The focus rows force :focus-visible
+// via the pseudo-states addon, so the focus ring — and the focus-gated invalid red
+// ring (invalid alone shows only the destructive border) — is visible statically.
 export const AllStates: Story = {
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    pseudo: { focusVisible: ['#s-checked-focus', '#s-focus-invalid'] },
+  },
   render: () => (
     <div className="flex flex-col gap-lg">
       <div className="flex items-center gap-lg">
@@ -361,8 +366,16 @@ export const AllStates: Story = {
         <Label htmlFor="s-checked">Checked</Label>
       </div>
       <div className="flex items-center gap-lg">
+        <Checkbox id="s-checked-focus" defaultChecked />
+        <Label htmlFor="s-checked-focus">Checked + focus</Label>
+      </div>
+      <div className="flex items-center gap-lg">
         <Checkbox id="s-disabled" disabled />
         <Label htmlFor="s-disabled">Disabled</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <Checkbox id="s-checked-disabled" defaultChecked disabled />
+        <Label htmlFor="s-checked-disabled">Checked + disabled</Label>
       </div>
       <div className="flex items-center gap-lg">
         <Checkbox id="s-invalid" aria-invalid />
@@ -371,6 +384,10 @@ export const AllStates: Story = {
       <div className="flex items-center gap-lg">
         <Checkbox id="s-checked-invalid" defaultChecked aria-invalid />
         <Label htmlFor="s-checked-invalid">Checked + invalid</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <Checkbox id="s-focus-invalid" aria-invalid />
+        <Label htmlFor="s-focus-invalid">Invalid + focus</Label>
       </div>
     </div>
   ),
