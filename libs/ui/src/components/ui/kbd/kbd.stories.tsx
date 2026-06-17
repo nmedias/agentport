@@ -21,7 +21,7 @@ type Story = StoryObj<typeof Kbd>;
 // mono key glyph.
 export const Default: Story = {};
 
-// The emphasis axis (Figma `.Kbd`): high (default) is the inverted dark keycap;
+// The emphasis axis (Figma Kbd set): high (default) is the inverted dark keycap;
 // low is the quiet muted keycap (the stock-shadcn look).
 export const Emphasis: Story = {
   parameters: { controls: { disable: true } },
@@ -85,7 +85,7 @@ export const Combo: Story = {
   render: () => (
     <KbdGroup>
       <Kbd>Ctrl</Kbd>
-      <span className="text-muted-foreground text-format-kbd">+</span>
+      <span className="text-muted-ink text-format-kbd">+</span>
       <Kbd>B</Kbd>
     </KbdGroup>
   ),
@@ -95,7 +95,7 @@ export const Combo: Story = {
 export const InText: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <p className="text-format-body text-foreground">
+    <p className="text-format-body text-ink">
       Press <Kbd>Ctrl</Kbd> <Kbd>K</Kbd> to open the command palette.
     </p>
   ),

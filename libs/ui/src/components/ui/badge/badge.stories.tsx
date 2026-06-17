@@ -25,13 +25,12 @@ const meta: Meta<typeof Badge> = {
 export default meta;
 type Story = StoryObj<typeof Badge>;
 
-// The default badge — a brand-primary pill marker (text-format-label on the
-// primary surface).
+// The default badge — a brand-primary pill marker (text-format-label /
+// primary-ink on the dark primary-fill surface).
 export const Default: Story = {};
 
-// The full `variant` axis. default/outline are designed DS tints; secondary +
-// destructive ride the stock PLACEHOLDER tokens (not finalized — see notes);
-// ghost/link are the Nova-baseline extras.
+// The full `variant` axis. default/secondary/destructive are solid DS fills,
+// outline is a bordered neutral; ghost/link are the Nova-baseline extras.
 export const Variants: Story = {
   parameters: { controls: { disable: true } },
   render: () => (

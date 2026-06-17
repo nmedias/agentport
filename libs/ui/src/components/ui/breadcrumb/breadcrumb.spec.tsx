@@ -35,14 +35,14 @@ describe('Breadcrumb', () => {
     const { container } = render(<Trail />);
     const list = container.querySelector('[data-slot="breadcrumb-list"]');
     expect(list?.className).toContain('text-format-body');
-    expect(list?.className).toContain('text-muted-foreground');
+    expect(list?.className).toContain('text-muted-ink');
   });
 
-  it('marks the current page with aria-current and foreground colour', () => {
+  it('marks the current page with aria-current and ink colour', () => {
     const { container } = render(<Trail />);
     const page = container.querySelector('[data-slot="breadcrumb-page"]');
     expect(page?.getAttribute('aria-current')).toBe('page');
-    expect(page?.className).toContain('text-foreground');
+    expect(page?.className).toContain('text-ink');
   });
 
   it('renders the separator as an aria-hidden chevron vector', () => {

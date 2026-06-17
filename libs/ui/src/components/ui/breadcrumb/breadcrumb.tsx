@@ -13,8 +13,9 @@ import { cn } from '@/lib/utils';
 //  · text-sm → text-format-body (Page's redundant font-normal skipped — text-format-body owns
 //    the weight) · break-words → Nova's v4 wrap-break-word (same CSS) · separator
 //    size-3.5 stays numeric · lucide → Remix RiArrowRightSLine/RiMoreLine.
-//  Multi-part composition: List sets the default muted colour, Link inherits it and
-//  darkens on hover, Page is the current (foreground) leaf.
+//  Colour (Figma Breadcrumb/Segment set, -fill/-ink/-border system): List default =
+//  text-muted-ink (link rest + separator/ellipsis icons inherit it), Link darkens to
+//  text-ink on hover, Page is the current text-ink leaf.
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
@@ -25,7 +26,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        'flex flex-wrap items-center gap-sm wrap-break-word text-format-body text-muted-foreground',
+        'flex flex-wrap items-center gap-sm wrap-break-word text-format-body text-muted-ink',
         className
       )}
       {...props}
@@ -55,7 +56,7 @@ function BreadcrumbLink({
   return (
     <Comp
       data-slot="breadcrumb-link"
-      className={cn('transition-colors hover:text-foreground', className)}
+      className={cn('transition-colors hover:text-ink', className)}
       {...props}
     />
   );
@@ -68,7 +69,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn('text-foreground', className)}
+      className={cn('text-ink', className)}
       {...props}
     />
   );

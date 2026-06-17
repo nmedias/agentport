@@ -79,7 +79,7 @@ status_note: >
 ```yaml
 - name: Badge
   status: nova-aligned
-  figma_synced: false
+  figma_synced: true                            # colour sync 2026-06-17 (/component-sync) → -fill/-ink
   source: { registry: "@shadcn", item: badge, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/badge/
@@ -87,21 +87,22 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/badge'"
   figma:
     section: { name: "Badge", id: "3687:1016" }
-    set: { name: ".Badge", id: "3697:1016" }
+    set: { name: "Badge", id: "3697:1016" }         # Live-Name ohne führenden Punkt
     members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
     slots: { icon: "icon#3697:0" }                  # leading-icon SLOT; default 12px check vector, empty→text-only
     axis: { variant: [default, secondary, destructive, outline, ghost, link] }
-  skill: /shadcn-component-port (2026-06-12)
+  skill: /shadcn-component-port (2026-06-12); /component-sync (2026-06-17)
   notes: >
     Single-element CVA span (asChild via Radix Slot, data-slot/data-variant, [&>svg]:size-3 icon).
-    Landed radix-nova source = 6 variants (ghost/link are Nova extras over the doc's 4) — all kept in
-    code AND the full Figma matrix. DS: rounded-4xl→corner-full (full pill); text-xs font-medium→
-    text-format-label (no 12px sans format → picked by role, snaps to 14px); px-2→px-md, py-0.5→py-2xs,
-    gap-1→gap-xs, icon-side pr-1.5/pl-1.5→pr-sm/pl-sm; h-5/size-3 numeric; focus border-ring + ring/50
-    ring-[3px]; dark: dropped. ⚠ secondary + destructive = stock PLACEHOLDER tokens (raw hex,
-    Figma var name suffix " ⚠") — bound but NOT finalized. destructive surface = bg-destructive/10
-    (paint opacity 0.1 + resolved fallback). asChild + count-pill (font-mono tabular min-w-5) are
-    code-level overrides, not Figma variants. /figma-verify CLEAN, gate green (8 specs).
+    radix-nova source = 6 variants (ghost/link are Nova extras over the doc's 4) — all kept in code
+    AND the full Figma matrix. Geometry: rounded-4xl→corner-full (full pill); text-format-label
+    (no 12px sans → role-picked, 14px); px-2→px-md, py-0.5→py-2xs, gap-1→gap-xs; h-5/size-3 numeric;
+    focus border-ring + ring/50 ring-[3px]; dark: dropped. Colour clothing (Figma Badge bindings,
+    2026-06-17 -fill/-ink): default bg-primary-fill + text-primary-ink · secondary bg-secondary +
+    text-secondary-ink · destructive NOW SOLID bg-destructive + text-destructive-ink (was /10 tint,
+    hover→/80) · outline border + text-ink · ghost text-ink + muted-fill/-ink hover · link text-primary.
+    Prior secondary/destructive ⚠ placeholder RESOLVED — both bind real DS semantics. asChild +
+    count-pill (font-mono tabular min-w-5) are code-level overrides, not Figma variants.
 
 - name: Button
   status: nova-aligned
@@ -207,7 +208,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/kbd'"
   figma:
     section: { name: "Kbd", id: "3215:302" }
-    set: { name: ".Kbd", id: "3217:308" }            # 2 Achsen: content × emphasis = 4 Member
+    set: { name: "Kbd", id: "3217:308" }             # 2 Achsen: content × emphasis = 4 Member (Live-Name ohne Punkt)
     members:
       "content=text, emphasis=high": "3217:302"      # defaultVariant
       "content=icon, emphasis=high": "3217:304"
@@ -215,16 +216,17 @@ status_note: >
       "content=icon, emphasis=low":  "3428:1387"
     slots: { property: "icon#3217:1", nodes: { high: "3217:305", low: "3428:1388" } }  # 12px Vektor
     axis: { content: [text, icon], emphasis: [high, low] }   # content children-getrieben; emphasis = Code-Prop (default high)
-  skill: /shadcn-component-port (+ /component-sync 2026-06-09 — emphasis-Achse)
+  skill: /shadcn-component-port (+ /component-sync 2026-06-09 emphasis-Achse, 2026-06-17 colour-rework)
   notes: >
     Nova-Kbd metrisch identisch zu new-york (keine Dichte-Änderung). emphasis=high (default) =
-    invertierte dunkle Keycap (Inverse/inverse + inverse-foreground); emphasis=low = muted Keycap
-    (shadcn muted/muted-foreground). text-format-kbd (Geist Mono); gap-xs/px-xs; corner-sm; Tooltip-Kontext
-    via v4 in-data-[slot=tooltip-content]:. content (text|icon) children-getrieben, nicht als Prop.
+    invertierte dunkle Keycap (bg-inverse-fill + text-inverse-ink); emphasis=low = muted Keycap
+    (bg-muted-fill + text-muted-ink). text-format-kbd (Geist Mono); gap-xs/px-xs (Space/space-xs);
+    corner-sm. Tooltip-Kontext-Overrides (in-data-[slot=tooltip-content]:) sind code-only Stock-Carryover
+    (keine Figma-Bindung) → §6-umgekleidet auf bg-surface/text-ink. content (text|icon) children-getrieben.
 
 - name: Breadcrumb
   status: nova-aligned
-  figma_synced: true                            # Code→Figma-Push der Nova-Dichte (2026-06-09)
+  figma_synced: true                            # Code→Figma-Push der Nova-Dichte (2026-06-09); colour-rework re-synced 2026-06-17
   source: { registry: "@shadcn", item: breadcrumb, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/breadcrumb/
@@ -232,17 +234,19 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/breadcrumb'"
   figma:
     section: { name: "Breadcrumb", id: "3249:302" }
-    composition: { name: ".Breadcrumb", id: "3254:302" }       # items-Gap Space/space-sm (6px)
-    segment_set: { name: ".Breadcrumb/Segment", id: "3250:308" }
+    composition: { name: "Breadcrumb", id: "3254:302" }        # items-Gap Space/space-sm (6px); Live-Name ohne Punkt
+    segment_set: { name: "Segment", id: "3250:308" }           # Live-Name (war .Breadcrumb/Segment)
     segment_members: { "state=link": "3250:302", "state=link-hover": "3250:304", "state=page": "3250:306" }
-    separator: { name: ".Breadcrumb/Separator", id: "3251:302" }  # Icon 14px → size-3.5
-    ellipsis: { name: ".Breadcrumb/Ellipsis", id: "3251:305" }    # 20×20, Icon 16px → size-4
+    separator: { name: ".Separator", id: "3251:302" }            # Icon 14px → size-3.5 (Live-Name .Separator)
+    ellipsis: { name: "Ellipsis", id: "3251:305" }              # 20×20, Icon 16px → size-4 (Live-Name ohne Punkt)
     axis: { segment_state: [link, link-hover, page] }
-  skill: /shadcn-component-port (+ Code→Figma-Push via use_figma)
+  skill: /shadcn-component-port (+ Code→Figma-Push via use_figma; /component-sync 2026-06-17 colour)
   notes: >
-    Multipart. Farben: link=muted-foreground, link-hover/page=foreground (Body→text-format-body).
-    List- + Segment-Gap → Space/space-xs (4px) Item / Space/space-sm (6px) List; Ellipsis size-5;
-    break-words → v4 wrap-break-word. Nova-Dichte wurde im Code entschieden und nach Figma gepusht.
+    Multipart. Colour (Figma Segment-Set, 2026-06-17 -fill/-ink): link rest = text-muted-ink,
+    link-hover + page = text-ink; Separator/Ellipsis-Icons erben currentColor (= muted-ink, kein
+    expliziter Class). Body→text-format-body. List- + Segment-Gap → Space/space-xs (4px) Item /
+    Space/space-sm (6px) List; Ellipsis size-5; break-words → v4 wrap-break-word. Nova-Dichte im Code
+    entschieden und nach Figma gepusht.
 
 - name: Command
   status: nova-aligned
@@ -370,7 +374,7 @@ status_note: >
 
 - name: Separator
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code zusammen)
+  figma_synced: true                            # Erstport 2026-06-12; colour-rework re-synced 2026-06-17 (no delta)
   source: { registry: "@shadcn", item: separator, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/separator/
@@ -378,20 +382,18 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/separator'"
   figma:
     section: { name: "Separator", id: "3675:1016" }
-    set: { name: ".Separator", id: "3676:1018" }
+    set: { name: "Separator", id: "3676:1018" }     # Live-Name ohne führenden Punkt
     members: { "orientation=horizontal": "3676:1016", "orientation=vertical": "3676:1017" }
     axis: { orientation: [horizontal, vertical] }   # statisch/non-interaktiv → Content-Achse, KEIN CVA
-  skill: /shadcn-component-port (2026-06-12)
+  skill: /shadcn-component-port (2026-06-12); /component-sync (2026-06-17, no delta)
   notes: >
     Statisches, non-interaktives Element (Radix Separator.Root, decorative=true → role=none;
-    decorative=false → role=separator + aria-orientation). Keine State-Achse, kein variant×size —
-    Content-Achse = orientation. Volle Matrix = 2 Member. Beide Member: 1px-Linie, SOLID-Fill an
-    border gebunden (VariableID:3038:4 = shadcn Default/border) — `border` ist der Trenner-Token
-    (use: "Standard-Kanten/Trenner"), NICHT border-emphasis/-strong. Klassenstring unverändert ggü.
-    nova (bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch): bg-border nennt
-    bereits den DS-Token, Rest ist reine Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
-    Linie im Flex-Row. Kein jsdom-Polyfill nötig (Radix Separator trivial). Gate grün (4 Tests:
-    default-horizontal, vertical, decorative/role, bg-border-Survival).
+    decorative=false → role=separator + aria-orientation). Content-Achse = orientation, 2 Member.
+    Beide Member: 1px-Linie, SOLID-Fill an `Border/border` gebunden — `border` ist ein im Colour-Rework
+    BEHALTENER Name (nur Wert neu = ink/75 #e4e6eb), NICHT border-emphasis/-strong. Klassenstring
+    unverändert (bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch): bg-border
+    mappt 1:1 auf die Live-Bindung, Rest = Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
+    Linie im Flex-Row. Colour-Sync 2026-06-17: KEIN Delta — kein Code-Edit.
 
 - name: Label
   status: nova-aligned

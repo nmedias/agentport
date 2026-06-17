@@ -24,26 +24,26 @@ describe('Badge', () => {
   it('defaults to the primary variant', () => {
     const { container } = render(<Badge>New</Badge>);
     const el = container.querySelector('[data-slot="badge"]');
-    expect(el?.className).toContain('bg-primary');
+    expect(el?.className).toContain('bg-primary-fill');
     expect(el?.getAttribute('data-variant')).toBe('default');
   });
 
-  it('applies the outline variant (bordered, neutral foreground)', () => {
+  it('applies the outline variant (bordered, neutral ink)', () => {
     const { container } = render(<Badge variant="outline">Outline</Badge>);
     const el = container.querySelector('[data-slot="badge"]');
     expect(el?.className).toContain('border-border');
-    expect(el?.className).toContain('text-foreground');
+    expect(el?.className).toContain('text-ink');
     expect(el?.getAttribute('data-variant')).toBe('outline');
   });
 
-  it('applies the secondary and destructive placeholder variants', () => {
+  it('applies the secondary and destructive variants', () => {
     const { container, rerender } = render(<Badge variant="secondary">S</Badge>);
     expect(container.querySelector('[data-slot="badge"]')?.className).toContain(
       'bg-secondary'
     );
     rerender(<Badge variant="destructive">D</Badge>);
     expect(container.querySelector('[data-slot="badge"]')?.className).toContain(
-      'text-destructive'
+      'bg-destructive'
     );
   });
 
@@ -56,7 +56,7 @@ describe('Badge', () => {
     const el = container.querySelector('[data-slot="badge"]');
     expect(el?.tagName).toBe('A');
     expect(el?.getAttribute('href')).toBe('#x');
-    expect(el?.className).toContain('bg-primary');
+    expect(el?.className).toContain('bg-primary-fill');
   });
 
   it('merges a consumer className via cn (twMerge)', () => {

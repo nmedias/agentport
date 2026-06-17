@@ -20,7 +20,7 @@ export default meta;
 type Story = StoryObj<typeof Breadcrumb>;
 
 // The default trail: muted links, a chevron separator between segments, and the
-// current page as the foreground leaf (non-interactive).
+// current page as the ink leaf (non-interactive).
 export const Default: Story = {
   render: () => (
     <Breadcrumb>
