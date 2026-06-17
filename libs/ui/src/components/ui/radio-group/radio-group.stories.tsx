@@ -103,6 +103,29 @@ export const Default: Story = {
   ),
 };
 
+// orientation="horizontal": the options lay out in a row (the DS container switches its
+// grid flow off Radix's data-orientation; arrow keys then navigate left/right). Stock
+// shadcn ignores orientation visually — this row layout is a DS addition.
+export const Horizontal: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <RadioGroup orientation="horizontal" defaultValue="comfortable">
+      <div className="flex items-center gap-lg">
+        <RadioGroupItem value="default" id="h1" />
+        <Label htmlFor="h1">Default</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <RadioGroupItem value="comfortable" id="h2" />
+        <Label htmlFor="h2">Comfortable</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <RadioGroupItem value="compact" id="h3" />
+        <Label htmlFor="h3">Compact</Label>
+      </div>
+    </RadioGroup>
+  ),
+};
+
 // docs "Description": each option carries helper text via Field + FieldContent.
 export const Description: Story = {
   parameters: { controls: { disable: true } },

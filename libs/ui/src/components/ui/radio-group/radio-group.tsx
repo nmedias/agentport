@@ -8,6 +8,11 @@ import { cn } from '@/lib/utils';
 //
 //  RadioGroup — pure layout container (no state, no DS surface). Only the gap is
 //  a DS mapping: grid w-full stays structural; gap-2 (8px) → gap-md (§3, by value).
+//  orientation="horizontal" lays the options in a row: Radix mirrors the prop onto
+//  the root as data-orientation (via RovingFocusGroup, asChild-merged here), so the
+//  container keys a grid-flow-col/auto-cols-max row off data-[orientation=horizontal]
+//  (default vertical = the single-column grid). Stock shadcn ignores orientation
+//  visually — this is a DS addition.
 //
 //  RadioGroupItem — the interactive control (state axis: default · checked ·
 //  focus · disabled · invalid, + checked-invalid). DS re-clothe:
@@ -40,7 +45,10 @@ function RadioGroup({
   return (
     <RadioGroupPrimitive.Root
       data-slot="radio-group"
-      className={cn('grid w-full gap-md', className)}
+      className={cn(
+        'grid w-full gap-md data-[orientation=horizontal]:w-fit data-[orientation=horizontal]:grid-flow-col data-[orientation=horizontal]:auto-cols-max',
+        className,
+      )}
       {...props}
     />
   );

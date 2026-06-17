@@ -48,6 +48,22 @@ describe('RadioGroup', () => {
     expect((getAllByRole('radio')[0] as HTMLButtonElement).disabled).toBe(true);
   });
 
+  // Guards the horizontal-orientation fix: Radix mirrors the prop onto the root as
+  // data-orientation (asChild-merged), and the DS container keys its row layout off
+  // that attribute. jsdom has no layout engine, so assert both halves of the hook —
+  // the attribute is emitted AND the responding utility is wired.
+  it('switches to a row when orientation="horizontal"', () => {
+    const { getByRole } = render(
+      <RadioGroup orientation="horizontal" aria-label="Density">
+        <RadioGroupItem value="default" />
+        <RadioGroupItem value="comfortable" />
+      </RadioGroup>,
+    );
+    const group = getByRole('radiogroup');
+    expect(group.getAttribute('data-orientation')).toBe('horizontal');
+    expect(group.className).toContain('data-[orientation=horizontal]:grid-flow-col');
+  });
+
   it('reflects aria-invalid for the destructive state', () => {
     const { getByRole } = render(
       <RadioGroup aria-label="Density">
