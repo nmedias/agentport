@@ -13,11 +13,11 @@ import { cn } from '@/lib/utils';
 //  focus · disabled · invalid, + checked-invalid). DS re-clothe:
 //   · rounded-full → corner-full — the DS radius vocabulary; all rounded-* are
 //     dead under the theme reset (§2/§6). Applies to the ring and the inner dot.
-//   · border-input + bg-input-background — the form-control border + (opaque)
+//   · border-input-border + bg-input-fill — the form-control border + (opaque)
 //     unchecked fill tokens (focus → ring).
-//   · data-checked:{border,bg}-primary + text-primary-foreground → primary tokens
-//     (brand accent for selection); the inner dot is bg-primary-foreground (the
-//     on-primary token) so it reads on the filled circle.
+//   · data-checked:{border,bg}-primary-fill + text-primary-ink → primary-fill
+//     tokens (dark filled circle for selection); the inner dot is bg-primary-ink
+//     (the on-primary-fill token) so it reads on the filled circle.
 //   · focus-visible:border-ring + ring-ring/50 ring-3 → ring-[3px] (match the
 //     Input focus convention; ring-3 ≈ 3px).
 //   · aria-invalid:border-destructive + ring-destructive/20 — ⚠ destructive is a
