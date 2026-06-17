@@ -74,7 +74,13 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     },
   },
   parameters: {
-    docs: { source: { type: 'code' } },
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A checkbox choice card — a `FieldLabel`-wrapped `Field` + `Checkbox`. The whole card tints on checked and dims on disabled via CSS `:has()`; the control carries focus + invalid (the `error` prop → `FieldError` + `data-invalid` + `aria-invalid`). See the **Default** story for the live playground + interaction test.',
+      },
+    },
   },
 };
 

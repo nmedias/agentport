@@ -78,7 +78,13 @@ const meta: Meta<typeof ChoiceCardSwitch> = {
     },
   },
   parameters: {
-    docs: { source: { type: 'code' } },
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A switch choice card — mirrors `ChoiceCardCheckbox` with a `Switch` control: the card tints on checked and dims on disabled via CSS `:has()`; the switch carries focus + invalid (the `error` prop → `FieldError` + `data-invalid` + `aria-invalid`). See the **Default** story for the live playground + interaction test.',
+      },
+    },
   },
 };
 
