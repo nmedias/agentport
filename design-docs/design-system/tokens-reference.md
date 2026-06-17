@@ -89,14 +89,14 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 ```yaml
 # Core surface + ink (Figma: shadcn Default/)
 - { token: surface,     css_var: --ap-sys-surface,     primitive: base/white,     value: "#ffffff", utilities: [bg-surface],          use: "App-Grundfläche.", note: "war: background" }
-- { token: ink,         css_var: --ap-sys-ink,         primitive: ink/900,        value: "#0d1016", utilities: [text-ink],            use: "Primärtext/-Icon (kein FRAME_FILL → keine Fläche; dunkle Fläche = inverse-fill).", note: "war: foreground" }
+- { token: ink,         css_var: --ap-sys-ink,         primitive: ink/900,        value: "#0d1016", utilities: [text-ink, "bg-ink¹/fill-ink¹"],  use: "Primärtext/-Icon. ¹SHAPE_FILL erlaubt → bg-ink/fill-ink NUR für Shape-/Marker-Fills, NICHT als Container-/Frame-Fläche (kein FRAME_FILL → dunkle Fläche = inverse-fill).", note: "war: foreground" }
 - { token: card,        css_var: --ap-sys-card,        primitive: ink/50,         value: "#f3f5fa", utilities: [bg-card],             use: "Erhabene/sekundäre Panel-Fläche." }
 - { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: ink/900,        value: "#0d1016", utilities: [text-card-ink],       use: "Text auf card.", note: "war: card-foreground" }
 - { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: ink/25,         value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Ruhige Chrome-Fläche.", note: "war: muted" }
 - { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: ink/500,        value: "#656971", utilities: [text-muted-ink],      use: "Sekundärtext.", note: "war: muted-foreground (neutral/600)" }
 
 # Primary / secondary / accent (Figma: shadcn Default/)
-- { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary], use: "Marken-Akzent (AA auf Weiß) als Text/Icon/Stroke; kein FRAME_FILL → Fläche = primary-fill.", note: "war: cyan/500 #0098da" }
+- { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary, "bg-primary¹/fill-primary¹"], use: "Marken-Akzent (AA auf Weiß) als Text/Icon/Stroke. ¹SHAPE_FILL erlaubt → bg-primary/fill-primary NUR für Shape-/Marker-Fills (in Figma ein Rechteck/Vektor, z. B. Command-Caret), NICHT als Container-/Frame-Fläche (kein FRAME_FILL → Fläche = primary-fill).", note: "war: cyan/500 #0098da" }
 - { token: primary-fill,   css_var: --ap-sys-primary-fill,   primitive: deep/900,   value: "#0d2531", utilities: [bg-primary-fill],  use: "Dunkle Primary-Fläche (Buttons).", note: "neu" }
 - { token: primary-ink,    css_var: --ap-sys-primary-ink,    primitive: signal/100, value: "#a4e5ff", utilities: [text-primary-ink], use: "Ink auf primary-fill.", note: "war: primary-foreground (weiß)" }
 - { token: secondary,      css_var: --ap-sys-secondary,      primitive: still/100,  value: "#bde4fd", utilities: [bg-secondary],     use: "Sekundär-Fläche.", note: "war Platzhalter #f5f5f5" }
@@ -156,6 +156,7 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 
 **Linien-Leiter (aufsteigend):** `border` (ink/75) < `border-emphasis` (ink/200) < `border-strong` (ink/300).
 **Primary-Modell (neu):** `primary` = Akzent-Ton (signal/600, AA-Text/Stroke) · `primary-fill` = dunkle Fläche (deep/900) + `primary-ink` (signal/100) als Text darauf.
+**SHAPE_FILL vs FRAME_FILL (`primary`, `ink`):** beide haben `SHAPE_FILL` aber **kein** `FRAME_FILL`. Heißt: `bg-primary`/`bg-ink` (bzw. `fill-*`) sind **gültig für Shape-/Marker-Fills** (in Figma ein Rechteck/Vektor — z. B. der Command-Caret `command.tsx`), aber **nicht** als Container-/Frame-Fläche. Container-Flächen = `primary-fill` bzw. `inverse-fill`.
 **Accent-Trio:** `accent-fill` (Tint) · `accent-ink` (Text darauf) · `accent-border` (Kante).
 **Status-Familie jetzt vorhanden:** `destructive` (error). `success`/`warning` existieren als Rampen (Charts), eigene Semantic-Tokens dafür noch tbd.
 
@@ -386,7 +387,7 @@ color_renames:
   - { stock: text-muted-foreground,          ds: text-muted-ink }
   - { stock: bg-accent,                      ds: bg-accent-fill }
   - { stock: text-accent-foreground,         ds: text-accent-ink }
-  - { stock: "bg-primary",                   ds: "bg-primary-fill  (dunkle Fläche; bg-primary GIBT ES NICHT — primary = Akzent text-/border-/ring-primary)" }
+  - { stock: "bg-primary (als Container-Fläche)", ds: "bg-primary-fill (dunkle Fläche). bg-primary bleibt gültig NUR als Shape-/Marker-Fill (SHAPE_FILL, kein FRAME_FILL) — z. B. Command-Caret" }
   - { stock: text-primary-foreground,        ds: text-primary-ink }
   - { stock: text-secondary-foreground,      ds: text-secondary-ink }
   - { stock: text-destructive-foreground,    ds: text-destructive-ink }
