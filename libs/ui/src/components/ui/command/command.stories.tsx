@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import {
   RiCalendarLine,
   RiEmotionLine,
@@ -28,23 +29,95 @@ import {
   CommandSeparator,
 } from './command';
 
-// Canonical usage set = the structurally-distinct, portable shadcn doc examples
-// (see run notes example-inventory). Visual showcases → controls disabled.
+// CONTRACT — cmdk command palette, re-clothed in DS tokens. MECHANISM: typing into the
+// input (role="combobox") drives cmdk's CLIENT-SIDE filter — non-matching CommandItems
+// unmount, the list re-sorts by match score, and CommandEmpty surfaces when nothing
+// matches (filtered.count === 0). Arrow keys move the active option (aria-selected). A
+// CommandGroup's heading tracks ITS items (hidden when its group is empty); a labeled
+// CommandSeparator is scope-less. WHEN: the inline Command renders in canvas; CommandDialog
+// portals to document.body (Radix) — play queries the palette inside it via
+// within(document.body). The `variant="palette"` axis (root only, flows to Input/List/
+// Group/Separator via context) re-shapes the surface into the Agentport terminal palette.
 const meta: Meta<typeof Command> = {
   title: 'UI/Command',
   component: Command,
   tags: ['autodocs'],
-  parameters: { controls: { disable: true } },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
+  // ComponentProps<typeof CommandPrimitive> & VariantProps<…> intersection, so the
+  // Command-root public API (cmdk props + the DS `variant`) is documented here by hand.
+  argTypes: {
+    variant: {
+      control: 'inline-radio',
+      options: ['default', 'palette'],
+      description:
+        'DS surface variant. `default` is the elevated overlay panel; `palette` is the full-bleed Agentport terminal palette (set on the root only, flows to Input/List/Group/Separator via context).',
+      table: {
+        type: { summary: '"default" | "palette"' },
+        defaultValue: { summary: '"default"' },
+      },
+    },
+    label: {
+      control: 'text',
+      description:
+        'Accessible label for the command menu (cmdk renders it visually hidden). Not shown.',
+      table: { type: { summary: 'string' } },
+    },
+    shouldFilter: {
+      control: 'boolean',
+      description:
+        'Whether cmdk filters + sorts items by the search query. Set `false` to render valid items yourself (server-side / async search).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+    loop: {
+      control: 'boolean',
+      description: 'Loop arrow-key navigation around the ends of the list.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    value: {
+      control: 'text',
+      description: 'Controlled value of the active item (pair with `onValueChange`).',
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      control: 'text',
+      description: 'Active item value when uncontrolled.',
+      table: { type: { summary: 'string' } },
+    },
+    onValueChange: {
+      control: false,
+      description: 'Called when the active item changes.',
+      table: { type: { summary: '(value: string) => void' } },
+    },
+    filter: {
+      control: false,
+      description:
+        'Custom match function `(value, search, keywords) => number` (0 hidden … 1 best). Defaults to command-score.',
+      table: { type: { summary: '(value: string, search: string, keywords?: string[]) => number' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A command palette built on **cmdk** with **client-side filtering**: typing in the input filters and re-sorts the list, and **`CommandEmpty`** surfaces when nothing matches. Compose `CommandInput` + `CommandList` with `CommandGroup`/`CommandItem`/`CommandSeparator`/`CommandShortcut`; **`CommandDialog`** portals the same palette into a modal (the Agentport ⌘K). The **`variant="palette"`** axis re-shapes the surface — see the **Palette** and **PaletteInDialog** stories.',
+      },
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Command>;
 
-// Hero: the command palette — search input + scrollable list with two grouped
-// sections, icons, a disabled item, a separator, and trailing keyboard shortcuts.
+// Default — the API playground: render spreads {...args} onto a COMPLETE canonical palette
+// (input + two grouped sections, icons, a disabled item, a separator, trailing shortcuts),
+// so every meta argType is a live control AND an ArgsTable row. INTERACTIVE → the play types
+// into the input and asserts cmdk's client-side filter: the matching item stays, the
+// non-matching one unmounts; clearing the query restores the full list. No controls.include
+// (it would filter the table too).
 export const Default: Story = {
-  render: () => (
-    <Command className="w-[450px]">
+  render: (args) => (
+    <Command {...args} className="w-[450px]">
       <CommandInput placeholder="Type a command or search…" />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
@@ -83,6 +156,26 @@ export const Default: Story = {
       </CommandList>
     </Command>
   ),
+  play: async ({ canvas, step }) => {
+    // cmdk's input is role="combobox"; items are role="option".
+    const input = canvas.getByRole('combobox');
+
+    await step('typing a query filters the list to the matching item', async () => {
+      await userEvent.type(input, 'Profile');
+      await expect(
+        await canvas.findByRole('option', { name: /profile/i })
+      ).toBeInTheDocument();
+      // Non-matching items unmount (cmdk returns null below its match threshold).
+      await expect(canvas.queryByRole('option', { name: /calendar/i })).toBeNull();
+    });
+
+    await step('clearing the query restores the full list', async () => {
+      await userEvent.clear(input);
+      await expect(
+        await canvas.findByRole('option', { name: /calendar/i })
+      ).toBeInTheDocument();
+    });
+  },
 };
 
 // The command-dialog doc example: the same palette inside a CommandDialog,
@@ -153,7 +246,28 @@ function CommandDialogDemo() {
 }
 
 export const InDialog: Story = {
+  parameters: { controls: { disable: true } },
   render: () => <CommandDialogDemo />,
+  play: async ({ step }) => {
+    // CommandDialog portals to document.body (Radix), OUTSIDE the story canvas — so the
+    // palette is queried via within(document.body), not `canvas`. It starts open.
+    const body = within(document.body);
+    const input = await body.findByRole('combobox');
+
+    await step('the portalled palette filters as you type', async () => {
+      await userEvent.type(input, 'Profile');
+      await expect(
+        await body.findByRole('option', { name: /profile/i })
+      ).toBeInTheDocument();
+      await expect(body.queryByRole('option', { name: /calendar/i })).toBeNull();
+    });
+
+    await step('a non-matching query surfaces the empty state', async () => {
+      await userEvent.clear(input);
+      await userEvent.type(input, 'zxcvbnm');
+      await expect(await body.findByText('No results found.')).toBeInTheDocument();
+    });
+  },
 };
 
 // Shared palette list content — mirrors the Figma "Example · palette-demo" (3650:63):
@@ -212,6 +326,7 @@ function PaletteListContent() {
 // One switch point: variant="palette" on the root, everything else adapts via context.
 // The trailing CommandSeparator is the footer divider from the Figma composition.
 export const Palette: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Command variant="palette" className="w-[720px]">
       <CommandInput placeholder="type a command, jump or search" />
@@ -264,6 +379,7 @@ function PaletteDialogDemo() {
 }
 
 export const PaletteInDialog: Story = {
+  parameters: { controls: { disable: true } },
   render: () => <PaletteDialogDemo />,
 };
 
@@ -274,6 +390,7 @@ export const PaletteInDialog: Story = {
 // item scope — prefer groups for searchable palettes, labeled separators for
 // static/composed lists.
 export const PaletteFlat: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Command variant="palette" className="w-[720px]">
       <CommandInput placeholder="type a command, jump or search" />
@@ -304,6 +421,7 @@ export const PaletteFlat: Story = {
 // of the list. (Controlled `value` on the input freezes the palette on the no-results
 // frame for a static visual.)
 export const Empty: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Command className="w-[450px]">
       <CommandInput placeholder="Type a command or search…" value="zxcvbnm" />
