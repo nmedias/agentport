@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 import {
   RiSearchLine,
   RiMailLine,
@@ -21,51 +22,110 @@ import {
   InputGroupTextarea,
 } from './input-group';
 import { Kbd } from '@/components/ui/kbd';
+import { Field, FieldLabel } from '@/components/ui/field';
 
-// Canonical usage set = the structurally-distinct, portable shadcn doc examples
-// (see run notes example-inventory). Composition showcases → controls disabled.
+// InputGroup contract — a composite shell, NOT "an input with addons":
+//  · MECHANISM: the GROUP <div role="group"> owns the surface (bg-input-fill +
+//    border-input-border + radius); the control inside goes borderless
+//    (InputGroupInput/-Textarea carry data-slot="input-group-control"), and
+//    InputGroupAddon slots sit beside/around it. `align` places an addon
+//    inline-start/-end (left/right of the control) or block-start/-end (the group
+//    stacks vertically — a toolbar above/below a textarea).
+//  · WHEN focus: the group does NOT own focus — the inner control does. The ring
+//    bubbles UP via `has-[…control:focus-visible]` on the group (border-ring +
+//    ring-ring/50), so focusing the input lights the whole shell. invalid/disabled
+//    bubble the same way (aria-invalid on a child → destructive border+ring;
+//    :disabled → opacity-50). Forcing the ring statically = focusVisible on the
+//    inner input id (the addon's own focus is not what the group keys on).
+//  · Addons are inert chrome: clicking an addon (that isn't a button) refocuses the
+//    input; InputGroupButton nests a real DS Button at a mapped size.
 const meta: Meta<typeof InputGroup> = {
   title: 'UI/InputGroup',
   component: InputGroup,
   tags: ['autodocs'],
-  parameters: { controls: { disable: true } },
+  args: {},
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
+  // ComponentProps<'div'> the root spreads, so the public API is documented here by
+  // hand. The root is a passthrough <div role="group"> (no variant axis); composition
+  // happens through the InputGroupAddon/-Input/-Button children, not root props.
+  argTypes: {
+    children: {
+      control: false,
+      description:
+        'The control + addons — InputGroupInput / InputGroupTextarea plus one or more InputGroupAddon (each `align`ed inline/block).',
+      table: { type: { summary: 'React.ReactNode' } },
+    },
+    className: {
+      control: 'text',
+      description: 'Extra classes merged onto the group shell (sizing, overrides).',
+      table: { type: { summary: 'string' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A composite input shell — the **group** owns the surface, border and focus/invalid/disabled treatment, the control inside goes **borderless**, and **`InputGroupAddon`** slots sit around it (`align`: inline-start/-end beside the control, or block-start/-end as a toolbar above/below a textarea). Focus bubbles up from the inner control (see **States**); compose adornments per the **Icons** / **Buttons** / **Text** stories.',
+      },
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof InputGroup>;
 
-// Hero: leading search icon + borderless input. The group owns the border + focus ring.
+// Default — the API playground. render spreads {...args} into a COMPLETE canonical
+// group (borderless input + a leading search addon), so the ArgsTable documents the
+// root props while the 'code' snippet stays a real example. play drives the inner
+// input like a user (query the textbox by its accessible name) and asserts the value.
 export const Default: Story = {
-  render: () => (
+  render: (args) => (
     <div className="w-80">
-      <InputGroup>
-        <InputGroupInput placeholder="Search…" />
+      <InputGroup {...args}>
+        <InputGroupInput aria-label="Search" placeholder="Search…" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
       </InputGroup>
     </div>
   ),
+  play: async ({ canvas, step }) => {
+    const input = canvas.getByRole('textbox', { name: /search/i });
+
+    await step('typing updates the inner control value', async () => {
+      await userEvent.type(input, 'documents');
+      await expect(input).toHaveValue('documents');
+    });
+
+    // userEvent.type leaves the input focused (→ the group's :focus-visible ring);
+    // blur() drops it so the end state matches a real mouse user (no lingering ring).
+    await step('blurring clears the focus', async () => {
+      input.blur();
+      await expect(input).not.toHaveFocus();
+    });
+  },
 };
 
-// Icon addon placements — inline-start, inline-end, both, and two icons in one addon.
+// Usage — icon addon placements: inline-start, inline-end, both, and two icons in one addon.
 export const Icons: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-80 gap-6">
+    <div className="grid w-80 gap-2xl">
       <InputGroup>
-        <InputGroupInput placeholder="Search…" />
+        <InputGroupInput aria-label="Search" placeholder="Search…" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput type="email" placeholder="Enter your email" />
+        <InputGroupInput aria-label="Email" type="email" placeholder="Enter your email" />
         <InputGroupAddon align="inline-end">
           <RiMailLine />
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="Card number" />
+        <InputGroupInput aria-label="Card number" placeholder="Card number" />
         <InputGroupAddon>
           <RiBankCardLine />
         </InputGroupAddon>
@@ -74,7 +134,7 @@ export const Icons: Story = {
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="Card number" />
+        <InputGroupInput aria-label="Card number, validated" placeholder="Card number" />
         <InputGroupAddon align="inline-end">
           <RiStarLine />
           <RiCheckLine />
@@ -84,15 +144,16 @@ export const Icons: Story = {
   ),
 };
 
-// Text addons — prefix/suffix labels (currency, URL scheme/TLD, domain suffix).
+// Usage — text addons: prefix/suffix labels (currency, URL scheme/TLD, domain suffix).
 export const Text: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-80 gap-6">
+    <div className="grid w-80 gap-2xl">
       <InputGroup>
         <InputGroupAddon>
           <InputGroupText>$</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="0.00" />
+        <InputGroupInput aria-label="Amount" placeholder="0.00" />
         <InputGroupAddon align="inline-end">
           <InputGroupText>USD</InputGroupText>
         </InputGroupAddon>
@@ -101,13 +162,13 @@ export const Text: Story = {
         <InputGroupAddon>
           <InputGroupText>https://</InputGroupText>
         </InputGroupAddon>
-        <InputGroupInput placeholder="example.com" />
+        <InputGroupInput aria-label="Website host" placeholder="example.com" />
         <InputGroupAddon align="inline-end">
           <InputGroupText>.com</InputGroupText>
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="username" />
+        <InputGroupInput aria-label="Username" placeholder="username" />
         <InputGroupAddon align="inline-end">
           <InputGroupText>@company.com</InputGroupText>
         </InputGroupAddon>
@@ -116,13 +177,31 @@ export const Text: Story = {
   ),
 };
 
-// Keyboard-shortcut hint — leading icon + trailing Kbd group (quiet `low` emphasis).
+// Usage — labelled field: FieldLabel (htmlFor) above the group; the htmlFor↔id link
+// gives the inner input its accessible name (no aria-label needed in this composition).
+export const WithLabel: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Field className="w-80">
+      <FieldLabel htmlFor="search">Schema</FieldLabel>
+      <InputGroup>
+        <InputGroupInput id="search" placeholder="Search…" />
+        <InputGroupAddon>
+          <RiSearchLine />
+        </InputGroupAddon>
+      </InputGroup>
+    </Field>
+  ),
+};
+
+// Usage — keyboard-shortcut hint: leading icon + a trailing Kbd group (quiet `low` emphasis).
 export const Kbd_: Story = {
   name: 'Kbd',
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-80">
       <InputGroup>
-        <InputGroupInput placeholder="Search…" />
+        <InputGroupInput aria-label="Search" placeholder="Search…" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
@@ -137,34 +216,40 @@ export const Kbd_: Story = {
   ),
 };
 
-// Trailing action buttons — icon button (copy) and a text button (search).
+// Usage — trailing action buttons: an icon button (copy) and a text button (search).
 export const Buttons: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
-      <div className="grid w-80 gap-6">
-        <InputGroup>
-          <InputGroupInput placeholder="https://x.com/shadcn" readOnly/>
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton aria-label="Copy" title="Copy" size="icon-sm">
-              <RiFileCopyLine/>
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-        <InputGroup>
-          <InputGroupInput placeholder="Type to search…"/>
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton size="xs" variant={"default"}>Search</InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-      </div>
+    <div className="grid w-80 gap-2xl">
+      <InputGroup>
+        <InputGroupInput aria-label="Share link" placeholder="https://x.com/shadcn" readOnly />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton aria-label="Copy" title="Copy" size="icon-sm">
+            <RiFileCopyLine />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput aria-label="Search query" placeholder="Type to search…" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton size="xs" variant="default">
+            Search
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
   ),
 };
 
-// Textarea with block-aligned toolbars — the group stacks vertically; addons get borders.
+// Usage — textarea with block-aligned toolbars: the group stacks vertically; the
+// block-start/-end addons span full width and carry their own dividing border.
 export const Textarea: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-96">
       <InputGroup>
         <InputGroupTextarea
+          aria-label="Code"
           placeholder="console.log('Hello, world!');"
           className="min-h-[160px]"
         />
@@ -191,12 +276,25 @@ export const Textarea: Story = {
   ),
 };
 
-// Container states — default / disabled / invalid (focus is an interaction state).
+// States gallery — the real axis is the SHELL state bubbled up from the inner control:
+// default / focus / disabled / invalid. focus can't be set by a prop, so the focus row's
+// inner input is forced :focus-visible via the pseudo addon (the group keys on the
+// control's focus, not the addon's), making the group's focus ring visible statically.
 export const States: Story = {
+  parameters: {
+    controls: { disable: true },
+    pseudo: { focusVisible: ['#st-focus'] },
+  },
   render: () => (
-    <div className="grid w-80 gap-6">
+    <div className="grid w-80 gap-2xl">
       <InputGroup>
         <InputGroupInput aria-label="Default" placeholder="Default" />
+        <InputGroupAddon>
+          <RiSearchLine />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput id="st-focus" aria-label="Focus" placeholder="Focus" />
         <InputGroupAddon>
           <RiSearchLine />
         </InputGroupAddon>
