@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 import { Button } from '../button';
 import {
@@ -13,15 +13,66 @@ import {
   DialogTrigger,
 } from './dialog';
 
-// Canonical usage set = the structurally-distinct, portable shadcn doc examples
-// (see run notes example-inventory). "With Form" is kept structurally but without
-// its Field/FieldLabel rows (not ported); "Chat Settings" is skipped entirely
-// (Tabs/Select/Switch/Checkbox not ported). Render-only showcases → controls off.
+// Dialog contract — Radix Dialog, NOT just "a modal":
+//  · DialogContent portals to document.body (DialogPortal) — so the panel is OUTSIDE the
+//    story canvas. Plays MUST query it via within(document.body), never `canvas`; only the
+//    DialogTrigger lives in canvas.
+//  · A DialogOverlay (bg-scrim) sits under the panel; the panel grids header/body/footer and
+//    carries a focus trap while open.
+//  · Dismiss paths: the corner X (showCloseButton, a DialogClose), any DialogClose in the
+//    footer, the Escape key, or an overlay click. Each flips the root closed and unmounts the
+//    portal (queryByRole('dialog') → null).
+//  · a11y: role="dialog"; DialogTitle sets aria-labelledby and DialogDescription sets
+//    aria-describedby — a Title is REQUIRED for the accessible name (axe gate). Keep one per
+//    DialogContent.
+//
+// Canonical usage set = the structurally-distinct, portable shadcn doc examples (see run
+// notes example-inventory). "With Form" is kept structurally but without its Field/FieldLabel
+// rows (not ported); "Chat Settings" is skipped entirely (Tabs/Select/Switch/Checkbox not
+// ported). Render-only showcases → controls off.
 const meta: Meta<typeof Dialog> = {
   title: 'UI/Dialog',
   component: Dialog,
   tags: ['autodocs'],
-  parameters: { controls: { disable: true } },
+  args: {
+    modal: true,
+  },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the Radix
+  // DialogPrimitive.Root prop types through ComponentProps, so the public root API is
+  // documented here by hand (same approach as the other ports).
+  argTypes: {
+    open: {
+      control: 'boolean',
+      description:
+        'Controlled open state (pair with `onOpenChange`). Leave unset for an uncontrolled dialog driven by the trigger.',
+      table: { type: { summary: 'boolean' } },
+    },
+    defaultOpen: {
+      control: 'boolean',
+      description: 'Open state when uncontrolled — `true` renders the dialog open on mount.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onOpenChange: {
+      control: false,
+      description: 'Called with the next open state whenever the dialog opens or closes.',
+      table: { type: { summary: '(open: boolean) => void' } },
+    },
+    modal: {
+      control: 'boolean',
+      description:
+        'When `true` (default) the overlay blocks pointer events and traps focus; `false` lets the rest of the page stay interactive.',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A Radix Dialog: the `DialogContent` **portals to `document.body`** (so tests query it via `within(document.body)`, not the canvas), draws an overlay scrim, and traps focus while open. Dismiss via the corner close, a footer `DialogClose`, **Escape**, or an overlay click. A `DialogTitle` is required for the accessible name — see the **Default** story for the canonical open→close flow.',
+      },
+    },
+  },
 };
 
 export default meta;
@@ -37,12 +88,13 @@ const loremParagraphs = Array.from({ length: 10 }).map((_, index) => (
   </p>
 ));
 
-// Hero: trigger-driven dialog with header + two-action footer (Cancel/Save) —
-// the doc "With Form" example minus its un-ported Field rows. The play function
-// drives the canonical flow: open via trigger, assert the dialog is shown.
+// Default — API playground: a complete trigger-driven dialog (header + two-action footer),
+// the doc "With Form" example minus its un-ported Field rows. render spreads {...args} into the
+// root so open/defaultOpen/modal are live controls AND ArgsTable rows (no controls.include — it
+// would also filter the table). The play drives the canonical flow against the PORTAL.
 export const Default: Story = {
-  render: () => (
-    <Dialog>
+  render: (args) => (
+    <Dialog {...args}>
       <DialogTrigger asChild>
         <Button variant="outline">Edit Profile</Button>
       </DialogTrigger>
@@ -63,17 +115,90 @@ export const Default: Story = {
       </DialogContent>
     </Dialog>
   ),
-  play: async ({ canvas, userEvent }) => {
-    // the dialog itself portals outside the canvas — assert via the trigger state
-    const trigger = canvas.getByRole('button', { name: 'Edit Profile' });
-    await userEvent.click(trigger);
-    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  play: async ({ canvas, step }) => {
+    // The DialogContent portals to document.body, so it is NOT inside `canvas` — only the
+    // trigger is. Open from canvas, then assert/dismiss against within(document.body).
+    const body = within(document.body);
+
+    await step('opens from the trigger', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Edit Profile' }));
+      const dialog = await body.findByRole('dialog');
+      // Radix plays an open animation (fade-in-0 → opacity 0 at t=0), so poll until the panel
+      // has finished animating in before asserting visibility (real browser, unlike jsdom).
+      await waitFor(() => expect(dialog).toBeVisible());
+      // Title is the accessible name (aria-labelledby) → axe-clean dialog.
+      await expect(body.getByText('Edit profile')).toBeVisible();
+    });
+
+    await step('Escape dismisses it and unmounts the portal', async () => {
+      await userEvent.keyboard('{Escape}');
+      // The exit animation keeps the portal mounted briefly → poll until it unmounts.
+      await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    });
   },
 };
 
-// Long body content scrolling inside the panel; no footer. The scroll region
-// bleeds through the panel padding (negative margins) and hides its scrollbar.
+// Basic confirm — the smallest real dialog: header + a single Cancel close, no destructive
+// intent. The corner X and Escape both dismiss it too.
+export const BasicConfirm: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Show dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you sure?</DialogTitle>
+          <DialogDescription>
+            This action confirms your current selection. You can change it
+            again later.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button>Confirm</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+// Destructive confirm — same shape, but the primary action is a `destructive` button: the
+// guarded "delete" pattern. Cancel stays the safe default; the irreversible action is red.
+export const DestructiveConfirm: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="destructive">Delete project</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete this project?</DialogTitle>
+          <DialogDescription>
+            This permanently removes the project and all of its data. This
+            action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button variant="destructive">Delete project</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+// Long body content scrolling inside the panel; no footer. The scroll region bleeds through
+// the panel padding (negative margins) and hides its scrollbar. defaultOpen shows the
+// scrolling state at a glance.
 export const ScrollableContent: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Dialog defaultOpen>
       <DialogTrigger asChild>
@@ -99,6 +224,7 @@ export const ScrollableContent: Story = {
 
 // Scrollable body + footer: the footer band stays fixed below the scroll region.
 export const StickyFooter: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Dialog defaultOpen>
       <DialogTrigger asChild>
@@ -127,8 +253,9 @@ export const StickyFooter: Story = {
   ),
 };
 
-// showCloseButton={false}: no X in the corner — closing runs through the footer.
+// showCloseButton={false}: no X in the corner — closing runs through the footer (or Escape).
 export const NoCloseButton: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <Dialog defaultOpen>
       <DialogTrigger asChild>
