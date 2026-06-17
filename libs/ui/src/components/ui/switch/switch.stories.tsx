@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 
 import { Switch } from './switch';
 import {
@@ -11,15 +11,23 @@ import {
   FieldLabel,
 } from '../field';
 
-// Usage examples mirror ui.shadcn.com/docs/components/radix/switch, which composes the
-// switch with the ported Field family — label leads, switch trails (FieldLabel's
-// flex-auto pushes the control to the right edge). Skipped: the "RTL" locale demo.
-// The clickable Choice Card lives in its own DS component (UI/ChoiceCards/ChoiceCardSwitch).
+// Switch contract — a Radix Root[role=switch] (data-slot="switch") whose track + thumb are
+// pure CSS, not props:
+//  · data-checked tints the track primary-fill and slides the thumb (translate-x); data-unchecked
+//    paints input-fill-high. focus-visible adds the border-ring + 3px ring; aria-invalid sets the
+//    destructive border (+ destructive track when checked), with the red ring focus-gated. disabled
+//    dims via data-disabled. AllStates forces focus statically via the pseudo addon.
+//  · size is a manual code prop (sm | default) → data-[size] geometry on track + thumb.
+// Usage examples mirror ui.shadcn.com/docs/components/radix/switch, which composes the switch with
+// the ported Field family — label leads, switch trails (FieldLabel's flex-auto pushes the control to
+// the right edge). Skipped: the "RTL" locale demo. The clickable Choice Card lives in its own DS
+// component (UI/ChoiceCards/ChoiceCardSwitch).
 const meta: Meta<typeof Switch> = {
   title: 'UI/Switch',
   component: Switch,
   tags: ['autodocs'],
-  args: { checked: true, disabled: false, size: 'default' },
+  // onCheckedChange is an fn() spy so Default's play can assert the toggle fired (button pattern).
+  args: { checked: true, disabled: false, size: 'default', onCheckedChange: fn() },
   // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
   // `ComponentProps<typeof SwitchPrimitive.Root>` (a Radix type reference), so the public
   // API is documented here by hand. Interactive stories scope their panel via controls.include.
@@ -67,7 +75,13 @@ const meta: Meta<typeof Switch> = {
     },
   },
   parameters: {
-    docs: { source: { type: 'code' } },
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'The DS switch — a Radix `role="switch"` toggle whose track + thumb are pure CSS state (`data-checked` tints the track and slides the thumb, `aria-invalid` paints destructive, focus adds the ring). `size` (`sm` | `default`) sets the geometry. Compose with the **Field** family for a label (see **Airplane Mode**); the clickable card variant lives in **ChoiceCardSwitch**.',
+      },
+    },
   },
 };
 
@@ -77,10 +91,27 @@ type Story = StoryObj<typeof Switch>;
 // Bare switch — the API playground. Renders <Switch {...args} />, so every prop documented
 // in the meta argTypes shows in the ArgsTable AND as a live control (no controls.include —
 // that would also filter the table). aria-label gives the otherwise-bare control an
-// accessible name (in real usage a Field/Label supplies it). The Field-composed examples
-// live in the stories below.
+// accessible name (in real usage a Field/Label supplies it). play drives a real click and
+// asserts onCheckedChange (the fn() spy in meta args) fired — args.checked is controlled, so
+// the visible toggle is exercised by AirplaneMode's uncontrolled instance below. The
+// Field-composed examples live in the stories below.
 export const Default: Story = {
   render: (args) => <Switch aria-label="Switch" {...args} />,
+  play: async ({ canvas, args, step }) => {
+    const toggle = canvas.getByRole('switch', { name: /switch/i });
+
+    await step('clicking fires onCheckedChange', async () => {
+      await userEvent.click(toggle);
+      await expect(args.onCheckedChange).toHaveBeenCalledTimes(1);
+    });
+
+    // userEvent.click leaves the switch programmatically focused (→ :focus-visible ring);
+    // blur() drops it so the end state matches a real mouse user (no lingering ring).
+    await step('blurring clears the focus', async () => {
+      toggle.blur();
+      await expect(toggle).not.toHaveFocus();
+    });
+  },
 };
 
 // docs "Airplane Mode" (basic): a labeled switch in a horizontal Field.
