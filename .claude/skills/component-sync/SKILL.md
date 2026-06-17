@@ -34,7 +34,7 @@ Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before a
 S1 Locate   resolve the set .<Component> by NAME + the code file components/ui/<name>/<name>.tsx
 S2 Read     live per-member bindings/values (snippets/read-set-values.js): fills/strokes/text-style/radius/padding/effect/opacity/auto-layout
 S3 Diff     bound var → DS utility (§6 crosswalk, authoritative); use/avoid only for raw/wrong bindings → delta list
-S4 Apply    edit the code to the delta only (+ stories/spec if a variant/state was added/removed); token-faithful
+S4 Apply    edit the code to the delta only (variant/state change → reconcile stories per /storybook-rules); token-faithful
 S5 Gate     nx test|typecheck|lint @agentport/ui green; DS typo class survives markup; storybook MCP up (:6006) → preview-stories, surface URLs
 S6 Notes    delta + DEVIATIONS (code ≠ Figma binding) + auto-layout/variant changes → agent-runs notes.md
 ```
@@ -75,8 +75,9 @@ Ignore Figma-only helper layers.
 ### S4 — Apply
 
 Edit `<name>.tsx` to the delta, token-faithful — **no opportunistic rewrites**. If the set gained/lost
-a variant or state, mirror it in `.stories.tsx` (+ a `.spec.tsx` guard if relevant). Keep the
-structure; change only what the diff demands.
+a variant or state, reconcile the stories **per `/storybook-rules` (update mode)** — every
+variant×size/state in ≥1 story, an overview story if none exercises it (+ a `.spec.tsx` guard if
+relevant). Keep the structure; change only what the diff demands.
 
 ### S5 — Gate
 

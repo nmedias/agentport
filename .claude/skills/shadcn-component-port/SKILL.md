@@ -40,7 +40,7 @@ slots / properties / auto-layout only.
 ```
 T1   Setup     cn() carries the text-format + named-spacing twMerge extensions (one-time)
 T2   Anatomy   land the stock source locally → variant axes/slots + every stock class string
-T2.5 Stories   shadcn doc usage-examples → Storybook stories, BEFORE Figma (the canonical usage set)
+T2.5 Stories   shadcn doc usage-examples → Storybook stories (author per /storybook-rules), BEFORE Figma
 T3   Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
 T4   Figma     token-bound set: full matrix, sorted grid, in a Section (recipes → figma-build.md)
 T5   Verify    controls live · /figma-verify CLEAN · build every story as a permanent example + verify (token/values/px)
@@ -103,20 +103,19 @@ T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
 
 ### T2.5 — Usage-examples → Stories (before Figma)
 
-Always author the canonical usage set as Storybook stories **before** building Figma, so Figma
-reproduces real usages — not just the variant matrix. Stories run against the T2-landed `ui:add`
-source (working shadcn code); T6 only re-clothes the look to DS tokens, the stories stay.
+Author the canonical usage set as Storybook stories **before** building Figma, so Figma reproduces real
+usages — not just the variant matrix. Stories run against the T2-landed `ui:add` source (working shadcn
+code); T6 only re-clothes the look to DS tokens, the stories stay. **Write them to the house pattern via
+`/storybook-rules`** (the three story roles, hand-curated argTypes, `play` tests, a11y, the storybook-MCP
+workflow); this section governs only WHICH examples to port.
 
 - **Source:** `ui.shadcn.com/docs/components/<x>` (else `get_item_examples_from_registries`, `query`
   required). **All structurally distinct** examples, deduped — not every prop permutation.
-- **Reproduce each example's ACTUAL composition**, not a simplified layout: build it from the
-  already-ported DS composition/layout primitives the doc uses (e.g. a field/form-field family for form
-  controls), never a hand-rolled `div`+label. "Mirror an existing `.stories.tsx`" is for the CSF/meta
-  boilerplate only — not the example composition.
-- **Write each as a story:** if the `storybook` MCP is up (:6006) `get-storybook-story-instructions`
-  first (canonical CSF/imports), write, then `preview-stories` → surface every URL.
+- **Reproduce each example's ACTUAL composition** — the already-ported DS primitives the doc uses (a
+  field/form-field family for form controls), per `/storybook-rules` (Usage-examples role). Never a
+  simplified layout.
 - **Skip-rule:** an example needing a **not-yet-ported** component → skip + log in `notes.md` (example
-  name, missing dep). Don't stub, don't co-port. Confirm the composition primitive is genuinely
+  name, missing dep). Don't stub, don't co-port. Confirm the primitive is genuinely
   un-ported *before* simplifying — a ported one must be used, not hand-rolled around.
 - Output: the story-set = the canonical usage set. T5 verifies the Figma component against it **and**
   reproduces it as a **permanent Usage-Examples instance group** in the Section — **every port**, not
@@ -179,21 +178,16 @@ Three checks on the built set, in order — **functional → clean → faithful*
 Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export the folder in
 `libs/ui/src/index.ts` if new. Icons = `@remixicon/react`.
 
-- **Stories**: = the T2.5 usage-example set (already written, now running on DS tokens). Ensure every
-  variant×size/state still appears in ≥1 story — add an overview story if the examples don't exercise
-  them all. **Interactive component** → add a `play` interaction test (`storybook/test`: `userEvent` +
-  `expect`, role/label queries; runs as a browser test in the gate). Rendered-output check: `npm run shoot
-  -- <storyId>` screenshots a **running** Storybook → eyeball it yourself; also `preview-stories` → surface
-  every URL. (The lint/typecheck gate + `/figma-verify` don't see the render.)
+- **Stories**: the T2.5 usage-example set, now running on DS tokens. **Reconcile them per
+  `/storybook-rules`** (coverage: every variant×size/state in ≥1 story, overview story if the examples
+  miss any; a `play` test for interactive components; the `shoot` / `preview-stories` rendered-output
+  check). Neither the gate nor `/figma-verify` sees the render — eyeball it.
 - **Headless lib** (e.g. Radix, cmdk): components that touch any browser API jsdom doesn't implement on
   mount (e.g. `ResizeObserver`, `Element.prototype.scrollIntoView`, `matchMedia`, …) need a stub/polyfill
   in the vitest `setupFile` — **once per lib**, else **jsdom specs** can't
   render them. The `storybook` browser project runs in real Chromium → needs no polyfill.
-- **No dead controls**: render-only stories ignore args → `parameters: { controls: { disable: true } }`;
-  elsewhere expose only the relevant ones (`controls: { include: [...] }`).
-- **Gate**: `npx nx test|typecheck|lint @agentport/ui` green. `nx test` runs **two Vitest projects** —
-  jsdom `.spec` units **and** the `storybook` browser project (every story rendered in Chromium via
-  `@storybook/addon-vitest` + axe a11y), so a story that throws/regresses fails the gate. 
+- **Gate**: `npx nx test|typecheck|lint @agentport/ui` green — two Vitest projects (jsdom `.spec` units +
+  the `storybook` browser project, Chromium + axe); a story that throws/regresses fails it.
 
 ### T7 — Notes + Catalog
 

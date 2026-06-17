@@ -153,6 +153,8 @@ Installed under `.claude/skills/` (project-local).
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
 - Both share the data source `design-docs/design-system/tokens-reference.md`.
+- `/storybook-rules` — author or update a component's `.stories.tsx` to the house pattern. 
+  Story craft only — not Figma, not the component code. 
 
 **Figma helpers:**
 - `/figma-status` — check Figma Desktop + Plugin MCP connection.
