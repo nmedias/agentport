@@ -10,6 +10,9 @@
    shadcn's default dark is disabled for now so Light=Figma doesn't mix with
    Dark=shadcn-neutral. Re-enable once dark tokens exist
    (`--background-fixed` must then be excluded).
+   NOTE: the --ap-sys-* names below are PRE-rework (background/foreground/
+   -foreground); rewrite to the new -fill/-ink/-border leaves (surface/ink/…)
+   from the Figma dark mode when it exists.
 .dark {
   --ap-sys-background: oklch(0.145 0 0);
   --ap-sys-foreground: oklch(0.985 0 0);
@@ -65,53 +68,75 @@
   --color-current: currentColor;
   --color-white: var(--ap-color-base-white);
 
-  /* Color */
-  --color-background: var(--ap-sys-background);
-  --color-foreground: var(--ap-sys-foreground);
-  --color-card: var(--ap-sys-card);
-  --color-card-foreground: var(--ap-sys-card-foreground);
-  --color-popover: var(--ap-sys-popover);
-  --color-popover-foreground: var(--ap-sys-popover-foreground);
-  --color-primary: var(--ap-sys-primary);
-  --color-primary-foreground: var(--ap-sys-primary-foreground);
-  --color-secondary: var(--ap-sys-secondary);
-  --color-secondary-foreground: var(--ap-sys-secondary-foreground);
-  --color-muted: var(--ap-sys-muted);
-  --color-muted-foreground: var(--ap-sys-muted-foreground);
-  --color-accent: var(--ap-sys-accent);
-  --color-accent-foreground: var(--ap-sys-accent-foreground);
-  --color-destructive: var(--ap-sys-destructive);
-  --color-border: var(--ap-sys-border);
-  --color-input: var(--ap-sys-input);
-  --color-ring: var(--ap-sys-ring);
+  /* Color — keys follow the Figma leaf names (2026-06-17 -fill/-ink/-border
+     rework). New utilities: bg-surface, text-ink, bg-muted-fill,
+     text-muted-ink, bg-accent-fill, text-accent-ink, border-accent-border,
+     bg-primary-fill, text-primary-ink, border-input-border, … */
 
-  --color-sidebar: var(--ap-sys-sidebar);
-  --color-sidebar-foreground: var(--ap-sys-sidebar-foreground);
-  --color-sidebar-primary: var(--ap-sys-sidebar-primary);
-  --color-sidebar-primary-foreground: var(--ap-sys-sidebar-primary-foreground);
-  --color-sidebar-accent: var(--ap-sys-sidebar-accent);
-  --color-sidebar-accent-foreground: var(--ap-sys-sidebar-accent-foreground);
+  /* Core surface + ink */
+  --color-surface: var(--ap-sys-surface);
+  --color-ink: var(--ap-sys-ink);
+  --color-card: var(--ap-sys-card);
+  --color-card-ink: var(--ap-sys-card-ink);
+  --color-muted-fill: var(--ap-sys-muted-fill);
+  --color-muted-ink: var(--ap-sys-muted-ink);
+
+  /* Primary / secondary / accent */
+  --color-primary: var(--ap-sys-primary);
+  --color-primary-fill: var(--ap-sys-primary-fill);
+  --color-primary-ink: var(--ap-sys-primary-ink);
+  --color-secondary: var(--ap-sys-secondary);
+  --color-secondary-ink: var(--ap-sys-secondary-ink);
+  --color-accent-fill: var(--ap-sys-accent-fill);
+  --color-accent-ink: var(--ap-sys-accent-ink);
+  --color-accent-border: var(--ap-sys-accent-border);
+
+  /* Destructive */
+  --color-destructive: var(--ap-sys-destructive);
+  --color-destructive-ink: var(--ap-sys-destructive-ink);
+
+  /* Ring + borders */
+  --color-ring: var(--ap-sys-ring);
+  --color-border: var(--ap-sys-border);
+  --color-border-emphasis: var(--ap-sys-border-emphasis);
+  --color-border-strong: var(--ap-sys-border-strong);
+
+  /* Sidebar */
+  --color-sidebar-fill: var(--ap-sys-sidebar-fill);
+  --color-sidebar-ink: var(--ap-sys-sidebar-ink);
+  --color-sidebar-primary-fill: var(--ap-sys-sidebar-primary-fill);
+  --color-sidebar-primary-ink: var(--ap-sys-sidebar-primary-ink);
+  --color-sidebar-accent-fill: var(--ap-sys-sidebar-accent-fill);
+  --color-sidebar-accent-ink: var(--ap-sys-sidebar-accent-ink);
   --color-sidebar-border: var(--ap-sys-sidebar-border);
   --color-sidebar-ring: var(--ap-sys-sidebar-ring);
 
+  /* Charts */
   --color-chart-1: var(--ap-sys-chart-1);
   --color-chart-2: var(--ap-sys-chart-2);
   --color-chart-3: var(--ap-sys-chart-3);
   --color-chart-4: var(--ap-sys-chart-4);
   --color-chart-5: var(--ap-sys-chart-5);
 
-  /* Agentport custom semantics */
-  --color-overlay: var(--ap-sys-overlay);
-  --color-overlay-foreground: var(--ap-sys-overlay-foreground);
-  --color-inverse: var(--ap-sys-inverse);
-  --color-inverse-foreground: var(--ap-sys-inverse-foreground);
+  /* Overlay + popover (popover = shadcn-compat alias onto overlay) */
+  --color-overlay-fill: var(--ap-sys-overlay-fill);
+  --color-overlay-ink: var(--ap-sys-overlay-ink);
+  --color-popover: var(--ap-sys-popover);
+  --color-popover-foreground: var(--ap-sys-popover-foreground);
   --color-scrim: var(--ap-sys-scrim);
-  --color-border-emphasis: var(--ap-sys-border-emphasis);
-  --color-border-strong: var(--ap-sys-border-strong);
-  --color-input-placeholder: var(--ap-sys-input-placeholder);
-  --color-input-background: var(--ap-sys-input-background);
+
+  /* Input */
+  --color-input-ink-placeholder: var(--ap-sys-input-ink-placeholder);
+  --color-input-fill: var(--ap-sys-input-fill);
+  --color-input-fill-high: var(--ap-sys-input-fill-high);
+  --color-input-border: var(--ap-sys-input-border);
+
+  /* Inverse */
+  --color-inverse-fill: var(--ap-sys-inverse-fill);
+  --color-inverse-ink: var(--ap-sys-inverse-ink);
+
+  /* Theme-invariant */
   --color-background-fixed: var(--ap-sys-background-fixed);
-  --color-destructive-foreground: var(--ap-sys-destructive-foreground);
 
   /* Corner — lookup keys for the corner-* utilities (tw-utilities.css), same
      pattern as --space-step-*. rounded-* is dead (--radius-*: initial, no

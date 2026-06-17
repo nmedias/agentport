@@ -29,10 +29,10 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
   reference = Primitives, EINE Collection mit Gruppen Color/ Dimension/ Font/ Effect (scopes:[]
               alias-only; Ausnahme Effect/* = EFFECT_*-Scopes, direkt von den Effect Styles gebunden)
   semantic* = Semantics (Alias → Primitive)
-  CSS-Naming: Primitives = --ap-<figma-pfad-mit-dashes> (Color/neutral/50 → --ap-color-neutral-50,
+  CSS-Naming: Primitives = --ap-<figma-pfad-mit-dashes> (Color/signal/600 → --ap-color-signal-600,
               Font/family/sans → --ap-font-family-sans). Semantics = --ap-sys-<token-leaf> —
-              Figma-Gruppen sind rein organisatorisch (Overlay/overlay → --ap-sys-overlay,
-              Input/input-placeholder → --ap-sys-input-placeholder; shadcn Default/ ist flach,
+              Figma-Gruppen sind rein organisatorisch (Overlay/overlay-fill → --ap-sys-overlay-fill,
+              Input/input-ink-placeholder → --ap-sys-input-ink-placeholder; shadcn Default/ ist flach,
               Sidebar/Chart-Untergruppen aufgelöst). semantic-typo: Org-Gruppe oben drauf,
               Token = format/part (Heading/heading-sm/family → --ap-sys-heading-sm-family;
               leading heißt line-height). Schatten: --ap-sys-shadow-glow/-elevation — sys-Tier
@@ -47,313 +47,117 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
 
 ## 1 · Farbe
 
-Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`):
+Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`).
+**2026-06-17:** `neutral`+`cyan` ersetzt durch 7 OKLCH-Rampen (pencilcolor). `signal/still/deep`
+= die drei OS-Blau-Rampen (Naming-Entscheid „Signal/Still/Deep", OS bleibt); `ink` = neutralisierte
+Graustufen (Blaustich raus, C ×0.5) inkl. Sonderstufen `25`+`75`; `success/warning/error` = Status-Familie.
 
 ```yaml
-base/white: "#ffffff"                                        # --ap-color-base-white
-neutral: { 50: "#fafbfc", 100: "#f4f6f8", 200: "#e6eaee", 300: "#c4ccd4", 400: "#979fa8", 450: "#79828f", 500: "#6b7585", 600: "#636c7b", 700: "#4a5562", 900: "#1a2230" }   # --ap-color-neutral-*
-cyan:    { 50: "#e9f6fc", 500: "#0098da", 700: "#0077a8" }   # cyan/500 = Brand #009FE3 → #0098DA (≥3:1, WCAG 1.4.11)
-opacity: { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --ap-color-opacity-10: 10%" }
+base/white: "#ffffff"   # --ap-color-base-white
+signal: { 50: "#c4feff", 100: "#a4e5ff", 200: "#7cceff", 300: "#51b6f3", 400: "#009fe3", 500: "#0081d2", 600: "#0063bb", 700: "#00459c", 800: "#002779", 900: "#000854", 950: "#010034" }   # Brand = signal/400 #009FE3; AA-Primary auf Weiß ab 600 (#0063BB ≥4.5:1)
+still:  { 50: "#d8fbff", 100: "#bde4fd", 200: "#9fcdeb", 300: "#80b7d9", 400: "#61a1c8", 500: "#3a8cba", 600: "#0077a8", 700: "#005685", 800: "#003761", 900: "#00193d", 950: "#00001e" }
+deep:   { 50: "#eaf8ff", 100: "#cfdde6", 200: "#b2c4cf", 300: "#97abb7", 400: "#7c93a0", 500: "#617c8b", 600: "#476575", 700: "#314f5e", 800: "#1e3947", 900: "#0d2531", 950: "#00121c" }
+ink:       { 25: "#f9fcfd", 50: "#f3f5fa", 75: "#e4e6eb", 100: "#d5d8dd", 200: "#b8bbc0", 300: "#9b9fa5", 400: "#7f848b", 500: "#656971", 600: "#4b5059", 700: "#343840", 800: "#1e2229", 900: "#0d1016", 950: "#020306" }   # ink/800 = #1E2229 (Brand-Text, war #1A2230)
+success:   { 50: "#defeec", 100: "#c6ead6", 200: "#abd7bf", 300: "#91c4a8", 400: "#76b192", 500: "#57a07a", 600: "#298058", 700: "#005f3a", 800: "#00401f", 900: "#002207", 950: "#000700" }
+warning:   { 50: "#fff0c8", 100: "#fbd9ac", 200: "#eac18a", 300: "#d9a967", 400: "#c8923f", 500: "#af7000", 600: "#944f00", 700: "#753100", 800: "#541500", 900: "#340000", 950: "#160000" }
+error:     { 50: "#ffe3d9", 100: "#ffc6bb", 200: "#fca69a", 300: "#e98779", 400: "#d66859", 500: "#c54235", 600: "#b01207", 700: "#8e0000", 800: "#6a0000", 900: "#440000", 950: "#220000" }
+opacity:   { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --ap-color-opacity-10: 10%" }
 ```
 
-Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}`. Für
-`border-*`-Namen lautet die Border-Utility `border-border-emphasis` usw.
+> **Effect-Farben** `glow`/`elevation` im CSS **an die neuen Rampen gebunden** (User-Entscheid):
+> `glow` → `signal/400`, `elevation` → `ink/900`. Figmas `Effect/*` halten noch die alten Roh-Werte
+> (#0098da / #1a2230) → bei Gelegenheit in Figma nachziehen (Code↔Figma-Divergenz an dieser Stelle).
+
+**Naming-Rework 2026-06-17 (Figma):** Color-Semantics auf ein **`-fill`/`-ink`/`-border`-System**
+umgestellt. Flächen-Token = bloßer Name oder `-fill`, Text/Icon = `-ink` (ersetzt `-foreground`),
+Kanten = `-border`. Utilities aus `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`,
+`ring-{name}` (Border-Utility verdoppelt: `border-border`, `border-accent-border`, `border-input-border`).
+
+Migration alt→neu: `background`→`surface` · `foreground`→`ink` · `card-foreground`→`card-ink` ·
+`muted`→`muted-fill` · `muted-foreground`→`muted-ink` · `accent`→`accent-fill` ·
+`accent-foreground`→`accent-ink` · `input`→`input-border` · `input-background`→`input-fill` ·
+`input-placeholder`→`input-ink-placeholder` · `overlay`→`overlay-fill` · `overlay-foreground`→`overlay-ink` ·
+`inverse`→`inverse-fill` · `inverse-foreground`→`inverse-ink` · `sidebar`→`sidebar-fill` ·
+`sidebar-*-foreground`→`sidebar-*-ink` · `primary-foreground`→`primary-ink` · `secondary-foreground`→`secondary-ink` ·
+`destructive-foreground`→`destructive-ink`. **Neu:** `primary-fill`, `accent-border`, `input-fill-high`.
+**Weggefallen:** `primary` als Fläche (jetzt Akzent-Ton signal/600 + separater dunkler `primary-fill`).
+`popover`/`popover-foreground` bleiben (shadcn-Compat-Alias → overlay).
+
+Werte = Light-Mode. `note` zeigt den alten Wert/Namen. Detaillierte `use`/`avoid`-Semantik +
+AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst Rampen-Crosswalk + Rolle.
 
 ```yaml
-- token: background
-  css_var: --ap-sys-background
-  primitive: base/white
-  value: "#ffffff"
-  utilities: [bg-background]
-  use: "Basis-Flächenfarbe (App-Grundfläche)."
+# Core surface + ink (Figma: shadcn Default/)
+- { token: surface,     css_var: --ap-sys-surface,     primitive: base/white,     value: "#ffffff", utilities: [bg-surface],          use: "App-Grundfläche.", note: "war: background" }
+- { token: ink,         css_var: --ap-sys-ink,         primitive: ink/900,        value: "#0d1016", utilities: [text-ink],            use: "Primärtext/-Icon (kein FRAME_FILL → keine Fläche; dunkle Fläche = inverse-fill).", note: "war: foreground" }
+- { token: card,        css_var: --ap-sys-card,        primitive: ink/50,         value: "#f3f5fa", utilities: [bg-card],             use: "Erhabene/sekundäre Panel-Fläche." }
+- { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: ink/900,        value: "#0d1016", utilities: [text-card-ink],       use: "Text auf card.", note: "war: card-foreground" }
+- { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: ink/25,         value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Ruhige Chrome-Fläche.", note: "war: muted" }
+- { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: ink/500,        value: "#656971", utilities: [text-muted-ink],      use: "Sekundärtext.", note: "war: muted-foreground (neutral/600)" }
 
-- token: foreground
-  css_var: --ap-sys-foreground
-  primitive: neutral/900
-  value: "#1a2230"
-  utilities: [text-foreground, bg-foreground]
-  use: "Primärtext/-Icon auf Basis-Flächen."
+# Primary / secondary / accent (Figma: shadcn Default/)
+- { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary], use: "Marken-Akzent (AA auf Weiß) als Text/Icon/Stroke; kein FRAME_FILL → Fläche = primary-fill.", note: "war: cyan/500 #0098da" }
+- { token: primary-fill,   css_var: --ap-sys-primary-fill,   primitive: deep/900,   value: "#0d2531", utilities: [bg-primary-fill],  use: "Dunkle Primary-Fläche (Buttons).", note: "neu" }
+- { token: primary-ink,    css_var: --ap-sys-primary-ink,    primitive: signal/100, value: "#a4e5ff", utilities: [text-primary-ink], use: "Ink auf primary-fill.", note: "war: primary-foreground (weiß)" }
+- { token: secondary,      css_var: --ap-sys-secondary,      primitive: still/100,  value: "#bde4fd", utilities: [bg-secondary],     use: "Sekundär-Fläche.", note: "war Platzhalter #f5f5f5" }
+- { token: secondary-ink,  css_var: --ap-sys-secondary-ink,  primitive: deep/900,   value: "#0d2531", utilities: [text-secondary-ink], use: "Text auf secondary.", note: "war: secondary-foreground" }
+- { token: accent-fill,    css_var: --ap-sys-accent-fill,    primitive: deep/50,    value: "#eaf8ff", utilities: [bg-accent-fill],   use: "Selektions-/Aktiv-Tint.", note: "war: accent (cyan/50)" }
+- { token: accent-ink,     css_var: --ap-sys-accent-ink,     primitive: signal/600, value: "#0063bb", utilities: [text-accent-ink],  use: "Text auf accent-fill.", note: "war: accent-foreground (cyan/700)" }
+- { token: accent-border,  css_var: --ap-sys-accent-border,  primitive: still/200,  value: "#9fcdeb", utilities: [border-accent-border], use: "Accent-Kante.", note: "neu" }
 
-- token: card
-  css_var: --ap-sys-card
-  primitive: neutral/50
-  value: "#fafbfc"
-  utilities: [bg-card]
-  use: "Erhabene/sekundäre Panel-Fläche."
+# Destructive (Figma: shadcn Default/)
+- { token: destructive,     css_var: --ap-sys-destructive,     primitive: error/600, value: "#b01207", utilities: [bg-destructive, text-destructive, border-destructive], use: "Fehler/Zerstörende Aktion.", note: "war Platzhalter #e7000b. STROKE_COLOR → auch ring-destructive (Focus)." }
+- { token: destructive-ink, css_var: --ap-sys-destructive-ink, primitive: error/50,  value: "#ffe3d9", utilities: [text-destructive-ink, border-destructive-ink], use: "Text/Kante auf destructive.", note: "war: destructive-foreground" }
 
-- token: card-foreground
-  css_var: --ap-sys-card-foreground
-  primitive: neutral/900
-  value: "#1a2230"
-  utilities: [text-card-foreground]
-  use: "Text auf card (shadcn-Paarung)."
+# Ring + borders
+- { token: ring,            css_var: --ap-sys-ring,            primitive: ink/800, value: "#1e2229", utilities: [ring-ring, outline-ring],   use: "Fokus-Indikator.", note: "war neutral/700" }
+- { token: border,          css_var: --ap-sys-border,          primitive: ink/75,  value: "#e4e6eb", utilities: [border-border],              use: "Standard-Kante (Base-Layer).", note: "war neutral/200" }
+- { token: border-emphasis, css_var: --ap-sys-border-emphasis, primitive: ink/200, value: "#b8bbc0", utilities: [border-border-emphasis],     use: "Betonte Linie." }
+- { token: border-strong,   css_var: --ap-sys-border-strong,   primitive: ink/300, value: "#9b9fa5", utilities: [border-border-strong],       use: "Schwerste Linie.", note: "war neutral/700 — jetzt heller" }
 
-- token: primary
-  css_var: --ap-sys-primary
-  primitive: cyan/500
-  value: "#0098da"
-  utilities: [bg-primary, text-primary]
-  use: "Brand-Akzent für Selektion/Fokus/Primäraktion und freistehende Aktiv-Hervorhebung. Als Fläche nur, wenn die Fläche „selektiert/primär/hier handeln“ bedeutet."
-  avoid: "Text auf hellem Grund (≥3:1, aber <4.5 → dafür accent-foreground); dekorative Flächen-Einfärbung."
+# Sidebar (Figma: shadcn Default/)
+- { token: sidebar-fill,         css_var: --ap-sys-sidebar-fill,         primitive: ink/25,        value: "#f9fcfd", utilities: [bg-sidebar-fill],          use: "Sidebar-/Rail-Fläche.", note: "war: sidebar" }
+- { token: sidebar-ink,          css_var: --ap-sys-sidebar-ink,          primitive: ink/900,       value: "#0d1016", utilities: [text-sidebar-ink],         use: "Text in Sidebar." }
+- { token: sidebar-primary-fill, css_var: --ap-sys-sidebar-primary-fill, primitive: deep/900,   value: "#0d2531", utilities: [bg-sidebar-primary-fill, text-sidebar-primary-fill],  use: "Sidebar-Akzent-Fläche (auch als Text/Icon).", note: "war: sidebar-primary" }
+- { token: sidebar-primary-ink,  css_var: --ap-sys-sidebar-primary-ink,  primitive: signal/200, value: "#7cceff", utilities: [text-sidebar-primary-ink], use: "Text auf sidebar-primary-fill." }
+- { token: sidebar-accent-fill,  css_var: --ap-sys-sidebar-accent-fill,  primitive: deep/50,    value: "#eaf8ff", utilities: [bg-sidebar-accent-fill],   use: "Aktiv-Tint in der Sidebar.", note: "war: sidebar-accent" }
+- { token: sidebar-accent-ink,   css_var: --ap-sys-sidebar-accent-ink,   primitive: signal/600, value: "#0063bb", utilities: [text-sidebar-accent-ink],  use: "Text auf sidebar-accent-fill." }
+- { token: sidebar-border,       css_var: --ap-sys-sidebar-border,       primitive: ink/50,        value: "#f3f5fa", utilities: [border-sidebar-border],    use: "Sidebar-Trenner." }
+- { token: sidebar-ring,         css_var: --ap-sys-sidebar-ring,         primitive: ink/800,       value: "#1e2229", utilities: [ring-sidebar-ring],        use: "Fokus in der Sidebar." }
 
-- token: primary-foreground
-  css_var: --ap-sys-primary-foreground
-  primitive: base/white
-  value: "#ffffff"
-  utilities: [text-primary-foreground]
-  use: "Text/Icon auf primary-Fläche."
+# Charts — jetzt rampen-gebunden (Figma: shadcn Default/)
+- { token: chart-1, css_var: --ap-sys-chart-1, primitive: warning/700, value: "#753100", utilities: [bg-chart-1, border-chart-1] }
+- { token: chart-2, css_var: --ap-sys-chart-2, primitive: success/600, value: "#298058", utilities: [bg-chart-2, border-chart-2] }
+- { token: chart-3, css_var: --ap-sys-chart-3, primitive: deep/900, value: "#0d2531", utilities: [bg-chart-3, border-chart-3] }
+- { token: chart-4, css_var: --ap-sys-chart-4, primitive: warning/400, value: "#c8923f", utilities: [bg-chart-4, border-chart-4] }
+- { token: chart-5, css_var: --ap-sys-chart-5, primitive: error/500,   value: "#c54235", utilities: [bg-chart-5, border-chart-5] }
 
-- token: muted
-  css_var: --ap-sys-muted
-  primitive: neutral/100
-  value: "#f4f6f8"
-  utilities: [bg-muted]
-  use: "Ruhige Chrome-Fläche (Bänder, Chips, Tracks)."
+# Overlay + popover + scrim (Figma: Overlay/)
+- { token: overlay-fill,        css_var: --ap-sys-overlay-fill,        primitive: base/white, value: "#ffffff", utilities: [bg-overlay-fill],        use: "Erhabene Overlay-Fläche (Popover/Command/Menu).", note: "war: overlay" }
+- { token: overlay-ink,         css_var: --ap-sys-overlay-ink,         primitive: ink/900,    value: "#0d1016", utilities: [text-overlay-ink],       use: "Text auf overlay." }
+- { token: popover,             css_var: --ap-sys-popover,             primitive: "alias → overlay-fill", value: "#ffffff", utilities: [bg-popover],            use: "shadcn-Compat-Alias → overlay-fill." }
+- { token: popover-foreground,  css_var: --ap-sys-popover-foreground,  primitive: "alias → overlay-ink",  value: "#0d1016", utilities: [text-popover-foreground], use: "shadcn-Compat-Alias → overlay-ink." }
+- { token: scrim,               css_var: --ap-sys-scrim,               primitive: "ink/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Modal-Backdrop-Dimmer — ohne Opacity-Modifier.", note: "war neutral/900" }
+- { token: scrim-opacity,       css_var: --ap-sys-scrim-opacity,       primitive: opacity/10, value: "10%", utilities: [], use: "FLOAT, Scope OPACITY — komponiert scrim." }
 
-- token: muted-foreground
-  css_var: --ap-sys-muted-foreground
-  primitive: neutral/600
-  value: "#636c7b"
-  utilities: [text-muted-foreground]
-  use: "Sekundär-/Tertiärtext auf hellen Flächen."
-  note: "AA ≥4.5 auf background/card/sidebar."
+# Input (Figma: Input/)
+- { token: input-ink-placeholder, css_var: --ap-sys-input-ink-placeholder, primitive: ink/500, value: "#656971", utilities: [text-input-ink-placeholder], use: "Platzhaltertext.", note: "war: input-placeholder (neutral/400)" }
+- { token: input-fill,            css_var: --ap-sys-input-fill,            primitive: ink/25,  value: "#f9fcfd", utilities: [bg-input-fill],               use: "Feld-Fill (opak).", note: "war: input-background" }
+- { token: input-fill-high,       css_var: --ap-sys-input-fill-high,       primitive: ink/400, value: "#7f848b", utilities: [bg-input-fill-high],          use: "Betonter Feld-Fill.", note: "neu" }
+- { token: input-border,          css_var: --ap-sys-input-border,          primitive: ink/400, value: "#7f848b", utilities: [border-input-border],         use: "Feld-Border.", note: "war: input (neutral/450)" }
 
-- token: accent
-  css_var: --ap-sys-accent
-  primitive: cyan/50
-  value: "#e9f6fc"
-  utilities: [bg-accent]
-  use: "Selektions-/Aktiv-Tint-Fläche."
-  note: "Abweichung von Stock-shadcn (dort neutrales Hover-Grau) — hier = Selektion. Neutrales Row-Hover bräuchte eigenen Token."
+# Inverse (Figma: Inverse/)
+- { token: inverse-fill, css_var: --ap-sys-inverse-fill, primitive: deep/950, value: "#00121c", utilities: [bg-inverse-fill],  use: "Dunkle Fläche (invertierte Chips/Pillen).", note: "war: inverse (neutral/900)" }
+- { token: inverse-ink,  css_var: --ap-sys-inverse-ink,  primitive: ink/50,      value: "#f3f5fa", utilities: [text-inverse-ink], use: "Text auf inverse-fill." }
 
-- token: accent-foreground
-  css_var: --ap-sys-accent-foreground
-  primitive: cyan/700
-  value: "#0077a8"
-  utilities: [text-accent-foreground]
-  use: "Lesbares Cyan für Text auf accent-Tint (≈5:1)."
-  avoid: "Nicht primary für Text-auf-hell."
-
-- token: border
-  css_var: --ap-sys-border
-  primitive: neutral/200
-  value: "#e6eaee"
-  utilities: [border-border]
-  use: "Standard-Kanten/Trenner (global via Base-Layer gesetzt)."
-
-- token: input
-  css_var: --ap-sys-input
-  primitive: neutral/450
-  value: "#79828f"
-  utilities: [border-input]
-  use: "Form-Control-Border; Fokus → ring; Fill → input-background."
-  note: "≥3:1 (WCAG 1.4.11 / BITV)."
-
-- token: ring
-  css_var: --ap-sys-ring
-  primitive: neutral/700
-  value: "#4a5562"
-  utilities: [ring-ring, outline-ring]
-  use: "Fokus-Indikator (Base-Layer setzt outline-ring/50)."
-
-- token: overlay
-  css_var: --ap-sys-overlay
-  primitive: base/white
-  value: "#ffffff"
-  utilities: [bg-overlay]
-  use: "Erhabene Overlay-Fläche (Popover/Command/Menu/Dropdown)."
-
-- token: overlay-foreground
-  css_var: --ap-sys-overlay-foreground
-  primitive: neutral/900
-  value: "#1a2230"
-  utilities: [text-overlay-foreground]
-  use: "Text auf overlay."
-
-- token: popover
-  css_var: --ap-sys-popover
-  primitive: alias → --ap-sys-overlay
-  value: "#ffffff"
-  utilities: [bg-popover]
-  use: "Alias auf overlay für shadcn-Komponenten, die --popover referenzieren."
-  note: "In neuen Komponenten ist overlay der bevorzugte Name."
-
-- token: popover-foreground
-  css_var: --ap-sys-popover-foreground
-  primitive: alias → --ap-sys-overlay-foreground
-  value: "#1a2230"
-  utilities: [text-popover-foreground]
-  use: "s. popover."
-
-- token: sidebar
-  css_var: --ap-sys-sidebar
-  primitive: neutral/100
-  value: "#f4f6f8"
-  utilities: [bg-sidebar]
-  use: "Sidebar-/Rail-Fläche."
-
-- token: sidebar-foreground
-  css_var: --ap-sys-sidebar-foreground
-  primitive: neutral/900
-  value: "#1a2230"
-  utilities: [text-sidebar-foreground]
-  use: "Text auf sidebar."
-
-- token: sidebar-primary
-  css_var: --ap-sys-sidebar-primary
-  primitive: cyan/700
-  value: "#0077a8"
-  utilities: [bg-sidebar-primary]
-  use: "Sidebar-Akzent-Fläche."
-
-- token: sidebar-primary-foreground
-  css_var: --ap-sys-sidebar-primary-foreground
-  primitive: base/white
-  value: "#ffffff"
-  utilities: [text-sidebar-primary-foreground]
-  use: "Text auf sidebar-primary."
-
-- token: sidebar-accent
-  css_var: --ap-sys-sidebar-accent
-  primitive: cyan/50
-  value: "#e9f6fc"
-  utilities: [bg-sidebar-accent]
-  use: "Aktiv-/Selektions-Tint in der Sidebar."
-
-- token: sidebar-accent-foreground
-  css_var: --ap-sys-sidebar-accent-foreground
-  primitive: cyan/700
-  value: "#0077a8"
-  utilities: [text-sidebar-accent-foreground]
-  use: "Text auf sidebar-accent."
-
-- token: sidebar-border
-  css_var: --ap-sys-sidebar-border
-  primitive: neutral/200
-  value: "#e6eaee"
-  utilities: [border-sidebar-border]
-  use: "Sidebar-Trenner."
-
-- token: sidebar-ring
-  css_var: --ap-sys-sidebar-ring
-  primitive: neutral/700
-  value: "#4a5562"
-  utilities: [ring-sidebar-ring]
-  use: "Fokus in der Sidebar."
-
-- token: input-placeholder
-  css_var: --ap-sys-input-placeholder
-  primitive: neutral/400
-  value: "#979fa8"
-  utilities: [text-input-placeholder]
-  use: "Platzhaltertext in Feldern."
-  note: "Bewusst dezent (kein AA-Ziel)."
-
-- token: input-background
-  css_var: --ap-sys-input-background
-  primitive: neutral/100
-  value: "#f4f6f8"
-  utilities: [bg-input-background]
-  use: "Eingabefeld-Fill (opak)."
-  note: "Abhebung gering → Erkennbarkeit trägt die Border (input)."
-
-- token: background-fixed
-  css_var: --ap-sys-background-fixed
-  primitive: base/white
-  value: "#ffffff"
-  utilities: [bg-background-fixed]
-  use: "Theme-invariante weiße Fläche."
-  avoid: "Im künftigen .dark NICHT überschreiben."
-
-- token: border-emphasis
-  css_var: --ap-sys-border-emphasis
-  primitive: neutral/300
-  value: "#c4ccd4"
-  utilities: [border-border-emphasis]
-  use: "Betonte Linie (stärker als border)."
-
-- token: border-strong
-  css_var: --ap-sys-border-strong
-  primitive: neutral/700
-  value: "#4a5562"
-  utilities: [border-border-strong]
-  use: "Schwerste/dunkelste Linie."
-
-- token: inverse
-  css_var: --ap-sys-inverse
-  primitive: neutral/900
-  value: "#1a2230"
-  utilities: [bg-inverse]
-  use: "Dunkle Fläche auf hellem Grund (invertierte Chips/Pillen)."
-
-- token: inverse-foreground
-  css_var: --ap-sys-inverse-foreground
-  primitive: neutral/50
-  value: "#fafbfc"
-  utilities: [text-inverse-foreground]
-  use: "Text auf inverse."
-
-- token: scrim
-  css_var: --ap-sys-scrim
-  primitive: "neutral/900 (Farbe) — Stärke komponiert via scrim-opacity"
-  value: "color-mix(in srgb, #1a2230 var(--ap-sys-scrim-opacity), transparent)"
-  utilities: [bg-scrim]
-  use: "Modal-Backdrop-Dimmer (Dialog-Overlay); Alpha komponiert via scrim-opacity — ohne Opacity-Modifier verwenden."
-  avoid: "Keine Flächen-Tönung unterhalb von Modal-Ebene; nicht mit zusätzlichem /NN-Modifier stapeln."
-  note: "Figma: scrim = Alias → neutral/900 (voll-opak); die 10% liegen als Layer-Opacity-Binding (scrim-opacity) auf .Dialog/Overlay — als Fill ohne dieses Binding ist scrim voll-opak dunkel."
-
-- token: scrim-opacity
-  css_var: --ap-sys-scrim-opacity
-  primitive: opacity/10
-  value: "10%"
-  utilities: []
-  use: "Stärke des Modal-Backdrops — komponiert --scrim (color-mix) bzw. die Layer-Opacity der Overlay-Komponente."
-  note: "FLOAT-Token, Scope OPACITY. Figma-Wert 10 (Opacity-Variablen = 0–100-Prozent-Skala) ↔ CSS 10%."
-
-- token: secondary
-  css_var: --ap-sys-secondary
-  primitive: raw
-  value: "#f5f5f5"
-  utilities: [bg-secondary, text-secondary]
-  status: placeholder
-  use: tbd
-
-- token: secondary-foreground
-  css_var: --ap-sys-secondary-foreground
-  primitive: raw
-  value: "#343434"
-  utilities: [text-secondary-foreground]
-  status: placeholder
-  use: tbd
-
-- token: destructive
-  css_var: --ap-sys-destructive
-  primitive: raw
-  value: "#e7000b"
-  utilities: [bg-destructive, text-destructive]
-  status: placeholder
-  use: tbd
-
-- token: destructive-foreground
-  css_var: --ap-sys-destructive-foreground
-  primitive: raw
-  value: "#fafafa"
-  utilities: [text-destructive-foreground]
-  status: placeholder
-  use: tbd
-
-- token: chart-1..5
-  css_var: --ap-sys-chart-1 … --ap-sys-chart-5
-  primitive: raw
-  value: ["#e76f51", "#2a9d8f", "#264653", "#e9c46a", "#f4a261"]
-  utilities: [bg-chart-1 … text-chart-5]
-  status: placeholder
-  use: tbd
+# Theme-invariant
+- { token: background-fixed, css_var: --ap-sys-background-fixed, primitive: base/white, value: "#ffffff", utilities: [bg-background-fixed], use: "Theme-invariante weiße Fläche (Toggle-Knob).", avoid: "Im künftigen .dark NICHT überschreiben." }
 ```
 
-**Linien-Leiter (aufsteigend):** `border` < `border-emphasis` < `border-strong`.
-**Zwei-Cyan-Modell:** helles `primary` (Flächen/Marken) vs. dunkles `accent-foreground` (Text auf Tint) — Verwechslung = AA-Bruch.
-**Kein Token (tbd):** Status-Familie `connected/offline/error/warning`.
+**Linien-Leiter (aufsteigend):** `border` (ink/75) < `border-emphasis` (ink/200) < `border-strong` (ink/300).
+**Primary-Modell (neu):** `primary` = Akzent-Ton (signal/600, AA-Text/Stroke) · `primary-fill` = dunkle Fläche (deep/900) + `primary-ink` (signal/100) als Text darauf.
+**Accent-Trio:** `accent-fill` (Tint) · `accent-ink` (Text darauf) · `accent-border` (Kante).
+**Status-Familie jetzt vorhanden:** `destructive` (error). `success`/`warning` existieren als Rampen (Charts), eigene Semantic-Tokens dafür noch tbd.
 
 ---
 
@@ -571,6 +375,33 @@ dead_utilities:   # durch Reset entfernt → Ersatz
   - { stock: "shadow-xs/sm/md/lg/xl",            reset: "--shadow-*: initial",       replace: "weglassen (flach) ODER shadow-elevation, wenn Tiefe Bedeutung trägt" }
   - { stock: "Core-Farben (text-red-500 …)",     reset: "--color-*: initial",        replace: "nur DS-Semantics; text-white/current/transparent bleiben" }
 
+# Color-Utility-Renames (2026-06-17): Bis zum Rework hießen die Farb-Utilities wie stock-shadcn
+# (nur Werte DS-eigen). Seit dem -fill/-ink/-border-System DIVERGIEREN die Namen → stock-shadcn-Klassen
+# (Nova/ui:add) müssen pro Component übersetzt werden. Hier die kanonische Tabelle:
+color_renames:
+  - { stock: bg-background,                  ds: bg-surface }
+  - { stock: "text-foreground / bg-foreground", ds: "text-ink  (KEIN bg-ink — keine Fläche; dunkle Fläche = bg-inverse-fill)" }
+  - { stock: text-card-foreground,           ds: text-card-ink }
+  - { stock: bg-muted,                       ds: bg-muted-fill }
+  - { stock: text-muted-foreground,          ds: text-muted-ink }
+  - { stock: bg-accent,                      ds: bg-accent-fill }
+  - { stock: text-accent-foreground,         ds: text-accent-ink }
+  - { stock: "bg-primary",                   ds: "bg-primary-fill  (dunkle Fläche; bg-primary GIBT ES NICHT — primary = Akzent text-/border-/ring-primary)" }
+  - { stock: text-primary-foreground,        ds: text-primary-ink }
+  - { stock: text-secondary-foreground,      ds: text-secondary-ink }
+  - { stock: text-destructive-foreground,    ds: text-destructive-ink }
+  - { stock: border-input,                   ds: border-input-border }
+  - { stock: bg-input-background,            ds: bg-input-fill }
+  - { stock: "placeholder (input-placeholder)", ds: text-input-ink-placeholder }
+  - { stock: "bg-overlay / text-overlay-foreground", ds: "bg-overlay-fill / text-overlay-ink" }
+  - { stock: "bg-inverse / text-inverse-foreground", ds: "bg-inverse-fill / text-inverse-ink" }
+  - { stock: bg-sidebar,                     ds: bg-sidebar-fill }
+  - { stock: text-sidebar-foreground,        ds: text-sidebar-ink }
+  - { stock: "bg-sidebar-primary / text-sidebar-primary-foreground", ds: "bg-sidebar-primary-fill / text-sidebar-primary-ink" }
+  - { stock: "bg-sidebar-accent / text-sidebar-accent-foreground",   ds: "bg-sidebar-accent-fill / text-sidebar-accent-ink" }
+  - { unchanged: "Name BLEIBT (nur Wert neu): bg-card, bg-popover/text-popover-foreground (Compat-Alias), bg-secondary, bg-destructive/text-destructive, border-border/-emphasis/-strong, ring-ring/outline-ring, border-sidebar-border, ring-sidebar-ring, bg-chart-1..5, bg-background-fixed" }
+  - { neu: "Tokens ohne stock-Pendant: accent-border, primary-fill, input-fill-high, sidebar-*-ink (Text auf Akzentflächen)" }
+
 geometry_vs_token:
   spacing: "Padding/Gap/Margin → benanntes Token MAPPE ÜBER DEN px-WERT: gap-2(8)→gap-md · gap-1.5(6)→gap-sm · px-4(16)→px-xl · py-2(8)→py-md · px-3(12)→px-lg · px-6(24)→px-2xl."
   control_geometry: "Control-Höhen/Icon-Maße (h-9/h-8/h-10, size-9, size-4) NUMERISCH lassen — nicht auf der Spacing-Skala. Geometrie ≠ Spacing-Token."
@@ -578,7 +409,7 @@ geometry_vs_token:
 
 keep_valid:
   - "Container-T-Shirt-Namen auf Sizing-Utilities: max-w-sm/md/…, w-lg, basis-md = --container-Skala (24rem/28rem/…), KEINE Spacing-Steps (§3 Kollisions-Regel)"
-  - "Opacity-Modifier auf DS-Tokens: bg-primary/90, ring-ring/50, outline-ring/50"
+  - "Opacity-Modifier auf DS-Tokens: bg-primary-fill/90, ring-ring/50, outline-ring/50"
   - "Arbitrary values: ring-[3px], size-[18px]"
   - "Numerische Spacing-Utilities: p-4, gap-2, h-9, size-4"
   - "Struktur-Namespaces: --breakpoint-*, --container-*, --animate-*, --default-*, --spacing"

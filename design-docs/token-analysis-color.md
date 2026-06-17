@@ -22,6 +22,19 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 450 #79828F · 500 #6B7585 · 600 #636C7B · 700 #4A5562 · 900 #1A2230` *(Lücken: 800, 950; `450` für AA-Input-Border, `600` für `muted-foreground` ergänzt)*
   - `cyan/` `50 #E9F6FC · 500 #0098DA · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)* — `500` von
     Brand-`#009FE3` auf **`#0098DA`** abgedunkelt, damit `primary`-Marken **≥3:1** auf Weiß erreichen (WCAG 1.4.11).
+  > **Update 2026-06-17 — Paletten-Swap (pencilcolor OKLCH):** `neutral`+`cyan` als Reference-Primitives
+  > **ersetzt** durch **7 volle Rampen** (je 11 Stufen, `ink` 13 inkl. `25`/`75`):
+  > **`signal`** (Brand-Cyan, `400 #009FE3`, AA-Primary ab `600 #0063BB`), **`still`** (gedämpft,
+  > `600 #0077A8` = altes accent-foreground), **`deep`** (Navy-Cyan), **`ink`** (neutralisierte Graustufe,
+  > Blaustich raus C ×0.5; `800 #1E2229` ≈ alter Brand-Text `#1A2230`), **`success`/`warning`/`error`**
+  > (Status-Familie — füllt die in §8 offene Lücke). `base/white` + `opacity/10` bleiben. CSS-Pfade
+  > `--ap-color-<ramp>-<step>`. **Semantic-Rewire (welcher Step welche Rampe) = Schritt 2**, hier noch
+  > nicht abgebildet; die Tabellen unten beschreiben weiter den alten Screen-Ableitungsstand.
+  > **Update 2026-06-17 (Schritt 2):** Semantic-Rework in Code abgebildet — neues
+  > **`-fill`/`-ink`/`-border`-System** (`background`→`surface`, `foreground`→`ink`, alle
+  > `-foreground`→`-ink`; neu `primary-fill`/`accent-border`/`input-fill-high`). Vollständige
+  > Token→Rampe-Crosswalk + Alt→Neu-Migration in `design-docs/design-system/tokens-reference.md` §1.
+  > Die Screen-Tabellen unten bleiben der alte Ableitungsstand (nicht nachgezogen).
 - **Collection `semantic`** · Mode `light` · **42 Variablen**:
   - **shadcn-Set vollständig** (inkl. `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
     Die Palette-Fläche heißt bei uns **`overlay`/`overlay-foreground`** (umbenannt von `popover*`).

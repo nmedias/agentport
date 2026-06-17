@@ -7,10 +7,10 @@
    (dark mode not set up yet).
 
    Naming: PRIMITIVES carry the `--ap-` prefix + the Figma path with dashes
-   (Color/neutral/50 → --ap-color-neutral-50; Font/family/sans →
+   (Color/signal/600 → --ap-color-signal-600; Font/family/sans →
    --ap-font-family-sans). SEMANTICS carry `--ap-sys-` + the token leaf —
    Figma groups (shadcn Default/, Overlay/, Input/, …) are organisation only
-   (Overlay/overlay → --ap-sys-overlay). Typography semantics follow the
+   (Overlay/overlay-fill → --ap-sys-overlay-fill). Typography semantics follow the
    Figma path below the org group: Heading/heading-sm/family →
    --ap-sys-heading-sm-family. Figma itself has no prefix.
    --ap-sys-shadow-glow/--ap-sys-shadow-elevation have no Figma semantic
@@ -25,6 +25,9 @@
 /* ===========================================================================
    1 · PRIMITIVES  (Figma-Collection: reference — Gruppen Color / Dimension /
                     Font / Effect; konsolidiert 2026-06-11)
+   Color palettes replaced 2026-06-17: neutral+cyan → 7 OKLCH ramps
+   (signal/still/deep/ink/success/warning/error). base/white + opacity
+   stay. Dimension/Font/Effect unchanged.
    =========================================================================== */
 :root {
 
@@ -32,22 +35,100 @@
   /* --- Color · base ------------------------------------------------------- */
   --ap-color-base-white: #ffffff;
 
-  /* --- Color · neutral ramp  ------------------------ */
-  --ap-color-neutral-50: #fafbfc;
-  --ap-color-neutral-100: #f4f6f8;
-  --ap-color-neutral-200: #e6eaee;
-  --ap-color-neutral-300: #c4ccd4;
-  --ap-color-neutral-400: #979fa8;
-  --ap-color-neutral-450: #79828f;
-  --ap-color-neutral-500: #6b7585;
-  --ap-color-neutral-600: #636c7b;
-  --ap-color-neutral-700: #4a5562;
-  --ap-color-neutral-900: #1a2230;
+  /* --- Color · signal ramp (brand cyan, "Signal") --------------------
+     400 = brand #009FE3; AA primary on white from 600 up (#0063BB, ≥4.5:1). */
+  --ap-color-signal-50: #c4feff;
+  --ap-color-signal-100: #a4e5ff;
+  --ap-color-signal-200: #7cceff;
+  --ap-color-signal-300: #51b6f3;
+  --ap-color-signal-400: #009fe3;
+  --ap-color-signal-500: #0081d2;
+  --ap-color-signal-600: #0063bb;
+  --ap-color-signal-700: #00459c;
+  --ap-color-signal-800: #002779;
+  --ap-color-signal-900: #000854;
+  --ap-color-signal-950: #010034;
 
-  /* --- Color · cyan  -- */
-  --ap-color-cyan-50: #e9f6fc;
-  --ap-color-cyan-500: #0098da;
-  --ap-color-cyan-700: #0077a8;
+  /* --- Color · still ramp (muted cyan, "Still") ---------------------- */
+  --ap-color-still-50: #d8fbff;
+  --ap-color-still-100: #bde4fd;
+  --ap-color-still-200: #9fcdeb;
+  --ap-color-still-300: #80b7d9;
+  --ap-color-still-400: #61a1c8;
+  --ap-color-still-500: #3a8cba;
+  --ap-color-still-600: #0077a8;
+  --ap-color-still-700: #005685;
+  --ap-color-still-800: #003761;
+  --ap-color-still-900: #00193d;
+  --ap-color-still-950: #00001e;
+
+  /* --- Color · deep ramp (deep navy cyan, "Deep") -------------------- */
+  --ap-color-deep-50: #eaf8ff;
+  --ap-color-deep-100: #cfdde6;
+  --ap-color-deep-200: #b2c4cf;
+  --ap-color-deep-300: #97abb7;
+  --ap-color-deep-400: #7c93a0;
+  --ap-color-deep-500: #617c8b;
+  --ap-color-deep-600: #476575;
+  --ap-color-deep-700: #314f5e;
+  --ap-color-deep-800: #1e3947;
+  --ap-color-deep-900: #0d2531;
+  --ap-color-deep-950: #00121c;
+
+  /* --- Color · ink ramp (neutralized greys; 25+75 added) -------------------
+     C ×0.5 (blue cast removed); ink/800 = #1E2229 (brand text, was #1A2230). */
+  --ap-color-ink-25: #f9fcfd;
+  --ap-color-ink-50: #f3f5fa;
+  --ap-color-ink-75: #e4e6eb;
+  --ap-color-ink-100: #d5d8dd;
+  --ap-color-ink-200: #b8bbc0;
+  --ap-color-ink-300: #9b9fa5;
+  --ap-color-ink-400: #7f848b;
+  --ap-color-ink-500: #656971;
+  --ap-color-ink-600: #4b5059;
+  --ap-color-ink-700: #343840;
+  --ap-color-ink-800: #1e2229;
+  --ap-color-ink-900: #0d1016;
+  --ap-color-ink-950: #020306;
+
+  /* --- Color · success ramp (green) ---------------------------------------- */
+  --ap-color-success-50: #defeec;
+  --ap-color-success-100: #c6ead6;
+  --ap-color-success-200: #abd7bf;
+  --ap-color-success-300: #91c4a8;
+  --ap-color-success-400: #76b192;
+  --ap-color-success-500: #57a07a;
+  --ap-color-success-600: #298058;
+  --ap-color-success-700: #005f3a;
+  --ap-color-success-800: #00401f;
+  --ap-color-success-900: #002207;
+  --ap-color-success-950: #000700;
+
+  /* --- Color · warning ramp (amber) ---------------------------------------- */
+  --ap-color-warning-50: #fff0c8;
+  --ap-color-warning-100: #fbd9ac;
+  --ap-color-warning-200: #eac18a;
+  --ap-color-warning-300: #d9a967;
+  --ap-color-warning-400: #c8923f;
+  --ap-color-warning-500: #af7000;
+  --ap-color-warning-600: #944f00;
+  --ap-color-warning-700: #753100;
+  --ap-color-warning-800: #541500;
+  --ap-color-warning-900: #340000;
+  --ap-color-warning-950: #160000;
+
+  /* --- Color · error ramp (red) -------------------------------------------- */
+  --ap-color-error-50: #ffe3d9;
+  --ap-color-error-100: #ffc6bb;
+  --ap-color-error-200: #fca69a;
+  --ap-color-error-300: #e98779;
+  --ap-color-error-400: #d66859;
+  --ap-color-error-500: #c54235;
+  --ap-color-error-600: #b01207;
+  --ap-color-error-700: #8e0000;
+  --ap-color-error-800: #6a0000;
+  --ap-color-error-900: #440000;
+  --ap-color-error-950: #220000;
 
   /* --- Color · opacity ------------------------------------------------------
      Figma mirror: reference Color/opacity/10 = 10 (opacity variables use the
@@ -115,12 +196,12 @@
   --ap-effect-glow-y: 0px;
   --ap-effect-glow-blur: 4px;
   --ap-effect-glow-spread: 0px;
-  --ap-effect-glow-color: color-mix(in srgb, var(--ap-color-cyan-500) 50%, transparent);
+  --ap-effect-glow-color: color-mix(in srgb, var(--ap-color-signal-400) 50%, transparent);
   --ap-effect-elevation-x: 0px;
   --ap-effect-elevation-y: 14px;
   --ap-effect-elevation-blur: 36px;
   --ap-effect-elevation-spread: -6px;
-  --ap-effect-elevation-color: color-mix(in srgb, var(--ap-color-neutral-900) 18%, transparent);
+  --ap-effect-elevation-color: color-mix(in srgb, var(--ap-color-ink-900) 18%, transparent);
 }
 
 :root{
@@ -129,62 +210,80 @@
      2 · SEMANTIC · COLOR  (Collection: semantic)
      =========================================================================== */
 
-  /* --- Surfaces & text (shadcn) ------------------------------------------- */
-  --ap-sys-background:          var(--ap-color-base-white);
-  --ap-sys-foreground:          var(--ap-color-neutral-900);
-  --ap-sys-card:                var(--ap-color-neutral-50);
-  --ap-sys-card-foreground:     var(--ap-color-neutral-900);
-  --ap-sys-primary:             var(--ap-color-cyan-500);
-  --ap-sys-primary-foreground:  var(--ap-color-base-white);
-  --ap-sys-muted:               var(--ap-color-neutral-100);
-  --ap-sys-muted-foreground:    var(--ap-color-neutral-600);
-  --ap-sys-accent:              var(--ap-color-cyan-50);
-  --ap-sys-accent-foreground:   var(--ap-color-cyan-700);
-  --ap-sys-border:              var(--ap-color-neutral-200);
-  --ap-sys-input:               var(--ap-color-neutral-450);   /* form control border (AA ≥3:1) */
-  --ap-sys-ring:                var(--ap-color-neutral-700);    /* focus */
-  /* shadcn components reference --ap-sys-popover → mapped onto overlay */
-  --ap-sys-popover:             var(--ap-sys-overlay);
-  --ap-sys-popover-foreground:  var(--ap-sys-overlay-foreground);
+  /* Naming 2026-06-17: Figma reworked the color semantics to a -fill/-ink/-border
+     system (surface/ink instead of background/foreground; every -foreground → -ink;
+     new primary-fill/primary-ink/accent-border/input-fill-high). Old names in
+     trailing comments. Aliases now point at the 7 ramps (no more neutral/cyan). */
 
-  /* --- Sidebar (shadcn) --------------------------------------------------- */
-  --ap-sys-sidebar:                     var(--ap-color-neutral-100);
-  --ap-sys-sidebar-foreground:          var(--ap-color-neutral-900);
-  --ap-sys-sidebar-primary:             var(--ap-color-cyan-700);
-  --ap-sys-sidebar-primary-foreground:  var(--ap-color-base-white);
-  --ap-sys-sidebar-accent:              var(--ap-color-cyan-50);
-  --ap-sys-sidebar-accent-foreground:   var(--ap-color-cyan-700);
-  --ap-sys-sidebar-border:              var(--ap-color-neutral-200);
-  --ap-sys-sidebar-ring:                var(--ap-color-neutral-700);
+  /* --- Core surface + ink (Figma: shadcn Default/) ----------------------- */
+  --ap-sys-surface:        var(--ap-color-base-white);   /* was: background */
+  --ap-sys-ink:            var(--ap-color-ink-900);      /* was: foreground */
+  --ap-sys-card:           var(--ap-color-ink-50);
+  --ap-sys-card-ink:       var(--ap-color-ink-900);      /* was: card-foreground */
+  --ap-sys-muted-fill:     var(--ap-color-ink-25);       /* was: muted */
+  --ap-sys-muted-ink:      var(--ap-color-ink-500);      /* was: muted-foreground */
 
-  /* --- Custom (Agentport) --------------------------------------------------- */
-  --ap-sys-input-placeholder:   var(--ap-color-neutral-400);
-  --ap-sys-input-background:    var(--ap-color-neutral-100);
-  --ap-sys-background-fixed:    var(--ap-color-base-white);   /* theme-invariant (toggle knob) — do NOT override in .dark */
-  --ap-sys-border-emphasis:     var(--ap-color-neutral-300);
-  --ap-sys-border-strong:       var(--ap-color-neutral-700);
-  --ap-sys-inverse:             var(--ap-color-neutral-900);
-  --ap-sys-inverse-foreground:  var(--ap-color-neutral-50);
-  /* --- Overlay (= shadcn popover, renamed) -------------------------------- */
-  --ap-sys-overlay:             var(--ap-color-base-white);
-  --ap-sys-overlay-foreground:  var(--ap-color-neutral-900);
-  /* modal backdrop dimmer — colour (alias neutral/900) × strength (scrim-opacity,
+  /* --- Primary / secondary / accent (Figma: shadcn Default/) ------------- */
+  --ap-sys-primary:        var(--ap-color-signal-600);   /* brand accent, AA on white; was cyan/500 */
+  --ap-sys-primary-fill:   var(--ap-color-deep-900);     /* dark primary surface (new) */
+  --ap-sys-primary-ink:    var(--ap-color-signal-100);   /* ink on primary-fill; was primary-foreground */
+  --ap-sys-secondary:      var(--ap-color-still-100);
+  --ap-sys-secondary-ink:  var(--ap-color-deep-900);     /* was: secondary-foreground */
+  --ap-sys-accent-fill:    var(--ap-color-deep-50);      /* selection/active tint; was accent */
+  --ap-sys-accent-ink:     var(--ap-color-signal-600);   /* ink on accent-fill; was accent-foreground */
+  --ap-sys-accent-border:  var(--ap-color-still-200);    /* accent edge (new) */
+
+  /* --- Destructive (Figma: shadcn Default/) ------------------------------ */
+  --ap-sys-destructive:     var(--ap-color-error-600);
+  --ap-sys-destructive-ink: var(--ap-color-error-50);       /* was: destructive-foreground */
+
+  /* --- Ring + borders ---------------------------------------------------- */
+  --ap-sys-ring:            var(--ap-color-ink-800);   /* focus; was neutral/700 */
+  --ap-sys-border:          var(--ap-color-ink-75);    /* default edge; was neutral/200 */
+  --ap-sys-border-emphasis: var(--ap-color-ink-200);   /* was neutral/300 */
+  --ap-sys-border-strong:   var(--ap-color-ink-300);   /* was neutral/700 (now lighter) */
+
+  /* --- Sidebar (Figma: shadcn Default/) ---------------------------------- */
+  --ap-sys-sidebar-fill:          var(--ap-color-ink-25);        /* was: sidebar */
+  --ap-sys-sidebar-ink:           var(--ap-color-ink-900);       /* was: sidebar-foreground */
+  --ap-sys-sidebar-primary-fill:  var(--ap-color-deep-900);   /* was: sidebar-primary */
+  --ap-sys-sidebar-primary-ink:   var(--ap-color-signal-200); /* was: sidebar-primary-foreground */
+  --ap-sys-sidebar-accent-fill:   var(--ap-color-deep-50);    /* was: sidebar-accent */
+  --ap-sys-sidebar-accent-ink:    var(--ap-color-signal-600); /* was: sidebar-accent-foreground */
+  --ap-sys-sidebar-border:        var(--ap-color-ink-50);        /* was neutral/200 */
+  --ap-sys-sidebar-ring:          var(--ap-color-ink-800);       /* was neutral/700 */
+
+  /* --- Charts — now ramp-bound (Figma: shadcn Default/) ------------------ */
+  --ap-sys-chart-1: var(--ap-color-warning-700);
+  --ap-sys-chart-2: var(--ap-color-success-600);
+  --ap-sys-chart-3: var(--ap-color-deep-900);
+  --ap-sys-chart-4: var(--ap-color-warning-400);
+  --ap-sys-chart-5: var(--ap-color-error-500);
+
+  /* --- Overlay + popover + scrim (Figma: Overlay/) ----------------------- */
+  --ap-sys-overlay-fill:        var(--ap-color-base-white);  /* was: overlay */
+  --ap-sys-overlay-ink:         var(--ap-color-ink-900);     /* was: overlay-foreground */
+  /* shadcn components reference --popover → alias onto overlay (Figma keeps both) */
+  --ap-sys-popover:             var(--ap-sys-overlay-fill);
+  --ap-sys-popover-foreground:  var(--ap-sys-overlay-ink);
+  /* modal backdrop dimmer — colour (alias ink/900) × strength (scrim-opacity,
      alias opacity/10) composed via color-mix. Figma composes the same pair on
      .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */
   --ap-sys-scrim-opacity:       var(--ap-color-opacity-10);
-  --ap-sys-scrim:               color-mix(in srgb, var(--ap-color-neutral-900) var(--ap-sys-scrim-opacity), transparent);
+  --ap-sys-scrim:               color-mix(in srgb, var(--ap-color-ink-900) var(--ap-sys-scrim-opacity), transparent);
 
+  /* --- Input (Figma: Input/) --------------------------------------------- */
+  --ap-sys-input-ink-placeholder: var(--ap-color-ink-500);  /* was: input-placeholder */
+  --ap-sys-input-fill:            var(--ap-color-ink-25);    /* field fill; was: input-background */
+  --ap-sys-input-fill-high:       var(--ap-color-ink-400);   /* emphasised field fill (new) */
+  --ap-sys-input-border:          var(--ap-color-ink-400);   /* field border (AA); was: input */
 
-  /* --- ⚠ Placeholders (shadcn defaults, not yet designed) ------------------ */
-  --ap-sys-secondary:              #f5f5f5;  /* ⚠ */
-  --ap-sys-secondary-foreground:   #343434;  /* ⚠ */
-  --ap-sys-destructive:            #e7000b;  /* ⚠ */
-  --ap-sys-destructive-foreground: #fafafa;  /* ⚠ */
-  --ap-sys-chart-1: #e76f51;  /* ⚠ */
-  --ap-sys-chart-2: #2a9d8f;  /* ⚠ */
-  --ap-sys-chart-3: #264653;  /* ⚠ */
-  --ap-sys-chart-4: #e9c46a;  /* ⚠ */
-  --ap-sys-chart-5: #f4a261;  /* ⚠ */
+  /* --- Inverse (Figma: Inverse/) ----------------------------------------- */
+  --ap-sys-inverse-fill:  var(--ap-color-deep-950);  /* was: inverse (neutral/900) */
+  --ap-sys-inverse-ink:   var(--ap-color-ink-50);       /* was: inverse-foreground */
+
+  /* --- Theme-invariant --------------------------------------------------- */
+  --ap-sys-background-fixed:  var(--ap-color-base-white);  /* do NOT override in .dark (toggle knob) */
 
 
   /* ===========================================================================
