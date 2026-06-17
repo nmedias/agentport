@@ -37,11 +37,14 @@ import { expect, userEvent } from 'storybook/test';           // NOT @storybook/
 Every component ships the same set. Map each role; don't skip.
 
 ```
-Default          API playground + interaction smoke test IN ONE
-                 · component: set, auto-render or thin render → every prop is live control + ArgsTable row
+Default          API playground (+ interaction smoke test, if the component is interactive)
+                 · NEVER `export const Default = {}` — `render: (args) => <X {...args}>…</X>` spreading
+                   args into a COMPLETE instance (props/children that make sense together), so the 'code'
+                   snippet is a real example not {} — every prop stays a live control + ArgsTable row
                  · NO controls.include (it filters the table, not just the panel)
-                 · carries the play() test (§play)
-                 · bare-control playground → source: { type: 'dynamic' } (snippet reflects controls)
+                 · carries the play() test (§play) — UNLESS Default is non-interactive (static display);
+                   then the play moves to the interactive story (e.g. an asChild link), like radio→Group
+                 · source stays the meta's 'code' — never override a story to 'dynamic'
 Usage examples   one per STRUCTURALLY-DISTINCT real usage (Basic, Description, Group, Disabled, Invalid)
                  · reproduce the ACTUAL composition with ported DS primitives (Field/FieldLabel/…), never div+label
                  · render-only → parameters: { controls: { disable: true } }
@@ -49,6 +52,8 @@ States gallery   AllStates / <Comp>States — every state side by side, at a gla
                  · grid: columns = primary axis (unchecked/checked, off/on, unselected/selected)
                  · rows mapped from a STATE_ROWS array (enabled/focus/disabled/invalid/invalid-focus)
                  · render-only; focus rows via pseudo addon (§pseudo)
+                 · DISPLAY-ONLY component (no pseudo-state axis, e.g. badge) → the gallery axis is
+                   variant/content, NOT state; don't fake focus/disabled/invalid rows (cf. port T2 anatomy)
 ```
 
 ## Meta block
@@ -59,7 +64,10 @@ args: { …defaults for the playground }
 argTypes: HAND-CURATED  — react-docgen can't read Pick<…> & Omit<ComponentProps<…>> / Radix type refs
   per prop: control | description (Backticks for `code`) | table:{ type:{summary}, defaultValue:{summary} }
   callbacks + id → control: false   (documented in table, no live control)
-parameters: { docs: { source: { type: 'code' } } }   // literal JSX; per-story override → 'dynamic'
+parameters: { docs: {
+  source: { type: 'code' }              // ALWAYS 'code' — never override a story to 'dynamic'
+  description: { component: '…' }        // autodocs-page prose (markdown); point at the key story (cf. radio-group)
+}}
 ```
 
 ## play (interaction test) — §play
@@ -106,16 +114,18 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
   `text-muted-ink` — never raw Tailwind numbers (`gap-6`) or hex.
 - **Controls hygiene** — render-only → `controls: { disable: true }`; scope a panel elsewhere with
   `controls: { include: [...] }`; but NEVER `include` on the Default playground (filters the ArgsTable).
-- **Comment discipline** — file-top contract comment (what tints/focuses/wires-a11y, when); each story a
-  one-line "why I exist"; inline-justify non-obvious choices (why uncontrolled, why `blur()`, why no
-  `include`, why `source:'dynamic'`). This is house norm, not optional.
+- **Comment discipline** — file-top **contract** comment: name the *mechanism* (which CSS/Slot/attribute
+  tints/focuses/wires-a11y, and WHEN), not what the component *is* — "a pill marker" = description ✗;
+  "variant sets fill+ink; asChild→Slot renders as `<a>`, becomes focusable→ring" = contract ✓. Each story
+  a one-line "why I exist"; inline-justify non-obvious choices (why uncontrolled, why `blur()`, why no
+  `include`). House norm, not optional.
 
 ## Process
 
 ```
 S1 Locate    component folder; storybook MCP up (:6006)? → get-storybook-story-instructions (canonical CSF/imports)
-S2 Meta      header contract comment; tags autodocs; args defaults; HAND-CURATED argTypes; source:'code'
-S3 Default   playground + play smoke test; full ArgsTable (no include); 'dynamic' if bare
+S2 Meta      header contract comment; tags autodocs; args defaults; HAND-CURATED argTypes + docs.description.component; source:'code'
+S3 Default   render: (args)=><X {...args}>…</X> — never {}; full ArgsTable (no include); play if interactive
 S4 Examples  one per structurally-distinct usage, real DS composition primitives, controls.disable
 S5 States    STATE_ROWS grid (primary axis = columns); focus via pseudo addon
 S6 Verify    gate green (jsdom specs + storybook browser: Chromium + axe); shoot -- <storyId> / preview-stories → surface URLs
