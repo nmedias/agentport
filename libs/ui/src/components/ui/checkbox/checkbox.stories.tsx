@@ -149,14 +149,26 @@ export const Description: Story = {
   ),
 };
 
-// docs "Group": a checkbox list grouped under a FieldSet + FieldLegend.
-export const Group: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <FieldSet className="max-w-sm">
+// docs "Group": a checkbox list grouped under a FieldSet + FieldLegend. The orientation
+// control is wired to the FieldGroup container (a DS prop, not a Checkbox prop) — vertical
+// stacks the options, horizontal lays them in a wrapping row. Typed on its own arg shape
+// since orientation isn't part of the Checkbox API (the meta's component).
+export const Group: StoryObj<{ orientation: 'vertical' | 'horizontal' }> = {
+  args: { orientation: 'vertical' },
+  argTypes: {
+    orientation: {
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      description: 'Layout of the checkbox list — a `FieldGroup` prop (`vertical` stacks, `horizontal` rows).',
+      table: { type: { summary: '"vertical" | "horizontal"' }, defaultValue: { summary: '"vertical"' } },
+    },
+  },
+  parameters: { controls: { include: ['orientation'] } },
+  render: ({ orientation }) => (
+    <FieldSet className={orientation === 'horizontal' ? 'max-w-lg' : 'max-w-sm'}>
       <FieldLegend variant="label">Sidebar</FieldLegend>
       <FieldDescription>Select the items to show in the sidebar.</FieldDescription>
-      <FieldGroup>
+      <FieldGroup orientation={orientation}>
         <Field orientation="horizontal">
           <Checkbox id="recents" defaultChecked />
           <FieldLabel htmlFor="recents">Recents</FieldLabel>
@@ -168,6 +180,38 @@ export const Group: Story = {
         <Field orientation="horizontal">
           <Checkbox id="applications" />
           <FieldLabel htmlFor="applications">Applications</FieldLabel>
+        </Field>
+      </FieldGroup>
+    </FieldSet>
+  ),
+};
+
+// DS-authored usage: a horizontal checkbox group — FieldGroup orientation="horizontal" lays
+// the options in a wrapping row (each Field shrinks to content), e.g. a compact "which columns
+// to show" toggle row. The static counterpart to the Group story's orientation control, and the
+// checkbox parallel to RadioGroup's Horizontal story.
+export const GroupHorizontal: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <FieldSet className="max-w-lg">
+      <FieldLegend variant="label">Visible columns</FieldLegend>
+      <FieldDescription>Choose which columns to show in the table.</FieldDescription>
+      <FieldGroup orientation="horizontal">
+        <Field orientation="horizontal">
+          <Checkbox id="col-name" defaultChecked />
+          <FieldLabel htmlFor="col-name">Name</FieldLabel>
+        </Field>
+        <Field orientation="horizontal">
+          <Checkbox id="col-type" defaultChecked />
+          <FieldLabel htmlFor="col-type">Type</FieldLabel>
+        </Field>
+        <Field orientation="horizontal">
+          <Checkbox id="col-size" />
+          <FieldLabel htmlFor="col-size">Size</FieldLabel>
+        </Field>
+        <Field orientation="horizontal">
+          <Checkbox id="col-modified" />
+          <FieldLabel htmlFor="col-modified">Modified</FieldLabel>
         </Field>
       </FieldGroup>
     </FieldSet>

@@ -540,22 +540,34 @@ status_note: >
 
 - name: FieldGroup
   status: nova-aligned
-  figma_synced: true                            # Figma-Component 2026-06-12 gebaut (Revision; vorher code-only)
+  figma_synced: true                            # Figma-Component 2026-06-12; orientation-Achse 2026-06-17 (Einzel-Component → Set)
   source: { registry: "@shadcn", item: field, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/field/
     exports: [FieldGroup]
     barrel: "via field-Barrel"
+    props: { orientation: [vertical, horizontal] }   # NEU 2026-06-17: fieldGroupVariants (DS-Erweiterung über stock-shadcn, das nur Field orientation kennt)
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
-    component: { name: "FieldGroup", id: "3742:1044" }
-    nests: "Field 3742:1045 → .Separator 3742:1055 (horizontal, FieldSeparator-Idiom = reuse, task 4) → Field 3742:1056; alle FILL-Breite"
-  skill: Figma-Revision (2026-06-12)
+    set: { name: "FieldGroup", id: "4285:1997" }     # NEU 2026-06-17: combineAsVariants (vorher Einzel-Component 3742:1044)
+    members:
+      "orientation=vertical":   "3742:1044"          # = der frühere Einzel-Component (ID erhalten, Default-Variante)
+      "orientation=horizontal": "4280:73"            # NEU 2026-06-17
+    axis: { orientation: [vertical, horizontal] }
+    nests: "Slot (VERTICAL gap-16) → Field → .Separator → Field. vertical: Separator orientation=horizontal (3742:1055), Fields FILL-Breite. horizontal: Slot HORIZONTAL, Fields HUG nebeneinander, Separator orientation=vertical + lV=FILL (vertikaler Divider, volle Reihenhöhe)."
+  skill: Figma-Revision (2026-06-12) + orientation-Achse (2026-06-17, /figma-use)
   notes: >
     Surface-less Container (finding #24): VERTICAL auto-layout gap-xl (space-xl/16, bound), w-full, KEIN
     Fill/Stroke. Gruppiert mehrere Fields mit Divider — FieldSeparator = genestete echte .Separator-Instanz
     (kein eigenes Set, task 4). Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<div>` @container/
     field-group flex-col gap-xl. figma-verify CLEAN, instanziierbar (h≈207).
+    ORIENTATION-ACHSE 2026-06-17: Einzel-Component → Set (combineAsVariants), Achse `orientation`
+    (lowercase, wie Field/Separator). vertical = unverändert (gestapelt, horizontaler Divider). horizontal =
+    Slot HORIZONTAL, Fields HUG nebeneinander, der Separator switcht auf die vorhandene vertical-Variante
+    (3676:1016-Set) + lV=FILL → vertikaler Divider zwischen den Spalten. Set vertikal arrangiert (passt in die
+    840er-Section, kein Überlauf). Code: fieldGroupVariants (vertical=flex-col / horizontal=flex-row flex-wrap +
+    [&>[data-slot=field]]:w-auto). DS-Erweiterung über stock-shadcn (dort nur Field orientation). Pendant zur
+    RadioGroup-Container-orientation → Checkbox-/Radio-Gruppen bekommen die gleiche Reihen-Fähigkeit.
 
 - name: Checkbox
   status: nova-aligned

@@ -25,8 +25,9 @@ import { Button } from '../button';
 //    aria-invalid border/ring + FieldError (text-destructive) carry the red. `data-disabled`
 //    on the Field dims its label via group styling. There is NO focus/hover/active state here.
 //  · FieldContent stacks label+description into a column beside a control (horizontal rows).
-//    FieldSet+FieldLegend wrap a <fieldset>/<legend> caption; FieldGroup is the vertical stack
-//    of Fields; FieldSeparator nests the DS Separator (optional inline label).
+//    FieldSet+FieldLegend wrap a <fieldset>/<legend> caption; FieldGroup stacks its Fields
+//    (vertical default; `orientation="horizontal"` lays them in a wrapping row — a DS extension,
+//    the row axis the checkbox/radio groups build on); FieldSeparator nests the DS Separator.
 // So the "states" are: orientation × invalid × disabled × which parts are present — shown as
 // the usage examples below, NOT as a faked pseudo-state gallery. Default = canonical playground.
 const meta: Meta<typeof Field> = {
@@ -60,7 +61,7 @@ const meta: Meta<typeof Field> = {
       source: { type: 'code' },
       description: {
         component:
-          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** stories for the real compositions.',
+          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** / **Field Group** stories for the real compositions.',
       },
     },
   },
@@ -265,6 +266,51 @@ export const Horizontal: Story = {
           <Field orientation="horizontal">
             <FieldLabel htmlFor="optin-narrow">Subscribe to updates</FieldLabel>
             <Input id="optin-narrow" type="text" placeholder="you@example.com" className="max-w-1/3" />
+          </Field>
+        </FieldGroup>
+      </FieldSet>
+    </div>
+  ),
+};
+
+// DS-authored: FieldGroup orientation — distinct axis from Field orientation above. The GROUP
+// container lays its Fields in a wrapping ROW instead of the default vertical stack (each Field
+// shrinks to content via [&>[data-slot=field]]:w-auto). A DS extension over stock shadcn (which
+// only gives Field an orientation) — the same row capability the checkbox/radio groups build on.
+// Here: a compact row of short number inputs (the inputs carry the width since the Fields hug).
+// The `orientation` control is wired to the FieldGroup (NOT the meta's Field orientation): it
+// overrides the meta argType to the two FieldGroup values, so toggling reflows row↔stack live.
+// Its own arg shape (orientation isn't a Field prop); defaults to horizontal — the story's point.
+// Export name avoids the imported FieldGroup component; `name` sets the "Field Group" display title.
+export const FieldGroupExample: StoryObj<{ orientation: 'vertical' | 'horizontal' }> = {
+  name: 'Field Group',
+  args: { orientation: 'horizontal' },
+  argTypes: {
+    orientation: {
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      description: 'Layout of the **FieldGroup** container — `vertical` stacks the Fields, `horizontal` lays them in a wrapping row.',
+      table: { type: { summary: '"vertical" | "horizontal"' }, defaultValue: { summary: '"vertical"' } },
+    },
+  },
+  parameters: { controls: { include: ['orientation'] } },
+  render: ({ orientation }) => (
+    <div className="w-full max-w-2xl">
+      <FieldSet>
+        <FieldLegend>Dimensions</FieldLegend>
+        <FieldDescription>Set the artboard size in pixels.</FieldDescription>
+        <FieldGroup orientation={orientation}>
+          <Field>
+            <FieldLabel htmlFor="dim-width">Width</FieldLabel>
+            <Input id="dim-width" type="number" placeholder="1920" className="w-24" />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="dim-height">Height</FieldLabel>
+            <Input id="dim-height" type="number" placeholder="1080" className="w-24" />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="dim-scale">Scale</FieldLabel>
+            <Input id="dim-scale" type="number" placeholder="2" className="w-24" />
           </Field>
         </FieldGroup>
       </FieldSet>

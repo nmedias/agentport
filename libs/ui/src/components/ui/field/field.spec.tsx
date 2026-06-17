@@ -32,6 +32,31 @@ describe('Field', () => {
     ).toBe('horizontal');
   });
 
+  // FieldGroup stacks vertically by default; orientation="horizontal" (DS extension)
+  // switches it to a wrapping row that lets each Field shrink to content.
+  it('stacks the FieldGroup vertically by default', () => {
+    const { container } = render(
+      <FieldGroup>
+        <Field />
+      </FieldGroup>,
+    );
+    const group = container.querySelector('[data-slot="field-group"]') as HTMLElement;
+    expect(group.getAttribute('data-orientation')).toBe('vertical');
+    expect(group.className).toContain('flex-col');
+  });
+
+  it('lays the FieldGroup in a row when orientation="horizontal"', () => {
+    const { container } = render(
+      <FieldGroup orientation="horizontal">
+        <Field />
+      </FieldGroup>,
+    );
+    const group = container.querySelector('[data-slot="field-group"]') as HTMLElement;
+    expect(group.getAttribute('data-orientation')).toBe('horizontal');
+    expect(group.className).toContain('flex-row');
+    expect(group.className).not.toContain('flex-col');
+  });
+
   // FieldError suppresses itself when there is no message, and renders role=alert
   // with the destructive format when there is one (the ⚠ placeholder token).
   it('renders FieldError only with content, as an alert', () => {

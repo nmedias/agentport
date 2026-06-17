@@ -65,14 +65,36 @@ function FieldLegend({
   );
 }
 
-function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
+// FieldGroup stacks its Fields. orientation is a DS extension (stock shadcn ships a
+// fixed flex-col group): horizontal lays the Fields in a wrapping row and lets each
+// shrink to content — Field is w-full by default, so the row needs to override that
+// (the same w-auto trick the responsive Field variant applies at @md). Parallels the
+// RadioGroup container's orientation so checkbox groups get the same row capability.
+const fieldGroupVariants = cva(
+  'group/field-group @container/field-group flex w-full gap-xl data-[slot=checkbox-group]:gap-lg *:data-[slot=field-group]:gap-xl',
+  {
+    variants: {
+      orientation: {
+        vertical: 'flex-col',
+        horizontal: 'flex-row flex-wrap items-center [&>[data-slot=field]]:w-auto',
+      },
+    },
+    defaultVariants: {
+      orientation: 'vertical',
+    },
+  },
+);
+
+function FieldGroup({
+  className,
+  orientation = 'vertical',
+  ...props
+}: React.ComponentProps<'div'> & VariantProps<typeof fieldGroupVariants>) {
   return (
     <div
       data-slot="field-group"
-      className={cn(
-        'group/field-group @container/field-group flex w-full flex-col gap-xl data-[slot=checkbox-group]:gap-lg *:data-[slot=field-group]:gap-xl',
-        className,
-      )}
+      data-orientation={orientation}
+      className={cn(fieldGroupVariants({ orientation }), className)}
       {...props}
     />
   );
