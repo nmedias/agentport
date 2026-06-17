@@ -64,9 +64,12 @@ error:     { 50: "#ffe3d9", 100: "#ffc6bb", 200: "#fca69a", 300: "#e98779", 400:
 opacity:   { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS --ap-color-opacity-10: 10%" }
 ```
 
-> **Effect-Farben** `glow`/`elevation` im CSS **an die neuen Rampen gebunden** (User-Entscheid):
-> `glow` → `signal/400`, `elevation` → `ink/900`. Figmas `Effect/*` halten noch die alten Roh-Werte
-> (#0098da / #1a2230) → bei Gelegenheit in Figma nachziehen (Code↔Figma-Divergenz an dieser Stelle).
+> **Effect-Farben** `glow`/`elevation` im CSS an die Rampen gebunden (User-Entscheid):
+> `glow → signal/400 @50%`, `elevation → ink/900 @18%` (via `color-mix`). **In Figma nicht 1:1
+> abbildbar:** eine Effekt-Farbe ist dort eine rohe RGBA im `Effect/*`-Primitive — das Color-Binding
+> ersetzt die ganze RGBA, ein Live-Alias auf eine Rampe ist nicht möglich. Figmas `Effect/*` halten
+> daher bewusst Roh-Werte (#0098da / #1a2230); **Code ist hier die Quelle** für die Effekt-Farben,
+> die Divergenz ist akzeptiert (kein Figma-To-Do).
 
 **Naming-Rework 2026-06-17 (Figma):** Color-Semantics auf ein **`-fill`/`-ink`/`-border`-System**
 umgestellt. Flächen-Token = bloßer Name oder `-fill`, Text/Icon = `-ink` (ersetzt `-foreground`),
@@ -335,15 +338,15 @@ Primitives (intern; Figma-Gruppe `Effect/`, Scopes EFFECT_COLOR/EFFECT_FLOAT —
 Kurz-Pfade, CSS = `--ap-effect-…`):
 
 ```yaml
-glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "cyan/500 @ 50% (color-mix)" }        # --ap-effect-glow-*
-elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }   # --ap-effect-elevation-*
+glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma-Style hält Roh-#0098da
+elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "ink/900 @ 18% (color-mix)" }       # --ap-effect-elevation-* · Figma-Style hält Roh-#1a2230
 ```
 
 ```yaml
 - token: shadow-glow
   css_var: --ap-sys-shadow-glow
   primitive: "glow/* (5 Teile: x y blur spread color)"
-  value: "0 0 4px 0 · cyan/500 @ 50%"
+  value: "0 0 4px 0 · signal/400 @ 50%"
   utilities: [shadow-glow]
   use: "Glow an Brand-Marken (Fokus/Aktiv-Akzent)."
   note: "Figma: Effect Style „Glow" bindet die Teile direkt — kein semantic-Var."
@@ -351,7 +354,7 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color
 - token: shadow-elevation
   css_var: --ap-sys-shadow-elevation
   primitive: "elevation/* (5 Teile: x y blur spread color)"
-  value: "0 14px 36px -6px · neutral/900 @ 18%"
+  value: "0 14px 36px -6px · ink/900 @ 18%"
   utilities: [shadow-elevation]
   use: "Schlagschatten erhabener Overlays/Menüs."
   note: "Figma: Effect Style „Elevation" bindet die Teile direkt — kein semantic-Var."
