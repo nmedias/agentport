@@ -47,7 +47,9 @@ Default          API playground (+ interaction smoke test, if the component is i
                  · source stays the meta's 'code' — never override a story to 'dynamic'
 Usage examples   one per STRUCTURALLY-DISTINCT real usage (Basic, Description, Group, Disabled, Invalid)
                  · reproduce the ACTUAL composition with ported DS primitives (Field/FieldLabel/…), never div+label
-                 · render-only → parameters: { controls: { disable: true } }
+                 · `controls: { disable: true }` is the DEFAULT, not a reflex — add a scoped
+                   `controls: { include: ['<prop>'] }` when a live toggle REINFORCES the example's
+                   point or aids doc/understanding (§controls)
 States gallery   AllStates / <Comp>States — every state side by side, at a glance
                  · grid: columns = primary axis (unchecked/checked, off/on, unselected/selected)
                  · rows mapped from a STATE_ROWS array (enabled/focus/disabled/invalid/invalid-focus)
@@ -112,8 +114,14 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
   story tests. Every story needs real labels/roles/aria (a bare control → `aria-label="…"`).
 - **DS tokens in story layout** — stories are part of the DS surface: `gap-xl`, `text-format-eyebrow`,
   `text-muted-ink` — never raw Tailwind numbers (`gap-6`) or hex.
-- **Controls hygiene** — render-only → `controls: { disable: true }`; scope a panel elsewhere with
-  `controls: { include: [...] }`; but NEVER `include` on the Default playground (filters the ArgsTable).
+- **Controls hygiene** — §controls. Default playground = full panel (NEVER `include` — it filters the
+  ArgsTable). Usage examples default to `controls: { disable: true }`, but `disable` is a DEFAULT, not a
+  reflex: attach a scoped `controls: { include: ['<prop>'] }` (give the story its own arg shape if the prop
+  isn't on the meta component) when a live toggle **reinforces the example's main point** or aids
+  doc/understanding — e.g. the orientation/variant the example exists to show. ALWAYS add such a control
+  when the example demonstrates a prop of a SUB-/SIBLING part the meta component's Default can't reach
+  (e.g. `FieldGroup.orientation` while `component: Field`): that prop otherwise has NO playground anywhere.
+  The States gallery stays render-only.
 - **Comment discipline** — file-top **contract** comment: name the *mechanism* (which CSS/Slot/attribute
   tints/focuses/wires-a11y, and WHEN), not what the component *is* — "a pill marker" = description ✗;
   "variant sets fill+ink; asChild→Slot renders as `<a>`, becomes focusable→ring" = contract ✓. Each story
@@ -126,7 +134,7 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
 S1 Locate    component folder; storybook MCP up (:6006)? → get-storybook-story-instructions (canonical CSF/imports)
 S2 Meta      header contract comment; tags autodocs; args defaults; HAND-CURATED argTypes + docs.description.component; source:'code'
 S3 Default   render: (args)=><X {...args}>…</X> — never {}; full ArgsTable (no include); play if interactive
-S4 Examples  one per structurally-distinct usage, real DS composition primitives, controls.disable
+S4 Examples  one per structurally-distinct usage, real DS composition primitives; controls.disable by default — scoped include where a toggle reinforces the point / reaches a sub-part prop (§controls)
 S5 States    STATE_ROWS grid (primary axis = columns); focus via pseudo addon
 S6 Verify    gate green (jsdom specs + storybook browser: Chromium + axe); shoot -- <storyId> / preview-stories → surface URLs
 ```
