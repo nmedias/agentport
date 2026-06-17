@@ -215,7 +215,7 @@ export const Invalid: Story = {
 // caption span is decorative) so the visual matrix still has accessible names.
 export const AllStates: Story = {
   parameters: {
-    controls: { include: [] },
+    controls: { disable: true },
     pseudo: { focusVisible: ['#sw-focus', '#sw-checked-focus', '#sw-focus-invalid', '#sw-checked-focus-invalid'] },
   },
   render: () => (
