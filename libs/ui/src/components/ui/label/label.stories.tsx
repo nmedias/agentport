@@ -30,7 +30,7 @@ export const Disabled: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="group" data-disabled="true">
-      <Label htmlFor="disabled-input">Disabled field</Label>
+      <Label htmlFor="disabled-input" aria-disabled>Disabled field</Label>
     </div>
   ),
 };

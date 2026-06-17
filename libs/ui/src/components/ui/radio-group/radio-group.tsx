@@ -54,7 +54,7 @@ function RadioGroupItem({
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
       className={cn(
-        'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 corner-full border border-input bg-input-background outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive',
+        'group/radio-group-item peer relative flex aspect-square size-4 shrink-0 corner-full border border-input-border bg-input-fill outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-checked:border-primary-fill data-checked:bg-primary-fill data-checked:text-primary-ink aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive',
         className,
       )}
       {...props}
@@ -63,7 +63,7 @@ function RadioGroupItem({
         data-slot="radio-group-indicator"
         className="flex size-4 items-center justify-center"
       >
-        <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 corner-full bg-primary-foreground group-aria-invalid/radio-group-item:bg-destructive-foreground" />
+        <span className="absolute top-1/2 left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 corner-full bg-primary-ink group-aria-invalid/radio-group-item:bg-destructive-ink" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );

@@ -25,8 +25,8 @@ export const Default: Story = {};
 export const Filled: Story = { args: { defaultValue: 'invoice_2024' } };
 export const Disabled: Story = { args: { disabled: true } };
 
-// Invalid state: aria-invalid drives the destructive border + ring. The token is
-// still a ⚠ placeholder (stock hex) — see tokens-reference.md.
+// Invalid state: aria-invalid drives the destructive border + ring (destructive
+// now bound to error/600 — no longer a placeholder token).
 export const Invalid: Story = {
   args: { 'aria-invalid': true, defaultValue: 'not-a-valid-value' },
 };

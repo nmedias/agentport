@@ -9,6 +9,14 @@ Quelle: `libs/ui/src/components/ui/*`, `libs/ui/src/index.ts`, `libs/ui/{compone
 Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 (dieses Doc nachziehen, nicht umgekehrt). Figma-Lesen ist read-only (Pipeline-Regel).
 
+> **Colour-Rework 2026-06-17 (`-fill`/`-ink`/`-border`-Token-System):** alle Components unten via
+> `/component-sync` (Figma → Code) auf die neuen DS-Color-Utilities umgekleidet. Live-Figma-Set-Namen
+> aktualisiert (Top-Level-Sets ohne führenden `.`; Composites flachgezogen, z. B. `.Command/Item`→`CommandItem`,
+> `.Dialog/Footer`→`DialogFooter`, `.ChoiceCard/Checkbox`→`ChoiceCardCheckbox`; `.Button/Base` behält den Punkt).
+> Per-Component Color-Deltas + Deviations: `agent-runs/component-sync/2026-06-17-<component>/notes.md`.
+> Offene Figma-Schuld (mehrere Components): die Focus/Invalid-DROP_SHADOW-Effektfarben binden rohes Hex
+> (unbound) statt der `ring`/`destructive`-Variablen — der Code nutzt die rollen-korrekten Tokens.
+
 ## Regeln
 
 - **Baseline = `radix-nova`** (`components.json` `style`). `ui:add` zieht dichtere Nova-Source; im Code
@@ -132,7 +140,7 @@ status_note: >
 
 - name: Input
   status: nova-aligned
-  figma_synced: false
+  figma_synced: true                            # colour sync 2026-06-17 (/component-sync) → input-fill/-border/-ink-placeholder
   source: { registry: "@shadcn", item: input, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/input/
@@ -140,7 +148,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input'"
   figma:
     section: { name: "Input", id: "3176:302" }
-    set: { name: ".Input", id: "3177:302" }
+    set: { name: "Input", id: "3177:302" }
     axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # focus-invalid = focus+invalid kombiniert (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid: zusammen, kein Sync). kein CVA im Code
   skill: /shadcn-component-port
   notes: >
@@ -158,7 +166,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/textarea'"
   figma:
     section: { name: "Textarea", id: "3487:674" }
-    set: { name: ".Textarea", id: "3488:684" }
+    set: { name: "Textarea", id: "3488:684" }
     axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # kein CVA; Sibling von Input; focus-invalid wie Input (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid:)
   skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
   notes: >
@@ -177,14 +185,14 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input-group'"
   figma:
     section: { name: "Input Group", id: "3519:590" }                 # alt 3491:674 gelöscht (rebuild fresh)
-    addon: { name: ".InputGroup/Addon", id: "3520:606", axis: "align [inline-start,inline-end,block-start,block-end]", slot: content }
-    button: { name: ".InputGroup/Button", id: "3545:694", axis: "size [xs,sm,icon-xs,icon-sm]",
+    addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start,inline-end,block-start,block-end]", slot: content }
+    button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs,sm,icon-xs,icon-sm]",
               nests: "ghost .Button instance per size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon); Base radius→corner-sm on xs+icon-xs",
               content: "label = deep text override; icon = swapComponent .Button Icon → swap-target (.InputGroup/Button Icon · copy 3546:677)" }
-    input: { name: ".InputGroup/Input", id: "3522:590", prop: text }
-    textarea: { name: ".InputGroup/Textarea", id: "3522:592", prop: text }
-    text: { name: ".InputGroup/Text", id: "3522:594", prop: text }
-    composition: { name: ".InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid,focus-invalid] x layout [horizontal,vertical]", slot: content }   # +focus-invalid 2026-06-12 (Figma-Member; Code via has-[control:focus-visible]+has-[aria-invalid], kein Sync)
+    input: { name: "InputGroupInput", id: "3522:590", prop: text }
+    textarea: { name: "InputGroupTextarea", id: "3522:592", prop: text }
+    text: { name: "InputGroupText", id: "3522:594", prop: text }
+    composition: { name: "InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid,focus-invalid] x layout [horizontal,vertical]", slot: content }   # +focus-invalid 2026-06-12 (Figma-Member; Code via has-[control:focus-visible]+has-[aria-invalid], kein Sync)
     examples: { Icons: "3527:613", Text: "3527:650", Buttons: "3546:697", States: "3528:662/681/700", Textarea: "3547:711", Kbd: "3531:676" }
   skill: /shadcn-component-port (2026-06-10, Re-port; GREEN-Test des überarbeiteten Composite-Verfahrens)
   notes: >
@@ -260,34 +268,34 @@ status_note: >
   figma:
     section: { name: "Command", id: "3555:679" }
     item:
-      set: { name: ".Command/Item", id: "3559:2" }
+      set: { name: "CommandItem", id: "3559:2" }
       axis: { state: [default, selected, disabled, checked] }
       props: "icon#3559:0 (INSTANCE_SWAP→Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
       members: { default: "3558:2", selected: "3558:7", disabled: "3558:12", checked: "3558:17" }
     input:
-      set: { name: ".Command/Input", id: "3639:2" }
+      set: { name: "CommandInput", id: "3639:2" }
       axis: { variant: [default, palette] }
       props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
       members: { default: "3561:2", palette: "3638:8" }
       default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-input Placeholder"
       palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
     separator:
-      set: { name: ".Command/Separator", id: "3653:6" }
+      set: { name: "CommandSeparator", id: "3653:6" }
       axis: { variant: [default, labeled] }
       props: "label#3653:1 (text) — nur labeled-Member gebunden"
       members: { default: "3564:2", labeled: "3653:5" }
       default: "1px-Linie (border), full-bleed ergibt sich aus p-0-Panel der palette-Composition"
       labeled: "Labeled Rule: Eyebrow-Label (textCase UPPER, muted-foreground) + nachlaufende Linie (h1 fill, border) · gap-md px-xl pt-lg pb-sm — für freie/flache Kompositionen; CommandGroup[palette] zeichnet sein Heading weiterhin selbst (cmdk-Auto-Hide bleibt beim Gruppen-Weg)"
-    empty: { name: ".Command/Empty", id: "3564:3", prop: "message (text)" }
+    empty: { name: "CommandGroup/CommandEmpty", id: "3564:3", prop: "message (text)" }
     group:
-      set: { name: ".Command/Group", id: "3640:9" }
+      set: { name: "CommandGroup", id: "3640:9" }
       axis: { variant: [default, palette] }
       props: "heading#3640:1 (text, eyebrow UPPER)"
       slot: "items#3640:0"
       members: { default: "3565:2", palette: "3640:2" }
       palette: "Heading = genestete .Command/Separator[labeled]-Instanz (px auf space-md overridet → Label-Einzug 16px wie Item-Icons) · Container px-md py-0. ACHTUNG: heading-Prop ist im palette-Member inert — Gruppen-Titel via label-Prop der genesteten Separator-Instanz setzen"
     composition:
-      set: { name: ".Command", id: "3642:2" }
+      set: { name: "Command", id: "3642:2" }
       axis: { variant: [default, palette] }
       slot: "list#3642:0"
       members: { default: "3566:2", palette: "3641:2" }
@@ -350,13 +358,13 @@ status_note: >
   figma:
     section: { name: "Dialog", id: "3589:788" }
     composition:
-      name: ".Dialog"
+      name: "Dialog"
       id: "3592:794"
       props: "title#3593:2 (text) · description#3593:3 (text) · showCloseButton#3593:4 · showFooter#3593:5 · showBody#3606:0 (bools)"
       slots: { body: "3609:890 (leer; Wrapper body-region visible↔showBody)", footer: "3593:795 (Default = .Dialog/Footer-Instanz 3593:796)" }
       nests: "ghost icon-sm .Button-Instanz 3593:806 als Close (ABSOLUTE top-right, Icon via swapComponent→.Dialog/Icon/Close)"
-    footer: { name: ".Dialog/Footer", id: "3591:788", slot: "actions#3591:789 (Default: Cancel outline + Save default .Button-Instanzen)" }
-    overlay: { name: ".Dialog/Overlay", id: "3590:791", fill: "scrim (3588:2, Alias→neutral/900) × Layer-Opacity scrim-opacity (3618:3, Alias→opacity/10) + BACKGROUND_BLUR 4" }
+    footer: { name: "DialogFooter", id: "3591:788", slot: "actions#3591:789 (Default: Cancel outline + Save default .Button-Instanzen)" }
+    overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, Alias→neutral/900) × Layer-Opacity scrim-opacity (3618:3, Alias→opacity/10) + BACKGROUND_BLUR 4" }
     icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
     examples: { dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
   skill: /shadcn-component-port (2026-06-10, Composite-Port; nestet Button)
@@ -405,7 +413,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/label'"
   figma:
     section: { name: "Label", id: "3733:1022" }
-    set: { name: ".Label", id: "3735:1024" }
+    set: { name: "Label", id: "3735:1024" }
     members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
     props: "label (children)#3735:0 (TEXT, default '{Label}' — Text-Property-Konvention 2026-06-12: children-getrieben → (children)-Suffix + {…}-Default) · state (VARIANT [default, disabled])"
     axis: { state: [default, disabled] }
@@ -435,7 +443,7 @@ status_note: >
     code_only_parts: [FieldTitle, "orientation=responsive"]   # FieldSet/FieldGroup/FieldLegend jetzt MIT Figma; responsive bleibt Container-Query-only (Wrap kein faithful Proxy)
   figma:
     section: { name: "Field", id: "3710:1016" }
-    set: { name: ".Field", id: "3716:1020" }
+    set: { name: "Field", id: "3716:1020" }
     members:
       "orientation=vertical, invalid=false, controlPosition=trailing":   "3712:1016"
       "orientation=vertical, invalid=true, controlPosition=trailing":    "3713:1017"
@@ -499,7 +507,7 @@ status_note: >
     barrel: "via field-Barrel"
   figma:
     section: { name: "Field Legend", id: "3904:1246" }
-    set: { name: ".FieldLegend", id: "3909:1246" }
+    set: { name: "FieldLegend", id: "3909:1246" }
     members: { "variant=legend": "3908:1246", "variant=label": "3908:1248" }
     props: "legend (children)#3909:2 (TEXT, default '{Legend}'); variant (VARIANT [legend, label])"
     axis: { variant: [legend, label] }
@@ -520,7 +528,7 @@ status_note: >
     barrel: "via field-Barrel"
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
-    component: { name: ".FieldSet", id: "3739:1026" }   # Einzel-Component (keine Variant-Achse)
+    component: { name: "FieldSet", id: "3739:1026" }   # Einzel-Component (keine Variant-Achse)
     slots: { legend: "legend#3741:0 (Title-Text-Default 'Address', finding #25)" }
     nests: "2× echte .Field-Instanz (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL-Breite)"
   skill: Figma-Revision (2026-06-12)
@@ -540,7 +548,7 @@ status_note: >
     barrel: "via field-Barrel"
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
-    component: { name: ".FieldGroup", id: "3742:1044" }
+    component: { name: "FieldGroup", id: "3742:1044" }
     nests: "Field 3742:1045 → .Separator 3742:1055 (horizontal, FieldSeparator-Idiom = reuse, task 4) → Field 3742:1056; alle FILL-Breite"
   skill: Figma-Revision (2026-06-12)
   notes: >
@@ -559,7 +567,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
   figma:
     section: { name: "Checkbox", id: "3791:1184" }
-    set: { name: ".Checkbox", id: "3795:1184" }   # 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP-Grid
+    set: { name: "Checkbox", id: "3795:1184" }   # 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP-Grid
     members:   # Reihe checked=off, dann checked=on
       "checked=off, state=default":       "3792:1184"
       "checked=off, state=focus":         "3794:1184"
@@ -622,7 +630,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/switch'"
   figma:
     section: { name: "Switch", id: "3835:1193" }
-    set: { name: ".Switch", id: "3839:2" }                 # 2026-06-15 umgebaut → 3 Achsen (size × checked × state), 20 Member, 5×4 WRAP-Grid
+    set: { name: "Switch", id: "3839:2" }                 # 2026-06-15 umgebaut → 3 Achsen (size × checked × state), 20 Member, 5×4 WRAP-Grid
     members:   # je size: Reihe checked=off, dann checked=on
       "size=default, checked=off, state=default":       "3837:2"
       "size=default, checked=off, state=focus":         "3837:6"
@@ -687,7 +695,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/radio-group'"
   figma:
     section: { name: "RadioGroup", id: "3849:1206" }
-    set: { name: ".RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP
+    set: { name: "RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP
     members:   # Reihe checked=off, dann checked=on
       "checked=off, state=default":       "3850:1206"
       "checked=off, state=focus":         "3850:1210"
@@ -739,19 +747,19 @@ status_note: >
   figma:
     section: { name: "Choice Card", id: "4107:1526" }   # Page "Shadcn Components" 3126:2
     checkbox:
-      set: { name: ".ChoiceCard/Checkbox", id: "4112:1638" }
+      set: { name: "ChoiceCardCheckbox", id: "4112:1638" }
       members:
         "checked=off": { default: "4110:1535", focus: "4110:1556", disabled: "4110:1577", invalid: "4110:1598", focus-invalid: "4110:1624" }
         "checked=on":  { default: "4111:1577", focus: "4111:1602", disabled: "4111:1627", invalid: "4111:1652", focus-invalid: "4111:1682" }
       usage_example: "4128:1862 (selected single card)"
     switch:
-      set: { name: ".ChoiceCard/Switch", id: "4119:1750" }   # control size=default, KEINE size-Achse
+      set: { name: "ChoiceCardSwitch", id: "4119:1750" }   # control size=default, KEINE size-Achse
       members:
         "checked=off": { default: "4117:1638", focus: "4117:1661", disabled: "4117:1684", invalid: "4117:1707", focus-invalid: "4117:1735" }
         "checked=on":  { default: "4118:1694", focus: "4118:1717", disabled: "4118:1740", invalid: "4118:1763", focus-invalid: "4118:1791" }
       usage_example: "4128:1877 (selected single card)"
     radio:
-      set: { name: ".ChoiceCard/Radio", id: "4124:1862" }
+      set: { name: "ChoiceCardRadio", id: "4124:1862" }
       members:
         "checked=off": { default: "4122:1750", focus: "4122:1771", disabled: "4122:1792", invalid: "4122:1813", focus-invalid: "4122:1839" }
         "checked=on":  { default: "4123:1801", focus: "4123:1826", disabled: "4123:1851", invalid: "4123:1876", focus-invalid: "4123:1906" }

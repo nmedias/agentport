@@ -153,12 +153,12 @@ export const ChoiceCardStates: Story = {
     <div className="flex max-w-2xl flex-col gap-xl">
       <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
         <span />
-        <span className="text-format-eyebrow text-muted-foreground">Unchecked</span>
-        <span className="text-format-eyebrow text-muted-foreground">Checked</span>
+        <span className="text-format-eyebrow text-muted-ink">Unchecked</span>
+        <span className="text-format-eyebrow text-muted-ink">Checked</span>
       </div>
       {STATE_ROWS.map((r) => (
         <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-start gap-lg">
-          <span className="pt-md text-format-eyebrow text-muted-foreground">{r.label}</span>
+          <span className="pt-md text-format-eyebrow text-muted-ink">{r.label}</span>
           <ChoiceCardCheckbox
             id={`cc-${r.key}-off`}
             title="Enable notifications"

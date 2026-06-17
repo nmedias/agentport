@@ -21,12 +21,15 @@ import { Separator } from '@/components/ui/separator';
 //    label/title → text-format-label (14/500); legend → text-format-title
 //    (18/600 — 16px text-base has no DS rung, picked by the section-caption ROLE);
 //    description/error → text-format-body (14/400/1.5). Standalone leading-* dropped.
-//  · FieldError colour = the destructive token (text-destructive) — a ⚠ stock
-//    PLACEHOLDER (raw hex, not designed); bound but NOT finalized.
-//  · invalid state keeps label + description NEUTRAL (foreground / muted) — only the
+//  · FieldError colour = the destructive token (text-destructive, now error/600 — a
+//    real DS semantic since the 2026-06-17 rework, no longer a placeholder).
+//  · invalid state keeps label + description NEUTRAL (ink / muted-ink) — only the
 //    control (aria-invalid border/ring) + FieldError go destructive, matching the
 //    Figma .Field design (3716:1020). This deviates from stock shadcn's group-wide
 //    data-[invalid=true]:text-destructive, which reddened the label by inheritance.
+//  · colour rework 2026-06-17 (-fill/-ink): description/separator text-muted-foreground
+//    → text-muted-ink, separator bg-background → bg-surface; checked choice-card tint
+//    (FieldLabel/FieldTitle) on accent-fill/accent-border/accent-ink (see those parts).
 //  · rounded-lg→corner-lg; every dark: variant dropped (light is the only mode).
 //  · responsive orientation (container-query @md flips column→row) is CODE-ONLY —
 //    not modelled in Figma (Figma has no container queries); kept verbatim here.
@@ -121,10 +124,11 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
     <Label
       data-slot="field-label"
       className={cn(
-        // checked choice-card tint = the two-cyan selection model (Figma-synced 2026-06-16):
-        // card fill → accent (cyan/50), stroke → primary (cyan/500); the title recolours to
-        // accent-foreground (see FieldTitle). Replaces the earlier primary/5 + primary/30 alpha.
-        'group/field-label peer/field-label flex w-fit gap-md group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary has-data-checked:bg-accent has-[>[data-slot=field]]:corner-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-md',
+        // checked choice-card tint = the accent selection model (Figma-synced 2026-06-17):
+        // card fill → accent-fill (deep/50), stroke → accent-border (still/200); the title
+        // recolours to accent-ink (see FieldTitle). The colour rework re-clothed the checked stroke
+        // from primary to accent-border (Figma .ChoiceCard/* checked=on members bind accent-border).
+        'group/field-label peer/field-label flex w-fit gap-md group-data-[disabled=true]/field:opacity-50 has-data-checked:border-accent-border has-data-checked:bg-accent-fill has-[>[data-slot=field]]:corner-lg has-[>[data-slot=field]]:border *:data-[slot=field]:p-md',
         'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',
         className,
       )}
@@ -138,9 +142,9 @@ function FieldTitle({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="field-label"
       className={cn(
-        // in a checked choice-card the title reads as accent-foreground (cyan/700) on the
+        // in a checked choice-card the title reads as accent-ink (signal/600) on the
         // accent tint — scoped to the FieldLabel card group so plain field rows are unaffected.
-        'flex w-fit items-center gap-md text-format-label group-data-[disabled=true]/field:opacity-50 group-has-data-checked/field-label:text-accent-foreground',
+        'flex w-fit items-center gap-md text-format-label group-data-[disabled=true]/field:opacity-50 group-has-data-checked/field-label:text-accent-ink',
         className,
       )}
       {...props}
@@ -153,7 +157,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="field-description"
       className={cn(
-        'text-left text-format-body text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-sm',
+        'text-left text-format-body text-muted-ink group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-sm',
         'last:mt-0 nth-last-2:-mt-xs',
         '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
         className,
@@ -183,7 +187,7 @@ function FieldSeparator({
       <Separator className="absolute inset-0 top-1/2" />
       {children && (
         <span
-          className="relative mx-auto block w-fit bg-background px-md text-muted-foreground"
+          className="relative mx-auto block w-fit bg-surface px-md text-muted-ink"
           data-slot="field-separator-content"
         >
           {children}

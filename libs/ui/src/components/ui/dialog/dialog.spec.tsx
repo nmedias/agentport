@@ -81,7 +81,7 @@ describe('Dialog', () => {
       'text-format-body'
     );
     expect(getByRole('dialog').className).toContain('text-format-body');
-    expect(getByRole('dialog').className).toContain('bg-overlay');
+    expect(getByRole('dialog').className).toContain('bg-overlay-fill');
   });
 
   it('keeps DS surface tokens on overlay and footer', async () => {
@@ -91,7 +91,7 @@ describe('Dialog', () => {
     const overlay = baseElement.querySelector('[data-slot="dialog-overlay"]');
     expect(overlay?.className).toContain('bg-scrim');
     const footer = baseElement.querySelector('[data-slot="dialog-footer"]');
-    expect(footer?.className).toContain('bg-muted/50');
+    expect(footer?.className).toContain('bg-muted-fill/50');
     expect(footer?.className).toContain('-mx-xl');
   });
 });

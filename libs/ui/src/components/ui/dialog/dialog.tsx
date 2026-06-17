@@ -9,7 +9,11 @@ import { Button } from '@/components/ui/button';
 // agent-runs/component-port/2026-06-10-dialog/notes.md). Geometry (top-2, right-2,
 // max-w-*) stays numeric. nova's hairline ring-1 ring-foreground/10 becomes
 // border + shadow-elevation (DS overlay depth, same move as Command); bg-black/10
-// becomes bg-scrim (new semantic token, neutral-900 @ 10%).
+// becomes bg-scrim (semantic token, ink-900 @ 10%).
+// Colour re-clothed for the -fill/-ink token rework (/component-sync 2026-06-17):
+// panel bg-overlay→bg-overlay-fill + text-overlay-foreground→text-overlay-ink,
+// footer band bg-muted/50→bg-muted-fill/50, description text-muted-foreground→
+// text-muted-ink, link hover text-foreground→text-ink (Figma .Dialog bindings).
 // CommandDialog (command/) can now be un-deferred — it needs this Dialog.
 
 function Dialog({
@@ -66,7 +70,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-xl corner-xl border bg-overlay p-xl text-format-body text-overlay-foreground shadow-elevation duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-xl corner-xl border bg-overlay-fill p-xl text-format-body text-overlay-ink shadow-elevation duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
           className
         )}
         {...props}
@@ -112,7 +116,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        '-mx-xl -mb-xl flex flex-col-reverse gap-md corner-b-xl border-t bg-muted/50 p-xl sm:flex-row sm:justify-end',
+        '-mx-xl -mb-xl flex flex-col-reverse gap-md corner-b-xl border-t bg-muted-fill/50 p-xl sm:flex-row sm:justify-end',
         className
       )}
       {...props}
@@ -148,7 +152,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        'text-format-body text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground',
+        'text-format-body text-muted-ink *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-ink',
         className
       )}
       {...props}

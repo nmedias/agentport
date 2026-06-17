@@ -11,25 +11,30 @@ import { Textarea } from '@/components/ui/textarea';
 // Token-faithful re-port of the shadcn input-group (radix-nova) into the Agentport DS
 // (tokens-reference.md §6). Composite: the GROUP owns the surface, border and
 // focus/invalid/disabled treatment; the controls (input/textarea) go borderless and
-// addons (icons, text, buttons, kbd) sit beside them. Re-clothed in DS tokens:
-//  · the group carries bg-input-background (DS fields are opaque — Input/Textarea
-//    precedent); nova leaves it transparent in light mode. Command overrides the
-//    surface for its palette look.
-//  · text-sm font-medium addon → text-format-label; plain text-sm Text → text-format-body
-//    (Medium vs Regular 14, the DS distinction).
+// addons (icons, text, buttons, kbd) sit beside them. Re-clothed in DS tokens
+// (colour bindings verified live against the Figma InputGroup set, 2026-06-17
+// -fill/-ink token rework):
+//  · the group carries bg-input-fill + border-input-border (Input/input-fill +
+//    Input/input-border — DS fields are opaque; nova leaves it transparent in light
+//    mode). Command overrides the surface for its palette look.
+//  · addon icon/text → text-muted-ink (shadcn Default/muted-ink); text-sm font-medium
+//    addon → text-format-label; plain text-sm Text → text-format-body (Medium vs
+//    Regular 14, the DS distinction; InputGroupText carries the Figma Body style).
 //  · gap-2(8)→gap-md, py-1.5(6)→py-sm, pl/pr-2(8)→pl/pr-md, px-2.5(10)→px-md,
 //    pl/pr-1.5(6)→pl/pr-sm, pt/pb-3(12)→pt/pb-lg; ring-3→ring-[3px]; radius by NAME.
-//  · invalid bubbles border + ring WIDTH + colour (ring-[3px] ring-destructive/20).
+//  · focus = border-ring + ring-ring/50 ring-[3px] (Figma: ring var + raw glow effect).
+//    invalid bubbles border-destructive + ring WIDTH + colour (ring-[3px]
+//    ring-destructive/20) — destructive now binds a real DS semantic (error/600).
 //  · disabled:bg-input/50 dropped (DS disabled = opacity); dark: + combobox-content
 //    overrides dropped; [&>kbd]:rounded-calc dropped (DS Kbd owns its radius).
-// Geometry (h-8/h-6, size-6/8, svg sizes) stays numeric. destructive is a ⚠ placeholder.
+// Geometry (h-8/h-6, size-6/8, svg sizes) stays numeric.
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="input-group"
       role="group"
       className={cn(
-        'group/input-group relative flex h-8 w-full min-w-0 items-center corner-lg border border-input bg-input-background transition-[color,box-shadow] outline-none',
+        'group/input-group relative flex h-8 w-full min-w-0 items-center corner-lg border border-input-border bg-input-fill transition-[color,box-shadow] outline-none',
         // the control owns focus; the GROUP shows the ring
         'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]',
         // invalid bubbles up from any marked child: border + ring (width + colour)
@@ -47,7 +52,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text items-center justify-center gap-md py-sm text-format-label text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4",
+  "flex h-auto cursor-text items-center justify-center gap-md py-sm text-format-label text-muted-ink select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4",
   {
     variants: {
       align: {
@@ -144,7 +149,7 @@ function InputGroupText({ className, ...props }: React.ComponentProps<'span'>) {
   return (
     <span
       className={cn(
-        "flex items-center gap-md text-format-body text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+        "flex items-center gap-md text-format-body text-muted-ink [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
