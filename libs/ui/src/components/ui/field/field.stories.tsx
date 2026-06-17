@@ -15,21 +15,79 @@ import { Input } from '../input';
 import { Textarea } from '../textarea';
 import { Button } from '../button';
 
-// Field has no root element and no props worth a control panel — every story is
-// a composition. Render-only: disable the args table.
+// Field family contract — a DISPLAY-ONLY composition primitive, no root element of its own.
+// The parts only lay out + carry a11y semantics; the surface lives on the control inside.
+//  · Field (role="group") = the per-row wrapper. `orientation` is its one real prop and the
+//    only flex axis: vertical (default) stacks label→control→description; horizontal puts
+//    label + control on one centered row; responsive flips column→row at @md (container query).
+//  · State is expressed by DATA ATTRIBUTES on the wrapper, never pseudo-classes: `data-invalid`
+//    dims nothing itself — it only flips FieldDescription/error wiring; the control's own
+//    aria-invalid border/ring + FieldError (text-destructive) carry the red. `data-disabled`
+//    on the Field dims its label via group styling. There is NO focus/hover/active state here.
+//  · FieldContent stacks label+description into a column beside a control (horizontal rows).
+//    FieldSet+FieldLegend wrap a <fieldset>/<legend> caption; FieldGroup is the vertical stack
+//    of Fields; FieldSeparator nests the DS Separator (optional inline label).
+// So the "states" are: orientation × invalid × disabled × which parts are present — shown as
+// the usage examples below, NOT as a faked pseudo-state gallery. Default = canonical playground.
 const meta: Meta<typeof Field> = {
   title: 'UI/Field',
   component: Field,
-  parameters: { controls: { disable: true } },
+  tags: ['autodocs'],
+  args: { orientation: 'vertical' },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from the
+  // ComponentProps<'div'> & VariantProps<…> intersection, so the public API is documented here
+  // by hand (same approach as the other ports). data-invalid / data-disabled are HTML data
+  // attributes (not typed props) → described in the component block, not the table.
+  argTypes: {
+    orientation: {
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal', 'responsive'],
+      description:
+        'Flex axis of the row. `vertical` stacks label → control → description; `horizontal` puts label + control on one row; `responsive` is column on narrow, row at `@md` (container query).',
+      table: {
+        type: { summary: '"vertical" | "horizontal" | "responsive"' },
+        defaultValue: { summary: '"vertical"' },
+      },
+    },
+    children: {
+      control: false,
+      description: 'The field parts — FieldLabel, a control, FieldDescription, FieldError.',
+      table: { type: { summary: 'React.ReactNode' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** stories for the real compositions.',
+      },
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Field>;
 
+// Default — the API playground. render spreads {...args} into a complete canonical Field
+// (label → control → description), so `orientation` is a live control AND an ArgsTable row
+// (no controls.include — it would also filter the table) and the 'code' snippet shows a real
+// composition, never an empty {}. Display-only → no play (nothing to drive on a layout wrapper).
+export const Default: Story = {
+  render: (args) => (
+    <Field {...args} className="w-full max-w-md">
+      <FieldLabel htmlFor="default-username">Username</FieldLabel>
+      <Input id="default-username" type="text" placeholder="Max Leiter" />
+      <FieldDescription>Choose a unique username for your account.</FieldDescription>
+    </Field>
+  ),
+};
+
 // field-input (shadcn docs): vertical Input fields with label + description.
 // Exercises the canonical stack order (label → control → description) and the
 // label-first / description-first ordering.
 export const InputField: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-md">
       <FieldSet>
@@ -52,6 +110,7 @@ export const InputField: Story = {
 
 // field-textarea (shadcn docs): a Textarea field with label + description.
 export const TextareaField: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-md">
       <FieldSet>
@@ -70,6 +129,7 @@ export const TextareaField: Story = {
 // field-fieldset (shadcn docs): a FieldSet with a FieldLegend caption + a nested
 // two-column grid of Inputs. Exercises the legend (legend variant → title format).
 export const Fieldset: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-md">
       <FieldSet>
@@ -100,6 +160,7 @@ export const Fieldset: Story = {
 // row on @md. Exercises FieldContent (label+description column beside the control),
 // FieldSeparator between rows (nests the DS Separator), and a Button action row.
 export const Responsive: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-4xl">
       <form>
@@ -146,9 +207,11 @@ export const Responsive: Story = {
 
 // DS-authored (no standalone doc example): the invalid state. data-invalid marks the
 // group invalid; per the Figma .Field design only the control (aria-invalid border/ring)
-// and FieldError go destructive — label + description stay neutral (foreground / muted).
-// The destructive token is a ⚠ stock PLACEHOLDER — see tokens-reference.md.
+// and FieldError (text-destructive → error/600, a real DS semantic since the 2026-06-17
+// rework) go red — label + description stay neutral (ink / muted-ink). Single message vs
+// the dedup list both shown.
 export const Invalid: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-md">
       <FieldGroup>
@@ -167,23 +230,41 @@ export const Invalid: Story = {
   ),
 };
 
+// DS-authored: the disabled state — data-disabled="true" on the Field dims its label via
+// the group/field styling (the control itself carries its own disabled look).
+export const Disabled: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="w-full max-w-md">
+      <Field data-disabled="true">
+        <FieldLabel htmlFor="api-key">API key</FieldLabel>
+        <Input id="api-key" type="text" placeholder="sk-…" disabled />
+        <FieldDescription>Generated once your plan is upgraded.</FieldDescription>
+      </Field>
+    </div>
+  ),
+};
+
 // DS-authored: the horizontal orientation in isolation — label leading, control
 // trailing, on one baseline-centered row.
 export const Horizontal: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-full max-w-4xl">
       <FieldSet>
         <FieldGroup>
           <Field orientation="horizontal">
-            <FieldLabel htmlFor="optin" className="min-w-1/3" >Subscribe to updates</FieldLabel>
-            <Input id="optin" type="text" placeholder="you@example.com"  />
+            <FieldLabel htmlFor="optin-wide" className="min-w-1/3">
+              Subscribe to updates
+            </FieldLabel>
+            <Input id="optin-wide" type="text" placeholder="you@example.com" />
           </Field>
         </FieldGroup>
         <FieldSeparator />
         <FieldGroup>
           <Field orientation="horizontal">
-            <FieldLabel htmlFor="optin">Subscribe to updates</FieldLabel>
-            <Input id="optin" type="text" placeholder="you@example.com" className="max-w-1/3" />
+            <FieldLabel htmlFor="optin-narrow">Subscribe to updates</FieldLabel>
+            <Input id="optin-narrow" type="text" placeholder="you@example.com" className="max-w-1/3" />
           </Field>
         </FieldGroup>
       </FieldSet>
