@@ -105,23 +105,29 @@ status_note: >
 
 - name: Button
   status: nova-aligned
-  figma_synced: false
+  figma_synced: true   # 2026-06-17 colour sync (Step 3, /component-sync) → -fill/-ink token rework
   source: { registry: "@shadcn", item: button, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/button/
     exports: [Button, buttonVariants, ButtonProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/button'"
   figma:
-    set: { name: ".Button", id: "3164:312" }      # volle 120er-Matrix variant × size × state
-    base: { name: ".Button/Base", id: "3159:12" } # ausgekoppelter Basis-Slot
+    section: { name: "Button", id: "3126:3" }
+    set: { name: "Button", id: "3164:312" }       # 220er-Matrix variant × size × state (Live-Name ohne führenden Punkt)
+    base: { name: ".Button/Base", id: "3159:12" } # ausgekoppeltes Basis-Set (Fläche/Radius/Padding + state-layer RECTANGLE)
     axis: { variant: [default, destructive, outline, secondary, ghost, link],
             size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg],
             state: [default, hover, active, focus, disabled] }
-  skill: /shadcn-component-port
+  skill: /shadcn-component-port   # colour re-clothed via /component-sync
   notes: >
     Nova-Size-Ladder (h-8 default + xs und icon-xs/sm/lg, per-Size-Icon-Sizing, aria-expanded).
-    DS behalten: Radius per NAME (corner-lg/-md, ehem. rounded), Akzent-Cyan-Hover, solides destructive, text-format-label.
-    Icon-only (size=icon*) verlangt aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
+    Colour-Clothing (Figma .Button-Bindings, 2026-06-17): default = bg-primary-fill + text-primary-ink ·
+    secondary = bg-secondary + text-secondary-ink · destructive = bg-destructive + text-destructive-ink ·
+    outline = bg-surface + border + hover bg-accent-fill/text-accent-ink · ghost = hover accent-fill/-ink ·
+    link = text-primary. Radius per NAME (corner-lg/-md), text-format-label. Figma treibt hover/active
+    über ein state-layer-Overlay → Code nutzt das /opacity-Idiom. Focus-Ring = ring-ring/50 (Figma-Effekt
+    ist rohes #4a5562@50%, unbound → sollte an ring gebunden werden). Icon-only (size=icon*) verlangt
+    aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
 
 - name: Input
   status: nova-aligned

@@ -10,24 +10,27 @@ import { cn } from '@/lib/utils';
 // [&_svg:not([class*='size-'])]:size-N, ring-3 focus, active press, aria-invalid
 // + aria-expanded affordances. Kept on DS conventions (NOT Nova's raw values):
 //  · radius by NAME → DS scale (corner-lg=8, small sizes corner-md=6), not
-//    Nova's parametric --radius=10 · hover stays the cyan accent (§1 two-cyan /
-//    accent=selection), not Nova's neutral bg-muted · destructive stays the DS
-//    solid fill, not Nova's tint · text stays text-format-label (DS has no <14px sans).
+//    Nova's parametric --radius=10 · text stays text-format-label (DS has no <14px sans).
+// Colour clothing synced to the Figma .Button set (2026-06-17 -fill/-ink rework):
+//    default = primary-fill surface + primary-ink text · outline/ghost hover =
+//    accent-fill + accent-ink (selection tint) · secondary = secondary + -ink ·
+//    destructive solid + destructive-ink text. Figma drives hover/active via a
+//    state-layer overlay; here expressed as the DS /opacity idiom (see notes).
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap corner-lg text-format-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/90',
+          'bg-primary-fill text-primary-ink hover:bg-primary-fill/90 active:bg-primary-fill/90',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90 active:bg-destructive/90 focus-visible:ring-destructive/20',
+          'bg-destructive text-destructive-ink hover:bg-destructive/90 active:bg-destructive/90 focus-visible:ring-destructive/20',
         outline:
-          'border bg-background hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground',
+          'border bg-surface hover:bg-accent-fill hover:text-accent-ink active:bg-accent-fill active:text-accent-ink aria-expanded:bg-accent-fill aria-expanded:text-accent-ink',
         secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80 active:bg-secondary/80',
+          'bg-secondary text-secondary-ink hover:bg-secondary/80 active:bg-secondary/80',
         ghost:
-          'hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground',
+          'hover:bg-accent-fill hover:text-accent-ink active:bg-accent-fill active:text-accent-ink aria-expanded:bg-accent-fill aria-expanded:text-accent-ink',
         link: 'text-primary underline-offset-4 hover:underline active:underline',
       },
       size: {
