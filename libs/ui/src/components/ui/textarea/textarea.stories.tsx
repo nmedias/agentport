@@ -1,53 +1,177 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Textarea } from './textarea';
+import { expect, userEvent } from 'storybook/test';
 
+import { Textarea } from './textarea';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '../field';
+
+// Textarea contract — one bare <textarea> (data-slot="textarea"), the Input sibling
+// with a taller box:
+//  · NO variant axis — the surface is fixed; the axis is the live CSS STATE
+//    (default / focus / filled / disabled / invalid), driven by attributes not props:
+//    focus-visible → border-ring + ring; `disabled` → opacity-dim + no pointer events;
+//    `aria-invalid` → destructive border/ring. AllStates forces focus statically via the
+//    pseudo addon.
+//  · field-sizing-content auto-grows the box to its content; `rows` sets the initial height.
+//  · a11y: a bare control has no implicit name → every instance needs an associated
+//    <FieldLabel htmlFor> (usage examples) or an aria-label (standalone gallery rows).
 const meta: Meta<typeof Textarea> = {
   title: 'UI/Textarea',
   component: Textarea,
   tags: ['autodocs'],
-  argTypes: {
-    disabled: { control: 'boolean' },
-    rows: { control: 'number' },
-  },
   args: {
     placeholder: 'Add a description…',
     rows: 3,
+  },
+  // Curated prop docs for the Autodocs ArgsTable — the public API is the native
+  // <textarea> surface; the handful of props that drive the DS state language are
+  // documented here by hand (same approach as the other form-control ports).
+  argTypes: {
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder shown while empty (`text-input-ink-placeholder`).',
+      table: { type: { summary: 'string' } },
+    },
+    rows: {
+      control: 'number',
+      description: 'Initial visible text rows; the box still auto-grows with content.',
+      table: { type: { summary: 'number' } },
+    },
+    defaultValue: {
+      control: 'text',
+      description: 'Initial value when uncontrolled (the filled state).',
+      table: { type: { summary: 'string' } },
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Prevents interaction and dims the control (opacity-50, no pointer events).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    'aria-invalid': {
+      control: 'boolean',
+      description: 'Drives the destructive border + ring (the invalid state).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A multiline text control — the Input sibling with a taller, auto-growing box. No variant axis; its axis is the live CSS **state** (default/focus/filled/disabled/invalid). A bare control needs a label — compose it with the **Field** family (see **WithLabel**).',
+      },
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Textarea>;
 
-export const Default: Story = {};
-export const Filled: Story = {
-  args: {
-    defaultValue:
-      'Draft notes for the invoice type.\nReviewed with the team.',
+// Default — the API playground. render spreads {...args} into a complete <Textarea>, so every
+// prop in the meta argTypes is a live control AND an ArgsTable row (no controls.include — it
+// would also filter the table) and the 'code' snippet is a real example, never an empty {}.
+// play types into the box and asserts the value lands (a textbox HAS no implicit name → query
+// by role + the aria-label, then blur so the end state matches a real mouse user, no ring).
+export const Default: Story = {
+  render: (args) => <Textarea aria-label="Description" {...args} />,
+  play: async ({ canvas, step }) => {
+    const textarea = canvas.getByRole('textbox', { name: /description/i });
+
+    await step('typing fills the box', async () => {
+      await userEvent.type(textarea, 'Schema notes');
+      await expect(textarea).toHaveValue('Schema notes');
+    });
+
+    // userEvent.type leaves the box programmatically focused (→ :focus-visible ring);
+    // blur() drops it so the end state matches a real mouse user (no lingering ring).
+    await step('blurring clears the focus', async () => {
+      textarea.blur();
+      await expect(textarea).not.toHaveFocus();
+    });
   },
 };
-export const Disabled: Story = { args: { disabled: true } };
 
-// Invalid state: aria-invalid drives the destructive border + ring. The token is
-// still a ⚠ placeholder (stock hex) — see tokens-reference.md.
-export const Invalid: Story = {
-  args: { 'aria-invalid': true, defaultValue: 'not-a-valid-value' },
+// Usage — the canonical form composition: a labelled field. The bare control gets its
+// accessible name from the FieldLabel's htmlFor (not a div+label), the DS form pattern.
+export const WithLabel: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Field className="max-w-sm">
+      <FieldLabel htmlFor="tx-bio">Description</FieldLabel>
+      <Textarea id="tx-bio" placeholder="Add a description…" rows={3} />
+    </Field>
+  ),
 };
 
-// Gallery: every state side by side. Matches the Figma .Textarea variant set
-// (state = default | focus | filled | disabled | invalid). Focus is a live
-// pseudo-state, so it is shown via the dedicated Default story rather than a prop.
-export const AllStates: Story = {
-  parameters: { controls: { include: [] } },
+// Usage — label + helper text stacked above the control via FieldContent; the
+// description gives the field guidance copy without crowding the label.
+export const WithDescription: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
-    <div className="flex w-80 flex-col gap-3">
-      <Textarea aria-label="Default" placeholder="Default" rows={3} />
-      <Textarea
-        aria-label="Filled"
-        defaultValue={'Draft notes for the invoice type.\nReviewed with the team.'}
-        rows={3}
-      />
-      <Textarea aria-label="Disabled" placeholder="Disabled" rows={3} disabled />
-      <Textarea aria-label="Invalid" aria-invalid defaultValue="not-a-valid-value" rows={3} />
+    <Field className="max-w-sm">
+      <FieldContent>
+        <FieldLabel htmlFor="tx-notes">Schema notes</FieldLabel>
+        <FieldDescription>
+          Visible to anyone with access to this record type.
+        </FieldDescription>
+      </FieldContent>
+      <Textarea id="tx-notes" rows={4} defaultValue={'Draft notes for the invoice type.\nReviewed with the team.'} />
+    </Field>
+  ),
+};
+
+// Usage — the invalid state in context: aria-invalid reddens the control while the
+// FieldError (role="alert") carries the message. data-invalid on the Field is the
+// hook stock shadcn uses; the DS keeps the label neutral (only control + error go red).
+export const WithError: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Field data-invalid className="max-w-sm">
+      <FieldLabel htmlFor="tx-err">Description</FieldLabel>
+      <Textarea id="tx-err" aria-invalid defaultValue="not-a-valid-value" rows={3} />
+      <FieldError>A description is required.</FieldError>
+    </Field>
+  ),
+};
+
+// DS-authored gallery: every state side by side, mirroring the Figma .Textarea variant set
+// (state = default | focus | filled | disabled | invalid). focus is a live pseudo-state, so
+// the focus row is forced via the pseudo addon (targeting its id) — that's the only way to
+// show the focus ring statically; the rest are attribute-driven.
+const STATE_ROWS = [
+  { id: 'tx-default', label: 'Default', placeholder: 'Default' },
+  { id: 'tx-focus', label: 'Focus', placeholder: 'Focus' },
+  { id: 'tx-filled', label: 'Filled', value: 'Draft notes for the invoice type.\nReviewed with the team.' },
+  { id: 'tx-disabled', label: 'Disabled', placeholder: 'Disabled', disabled: true },
+  { id: 'tx-invalid', label: 'Invalid', value: 'not-a-valid-value', invalid: true },
+] as const;
+
+export const AllStates: Story = {
+  parameters: {
+    controls: { disable: true },
+    pseudo: { focusVisible: ['#tx-focus'] },
+  },
+  render: () => (
+    <div className="flex w-80 flex-col gap-lg">
+      {STATE_ROWS.map((r) => (
+        <div key={r.id} className="flex flex-col gap-xs">
+          <span className="text-format-eyebrow text-muted-ink">{r.label}</span>
+          <Textarea
+            id={r.id}
+            aria-label={r.label}
+            rows={3}
+            placeholder={'placeholder' in r ? r.placeholder : undefined}
+            defaultValue={'value' in r ? r.value : undefined}
+            disabled={'disabled' in r ? r.disabled : undefined}
+            aria-invalid={'invalid' in r ? r.invalid : undefined}
+          />
+        </div>
+      ))}
     </div>
   ),
 };
