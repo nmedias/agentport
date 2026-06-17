@@ -13,7 +13,7 @@ const preview: Preview = {
     //   'todo'  → violations reported (UI panel + test annotation), but DON'T fail the run
     //   'error' → violations FAIL `npm run test:stories` (production gate, after triage)
     //   'off'   → skip a11y in tests entirely
-    a11y: { test: 'todo' },
+    a11y: { test: 'error' },
   },
 };
 

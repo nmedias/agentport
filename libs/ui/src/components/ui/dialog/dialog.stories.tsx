@@ -86,7 +86,10 @@ export const ScrollableContent: Story = {
             This is a dialog with scrollable content.
           </DialogDescription>
         </DialogHeader>
-        <div className="no-scrollbar -mx-xl max-h-[70vh] overflow-y-auto px-xl">
+        <div
+          tabIndex={0}
+          className="no-scrollbar -mx-xl max-h-[70vh] overflow-y-auto px-xl"
+        >
           {loremParagraphs}
         </div>
       </DialogContent>
@@ -108,7 +111,10 @@ export const StickyFooter: Story = {
             This is a dialog with scrollable content.
           </DialogDescription>
         </DialogHeader>
-        <div className="no-scrollbar -mx-xl max-h-[70vh] overflow-y-auto px-xl">
+        <div
+          tabIndex={0}
+          className="no-scrollbar -mx-xl max-h-[70vh] overflow-y-auto px-xl"
+        >
           {loremParagraphs}
         </div>
         <DialogFooter>
