@@ -14,6 +14,12 @@ import {
   FieldSet,
 } from '../field';
 
+// Checkbox contract — a Radix Root[role=checkbox] (data-slot="checkbox") whose box + check are pure
+// CSS, not props: data-state=checked (or "indeterminate") paints the primary fill + check/dash icon
+// (unchecked = the input-fill border box); focus-visible adds the border-ring + 3px ring; aria-invalid
+// sets the destructive border + ring (red, focus-gated); disabled dims and dims its Field label via
+// group styling. AllStates forces focus statically via the pseudo addon.
+//
 // Usage examples mirror ui.shadcn.com/docs/components/radix/checkbox, which composes
 // the checkbox with the ported Field family (Field / FieldGroup / FieldSet), not a
 // bare div + Label. Skipped (un-ported dep / locale): the docs "Table" example
@@ -67,21 +73,25 @@ const meta: Meta<typeof Checkbox> = {
     },
   },
   parameters: {
-    docs: { source: { type: 'code' } },
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'The DS checkbox — a Radix `role="checkbox"` whose box + check are pure CSS state (`data-state=checked` paints the primary fill + check icon, `aria-invalid` reddens, focus adds the ring). Accepts `"indeterminate"`. Compose with the **Field** family (`FieldLabel`/`FieldDescription`/`FieldError`) for labelled forms — see the **Basic** / **Group** stories.',
+      },
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
-// Bare checkbox — the API playground. With `component: Checkbox` and no custom render,
-// Storybook auto-renders <Checkbox {...args} />, so every prop documented in the meta
-// argTypes shows in the ArgsTable AND as a live control (no controls.include — that would
-// also filter the table). source.type:'dynamic' overrides the meta's 'code' so the snippet
-// shows the generated <Checkbox …/> (reflecting the controls) instead of the literal `{}`.
-// The Field-composed examples + the pseudo-state preview live in the stories below.
+// Bare checkbox — the API playground. render spreads {...args} into a complete <Checkbox> (aria-label
+// gives the otherwise-bare control an accessible name), so every prop in the meta argTypes is a live
+// control AND an ArgsTable row (no controls.include — it would also filter the table) and the 'code'
+// snippet is a real example, never an empty {}. The Field-composed examples + the pseudo-state preview
+// live in the stories below.
 export const Default: Story = {
-
   render: (args) => <Checkbox aria-label="Checkbox" {...args} />,
 };
 
