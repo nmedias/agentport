@@ -2,20 +2,65 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Label } from './label';
 import { Input } from '../input';
+import { Checkbox } from '../checkbox';
 
+// Label contract — a Radix Label re-clothed in DS tokens (text-format-label), DISPLAY-ONLY:
+//  · htmlFor↔id is the whole job: it names the associated control, so clicking the label
+//    focuses/toggles that control and screen readers read the caption as the field's name.
+//    A label is only accessible when an id-matched control exists — that pairing is the a11y gate.
+//  · No own state axis. It dims (opacity-50) only by REACTING to a disabled control via two
+//    mechanisms it ships verbatim: group-data-[disabled=true] (an ancestor marks the group
+//    disabled — the Field pattern) and peer-disabled (a :disabled sibling tagged `peer`). Both
+//    need a real disabled control to fire — never faked here.
+//  · select-none keeps double-click from selecting the caption text. There is no focus/invalid
+//    state of its own to story (those belong to the control it labels).
 const meta: Meta<typeof Label> = {
   title: 'UI/Label',
   component: Label,
+  tags: ['autodocs'],
   args: { children: 'Email' },
+  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
+  // ComponentProps<typeof LabelPrimitive.Root> (a Radix type reference), so the public API
+  // is documented here by hand (same approach as the other ports).
+  argTypes: {
+    children: {
+      control: 'text',
+      description: 'Label caption — text (or text + a small icon).',
+      table: { type: { summary: 'React.ReactNode' } },
+    },
+    htmlFor: {
+      control: 'text',
+      description:
+        'The `id` of the control this label names. Sets the native `for` association — clicking the label focuses/toggles that control, and it becomes the control\'s accessible name. Required for the a11y pairing.',
+      table: { type: { summary: 'string' } },
+    },
+  },
+  parameters: {
+    docs: {
+      source: { type: 'code' },
+      description: {
+        component:
+          'A control caption — a Radix Label in DS tokens. Its whole job is the **`htmlFor`↔`id`** pairing: it names a control, so clicking the label focuses/toggles it and screen readers read the caption as the field name (see **With Input**). It has no state of its own — it only **dims** by reacting to a disabled control, via `group-data-[disabled=true]` or `peer-disabled` (see **Disabled Peer**).',
+      },
+    },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Label>;
 
-export const Default: Story = {};
+// Default — the API playground. render spreads {...args} into a complete <Label>, so every
+// prop in the meta argTypes is a live control AND an ArgsTable row (no controls.include — it
+// would also filter the table) and the 'code' snippet shows a real example, never an empty {}.
+// No play: a label is a static <label> with no interaction of its own — it only ever reacts to
+// the control it names, which is demonstrated in the usage stories below.
+export const Default: Story = {
+  render: (args) => <Label {...args} />,
+};
 
-// Bound to a control via htmlFor — clicking the label focuses the input.
-export const WithControl: Story = {
+// Bound to a text input via htmlFor↔id — clicking the label focuses the input, and the
+// caption becomes the input's accessible name. The canonical label usage.
+export const WithInput: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="flex w-80 flex-col gap-md">
@@ -25,12 +70,27 @@ export const WithControl: Story = {
   ),
 };
 
-// Inside a data-disabled group the label dims and stops pointer events.
-export const Disabled: Story = {
+// A different real composition: label beside a Checkbox (the toggle-caption row). Same
+// htmlFor↔id pairing, so clicking the caption toggles the box and names it for the reader.
+export const WithCheckbox: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="group" data-disabled="true">
-      <Label htmlFor="disabled-input" aria-disabled>Disabled field</Label>
+    <div className="flex items-center gap-md">
+      <Checkbox id="terms" defaultChecked />
+      <Label htmlFor="terms">Accept terms and conditions</Label>
+    </div>
+  ),
+};
+
+// The label has no disabled state of its own — it DIMS by reacting to a disabled control.
+// Here the input carries `peer` + `disabled`, so the sibling label's `peer-disabled:opacity-50`
+// fires off the real control state (not a faked class). htmlFor↔id keeps the pairing intact.
+export const DisabledPeer: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="flex w-80 flex-col gap-md">
+      <Input id="email-disabled" type="email" placeholder="you@example.com" disabled className="peer" />
+      <Label htmlFor="email-disabled">Email address</Label>
     </div>
   ),
 };
