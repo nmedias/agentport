@@ -28,51 +28,18 @@ const meta: Meta<typeof Switch> = {
   tags: ['autodocs'],
   // onCheckedChange is an fn() spy so Default's play can assert the toggle fired (button pattern).
   args: { checked: true, disabled: false, size: 'default', onCheckedChange: fn() },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
-  // `ComponentProps<typeof SwitchPrimitive.Root>` (a Radix type reference), so the public
-  // API is documented here by hand. Interactive stories scope their panel via controls.include.
+  // Prop type · description · enum come from the component's JSDoc via react-docgen (see SwitchProps in
+  // switch.tsx); Storybook infers each control from the type (boolean → toggle, string → text, union →
+  // select). argTypes adds only: (1) a control override — `size` as inline-radio vs the inferred select;
+  // (2) a defaultValue per defaulted prop — the ArgsTable Default column ignores the @default JSDoc tag,
+  // so every default is declared here uniformly (the component's @default tags feed the storybook MCP
+  // get-documentation instead).
   argTypes: {
-    checked: {
-      control: 'boolean',
-      description: 'Controlled on/off state (pair with `onCheckedChange`).',
-      table: { type: { summary: 'boolean' } },
-    },
-    defaultChecked: {
-      control: 'boolean',
-      description: 'On/off state when uncontrolled.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    onCheckedChange: {
-      control: false,
-      description: 'Called when the on/off state changes.',
-      table: { type: { summary: '(checked: boolean) => void' } },
-    },
-    size: {
-      control: 'inline-radio',
-      options: ['sm', 'default'],
-      description: 'DS size variant (track + thumb geometry).',
-      table: { type: { summary: '"sm" | "default"' }, defaultValue: { summary: '"default"' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Prevents interaction and dims the control (and its Field label via group styling).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    required: {
-      control: 'boolean',
-      description: 'Marks the control required for native form validation.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    name: {
-      control: 'text',
-      description: 'Form field name submitted with the form.',
-      table: { type: { summary: 'string' } },
-    },
-    value: {
-      control: 'text',
-      description: 'Value submitted when on.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '"on"' } },
-    },
+    size: { control: 'inline-radio', options: ['sm', 'default'], table: { defaultValue: { summary: '"default"' } } },
+    defaultChecked: { table: { defaultValue: { summary: 'false' } } },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
+    required: { table: { defaultValue: { summary: 'false' } } },
+    value: { table: { defaultValue: { summary: '"on"' } } },
   },
   parameters: {
     docs: {

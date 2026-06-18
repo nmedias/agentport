@@ -5,42 +5,51 @@ import { Switch as SwitchPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 
-// Token-faithful port of the shadcn switch to the Agentport DS vocabulary
-// (see design-docs/design-system/tokens-reference.md §6):
-//  · data-checked:bg-primary-fill → the checked ("on") track binds the DS
-//    `primary-fill` token (deep/900 #0d2531 — the dark primary surface; the
-//    flat `primary` is an accent text/stroke tone, not a fill, post-rework).
-//  · data-unchecked:bg-input-fill-high → the off track fill binds `input-fill-high`
-//    (ink/400 #7f848b — a mid-grey that stays ≥3:1 on white; muted-fill #f9fcfd
-//    would be near-invisible). The DS now has a dedicated emphasized-field-fill
-//    token for exactly this role, so the old `input`-border-as-fill workaround is gone.
-//  · thumb bg-surface → bg-surface (white knob on both tracks; was bg-background).
-//  · rounded-full → corner-full (DS radius vocab; all rounded-* dead, §2/§6).
-//  · focus = border-ring + ring-ring/50 ring-[3px]; invalid = destructive
-//    (⚠ placeholder token, stock hex — bound but NOT finalized) TRACK FILL +
-//    border. The destructive ring (ring/20) is FOCUS-GATED — its width comes
-//    from focus-visible:ring-[3px] only (no aria-invalid:ring-[3px]), so invalid
-//    alone shows track+border and the red ring appears on invalid+focus, matching
-//    .Input / .Checkbox. Deviates from default-shadcn-switch (ships ring-3); the
-//    Figma .Switch focus-invalid members carry the focus-gated glow. invalid TRACK
-//    FILL is destructive only when CHECKED (aria-invalid:data-checked:bg-destructive
-//    overrides primary); the UNCHECKED-invalid track keeps the input grey — only the
-//    border signals invalid, matching .Input/.Checkbox. (Synced from Figma 2026-06-16:
-//    the earlier aria-invalid:data-unchecked:bg-destructive both-positions fill removed.)
-//    (ring-[3px], not stock ring-3, to match the sibling field convention —
-//    input / checkbox / input-group / textarea all use the arbitrary form.)
-//  · all dimensions stay numeric (geometry ≠ token): track h-[18.4px]/w-[32px]
-//    (default) · h-[14px]/w-[24px] (sm), thumb size-4/size-3, the checked
-//    translate-x-[calc(100%-2px)]. dark: variants dropped (light-only DS).
-// The `size` prop ("sm" | "default") is a manual code prop (not CVA); in Figma
-// it is the size axis, the interaction states the state axis.
-function Switch({
-  className,
-  size = 'default',
-  ...props
-}: React.ComponentProps<typeof SwitchPrimitive.Root> & {
+// Public API. The curated subset of the Radix Switch surface is re-declared here as
+// FLAT, own props so react-docgen can extract it (the default docgen propFilter drops
+// anything declared in node_modules — i.e. the inherited Radix/DOM props — so JSDoc on
+// `ComponentProps<typeof Root>` would never surface). Omit those keys from the inherited
+// type first, then re-add them with JSDoc → one declaration each, attributed to this file.
+// Everything else Radix accepts still passes through via the untouched rest of the base type.
+interface SwitchProps
+  extends Omit<
+    React.ComponentProps<typeof SwitchPrimitive.Root>,
+    'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'required' | 'name' | 'value'
+  > {
+  /**
+   * DS size variant — sets the track + thumb geometry.
+   * @default "default"
+   */
   size?: 'sm' | 'default';
-}) {
+  /** Controlled on/off state (pair with `onCheckedChange`). */
+  checked?: boolean;
+  /**
+   * On/off state when uncontrolled.
+   * @default false
+   */
+  defaultChecked?: boolean;
+  /** Called when the on/off state changes. */
+  onCheckedChange?: (checked: boolean) => void;
+  /**
+   * Prevents interaction and dims the control (and its Field label via group styling).
+   * @default false
+   */
+  disabled?: boolean;
+  /**
+   * Marks the control required for native form validation.
+   * @default false
+   */
+  required?: boolean;
+  /** Form field name submitted with the form. */
+  name?: string;
+  /**
+   * Value submitted when on.
+   * @default "on"
+   */
+  value?: string;
+}
+
+function Switch({ className, size = 'default', ...props }: SwitchProps) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
@@ -60,3 +69,4 @@ function Switch({
 }
 
 export { Switch };
+export type { SwitchProps };
