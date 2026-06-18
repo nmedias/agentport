@@ -152,7 +152,9 @@ Installed under `.claude/skills/` (project-local).
 - `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
-- Both share the data source `design-docs/design-system/tokens-reference.md`.
+
+**Storybook**
+- `/docgen-props` — annotate a component's `.tsx` so react-docgen extracts its public prop API.
 - `/storybook-rules` — author or update a component's `.stories.tsx` to the house pattern. 
   Story craft only — not Figma, not the component code. 
 
