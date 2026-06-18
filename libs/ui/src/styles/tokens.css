@@ -28,107 +28,110 @@
    Color palettes replaced 2026-06-17: neutral+cyan → 7 OKLCH ramps
    (signal/still/deep/ink/success/warning/error). base/white + opacity
    stay. Dimension/Font/Effect unchanged.
+   Color primitives are oklch() literals (converted from the Figma hex export
+   2026-06-17; sRGB 8-bit round-trip exact). opacity stays %; Effect colours
+   compose via color-mix on the primitives.
    =========================================================================== */
 :root {
 
 
   /* --- Color · base ------------------------------------------------------- */
-  --ap-color-base-white: #ffffff;
+  --ap-color-base-white: oklch(1 0 0);
 
   /* --- Color · signal ramp (brand cyan, "Signal") --------------------
      400 = brand #009FE3; AA primary on white from 600 up (#0063BB, ≥4.5:1). */
-  --ap-color-signal-50: #c4feff;
-  --ap-color-signal-100: #a4e5ff;
-  --ap-color-signal-200: #7cceff;
-  --ap-color-signal-300: #51b6f3;
-  --ap-color-signal-400: #009fe3;
-  --ap-color-signal-500: #0081d2;
-  --ap-color-signal-600: #0063bb;
-  --ap-color-signal-700: #00459c;
-  --ap-color-signal-800: #002779;
-  --ap-color-signal-900: #000854;
-  --ap-color-signal-950: #010034;
+  --ap-color-signal-50: oklch(0.9582 0.0582 197.54);
+  --ap-color-signal-100: oklch(0.8871 0.0744 224.78);
+  --ap-color-signal-200: oklch(0.8174 0.1061 236.3);
+  --ap-color-signal-300: oklch(0.7419 0.1285 238.51);
+  --ap-color-signal-400: oklch(0.6667 0.1473 237.8);
+  --ap-color-signal-500: oklch(0.587 0.1546 247.08);
+  --ap-color-signal-600: oklch(0.5027 0.1587 253.75);
+  --ap-color-signal-700: oklch(0.411 0.1546 258.35);
+  --ap-color-signal-800: oklch(0.3137 0.1454 262.03);
+  --ap-color-signal-900: oklch(0.2138 0.1314 264.17);
+  --ap-color-signal-950: oklch(0.1482 0.1008 265.93);
 
   /* --- Color · still ramp (muted cyan, "Still") ---------------------- */
-  --ap-color-still-50: #d8fbff;
-  --ap-color-still-100: #bde4fd;
-  --ap-color-still-200: #9fcdeb;
-  --ap-color-still-300: #80b7d9;
-  --ap-color-still-400: #61a1c8;
-  --ap-color-still-500: #3a8cba;
-  --ap-color-still-600: #0077a8;
-  --ap-color-still-700: #005685;
-  --ap-color-still-800: #003761;
-  --ap-color-still-900: #00193d;
-  --ap-color-still-950: #00001e;
+  --ap-color-still-50: oklch(0.9644 0.0365 204.99);
+  --ap-color-still-100: oklch(0.8991 0.0534 236.31);
+  --ap-color-still-200: oklch(0.826 0.0642 237.15);
+  --ap-color-still-300: oklch(0.7536 0.0755 236.26);
+  --ap-color-still-400: oklch(0.6813 0.0876 236.75);
+  --ap-color-still-500: oklch(0.6099 0.1052 236.78);
+  --ap-color-still-600: oklch(0.5384 0.1159 236.06);
+  --ap-color-still-700: oklch(0.4347 0.1041 242.48);
+  --ap-color-still-800: oklch(0.3298 0.0904 248.73);
+  --ap-color-still-900: oklch(0.2199 0.0768 256.58);
+  --ap-color-still-950: oklch(0.1062 0.0736 264.05);
 
   /* --- Color · deep ramp (deep navy cyan, "Deep") -------------------- */
-  --ap-color-deep-50: #eaf8ff;
-  --ap-color-deep-100: #cfdde6;
-  --ap-color-deep-200: #b2c4cf;
-  --ap-color-deep-300: #97abb7;
-  --ap-color-deep-400: #7c93a0;
-  --ap-color-deep-500: #617c8b;
-  --ap-color-deep-600: #476575;
-  --ap-color-deep-700: #314f5e;
-  --ap-color-deep-800: #1e3947;
-  --ap-color-deep-900: #0d2531;
-  --ap-color-deep-950: #00121c;
+  --ap-color-deep-50: oklch(0.9708 0.0175 229);
+  --ap-color-deep-100: oklch(0.8897 0.0195 235.75);
+  --ap-color-deep-200: oklch(0.81 0.0251 234.51);
+  --ap-color-deep-300: oklch(0.7297 0.0283 234.14);
+  --ap-color-deep-400: oklch(0.6497 0.0326 232.74);
+  --ap-color-deep-500: oklch(0.5707 0.0389 232.64);
+  --ap-color-deep-600: oklch(0.4897 0.0435 232.07);
+  --ap-color-deep-700: oklch(0.4105 0.0436 230.93);
+  --ap-color-deep-800: oklch(0.3296 0.0413 232.53);
+  --ap-color-deep-900: oklch(0.2515 0.0375 232.72);
+  --ap-color-deep-950: oklch(0.171 0.0347 231.65);
 
   /* --- Color · ink ramp (neutralized greys; 25+75 added) -------------------
      C ×0.5 (blue cast removed); ink/800 = #1E2229 (brand text, was #1A2230). */
-  --ap-color-ink-25: #f9fcfd;
-  --ap-color-ink-50: #f3f5fa;
-  --ap-color-ink-75: #e4e6eb;
-  --ap-color-ink-100: #d5d8dd;
-  --ap-color-ink-200: #b8bbc0;
-  --ap-color-ink-300: #9b9fa5;
-  --ap-color-ink-400: #7f848b;
-  --ap-color-ink-500: #656971;
-  --ap-color-ink-600: #4b5059;
-  --ap-color-ink-700: #343840;
-  --ap-color-ink-800: #1e2229;
-  --ap-color-ink-900: #0d1016;
-  --ap-color-ink-950: #020306;
+  --ap-color-ink-25: oklch(0.9891 0.0035 219.53);
+  --ap-color-ink-50: oklch(0.9701 0.007 268.55);
+  --ap-color-ink-75: oklch(0.9248 0.0071 268.54);
+  --ap-color-ink-100: oklch(0.8814 0.0076 260.73);
+  --ap-color-ink-200: oklch(0.7912 0.0078 260.73);
+  --ap-color-ink-300: oklch(0.7011 0.0099 258.34);
+  --ap-color-ink-400: oklch(0.6114 0.0121 256.72);
+  --ap-color-ink-500: oklch(0.5201 0.0135 264.45);
+  --ap-color-ink-600: oklch(0.4301 0.0162 262.31);
+  --ap-color-ink-700: oklch(0.34 0.0151 264.35);
+  --ap-color-ink-800: oklch(0.251 0.0145 261.66);
+  --ap-color-ink-900: oklch(0.1727 0.0134 264.13);
+  --ap-color-ink-950: oklch(0.0972 0.0125 264.98);
 
   /* --- Color · success ramp (green) ---------------------------------------- */
-  --ap-color-success-50: #defeec;
-  --ap-color-success-100: #c6ead6;
-  --ap-color-success-200: #abd7bf;
-  --ap-color-success-300: #91c4a8;
-  --ap-color-success-400: #76b192;
-  --ap-color-success-500: #57a07a;
-  --ap-color-success-600: #298058;
-  --ap-color-success-700: #005f3a;
-  --ap-color-success-800: #00401f;
-  --ap-color-success-900: #002207;
-  --ap-color-success-950: #000700;
+  --ap-color-success-50: oklch(0.9692 0.0409 160.94);
+  --ap-color-success-100: oklch(0.9057 0.0464 161.03);
+  --ap-color-success-200: oklch(0.8412 0.0569 161.03);
+  --ap-color-success-300: oklch(0.7766 0.0668 160.32);
+  --ap-color-success-400: oklch(0.7109 0.0767 160.69);
+  --ap-color-success-500: oklch(0.6473 0.0939 159.5);
+  --ap-color-success-600: oklch(0.5373 0.1041 159.53);
+  --ap-color-success-700: oklch(0.4278 0.0992 158.49);
+  --ap-color-success-800: oklch(0.3258 0.083 153.52);
+  --ap-color-success-900: oklch(0.2197 0.0642 147.64);
+  --ap-color-success-950: oklch(0.1114 0.0379 142.5);
 
   /* --- Color · warning ramp (amber) ---------------------------------------- */
-  --ap-color-warning-50: #fff0c8;
-  --ap-color-warning-100: #fbd9ac;
-  --ap-color-warning-200: #eac18a;
-  --ap-color-warning-300: #d9a967;
-  --ap-color-warning-400: #c8923f;
-  --ap-color-warning-500: #af7000;
-  --ap-color-warning-600: #944f00;
-  --ap-color-warning-700: #753100;
-  --ap-color-warning-800: #541500;
-  --ap-color-warning-900: #340000;
-  --ap-color-warning-950: #160000;
+  --ap-color-warning-50: oklch(0.957 0.0543 89.91);
+  --ap-color-warning-100: oklch(0.903 0.0697 74.49);
+  --ap-color-warning-200: oklch(0.8342 0.0852 74.36);
+  --ap-color-warning-300: oklch(0.7649 0.1009 74.14);
+  --ap-color-warning-400: oklch(0.6969 0.1183 75.11);
+  --ap-color-warning-500: oklch(0.5981 0.1289 70.84);
+  --ap-color-warning-600: oklch(0.5007 0.1192 58.48);
+  --ap-color-warning-700: oklch(0.4013 0.1093 48.02);
+  --ap-color-warning-800: oklch(0.3 0.098 38.12);
+  --ap-color-warning-900: oklch(0.2041 0.0838 29.23);
+  --ap-color-warning-950: oklch(0.1257 0.0516 29.23);
 
   /* --- Color · error ramp (red) -------------------------------------------- */
-  --ap-color-error-50: #ffe3d9;
-  --ap-color-error-100: #ffc6bb;
-  --ap-color-error-200: #fca69a;
-  --ap-color-error-300: #e98779;
-  --ap-color-error-400: #d66859;
-  --ap-color-error-500: #c54235;
-  --ap-color-error-600: #b01207;
-  --ap-color-error-700: #8e0000;
-  --ap-color-error-800: #6a0000;
-  --ap-color-error-900: #440000;
-  --ap-color-error-950: #220000;
+  --ap-color-error-50: oklch(0.936 0.0338 40.7);
+  --ap-color-error-100: oklch(0.8744 0.0674 30.96);
+  --ap-color-error-200: oklch(0.8068 0.1041 28.27);
+  --ap-color-error-300: oklch(0.7253 0.1227 29.03);
+  --ap-color-error-400: oklch(0.6453 0.1415 29.46);
+  --ap-color-error-500: oklch(0.5629 0.1692 29.13);
+  --ap-color-error-600: oklch(0.4817 0.189 29.76);
+  --ap-color-error-700: oklch(0.4061 0.1667 29.23);
+  --ap-color-error-800: oklch(0.3292 0.1351 29.23);
+  --ap-color-error-900: oklch(0.2428 0.0996 29.23);
+  --ap-color-error-950: oklch(0.1582 0.0649 29.23);
 
   /* --- Color · opacity ------------------------------------------------------
      Figma mirror: reference Color/opacity/10 = 10 (opacity variables use the
