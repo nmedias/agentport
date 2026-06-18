@@ -31,9 +31,10 @@ Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
   semantic* = Semantics (Alias → Primitive)
   CSS-Naming: Primitives = --ap-<figma-pfad-mit-dashes> (Color/signal/600 → --ap-color-signal-600,
               Font/family/sans → --ap-font-family-sans). Semantics = --ap-sys-<token-leaf> —
-              Figma-Gruppen sind rein organisatorisch (Overlay/overlay-fill → --ap-sys-overlay-fill,
-              Input/input-ink-placeholder → --ap-sys-input-ink-placeholder; shadcn Default/ ist flach,
-              Sidebar/Chart-Untergruppen aufgelöst). semantic-typo: Org-Gruppe oben drauf,
+              Figma-Gruppen sind rein organisatorisch (Dialog/dialog-fill → --ap-sys-dialog-fill,
+              Input/input-ink-placeholder → --ap-sys-input-ink-placeholder; shadcn Default/ 2026-06-18
+              aufgelöst → Base/ Primary/ Secondary/ Muted/ Accent/ Destructive/ Cards/ Focus/ Charts/).
+              semantic-typo: Org-Gruppe oben drauf,
               Token = format/part (Heading/heading-sm/family → --ap-sys-heading-sm-family;
               leading heißt line-height). Schatten: --ap-sys-shadow-glow/-elevation — sys-Tier
               nur im CSS (kein Figma-Pendant; Effect Styles binden die Effect/*-Teile direkt).
@@ -84,7 +85,13 @@ Migration alt→neu: `background`→`surface` · `foreground`→`ink` · `card-f
 `sidebar-*-foreground`→`sidebar-*-ink` · `primary-foreground`→`primary-ink` · `secondary-foreground`→`secondary-ink` ·
 `destructive-foreground`→`destructive-ink`. **Neu:** `primary-fill`, `accent-border`, `input-fill-high`.
 **Weggefallen:** `primary` als Fläche (jetzt Akzent-Ton signal/600 + separater dunkler `primary-fill`).
-`popover`/`popover-foreground` bleiben (shadcn-Compat-Alias → overlay).
+
+**Naming-Rework 2026-06-18 (Figma):** shadcn-Compat-Layer aufgelöst (weiter weg vom shadcn-Default). Die
+Gruppe `shadcn Default/` ist weg — Tokens neu gruppiert (`Base/ · Primary/ · Secondary/ · Muted/ · Accent/ ·
+Destructive/ · Cards/ · Focus/ · Charts/`; rein organisatorisch, **kein** CSS-Effekt — Leaf-Namen-Regel).
+Leaf-Renames: `overlay`+`popover` zu **einem** Raised-Surface-Token **`dialog`** konsolidiert
+(`overlay-fill`→`dialog-fill`, `overlay-ink`→`dialog-ink`; `popover`/`popover-foreground` **entfernt**) ·
+`card`→`card-fill`.
 
 Werte = Light-Mode. `note` zeigt den alten Wert/Namen. Detaillierte `use`/`avoid`-Semantik +
 AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst Rampen-Crosswalk + Rolle.
@@ -93,7 +100,7 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 # Core surface + ink (Figma: shadcn Default/)
 - { token: surface,     css_var: --ap-sys-surface,     primitive: base/white,     value: "#ffffff", utilities: [bg-surface],          use: "App-Grundfläche.", note: "war: background" }
 - { token: ink,         css_var: --ap-sys-ink,         primitive: ink/900,        value: "#0d1016", utilities: [text-ink, "bg-ink¹/fill-ink¹"],  use: "Primärtext/-Icon. ¹SHAPE_FILL erlaubt → bg-ink/fill-ink NUR für Shape-/Marker-Fills, NICHT als Container-/Frame-Fläche (kein FRAME_FILL → dunkle Fläche = inverse-fill).", note: "war: foreground" }
-- { token: card,        css_var: --ap-sys-card,        primitive: ink/50,         value: "#f3f5fa", utilities: [bg-card],             use: "Erhabene/sekundäre Panel-Fläche." }
+- { token: card-fill,   css_var: --ap-sys-card-fill,   primitive: ink/50,         value: "#f3f5fa", utilities: [bg-card-fill],        use: "Erhabene/sekundäre Panel-Fläche.", note: "war: card" }
 - { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: ink/900,        value: "#0d1016", utilities: [text-card-ink],       use: "Text auf card.", note: "war: card-foreground" }
 - { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: ink/25,         value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Ruhige Chrome-Fläche.", note: "war: muted" }
 - { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: ink/500,        value: "#656971", utilities: [text-muted-ink],      use: "Sekundärtext.", note: "war: muted-foreground (neutral/600)" }
@@ -135,11 +142,9 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 - { token: chart-4, css_var: --ap-sys-chart-4, primitive: warning/400, value: "#c8923f", utilities: [bg-chart-4, border-chart-4] }
 - { token: chart-5, css_var: --ap-sys-chart-5, primitive: error/500,   value: "#c54235", utilities: [bg-chart-5, border-chart-5] }
 
-# Overlay + popover + scrim (Figma: Overlay/)
-- { token: overlay-fill,        css_var: --ap-sys-overlay-fill,        primitive: base/white, value: "#ffffff", utilities: [bg-overlay-fill],        use: "Erhabene Overlay-Fläche (Popover/Command/Menu).", note: "war: overlay" }
-- { token: overlay-ink,         css_var: --ap-sys-overlay-ink,         primitive: ink/900,    value: "#0d1016", utilities: [text-overlay-ink],       use: "Text auf overlay." }
-- { token: popover,             css_var: --ap-sys-popover,             primitive: "alias → overlay-fill", value: "#ffffff", utilities: [bg-popover],            use: "shadcn-Compat-Alias → overlay-fill." }
-- { token: popover-foreground,  css_var: --ap-sys-popover-foreground,  primitive: "alias → overlay-ink",  value: "#0d1016", utilities: [text-popover-foreground], use: "shadcn-Compat-Alias → overlay-ink." }
+# Dialog + scrim (Figma: Dialog/ · Scrim/) — overlay+popover 2026-06-18 zu `dialog` konsolidiert
+- { token: dialog-fill,         css_var: --ap-sys-dialog-fill,         primitive: base/white, value: "#ffffff", utilities: [bg-dialog-fill],        use: "Erhabene Raised-Surface-Fläche (Dialog/Popover/Command/Menu).", note: "war: overlay-fill / popover" }
+- { token: dialog-ink,          css_var: --ap-sys-dialog-ink,          primitive: ink/900,    value: "#0d1016", utilities: [text-dialog-ink],        use: "Text auf dialog.", note: "war: overlay-ink / popover-foreground" }
 - { token: scrim,               css_var: --ap-sys-scrim,               primitive: "ink/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Modal-Backdrop-Dimmer — ohne Opacity-Modifier.", note: "war neutral/900" }
 - { token: scrim-opacity,       css_var: --ap-sys-scrim-opacity,       primitive: opacity/10, value: "10%", utilities: [], use: "FLOAT, Scope OPACITY — komponiert scrim." }
 
@@ -397,13 +402,14 @@ color_renames:
   - { stock: border-input,                   ds: border-input-border }
   - { stock: bg-input-background,            ds: bg-input-fill }
   - { stock: "placeholder (input-placeholder)", ds: text-input-ink-placeholder }
-  - { stock: "bg-overlay / text-overlay-foreground", ds: "bg-overlay-fill / text-overlay-ink" }
+  - { stock: "bg-popover / text-popover-foreground (auch bg-overlay / text-overlay-foreground)", ds: "bg-dialog-fill / text-dialog-ink  (overlay+popover 2026-06-18 zu `dialog` konsolidiert)" }
+  - { stock: bg-card,                        ds: bg-card-fill }
   - { stock: "bg-inverse / text-inverse-foreground", ds: "bg-inverse-fill / text-inverse-ink" }
   - { stock: bg-sidebar,                     ds: bg-sidebar-fill }
   - { stock: text-sidebar-foreground,        ds: text-sidebar-ink }
   - { stock: "bg-sidebar-primary / text-sidebar-primary-foreground", ds: "bg-sidebar-primary-fill / text-sidebar-primary-ink" }
   - { stock: "bg-sidebar-accent / text-sidebar-accent-foreground",   ds: "bg-sidebar-accent-fill / text-sidebar-accent-ink" }
-  - { unchanged: "Name BLEIBT (nur Wert neu): bg-card, bg-popover/text-popover-foreground (Compat-Alias), bg-secondary, bg-destructive/text-destructive, border-border/-emphasis/-strong, ring-ring/outline-ring, border-sidebar-border, ring-sidebar-ring, bg-chart-1..5, bg-background-fixed" }
+  - { unchanged: "Name BLEIBT (nur Wert neu): bg-secondary, bg-destructive/text-destructive, border-border/-emphasis/-strong, ring-ring/outline-ring, border-sidebar-border, ring-sidebar-ring, bg-chart-1..5, bg-background-fixed" }
   - { neu: "Tokens ohne stock-Pendant: accent-border, primary-fill, input-fill-high, sidebar-*-ink (Text auf Akzentflächen)" }
 
 geometry_vs_token:

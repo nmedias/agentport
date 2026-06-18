@@ -9,8 +9,8 @@
    Naming: PRIMITIVES carry the `--ap-` prefix + the Figma path with dashes
    (Color/signal/600 → --ap-color-signal-600; Font/family/sans →
    --ap-font-family-sans). SEMANTICS carry `--ap-sys-` + the token leaf —
-   Figma groups (shadcn Default/, Overlay/, Input/, …) are organisation only
-   (Overlay/overlay-fill → --ap-sys-overlay-fill). Typography semantics follow the
+   Figma groups (Base/, Dialog/, Input/, …) are organisation only
+   (Dialog/dialog-fill → --ap-sys-dialog-fill). Typography semantics follow the
    Figma path below the org group: Heading/heading-sm/family →
    --ap-sys-heading-sm-family. Figma itself has no prefix.
    --ap-sys-shadow-glow/--ap-sys-shadow-elevation have no Figma semantic
@@ -216,17 +216,23 @@
   /* Naming 2026-06-17: Figma reworked the color semantics to a -fill/-ink/-border
      system (surface/ink instead of background/foreground; every -foreground → -ink;
      new primary-fill/primary-ink/accent-border/input-fill-high). Old names in
-     trailing comments. Aliases now point at the 7 ramps (no more neutral/cyan). */
+     trailing comments. Aliases now point at the 7 ramps (no more neutral/cyan).
+     2026-06-18: Figma dissolved the shadcn-compat layer (moving further off the
+     shadcn default). The `shadcn Default/` group is gone — tokens regrouped into
+     Base/ · Primary/ · Secondary/ · Muted/ · Accent/ · Destructive/ · Cards/ ·
+     Focus/ · Charts/ (organisation only, no CSS effect — leaf names rule). Leaf
+     renames: overlay+popover consolidated into `dialog` (overlay-fill→dialog-fill,
+     overlay-ink→dialog-ink; popover/popover-foreground dropped); card→card-fill. */
 
-  /* --- Core surface + ink (Figma: shadcn Default/) ----------------------- */
+  /* --- Core surface + ink (Figma: Base/ · Cards/ · Muted/) --------------- */
   --ap-sys-surface:        var(--ap-color-base-white);   /* was: background */
   --ap-sys-ink:            var(--ap-color-ink-900);      /* was: foreground */
-  --ap-sys-card:           var(--ap-color-ink-50);
+  --ap-sys-card-fill:      var(--ap-color-ink-50);       /* was: card */
   --ap-sys-card-ink:       var(--ap-color-ink-900);      /* was: card-foreground */
   --ap-sys-muted-fill:     var(--ap-color-ink-25);       /* was: muted */
   --ap-sys-muted-ink:      var(--ap-color-ink-500);      /* was: muted-foreground */
 
-  /* --- Primary / secondary / accent (Figma: shadcn Default/) ------------- */
+  /* --- Primary / secondary / accent (Figma: Primary/ · Secondary/ · Accent/) - */
   --ap-sys-primary:        var(--ap-color-signal-600);   /* brand accent, AA on white; was cyan/500 */
   --ap-sys-primary-fill:   var(--ap-color-deep-900);     /* dark primary surface (new) */
   --ap-sys-primary-ink:    var(--ap-color-signal-100);   /* ink on primary-fill; was primary-foreground */
@@ -236,17 +242,17 @@
   --ap-sys-accent-ink:     var(--ap-color-signal-600);   /* ink on accent-fill; was accent-foreground */
   --ap-sys-accent-border:  var(--ap-color-still-200);    /* accent edge (new) */
 
-  /* --- Destructive (Figma: shadcn Default/) ------------------------------ */
+  /* --- Destructive (Figma: Destructive/) --------------------------------- */
   --ap-sys-destructive:     var(--ap-color-error-600);
   --ap-sys-destructive-ink: var(--ap-color-error-50);       /* was: destructive-foreground */
 
-  /* --- Ring + borders ---------------------------------------------------- */
+  /* --- Ring + borders (Figma: Focus/ · Border/) -------------------------- */
   --ap-sys-ring:            var(--ap-color-ink-800);   /* focus; was neutral/700 */
   --ap-sys-border:          var(--ap-color-ink-75);    /* default edge; was neutral/200 */
   --ap-sys-border-emphasis: var(--ap-color-ink-200);   /* was neutral/300 */
   --ap-sys-border-strong:   var(--ap-color-ink-300);   /* was neutral/700 (now lighter) */
 
-  /* --- Sidebar (Figma: shadcn Default/) ---------------------------------- */
+  /* --- Sidebar (Figma: Sidebar/) ----------------------------------------- */
   --ap-sys-sidebar-fill:          var(--ap-color-ink-25);        /* was: sidebar */
   --ap-sys-sidebar-ink:           var(--ap-color-ink-900);       /* was: sidebar-foreground */
   --ap-sys-sidebar-primary-fill:  var(--ap-color-deep-900);   /* was: sidebar-primary */
@@ -256,19 +262,18 @@
   --ap-sys-sidebar-border:        var(--ap-color-ink-50);        /* was neutral/200 */
   --ap-sys-sidebar-ring:          var(--ap-color-ink-800);       /* was neutral/700 */
 
-  /* --- Charts — now ramp-bound (Figma: shadcn Default/) ------------------ */
+  /* --- Charts — now ramp-bound (Figma: Charts/) -------------------------- */
   --ap-sys-chart-1: var(--ap-color-warning-700);
   --ap-sys-chart-2: var(--ap-color-success-600);
   --ap-sys-chart-3: var(--ap-color-deep-900);
   --ap-sys-chart-4: var(--ap-color-warning-400);
   --ap-sys-chart-5: var(--ap-color-error-500);
 
-  /* --- Overlay + popover + scrim (Figma: Overlay/) ----------------------- */
-  --ap-sys-overlay-fill:        var(--ap-color-base-white);  /* was: overlay */
-  --ap-sys-overlay-ink:         var(--ap-color-ink-900);     /* was: overlay-foreground */
-  /* shadcn components reference --popover → alias onto overlay (Figma keeps both) */
-  --ap-sys-popover:             var(--ap-sys-overlay-fill);
-  --ap-sys-popover-foreground:  var(--ap-sys-overlay-ink);
+  /* --- Dialog + scrim (Figma: Dialog/ · Scrim/) -------------------------- */
+  /* 2026-06-18: overlay + the shadcn-compat popover aliases consolidated into one
+     raised-surface token `dialog` (Popover/Command/Menu/Dialog all use it). */
+  --ap-sys-dialog-fill:         var(--ap-color-base-white);  /* was: overlay-fill / popover */
+  --ap-sys-dialog-ink:          var(--ap-color-ink-900);     /* was: overlay-ink / popover-foreground */
   /* modal backdrop dimmer — colour (alias ink/900) × strength (scrim-opacity,
      alias opacity/10) composed via color-mix. Figma composes the same pair on
      .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */

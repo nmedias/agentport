@@ -127,7 +127,7 @@ describe('Command palette variant', () => {
     const input = getByPlaceholderText('type a command…');
     expect(input.className).toContain('text-format-input');
     const wrapper = container.querySelector('[data-slot=command-input-wrapper]');
-    expect(wrapper?.className).toContain('bg-card');
+    expect(wrapper?.className).toContain('bg-card-fill');
     expect(wrapper?.className).toContain('border-b');
     expect(wrapper?.querySelector('[data-slot=input-group]')).toBeNull();
     expect(getByText('Esc')).toBeTruthy();

@@ -81,7 +81,7 @@ describe('Dialog', () => {
       'text-format-body'
     );
     expect(getByRole('dialog').className).toContain('text-format-body');
-    expect(getByRole('dialog').className).toContain('bg-overlay-fill');
+    expect(getByRole('dialog').className).toContain('bg-dialog-fill');
   });
 
   it('keeps DS surface tokens on overlay and footer', async () => {

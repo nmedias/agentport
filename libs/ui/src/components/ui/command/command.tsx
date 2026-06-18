@@ -46,7 +46,7 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //    CommandVariantContext (shadcn ToggleGroup idiom) — one switch point; data-variant for CSS.
 //  · palette surface = corner-md + border-[1.5px] + full-bleed (no root padding); overlay
 //    fill + elevation stay from the base.
-//  · palette input = terminal prompt row (bg-card p-xl gap-lg): static glow caret bar
+//  · palette input = terminal prompt row (bg-card-fill p-xl gap-lg): static glow caret bar
 //    (bg-primary shadow-glow — Figma binds the caret fill to `primary` (signal/600,
 //    SHAPE_FILL-scoped); 2.5×18 numeric geometry, the frame's 1px radius is dropped),
 //    mono text-format-input field (the frame's typed+ghost-hint state is a mid-typing
@@ -66,7 +66,7 @@ type CommandVariant = 'default' | 'palette';
 const CommandVariantContext = React.createContext<CommandVariant>('default');
 
 const commandVariants = cva(
-  'flex size-full flex-col overflow-hidden border bg-overlay-fill text-overlay-ink shadow-elevation',
+  'flex size-full flex-col overflow-hidden border bg-dialog-fill text-dialog-ink shadow-elevation',
   {
     variants: {
       variant: {
@@ -148,7 +148,7 @@ function CommandInput({
     return (
       <div
         data-slot="command-input-wrapper"
-        className="flex items-center gap-lg border-b bg-card p-xl"
+        className="flex items-center gap-lg border-b bg-card-fill p-xl"
       >
         <span
           aria-hidden="true"

@@ -278,7 +278,7 @@ status_note: >
       props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
       members: { default: "3561:2", palette: "3638:8" }
       default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-input Placeholder"
-      palette: "Prompt-Zeile: bg-card + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
+      palette: "Prompt-Zeile: bg-card-fill + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
     separator:
       set: { name: "CommandSeparator", id: "3653:6" }
       axis: { variant: [default, labeled] }
@@ -299,8 +299,8 @@ status_note: >
       axis: { variant: [default, palette] }
       slot: "list#3642:0"
       members: { default: "3566:2", palette: "3641:2" }
-      default: "bg-overlay + border + shadow-elevation + corner-xl + p-xs"
-      palette: "bg-overlay + border 1.5px + shadow-elevation + corner-md + p-0 · Prompt-Divider + Footer-Divider (.Command/Separator-Instanzen, fill) · list-Slot py-md · Default-Slot-Content = C2-Demo (SPRINGE ZU / SUCHE / FÜHRE AUS)"
+      default: "bg-dialog-fill + border + shadow-elevation + corner-xl + p-xs"
+      palette: "bg-dialog-fill + border 1.5px + shadow-elevation + corner-md + p-0 · Prompt-Divider + Footer-Divider (.Command/Separator-Instanzen, fill) · list-Slot py-md · Default-Slot-Content = C2-Demo (SPRINGE ZU / SUCHE / FÜHRE AUS)"
     examples: { command-demo: "3573:2", palette-demo: "3650:63" }
     icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19", ArrowRight: "3644:4", Swap: "3644:7", Search: "3644:10", Play: "3644:13", Download: "3644:16" }
   skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)
@@ -330,7 +330,7 @@ status_note: >
     Instanzen, Instanz-Slot-Content nicht editierbar). .Command/Separator als Set mit variant=labeled
     (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading (Gruppen-Weg
     behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
-    Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card/p-xl/gap-lg mit
+    Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card-fill/p-xl/gap-lg mit
     statischer Glow-Caret-Bar + text-format-input + Kbd-Esc (caret-primary wieder entfernt — Standard-Caret,
     User-Refinement 2026-06-11, ebenso Liste max-h-96 statt max-h-72 + Such-Icon text-foreground statt
     opacity-50); Prompt-Divider = border-b am Wrapper
@@ -370,8 +370,9 @@ status_note: >
   skill: /shadcn-component-port (2026-06-10, Composite-Port; nestet Button)
   notes: >
     Radix-Composite (radix-ui Dialog). Deps: Button ✓ (genestete ghost-Instanz als X-Close; flacher
-    ui:add-Schatten gelöscht), radix-ui ✓. DS-Abweichungen: Panel = bg-overlay + border + shadow-elevation
-    (novas ring-1 ring-foreground/10 ersetzt — Overlay-Tiefe wie Command); Scrim = NEUER Token `scrim`
+    ui:add-Schatten gelöscht), radix-ui ✓. DS-Abweichungen: Panel = bg-dialog-fill + border + shadow-elevation
+    (2026-06-18: bg-overlay-fill→bg-dialog-fill, s. Batch 7; novas ring-1 ring-foreground/10 ersetzt —
+    Raised-Surface-Tiefe wie Command); Scrim = NEUER Token `scrim`
     (neutral/900 @10%, bg-black/10 tot) + backdrop-blur-xs; Titel = text-format-title (18/600; nova 16/500 ohne
     DS-Stufe); Body/Description = text-format-body. Footer = getöntes nova-Band (bg-muted/50, border-t, Bleed
     -mx-xl/-mb-xl) als EIGENE Komponente, default-instanziiert im footer-Slot (User-Entscheidung).

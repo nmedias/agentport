@@ -35,12 +35,14 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   > `-foreground`→`-ink`; neu `primary-fill`/`accent-border`/`input-fill-high`). Vollständige
   > Token→Rampe-Crosswalk + Alt→Neu-Migration in `design-docs/design-system/tokens-reference.md` §1.
   > Die Screen-Tabellen unten bleiben der alte Ableitungsstand (nicht nachgezogen).
-- **Collection `semantic`** · Mode `light` · **42 Variablen**:
-  - **shadcn-Set vollständig** (inkl. `destructive-foreground` + `chart-1…5`, die im Repo-`globals.css` fehlen).
-    Die Palette-Fläche heißt bei uns **`overlay`/`overlay-foreground`** (umbenannt von `popover*`).
-  - **`popover`/`popover-foreground`** zusätzlich angelegt (Gruppe `shadcn Default/`), als **Alias auf
-    `overlay`/`overlay-foreground`** — shadcn-Komponenten (Popover/Command/Dropdown/Select) referenzieren
-    `--popover`. Entspricht dem geplanten CSS `--popover: var(--overlay)`.
+- **Collection `semantic`** · Mode `light` · **44 Variablen** (Stand 2026-06-18):
+  - Voll auf dem `-fill`/`-ink`/`-border`-System (2026-06-17). Die erhabene Raised-Surface-Fläche heißt
+    seit **2026-06-18** **`dialog-fill`/`dialog-ink`** (Gruppe `Dialog/`) — `overlay` **und** die shadcn-Compat-
+    Aliase `popover`/`popover-foreground` darin zu **einem** Token `dialog` konsolidiert; `popover*` ersatzlos
+    **entfernt** (Code referenziert kein `--popover` mehr; s. Batch 7).
+  - Gruppe `shadcn Default/` **aufgelöst** → Tokens neu organisiert in `Base/ · Primary/ · Secondary/ ·
+    Muted/ · Accent/ · Destructive/ · Cards/ · Sidebar/ · Charts/ · Focus/` (rein organisatorisch, kein
+    CSS-Effekt). Dabei `card` → **`card-fill`** (Gruppe `Cards/`).
   - 7 Custom (aliased): `input-placeholder`, `border-emphasis`, `border-strong`, `inverse`,
     `inverse-foreground`, `scrim` (→ `neutral/900`) + `scrim-opacity` (FLOAT → `opacity/10`;
     s. Batch 6 Update). *(`border-subtle` 2026-06-10 entfernt, s. Log.)*
@@ -157,6 +159,16 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 - **Nachtrag — shadcn-Set vervollständigt:** `destructive-foreground ⚠` + `chart-1…5 ⚠` als Platzhalter
   (Raw-Hex, shadcn-Defaults) **angelegt**, damit das volle shadcn-Set in Figma steht (waren im Repo-CSS nicht
   enthalten). Semantic-Collection jetzt 38 Variablen, davon 9 Platzhalter.
+- **Custom Batch 7 — Dialog-Konsolidierung (2026-06-18, „weiter weg vom shadcn-Default"):** Der shadcn-
+  Compat-Layer in Figma **aufgelöst**. (1) Gruppe `shadcn Default/` **entfernt** → Tokens neu gruppiert
+  (`Base/ · Primary/ · Secondary/ · Muted/ · Accent/ · Destructive/ · Cards/ · Sidebar/ · Charts/ · Focus/`;
+  Leaf-Namen unverändert ⇒ **kein** CSS-Effekt). (2) `overlay` + `popover`/`popover-foreground` zu **einem**
+  Raised-Surface-Token **`dialog`** konsolidiert (Gruppe `Dialog/`): `overlay-fill`→`dialog-fill`,
+  `overlay-ink`→`dialog-ink`; die Compat-Aliase `popover*` **ersatzlos gestrichen**. (3) `card` → **`card-fill`**
+  (Gruppe `Cards/`, Konsistenz mit dem `-fill`-System). Werte/Aliase aller drei **unverändert**
+  (base/white · ink/900 · ink/50). Code nachgezogen: `tokens.css` + `tw-theme.css` (Token-Seam), Consumer
+  `dialog.tsx`/`command.tsx` (+ Specs): `bg-overlay-fill`→`bg-dialog-fill`, `text-overlay-ink`→`text-dialog-ink`,
+  `bg-card`→`bg-card-fill`. Crosswalk `tokens-reference.md` §1/§6 aktualisiert. Kein `--popover` mehr im Code.
 
 ---
 

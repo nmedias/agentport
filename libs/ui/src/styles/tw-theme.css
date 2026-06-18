@@ -76,7 +76,7 @@
   /* Core surface + ink */
   --color-surface: var(--ap-sys-surface);
   --color-ink: var(--ap-sys-ink);
-  --color-card: var(--ap-sys-card);
+  --color-card-fill: var(--ap-sys-card-fill);
   --color-card-ink: var(--ap-sys-card-ink);
   --color-muted-fill: var(--ap-sys-muted-fill);
   --color-muted-ink: var(--ap-sys-muted-ink);
@@ -118,11 +118,9 @@
   --color-chart-4: var(--ap-sys-chart-4);
   --color-chart-5: var(--ap-sys-chart-5);
 
-  /* Overlay + popover (popover = shadcn-compat alias onto overlay) */
-  --color-overlay-fill: var(--ap-sys-overlay-fill);
-  --color-overlay-ink: var(--ap-sys-overlay-ink);
-  --color-popover: var(--ap-sys-popover);
-  --color-popover-foreground: var(--ap-sys-popover-foreground);
+  /* Dialog — single raised-surface token (overlay + popover consolidated 2026-06-18) */
+  --color-dialog-fill: var(--ap-sys-dialog-fill);
+  --color-dialog-ink: var(--ap-sys-dialog-ink);
   --color-scrim: var(--ap-sys-scrim);
 
   /* Input */

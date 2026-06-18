@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/button';
 // panel bg-overlay→bg-overlay-fill + text-overlay-foreground→text-overlay-ink,
 // footer band bg-muted/50→bg-muted-fill/50, description text-muted-foreground→
 // text-muted-ink, link hover text-foreground→text-ink (Figma .Dialog bindings).
+// 2026-06-18: overlay+popover consolidated into `dialog` (Figma Dialog/ group) →
+// panel now bg-dialog-fill + text-dialog-ink.
 // CommandDialog (command/) can now be un-deferred — it needs this Dialog.
 
 function Dialog({
@@ -70,7 +72,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-xl corner-xl border bg-overlay-fill p-xl text-format-body text-overlay-ink shadow-elevation duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-xl corner-xl border bg-dialog-fill p-xl text-format-body text-dialog-ink shadow-elevation duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
           className
         )}
         {...props}
