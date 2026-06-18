@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
@@ -16,6 +16,16 @@ import { cn } from '@/lib/utils';
 //    accent-fill + accent-ink (selection tint) · secondary = secondary + -ink ·
 //    destructive solid + destructive-ink text. Figma drives hover/active via a
 //    state-layer overlay; here expressed as the DS /opacity idiom (see notes).
+
+// Public scales authored once here; the cva objects are checked against them via `satisfies` (below)
+// and the props are typed by them, so the docgen-readable unions can't drift from the cva.
+//  · variant — the visual style axis.
+//  · size — the geometry scale, shared by text and icon-only buttons. The square `icon*` cva keys are
+//    NOT public sizes: an icon-only button is `size` (the scale) + `icon` (boolean), mapped in render.
+type ButtonVariant = 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
+type ButtonSize = 'default' | 'xs' | 'sm' | 'lg';
+type IconSize = 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap corner-lg text-format-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
@@ -32,7 +42,7 @@ const buttonVariants = cva(
         ghost:
           'hover:bg-accent-fill hover:text-accent-ink active:bg-accent-fill active:text-accent-ink aria-expanded:bg-accent-fill aria-expanded:text-accent-ink',
         link: 'text-primary underline-offset-4 hover:underline active:underline',
-      },
+      } satisfies Record<ButtonVariant, string>,
       size: {
         default: 'h-8 gap-sm px-md has-[>svg]:px-sm',
         xs: "h-6 gap-xs corner-md px-sm [&_svg:not([class*='size-'])]:size-3",
@@ -42,7 +52,7 @@ const buttonVariants = cva(
         'icon-xs': "size-6 corner-md [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': "size-7 corner-md [&_svg:not([class*='size-'])]:size-3.5",
         'icon-lg': 'size-9',
-      },
+      } satisfies Record<ButtonSize | IconSize, string>,
     },
     defaultVariants: {
       variant: 'default',
@@ -51,46 +61,72 @@ const buttonVariants = cva(
   }
 );
 
-type IconSize = 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
-type TextSize = Exclude<
-  NonNullable<VariantProps<typeof buttonVariants>['size']>,
-  IconSize
->;
+// Own DS props, FLAT with JSDoc so react-docgen surfaces them (/docgen-props): `variant` + `size` are
+// typed by the local named aliases (docgen resolves a named alias to its union → working select; a
+// generic like VariantProps<…>['variant'] it does NOT resolve). `icon` is NOT here — it carries the
+// a11y contract (icon-only ⟹ accessible name) and lives in the discriminated union below.
+interface ButtonOwnProps {
+  /**
+   * Visual style — solid fills (`default`/`secondary`/`destructive`), tinted-on-interaction
+   * (`outline`/`ghost`), or `link`.
+   * @default "default"
+   */
+  variant?: ButtonVariant;
+  /**
+   * Size scale (geometry) — shared by text and icon-only buttons.
+   * @default "default"
+   */
+  size?: ButtonSize;
+  /**
+   * Render the styling onto a single child element instead of a `<button>` (Radix Slot).
+   * @default false
+   */
+  asChild?: boolean;
+}
 
 type ButtonBaseProps = Omit<
   React.ComponentProps<'button'>,
   'aria-label' | 'aria-labelledby'
 > &
-  Omit<VariantProps<typeof buttonVariants>, 'size'> & {
-    asChild?: boolean;
-  };
+  ButtonOwnProps;
 
-// Icon-only buttons (every `icon*` size) carry no text, so an accessible name is
-// mandatory: require aria-label or aria-labelledby at the type level.
+// "at least one of aria-label / aria-labelledby" — an icon-only control needs an accessible name. The
+// constraint is inherently a 2-branch union (no single object expresses "at least one of two"); naming
+// it keeps ButtonProps to one line and is reusable for other icon-only components.
+type AccessibleName =
+  | { 'aria-label': string; 'aria-labelledby'?: string }
+  | { 'aria-labelledby': string; 'aria-label'?: string };
+
+// `icon` makes a square, icon-only button → `icon: true` requires an accessible name at the type level.
+// `icon` is a boolean modifier on the size scale (icon + size → the square `icon*` cva key in render),
+// NOT a separate variant.
 type ButtonProps = ButtonBaseProps &
   (
-    | {
-        size?: TextSize;
-        'aria-label'?: string;
-        'aria-labelledby'?: string;
-      }
-    | { size: IconSize; 'aria-label': string; 'aria-labelledby'?: string }
-    | { size: IconSize; 'aria-labelledby': string; 'aria-label'?: string }
+    | { icon?: false; 'aria-label'?: string; 'aria-labelledby'?: string }
+    | ({ icon: true } & AccessibleName)
   );
 
 function Button({
   className,
   variant,
-  size,
+  size = 'default',
+  icon = false,
   asChild = false,
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
+  // icon + size → the square icon-* cva key (default→icon, xs→icon-xs, sm→icon-sm, lg→icon-lg);
+  // otherwise the text size key. `icon` is consumed here, never spread onto the element.
+  const resolvedSize: ButtonSize | IconSize = icon
+    ? size === 'default'
+      ? 'icon'
+      : `icon-${size}`
+    : size;
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size: resolvedSize, className }))}
       {...props}
     />
   );

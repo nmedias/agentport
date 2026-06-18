@@ -112,15 +112,14 @@ const inputGroupButtonVariants = cva('', {
   },
 });
 
-// InputGroup size → DS Button size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon).
-const igButtonToButtonSize = {
-  xs: 'xs',
-  sm: 'default',
-  'icon-xs': 'icon-xs',
-  'icon-sm': 'icon-sm',
-} as const;
-
-
+// InputGroup size → DS Button (icon flag + size scale): xs→{xs}, sm→{default},
+// icon-xs→{icon, xs}, icon-sm→{icon, sm}.
+const igButtonToButton = {
+  xs: { icon: false, size: 'xs' },
+  sm: { icon: false, size: 'default' },
+  'icon-xs': { icon: true, size: 'xs' },
+  'icon-sm': { icon: true, size: 'sm' },
+} as const satisfies Record<string, { icon: boolean; size?: string }>;
 
 function InputGroupButton({
   className,
@@ -128,17 +127,19 @@ function InputGroupButton({
   variant = 'ghost',
   size = 'xs',
   ...props
-}: Omit<React.ComponentProps<typeof Button>, 'size'> &
+}: Omit<React.ComponentProps<typeof Button>, 'size' | 'icon'> &
   VariantProps<typeof inputGroupButtonVariants>) {
+  const mapped = igButtonToButton[size ?? 'xs'];
 
   return (
     <Button
       type={type}
       data-size={size}
       variant={variant}
-      // Button's icon sizes demand aria-label via a discriminated union; the mapped
-      // value is a valid Button size, so cast past it — a11y stays the consumer's job.
-      size={igButtonToButtonSize[size ?? 'xs'] as never}
+      // Button's `icon` carries an a11y discriminated union (icon ⟹ aria-label); InputGroupButton
+      // forwards the mapped flag + size and leaves the accessible name to the consumer → cast past it.
+      icon={mapped.icon as never}
+      size={mapped.size}
       className={cn(inputGroupButtonVariants({ size }), className)}
       {...props}
     />

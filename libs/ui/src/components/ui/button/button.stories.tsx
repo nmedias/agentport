@@ -13,8 +13,9 @@ import { Button } from './button';
 // Button contract — one CVA element (data-slot="button"), two axes on a real state layer:
 //  · variant sets fill + ink: solid (default/secondary/destructive), transparent → accent-fill/-ink
 //    on hover/active/aria-expanded (outline/ghost), or underline (link).
-//  · size sets geometry + per-size icon scaling ([&_svg…]:size-N); the `icon*` sizes are square and
-//    carry no text → an accessible name (aria-label) is REQUIRED (enforced at the type level).
+//  · size is the geometry scale (xs–lg), shared by text and icon buttons. `icon` (boolean) makes a
+//    square icon-only button at that size → no text, so an accessible name (aria-label) is REQUIRED
+//    (enforced at the type level); icon + size maps to the square `icon*` cva key in render.
 //  · states are real CSS, not props: hover/active (fill darken or accent tint + active:translate-y-px),
 //    focus-visible ring, disabled (opacity-50 + pointer-events-none), aria-invalid (destructive ring),
 //    aria-expanded (menu-trigger tint). AllStates forces them statically via the pseudo addon.
@@ -24,45 +25,23 @@ const meta: Meta<typeof Button> = {
   component: Button,
   tags: ['autodocs'],
   args: { children: 'Button', onClick: fn() },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the ButtonProps a11y
-  // union (Omit<…> & VariantProps<…> with the icon-size aria-label branch), so document by hand.
+  // variant + size + asChild are docgen-surfaced from the component's JSDoc (see ButtonOwnProps in
+  // button.tsx);
+  // react-docgen doesn't document — `icon` (in the a11y union, no JSDoc) + inherited `children`/`onClick`.
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'],
+    variant: { table: { defaultValue: { summary: '"default"' } } },
+    size: { table: { defaultValue: { summary: '"default"' } } },
+    icon: {
+      control: false,
       description:
-        'Visual style — solid fills (`default`/`secondary`/`destructive`), tinted-on-interaction (`outline`/`ghost`), or `link`.',
-      table: {
-        type: { summary: '"default" | "secondary" | "outline" | "ghost" | "destructive" | "link"' },
-        defaultValue: { summary: '"default"' },
-      },
+        'Render as a square, icon-only button (no text) at the current `size`. Requires an accessible name (`aria-label`).',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
-    // size="icon*" is a different anatomy (square, icon child, aria-label required), so it's excluded
-    // from this generic text-button control — picking it with text children renders a broken overflow.
-    // The full union is documented in the table; the icon ladder lives in IconSizes / Icon.
-    size: {
-      control: 'select',
-      options: ['default', 'xs', 'sm', 'lg'],
-      description:
-        'Geometry. Text sizes `xs`/`sm`/`default`/`lg`; square `icon`/`icon-xs`/`icon-sm`/`icon-lg` are icon-only (need `aria-label`).',
-      table: {
-        type: { summary: '"default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"' },
-        defaultValue: { summary: '"default"' },
-      },
-    },
+    asChild: { control: false, table: { defaultValue: { summary: 'false' } } },
     children: {
       control: 'text',
       description: 'Button label — text, an icon, or both.',
       table: { type: { summary: 'React.ReactNode' } },
-    },
-    // asChild swaps the rendered <button> for its single child (Radix Slot) and needs exactly ONE
-    // element child — toggling it onto the plain-text stories crashes the Slot. No control;
-    // demonstrated in the AsChild story.
-    asChild: {
-      control: false,
-      description:
-        'Merge the button styling onto a single child element instead of a `<button>` (Radix Slot).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     onClick: {
       control: false,
@@ -75,7 +54,7 @@ const meta: Meta<typeof Button> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS button — `variant` × `size` axes on a real CSS state layer (hover/active/focus/disabled/aria-invalid/aria-expanded). Icon-only sizes require an `aria-label`. Use **`asChild`** to render a link or other element as a button (see the **As Child** story).',
+          'The DS button — `variant` × `size` axes on a real CSS state layer (hover/active/focus/disabled/aria-invalid/aria-expanded). Set **`icon`** for a square icon-only button at the current `size` (requires an `aria-label`). Use **`asChild`** to render a link or other element as a button (see the **As Child** story).',
       },
     },
   },
@@ -107,31 +86,46 @@ export const Default: Story = {
   },
 };
 
-// Per-variant examples (the shadcn doc set) — each auto-renders <Button variant=…>Button</Button>.
-export const Secondary: Story = { args: { variant: 'secondary' } };
-export const Outline: Story = { args: { variant: 'outline' } };
-export const Ghost: Story = { args: { variant: 'ghost' } };
-export const Destructive: Story = { args: { variant: 'destructive' } };
-export const Link: Story = { args: { variant: 'link' } };
+// Icon-only buttons (`icon`): square, no text, Remix icon child, and a mandatory accessible name
+// (aria-label) — enforced at the type level. The variant + size controls apply to the whole set.
+export const Icon: Story = {
+    parameters: { controls: { include: ['variant', 'size'] } },
+    render: ({ variant, size }) => (
+        <div className="flex flex-wrap items-center gap-lg">
+            <Button icon size={size} variant={variant} aria-label="Add">
+                <RiAddLine />
+            </Button>
+            <Button icon size={size} variant={variant} aria-label="Search">
+                <RiSearchLine />
+            </Button>
+            <Button icon size={size} variant={variant} aria-label="Download">
+                <RiDownloadLine />
+            </Button>
+            <Button icon size={size} variant={variant} aria-label="More options">
+                <RiMore2Line />
+            </Button>
+            <Button icon size={size} variant={variant} aria-label="Delete">
+                <RiDeleteBinLine />
+            </Button>
+        </div>
+    ),
+};
 
 // Gallery stories consume args so a single relevant control stays live: AllVariants → size,
-// AllSizes/Icon → variant (the other controls are hidden via controls.include). size is cast to the
-// non-icon subset because args.size is typed with 'icon' too, which our a11y union rejects on text buttons.
+// AllSizes/Icon → variant (the other controls are hidden via controls.include). size is now the plain
+// scale (default|xs|sm|lg), so it passes straight through — no cast needed.
 export const AllVariants: Story = {
   parameters: { controls: { include: ['size'] } },
-  render: ({ size }) => {
-    const s = size as 'default' | 'xs' | 'sm' | 'lg';
-    return (
-      <div className="flex flex-wrap items-center gap-lg">
-        <Button size={s}>Default</Button>
-        <Button size={s} variant="secondary">Secondary</Button>
-        <Button size={s} variant="outline">Outline</Button>
-        <Button size={s} variant="ghost">Ghost</Button>
-        <Button size={s} variant="destructive">Destructive</Button>
-        <Button size={s} variant="link">Link</Button>
-      </div>
-    );
-  },
+  render: ({ size }) => (
+    <div className="flex flex-wrap items-center gap-lg">
+      <Button size={size}>Default</Button>
+      <Button size={size} variant="secondary">Secondary</Button>
+      <Button size={size} variant="outline">Outline</Button>
+      <Button size={size} variant="ghost">Ghost</Button>
+      <Button size={size} variant="destructive">Destructive</Button>
+      <Button size={size} variant="link">Link</Button>
+    </div>
+  ),
 };
 
 // DS-authored gallery: the real state layer (default/hover/focus/active/disabled/invalid) on two
@@ -190,14 +184,11 @@ export const AllStates: Story = {
 // contract), hence no boolean control on the text stories.
 export const AsChild: Story = {
   parameters: { controls: { include: ['variant', 'size'] } },
-  render: ({ variant, size }) => {
-    const s = size as 'default' | 'xs' | 'sm' | 'lg';
-    return (
-      <Button asChild variant={variant} size={s}>
-        <div role="button">Open explorer</div>
-      </Button>
-    );
-  },
+  render: ({ variant, size }) => (
+    <Button asChild variant={variant} size={size}>
+      <div role="button">Open explorer</div>
+    </Button>
+  ),
 };
 
 // The full radix-nova size ladder — text sizes xs → lg, denser than the new-york default (h-6/7/8/9).
@@ -214,49 +205,25 @@ export const AllSizes: Story = {
   ),
 };
 
-// The icon-only size ladder (icon-xs → icon-lg). Each square scales its Remix icon to match via the
-// per-size [&_svg]:size-N rule; every one requires an accessible name (enforced at the type level).
-export const IconSizes: Story = {
+// The icon-only size ladder — `icon` + each size (xs → lg). Each square scales its Remix icon to match
+// via the per-size [&_svg]:size-N rule; every one requires an accessible name (enforced at the type level).
+export const AllIconSizes: Story = {
   parameters: { controls: { include: ['variant'] } },
   render: ({ variant }) => (
     <div className="flex flex-wrap items-center gap-lg">
-      <Button size="icon-xs" variant={variant} aria-label="Add">
+      <Button icon size="xs" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
-      <Button size="icon-sm" variant={variant} aria-label="Add">
+      <Button icon size="sm" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
-      <Button size="icon" variant={variant} aria-label="Add">
+      <Button icon variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
-      <Button size="icon-lg" variant={variant} aria-label="Add">
+      <Button icon size="lg" variant={variant} aria-label="Add">
         <RiAddLine />
       </Button>
     </div>
   ),
 };
 
-// Icon-only buttons (size="icon"): square, no text, Remix icon child, and a mandatory accessible name
-// (aria-label) — enforced at the type level. The variant control applies to the whole set.
-export const Icon: Story = {
-  parameters: { controls: { include: ['variant'] } },
-  render: ({ variant }) => (
-    <div className="flex flex-wrap items-center gap-lg">
-      <Button size="icon" variant={variant} aria-label="Add">
-        <RiAddLine />
-      </Button>
-      <Button size="icon" variant={variant} aria-label="Search">
-        <RiSearchLine />
-      </Button>
-      <Button size="icon" variant={variant} aria-label="Download">
-        <RiDownloadLine />
-      </Button>
-      <Button size="icon" variant={variant} aria-label="More options">
-        <RiMore2Line />
-      </Button>
-      <Button size="icon" variant={variant} aria-label="Delete">
-        <RiDeleteBinLine />
-      </Button>
-    </div>
-  ),
-};
