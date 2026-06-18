@@ -44,7 +44,7 @@ T2.5 Stories   shadcn doc usage-examples → Storybook stories (author per /stor
 T3   Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
 T4   Figma     token-bound set: full matrix, sorted grid, in a Section (recipes → figma-build.md)
 T5   Verify    controls live · /figma-verify CLEAN · build every story as a permanent example + verify (token/values/px)
-T6   Code      rewrite per T3; stories = the T2.5 set; headless lib → jsdom once/lib; gate green
+T6   Code      rewrite per T3 + annotate the prop API (/docgen-props); stories = the T2.5 set; headless lib → jsdom once/lib; gate green
 T7   Notes     mapping table + node/var ids + example-inventory + findings
 ```
 
@@ -106,7 +106,7 @@ T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
 Author the canonical usage set as Storybook stories **before** building Figma, so Figma reproduces real
 usages — not just the variant matrix. Stories run against the T2-landed `ui:add` source (working shadcn
 code); T6 only re-clothes the look to DS tokens, the stories stay. **Write them to the house pattern via
-`/storybook-rules`** (the three story roles, hand-curated argTypes, `play` tests, a11y, the storybook-MCP
+`/storybook-rules`** (the three story roles, slim argTypes, `play` tests, a11y, the storybook-MCP
 workflow); this section governs only WHICH examples to port.
 
 - **Source:** `ui.shadcn.com/docs/components/<x>` (else `get_item_examples_from_registries`, `query`
@@ -178,6 +178,9 @@ Three checks on the built set, in order — **functional → clean → faithful*
 Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export the folder in
 `libs/ui/src/index.ts` if new. Icons = `@remixicon/react`.
 
+- **Prop API docs**: annotate the `.tsx` so react-docgen surfaces the public props (Autodocs ArgsTable
+  **and** storybook MCP `get-documentation`) — flat JSDoc props, `Omit`+re-declare for the curated
+  Radix/DOM/CVA-derived props the docgen filter drops. Per **`/docgen-props`**.
 - **Stories**: the T2.5 usage-example set, now running on DS tokens. **Reconcile them per
   `/storybook-rules`** (coverage: every variant×size/state in ≥1 story, overview story if the examples
   miss any; a `play` test for interactive components; the `shoot` / `preview-stories` rendered-output

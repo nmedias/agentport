@@ -1,6 +1,6 @@
 ---
 name: storybook-rules
-description: "Author or update a component's .stories.tsx in this repo to the house pattern — the three story roles (Default playground+play, Usage examples, States gallery), hand-curated argTypes, role-based play tests, pseudo-state focus, axe-clean a11y, DS-token layout. Trigger when writing a NEW story file, adding stories to a component, or reconciling existing stories after a component's API/variants/states changed. Not a Figma→code token sync (use /component-sync) and not a first-time component build (use /shadcn-component-port — it delegates story work to these rules)."
+description: "Author or update a component's .stories.tsx in this repo to the house pattern — the three story roles (Default playground+play, Usage examples, States gallery), slim argTypes (control config; prop docs live on the component via /docgen-props), role-based play tests, pseudo-state focus, axe-clean a11y, DS-token layout. Trigger when writing a NEW story file, adding stories to a component, or reconciling existing stories after a component's API/variants/states changed. Not a Figma→code token sync (use /component-sync) and not a first-time component build (use /shadcn-component-port — it delegates story work to these rules)."
 ---
 
 # Storybook Rules (author + update stories)
@@ -8,6 +8,12 @@ description: "Author or update a component's .stories.tsx in this repo to the ho
 Write and maintain `<name>.stories.tsx` to the repo's house pattern. **Story craft only** — not the
 component code, not Figma. Two entry modes share one rule set: **author** a new story file, or
 **update** an existing one after the component changed.
+
+> **Companion — `/docgen-props`.** Prop type · description · enum live on the component `.tsx` via
+> react-docgen, NOT in `argTypes`. If you're invoked standalone and the props don't appear in the
+> ArgsTable / storybook MCP `get-documentation`, the `.tsx` isn't annotated — run **`/docgen-props`**
+> first (that's component code, out of scope here). `argTypes` carries control-type overrides + a
+> `defaultValue` for every defaulted prop (the ArgsTable ignores the `@default` tag) — see Meta block.
 
 ## Inputs / Output
 
@@ -17,13 +23,6 @@ in   component: name of a component in libs/ui/src/components/ui/<name>/ (or blo
 out  <name>.stories.tsx to the pattern below; gate green (jsdom specs + storybook browser project)
      storybook MCP up (:6006) → preview-stories URLs surfaced
 ```
-
-## Reference (living template — read, don't duplicate)
-
-The **choice-card trio** is the canonical implementation of every rule here:
-`components/ui/choice-card/{choice-card-checkbox,choice-card-radio,choice-card-switch}/*.stories.tsx`
-plus the base `components/ui/checkbox/checkbox.stories.tsx` (usage-example set). When a rule is
-ambiguous, copy the shape from these — don't reinvent.
 
 ## Imports (easy to get wrong)
 
@@ -63,9 +62,12 @@ States gallery   AllStates / <Comp>States — every state side by side, at a gla
 ```
 tags: ['autodocs']
 args: { …defaults for the playground }
-argTypes: HAND-CURATED  — react-docgen can't read Pick<…> & Omit<ComponentProps<…>> / Radix type refs
-  per prop: control | description (Backticks for `code`) | table:{ type:{summary}, defaultValue:{summary} }
-  callbacks + id → control: false   (documented in table, no live control)
+argTypes: prop type · description · enum come from the component's JSDoc via react-docgen (annotate the
+  .tsx per /docgen-props, NOT here); Storybook infers the control from the type. Add an argType for:
+    · control-type override   — e.g. size → control:'inline-radio' (vs the inferred select)
+    · default value           — table:{ defaultValue:{ summary } } for EVERY prop that has a default
+        (the ArgsTable Default column ignores the @default JSDoc tag → declare it here too, uniformly)
+  callbacks/functions get no inferred control already; set control:false only to be explicit.
 parameters: { docs: {
   source: { type: 'code' }              // ALWAYS 'code' — never override a story to 'dynamic'
   description: { component: '…' }        // autodocs-page prose (markdown); point at the key story (cf. radio-group)
@@ -132,7 +134,7 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
 
 ```
 S1 Locate    component folder; storybook MCP up (:6006)? → get-storybook-story-instructions (canonical CSF/imports)
-S2 Meta      header contract comment; tags autodocs; args defaults; HAND-CURATED argTypes + docs.description.component; source:'code'
+S2 Meta      header contract comment; tags autodocs; args defaults; argTypes = control-overrides + a defaultValue per defaulted prop (type/description/enum on the .tsx via /docgen-props); docs.description.component; source:'code'
 S3 Default   render: (args)=><X {...args}>…</X> — never {}; full ArgsTable (no include); play if interactive
 S4 Examples  one per structurally-distinct usage, real DS composition primitives; controls.disable by default — scoped include where a toggle reinforces the point / reaches a sub-part prop (§controls)
 S5 States    STATE_ROWS grid (primary axis = columns); focus via pseudo addon
@@ -143,7 +145,7 @@ S6 Verify    gate green (jsdom specs + storybook browser: Chromium + axe); shoot
 
 ```
 U1 Diff       what changed: prop added/removed/renamed · variant/size/state added/removed · role/label changed
-U2 argTypes   re-sync the hand-curated docs to the new public API (react-docgen won't)
+U2 argTypes   prop type/description/enum live on the .tsx (/docgen-props) → react-docgen re-syncs them; here re-sync control-overrides + the defaultValue of each defaulted prop
 U3 Coverage   every variant×size/state appears in ≥1 story; add an overview story if examples don't exercise all
 U4 play       fix role/name queries + assertions if the API moved
 U5 Keep       never delete the States gallery / Usage examples — permanent deliverables
