@@ -21,16 +21,29 @@ Worked reference: `components/ui/switch/{switch.tsx,switch.stories.tsx}` (Radix 
 
 ## Rules
 
-### 1. Own props (CVA variants, local props) → flatten + JSDoc
-A prop hidden in `VariantProps<typeof xVariants>` is invisible. Declare it as a flat literal-union prop
-with JSDoc. Keep it in lockstep with the CVA source so the written union can't drift:
+### 1. Own props (CVA variants, local props) → named alias + JSDoc
+A prop hidden in `VariantProps<typeof xVariants>` is invisible (CVA-derived → dropped by the propFilter).
+Author the union as a **named type alias** and type the prop by it. docgen resolves a *named alias* to
+its members (→ working select); it does **not** resolve a generic indexed-access
+(`variant?: VariantProps<…>['variant']` renders unresolved → a broken "Set object" control), so don't
+use that form. Guard drift with `satisfies` on the cva — single source, gate-clean:
 
 ```ts
-/** Visual style — solid fills … */
-variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
+type XVariant = 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
 
-type Equal<A, B> = [A] extends [B] ? ([B] extends [A] ? true : never) : never;
-const _v: Equal<NonNullable<Props['variant']>, NonNullable<VariantProps<typeof xVariants>['variant']>> = true;
+const xVariants = cva(base, {
+  variants: {
+    variant: { default: '…', secondary: '…', /* … */ } satisfies Record<XVariant, string>,
+    // ↑ drift guard BOTH ways (extra/missing key → type error) on the real cva value → no unused symbol.
+    //   Don't use an equality-assert const/type (`const _v: Equal<…> = true`) — this repo's
+    //   noUnusedLocals:true flags the unused symbol (TS6196/6133) → gate fails.
+  },
+});
+
+interface XOwnProps {
+  /** Visual style — solid fills … @default "default" */
+  variant?: XVariant;
+}
 ```
 
 ### 2. Inherited props (Radix / DOM) you want documented → Omit + re-declare
