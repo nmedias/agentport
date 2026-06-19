@@ -34,13 +34,16 @@ const meta: Meta<typeof Checkbox> = {
   args: { checked: true, disabled: false },
   // Prop type · description · enum come from the component's JSDoc via react-docgen (see
   // CheckboxProps in checkbox.tsx); Storybook infers each control from the type. argTypes adds:
-  // control overrides for `onCheckedChange` (false — it's a callback) and the `boolean |
-  // 'indeterminate'` props (`checked`/`defaultChecked` → forced `boolean` toggle; the union would
-  // otherwise infer an object control), plus a defaultValue per defaulted prop — the ArgsTable
-  // Default column ignores the @default JSDoc tag, so every default is declared here (the
-  // component's @default tags feed the storybook MCP get-documentation).
+  // control overrides for `onCheckedChange` (false — it's a callback); `checked` → an inline-radio
+  // over the real union `false | true | 'indeterminate'`, so the tri-state (incl. indeterminate) is
+  // reachable in the playground AND survives a URL/MCP `&args=checked:indeterminate` override — a
+  // `boolean` toggle would coerce "indeterminate" → bool and the tri-state path would never render;
+  // `defaultChecked` stays a `boolean` toggle (uncontrolled initial state; its union would otherwise
+  // infer an object control). Plus a defaultValue per defaulted prop — the ArgsTable Default column
+  // ignores the @default JSDoc tag, so every default is declared here (the component's @default tags
+  // feed the storybook MCP get-documentation).
   argTypes: {
-    checked: { control: 'boolean' },
+    checked: { control: 'inline-radio', options: [false, true, 'indeterminate'] },
     onCheckedChange: { control: false },
     defaultChecked: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
     disabled: { table: { defaultValue: { summary: 'false' } } },
@@ -122,6 +125,24 @@ export const Description: Story = {
       </Field>
     </FieldGroup>
   ),
+};
+
+// DS-authored: the third checked state. Radix sets data-state="indeterminate" (and
+// aria-checked="mixed") — the box gets the same primary fill as checked but shows a dash, not a
+// check. Wired via defaultChecked so the tri-state renders on mount and bypasses the `checked` arg
+// control. The play test pins the semantics with the jest-dom partial-checked matcher.
+export const Indeterminate: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Field orientation="horizontal" className="max-w-sm">
+      <Checkbox id="terms-indeterminate" defaultChecked="indeterminate" />
+      <FieldLabel htmlFor="terms-indeterminate">Select all items</FieldLabel>
+    </Field>
+  ),
+  play: async ({ canvas }) => {
+    const checkbox = canvas.getByRole('checkbox', { name: /select all items/i });
+    await expect(checkbox).toBePartiallyChecked();
+  },
 };
 
 // docs "Group": a checkbox list grouped under a FieldSet + FieldLegend. The orientation
@@ -220,7 +241,8 @@ export const Invalid: Story = {
 };
 
 // DS-authored (no standalone doc example): every state side by side, mirroring the
-// Figma .Checkbox variant set (checked × state). The focus rows force :focus-visible
+// Figma .Checkbox variant set (checked × state) plus the indeterminate tri-state the code now
+// styles. The focus rows force :focus-visible
 // via the pseudo-states addon, so the focus ring — and the focus-gated invalid red
 // ring (invalid alone shows only the destructive border) — is visible statically.
 export const AllStates: Story = {
@@ -245,6 +267,10 @@ export const AllStates: Story = {
       <div className="flex items-center gap-lg">
         <Checkbox id="s-checked-focus" defaultChecked />
         <Label htmlFor="s-checked-focus">Checked + focus</Label>
+      </div>
+      <div className="flex items-center gap-lg">
+        <Checkbox id="s-indeterminate" defaultChecked="indeterminate" />
+        <Label htmlFor="s-indeterminate">Indeterminate</Label>
       </div>
       <div className="flex items-center gap-lg">
         <Checkbox id="s-disabled" disabled />

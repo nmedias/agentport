@@ -580,20 +580,25 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
   figma:
     section: { name: "Checkbox", id: "3791:1184" }
-    set: { name: "Checkbox", id: "3795:1184" }   # 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP-Grid
-    members:   # Reihe checked=off, dann checked=on
-      "checked=off, state=default":       "3792:1184"
-      "checked=off, state=focus":         "3794:1184"
-      "checked=off, state=disabled":      "3794:1185"
-      "checked=off, state=invalid":       "3794:1186"   # Glow gestrippt (border-only)
-      "checked=off, state=focus-invalid": "4063:2"       # NEU (Border + destructive@20% Glow)
-      "checked=on, state=default":        "3792:1185"
-      "checked=on, state=focus":          "4063:6"       # NEU (primary-Border + ring@50% Halo)
-      "checked=on, state=disabled":       "4063:9"       # NEU (opacity 0.5)
-      "checked=on, state=invalid":        "3794:1187"    # war checked-invalid; Glow gestrippt
-      "checked=on, state=focus-invalid":  "4063:3"       # NEU (destructive Fill+Border + Glow)
-    indicator: { glyph: "RiCheckLine VECTOR, fill primary-foreground; sichtbar auf allen checked=on Membern" }
-    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
+    set: { name: "Checkbox", id: "3795:1184" }   # 2026-06-19: checked-Achse um indeterminate erweitert → 15 Member, 5×3 WRAP-Grid (war 2026-06-15: 2 Achsen, 10 Member, 5×2)
+    members:   # Reihe checked=off, dann checked=on, dann checked=indeterminate
+      "checked=off, state=default":          "3792:1184"
+      "checked=off, state=focus":            "3794:1184"
+      "checked=off, state=disabled":         "3794:1185"
+      "checked=off, state=invalid":          "3794:1186"   # Glow gestrippt (border-only)
+      "checked=off, state=focus-invalid":    "4063:2"       # NEU (Border + destructive@20% Glow)
+      "checked=on, state=default":           "3792:1185"
+      "checked=on, state=focus":             "4063:6"       # NEU (primary-Border + ring@50% Halo)
+      "checked=on, state=disabled":          "4063:9"       # NEU (opacity 0.5)
+      "checked=on, state=invalid":           "3794:1187"    # war checked-invalid; Glow gestrippt
+      "checked=on, state=focus-invalid":     "4063:3"       # NEU (destructive Fill+Border + Glow)
+      "checked=indeterminate, state=default":       "4303:73"  # 2026-06-19 (Klon on/default, Glyph→Dash)
+      "checked=indeterminate, state=focus":         "4304:73"  # 2026-06-19 (Klon on/focus)
+      "checked=indeterminate, state=disabled":      "4304:76"  # 2026-06-19 (Klon on/disabled)
+      "checked=indeterminate, state=invalid":       "4304:79"  # 2026-06-19 (Klon on/invalid, Dash destructive-ink)
+      "checked=indeterminate, state=focus-invalid": "4304:82"  # 2026-06-19 (Klon on/focus-invalid)
+    indicator: { glyph: "checked=on → RiCheckLine VECTOR (primary-foreground 3037:9); checked=indeterminate → RiSubtractLine-Dash VECTOR (M5 11H19V13H5z ×14/24, zentriert; primary-foreground bzw. destructive-ink 3052:2 auf invalid)" }
+    axis: { checked: [off, on, indeterminate], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-19: indeterminate als 3. checked-Wert (Box = on-Treatment, Glyph = Dash). 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
     examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-TRAILING per family, checked .Checkbox; 2026-06-13)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
     vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
   skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
@@ -632,6 +637,13 @@ status_note: >
     (Playground, aria-label) + Basic (play) + Description/Group/Disabled/Invalid + AllStates-Galerie. Die klickbare Choice-Card
     ist eine eigene DS-Komponente (ChoiceCardCheckbox, choice-card/) — die früheren Inline-ChoiceCard/ChoiceCardStates-Stories
     sind migriert/entfernt. Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
+    INDETERMINATE 2026-06-19 (Code→Figma-Push): Code stylt jetzt den Tri-State — data-[state=indeterminate]
+    = primary Fill (bzw. aria-invalid:data-[state=indeterminate] = destructive Fill), Indicator-Glyph via CSS
+    data-state auf RiSubtractLine (Dash) statt RiCheckLine; checked-Story-Control = inline-radio false|true|
+    indeterminate; neue Indeterminate-Story (defaultChecked, toBePartiallyChecked-play) + AllStates-Zeile.
+    Figma gespiegelt: checked-Achse um indeterminate erweitert (5 Member als Klone der checked=on-Reihe,
+    Glyph→Dash; invalid-Glyph erbt destructive-ink 3052:2). 15 Member, 5×3 WRAP. figma-verify CLEAN, Gate grün
+    (typecheck + 11 Checkbox-Story-Tests). OFFEN: ChoiceCardCheckbox (choice-card/) hat dieselbe Lücke — noch nicht gespiegelt.
 
 - name: Switch
   status: nova-aligned

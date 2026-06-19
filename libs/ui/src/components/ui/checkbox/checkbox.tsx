@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
-import { RiCheckLine } from '@remixicon/react';
+import { RiCheckLine, RiSubtractLine } from '@remixicon/react';
 
 import { cn } from '@/lib/utils';
 
@@ -49,7 +49,7 @@ function Checkbox({ className, ...props }: CheckboxProps) {
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        'peer relative flex size-4 shrink-0 items-center justify-center corner-sm border border-input-border bg-input-fill transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive aria-invalid:aria-checked:text-destructive-ink data-checked:border-primary-fill data-checked:bg-primary-fill data-checked:text-primary-ink',
+        'peer relative flex size-4 shrink-0 items-center justify-center corner-sm border border-input-border bg-input-fill transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-destructive aria-invalid:aria-checked:bg-destructive aria-invalid:aria-checked:text-destructive-ink aria-invalid:data-[state=indeterminate]:border-destructive aria-invalid:data-[state=indeterminate]:bg-destructive aria-invalid:data-[state=indeterminate]:text-destructive-ink data-checked:border-primary-fill data-checked:bg-primary-fill data-checked:text-primary-ink data-[state=indeterminate]:border-primary-fill data-[state=indeterminate]:bg-primary-fill data-[state=indeterminate]:text-primary-ink',
         className,
       )}
       {...props}
@@ -58,7 +58,10 @@ function Checkbox({ className, ...props }: CheckboxProps) {
         data-slot="checkbox-indicator"
         className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
       >
-        <RiCheckLine />
+        {/* Both icons mount with the Indicator; its data-state picks which one shows — a check
+            for `checked`, a dash for `indeterminate`. Unchecked unmounts the Indicator entirely. */}
+        <RiCheckLine className="hidden [[data-state=checked]_&]:block" />
+        <RiSubtractLine className="hidden [[data-state=indeterminate]_&]:block" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );
