@@ -4,18 +4,9 @@ import { RiArrowRightSLine, RiMoreLine } from '@remixicon/react';
 
 import { cn } from '@/lib/utils';
 
-// shadcn breadcrumb on the **radix-nova structure**, re-clothed in DS values
-// (tokens-reference.md §6). Density follows the radix-nova baseline (mapped by
-// NAME to DS tokens, not Nova's raw scale):
-//  · List gap-1.5 (6px) → gap-sm; sm:gap-2.5 already gone (Nova dropped it too) ·
-//    Item gap tightened 1.5→1 (6px→4px) → gap-xs · Ellipsis hit-area shrank
-//    size-9→size-5 (36→20px) with icon-agnostic [&>svg]:size-4 (Nova form).
-//  · text-sm → text-format-body (Page's redundant font-normal skipped — text-format-body owns
-//    the weight) · break-words → Nova's v4 wrap-break-word (same CSS) · separator
-//    size-3.5 stays numeric · lucide → Remix RiArrowRightSLine/RiMoreLine.
-//  Colour (Figma Breadcrumb/Segment set, -fill/-ink/-border system): List default =
-//  text-muted-ink (link rest + separator/ellipsis icons inherit it), Link darkens to
-//  text-ink on hover, Page is the current text-ink leaf.
+// Public API. The only curated, docgen-extractable prop is BreadcrumbLink's `asChild` (Radix
+// Slot) — re-declared flat with JSDoc below. Every other part (Breadcrumb/List/Item/Page/
+// Separator/Ellipsis) is a plain passthrough.
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
@@ -44,13 +35,20 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   );
 }
 
+interface BreadcrumbLinkProps extends React.ComponentProps<'a'> {
+  /**
+   * Render the link styling onto a single child element instead of an `<a>` (Radix Slot) —
+   * e.g. wrap a router `<Link>`.
+   * @default false
+   */
+  asChild?: boolean;
+}
+
 function BreadcrumbLink({
   asChild,
   className,
   ...props
-}: React.ComponentProps<'a'> & {
-  asChild?: boolean;
-}) {
+}: BreadcrumbLinkProps) {
   const Comp = asChild ? Slot : 'a';
 
   return (
@@ -123,3 +121,4 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 };
+export type { BreadcrumbLinkProps };
