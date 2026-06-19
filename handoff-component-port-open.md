@@ -41,6 +41,11 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    `/component-sync` (bound≠Deviation, ADD-Diff-Form, no-delta-Outcome, Snippet-Indicator-Kind).
    **Davon 06-12 eingearbeitet:** #34 (Examples-Deliverable) + #36 (Doc-Komposition) — s. „Bereits
    eingearbeitet". Rest (30–33, 35, 37–45) offen.
+   **Neu 06-12 (Figma-Example-Runs): Findings 46–51** (clone()→SLOT-Degradierung, createSlot-Orphan-Prop,
+   fill-slot-in-instance-Zusätze, figma-verify überspringt visible:false, control-leading-`.Field`, VariableID-Präfix)
+   — offen. **Neu 06-19 (Select-Port): Findings 52–58** — Slot-Merge-Timing · Section-Koord-Doppel-Offset (schärft #16) ·
+   Section-Auto-Grow · 1-Removal-pro-Call (schärft #48) · radix-Umbrella-Scope (verengt #3) · Composite-Doc-Prop-Split
+   (`subcomponents`) · Select-jsdom-Polyfill-Heuristik — offen.
 2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
    Branch `feat/form-toggles-port`). **Select 06-19 portiert** (Composite, Branch `feat/select-port`; Figma via
    Background-Agent ausgelagert, Code parallel; Findings A–G s. u.). Kandidaten für den nächsten Schritt: **Slider**
@@ -497,24 +502,39 @@ echtes `.Field`-Reuse + dem `.Field`-control-leading/error-Slot-Fix.
 
 ### Offen — Select-Port (Composite, ausgelagerte Figma-Hälfte) — neu 06-19
 
-Quelle: `agent-runs/component-port/2026-06-19-select/skill-feedback.md` (Findings A–G + Build-Deviations D1–D4).
-Erster Port mit Figma im **Background-Agent** (baut Figma) + main (baut Code) parallel — Muster funktioniert.
+Quelle: `agent-runs/component-port/2026-06-19-select/skill-feedback.md` (dort als A–G + Build-Deviations D1–D4
+geführt; hier in die laufende Nummerierung konsolidiert → **#52–58**). Erster Port mit der Figma-Hälfte im
+**Background-Agent** (baut Figma) + main (baut Code) **parallel** — das Auslagerungs-Muster funktioniert (eine
+Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
 
-**figma-build.md / composites.md / snippets (Agent-Findings):**
-- **A.** Slot-Merge passiert zur `combineAsVariants`-Zeit → Slots auf den **standalone Comps VOR** dem Kombinieren bauen
-  (post-combine `createSlot` → N un-merged gleichnamige Props, kaputte Instanz-API). §Slots/§Variant-set-assembly.
-- **B.** Section-Kind-Koords = reine Offsets vom Section-Ursprung — **nie `section.x` addieren** (sharpens #16; konkretes
-  WRONG/RIGHT in `build-variant-set.js` + composites.md).
-- **C.** Sections wachsen nicht auto mit den Kindern → nach dem Positionieren auf hug resizen (paart mit B).
-- **D.** Instanz-Slot-Default-Removal strikt **eins pro `use_figma`-Call** (sharpens #48; guarded while-Loop in EINEM Call wirft „node not found").
+**figma-build.md §Slots + §Variant set assembly (Agent):**
 
-**SKILL.md / docgen-props / storybook-rules (Code-Findings):**
-- **E.** `radix-ui`-Umbrella für **volle** Primitives behalten — Finding #3 (per-primitive) galt nur dem `Slot`-aus-`radix-ui`-Fall.
-  Composite-Dep-Audit §2 T2 splitten (voll-Primitive-Umbrella behalten, einzelne Sub-Imports umstellen).
-- **F.** Composite-Doc-Prop über Root + Sub-Part → `meta.component` + `subcomponents:{Sub}` (zwei ArgsTables); der Sub-Control
-  lebt als **Story-lokaler** arg (erreicht den meta.component nicht). Regel für `/storybook-rules` + `/docgen-props`.
-- **G.** Radix Select braucht **keinen** jsdom-Polyfill, wenn Specs nur „closed" rendern (Content im Portal mountet on-open);
-  Open-Pfad übers Chromium-Storybook-Projekt. Heuristik für §T6 Headless lib.
+52. **Slot-Merge passiert zur `combineAsVariants`-Zeit, NICHT danach** *(A)* — `createSlot()` auf jedem Member eines
+    BEREITS kombinierten Sets → N separate gleichnamige Props (kaputte Instanz-API; verified: Instanz exponierte 6
+    un-merged `leadingIcon#…`). §Slots sagt „named consistently → merges to ONE", aber nicht WANN. Fix: Slots auf den
+    **standalone Comps VOR** dem Kombinieren bauen. Explizite Zeile in §Slots / §Variant set assembly.
+53. **Section-Kind-Koords = reine Offsets vom Section-Ursprung — nie `section.x` addieren** *(B; schärft #16)* — der
+    Reflex `set.x = section.x + 80` rendert bei `section.x + (section.x + 80)` (verified: content bei abs x≈21000 für
+    Section bei x≈10600). Konkretes WRONG/RIGHT in `build-variant-set.js` + composites.md.
+54. **Sections wachsen NICHT automatisch mit den Kindern** *(C)* — nach dem Positionieren `resizeWithoutConstraints`
+    (hug), sonst bleibt die Section headline-groß. Paart mit #53; gehört an die Section-Invariante in figma-build.md.
+55. **Instanz-Slot-Default-Removal strikt EINS pro `use_figma`-Call** *(D; schärft #48)* — selbst mit Re-Fetch per
+    stabiler ID wirft das ZWEITE `slot.children[0].remove()` im selben Tick „node not found"; eine guarded while-Schleife
+    in EINEM Call geht NICHT (je Default-Kind ein eigener Round-Trip). §Slots „Filling a slot in an instance" verschärfen.
+
+**SKILL.md T2 (Dep-Audit) · /docgen-props + /storybook-rules · T6 (Code):**
+
+56. **`radix-ui`-Umbrella für VOLLE Primitives behalten** *(E; verengt #3)* — #3 („Radix-Umbrella → per-primitive") galt
+    nur dem `Slot`-aus-`radix-ui`-Fall (Breadcrumb). Volles Primitive (`Select`/`Dialog`) = Umbrella behalten
+    (`import { Select as SelectPrimitive } from 'radix-ui'`; deklarierte Dep, Dialog-Konvention). Composite-Dep-Audit
+    §2 T2 splitten: Voll-Primitive-Umbrella behalten, nur einzelne Sub-Imports auf per-primitive umstellen.
+57. **Composite-Doc-Prop über Root + Sub-Part → `meta.component` + `subcomponents:{Sub}`** *(F)* — die Autodocs-ArgsTable
+    zieht nur `meta.component`; ein zweites dokumentiertes Teil (`SelectTrigger.size` neben den `Select`-Root-Props)
+    braucht `meta.subcomponents` (zweite Tabelle) + den Sub-Control als **Story-lokalen** arg (er erreicht den
+    meta.component nicht). Regel für `/storybook-rules` (Composite-Prop-Split) + `/docgen-props` (Sub-Part annotieren).
+58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
+    (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
+    übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
 
 ## Quellen
 
