@@ -35,7 +35,7 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     title: { control: 'text' },
     description: { control: 'text' },
     error: { control: 'text' },
-    // Union (boolean | 'indeterminate') would otherwise infer an object control — pin to boolean.
+    // checked/defaultChecked are boolean — a leaf choice card has no tri-state (no "indeterminate").
     checked: { control: 'boolean' },
     defaultChecked: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
     onCheckedChange: { control: false },

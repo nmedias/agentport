@@ -643,7 +643,10 @@ status_note: >
     indeterminate; neue Indeterminate-Story (defaultChecked, toBePartiallyChecked-play) + AllStates-Zeile.
     Figma gespiegelt: checked-Achse um indeterminate erweitert (5 Member als Klone der checked=on-Reihe,
     Glyph→Dash; invalid-Glyph erbt destructive-ink 3052:2). 15 Member, 5×3 WRAP. figma-verify CLEAN, Gate grün
-    (typecheck + 11 Checkbox-Story-Tests). OFFEN: ChoiceCardCheckbox (choice-card/) hat dieselbe Lücke — noch nicht gespiegelt.
+    (typecheck + 11 Checkbox-Story-Tests). ChoiceCardCheckbox: NICHT gespiegelt — bewusst. indeterminate ist
+    für eine Blatt-Karte (binäre Einzelauswahl) semantisch n/a (Tri-State = Gruppen-/Eltern-Konzept). Statt einen
+    Phantom-State zu modellieren, wurde ChoiceCardCheckbox.checked/defaultChecked/onCheckedChange auf `boolean`
+    verengt (2026-06-19) — schließt die alte „Typ behauptet indeterminate, kein Render/Test"-Lücke richtungsrichtig.
 
 - name: Switch
   status: nova-aligned
@@ -816,6 +819,11 @@ status_note: >
     Signal über roten Control + roten FieldError). Stories je Wrapper: Default (Playground + State-Preview +
     play-Smoke-Test) + ChoiceCardStates-Galerie; Radio zusätzlich Group (Exklusivitäts-play). Gate grün
     (210 Tests: 124 jsdom-Specs + 84 Story-Tests). Branch feat/choice-card.
+    BINARY-BY-DESIGN 2026-06-19: ChoiceCardCheckbox.checked/defaultChecked/onCheckedChange = `boolean`
+    (von `boolean | 'indeterminate'` verengt). Eine Blatt-Karte ist eine binäre Einzelauswahl — der
+    indeterminate-Tri-State ist ein Gruppen-/Eltern-Konzept und auf einer Karte semantisch n/a; daher
+    KEINE indeterminate-Story/-Figma-Variante (kein Phantom-State in DS-Artefakten). Basis-Checkbox behält
+    indeterminate (dort echt). Switch/Radio sind ohnehin binär bzw. single-select.
 
 ## Pending / Removed
 
