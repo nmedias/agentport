@@ -1,33 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-// Token-faithful re-port of the shadcn input-group (radix-nova) into the Agentport DS
-// (tokens-reference.md §6). Composite: the GROUP owns the surface, border and
-// focus/invalid/disabled treatment; the controls (input/textarea) go borderless and
-// addons (icons, text, buttons, kbd) sit beside them. Re-clothed in DS tokens
-// (colour bindings verified live against the Figma InputGroup set, 2026-06-17
-// -fill/-ink token rework):
-//  · the group carries bg-input-fill + border-input-border (Input/input-fill +
-//    Input/input-border — DS fields are opaque; nova leaves it transparent in light
-//    mode). Command overrides the surface for its palette look.
-//  · addon icon/text → text-muted-ink (shadcn Default/muted-ink); text-sm font-medium
-//    addon → text-format-label; plain text-sm Text → text-format-body (Medium vs
-//    Regular 14, the DS distinction; InputGroupText carries the Figma Body style).
-//  · gap-2(8)→gap-md, py-1.5(6)→py-sm, pl/pr-2(8)→pl/pr-md, px-2.5(10)→px-md,
-//    pl/pr-1.5(6)→pl/pr-sm, pt/pb-3(12)→pt/pb-lg; ring-3→ring-[3px]; radius by NAME.
-//  · focus = border-ring + ring-ring/50 ring-[3px] (Figma: ring var + raw glow effect).
-//    invalid bubbles border-destructive + ring WIDTH + colour (ring-[3px]
-//    ring-destructive/20) — destructive now binds a real DS semantic (error/600).
-//  · disabled:bg-input/50 dropped (DS disabled = opacity); dark: + combobox-content
-//    overrides dropped; [&>kbd]:rounded-calc dropped (DS Kbd owns its radius).
-// Geometry (h-8/h-6, size-6/8, svg sizes) stays numeric.
+// Public API. The curated CVA props are re-declared flat with JSDoc so react-docgen surfaces them
+// (/docgen-props): InputGroupAddon's `align` and InputGroupButton's `size`. The remaining parts
+// (InputGroup, InputGroupText, InputGroupInput, InputGroupTextarea) are plain passthroughs.
 function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -51,6 +34,14 @@ function InputGroup({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+// Public axis authored once here; the cva object is checked against it via `satisfies` (below) and the
+// prop is typed by it, so the docgen-readable union can't drift from the cva.
+type InputGroupAddonAlign =
+  | 'inline-start'
+  | 'inline-end'
+  | 'block-start'
+  | 'block-end';
+
 const inputGroupAddonVariants = cva(
   "flex h-auto cursor-text items-center justify-center gap-md py-sm text-format-label text-muted-ink select-none group-data-[disabled=true]/input-group:opacity-50 [&>svg:not([class*='size-'])]:size-4",
   {
@@ -64,7 +55,7 @@ const inputGroupAddonVariants = cva(
           'order-first w-full justify-start px-md pt-md group-has-[>input]/input-group:pt-md [.border-b]:pb-md',
         'block-end':
           'order-last w-full justify-start px-md pb-md group-has-[>input]/input-group:pb-md [.border-t]:pt-md',
-      },
+      } satisfies Record<InputGroupAddonAlign, string>,
     },
     defaultVariants: {
       align: 'inline-start',
@@ -72,11 +63,20 @@ const inputGroupAddonVariants = cva(
   }
 );
 
+interface InputGroupAddonProps extends React.ComponentProps<'div'> {
+  /**
+   * Where the addon sits relative to the control — `inline-start`/`inline-end` beside it,
+   * `block-start`/`block-end` as a toolbar above/below (the group stacks vertically).
+   * @default "inline-start"
+   */
+  align?: InputGroupAddonAlign;
+}
+
 function InputGroupAddon({
   className,
   align = 'inline-start',
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof inputGroupAddonVariants>) {
+}: InputGroupAddonProps) {
   return (
     <div
       role="group"
@@ -94,6 +94,10 @@ function InputGroupAddon({
   );
 }
 
+// Public axis authored once here; the cva object is checked against it via `satisfies` (below) and the
+// prop is typed by it, so the docgen-readable union can't drift from the cva.
+type InputGroupButtonSize = 'xs' | 'sm' | 'icon-xs' | 'icon-sm';
+
 // InputGroupButton maps onto the DS Button's own size scale and forwards the mapped
 // size (code↔Figma parity: the Figma .InputGroup/Button nests a real .Button at the
 // same size). The Button then carries all geometry; the className below adds only the
@@ -105,7 +109,7 @@ const inputGroupButtonVariants = cva('', {
       sm: '',
       'icon-xs': 'corner-sm',
       'icon-sm': '',
-    },
+    } satisfies Record<InputGroupButtonSize, string>,
   },
   defaultVariants: {
     size: 'xs',
@@ -119,7 +123,20 @@ const igButtonToButton = {
   sm: { icon: false, size: 'default' },
   'icon-xs': { icon: true, size: 'xs' },
   'icon-sm': { icon: true, size: 'sm' },
-} as const satisfies Record<string, { icon: boolean; size?: string }>;
+} as const satisfies Record<
+  InputGroupButtonSize,
+  { icon: boolean; size?: string }
+>;
+
+interface InputGroupButtonProps
+  extends Omit<React.ComponentProps<typeof Button>, 'size' | 'icon'> {
+  /**
+   * Button size on the InputGroup's own scale — `xs`/`sm` text buttons, `icon-xs`/`icon-sm`
+   * icon-only. Mapped onto the DS Button's size + icon flag.
+   * @default "xs"
+   */
+  size?: InputGroupButtonSize;
+}
 
 function InputGroupButton({
   className,
@@ -127,8 +144,7 @@ function InputGroupButton({
   variant = 'ghost',
   size = 'xs',
   ...props
-}: Omit<React.ComponentProps<typeof Button>, 'size' | 'icon'> &
-  VariantProps<typeof inputGroupButtonVariants>) {
+}: InputGroupButtonProps) {
   const mapped = igButtonToButton[size ?? 'xs'];
 
   return (
@@ -195,3 +211,4 @@ export {
   InputGroupInput,
   InputGroupTextarea,
 };
+export type { InputGroupAddonProps, InputGroupButtonProps };
