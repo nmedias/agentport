@@ -35,18 +35,15 @@ const meta: Meta<typeof Field> = {
   component: Field,
   tags: ['autodocs'],
   args: { orientation: 'vertical' },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from the
-  // ComponentProps<'div'> & VariantProps<…> intersection, so the public API is documented here
-  // by hand (same approach as the other ports). data-invalid / data-disabled are HTML data
-  // attributes (not typed props) → described in the component block, not the table.
+  // Prop docs come from docgen (JSDoc on the component types). Only story-side control config
+  // stays here: orientation's control override (inline-radio) + its ArgsTable default (the
+  // Default column ignores @default); docgen resolves the FieldOrientation union → options.
+  // children is hand-curated (docgen surfaces no useful children). data-invalid / data-disabled
+  // are HTML data attributes (not typed props) → described in the component block, not the table.
   argTypes: {
     orientation: {
       control: 'inline-radio',
-      options: ['vertical', 'horizontal', 'responsive'],
-      description:
-        'Flex axis of the row. `vertical` stacks label → control → description; `horizontal` puts label + control on one row; `responsive` is column on narrow, row at `@md` (container query).',
       table: {
-        type: { summary: '"vertical" | "horizontal" | "responsive"' },
         defaultValue: { summary: '"vertical"' },
       },
     },

@@ -1,38 +1,15 @@
 import { useMemo } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
-// Field — the shadcn/Radix form-field composite, re-clothed in DS tokens.
-//
-// Field has NO root element: it is ~10 pure layout/typography/spacing/a11y parts
-// (no border / bg / shadow of their own — the control inside carries the surface).
-// DS port (tokens-reference.md §3 spacing-by-px, §4 typo formats, §6 stock→DS):
-//  · the named-spacing scale skips 20px → FieldGroup's stock gap-5 (20) lands on
-//    gap-xl (16, denser — the Nova density direction) rather than gap-2xl (24);
-//    noted in the run notes as a no-exact-rung pick.
-//  · gap-4→gap-xl(16) · gap-3→gap-lg(12) · gap-2→gap-md(8) · gap-0.5→gap-2xs(2)
-//    · gap-1→gap-xs(4) · mb-1.5/-mt-1.5→mb-sm/-mt-sm(6) · -my-2/-mb-2→-my-md(8)
-//    · -mt-1→-mt-xs(4) · px-2→px-md(8) · ml-4→ml-xl(16).
-//  · typography: the three stock utilities (text-sm/font-*/leading-*) are dead
-//    under the theme reset (§6) → one text-format-* composition class each:
-//    label/title → text-format-label (14/500); legend → text-format-title
-//    (18/600 — 16px text-base has no DS rung, picked by the section-caption ROLE);
-//    description/error → text-format-body (14/400/1.5). Standalone leading-* dropped.
-//  · FieldError colour = the destructive token (text-destructive, now error/600 — a
-//    real DS semantic since the 2026-06-17 rework, no longer a placeholder).
-//  · invalid state keeps label + description NEUTRAL (ink / muted-ink) — only the
-//    control (aria-invalid border/ring) + FieldError go destructive, matching the
-//    Figma .Field design (3716:1020). This deviates from stock shadcn's group-wide
-//    data-[invalid=true]:text-destructive, which reddened the label by inheritance.
-//  · colour rework 2026-06-17 (-fill/-ink): description/separator text-muted-foreground
-//    → text-muted-ink, separator bg-background → bg-surface; checked choice-card tint
-//    (FieldLabel/FieldTitle) on accent-fill/accent-border/accent-ink (see those parts).
-//  · rounded-lg→corner-lg; every dark: variant dropped (light is the only mode).
-//  · responsive orientation (container-query @md flips column→row) is CODE-ONLY —
-//    not modelled in Figma (Figma has no container queries); kept verbatim here.
+// Public API. Four parts carry a curated, docgen-extractable prop API: Field + FieldGroup
+// (CVA orientation — named alias + `satisfies Record<…>` on the cva so the docgen-readable
+// union can't drift), FieldLegend (variant) and FieldError (errors), each re-declared flat
+// with JSDoc so react-docgen surfaces it. The remaining parts (FieldSet/FieldContent/
+// FieldLabel/FieldTitle/FieldDescription/FieldSeparator) are plain layout passthroughs.
 
 function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (
@@ -47,11 +24,15 @@ function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   );
 }
 
-function FieldLegend({
-  className,
-  variant = 'legend',
-  ...props
-}: React.ComponentProps<'legend'> & { variant?: 'legend' | 'label' }) {
+interface FieldLegendProps extends React.ComponentProps<'legend'> {
+  /**
+   * Caption style — `legend` (section title) or `label` (control-sized).
+   * @default "legend"
+   */
+  variant?: 'legend' | 'label';
+}
+
+function FieldLegend({ className, variant = 'legend', ...props }: FieldLegendProps) {
   return (
     <legend
       data-slot="field-legend"
@@ -70,6 +51,8 @@ function FieldLegend({
 // shrink to content — Field is w-full by default, so the row needs to override that
 // (the same w-auto trick the responsive Field variant applies at @md). Parallels the
 // RadioGroup container's orientation so checkbox groups get the same row capability.
+type FieldGroupOrientation = 'vertical' | 'horizontal';
+
 const fieldGroupVariants = cva(
   'group/field-group @container/field-group flex w-full gap-xl data-[slot=checkbox-group]:gap-lg *:data-[slot=field-group]:gap-xl',
   {
@@ -77,7 +60,7 @@ const fieldGroupVariants = cva(
       orientation: {
         vertical: 'flex-col',
         horizontal: 'flex-row flex-wrap items-center [&>[data-slot=field]]:w-auto',
-      },
+      } satisfies Record<FieldGroupOrientation, string>,
     },
     defaultVariants: {
       orientation: 'vertical',
@@ -85,11 +68,16 @@ const fieldGroupVariants = cva(
   },
 );
 
-function FieldGroup({
-  className,
-  orientation = 'vertical',
-  ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof fieldGroupVariants>) {
+interface FieldGroupProps extends React.ComponentProps<'div'> {
+  /**
+   * Layout axis for the stacked Fields — `vertical` stacks them, `horizontal` lays them in a
+   * wrapping row.
+   * @default "vertical"
+   */
+  orientation?: FieldGroupOrientation;
+}
+
+function FieldGroup({ className, orientation = 'vertical', ...props }: FieldGroupProps) {
   return (
     <div
       data-slot="field-group"
@@ -100,6 +88,8 @@ function FieldGroup({
   );
 }
 
+type FieldOrientation = 'vertical' | 'horizontal' | 'responsive';
+
 const fieldVariants = cva('group/field flex w-full gap-md', {
   variants: {
     orientation: {
@@ -108,18 +98,23 @@ const fieldVariants = cva('group/field flex w-full gap-md', {
         'flex-row items-center has-[>[data-slot=field-content]]:items-start *:data-[slot=field-label]:flex-auto has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
       responsive:
         'flex-col *:w-full @md/field-group:flex-row @md/field-group:items-center @md/field-group:*:w-auto @md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:*:data-[slot=field-label]:flex-auto [&>.sr-only]:w-auto @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-    },
+    } satisfies Record<FieldOrientation, string>,
   },
   defaultVariants: {
     orientation: 'vertical',
   },
 });
 
-function Field({
-  className,
-  orientation = 'vertical',
-  ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof fieldVariants>) {
+interface FieldProps extends React.ComponentProps<'div'> {
+  /**
+   * Flex axis of the row — `vertical` stacks label → control → description; `horizontal` puts
+   * label + control on one row; `responsive` is column on narrow, row at `@md` (container query).
+   * @default "vertical"
+   */
+  orientation?: FieldOrientation;
+}
+
+function Field({ className, orientation = 'vertical', ...props }: FieldProps) {
   return (
     <div
       role="group"
@@ -219,14 +214,15 @@ function FieldSeparator({
   );
 }
 
-function FieldError({
-  className,
-  children,
-  errors,
-  ...props
-}: React.ComponentProps<'div'> & {
+interface FieldErrorProps extends React.ComponentProps<'div'> {
+  /**
+   * Validation errors to render (dedup'd; one → text, many → bullet list). Omit when passing
+   * `children`.
+   */
   errors?: Array<{ message?: string } | undefined>;
-}) {
+}
+
+function FieldError({ className, children, errors, ...props }: FieldErrorProps) {
   const content = useMemo(() => {
     if (children) {
       return children;
@@ -279,3 +275,4 @@ export {
   FieldContent,
   FieldTitle,
 };
+export type { FieldProps, FieldGroupProps, FieldLegendProps, FieldErrorProps };
