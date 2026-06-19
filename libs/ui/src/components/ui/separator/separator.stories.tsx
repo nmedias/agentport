@@ -20,28 +20,18 @@ const meta: Meta<typeof Separator> = {
     orientation: 'horizontal',
     decorative: true,
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // ComponentProps<typeof SeparatorPrimitive.Root> shape, so the public API is
-  // documented here by hand (same approach as the other ports).
+  // Prop type · description · enum come from the component's JSDoc via react-docgen (see SeparatorProps
+  // in separator.tsx); Storybook infers each control from the type. argTypes adds only: (1) a control
+  // override — `orientation` as inline-radio vs the inferred select; (2) a defaultValue per defaulted
+  // prop — the ArgsTable Default column ignores the @default JSDoc tag, so every default is declared
+  // here uniformly (the component's @default tags feed the storybook MCP get-documentation instead).
   argTypes: {
     orientation: {
       control: 'inline-radio',
-      options: ['horizontal', 'vertical'],
-      description:
-        'Axis of the line. `horizontal` is a full-width rule (`h-px w-full`) between stacked content; `vertical` is a `w-px` line that stretches to the row height (`self-stretch`) between inline items.',
-      table: {
-        type: { summary: '"horizontal" | "vertical"' },
-        defaultValue: { summary: '"horizontal"' },
-      },
+      table: { defaultValue: { summary: '"horizontal"' } },
     },
     decorative: {
-      control: 'boolean',
-      description:
-        'Semantic role only (not the look). `true` (default) is non-semantic — `role="none"`, aria-hidden — for a purely visual divider; `false` exposes the ARIA `separator` role with its `aria-orientation` for assistive tech.',
-      table: {
-        type: { summary: 'boolean' },
-        defaultValue: { summary: 'true' },
-      },
+      table: { defaultValue: { summary: 'true' } },
     },
   },
   parameters: {

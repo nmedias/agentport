@@ -3,24 +3,34 @@ import { Separator as SeparatorPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 
-// shadcn separator on the radix-nova structure (Radix Separator.Root, decorative
-// by default → non-interactive). Single static element, no CVA: the only axis is
-// content — `orientation` (horizontal | vertical), driven by the data-* classes.
-//
-// DS re-clothe (tokens-reference.md §6):
-//  · bg-border → the DS `border` token (--color-border): its `use` is exactly
-//    "Standard-Kanten/Trenner" — the default divider line. Not border-emphasis/
-//    -strong (those are the heavier rungs of the line ladder), so the class name
-//    is unchanged but the binding is now semantic, not a value coincidence.
-//  · h-px / w-px stay numeric — a 1px line is geometry, not a spacing token.
-//  · w-full (horizontal) / self-stretch (vertical) fill the cross-axis; shrink-0
-//    keeps the line from collapsing in a flex row. All layout, no DS change.
+// Public API. The curated subset of the Radix Separator surface is re-declared here as
+// FLAT, own props so react-docgen can extract it (the default docgen propFilter drops
+// anything declared in node_modules — i.e. the inherited Radix/DOM props — so JSDoc on
+// `ComponentProps<typeof Root>` would never surface). Omit those keys from the inherited
+// type first, then re-add them with JSDoc → one declaration each, attributed to this file.
+// Everything else Radix accepts still passes through via the untouched rest of the base type.
+interface SeparatorProps
+  extends Omit<React.ComponentProps<typeof SeparatorPrimitive.Root>, 'orientation' | 'decorative'> {
+  /**
+   * Axis of the hairline — `horizontal` is a full-width rule between stacked content,
+   * `vertical` a line that stretches to the row height between inline items.
+   * @default "horizontal"
+   */
+  orientation?: 'horizontal' | 'vertical';
+  /**
+   * Semantic role only, not the look. `true` is non-semantic (`role="none"`, aria-hidden)
+   * for a purely visual divider; `false` exposes the ARIA `separator` role for assistive tech.
+   * @default true
+   */
+  decorative?: boolean;
+}
+
 function Separator({
   className,
   orientation = 'horizontal',
   decorative = true,
   ...props
-}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
+}: SeparatorProps) {
   return (
     <SeparatorPrimitive.Root
       data-slot="separator"
@@ -36,3 +46,4 @@ function Separator({
 }
 
 export { Separator };
+export type { SeparatorProps };

@@ -4,19 +4,6 @@ import { cva } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
-// shadcn button on the **radix-nova structure**, re-clothed in DS values
-// (tokens-reference.md §6). Adopted from Nova: the denser size ladder (h-8/7/9,
-// + xs and the icon-xs/sm/lg steps), per-size icon sizing via
-// [&_svg:not([class*='size-'])]:size-N, ring-3 focus, active press, aria-invalid
-// + aria-expanded affordances. Kept on DS conventions (NOT Nova's raw values):
-//  · radius by NAME → DS scale (corner-lg=8, small sizes corner-md=6), not
-//    Nova's parametric --radius=10 · text stays text-format-label (DS has no <14px sans).
-// Colour clothing synced to the Figma .Button set (2026-06-17 -fill/-ink rework):
-//    default = primary-fill surface + primary-ink text · outline/ghost hover =
-//    accent-fill + accent-ink (selection tint) · secondary = secondary + -ink ·
-//    destructive solid + destructive-ink text. Figma drives hover/active via a
-//    state-layer overlay; here expressed as the DS /opacity idiom (see notes).
-
 // Public scales authored once here; the cva objects are checked against them via `satisfies` (below)
 // and the props are typed by them, so the docgen-readable unions can't drift from the cva.
 //  · variant — the visual style axis.

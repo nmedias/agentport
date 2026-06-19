@@ -20,33 +20,26 @@ const meta: Meta<typeof Badge> = {
     children: 'Badge',
     variant: 'default',
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // ComponentProps<'span'> & VariantProps<…> intersection, so the public API is
-  // documented here by hand (same approach as the other ports).
+  // variant + asChild are docgen-surfaced from the component's JSDoc (see BadgeProps in badge.tsx) →
+  // type/description/enum come from there. Here: control-overrides + a defaultValue per defaulted prop
+  // (the ArgsTable ignores the @default tag). react-docgen doesn't document the inherited `children`.
   argTypes: {
     variant: {
+      // inline-radio override (vs the inferred select) — the axis is short enough to lay flat.
       control: 'inline-radio',
       options: ['default', 'secondary', 'destructive', 'outline', 'ghost', 'link'],
-      description:
-        'Visual style. `default`/`secondary`/`destructive` are solid DS fills, `outline` is a bordered neutral; `ghost`/`link` are the Nova-baseline extras.',
-      table: {
-        type: { summary: '"default" | "secondary" | "destructive" | "outline" | "ghost" | "link"' },
-        defaultValue: { summary: '"default"' },
-      },
+      table: { defaultValue: { summary: '"default"' } },
     },
     children: {
       control: 'text',
       description: 'Badge content — text, a leading icon, or both.',
       table: { type: { summary: 'React.ReactNode' } },
     },
-    // asChild swaps the rendered <span> for its single child (Radix Slot) and needs
-    // exactly ONE element child — toggling it onto the plain-text stories crashes the
-    // Slot. No control; demonstrated in the AsChild story.
+    // asChild swaps the rendered <span> for its single child (Radix Slot) and needs exactly ONE element
+    // child — toggling it onto the plain-text stories crashes the Slot. No control; shown in AsChild.
     asChild: {
       control: false,
-      description:
-        'Merge the badge styling onto a single child element instead of a `<span>` (Radix Slot) — e.g. wrap an `<a>` to get a real link badge.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      table: { defaultValue: { summary: 'false' } },
     },
   },
   parameters: {

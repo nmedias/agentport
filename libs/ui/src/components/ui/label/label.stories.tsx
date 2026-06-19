@@ -19,20 +19,16 @@ const meta: Meta<typeof Label> = {
   component: Label,
   tags: ['autodocs'],
   args: { children: 'Email' },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // ComponentProps<typeof LabelPrimitive.Root> (a Radix type reference), so the public API
-  // is documented here by hand (same approach as the other ports).
+  // Prop type · description · enum come from the component's JSDoc via react-docgen (see
+  // LabelProps in label.tsx — `htmlFor` is re-declared flat there). argTypes adds only what
+  // docgen can't supply: `children` is an inherited React.ReactNode (no own JSDoc → no docgen
+  // description), so its caption description + text control stay hand-curated here. Label has
+  // no defaulted prop, so there is no `table.defaultValue` to declare.
   argTypes: {
     children: {
       control: 'text',
       description: 'Label caption — text (or text + a small icon).',
       table: { type: { summary: 'React.ReactNode' } },
-    },
-    htmlFor: {
-      control: 'text',
-      description:
-        'The `id` of the control this label names. Sets the native `for` association — clicking the label focuses/toggles that control, and it becomes the control\'s accessible name. Required for the a11y pairing.',
-      table: { type: { summary: 'string' } },
     },
   },
   parameters: {

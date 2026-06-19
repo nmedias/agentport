@@ -3,22 +3,23 @@ import { Label as LabelPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 
-// Radix Label re-clothed in DS tokens. Co-ported as a Field dependency
-// (FieldLabel wraps it); usable standalone for any control caption.
-//
-// DS re-clothe (tokens-reference.md §6 / §4):
-//  · text-sm leading-none font-medium → text-format-label — the DS label
-//    format (14 / 500), the documented role "Form-/Toggle-Labels, Button-Text".
-//    The three stock typography utilities are dead under the theme reset (§6);
-//    one composition class carries family+size+weight+line-height+tracking.
-//  · gap-2 (8px) → gap-md — the icon↔text gap on the named spacing scale (§3).
-//  · no explicit colour class — the Figma .Label TEXT fill binds `ink` (the
-//    2026-06-17 colour rework renamed `foreground` → `ink`, §6); the base layer
-//    (`body { @apply … text-ink }`) already cascades it, so the label inherits
-//    currentColor. There is no bg-ink — ink is a text/icon role only.
-//  · select-none + the group/peer-disabled opacity dimming are behaviour, no
-//    DS surface — kept verbatim (disabled = Figma member opacity 0.5).
-function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
+// Public API. Radix Label's whole surface is the htmlFor↔id pairing, but `htmlFor` is a
+// standard DOM attribute inherited from ComponentProps<typeof Root> → the default docgen
+// propFilter drops it (declared in node_modules), so JSDoc on the base type never surfaces.
+// Omit it from the inherited type, then re-add it flat with JSDoc → one declaration here,
+// attributed to this file → react-docgen extracts it. Everything else Radix/DOM accepts
+// (children, id, the group/peer behaviour hooks) still passes through via the untouched
+// rest of the base type.
+interface LabelProps extends Omit<React.ComponentProps<typeof LabelPrimitive.Root>, 'htmlFor'> {
+  /**
+   * The `id` of the control this label names. Sets the native `for` association — clicking
+   * the label focuses/toggles that control, and it becomes the control's accessible name.
+   * Required for the a11y pairing.
+   */
+  htmlFor?: string;
+}
+
+function Label({ className, ...props }: LabelProps) {
   return (
     <LabelPrimitive.Root
       data-slot="label"
@@ -32,3 +33,4 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
 }
 
 export { Label };
+export type { LabelProps };

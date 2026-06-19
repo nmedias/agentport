@@ -20,19 +20,14 @@ const meta: Meta<typeof Kbd> = {
     children: 'Esc',
     emphasis: 'high',
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // ComponentProps<'kbd'> & VariantProps<…> intersection, so the public API is
-  // documented here by hand (same approach as the other ports).
+  // emphasis is docgen-surfaced from the component's JSDoc (see KbdProps in kbd.tsx) — type,
+  // description and enum come from there. Here: only the control-type override (inline-radio vs
+  // the inferred select) + table.defaultValue (the ArgsTable ignores the @default tag).
+  // react-docgen doesn't document the inherited `children` → it stays hand-curated.
   argTypes: {
     emphasis: {
       control: 'inline-radio',
-      options: ['high', 'low'],
-      description:
-        'Keycap weight. `high` (default) is the inverted dark cap (Inverse fill/ink); `low` is the quiet muted cap (the stock-shadcn look).',
-      table: {
-        type: { summary: '"high" | "low"' },
-        defaultValue: { summary: '"high"' },
-      },
+      table: { defaultValue: { summary: '"high"' } },
     },
     children: {
       control: 'text',
