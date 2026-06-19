@@ -1,6 +1,7 @@
 ---
 name: skill-feedback
 description: "Toggle ON before/at the start of a skill run to capture skill-IMPROVEMENT feedback — gaps, bugs, candidate fixes that surface while running another skill — into that run's skill-feedback.md, on the spot. Trigger when the user wants to switch on feedback capture for a run: 'skill feedback', 'capture skill gaps/improvements for this run', 'track feedback before I start'."
+disable-model-invocation: true
 ---
 
 # Skill Feedback
