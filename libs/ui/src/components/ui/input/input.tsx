@@ -2,23 +2,39 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-// Token-faithful port of the shadcn input to the Agentport DS vocabulary
-// (see design-docs/design-system/tokens-reference.md §6):
-//  bg-transparent → bg-input-fill (DS fields are opaque, carried by the input
-//  border) · text-base/md:text-sm → text-format-label (Figma DS uses the Label
-//  format for form-control text, Medium 14 — same as Button) · shadow-xs dropped
-//  (DS is flat) · placeholder:text-muted-foreground → placeholder:text-input-ink-placeholder
-//  (dedicated token) · file:text-sm/font-medium → file:text-format-label.
-//  Colour clothing synced to the Figma .Input set (2026-06-17 -fill/-ink rework):
-//  surface = input-fill · border = input-border · placeholder = input-ink-placeholder ·
-//  value text = ink · focus stroke = ring · invalid stroke = destructive. Text
-//  selection (code-only, no Figma binding) uses the primary surface pairing
-//  bg-primary-fill + text-primary-ink (bg-primary no longer exists post-rework).
-//  Density follows the radix-nova baseline (mapped by NAME, not Nova's --radius
-//  scale): h-8 (32) · corner-lg (DS 8px) · px-2.5(10)→px-md(8) · py-1→py-xs(4) ·
-//  file:h-6. Control height stays numeric. Focus = border-ring + ring/50 ring-[3px];
-//  invalid = destructive border + ring/20. dark: dropped.
-function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
+// Public API. Input spreads the full native <input> surface (ComponentProps<'input'>), but
+// the default docgen propFilter drops every DOM attr (declared in node_modules) → none would
+// surface. Take the curated subset out of the inherited base via Omit, then re-add each as a
+// flat own prop with JSDoc → one declaration each, attributed to this file → react-docgen
+// extracts them. The rest of the native surface (incl. aria-* a11y passthroughs) still flows
+// through via the untouched base type + {...props}; aria-invalid/aria-label stay hand-curated
+// in the story (hyphenated keys are docgen-unreliable).
+interface InputProps
+  extends Omit<
+    React.ComponentProps<'input'>,
+    'type' | 'placeholder' | 'defaultValue' | 'value' | 'disabled' | 'onChange'
+  > {
+  /**
+   * Native input type — drives the keyboard/affordance. `file` switches to the file picker anatomy.
+   * @default "text"
+   */
+  type?: React.HTMLInputTypeAttribute;
+  /** Hint shown while empty — rendered in the dedicated `input-ink-placeholder` token. Not a label substitute. */
+  placeholder?: string;
+  /** Initial value when uncontrolled (the "filled" state). */
+  defaultValue?: string | number | readonly string[];
+  /** Controlled value (pair with `onChange`). */
+  value?: string | number | readonly string[];
+  /**
+   * Native disabled — blocks interaction and dims the field (`opacity-50`).
+   * @default false
+   */
+  disabled?: boolean;
+  /** Change handler (required when controlling `value`). */
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+}
+
+function Input({ className, type, ...props }: InputProps) {
   return (
     <input
       type={type}
@@ -35,3 +51,4 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
 }
 
 export { Input };
+export type { InputProps };

@@ -32,37 +32,21 @@ const meta: Meta<typeof Input> = {
     placeholder: 'Search…',
     'aria-label': 'Search',
   },
-  // Curated prop docs for the Autodocs ArgsTable — Input spreads ComponentProps<'input'> (the full
-  // native surface), so the public API is documented here by hand: the props that actually shape the
-  // DS states (type/value/disabled) plus the a11y essentials. Interactive/gallery stories scope or
-  // disable their own panel.
+  // Prop type · description · enum come from the component's JSDoc via react-docgen (see InputProps in
+  // input.tsx — type/placeholder/defaultValue/value/disabled/onChange re-declared flat); Storybook infers
+  // each control from the type. For those six, argTypes adds only control overrides + a defaultValue per
+  // defaulted prop (the ArgsTable ignores the @default JSDoc tag → declared here; the @default tags feed
+  // the storybook MCP get-documentation instead). The two a11y passthroughs (aria-invalid/aria-label) stay
+  // FULLY hand-curated — hyphenated keys are docgen-unreliable, and they flow through via {...props}.
   argTypes: {
     type: {
       control: 'select',
       options: ['text', 'email', 'password', 'number', 'search', 'tel', 'url', 'file'],
-      description: 'Native input type — drives the keyboard/affordance. `file` switches to the file picker anatomy.',
-      table: { type: { summary: 'React.HTMLInputTypeAttribute' }, defaultValue: { summary: '"text"' } },
+      table: { defaultValue: { summary: '"text"' } },
     },
-    placeholder: {
-      control: 'text',
-      description: 'Hint shown while empty — rendered in the dedicated `input-ink-placeholder` token. Not a label substitute.',
-      table: { type: { summary: 'string' } },
-    },
-    defaultValue: {
-      control: 'text',
-      description: 'Initial value when uncontrolled (the "filled" state).',
-      table: { type: { summary: 'string | number' } },
-    },
-    value: {
-      control: false,
-      description: 'Controlled value (pair with `onChange`).',
-      table: { type: { summary: 'string | number' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Native disabled — blocks interaction and dims the field (`opacity-50`).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
+    defaultValue: { control: 'text' },
+    value: { control: false },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
     'aria-invalid': {
       control: 'boolean',
       description: 'Marks the field invalid → destructive border + ring. Pair with a `FieldError`.',
@@ -73,11 +57,7 @@ const meta: Meta<typeof Input> = {
       description: 'Accessible name for a bare (unlabelled) input. Prefer an associated `FieldLabel` in real forms.',
       table: { type: { summary: 'string' } },
     },
-    onChange: {
-      control: false,
-      description: 'Change handler (required when controlling `value`).',
-      table: { type: { summary: '(e: ChangeEvent<HTMLInputElement>) => void' } },
-    },
+    onChange: { control: false },
   },
   parameters: {
     docs: {

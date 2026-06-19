@@ -28,29 +28,24 @@ const meta: Meta<typeof Textarea> = {
     placeholder: 'Add a description…',
     rows: 3,
   },
-  // Curated prop docs for the Autodocs ArgsTable — the public API is the native
-  // <textarea> surface; the handful of props that drive the DS state language are
-  // documented here by hand (same approach as the other form-control ports).
+  // Story argTypes carry only control config here. The four re-declared props
+  // (placeholder/rows/defaultValue/disabled) get their description + type from docgen
+  // (JSDoc on TextareaProps) — only control overrides + the defaulted prop's
+  // table.defaultValue stay. `aria-invalid` is docgen-unreliable (hyphenated key) and a
+  // pure a11y passthrough → it stays fully hand-curated.
   argTypes: {
     placeholder: {
       control: 'text',
-      description: 'Placeholder shown while empty (`text-input-ink-placeholder`).',
-      table: { type: { summary: 'string' } },
     },
     rows: {
       control: 'number',
-      description: 'Initial visible text rows; the box still auto-grows with content.',
-      table: { type: { summary: 'number' } },
     },
     defaultValue: {
       control: 'text',
-      description: 'Initial value when uncontrolled (the filled state).',
-      table: { type: { summary: 'string' } },
     },
     disabled: {
       control: 'boolean',
-      description: 'Prevents interaction and dims the control (opacity-50, no pointer events).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      table: { defaultValue: { summary: 'false' } },
     },
     'aria-invalid': {
       control: 'boolean',
