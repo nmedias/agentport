@@ -62,6 +62,12 @@ function X({ className, ...props }: XProps) { return <Root {...props} />; }
 
 Document only the props that are genuinely **your API** — not every inherited DOM/ARIA attribute.
 
+**Keep each re-declared type ≥ native — never narrow it.** `Omit` removes the base prop, so your
+re-declaration is the *only* type a consumer sees. Narrow it (e.g. `defaultValue?: string` instead of the
+native `string | number | readonly string[]`) and any caller spreading native props in — a wrapper
+forwarding `ComponentProps<'…'>` — fails to assign (`TS2322`). Match the native type; widen the JSDoc'd
+prop if a doc-friendlier type tempted you to shrink it.
+
 ### 3. What react-docgen yields
 
 | Want in… | react-docgen reads | how |
