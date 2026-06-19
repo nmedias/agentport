@@ -1,6 +1,7 @@
 ---
 name: shadcn-component-port
 description: "Initial, first-time port of a shadcn/ui component into the Agentport DS — read its anatomy from the shadcn MCP, build a token-bound Figma component set with variants, then write the code on the DS utility vocabulary. Trigger when the user wants to add / port / rebuild / nachbauen a shadcn component (Button, Input, Card, Badge …) that does NOT exist in the DS yet, Figma + code together. To reconcile an ALREADY-built component after a Figma change, use /component-sync instead."
+argument-hint: Which shadcn component you would like to import? 
 ---
 
 # Shadcn Component Port (Initial · Shadcn → Figma → Code)
