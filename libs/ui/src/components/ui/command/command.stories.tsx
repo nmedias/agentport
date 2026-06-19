@@ -42,58 +42,24 @@ const meta: Meta<typeof Command> = {
   title: 'UI/Command',
   component: Command,
   tags: ['autodocs'],
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // ComponentProps<typeof CommandPrimitive> & VariantProps<…> intersection, so the
-  // Command-root public API (cmdk props + the DS `variant`) is documented here by hand.
+  // Prop docs come from react-docgen (CommandProps JSDoc on command.tsx); argTypes here
+  // only carry control overrides + the ArgsTable default column. `value`/`defaultValue`/
+  // `label` are plain strings → Storybook infers a text control, so they need no entry.
   argTypes: {
     variant: {
       control: 'inline-radio',
-      options: ['default', 'palette'],
-      description:
-        'DS surface variant. `default` is the elevated overlay panel; `palette` is the full-bleed Agentport terminal palette (set on the root only, flows to Input/List/Group/Separator via context).',
-      table: {
-        type: { summary: '"default" | "palette"' },
-        defaultValue: { summary: '"default"' },
-      },
-    },
-    label: {
-      control: 'text',
-      description:
-        'Accessible label for the command menu (cmdk renders it visually hidden). Not shown.',
-      table: { type: { summary: 'string' } },
+      table: { defaultValue: { summary: '"default"' } },
     },
     shouldFilter: {
       control: 'boolean',
-      description:
-        'Whether cmdk filters + sorts items by the search query. Set `false` to render valid items yourself (server-side / async search).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+      table: { defaultValue: { summary: 'true' } },
     },
     loop: {
       control: 'boolean',
-      description: 'Loop arrow-key navigation around the ends of the list.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      table: { defaultValue: { summary: 'false' } },
     },
-    value: {
-      control: 'text',
-      description: 'Controlled value of the active item (pair with `onValueChange`).',
-      table: { type: { summary: 'string' } },
-    },
-    defaultValue: {
-      control: 'text',
-      description: 'Active item value when uncontrolled.',
-      table: { type: { summary: 'string' } },
-    },
-    onValueChange: {
-      control: false,
-      description: 'Called when the active item changes.',
-      table: { type: { summary: '(value: string) => void' } },
-    },
-    filter: {
-      control: false,
-      description:
-        'Custom match function `(value, search, keywords) => number` (0 hidden … 1 best). Defaults to command-score.',
-      table: { type: { summary: '(value: string, search: string, keywords?: string[]) => number' } },
-    },
+    onValueChange: { control: false },
+    filter: { control: false },
   },
   parameters: {
     docs: {
