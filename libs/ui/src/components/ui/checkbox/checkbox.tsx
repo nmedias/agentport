@@ -4,50 +4,47 @@ import { RiCheckLine } from '@remixicon/react';
 
 import { cn } from '@/lib/utils';
 
+// Public API. The curated subset of the Radix Checkbox surface is re-declared here as
+// FLAT, own props so react-docgen can extract it (the default docgen propFilter drops
+// anything declared in node_modules — i.e. the inherited Radix/DOM props). Omit those keys
+// from the inherited type first, then re-add them with JSDoc → one declaration each,
+// attributed to this file. Native types are kept exactly (checked is `boolean | 'indeterminate'`,
+// = Radix CheckedState) — narrowing would break callers. Everything else Radix accepts still
+// passes through via the untouched rest of the base type.
+interface CheckboxProps
+  extends Omit<
+    React.ComponentProps<typeof CheckboxPrimitive.Root>,
+    'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'required' | 'name' | 'value'
+  > {
+  /** Controlled checked state (pair with `onCheckedChange`). Accepts `"indeterminate"`. */
+  checked?: boolean | 'indeterminate';
+  /**
+   * Checked state when uncontrolled.
+   * @default false
+   */
+  defaultChecked?: boolean | 'indeterminate';
+  /** Called when the checked state changes. */
+  onCheckedChange?: (checked: boolean | 'indeterminate') => void;
+  /**
+   * Prevents interaction and dims the control (and its Field label via group styling).
+   * @default false
+   */
+  disabled?: boolean;
+  /**
+   * Marks the control required for native form validation.
+   * @default false
+   */
+  required?: boolean;
+  /** Form field name submitted with the form. */
+  name?: string;
+  /**
+   * Value submitted when checked.
+   * @default "on"
+   */
+  value?: string;
+}
 
-
-
-
-// Token-faithful port of the shadcn checkbox to the Agentport DS vocabulary
-// (see design-docs/design-system/tokens-reference.md §6). No CVA → the axis
-// is checked × state, matching the Figma .Checkbox set (3795:1184): default ·
-// focus · disabled · invalid · focus-invalid, per checked=off/on.
-//
-// DS re-clothe (colour bindings verified live in Figma 2026-06-17, -fill/-ink rework):
-//  · rounded-[4px] → corner-sm — the DS 4px radius for small controls/markers;
-//    all rounded-* are dead under the theme reset (§2/§6), corner-* is the only
-//    radius vocabulary.
-//  · default/focus/disabled/invalid box fill → bg-input-fill (Figma Input/input-fill;
-//    was bg-input-background, renamed in the -fill/-ink rework — the unchecked box
-//    is opaque, not transparent).
-//  · border-input-border — DS Form-Control-Border token (Figma Input/input-border;
-//    was border-input). Control edge; focus hands off to the ring.
-//  · data-checked:{bg,border}-primary-fill + text-primary-ink — the checked box is
-//    the dark Primary surface (Figma shadcn Default/primary-fill on both fill and
-//    stroke) with the glyph riding it in primary-ink (Figma shadcn Default/primary-ink).
-//    NB bg-primary does NOT exist — primary is the accent text/border/ring tone; the
-//    filled surface binds primary-fill.
-//  · focus border-ring + ring-ring/50 ring-[3px] — mirrors the Input focus ring
-//    (ring-[3px], not ring-3, to match the sibling field convention). Figma focus
-//    members stroke shadcn Default/ring + a #4a5562@50% spread-3 glow.
-//  · aria-invalid → destructive border (⚠ PLACEHOLDER token — stock hex, not
-//    designed; bound but not finalized, same as Input/Badge). The destructive ring
-//    (ring-destructive/20) is FOCUS-GATED: its width comes from focus-visible:ring-[3px]
-//    only, so invalid-resting shows the border alone and the red ring appears on
-//    invalid+focus — matching .Input and the Figma invalid/focus-invalid split (the
-//    resting invalid members carry no glow; only focus-invalid adds the destructive@20%).
-//  · aria-invalid:aria-checked → destructive fill + border + text-destructive-ink (the
-//    checked-and-invalid box is solid destructive in Figma; the glyph rides the red fill
-//    in destructive-ink). Overrides data-checked:bg/border-primary-fill + text-primary-ink.
-//  · lucide CheckIcon → @remixicon/react RiCheckLine (matches the Command port's
-//    check glyph). [&>svg]:size-3.5 stays numeric (icon geometry ≠ token).
-//  · all dark: variants dropped (DS is light-only).
-//  · group-has-disabled/field:opacity-50 kept (Field integration); size-4 +
-//    after:-inset-* (invisible hit-target) stay numeric (geometry ≠ token).
-function Checkbox({
-  className,
-  ...props
-}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
+function Checkbox({ className, ...props }: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
@@ -68,3 +65,4 @@ function Checkbox({
 }
 
 export { Checkbox };
+export type { CheckboxProps };

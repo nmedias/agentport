@@ -32,45 +32,20 @@ const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   tags: ['autodocs'],
   args: { checked: true, disabled: false },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
-  // `ComponentProps<typeof CheckboxPrimitive.Root>` (a Radix type reference), so the public
-  // API is documented here by hand. Interactive stories scope their panel via controls.include.
+  // Prop type · description · enum come from the component's JSDoc via react-docgen (see
+  // CheckboxProps in checkbox.tsx); Storybook infers each control from the type. argTypes adds:
+  // control overrides for `onCheckedChange` (false — it's a callback) and the `boolean |
+  // 'indeterminate'` props (`checked`/`defaultChecked` → forced `boolean` toggle; the union would
+  // otherwise infer an object control), plus a defaultValue per defaulted prop — the ArgsTable
+  // Default column ignores the @default JSDoc tag, so every default is declared here (the
+  // component's @default tags feed the storybook MCP get-documentation).
   argTypes: {
-    checked: {
-      control: 'boolean',
-      description: 'Controlled checked state (pair with `onCheckedChange`). Accepts `"indeterminate"`.',
-      table: { type: { summary: 'boolean | "indeterminate"' } },
-    },
-    defaultChecked: {
-      control: 'boolean',
-      description: 'Checked state when uncontrolled.',
-      table: { type: { summary: 'boolean | "indeterminate"' }, defaultValue: { summary: 'false' } },
-    },
-    onCheckedChange: {
-      control: false,
-      description: 'Called when the checked state changes.',
-      table: { type: { summary: '(checked: boolean | "indeterminate") => void' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Prevents interaction and dims the control (and its Field label via group styling).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    required: {
-      control: 'boolean',
-      description: 'Marks the control required for native form validation.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    name: {
-      control: 'text',
-      description: 'Form field name submitted with the form.',
-      table: { type: { summary: 'string' } },
-    },
-    value: {
-      control: 'text',
-      description: 'Value submitted when checked.',
-      table: { type: { summary: 'string' }, defaultValue: { summary: '"on"' } },
-    },
+    checked: { control: 'boolean' },
+    onCheckedChange: { control: false },
+    defaultChecked: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
+    required: { table: { defaultValue: { summary: 'false' } } },
+    value: { table: { defaultValue: { summary: '"on"' } } },
   },
   parameters: {
     docs: {

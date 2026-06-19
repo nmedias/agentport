@@ -5,33 +5,18 @@ import { Label } from '../label';
 
 // Second Autodocs page for the option primitive. The UI/RadioGroup page documents the
 // value-driven container; this page (UI/RadioGroup/Item) gives RadioGroupItem its own
-// real ArgsTable instead of a prose block in the container's description. Same curation
-// reason as the container: react-docgen can't extract props from
-// `ComponentProps<typeof RadioGroupPrimitive.Item>` (a Radix type reference), so the
-// public API is documented here by hand. A RadioGroupItem needs a RadioGroup ancestor
-// (Radix context), so every render wraps it.
+// real ArgsTable. Prop type · description · enum · the required `value` come from
+// RadioGroupItemProps' JSDoc via react-docgen (see radio-group.tsx); Storybook infers
+// each control from the type. argTypes adds only the defaultValue for the defaulted
+// `disabled` (the ArgsTable Default column ignores the @default JSDoc tag). A
+// RadioGroupItem needs a RadioGroup ancestor (Radix context), so every render wraps it.
 const meta: Meta<typeof RadioGroupItem> = {
   title: 'UI/RadioGroup/Item',
   component: RadioGroupItem,
   tags: ['autodocs'],
   args: { value: 'option', disabled: false },
   argTypes: {
-    value: {
-      control: 'text',
-      description: 'Value selected (and form-submitted) when this item is chosen.',
-      type: { name: 'string', required: true },
-      table: { type: { summary: 'string' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables just this item. (The whole group can be disabled via `RadioGroup`.)',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    id: {
-      control: 'text',
-      description: 'Pairs the item with a `<label htmlFor>` for an accessible name.',
-      table: { type: { summary: 'string' } },
-    },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
   },
   parameters: {
     docs: {

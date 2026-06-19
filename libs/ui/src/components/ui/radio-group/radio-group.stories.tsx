@@ -23,48 +23,16 @@ const meta: Meta<typeof RadioGroup> = {
   component: RadioGroup,
   tags: ['autodocs'],
   args: { defaultValue: 'comfortable' },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
-  // `ComponentProps<typeof RadioGroupPrimitive.Root>` (a Radix type reference), so the public
-  // API is documented here by hand. The table documents RadioGroup (the container); the
-  // RadioGroupItem props live in the component description block. Interactive stories scope
-  // their panel via controls.include.
+  // Prop type · description · enum come from RadioGroupProps' JSDoc via react-docgen (see
+  // radio-group.tsx); Storybook infers each control from the type. argTypes adds only: (1) a
+  // control override — `orientation` as inline-radio vs the inferred select (docgen resolves
+  // the literal union, so options are inferred); (2) a defaultValue per defaulted prop — the
+  // ArgsTable Default column ignores the @default JSDoc tag. The RadioGroupItem props get
+  // their own ArgsTable on the UI/RadioGroup/Item page.
   argTypes: {
-    value: {
-      control: 'text',
-      description: 'Controlled selected value (pair with `onValueChange`).',
-      table: { type: { summary: 'string' } },
-    },
-    defaultValue: {
-      control: 'text',
-      description: 'Selected value when uncontrolled.',
-      table: { type: { summary: 'string' } },
-    },
-    onValueChange: {
-      control: false,
-      description: 'Called when the selected value changes.',
-      table: { type: { summary: '(value: string) => void' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables every item in the group.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    required: {
-      control: 'boolean',
-      description: 'Marks the group required for native form validation.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    name: {
-      control: 'text',
-      description: 'Form field name submitted with the form.',
-      table: { type: { summary: 'string' } },
-    },
-    orientation: {
-      control: 'inline-radio',
-      options: ['horizontal', 'vertical'],
-      description: 'Arrow-key navigation direction.',
-      table: { type: { summary: '"horizontal" | "vertical"' }, defaultValue: { summary: '"vertical"' } },
-    },
+    orientation: { control: 'inline-radio', table: { defaultValue: { summary: '"vertical"' } } },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
+    required: { table: { defaultValue: { summary: 'false' } } },
   },
   parameters: {
     docs: {
