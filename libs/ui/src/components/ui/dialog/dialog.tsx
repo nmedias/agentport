@@ -5,22 +5,33 @@ import { RiCloseLine } from '@remixicon/react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
-// Ported from shadcn radix-nova dialog, re-clothed in DS tokens (mapping table in
-// agent-runs/component-port/2026-06-10-dialog/notes.md). Geometry (top-2, right-2,
-// max-w-*) stays numeric. nova's hairline ring-1 ring-foreground/10 becomes
-// border + shadow-elevation (DS overlay depth, same move as Command); bg-black/10
-// becomes bg-scrim (semantic token, ink-900 @ 10%).
-// Colour re-clothed for the -fill/-ink token rework (/component-sync 2026-06-17):
-// panel bg-overlay→bg-overlay-fill + text-overlay-foreground→text-overlay-ink,
-// footer band bg-muted/50→bg-muted-fill/50, description text-muted-foreground→
-// text-muted-ink, link hover text-foreground→text-ink (Figma .Dialog bindings).
-// 2026-06-18: overlay+popover consolidated into `dialog` (Figma Dialog/ group) →
-// panel now bg-dialog-fill + text-dialog-ink.
-// CommandDialog (command/) can now be un-deferred — it needs this Dialog.
+// Public API. The root's curated open/modal props are re-declared FLAT here (Omit them
+// from the Radix Root type, then re-add with JSDoc) so react-docgen can extract them —
+// the default propFilter drops anything inherited from node_modules. The other parts
+// (Trigger/Portal/Close/Overlay/Header/Title/Description) are plain passthroughs with no
+// curated API; DialogContent + DialogFooter add a single flat DS prop each.
+interface DialogProps
+  extends Omit<
+    React.ComponentProps<typeof DialogPrimitive.Root>,
+    'open' | 'defaultOpen' | 'onOpenChange' | 'modal'
+  > {
+  /** Controlled open state (pair with `onOpenChange`). Leave unset for an uncontrolled dialog driven by the trigger. */
+  open?: boolean;
+  /**
+   * Open state when uncontrolled — `true` renders the dialog open on mount.
+   * @default false
+   */
+  defaultOpen?: boolean;
+  /** Called with the next open state whenever the dialog opens or closes. */
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * When `true` (default) the overlay blocks pointer events and traps focus; `false` lets the rest of the page stay interactive.
+   * @default true
+   */
+  modal?: boolean;
+}
 
-function Dialog({
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+function Dialog({ ...props }: DialogProps) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
@@ -58,14 +69,21 @@ function DialogOverlay({
   );
 }
 
+interface DialogContentProps
+  extends React.ComponentProps<typeof DialogPrimitive.Content> {
+  /**
+   * Render the corner close (×) button inside the panel.
+   * @default true
+   */
+  showCloseButton?: boolean;
+}
+
 function DialogContent({
   className,
   children,
   showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content> & {
-  showCloseButton?: boolean;
-}) {
+}: DialogContentProps) {
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -107,14 +125,20 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+interface DialogFooterProps extends React.ComponentProps<'div'> {
+  /**
+   * Render a default "Close" button (a DialogClose) at the end of the footer.
+   * @default false
+   */
+  showCloseButton?: boolean;
+}
+
 function DialogFooter({
   className,
   showCloseButton = false,
   children,
   ...props
-}: React.ComponentProps<'div'> & {
-  showCloseButton?: boolean;
-}) {
+}: DialogFooterProps) {
   return (
     <div
       data-slot="dialog-footer"
@@ -175,3 +199,4 @@ export {
   DialogTitle,
   DialogTrigger,
 };
+export type { DialogProps, DialogContentProps, DialogFooterProps };

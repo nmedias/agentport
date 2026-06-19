@@ -37,32 +37,13 @@ const meta: Meta<typeof Dialog> = {
   args: {
     modal: true,
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the Radix
-  // DialogPrimitive.Root prop types through ComponentProps, so the public root API is
-  // documented here by hand (same approach as the other ports).
+  // Prop docs (type/description/@default) come from the DialogProps JSDoc via react-docgen.
+  // These argTypes only carry what docgen can't: the non-control on onOpenChange and the
+  // ArgsTable default cells (the @default JSDoc tag isn't read by the Default column).
   argTypes: {
-    open: {
-      control: 'boolean',
-      description:
-        'Controlled open state (pair with `onOpenChange`). Leave unset for an uncontrolled dialog driven by the trigger.',
-      table: { type: { summary: 'boolean' } },
-    },
-    defaultOpen: {
-      control: 'boolean',
-      description: 'Open state when uncontrolled — `true` renders the dialog open on mount.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    onOpenChange: {
-      control: false,
-      description: 'Called with the next open state whenever the dialog opens or closes.',
-      table: { type: { summary: '(open: boolean) => void' } },
-    },
-    modal: {
-      control: 'boolean',
-      description:
-        'When `true` (default) the overlay blocks pointer events and traps focus; `false` lets the rest of the page stay interactive.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
-    },
+    onOpenChange: { control: false },
+    defaultOpen: { table: { defaultValue: { summary: 'false' } } },
+    modal: { table: { defaultValue: { summary: 'true' } } },
   },
   parameters: {
     docs: {
