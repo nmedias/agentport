@@ -229,7 +229,7 @@ der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf
 
 ---
 
-## 4 · Typografie — 11 Formate
+## 4 · Typografie — 12 Formate
 
 Composition-Utilities (`@utility text-format-<format>` in tw-utilities.css, mehrwertig:
 family+size+weight+line-height+tracking) → **eine Klasse** statt einzelner `text-`/`font-`-Utilities
@@ -284,6 +284,13 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
   utilities: [text-format-title]
   use: "Abschnitts-/Sektions-Titel."
 
+- token: lead
+  css_var: "--ap-sys-lead-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-1, weight: weight/regular, line-height: line-height/relaxed, tracking: tracking/normal }
+  value: { family: sans, size: 18, weight: 400, line-height: 1.5, tracking: "0" }
+  utilities: [text-format-lead]
+  use: "Großer Intro-/Lead-Fließtext."
+
 - token: body
   css_var: "--ap-sys-body-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/regular, line-height: line-height/relaxed, tracking: tracking/normal }
@@ -312,12 +319,20 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
   utilities: [text-format-eyebrow]
   use: "Uppercase-Mikro-Labels."
 
-- token: data
-  css_var: "--ap-sys-data-{family,size,weight,line-height,tracking}"
+- token: data-sm
+  css_var: "--ap-sys-data-sm-{family,size,weight,line-height,tracking}"
   primitive: { family: family/mono, size: size/step-neg1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
   value: { family: mono, size: 11, weight: 400, line-height: normal, tracking: "0" }
-  utilities: [text-format-data]
-  use: "Tabellarische Mono-Daten (auch Dateinamen u. ä.)."
+  utilities: [text-format-data-sm]
+  use: "Kleine tabellarische Mono-Daten (auch Dateinamen u. ä.). War: data."
+
+- token: data-lg
+  css_var: "--ap-sys-data-lg-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
+  value: { family: mono, size: 18, weight: 400, line-height: normal, tracking: "0" }
+  utilities: [text-format-data-lg]
+  use: "Große Mono-Daten: Command-/Query-Eingabe. War: input."
+  avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln."
 
 - token: kbd
   css_var: "--ap-sys-kbd-{family,size,weight,line-height,tracking}"
@@ -325,14 +340,6 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
   value: { family: mono, size: 11, weight: 500, line-height: normal, tracking: "0" }
   utilities: [text-format-kbd]
   use: "Tastatur-Tasten-Text."
-
-- token: input
-  css_var: "--ap-sys-input-{family,size,weight,line-height,tracking}"
-  primitive: { family: family/mono, size: size/step-1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
-  value: { family: mono, size: 18, weight: 400, line-height: normal, tracking: "0" }
-  utilities: [text-format-input]
-  use: "Command-/Eingabe-Text."
-  avoid: "Typo-Klasse — nicht mit dem Farb-Token input (--ap-sys-input, Form-Border) verwechseln; die alte Klasse text-input kollidierte genau damit (Grund des text-format-*-Renames)."
 ```
 
 *Line-Height in Figma nicht bindbar → im Text-Style roh (auto/%); im CSS
@@ -385,7 +392,7 @@ Stock-Klassen sind **tot** → beim Portieren jeder Component übersetzen.
 dead_utilities:   # durch Reset entfernt → Ersatz
   - { stock: "text-xs/sm/base/lg/… (font-size)", reset: "--text-*: initial",        replace: "passende .text-format-*-Klasse (§4)" }
   - { stock: "font-normal/medium/semibold/bold", reset: "--font-weight-*: initial",  replace: "Gewicht steckt in der .text-format-*-Klasse" }
-  - { stock: "font-sans/font-mono (family)",     reset: "--font-*: initial",         replace: "Familie steckt in der .text-format-*-Klasse (mono → text-format-data/-kbd/-eyebrow/-input)" }
+  - { stock: "font-sans/font-mono (family)",     reset: "--font-*: initial",         replace: "Familie steckt in der .text-format-*-Klasse (mono → text-format-data-sm/-data-lg/-kbd/-eyebrow)" }
   - { stock: "tracking-*",                       reset: "--tracking-*: initial",     replace: "steckt in der .text-format-*-Klasse" }
   - { stock: "leading-*",                        reset: "--leading-*: initial",      replace: "steckt in der .text-format-*-Klasse" }
   - { stock: "shadow-xs/sm/md/lg/xl",            reset: "--shadow-*: initial",       replace: "weglassen (flach) ODER shadow-elevation, wenn Tiefe Bedeutung trägt" }

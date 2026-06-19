@@ -43,15 +43,15 @@ export function SpacingRadius() {
         <div className="flex flex-col gap-lg">
           {SPACING.map(({ step, px }) => (
             <div key={step} className="flex items-center gap-xl">
-              <span className="w-12 shrink-0 text-format-data text-ink">
+              <span className="w-12 shrink-0 text-format-data-sm text-ink">
                 {step}
               </span>
               <div
                 className="h-4 shrink-0 corner-sm bg-inverse-fill"
                 style={{ width: `var(--ap-sys-space-${step})` }}
               />
-              <span className="text-format-data text-muted-ink">{px}px</span>
-              <span className="text-format-data text-muted-ink">
+              <span className="text-format-data-sm text-muted-ink">{px}px</span>
+              <span className="text-format-data-sm text-muted-ink">
                 gap-{step} · p-{step}
               </span>
             </div>
@@ -70,8 +70,8 @@ export function SpacingRadius() {
                 className={`h-20 border border-border-strong bg-card-fill ${cls}`}
               />
               <div className="flex flex-col gap-2xs">
-                <span className="text-format-data text-ink">{cls}</span>
-                <span className="text-format-data text-muted-ink">{px}px</span>
+                <span className="text-format-data-sm text-ink">{cls}</span>
+                <span className="text-format-data-sm text-muted-ink">{px}px</span>
                 <span className="mt-2xs text-format-body text-ink text-pretty">
                   {role}
                 </span>

@@ -321,7 +321,7 @@ function PaletteListContent() {
   );
 }
 
-// The palette variant — terminal-style prompt row (glow caret bar, mono text-format-input,
+// The palette variant — terminal-style prompt row (glow caret bar, mono text-format-data-lg,
 // Esc keycap) on a full-bleed corner-md panel; group headings render as labeled rules.
 // One switch point: variant="palette" on the root, everything else adapts via context.
 // The trailing CommandSeparator is the footer divider from the Figma composition.

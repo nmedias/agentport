@@ -188,7 +188,7 @@ function Hero() {
 
       {/* shortened, horizontal facts strip — faint, sits in the background at the
           hero's foot so it never disturbs the wordmark */}
-      <dl className="relative mx-auto flex w-full max-w-[68rem] flex-wrap items-center justify-center gap-x-2xl gap-y-xs px-2xl pb-3xl text-format-data text-inverse-ink/35 md:px-4xl">
+      <dl className="relative mx-auto flex w-full max-w-[68rem] flex-wrap items-center justify-center gap-x-2xl gap-y-xs px-2xl pb-3xl text-format-data-sm text-inverse-ink/35 md:px-4xl">
         {FACTS.map(({ k, v }) => (
           <div key={k} className="flex items-center gap-sm">
             <dt className="uppercase tracking-[0.2em]">{k}</dt>
@@ -236,7 +236,7 @@ function FoundationsPointer() {
                 className="size-4 text-muted-ink transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
               />
             </span>
-            <span className="text-format-data text-muted-ink">{f.note}</span>
+            <span className="text-format-data-sm text-muted-ink">{f.note}</span>
           </a>
         ))}
       </div>
@@ -355,9 +355,9 @@ function Footer() {
             <Eyebrow>Getting started</Eyebrow>
             <p className="text-format-body text-ink text-pretty">
               Consume the library from{' '}
-              <code className="text-format-data text-ink">@agentport/ui</code>. Run
+              <code className="text-format-data-sm text-ink">@agentport/ui</code>. Run
               the gate before you ship —{' '}
-              <code className="text-format-data text-ink">npm run check</code>{' '}
+              <code className="text-format-data-sm text-ink">npm run check</code>{' '}
               (lint + test + typecheck).
             </p>
           </div>
@@ -365,11 +365,11 @@ function Footer() {
             <Eyebrow>Develop</Eyebrow>
             <ul className="flex flex-col gap-xs text-format-body text-ink">
               <li>
-                <code className="text-format-data text-ink">npm run dev</code> —
+                <code className="text-format-data-sm text-ink">npm run dev</code> —
                 the app on :4200
               </li>
               <li>
-                <code className="text-format-data text-ink">
+                <code className="text-format-data-sm text-ink">
                   npm run storybook
                 </code>{' '}
                 — components in isolation

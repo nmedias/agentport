@@ -1,7 +1,7 @@
 import { FoundationsPage, Group, TypeSpecimen } from './foundations-kit';
 
 /*
-  Foundations / Typography — all 11 composition formats (tokens-reference.md §4).
+  Foundations / Typography — all 12 composition formats (tokens-reference.md §4).
   Each is a single `text-format-*` utility composing family + size + weight +
   line-height + tracking; the raw text-/font- utilities are dead. Specimen +
   the 5 part values + role, quoted from tokens-reference.
@@ -49,6 +49,16 @@ const FORMATS = [
     role: 'Section / panel title.',
   },
   {
+    format: 'text-format-lead',
+    sample: 'Lead — a larger intro paragraph that sets up the section.',
+    family: 'sans',
+    size: '18',
+    weight: '400 regular',
+    lineHeight: '1.5',
+    tracking: '0',
+    role: 'Large intro / lead body.',
+  },
+  {
     format: 'text-format-body',
     sample: 'Body — the foreign system becomes readable.',
     family: 'sans',
@@ -89,14 +99,24 @@ const FORMATS = [
     role: 'Uppercase micro-labels.',
   },
   {
-    format: 'text-format-data',
+    format: 'text-format-data-sm',
     sample: 'documentType · 2026-06-18 · 1,204 rows',
     family: 'mono',
     size: '11',
     weight: '400 regular',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Tabular mono data (also filenames etc.).',
+    role: 'Small tabular mono data (also filenames etc.).',
+  },
+  {
+    format: 'text-format-data-lg',
+    sample: 'SELECT * FROM documents',
+    family: 'mono',
+    size: '18',
+    weight: '400 regular',
+    lineHeight: 'normal',
+    tracking: '0',
+    role: 'Large mono data: command / query input.',
   },
   {
     format: 'text-format-kbd',
@@ -107,16 +127,6 @@ const FORMATS = [
     lineHeight: 'normal',
     tracking: '0',
     role: 'Keyboard key text.',
-  },
-  {
-    format: 'text-format-input',
-    sample: 'SELECT * FROM documents',
-    family: 'mono',
-    size: '18',
-    weight: '400 regular',
-    lineHeight: 'normal',
-    tracking: '0',
-    role: 'Command / input text.',
   },
 ];
 
@@ -129,7 +139,7 @@ export function Typography() {
     >
       <Group
         name="The format ladder"
-        note="Eleven formats, each a single text-format-* utility. The five part values are shown beside every specimen."
+        note="Twelve formats, each a single text-format-* utility. The five part values are shown beside every specimen."
       >
         <div className="flex flex-col">
           {FORMATS.map((f) => (

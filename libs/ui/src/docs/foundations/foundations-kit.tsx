@@ -120,12 +120,12 @@ function TokenMeta({
 }) {
   return (
     <div className="flex flex-col gap-2xs">
-      <span className="text-format-data text-ink">{token}</span>
-      <span className="text-format-data text-muted-ink">{utilities}</span>
-      <span className="text-format-data text-muted-ink/60">
+      <span className="text-format-data-sm text-ink">{token}</span>
+      <span className="text-format-data-sm text-muted-ink">{utilities}</span>
+      <span className="text-format-data-sm text-muted-ink/60">
         {primitive} · {value}
       </span>
-      <span className="text-format-data text-muted-ink/60">scope: {scope}</span>
+      <span className="text-format-data-sm text-muted-ink/60">scope: {scope}</span>
       {role && (
         <span className="mt-2xs text-format-body text-ink text-pretty">
           {role}
@@ -273,7 +273,7 @@ export function RingSwatch({
     <div className="flex flex-col gap-md">
       <div className="flex h-16 items-center justify-center corner-lg border border-border bg-surface px-lg">
         <span
-          className={`corner-md bg-card-fill px-lg py-md text-format-data text-ink ring-2 ${ring}`}
+          className={`corner-md bg-card-fill px-lg py-md text-format-data-sm text-ink ring-2 ${ring}`}
         >
           focus
         </span>
@@ -351,11 +351,11 @@ export function TypeSpecimen({
     <div className="grid gap-lg border-t border-border py-2xl lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-sm">
         <span className={`${format} text-ink`}>{sample}</span>
-        <span className="text-format-data text-muted-ink">
+        <span className="text-format-data-sm text-muted-ink">
           text-format-{format.replace('text-format-', '')}
         </span>
       </div>
-      <dl className="grid grid-cols-2 gap-x-lg gap-y-xs self-center text-format-data">
+      <dl className="grid grid-cols-2 gap-x-lg gap-y-xs self-center text-format-data-sm">
         <Part k="family" v={family} />
         <Part k="size" v={size} />
         <Part k="weight" v={weight} />

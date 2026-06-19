@@ -144,7 +144,7 @@ function RampStep({ ramp, step }: { ramp: string; step: Step }) {
         style={{ backgroundColor: `var(--ap-color-${ramp}-${step.step})` }}
       />
       <div className="flex flex-col gap-2xs">
-        <span className="text-format-data text-ink">
+        <span className="text-format-data-sm text-ink">
           {step.step}
           {step.note && (
             <span className="text-[color:var(--ap-color-signal-600)]">
@@ -153,8 +153,8 @@ function RampStep({ ramp, step }: { ramp: string; step: Step }) {
             </span>
           )}
         </span>
-        <span className="text-format-data text-muted-ink">{step.hex}</span>
-        <span className="text-format-data text-muted-ink/60">
+        <span className="text-format-data-sm text-muted-ink">{step.hex}</span>
+        <span className="text-format-data-sm text-muted-ink/60">
           {ramp}/{step.step}
         </span>
       </div>
@@ -190,8 +190,8 @@ export function Primitives() {
         note="A single opacity primitive (Figma 0–100 scale → CSS %). Composes the scrim dimmer."
       >
         <div className="flex flex-col gap-2xs">
-          <span className="text-format-data text-ink">opacity/10</span>
-          <span className="text-format-data text-muted-ink">10%</span>
+          <span className="text-format-data-sm text-ink">opacity/10</span>
+          <span className="text-format-data-sm text-muted-ink">10%</span>
         </div>
       </Group>
     </FoundationsPage>

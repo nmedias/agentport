@@ -107,6 +107,13 @@
   line-height: var(--ap-sys-title-line-height);
   letter-spacing: var(--ap-sys-title-tracking);
 }
+@utility text-format-lead {
+  font-family: var(--ap-sys-lead-family);
+  font-size: var(--ap-sys-lead-size);
+  font-weight: var(--ap-sys-lead-weight);
+  line-height: var(--ap-sys-lead-line-height);
+  letter-spacing: var(--ap-sys-lead-tracking);
+}
 @utility text-format-body {
   font-family: var(--ap-sys-body-family);
   font-size: var(--ap-sys-body-size);
@@ -135,12 +142,19 @@
   line-height: var(--ap-sys-eyebrow-line-height);
   letter-spacing: var(--ap-sys-eyebrow-tracking);
 }
-@utility text-format-data {
-  font-family: var(--ap-sys-data-family);
-  font-size: var(--ap-sys-data-size);
-  font-weight: var(--ap-sys-data-weight);
-  line-height: var(--ap-sys-data-line-height);
-  letter-spacing: var(--ap-sys-data-tracking);
+@utility text-format-data-sm {
+  font-family: var(--ap-sys-data-sm-family);
+  font-size: var(--ap-sys-data-sm-size);
+  font-weight: var(--ap-sys-data-sm-weight);
+  line-height: var(--ap-sys-data-sm-line-height);
+  letter-spacing: var(--ap-sys-data-sm-tracking);
+}
+@utility text-format-data-lg {
+  font-family: var(--ap-sys-data-lg-family);
+  font-size: var(--ap-sys-data-lg-size);
+  font-weight: var(--ap-sys-data-lg-weight);
+  line-height: var(--ap-sys-data-lg-line-height);
+  letter-spacing: var(--ap-sys-data-lg-tracking);
 }
 @utility text-format-kbd {
   font-family: var(--ap-sys-kbd-family);
@@ -148,13 +162,6 @@
   font-weight: var(--ap-sys-kbd-weight);
   line-height: var(--ap-sys-kbd-line-height);
   letter-spacing: var(--ap-sys-kbd-tracking);
-}
-@utility text-format-input {
-  font-family: var(--ap-sys-input-family);
-  font-size: var(--ap-sys-input-size);
-  font-weight: var(--ap-sys-input-weight);
-  line-height: var(--ap-sys-input-line-height);
-  letter-spacing: var(--ap-sys-input-tracking);
 }
 
 

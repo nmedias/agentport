@@ -5,8 +5,8 @@ import { extendTailwindMerge } from 'tailwind-merge';
 // built-in knowledge of class groups for conflict resolution. Two DS additions must
 // be taught to it manually, or className overrides misbehave:
 //
-// 1. Typography formats — the 11 multi-property @utility classes (.text-format-display
-//    … .text-format-input) set font/size/weight, NOT colour. The text-format-* prefix
+// 1. Typography formats — the 12 multi-property @utility classes (.text-format-display
+//    … .text-format-data-lg) set font/size/weight, NOT colour. The text-format-* prefix
 //    keeps them out of the way of Tailwind's generated colour utilities (text-input
 //    from --color-input collided with the old text-input format class). twMerge still
 //    files any `text-*` under text-color, so `text-format-label` + `text-foreground`
@@ -29,13 +29,14 @@ const TEXT_FORMATS = [
   'heading',
   'heading-sm',
   'title',
+  'lead',
   'body',
   'body-strong',
   'label',
   'eyebrow',
-  'data',
+  'data-sm',
+  'data-lg',
   'kbd',
-  'input',
 ];
 
 const SPACING_STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'];

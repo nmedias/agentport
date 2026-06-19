@@ -277,8 +277,8 @@ status_note: >
       axis: { variant: [default, palette] }
       props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
       members: { default: "3561:2", palette: "3638:8" }
-      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-input Placeholder"
-      palette: "Prompt-Zeile: bg-card-fill + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-input (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
+      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-data-lg Placeholder"
+      palette: "Prompt-Zeile: bg-card-fill + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-data-lg (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
     separator:
       set: { name: "CommandSeparator", id: "3653:6" }
       axis: { variant: [default, labeled] }
@@ -321,7 +321,7 @@ status_note: >
     (tracking-* tot). IconPlaceholder→lucide bei ui:add → @remixicon/react (RiSearchLine/RiCheckLine). Figma:
     3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
     Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
-    grün (32 Tests inkl. Typo-Survival text-format-input/text-format-body). jsdom-Polyfill lag bereits in test-setup.ts.
+    grün (32 Tests inkl. Typo-Survival text-format-data-lg/text-format-body). jsdom-Polyfill lag bereits in test-setup.ts.
     PALETTE-VARIANTE (2026-06-11): variant-Achse [default, palette] auf Input/Group/Composition, Quelle =
     C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Figma-Member per Clone aus dem Frame gebaut
     → Token-Bindings (space/corner/shadcn-default/overlay/inverse, Effect-Styles Glow+Elevation, Text-Styles
@@ -331,7 +331,7 @@ status_note: >
     (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading (Gruppen-Weg
     behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
     Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card-fill/p-xl/gap-lg mit
-    statischer Glow-Caret-Bar + text-format-input + Kbd-Esc (caret-primary wieder entfernt — Standard-Caret,
+    statischer Glow-Caret-Bar + text-format-data-lg + Kbd-Esc (caret-primary wieder entfernt — Standard-Caret,
     User-Refinement 2026-06-11, ebenso Liste max-h-96 statt max-h-72 + Such-Icon text-foreground statt
     opacity-50); Prompt-Divider = border-b am Wrapper
     (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) — Figma

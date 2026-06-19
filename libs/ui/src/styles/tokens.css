@@ -355,6 +355,13 @@
   --ap-sys-title-line-height:  normal;
   --ap-sys-title-tracking: var(--ap-font-tracking-normal);
 
+  /* Lead (large intro / lead body) */
+  --ap-sys-lead-family:   var(--ap-font-family-sans);
+  --ap-sys-lead-size:     var(--ap-font-size-step-1);
+  --ap-sys-lead-weight:   var(--ap-font-weight-regular);
+  --ap-sys-lead-line-height:  var(--ap-font-line-height-relaxed);
+  --ap-sys-lead-tracking: var(--ap-font-tracking-normal);
+
   /* Body */
   --ap-sys-body-family:   var(--ap-font-family-sans);
   --ap-sys-body-size:     var(--ap-font-size-step-0);
@@ -383,12 +390,19 @@
   --ap-sys-eyebrow-line-height:  normal;
   --ap-sys-eyebrow-tracking: var(--ap-font-tracking-wide);
 
-  /* Data (mono table data) */
-  --ap-sys-data-family:   var(--ap-font-family-mono);
-  --ap-sys-data-size:     var(--ap-font-size-step-neg1);
-  --ap-sys-data-weight:   var(--ap-font-weight-regular);
-  --ap-sys-data-line-height:  normal;
-  --ap-sys-data-tracking: var(--ap-font-tracking-normal);
+  /* Data-sm (mono table data; was: data) */
+  --ap-sys-data-sm-family:   var(--ap-font-family-mono);
+  --ap-sys-data-sm-size:     var(--ap-font-size-step-neg1);
+  --ap-sys-data-sm-weight:   var(--ap-font-weight-regular);
+  --ap-sys-data-sm-line-height:  normal;
+  --ap-sys-data-sm-tracking: var(--ap-font-tracking-normal);
+
+  /* Data-lg (large mono data: command/query input; was: input) */
+  --ap-sys-data-lg-family:   var(--ap-font-family-mono);
+  --ap-sys-data-lg-size:     var(--ap-font-size-step-1);
+  --ap-sys-data-lg-weight:   var(--ap-font-weight-regular);
+  --ap-sys-data-lg-line-height:  normal;
+  --ap-sys-data-lg-tracking: var(--ap-font-tracking-normal);
 
   /* Kbd (keyboard keys) */
   --ap-sys-kbd-family:   var(--ap-font-family-mono);
@@ -396,13 +410,6 @@
   --ap-sys-kbd-weight:   var(--ap-font-weight-medium);
   --ap-sys-kbd-line-height:  normal;
   --ap-sys-kbd-tracking: var(--ap-font-tracking-normal);
-
-  /* Input (command/input text) */
-  --ap-sys-input-family:   var(--ap-font-family-mono);
-  --ap-sys-input-size:     var(--ap-font-size-step-1);
-  --ap-sys-input-weight:   var(--ap-font-weight-regular);
-  --ap-sys-input-line-height:  normal;
-  --ap-sys-input-tracking: var(--ap-font-tracking-normal);
 
 
   /* ===========================================================================

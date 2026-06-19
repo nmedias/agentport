@@ -24,7 +24,7 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //    (an overlay carries depth) — DS interpretation of the demo's `border shadow-md`.
 //    Figma binds the panel fill to overlay-fill, the inherited text role to overlay-ink.
 //  · the search field uses text-format-label (sans 14 — the standard DS field text; adjusted in
-//    Figma from the mono text-format-input command-format), placeholder:text-input-ink-placeholder,
+//    Figma from the mono text-format-data-lg command-format), placeholder:text-input-ink-placeholder,
 //    on the InputGroup's opaque DS field (nova's translucent softening dropped).
 //  · selection = the DS accent tint, not stock's neutral grey — data-selected
 //    bg-accent-fill + text-accent-ink (accent-fill.use = "Selektions-/Aktiv-Tint").
@@ -49,7 +49,7 @@ import { RiSearchLine, RiCheckLine } from '@remixicon/react';
 //  · palette input = terminal prompt row (bg-card-fill p-xl gap-lg): static glow caret bar
 //    (bg-primary shadow-glow — Figma binds the caret fill to `primary` (signal/600,
 //    SHAPE_FILL-scoped); 2.5×18 numeric geometry, the frame's 1px radius is dropped),
-//    mono text-format-input field (the frame's typed+ghost-hint state is a mid-typing
+//    mono text-format-data-lg field (the frame's typed+ghost-hint state is a mid-typing
 //    mock → standard placeholder; default caret colour), Kbd "Esc". The prompt divider is border-b on
 //    the wrapper — Figma models it as a separator instance in the composition.
 //  · palette group = px-md container (items keep px-md → 16px text inset like the prompt);
@@ -157,7 +157,7 @@ function CommandInput({
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
-            'min-w-0 flex-1 bg-transparent text-format-input text-ink placeholder:text-input-ink-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
+            'min-w-0 flex-1 bg-transparent text-format-data-lg text-ink placeholder:text-input-ink-placeholder outline-hidden disabled:cursor-not-allowed disabled:opacity-50',
             className
           )}
           {...props}

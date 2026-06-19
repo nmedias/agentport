@@ -18,6 +18,17 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 > `--color-input` — beide Regeln im CSS). Alle 11 `@utility`-Klassen, alle Code-Nutzungen und der
 > twMerge-Gruppen-Matcher (`utils.ts`) umbenannt; CSS-Variablen, Figma-Variablen und Text Styles
 > unverändert. Details: tokens-reference §4.
+>
+> **Update 2026-06-19 — Data-Gruppe + neues `Lead`-Format (Figma → Code):** `Input` → **`Data/data-lg`**
+> umbenannt (Werte identisch: mono, 18/step-1, regular) und `Data` → **`Data/data-sm`** (mono, 11/step-neg1,
+> regular) — die beiden Mono-Datenformate sind jetzt eine `Data/`-Gruppe (sm/lg). Neu: **`Lead`** (sans,
+> 18/step-1, regular, LH `relaxed` 1.5, tracking normal) = großer Intro-/Lead-Fließtext, sitzt zwischen
+> `Title` und `Body`. **Jetzt 12 Formate / 53 Vars** (vorher 11/48 — `Lead` bringt 5 Teile inkl. LH-Var).
+> Utilities `text-format-data-sm`/`-data-lg`/`-lead`; Konsumenten umbenannt (Command-Prompt nutzt jetzt
+> `text-format-data-lg`). Die Format-Tabelle + `semantic-typo`-Zählung unten geben diesen Stand wieder;
+> der Build-Record (Text-Styles-Anwendung, Entscheidungs-Log) bleibt 2026-06-11-Snapshot.
+> *Figma-Beobachtung:* der Text Style **`Label`** ist aktuell fälschlich an `Lead/lead/*` gebunden
+> (zeigt 18/regular statt 14/medium) — Variable `Label/label/*` selbst ist korrekt; in Figma nachziehen.
 
 ## Befund (Screen-Scan, read-only)
 
@@ -84,9 +95,9 @@ Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variabl
 → dort sind `size/step-*` die gerundeten Werte direkt; `font-scale` + `size/base` als dokumentierte Anker.
 
 ### `semantic-typo` — `VariableCollectionId:3082:2`, Mode `value` (`3082:0`)
-48 Variablen, **11 Format-Gruppen**, jeder Teil aliast `reference-typo`. Scopes: family
+53 Variablen, **12 Format-Gruppen**, jeder Teil aliast `reference-typo`. Scopes: family
 `FONT_FAMILY`, size `FONT_SIZE`, weight `FONT_WEIGHT`, tracking `LETTER_SPACING`,
-line-height `[]` (nicht bindbar). LH-Teil nur bei `Display/Heading/Heading-sm/Body`.
+line-height `[]` (nicht bindbar). LH-Teil nur bei `Display/Heading/Heading-sm/Lead/Body`.
 
 | Format | family | size (step) | weight | line-height | tracking |
 |---|---|---|---|---|---|
@@ -94,13 +105,14 @@ line-height `[]` (nicht bindbar). LH-Teil nur bei `Display/Heading/Heading-sm/Bo
 | `Heading`     | sans | 27 (step-3)    | extrabold | 1.2 (120%) | tight |
 | `Heading-sm`  | sans | 22 (step-2)    | extrabold | 1.2 (120%) | tight |
 | `Title`       | sans | 18 (step-1)    | semibold  | auto | normal |
+| `Lead`        | sans | 18 (step-1)    | regular   | 1.5 (150%) | normal |
 | `Body`        | sans | 14 (step-0)    | regular   | 1.5 (150%) | normal |
 | `Body-strong` | sans | 14 (step-0)    | semibold  | auto | normal |
 | `Label`       | sans | 14 (step-0)    | medium    | auto | normal |
 | `Eyebrow`     | mono | 9 (step-neg2)  | medium    | auto | wide |
-| `Data`        | mono | 11 (step-neg1) | regular   | auto | normal |
+| `Data-sm`     | mono | 11 (step-neg1) | regular   | auto | normal |
+| `Data-lg`     | mono | 18 (step-1)    | regular   | auto | normal |
 | `Kbd`         | mono | 11 (step-neg1) | medium    | auto | normal |
-| `Input`       | mono | 18 (step-1)    | regular   | auto | normal |
 
 ### Text Styles (Anwendungs-Ebene)
 11 Figma Text Styles, je 4 gebundene Variablen (`fontFamily`, `fontSize`, `fontWeight`,

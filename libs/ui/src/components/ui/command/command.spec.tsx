@@ -118,14 +118,14 @@ describe('Command palette variant', () => {
   });
 
   // Context inheritance: the input switches anatomy from the root variant alone —
-  // prompt row instead of InputGroup, with caret bar, Kbd Esc and the mono text-format-input
+  // prompt row instead of InputGroup, with caret bar, Kbd Esc and the mono text-format-data-lg
   // format (text-format twMerge group must keep it alive next to text-ink).
   it('switches the input to the prompt row via context', () => {
     const { getByPlaceholderText, getByText, container } = render(
       <PalettePanel />
     );
     const input = getByPlaceholderText('type a command…');
-    expect(input.className).toContain('text-format-input');
+    expect(input.className).toContain('text-format-data-lg');
     const wrapper = container.querySelector('[data-slot=command-input-wrapper]');
     expect(wrapper?.className).toContain('bg-card-fill');
     expect(wrapper?.className).toContain('border-b');

@@ -19,13 +19,13 @@ export function Effects() {
           {/* glow */}
           <div className="flex flex-col gap-lg">
             <div className="flex h-40 items-center justify-center corner-xl border border-border bg-surface">
-              <span className="corner-md bg-card-fill px-2xl py-lg text-format-data text-ink shadow-glow">
+              <span className="corner-md bg-card-fill px-2xl py-lg text-format-data-sm text-ink shadow-glow">
                 shadow-glow
               </span>
             </div>
             <div className="flex flex-col gap-2xs">
-              <span className="text-format-data text-ink">shadow-glow</span>
-              <span className="text-format-data text-muted-ink">
+              <span className="text-format-data-sm text-ink">shadow-glow</span>
+              <span className="text-format-data-sm text-muted-ink">
                 0 0 4px 0 · signal/400 @ 50%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
@@ -37,13 +37,13 @@ export function Effects() {
           {/* elevation */}
           <div className="flex flex-col gap-lg">
             <div className="flex h-40 items-center justify-center corner-xl border border-border bg-card-fill">
-              <span className="corner-md bg-surface px-2xl py-lg text-format-data text-ink shadow-elevation">
+              <span className="corner-md bg-surface px-2xl py-lg text-format-data-sm text-ink shadow-elevation">
                 shadow-elevation
               </span>
             </div>
             <div className="flex flex-col gap-2xs">
-              <span className="text-format-data text-ink">shadow-elevation</span>
-              <span className="text-format-data text-muted-ink">
+              <span className="text-format-data-sm text-ink">shadow-elevation</span>
+              <span className="text-format-data-sm text-muted-ink">
                 0 14px 36px -6px · ink/900 @ 18%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
