@@ -27,51 +27,20 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     description: 'You can enable or disable notifications at any time.',
     disabled: false,
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't extract props from
-  // the Pick<…> & Omit<ComponentProps<typeof Checkbox>> type, so the public API is
-  // documented here by hand (same approach as checkbox.stories).
+  // Prop docs come from the component's typed JSDoc (react-docgen reads the flat
+  // ChoiceCardCheckboxProps interface). argTypes here only configure controls + the
+  // defaults that the ArgsTable can't infer from the type.
   argTypes: {
-    title: {
-      control: 'text',
-      description: 'Card heading (rendered as `FieldTitle`).',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    description: {
-      control: 'text',
-      description: 'Secondary line under the title (rendered as `FieldDescription`).',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    error: {
-      control: 'text',
-      description:
-        'When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid.',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    checked: {
-      control: 'boolean',
-      description: 'Controlled checked state (pair with `onCheckedChange`).',
-      table: { type: { summary: 'boolean | "indeterminate"' } },
-    },
-    defaultChecked: {
-      control: 'boolean',
-      description: 'Checked state when uncontrolled.',
-      table: { type: { summary: 'boolean | "indeterminate"' }, defaultValue: { summary: 'false' } },
-    },
-    onCheckedChange: {
-      control: false,
-      description: 'Called when the checked state changes.',
-      table: { type: { summary: '(checked: boolean | "indeterminate") => void' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the control and dims the whole card.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    id: {
-      control: false,
-      description: 'Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted.',
-      table: { type: { summary: 'string' } },
-    },
+    // React.ReactNode props — keep the text control so the playground stays editable.
+    title: { control: 'text' },
+    description: { control: 'text' },
+    error: { control: 'text' },
+    // Union (boolean | 'indeterminate') would otherwise infer an object control — pin to boolean.
+    checked: { control: 'boolean' },
+    defaultChecked: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
+    onCheckedChange: { control: false },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
+    id: { control: false },
   },
   parameters: {
     docs: {

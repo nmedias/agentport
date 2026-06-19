@@ -6,10 +6,35 @@ import {Checkbox} from "@/components/ui/checkbox";
 
 
 
-type Props = Pick<React.ComponentProps<typeof ChoiceCardShell>, 'title' | 'description' | 'error'>
-    & Omit<React.ComponentProps<typeof Checkbox>, 'title'>;
+// Public API. The card props (title/description/error) are re-declared flat with JSDoc so
+// react-docgen surfaces them; the rest of the Checkbox surface is inherited via Omit (the
+// curated keys are pulled out and re-declared, everything else still passes through via
+// {...props}). Native control types are kept exactly — checked is Radix CheckedState
+// (`boolean | 'indeterminate'`), narrowing would break callers.
+interface ChoiceCardCheckboxProps
+    extends Omit<
+        React.ComponentProps<typeof Checkbox>,
+        'title' | 'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'id'
+    > {
+    /** Card heading (rendered as `FieldTitle`). */
+    title: React.ReactNode;
+    /** Secondary line under the title (rendered as `FieldDescription`). */
+    description?: React.ReactNode;
+    /** When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid. */
+    error?: React.ReactNode;
+    /** Controlled checked state (pair with `onCheckedChange`). Accepts `"indeterminate"`. */
+    checked?: boolean | 'indeterminate';
+    /** Checked state when uncontrolled. @default false */
+    defaultChecked?: boolean | 'indeterminate';
+    /** Called when the checked state changes. */
+    onCheckedChange?: (checked: boolean | 'indeterminate') => void;
+    /** Disables the control and dims the whole card. @default false */
+    disabled?: boolean;
+    /** Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted. */
+    id?: string;
+}
 
-function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, ...props}: Props) {
+function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, ...props}: ChoiceCardCheckboxProps) {
     const id = useFieldId(idProp);
 
     return (
@@ -26,3 +51,4 @@ function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, ..
 }
 
 export { ChoiceCardCheckbox };
+export type { ChoiceCardCheckboxProps };

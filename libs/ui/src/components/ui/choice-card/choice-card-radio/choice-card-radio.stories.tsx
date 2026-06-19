@@ -28,40 +28,17 @@ const meta: Meta<typeof ChoiceCardRadio> = {
     value: 'pro',
     disabled: false,
   },
-  // Curated prop docs for the Autodocs ArgsTable — react-docgen can't read the
-  // Pick<…> & Omit<ComponentProps<typeof RadioGroupItem>> type, so document by hand.
+  // Prop docs come from the component's typed JSDoc (react-docgen reads the flat
+  // ChoiceCardRadioProps interface). argTypes here only configure controls + the
+  // defaults that the ArgsTable can't infer from the type.
   argTypes: {
-    title: {
-      control: 'text',
-      description: 'Card heading (rendered as `FieldTitle`).',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    description: {
-      control: 'text',
-      description: 'Secondary line under the title (rendered as `FieldDescription`).',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    error: {
-      control: 'text',
-      description:
-        'When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid.',
-      table: { type: { summary: 'React.ReactNode' } },
-    },
-    value: {
-      control: 'text',
-      description: 'The value this item selects in its parent `RadioGroup` (required).',
-      table: { type: { summary: 'string' } },
-    },
-    disabled: {
-      control: 'boolean',
-      description: 'Disables the control and dims the whole card.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    id: {
-      control: false,
-      description: 'Links the label to the control. Auto-generated via `useId` if omitted.',
-      table: { type: { summary: 'string' } },
-    },
+    // React.ReactNode props — keep the text control so the playground stays editable.
+    title: { control: 'text' },
+    description: { control: 'text' },
+    error: { control: 'text' },
+    value: { control: 'text' },
+    disabled: { table: { defaultValue: { summary: 'false' } } },
+    id: { control: false },
   },
   parameters: {
     docs: {
