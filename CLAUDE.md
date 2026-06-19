@@ -107,6 +107,10 @@ tools/              shoot-stories.mjs — Playwright screenshots of running Stor
 - **Never detach** instances without an explicit user request.
 - Use components through their intended APIs: **Slots**, **Properties** (text/variant/boolean),
   **Auto Layout**. No structural changes to instances (no child add/remove except via slots).
+- **After a code→Figma push** (or any structural change — new variant, swapped glyph, retuned binding):
+  (1) run `/figma-verify` on the node, hand off only on `CLEAN`; (2) sync the `components-reference.md`
+  catalog (node IDs, variant axes/values, `figma_synced`, dated note) — it's the read-first source of
+  truth for Figma IDs.
 
 
 ## Commit Style
