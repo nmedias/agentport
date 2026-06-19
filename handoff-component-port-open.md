@@ -42,9 +42,10 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    **Davon 06-12 eingearbeitet:** #34 (Examples-Deliverable) + #36 (Doc-Komposition) — s. „Bereits
    eingearbeitet". Rest (30–33, 35, 37–45) offen.
 2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
-   Branch `feat/form-toggles-port`). Kandidaten für den nächsten Schritt: **Select** + **Slider** porten
-   (Controls — schalten den Rest der zurückgestellten Field-Arbeit frei, s. #6), weiteres Composite
-   (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den Palette-Bausteinen.
+   Branch `feat/form-toggles-port`). **Select 06-19 portiert** (Composite, Branch `feat/select-port`; Figma via
+   Background-Agent ausgelagert, Code parallel; Findings A–G s. u.). Kandidaten für den nächsten Schritt: **Slider**
+   porten (letzter zurückgestellter Field-Control, s. #6), weiteres Composite (`/shadcn-component-port <name>`) oder
+   Blocks-Arbeit auf den Palette-Bausteinen.
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
@@ -55,8 +56,9 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 6. **Field-Folgearbeit (zurückgestellte Beispiele).** **Update 06-12:** Checkbox/Switch/RadioGroup jetzt
    portiert → `field-checkbox`/`-switch`/`-radio` + `field-choice-card` sind baubar; die Field-komponierten
    Stories der drei Controls decken Choice-Card-/Group-/Fieldset-/Invalid-Muster bereits ab (der
-   FieldLabel-`has-[data-slot=field]`-Branch ist damit erstmals real gerendert — Storybook). Offen bleibt
-   `field-demo` (Voll-Formular, braucht **Select**) · `field-slider` (braucht **Slider**) · `field-select`.
+   FieldLabel-`has-[data-slot=field]`-Branch ist damit erstmals real gerendert — Storybook). **Update 06-19:**
+   **Select portiert** → `field-select` + `field-demo` (Voll-Formular) jetzt baubar. Offen bleibt nur noch
+   `field-slider` (braucht **Slider**).
    Detail + Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md` (Open items #4/#5).
 
 ## Nova-Baseline — Standing Notes (aus den gelöschten Handoffs übernommen)
@@ -493,12 +495,33 @@ echtes `.Field`-Reuse + dem `.Field`-control-leading/error-Slot-Fix.
 51. **`getVariableByIdAsync` braucht das `VariableID:`-Präfix** *(checkbox-examples)* — bare ID → still schwarzer
     unbound Paint.
 
+### Offen — Select-Port (Composite, ausgelagerte Figma-Hälfte) — neu 06-19
+
+Quelle: `agent-runs/component-port/2026-06-19-select/skill-feedback.md` (Findings A–G + Build-Deviations D1–D4).
+Erster Port mit Figma im **Background-Agent** (baut Figma) + main (baut Code) parallel — Muster funktioniert.
+
+**figma-build.md / composites.md / snippets (Agent-Findings):**
+- **A.** Slot-Merge passiert zur `combineAsVariants`-Zeit → Slots auf den **standalone Comps VOR** dem Kombinieren bauen
+  (post-combine `createSlot` → N un-merged gleichnamige Props, kaputte Instanz-API). §Slots/§Variant-set-assembly.
+- **B.** Section-Kind-Koords = reine Offsets vom Section-Ursprung — **nie `section.x` addieren** (sharpens #16; konkretes
+  WRONG/RIGHT in `build-variant-set.js` + composites.md).
+- **C.** Sections wachsen nicht auto mit den Kindern → nach dem Positionieren auf hug resizen (paart mit B).
+- **D.** Instanz-Slot-Default-Removal strikt **eins pro `use_figma`-Call** (sharpens #48; guarded while-Loop in EINEM Call wirft „node not found").
+
+**SKILL.md / docgen-props / storybook-rules (Code-Findings):**
+- **E.** `radix-ui`-Umbrella für **volle** Primitives behalten — Finding #3 (per-primitive) galt nur dem `Slot`-aus-`radix-ui`-Fall.
+  Composite-Dep-Audit §2 T2 splitten (voll-Primitive-Umbrella behalten, einzelne Sub-Imports umstellen).
+- **F.** Composite-Doc-Prop über Root + Sub-Part → `meta.component` + `subcomponents:{Sub}` (zwei ArgsTables); der Sub-Control
+  lebt als **Story-lokaler** arg (erreicht den meta.component nicht). Regel für `/storybook-rules` + `/docgen-props`.
+- **G.** Radix Select braucht **keinen** jsdom-Polyfill, wenn Specs nur „closed" rendern (Content im Portal mountet on-open);
+  Open-Pfad übers Chromium-Storybook-Projekt. Heuristik für §T6 Headless lib.
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
-  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group}/skill-feedback.md` +
+  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,

@@ -825,6 +825,76 @@ status_note: >
     KEINE indeterminate-Story/-Figma-Variante (kein Phantom-State in DS-Artefakten). Basis-Checkbox behält
     indeterminate (dort echt). Switch/Radio sind ohnehin binär bzw. single-select.
 
+- name: Select
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-19 (Composite; Figma via Background-Agent, Code parallel; Gate grün)
+  source: { registry: "@shadcn", item: select, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/select/
+    exports: [Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/select'"
+    types: [SelectProps, SelectTriggerProps]
+  figma:
+    section: { name: "Select", id: "4307:1997" }
+    trigger:
+      set: { name: "SelectTrigger", id: "4308:2029" }
+      axis: { size: [default, sm], state: [default, focus, disabled, invalid] }    # 8 Member
+      members:
+        "size=default, state=default":  "4308:1997"
+        "size=default, state=focus":    "4308:2001"
+        "size=default, state=disabled": "4308:2005"
+        "size=default, state=invalid":  "4308:2009"
+        "size=sm, state=default":       "4308:2013"
+        "size=sm, state=focus":         "4308:2017"
+        "size=sm, state=disabled":      "4308:2021"
+        "size=sm, state=invalid":       "4308:2025"
+      props: "value#4310:0 (TEXT '{Value}') + trailing chevron VECTOR (RiArrowDownSLine, muted-ink). w=240 FIXED, h=32/28."
+    item:
+      set: { name: "SelectItem", id: "4313:2046" }
+      axis: { state: [default, focus, disabled], selected: [false, true] }          # 6 Member
+      members:
+        "state=default, selected=false":  "4313:2004"
+        "state=default, selected=true":   "4313:2011"
+        "state=focus, selected=false":    "4313:2018"
+        "state=focus, selected=true":     "4313:2025"
+        "state=disabled, selected=false": "4313:2032"
+        "state=disabled, selected=true":  "4313:2039"
+      props: "leadingIcon#4313:6 (SLOT, default 16px RiUserLine) · label#4313:7 (TEXT '{Label}') · trailing check VECTOR (RiCheckLine, visible↔selected). focus = accent-fill + accent-ink."
+    content:
+      composition: { name: "SelectContent", id: "4314:1997" }                       # single recompose-able component (mirror Command surface 3642:2)
+      slots: { items: "items#4314:0 (default 3 SelectItem-Instanzen)" }
+      bool_props: { showScrollUp: "showScrollUp#4315:0 (def false)", showScrollDown: "showScrollDown#4315:1 (def false)" }
+      scroll_buttons: { up: "4314:1998 (RiArrowUpSLine)", down: "4314:2023 (RiArrowDownSLine)" }
+    label: "inline styled text (px-sm/py-xs, text-format-label, muted-ink) im items-Slot — KEIN eigenes Set (layer-3 slot content); in Groups-Example"
+    separator: "genestete echte .Separator-Instanz (main 3676:1016 horizontal) — in Groups-Example"
+    group: { name: "Usage Examples", id: "4315:2106" }
+    examples: { Basic: "4315:2107", Groups: "4315:2324", Scrollable: "4315:2468", Invalid: "4316:2109 (nestet .Field 3713:1017 vertical/invalid)" }
+    vars: { input-fill: "3108:2", input-border: "4197:9644", ring: "3038:6", "destructive⚠": "3038:3", input-ink-placeholder: "3043:3", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", ink: "3037:3", dialog-fill: "3037:6", border: "3038:4", corner-lg: "3073:4", corner-md: "3073:3" }
+  skill: /shadcn-component-port (+ references/composites.md, 2026-06-19; Figma = Background-Agent figma-select-build)
+  notes: >
+    Popover-Composite (radix-ui Select), 10 Exporte. Deps: radix-ui ✓ (Umbrella-Import behalten = Dialog-Konvention,
+    deklarierte Dep), Field/Separator ✓ (in Examples genestet), Label ✓. lucide → @remixicon/react (RiArrowDownSLine/
+    -UpSLine/RiCheckLine). ui:add schrieb nur select.tsx (keine Foreign-Component-Files). Figma kann nicht „öffnen" →
+    offener Zustand als statische Composition (wie Command/Dialog). 3 Sets + Examples-Gruppe.
+    USER-DECISIONS (T2.7): (1) Trigger-Fill = bg-input-fill (Input-Parität, bewusste Abweichung vom Nova-bg-transparent;
+    der geschlossene Trigger liest identisch zu Input/Textarea/InputGroup). (2) Scope = volles Composite.
+    DS-Clothing: Trigger = Input-Klon (corner-lg/sm corner-md, border-input-border, focus border-ring + ring/50
+    ring-[3px], invalid destructive ⚠ + ring/20, placeholder→input-ink-placeholder, text-format-label, h-8/h-7 numerisch,
+    Chevron muted-ink); Content = Command-Surface (dialog-fill + border + shadow-elevation + corner-lg, popover→dialog
+    konsolidiert); Item = accent-fill/accent-ink-Highlight (= Command-Selektion) + Check, corner-md; Label text-format-label
+    muted-ink (12px-Sans→14 Rolle-Snap, findings #20/#28); Separator -mx-xs/my-xs bg-border. dark: + inerter
+    not-data-[variant=destructive]-Selektor (Nova-Item hat kein variant-Prop) gedroppt.
+    DESIGN-FORKS / CODE↔FIGMA (für /component-sync): D1 SelectItem-Check = Figma trailing Layout-Vektor (pr-md/right-2),
+    Code = absolute right-md + pr-3xl-Clearance (shadcn-Idiom, visuell äquivalent — NICHT als Delta lesen). SelectLabel =
+    Figma inline (kein Set). `size`-Achse = echtes Code-Prop SelectTrigger.size (kein Fork). `selected`-Bool (Figma) =
+    Radix data-state=checked (kein Code-Prop). Docs: meta.component=Select + subcomponents:{SelectTrigger} (Option 2,
+    User) → Root-Props Haupt-ArgsTable, size Sub-Tabelle.
+    docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
+    SelectTriggerProps (size). Stories: Default (play: open→Blueberry→assert→blur) · Groups · Scrollable · Disabled ·
+    WithField (Field-Komposition, invalid) · TriggerStates (size×state, pseudo-focus). Skip-Log: RTL (locale),
+    Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
+    Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
+
 ## Pending / Removed
 
 ```yaml
