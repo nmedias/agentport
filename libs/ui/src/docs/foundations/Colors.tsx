@@ -92,6 +92,18 @@ export function Colors() {
               role="Secondary text."
             />
           </Row>
+          <Row>
+            <FillSwatch
+              bg="bg-background-fixed"
+              token="background-fixed"
+              utilities="bg-background-fixed"
+              primitive="base/white"
+              scope="fill"
+              value="#ffffff"
+              role="Theme-invariant white surface (toggle knob) — must stay white when dark mode lands."
+              border
+            />
+          </Row>
         </Rows>
       </Group>
 
