@@ -3,6 +3,20 @@ import '../src/styles/globals.css';
 
 const preview: Preview = {
   parameters: {
+    // Pin the Introduction landing first in the sidebar, then the component
+    // libraries; everything else sorts after.
+    options: {
+      storySort: {
+        order: [
+          'Introduction',
+          'Foundations',
+          ['Primitives', 'Colors', 'Typography', 'Spacing & Radius', 'Effects'],
+          'UI',
+          'UI Blocks',
+          '*',
+        ],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

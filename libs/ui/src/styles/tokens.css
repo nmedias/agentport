@@ -236,11 +236,15 @@
   --ap-sys-primary:        var(--ap-color-signal-600);   /* brand accent, AA on white; was cyan/500 */
   --ap-sys-primary-fill:   var(--ap-color-deep-900);     /* dark primary surface (new) */
   --ap-sys-primary-ink:    var(--ap-color-signal-100);   /* ink on primary-fill; was primary-foreground */
-  --ap-sys-secondary:      var(--ap-color-still-100);
+  --ap-sys-secondary-fill: var(--ap-color-still-100);    /* was: secondary (renamed 2026-06-19, -fill convention) */
   --ap-sys-secondary-ink:  var(--ap-color-deep-900);     /* was: secondary-foreground */
   --ap-sys-accent-fill:    var(--ap-color-deep-50);      /* selection/active tint; was accent */
   --ap-sys-accent-ink:     var(--ap-color-signal-600);   /* ink on accent-fill; was accent-foreground */
   --ap-sys-accent-border:  var(--ap-color-still-200);    /* accent edge (new) */
+
+  /* --- Brand (Figma: Brand/) — on-dark brand accent (new 2026-06-19) ------- */
+  --ap-sys-brand-fill:     var(--ap-color-deep-900);     /* dark brand surface */
+  --ap-sys-brand-ink:      var(--ap-color-signal-400);   /* brand cyan #009FE3 — on-dark brand accent (text/icon/marker); brand content only, NOT a primary replacement. Fills the prior signal/400 gap. */
 
   /* --- Destructive (Figma: Destructive/) --------------------------------- */
   --ap-sys-destructive:     var(--ap-color-error-600);

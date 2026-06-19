@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 //    [3px] width is an arbitrary value, kept)
 // Colour clothing reconciled to the live `.Badge` Figma bindings (2026-06-17):
 //  · default → bg-primary-fill (dark primary surface) + text-primary-ink
-//  · secondary → bg-secondary + text-secondary-ink
+//  · secondary → bg-secondary-fill + text-secondary-ink
 //  · destructive → SOLID bg-destructive + text-destructive-ink (Figma replaced
 //    the former /10 tint with a full-opacity fill; hover deepened accordingly)
 //  · outline → border-border + text-ink
@@ -36,7 +36,7 @@ const badgeVariants = cva(
         default:
           'bg-primary-fill text-primary-ink [a]:hover:bg-primary-fill/80',
         secondary:
-          'bg-secondary text-secondary-ink [a]:hover:bg-secondary/80',
+          'bg-secondary-fill text-secondary-ink [a]:hover:bg-secondary-fill/80',
         destructive:
           'bg-destructive text-destructive-ink focus-visible:ring-destructive/20 [a]:hover:bg-destructive/80',
         outline:

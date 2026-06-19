@@ -85,11 +85,15 @@
   --color-primary: var(--ap-sys-primary);
   --color-primary-fill: var(--ap-sys-primary-fill);
   --color-primary-ink: var(--ap-sys-primary-ink);
-  --color-secondary: var(--ap-sys-secondary);
+  --color-secondary-fill: var(--ap-sys-secondary-fill);
   --color-secondary-ink: var(--ap-sys-secondary-ink);
   --color-accent-fill: var(--ap-sys-accent-fill);
   --color-accent-ink: var(--ap-sys-accent-ink);
   --color-accent-border: var(--ap-sys-accent-border);
+
+  /* Brand — on-dark brand accent (Figma: Brand/) */
+  --color-brand-fill: var(--ap-sys-brand-fill);
+  --color-brand-ink: var(--ap-sys-brand-ink);
 
   /* Destructive */
   --color-destructive: var(--ap-sys-destructive);

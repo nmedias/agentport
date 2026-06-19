@@ -109,11 +109,15 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 - { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary, "bg-primary¹/fill-primary¹"], use: "Marken-Akzent (AA auf Weiß) als Text/Icon/Stroke. ¹SHAPE_FILL erlaubt → bg-primary/fill-primary NUR für Shape-/Marker-Fills (in Figma ein Rechteck/Vektor, z. B. Command-Caret), NICHT als Container-/Frame-Fläche (kein FRAME_FILL → Fläche = primary-fill).", note: "war: cyan/500 #0098da" }
 - { token: primary-fill,   css_var: --ap-sys-primary-fill,   primitive: deep/900,   value: "#0d2531", utilities: [bg-primary-fill],  use: "Dunkle Primary-Fläche (Buttons).", note: "neu" }
 - { token: primary-ink,    css_var: --ap-sys-primary-ink,    primitive: signal/100, value: "#a4e5ff", utilities: [text-primary-ink], use: "Ink auf primary-fill.", note: "war: primary-foreground (weiß)" }
-- { token: secondary,      css_var: --ap-sys-secondary,      primitive: still/100,  value: "#bde4fd", utilities: [bg-secondary],     use: "Sekundär-Fläche.", note: "war Platzhalter #f5f5f5" }
+- { token: secondary-fill, css_var: --ap-sys-secondary-fill, primitive: still/100,  value: "#bde4fd", utilities: [bg-secondary-fill], use: "Sekundär-Fläche.", note: "war: secondary (Rename 2026-06-19, -fill-Konvention); davor Platzhalter #f5f5f5. Button/Badge re-clothed." }
 - { token: secondary-ink,  css_var: --ap-sys-secondary-ink,  primitive: deep/900,   value: "#0d2531", utilities: [text-secondary-ink], use: "Text auf secondary.", note: "war: secondary-foreground" }
 - { token: accent-fill,    css_var: --ap-sys-accent-fill,    primitive: deep/50,    value: "#eaf8ff", utilities: [bg-accent-fill],   use: "Selektions-/Aktiv-Tint.", note: "war: accent (cyan/50)" }
 - { token: accent-ink,     css_var: --ap-sys-accent-ink,     primitive: signal/600, value: "#0063bb", utilities: [text-accent-ink],  use: "Text auf accent-fill.", note: "war: accent-foreground (cyan/700)" }
 - { token: accent-border,  css_var: --ap-sys-accent-border,  primitive: still/200,  value: "#9fcdeb", utilities: [border-accent-border], use: "Accent-Kante.", note: "neu" }
+
+# Brand (Figma: Brand/) — On-Dark-Brand-Akzent (neu 2026-06-19)
+- { token: brand-fill, css_var: --ap-sys-brand-fill, primitive: deep/900,   value: "#0d2531", utilities: [bg-brand-fill], use: "Dunkle Brand-Fläche (On-Dark-Brand-Moment)." }
+- { token: brand-ink,  css_var: --ap-sys-brand-ink,  primitive: signal/400, value: "#009fe3", utilities: [text-brand-ink, "bg-brand-ink¹/fill-brand-ink¹"], use: "Brand-Cyan #009FE3 als On-Dark-Akzent — Text/Icon/Marker, speziell für Brand-Content (KEIN Ersatz für primary). ¹SHAPE_FILL → bg-brand-ink NUR Shape-/Marker-Fill, keine Container-Fläche.", note: "neu — schließt die zuvor fehlende signal/400-Semantic-Lücke (vorher im Hero per arbiträrer var() umgangen)" }
 
 # Destructive (Figma: shadcn Default/)
 - { token: destructive,     css_var: --ap-sys-destructive,     primitive: error/600, value: "#b01207", utilities: [bg-destructive, text-destructive, border-destructive], use: "Fehler/Zerstörende Aktion.", note: "war Platzhalter #e7000b. STROKE_COLOR → auch ring-destructive (Focus)." }
@@ -197,10 +201,13 @@ Ein System für Gap **und** Padding (Figma-Scope `GAP`); `m-*` als Code-Idiom (�
 Primitive ist die Grundeinheit `Dimension/space/base` → `--ap-dimension-space-base` (4px); die
 Steps sind in Figma **direkte Werte** (nur `space-xs` aliast die Grundeinheit), im CSS
 `calc(base × n)`. Step nach benötigter Abstandsgröße wählen. Utilities **benannt** — via
-`@utility` auf `--space-step-*`, **nur** für die Familien `gap/gap-x/gap-y`, `p/px/py/pt/pr/pb/pl`,
-`m/mx/my/mt/mr/mb/ml` inkl. Negative `-m…` (die YAML listet `p-`/`gap-` stellvertretend) — **plus
-numerisch** (`p-4`/`gap-2`/`h-9` über die `--spacing`-Basis); beide gültig, numerische nicht
-entfernen. Kein `use` pro Step — die Wahl läuft über den px-Wert (§6), nicht über Semantik.
+`@utility` auf `--space-step-*`, für die Familien `gap/gap-x/gap-y`, `p/px/py/pt/pr/pb/pl`,
+`m/mx/my/mt/mr/mb/ml` und die Inset-Familie `top/right/bottom/left` + `inset/inset-x/inset-y`
+(2026-06-19 ergänzt — Position-Offsets reiten dieselbe Rhythmik; **keine** `--container`-Kollision
+wie bei Sizing, da Inset keine Container-Skala hat), je inkl. Negative `-m…`/`-top…` (die YAML listet
+`p-`/`gap-` stellvertretend) — **plus numerisch** (`p-4`/`gap-2`/`top-6`/`h-9` über die
+`--spacing`-Basis), Fractions (`left-1/2`) und Keywords (`inset-auto`) via die Core-Utilities; alle
+gültig, nicht entfernen. Kein `use` pro Step — die Wahl läuft über den px-Wert (§6), nicht über Semantik.
 
 **Kollisions-Regel (2026-06-11):** Die Steps liegen bewusst **nicht** auf Tailwinds `--spacing-*` —
 der Namespace füttert alle Sizing-Utilities und löst **vor** `--container` auf (`max-w-md` wäre sonst
@@ -409,8 +416,9 @@ color_renames:
   - { stock: text-sidebar-foreground,        ds: text-sidebar-ink }
   - { stock: "bg-sidebar-primary / text-sidebar-primary-foreground", ds: "bg-sidebar-primary-fill / text-sidebar-primary-ink" }
   - { stock: "bg-sidebar-accent / text-sidebar-accent-foreground",   ds: "bg-sidebar-accent-fill / text-sidebar-accent-ink" }
-  - { unchanged: "Name BLEIBT (nur Wert neu): bg-secondary, bg-destructive/text-destructive, border-border/-emphasis/-strong, ring-ring/outline-ring, border-sidebar-border, ring-sidebar-ring, bg-chart-1..5, bg-background-fixed" }
-  - { neu: "Tokens ohne stock-Pendant: accent-border, primary-fill, input-fill-high, sidebar-*-ink (Text auf Akzentflächen)" }
+  - { rename: "bg-secondary → bg-secondary-fill (Figma secondary → secondary-fill, 2026-06-19, -fill-Konvention; Wert unverändert still/100). Button + Badge re-clothed." }
+  - { unchanged: "Name BLEIBT (nur Wert neu): bg-destructive/text-destructive, border-border/-emphasis/-strong, ring-ring/outline-ring, border-sidebar-border, ring-sidebar-ring, bg-chart-1..5, bg-background-fixed" }
+  - { neu: "Tokens ohne stock-Pendant: accent-border, primary-fill, input-fill-high, sidebar-*-ink (Text auf Akzentflächen), brand-fill/brand-ink (On-Dark-Brand-Akzent, 2026-06-19 — bg-brand-fill / text-brand-ink)" }
 
 geometry_vs_token:
   spacing: "Padding/Gap/Margin → benanntes Token MAPPE ÜBER DEN px-WERT: gap-2(8)→gap-md · gap-1.5(6)→gap-sm · px-4(16)→px-xl · py-2(8)→py-md · px-3(12)→px-lg · px-6(24)→px-2xl."

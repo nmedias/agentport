@@ -97,6 +97,14 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 
 ## Entscheidungs-Log
 
+- **Sync 2026-06-19 — Brand-Token + secondary-Rename (Figma → Code):** Figma-Token-Änderung übernommen.
+  (1) NEUE Gruppe **`Brand/`** mit `brand-fill` (→`deep/900` #0d2531) + `brand-ink` (→`signal/400`
+  #009FE3) — gibt dem On-Dark-Brand-Cyan endlich ein eigenes Semantic-Token (zuvor im Hero per arbiträrer
+  `var(--ap-color-signal-400)` umgangen). Utilities: `bg-brand-fill` / `text-brand-ink`.
+  (2) **`secondary` → `secondary-fill`** umbenannt (-fill-Konvention; Wert unverändert `still/100`).
+  Code: `tokens.css` + `tw-theme.css` (Bridge); Button + Badge re-clothed (`bg-secondary`→`bg-secondary-fill`
+  inkl. Badge-Spec); Foundations-Colors-Seite (Brand-Gruppe + Rename); `tokens-reference.md` §1/§6.
+  **Keine** Primitive-Werte geändert (alle resolved values unverändert).
 - **Custom Batch 1 — Text:** `text-tertiary` **verworfen** → hellgraue Labels nutzen `muted-foreground`
   (Vereinfachung; Labels dadurch minimal dunkler). `input-placeholder` **angelegt** als eigener Token,
   Wert `#979fa8` → neues Primitive `neutral/400`. Naming-Regel bestätigt: neue Tokens immer im

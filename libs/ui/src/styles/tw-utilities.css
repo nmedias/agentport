@@ -36,6 +36,29 @@
 @utility -ml-* { margin-left: calc(--value(--space-step-*) * -1); }
 
 
+/* ── Inset (position offsets) → utilities ─────────────────────────────────────
+   The named spacing steps wired to the position utilities (top/right/bottom/left
+   + inset/inset-x/inset-y) and their negatives — same pattern as gap/padding/
+   margin. Position offsets ride the spacing rhythm. Numeric (top-4, inset-0),
+   fractions (left-1/2) and keywords (inset-auto) still resolve via the core
+   utilities — and unlike sizing there's no --container collision (inset has no
+   container scale), so the named steps are safe here. */
+@utility top-*    { top: --value(--space-step-*); }
+@utility right-*  { right: --value(--space-step-*); }
+@utility bottom-* { bottom: --value(--space-step-*); }
+@utility left-*   { left: --value(--space-step-*); }
+@utility inset-*   { inset: --value(--space-step-*); }
+@utility inset-x-* { right: --value(--space-step-*); left: --value(--space-step-*); }
+@utility inset-y-* { top: --value(--space-step-*); bottom: --value(--space-step-*); }
+@utility -top-*    { top: calc(--value(--space-step-*) * -1); }
+@utility -right-*  { right: calc(--value(--space-step-*) * -1); }
+@utility -bottom-* { bottom: calc(--value(--space-step-*) * -1); }
+@utility -left-*   { left: calc(--value(--space-step-*) * -1); }
+@utility -inset-*   { inset: calc(--value(--space-step-*) * -1); }
+@utility -inset-x-* { right: calc(--value(--space-step-*) * -1); left: calc(--value(--space-step-*) * -1); }
+@utility -inset-y-* { top: calc(--value(--space-step-*) * -1); bottom: calc(--value(--space-step-*) * -1); }
+
+
 /* ── Corner radius → utilities ───────────────────────────────────────────────
    DS radius vocabulary: corner-<step> (sm/md/lg/xl/full) + corner-none, via
    --corner-step-* lookup keys (tw-theme.css) — same pattern as the named

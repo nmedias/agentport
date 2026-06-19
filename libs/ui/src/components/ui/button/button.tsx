@@ -38,7 +38,7 @@ const buttonVariants = cva(
         outline:
           'border bg-surface hover:bg-accent-fill hover:text-accent-ink active:bg-accent-fill active:text-accent-ink aria-expanded:bg-accent-fill aria-expanded:text-accent-ink',
         secondary:
-          'bg-secondary text-secondary-ink hover:bg-secondary/80 active:bg-secondary/80',
+          'bg-secondary-fill text-secondary-ink hover:bg-secondary-fill/80 active:bg-secondary-fill/80',
         ghost:
           'hover:bg-accent-fill hover:text-accent-ink active:bg-accent-fill active:text-accent-ink aria-expanded:bg-accent-fill aria-expanded:text-accent-ink',
         link: 'text-primary underline-offset-4 hover:underline active:underline',

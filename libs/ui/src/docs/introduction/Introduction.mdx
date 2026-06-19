@@ -1,0 +1,16 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+
+import { IntroLanding } from './IntroLanding';
+
+{/*
+  Thin mount point. The page is real TSX (IntroLanding.tsx) so it lint- and
+  typechecks; here it is only wrapped in <Unstyled> to escape the default docs
+  chrome and get full visual control. globals.css is imported in preview.ts, so
+  all DS utilities resolve in the docs canvas.
+*/}
+
+<Meta title="Introduction" />
+
+<Unstyled>
+  <IntroLanding />
+</Unstyled>

@@ -39,7 +39,7 @@ describe('Badge', () => {
   it('applies the secondary and destructive variants', () => {
     const { container, rerender } = render(<Badge variant="secondary">S</Badge>);
     expect(container.querySelector('[data-slot="badge"]')?.className).toContain(
-      'bg-secondary'
+      'bg-secondary-fill'
     );
     rerender(<Badge variant="destructive">D</Badge>);
     expect(container.querySelector('[data-slot="badge"]')?.className).toContain(
