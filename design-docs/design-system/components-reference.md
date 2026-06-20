@@ -833,7 +833,7 @@ status_note: >
     dir: libs/ui/src/components/ui/select/
     exports: [Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/select'"
-    types: [SelectProps, SelectTriggerProps, SelectContentProps]
+    types: [SelectProps, SelectTriggerProps, SelectContentProps, SelectItemProps, SelectValueProps]
   figma:
     section: { name: "Select", id: "4307:1997" }
     trigger:
@@ -901,10 +901,12 @@ status_note: >
     Code = absolute right-md + pr-3xl-Clearance (shadcn-Idiom, visuell äquivalent — NICHT als Delta lesen). SelectLabel =
     Figma inline (kein Set). `size`-Achse = echtes Code-Prop SelectTrigger.size (kein Fork). `selected`-Bool (Figma) =
     Radix data-state=checked (kein Code-Prop). Docs: meta.component=Select + subcomponents (Option 2, User) → Root-Props
-    Haupt-ArgsTable, je Part eine Sub-ArgsTable. 06-20: subcomponents von {SelectTrigger} auf ALLE exportierten Parts
-    erweitert (Trigger/Content/Item/Group/Label/Separator/Value/ScrollUp/ScrollDown; findings #57/#61c); size-Control = Story-lokal auf Default.
+    Haupt-ArgsTable, je Part eine Sub-ArgsTable. 06-20: subcomponents = die 4 Parts mit eigener API (Trigger/Content/
+    Item/Value); prop-lose Pass-throughs (Group/Label/Separator/ScrollButtons) WEGGELASSEN (sonst leere „couldn't be
+    auto-generated"-Tabs — findings #57/#61c). Controls (size/position/align) = Story-lokale args auf Default (subcomponents = nur Docs).
     docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
-    SelectTriggerProps (size) + SelectContentProps (position/align, 06-20). Stories: Default (play: open→Blueberry→assert→blur) ·
+    SelectTriggerProps (size) + SelectContentProps (position/align) + SelectItemProps (value/disabled/textValue) +
+    SelectValueProps (placeholder) [alle 06-20]. Stories: Default (play: open→Blueberry→assert→blur) ·
     Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
     Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).

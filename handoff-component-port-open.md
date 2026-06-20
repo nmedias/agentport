@@ -543,8 +543,15 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     zieht nur `meta.component`; ein zweites dokumentiertes Teil (`SelectTrigger.size` neben den `Select`-Root-Props)
     braucht `meta.subcomponents` (zweite Tabelle) + den Sub-Control als **Story-lokalen** arg (er erreicht den
     meta.component nicht). Regel für `/storybook-rules` (Composite-Prop-Split) + `/docgen-props` (Sub-Part annotieren).
-    **Update (Select-Review 06-20):** `subcomponents` muss ALLE exportierten Parts führen, nicht nur das eine mit
-    eigenen Props — sonst ist die Composite-API in den Docs unvollständig (s. #61c).
+    **Update (Select-Review 06-20):** `subcomponents` führt jeden Part mit **dokumentierbarer eigener API** (kuratierte
+    flat-Props via `/docgen-props`), NICHT nur das eine — ABER auch nicht blind ALLE: ein prop-loser Pass-through
+    (SelectGroup/Label/Separator/ScrollButtons = nur className/children, Radix-Rest vom propFilter gedroppt) liefert
+    react-docgen NICHTS → Storybook rendert ein leeres **„Args table … couldn't be auto-generated"** (schlechter als
+    weglassen). Regel: Part nur listen, wenn er kuratierte Props hat; prop-bringende Parts ggf. ERST annotieren
+    (Select: Item `value/disabled/textValue`, Value `placeholder` nachgerüstet), rein strukturelle Parts weglassen
+    (ihre Nutzung zeigen die Usage-Stories). **Controls ≠ subcomponents:** `subcomponents` = nur statische Doc-Tabellen;
+    **Controls** entstehen NUR aus den `args` einer Story (für `meta.component` auto, sonst als Story-lokaler arg
+    durchgereicht — `size`→Trigger, `position`/`align`→Content). (s. #61c)
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
@@ -589,8 +596,9 @@ Komponenten-Defekte werden separat gefixt (Code = main, Figma = Re-Brief des Bac
       `[default,focus,disabled,invalid]` + ungateten Ring.
     - **(b) Optionales Leading-Element = Boolean** — `showIcon`-Bool wie CommandItem (`showIcon#3559:5` + Icon-Slot/Swap),
       NICHT ein nicht-abschaltbarer Slot-Default. (= Mechanism-Tabelle „fixed element on/off → Boolean".)
-    - **(c) Doc-Subcomponents = ALLE exportierten Parts** (→ schärft #57), nicht nur das eine mit eigenen Props; eigene
-      Parts (SelectGroup) als eigenes Set modellieren, nicht inline im Example.
+    - **(c) Doc-Subcomponents = jeder Part mit dokumentierbarer eigener API** (→ #57; NICHT „das eine", aber auch nicht
+      blind ALLE — prop-lose Pass-throughs erzeugen leere „couldn't be auto-generated"-Tabs, s. #57-Update). Im Figma:
+      eigene Parts (SelectGroup) als eigenes Set modellieren, nicht inline im Example.
     Querverweis #21 (Story-Control-Scoping vom Sibling übernehmen) + #5 (Caveat: Sibling-*Surface* ja, Sibling-*Werte*
     trotzdem prüfen — Vorgänger nicht blind autoritativ).
 
