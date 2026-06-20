@@ -58,7 +58,7 @@ const meta: Meta<typeof Field> = {
       source: { type: 'code' },
       description: {
         component:
-          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** / **Field Group** stories for the real compositions.',
+          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** stories for the real compositions. Sub-parts with their own API have dedicated pages: [FieldGroup](?path=/docs/ui-field-fieldgroup--docs) · [FieldLegend](?path=/docs/ui-field-fieldlegend--docs) · [FieldError](?path=/docs/ui-field-fielderror--docs).',
       },
     },
   },
@@ -270,47 +270,8 @@ export const Horizontal: Story = {
   ),
 };
 
-// DS-authored: FieldGroup orientation — distinct axis from Field orientation above. The GROUP
-// container lays its Fields in a wrapping ROW instead of the default vertical stack (each Field
-// shrinks to content via [&>[data-slot=field]]:w-auto). A DS extension over stock shadcn (which
-// only gives Field an orientation) — the same row capability the checkbox/radio groups build on.
-// Here: a compact row of short number inputs (the inputs carry the width since the Fields hug).
-// The `orientation` control is wired to the FieldGroup (NOT the meta's Field orientation): it
-// overrides the meta argType to the two FieldGroup values, so toggling reflows row↔stack live.
-// Its own arg shape (orientation isn't a Field prop); defaults to horizontal — the story's point.
-// Export name avoids the imported FieldGroup component; `name` sets the "Field Group" display title.
-export const FieldGroupExample: StoryObj<{ orientation: 'vertical' | 'horizontal' }> = {
-  name: 'Field Group',
-  args: { orientation: 'horizontal' },
-  argTypes: {
-    orientation: {
-      control: 'inline-radio',
-      options: ['vertical', 'horizontal'],
-      description: 'Layout of the **FieldGroup** container — `vertical` stacks the Fields, `horizontal` lays them in a wrapping row.',
-      table: { type: { summary: '"vertical" | "horizontal"' }, defaultValue: { summary: '"vertical"' } },
-    },
-  },
-  parameters: { controls: { include: ['orientation'] } },
-  render: ({ orientation }) => (
-    <div className="w-full max-w-2xl">
-      <FieldSet>
-        <FieldLegend>Dimensions</FieldLegend>
-        <FieldDescription>Set the artboard size in pixels.</FieldDescription>
-        <FieldGroup orientation={orientation}>
-          <Field>
-            <FieldLabel htmlFor="dim-width">Width</FieldLabel>
-            <Input id="dim-width" type="number" placeholder="1920" className="w-24" />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="dim-height">Height</FieldLabel>
-            <Input id="dim-height" type="number" placeholder="1080" className="w-24" />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="dim-scale">Scale</FieldLabel>
-            <Input id="dim-scale" type="number" placeholder="2" className="w-24" />
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-    </div>
-  ),
-};
+// The sub-parts with their own API each live on a dedicated Autodocs page (meta.component = the part),
+// mirroring UI/RadioGroup → UI/RadioGroup/Item: UI/Field/FieldGroup (orientation), UI/Field/FieldLegend
+// (variant), UI/Field/FieldError (errors). This page keeps Field (the per-row wrapper) + the real
+// compositions; the prop-less layout parts (FieldLabel/Content/Description/Separator/Title/Set) have no
+// API to document and stay shown only inside the compositions above.
