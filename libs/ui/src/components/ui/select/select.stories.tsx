@@ -255,6 +255,52 @@ export const Value: StoryObj<{ placeholder: string }> = {
   },
 };
 
+// Typeahead — where `textValue` earns its place: each option leads with an aria-hidden flag emoji, so its
+// text CONTENT starts with the emoji, not the country name → Radix's derived typeahead (match-from-start)
+// wouldn't find "portugal". `textValue="Portugal"` restores type-to-select. The play focuses the CLOSED
+// trigger (Radix selects on type, like a native <select>) and types to jump — the behaviour proof a
+// control can't give. This is why textValue is documented but not a SelectItem control (see SelectItem).
+export const Typeahead: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Select>
+      <SelectTrigger aria-label="Country" className="w-60">
+        <SelectValue placeholder="Select a country" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="de" textValue="Germany">
+          <span aria-hidden>🇩🇪</span> Germany
+        </SelectItem>
+        <SelectItem value="fr" textValue="France">
+          <span aria-hidden>🇫🇷</span> France
+        </SelectItem>
+        <SelectItem value="pt" textValue="Portugal">
+          <span aria-hidden>🇵🇹</span> Portugal
+        </SelectItem>
+        <SelectItem value="jp" textValue="Japan">
+          <span aria-hidden>🇯🇵</span> Japan
+        </SelectItem>
+        <SelectItem value="br" textValue="Brazil">
+          <span aria-hidden>🇧🇷</span> Brazil
+        </SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvas, step }) => {
+    const trigger = canvas.getByRole('combobox', { name: /country/i });
+    await step('typing on the focused trigger jumps to the textValue match', async () => {
+      trigger.focus();
+      await userEvent.keyboard('portugal');
+      await expect(trigger).toHaveTextContent('Portugal');
+    });
+    // userEvent leaves the trigger focused; blur so the end state matches a real mouse user.
+    await step('blurring clears the focus', async () => {
+      trigger.blur();
+      await expect(trigger).not.toHaveFocus();
+    });
+  },
+};
+
 // docs "Groups" — SelectGroup + SelectLabel split by a SelectSeparator. The label captions each
 // group; the separator is a full-bleed border line between them.
 export const Groups: Story = {
