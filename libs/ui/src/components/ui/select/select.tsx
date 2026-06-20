@@ -76,7 +76,10 @@ function SelectTrigger({ className, size = 'default', children, ...props }: Sele
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-fit items-center justify-between gap-sm corner-lg border border-input-border bg-input-fill py-md px-md text-format-label whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 data-placeholder:text-input-ink-placeholder data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:corner-md *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        // Invalid ring is FOCUS-GATED (= Input/Checkbox/Switch/Radio family): aria-invalid alone shows
+        // only the destructive border; the 3px ring width comes solely from focus-visible (ring/50 →
+        // ring-destructive/20 recolours it when also invalid). No standalone aria-invalid:ring-[3px].
+        "flex w-fit items-center justify-between gap-sm corner-lg border border-input-border bg-input-fill py-md px-md text-format-label whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-input-ink-placeholder data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:corner-md *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -89,13 +92,27 @@ function SelectTrigger({ className, size = 'default', children, ...props }: Sele
   );
 }
 
+interface SelectContentProps extends Omit<React.ComponentProps<typeof SelectPrimitive.Content>, 'position' | 'align'> {
+  /**
+   * Dropdown positioning — `item-aligned` overlaps the selected item onto the trigger; `popper`
+   * anchors below/above like a typical menu.
+   * @default "item-aligned"
+   */
+  position?: 'item-aligned' | 'popper';
+  /**
+   * Alignment against the trigger (popper positioning).
+   * @default "center"
+   */
+  align?: 'start' | 'center' | 'end';
+}
+
 function SelectContent({
   className,
   children,
   position = 'item-aligned',
   align = 'center',
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: SelectContentProps) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -206,4 +223,4 @@ export {
   SelectTrigger,
   SelectValue,
 };
-export type { SelectProps, SelectTriggerProps };
+export type { SelectProps, SelectTriggerProps, SelectContentProps };

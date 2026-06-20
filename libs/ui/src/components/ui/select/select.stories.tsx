@@ -7,6 +7,8 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -29,9 +31,21 @@ const meta: Meta<typeof Select> = {
   title: 'UI/Select',
   component: Select,
   // The Autodocs ArgsTable follows meta.component → the Select ROOT props (value/defaultValue/
-  // onValueChange/open/disabled/required/name) from SelectProps JSDoc. `subcomponents` adds a SECOND
-  // ArgsTable for the trigger's own API — react-docgen reads SelectTriggerProps (size) off SelectTrigger.
-  subcomponents: { SelectTrigger },
+  // onValueChange/open/disabled/required/name) from SelectProps JSDoc. `subcomponents` adds an ArgsTable
+  // tab for EVERY exported part (not just the one with curated props) so the full composite API is
+  // documented — react-docgen reads each part's own props (SelectTrigger.size, SelectContent.position/
+  // align) + the inherited Radix surface.
+  subcomponents: {
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel,
+    SelectSeparator,
+    SelectValue,
+    SelectScrollUpButton,
+    SelectScrollDownButton,
+  },
   tags: ['autodocs'],
   args: { disabled: false },
   // type · description · enum come from SelectProps JSDoc via react-docgen (see select.tsx). argTypes
@@ -45,7 +59,7 @@ const meta: Meta<typeof Select> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS select — a Radix Select whose **trigger** reads as a form field (`bg-input-fill`, `border-input-border`, focus ring, `aria-invalid` red) with a compact `sm` / `default` size, and whose **dropdown** is the raised dialog surface with accent-tinted highlighted items and a check on the selected one. Compose with the **Field** family (`FieldLabel`/`FieldError`) for labelled forms — see the **WithField** story.',
+          'The DS select — a Radix Select whose **trigger** reads as a form field (`bg-input-fill`, `border-input-border`, focus ring, `aria-invalid` red) with a compact `sm` / `default` size, and whose **dropdown** is the raised dialog surface with accent-tinted highlighted items and a check on the selected one. Compose with the **Field** family (`FieldLabel`/`FieldError`) for labelled forms — see the **Invalid** story.',
       },
     },
   },
@@ -217,10 +231,11 @@ export const Disabled: Story = {
   ),
 };
 
-// docs "Invalid" (form) — the select composed in the ported Field family: FieldLabel names it,
-// aria-invalid on the trigger reddens the border + ring, FieldError shows the message. The actual
-// doc composition (not a bare div + label).
-export const WithField: Story = {
+// docs "Invalid" — the select composed in the ported Field family (the doc's real composition, not a
+// bare div + label): Field data-invalid + aria-invalid on the trigger reddens the border, FieldError
+// shows the message. Mirrors the sibling Invalid stories (checkbox/switch/radio). The destructive ring
+// is focus-gated → resting invalid shows only the red border (the ring appears on focus, see TriggerStates).
+export const Invalid: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <Field data-invalid className="max-w-sm">
