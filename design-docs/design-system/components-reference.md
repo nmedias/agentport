@@ -827,28 +827,31 @@ status_note: >
 
 - name: Select
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-19 (Composite; Figma via Background-Agent, Code parallel; Gate grün)
+  figma_synced: true                            # Erstport 2026-06-19; FIX-ROUND 2026-06-20 (Figma-Background-Agent): focus-invalid-Member + showIcon-Bool + SelectGroup-Set + anchored Select-Composition + Example-Headlines/Groups-Rebuild; figma-verify CLEAN
   source: { registry: "@shadcn", item: select, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/select/
     exports: [Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/select'"
-    types: [SelectProps, SelectTriggerProps]
+    types: [SelectProps, SelectTriggerProps, SelectContentProps]
   figma:
     section: { name: "Select", id: "4307:1997" }
     trigger:
       set: { name: "SelectTrigger", id: "4308:2029" }
-      axis: { size: [default, sm], state: [default, focus, disabled, invalid] }    # 8 Member
+      axis: { size: [default, sm], state: [default, focus, disabled, invalid, focus-invalid] }    # 10 Member (focus-invalid 2026-06-20)
       members:
-        "size=default, state=default":  "4308:1997"
-        "size=default, state=focus":    "4308:2001"
-        "size=default, state=disabled": "4308:2005"
-        "size=default, state=invalid":  "4308:2009"
-        "size=sm, state=default":       "4308:2013"
-        "size=sm, state=focus":         "4308:2017"
-        "size=sm, state=disabled":      "4308:2021"
-        "size=sm, state=invalid":       "4308:2025"
+        "size=default, state=default":       "4308:1997"
+        "size=default, state=focus":         "4308:2001"
+        "size=default, state=disabled":      "4308:2005"
+        "size=default, state=invalid":       "4308:2009"   # border-only (ring stripped 06-20 → focus-gated)
+        "size=default, state=focus-invalid": "4326:2363"   # NEW: destructive border + destructive/20 ring (DROP_SHADOW spread3 a0.2, sbn:false)
+        "size=sm, state=default":            "4308:2013"
+        "size=sm, state=focus":              "4308:2017"
+        "size=sm, state=disabled":           "4308:2021"
+        "size=sm, state=invalid":            "4308:2025"   # border-only (ring stripped 06-20)
+        "size=sm, state=focus-invalid":      "4326:2367"   # NEW
       props: "value#4310:0 (TEXT '{Value}') + trailing chevron VECTOR (RiArrowDownSLine, muted-ink). w=240 FIXED, h=32/28."
+      focus_invalid: "06-20 FIX1: invalid-Ring focus-gated (Input-Familien-Kanon, finding #61a). invalid = nur destructive border (DROP_SHADOW von den invalid-Membern entfernt); focus-invalid = destructive border + destructive/20 ring (mirror Input focus-invalid 3692:1249 verbatim). Code rendert in focus-invalid genau EINEN destructive/20-Ring (kein zweiter Glow) — Brief-Wortlaut 'both rings' = lose; faithful to code. Grid size-major neu sortiert, Set w=1360, Section auf w=1560 verbreitert (sonst überlief das 5-State-Raster)."
     item:
       set: { name: "SelectItem", id: "4313:2046" }
       axis: { state: [default, focus, disabled], selected: [false, true] }          # 6 Member
@@ -859,17 +862,27 @@ status_note: >
         "state=focus, selected=true":     "4313:2025"
         "state=disabled, selected=false": "4313:2032"
         "state=disabled, selected=true":  "4313:2039"
-      props: "leadingIcon#4313:6 (SLOT, default 16px RiUserLine) · label#4313:7 (TEXT '{Label}') · trailing check VECTOR (RiCheckLine, visible↔selected). focus = accent-fill + accent-ink."
+      props: "showIcon#4326:0 (BOOLEAN, def FALSE — 06-20 FIX2) gated leadingIcon · leadingIcon#4313:6 (SLOT, default 16px RiUserLine) · label#4313:7 (TEXT '{Label}') · trailing check VECTOR (RiCheckLine, visible↔selected). focus = accent-fill + accent-ink."
+      show_icon: "06-20 FIX2: showIcon#4326:0 Boolean (default false), mirror CommandItem showIcon#3559:5. Mechanik (finding #8): visible NICHT direkt auf den SLOT gebunden → je Member ein FRAME-Wrapper 'iconWrap' um den leadingIcon-SLOT, wrapper.visible an showIcon#4326:0 gebunden. Default-Item hat KEIN Icon; Toggle-on zeigt RiUserLine. Wrapper-IDs: 4326:2317/2318/2319/2352/2353/2354."
     content:
       composition: { name: "SelectContent", id: "4314:1997" }                       # single recompose-able component (mirror Command surface 3642:2)
       slots: { items: "items#4314:0 (default 3 SelectItem-Instanzen)" }
       bool_props: { showScrollUp: "showScrollUp#4315:0 (def false)", showScrollDown: "showScrollDown#4315:1 (def false)" }
       scroll_buttons: { up: "4314:1998 (RiArrowUpSLine)", down: "4314:2023 (RiArrowDownSLine)" }
-    label: "inline styled text (px-sm/py-xs, text-format-label, muted-ink) im items-Slot — KEIN eigenes Set (layer-3 slot content); in Groups-Example"
-    separator: "genestete echte .Separator-Instanz (main 3676:1016 horizontal) — in Groups-Example"
+    group_set:                                                                      # NEW 06-20 FIX3 — SelectGroup als eigenes Set
+      component: { name: "SelectGroup", id: "4326:2371" }
+      props: { label: "label#4326:8 (TEXT '{Label}', SelectLabel-Region px-sm/py-xs, text-format-label, muted-ink)", items: "items#4326:7 (SLOT, default 2 SelectItem-Instanzen)" }
+      note: "labeled group container = SelectLabel-Text + items-SLOT, container p-xs. Reusable; nistet in den SelectContent items-Slot. Ersetzt das frühere inline-SelectLabel (kein eigenes Set davor)."
+    composition_set:                                                                # NEW 06-20 FIX4 — Top-level Select (open-state, anchored)
+      component: { name: "Select", id: "4326:2477" }
+      nests: { trigger: "4326:2478 (SelectTrigger size=default, value='Banana')", content: "4326:2482 (SelectContent, layoutPositioning=ABSOLUTE)" }
+      anchor: "Composition = HORIZONTAL hug auto-layout (bounds=256×32 = nur Trigger). Content = ABSOLUTE-Child, y=36 (Trigger-h 32 + 4 Gap), constraints MIN/MIN → an Trigger-Bottom-Left verankert. Content zeigt Apple/Banana✓/Blueberry. composites.md T4 layer-3 anchored case (finding #59); Figma kann nicht 'öffnen' → diese statische Composition IST das Open-State-Modell."
+    label: "06-20: SelectLabel jetzt als SelectGroup-Set modelliert (group_set oben). Code = eigene SelectLabel-Component (kein Figma-Set-Pendant für das bare Label)."
+    separator: "genestete echte .Separator-Instanz (main 3676:1016 horizontal) — in Groups-Example zwischen den 2 SelectGroups"
     group: { name: "Usage Examples", id: "4315:2106" }
-    examples: { Basic: "4315:2107", Groups: "4315:2324", Scrollable: "4315:2468", Invalid: "4316:2109 (nestet .Field 3713:1017 vertical/invalid)" }
-    vars: { input-fill: "3108:2", input-border: "4197:9644", ring: "3038:6", "destructive⚠": "3038:3", input-ink-placeholder: "3043:3", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", ink: "3037:3", dialog-fill: "3037:6", border: "3038:4", corner-lg: "3073:4", corner-md: "3073:3" }
+    examples: { Open: "4327:2225 (NEW 06-20: Select-Composition 4326:2477, anchored)", Basic: "4315:2107", Groups: "4315:2324 (REBUILT 06-20: 2× SelectGroup-Instanz North America/Europe + .Separator dazwischen, neue SelectContent-Instanz 4326:2749)", Scrollable: "4315:2468", Invalid: "4316:2109 (nestet .Field 3713:1017 vertical/invalid)" }
+    example_headlines: "06-20 FIX5a: alle Block-Headlines auf Sibling-Kanon umgestellt (Hanken Grotesk Regular 13px, muted-ink — vorher ExtraBold 18px black). 5 Blocks (Open/Basic/Groups/Scrollable/Invalid), je Headline gerendert."
+    vars: { input-fill: "3108:2", input-border: "4197:9644", ring: "3038:6", "destructive⚠": "3038:3", input-ink-placeholder: "3043:3", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", ink: "3037:3", dialog-fill: "3037:6", border: "3038:4", corner-lg: "3073:4", corner-md: "3073:3", space-2xs: "3070:3", space-xs: "3070:4", space-sm: "3070:5" }
   skill: /shadcn-component-port (+ references/composites.md, 2026-06-19; Figma = Background-Agent figma-select-build)
   notes: >
     Popover-Composite (radix-ui Select), 10 Exporte. Deps: radix-ui ✓ (Umbrella-Import behalten = Dialog-Konvention,
@@ -887,13 +900,23 @@ status_note: >
     DESIGN-FORKS / CODE↔FIGMA (für /component-sync): D1 SelectItem-Check = Figma trailing Layout-Vektor (pr-md/right-2),
     Code = absolute right-md + pr-3xl-Clearance (shadcn-Idiom, visuell äquivalent — NICHT als Delta lesen). SelectLabel =
     Figma inline (kein Set). `size`-Achse = echtes Code-Prop SelectTrigger.size (kein Fork). `selected`-Bool (Figma) =
-    Radix data-state=checked (kein Code-Prop). Docs: meta.component=Select + subcomponents:{SelectTrigger} (Option 2,
-    User) → Root-Props Haupt-ArgsTable, size Sub-Tabelle.
+    Radix data-state=checked (kein Code-Prop). Docs: meta.component=Select + subcomponents (Option 2, User) → Root-Props
+    Haupt-ArgsTable, je Part eine Sub-ArgsTable. 06-20: subcomponents von {SelectTrigger} auf ALLE exportierten Parts
+    erweitert (Trigger/Content/Item/Group/Label/Separator/Value/ScrollUp/ScrollDown; findings #57/#61c); size-Control = Story-lokal auf Default.
     docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
-    SelectTriggerProps (size). Stories: Default (play: open→Blueberry→assert→blur) · Groups · Scrollable · Disabled ·
-    WithField (Field-Komposition, invalid) · TriggerStates (size×state, pseudo-focus). Skip-Log: RTL (locale),
+    SelectTriggerProps (size) + SelectContentProps (position/align, 06-20). Stories: Default (play: open→Blueberry→assert→blur) ·
+    Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
     Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
+    FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member
+    je Größe (10 statt 8) + invalid-Ring focus-gated (invalid = border-only, focus-invalid = border + destructive/20-Ring;
+    Input-Familien-Kanon, finding #61a). (2) Item showIcon-Boolean (def false, finding #61b/#8 — iconWrap-FRAME gated den
+    leadingIcon-SLOT, NICHT der Slot direkt). (3) SelectGroup als eigenes Set 4326:2371 (label-TEXT + items-SLOT, finding #61c).
+    (4) Top-level Select-Composition 4326:2477 (anchored open-state: Trigger + ABSOLUTE-Content, finding #59). (5) Example-
+    Headlines auf Sibling-Kanon (Regular 13 muted-ink) + Groups korrekt aus 2 SelectGroup-Instanzen + Separator neu gebaut +
+    Open-Example-Block ergänzt. figma-verify CLEAN über alle 5 berührten Knoten; controls-live PASS (showIcon-Toggle,
+    SelectGroup items-Slot, Select-Composition-Instanz, focus-invalid beide Größen). Code-Seite (subcomponents-Vollständigkeit,
+    focus-gated ring, Invalid-Story, docgen SelectContent) lief parallel in main (Task #7).
 
 ## Pending / Removed
 

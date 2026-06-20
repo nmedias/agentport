@@ -486,6 +486,8 @@ echtes `.Field`-Reuse + dem `.Field`-control-leading/error-Slot-Fix.
     (nur ein FRAME ohne Bindung); typecheck/visuell unauffällig. **War die Ursache des `.Field`-invalid-Flaws.**
     Fix: nach dem Klonen den Slot neu via `createSlot()` bauen + an die Set-Slot-Property rebinden
     (`componentPropertyReferences = { slotContentId: '<slot>#id' }`) + Wrapper-`visible` an das Show-Boolean.
+    **Update (Select-fix 06-20):** `clone()` ist SICHER für eine TEXT-*Property* — der `value#…`-prop-ref überlebt den
+    Klon (nur SLOTs degradieren). Geklonte Text-Prop-Member (z. B. Trigger-Style-Member) NICHT über-rebuilden.
 47. **`createSlot()` hinterlässt je Aufruf eine verwaiste Slot-Property** *(invalid-fix)* — nach dem Rebind an
     eine bestehende Slot-ID die zero-referenced Auto-Property löschen, sonst Junk auf jeder Instanz.
 48. **Fill-slot-in-instance — Zusätze zum §Slots-Rezept** *(switch/radio/checkbox-examples)* — Slot-Default-Text-
@@ -522,9 +524,14 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     Section bei x≈10600). Konkretes WRONG/RIGHT in `build-variant-set.js` + composites.md.
 54. **Sections wachsen NICHT automatisch mit den Kindern** *(C)* — nach dem Positionieren `resizeWithoutConstraints`
     (hug), sonst bleibt die Section headline-groß. Paart mit #53; gehört an die Section-Invariante in figma-build.md.
+    **Update (Select-fix 06-20):** gilt für die **Breite** genauso — eine zusätzliche Variant-Spalte (focus-invalid →
+    5-State-Raster) überlief die Section-Breite; `resizeWithoutConstraints` für Breite UND Höhe.
 55. **Instanz-Slot-Default-Removal strikt EINS pro `use_figma`-Call** *(D; schärft #48)* — selbst mit Re-Fetch per
     stabiler ID wirft das ZWEITE `slot.children[0].remove()` im selben Tick „node not found"; eine guarded while-Schleife
     in EINEM Call geht NICHT (je Default-Kind ein eigener Round-Trip). §Slots „Filling a slot in an instance" verschärfen.
+    **Update (Select-fix 06-20):** verallgemeinern — NICHT nur `remove`. **Jede** Mutation an einem nested-instance-Slot-
+    Subtree (auch `setProperties` 2 Ebenen tief, z. B. SelectGroup-Items im Content-Slot labeln) invalidiert die gecachten
+    Sibling-Node-Refs im selben Tick → eine Op pro `use_figma`-Call. #48/#55 decken append/remove UND deep setProperties.
 
 **SKILL.md T2 (Dep-Audit) · /docgen-props + /storybook-rules · T6 (Code):**
 
@@ -566,6 +573,10 @@ Komponenten-Defekte werden separat gefixt (Code = main, Figma = Re-Brief des Bac
     (mirror the sibling Sections)" — der Build droppte die Headlines, der Agent screenshottete die Gruppe nie. Fix: T5
     Schritt 3 erzwingt einen **Screenshot der Usage-Examples-Gruppe** + Eyeball (Labels da? Komposition korrekt?). Figma-
     Analogon zu #11 (Code-Render-Check ist zahnlos ohne echtes Rendern).
+    **Bestätigt (Select-fix 06-20):** die Original-Headlines waren NICHT gedroppt, sondern im falschen LAUTEN Stil
+    (ExtraBold 18 black statt Sibling-Regular 13 muted), und das Groups-Example war eine nicht-reusable Komposition —
+    beide bestanden `/figma-verify`, der nachgeholte Screenshot-Check fing beide. Verschärft die Pointe: der Verify sieht
+    weder falschen Text-STIL noch eine semantisch-falsche-aber-strukturell-saubere Komposition.
 
 **SKILL.md T2.6 + composites.md + /docgen-props/storybook-rules (Sibling-Surface spiegeln):**
 

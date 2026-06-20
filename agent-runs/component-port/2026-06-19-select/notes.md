@@ -190,6 +190,34 @@ keine orphan slot-props. IDs vollständig im Katalog-Eintrag (`components-refere
 - **Docs-Layout (Option 2, User):** `meta.component=Select` + `subcomponents:{SelectTrigger}` → Root-Props in der
   Haupt-ArgsTable, `size` in der SelectTrigger-Sub-Tabelle. Playground behält den `size`-Control (Story-lokal).
 
+## Fix-Round 2026-06-20 (User-Review)
+
+Code (main, Commit `6867878`) + Figma (Background-Agent `figma-select-fix`) parallel. Findings → Handoff #59–61 (+#57)
++ 4 geschärfte (#46/#54/#55/#60). Gate grün (236), figma-verify CLEAN über alle 5 berührten Knoten.
+
+**Code (main):**
+- **Ring focus-gated** — `aria-invalid:ring-[3px]` raus → invalid-resting = nur Border, Ring nur aus `focus-visible:`
+  (= Input/Checkbox/Switch/Radio). Visuell bestätigt (TriggerStates: Invalid = Border, Invalid+focus = Border+Ring).
+- **subcomponents** = alle exportierten Parts (volle Composite-API in den Docs, je Part eine Sub-ArgsTable).
+- **Invalid-Story** (war `WithField`) — Sibling-Muster. **docgen** `SelectContentProps` (position/align).
+
+**Figma (Agent, IDs):**
+- **FIX1** Trigger `focus-invalid`-Member je Größe → Set `4308:2029` jetzt 10 Member (default `4326:2363`, sm `4326:2367`);
+  invalid-Member-Ring gestrippt (border-only), focus-invalid = Border + destructive/20-Ring (mirror Input focus-invalid
+  `3692:1249`). **Code-treu** gebaut (ein Ring, kein zweiter Glow) — bewusste Abweichung vom Brief-Wortlaut „both rings".
+  Section auf w=1560 verbreitert (5-State-Raster überlief → finding #54-Breite).
+- **FIX2** Item `showIcon#4326:0` (BOOLEAN, def false; mirror CommandItem `showIcon#3559:5`); iconWrap-FRAME gated den
+  leadingIcon-SLOT (finding #8 — nie `visible` direkt am SLOT). Wrapper `4326:2317/2318/2319/2352/2353/2354`.
+- **FIX3** `SelectGroup` eigenes Set `4326:2371` (label `4326:8` + items-SLOT `4326:7`, p-xs).
+- **FIX4** Top-level `Select`-Composition `4326:2477` (anchored open-state: Trigger `4326:2478` + ABSOLUTE-Content
+  `4326:2482`, y=36 an Trigger-Bottom-Left; finding #59).
+- **FIX5** Example-Headlines auf Sibling-Kanon (Regular 13 muted-ink, war ExtraBold 18 black); Groups neu aus 2
+  SelectGroup-Instanzen + `.Separator` (Content `4326:2749`); neuer Open-Block `4327:2225`. Gruppe `4315:2106` Kinder:
+  [Open, Basic, Groups, Scrollable, Invalid]. Screenshot-Eyeball bestätigt (Headlines, focus-invalid-Distinktion, Anchor).
+
 ## Open items
 
 - `destructive` (invalid-Ring/Border) = ⚠-Platzhalter-Token — gebunden, nicht final (geteilt mit Input/Field/Checkbox…).
+- **Code↔Figma-Achsen-Lücke:** Figma hat jetzt `focus-invalid`-Trigger-Member + `showIcon`-Item-Bool; Code drückt beide
+  implizit aus (focus-gated Ring via CSS; `showIcon` = einfach Icon weglassen/setzen, kein Prop). Kein `/component-sync`
+  nötig — reines Figma-Modeling. SelectGroup-Set = Figma-Pendant zur bestehenden `SelectGroup`-Code-Component.
