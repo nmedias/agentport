@@ -900,21 +900,22 @@ status_note: >
     DESIGN-FORKS / CODE↔FIGMA (für /component-sync): D1 SelectItem-Check = Figma trailing Layout-Vektor (pr-md/right-2),
     Code = absolute right-md + pr-3xl-Clearance (shadcn-Idiom, visuell äquivalent — NICHT als Delta lesen). SelectLabel =
     Figma inline (kein Set). `size`-Achse = echtes Code-Prop SelectTrigger.size (kein Fork). `selected`-Bool (Figma) =
-    Radix data-state=checked (kein Code-Prop). Docs: meta.component=Select + subcomponents (Option 2, User) → Root-Props
-    Haupt-ArgsTable, je Part eine Sub-ArgsTable. 06-20: subcomponents = die 4 Parts mit eigener API (Trigger/Content/
-    Item/Value); prop-lose Pass-throughs (Group/Label/Separator/ScrollButtons) WEGGELASSEN (sonst leere „couldn't be
-    auto-generated"-Tabs — findings #57/#61c). Controls (size/position/align) = Story-lokale args auf Default (subcomponents = nur Docs).
+    Radix data-state=checked (kein Code-Prop). Docs (06-20, finaler Stand): KEIN `meta.subcomponents` — jeder API-Part hat
+    ein EIGENES Story-File (RadioGroupItem-Muster, findings #57/#61c): `select-{trigger,content,item,value}.stories.tsx`,
+    je `meta.component=Select*` + `title 'UI/Select/Select*'` + in `<Select>` gewrappt → eigene Autodocs-Seite
+    (ui-select-select*) mit echter ArgsTable UND Live-Controls. Prop-lose Pass-throughs (Group/Label/Separator/ScrollButtons)
+    = keine Seite. Hauptseite UI/Select = Root + Usage + verlinkt die Part-Seiten.
     docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
     SelectTriggerProps (size) + SelectContentProps (position/align) + SelectItemProps (value/disabled/textValue) +
-    SelectValueProps (placeholder) [alle 06-20]. Stories: Default (nur Select-Root-Controls; play: open→Blueberry→assert→blur) ·
-    Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus) ·
-    **Per-Subcomponent-Control-Stories** (06-20, je controls.include-scoped + play; Anzeige-Name = Part, Export
-    kollisionsfrei): SelectTrigger (size/disabled) · SelectContent (position/align) · SelectItem (value/disabled;
-    textValue dokumentiert aber KEIN Control — unsichtbarer Typeahead-Effekt, no-op bei Text-Children) · SelectValue
-    (placeholder). **Typeahead** (06-20, behavior-Story für textValue: Emoji-Flaggen-Items → Text-Content startet mit
-    dem Emoji, ohne textValue kein Match; play tippt auf dem closed Trigger „portugal" → selektiert). Skip-Log: RTL (locale),
+    SelectValueProps (placeholder) [alle 06-20]. Stories — select.stories (UI/Select): Default (voller Root-Playground;
+    play: open→Blueberry→assert→blur) · Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) ·
+    TriggerStates (size×state, pseudo-focus). Part-Files (je Default-Playground + play): SelectTrigger (size/disabled) ·
+    SelectContent (position/align) · SelectItem (value/disabled; textValue = ArgsTable, control:false — unsichtbarer
+    Typeahead-Effekt) **+ Typeahead-Sub-Story** (Emoji-Flaggen → Text-Content startet mit Emoji, ohne textValue kein Match;
+    play tippt „portugal" auf closed Trigger → selektiert) · SelectValue (placeholder). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
-    Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
+    Projekt). figma-verify CLEAN; Gate grün (typecheck + test 241: 6 Select-Specs + Story-Tests über select.stories (6) +
+    select-trigger/content/value (je 1) + select-item (2: Default + Typeahead), axe + lint).
     FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member
     je Größe (10 statt 8) + invalid-Ring focus-gated (invalid = border-only, focus-invalid = border + destructive/20-Ring;
     Input-Familien-Kanon, finding #61a). (2) Item showIcon-Boolean (def false, finding #61b/#8 — iconWrap-FRAME gated den

@@ -539,30 +539,27 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     nur dem `Slot`-aus-`radix-ui`-Fall (Breadcrumb). Volles Primitive (`Select`/`Dialog`) = Umbrella behalten
     (`import { Select as SelectPrimitive } from 'radix-ui'`; deklarierte Dep, Dialog-Konvention). Composite-Dep-Audit
     §2 T2 splitten: Voll-Primitive-Umbrella behalten, nur einzelne Sub-Imports auf per-primitive umstellen.
-57. **Composite-Doc-Prop über Root + Sub-Part → `meta.component` + `subcomponents:{Sub}`** *(F)* — die Autodocs-ArgsTable
-    zieht nur `meta.component`; ein zweites dokumentiertes Teil (`SelectTrigger.size` neben den `Select`-Root-Props)
-    braucht `meta.subcomponents` (zweite Tabelle) + den Sub-Control als **Story-lokalen** arg (er erreicht den
-    meta.component nicht). Regel für `/storybook-rules` (Composite-Prop-Split) + `/docgen-props` (Sub-Part annotieren).
-    **Update (Select-Review 06-20):** `subcomponents` führt jeden Part mit **dokumentierbarer eigener API** (kuratierte
-    flat-Props via `/docgen-props`), NICHT nur das eine — ABER auch nicht blind ALLE: ein prop-loser Pass-through
-    (SelectGroup/Label/Separator/ScrollButtons = nur className/children, Radix-Rest vom propFilter gedroppt) liefert
-    react-docgen NICHTS → Storybook rendert ein leeres **„Args table … couldn't be auto-generated"** (schlechter als
-    weglassen). Regel: Part nur listen, wenn er kuratierte Props hat; prop-bringende Parts ggf. ERST annotieren
-    (Select: Item `value/disabled/textValue`, Value `placeholder` nachgerüstet), rein strukturelle Parts weglassen
-    (ihre Nutzung zeigen die Usage-Stories). **Controls ≠ subcomponents:** `subcomponents` = nur statische Doc-Tabellen;
-    **Controls** entstehen NUR aus den `args` einer Story (für `meta.component` auto, sonst als Story-lokaler arg
-    durchgereicht — `size`→Trigger, `position`/`align`→Content). (s. #61c)
-    **Pattern (Composite-Sub-Part-Controls, `/storybook-rules`):** damit jeder Sub-Part-Prop EINEN Live-Control hat,
-    je API-tragendem Part eine eigene Story — `Default` zeigt nur die `meta.component`-(Root-)Controls, je Part eine
-    `<Part>Controls`-Story mit `controls: { include: [<die Part-Props>] }` (scopt das Panel) + eigenem arg-Shape + `play`,
-    das den Prop-Effekt assertet. Anzeige-Name = Part-Name (`name: 'SelectTrigger'`; Export kollisionsfrei, da der
-    Part-Bezeichner schon importiert ist). NUR Props mit **beobachtbarem** Effekt als Control — eine Prop mit
-    unsichtbarem Effekt (z. B. SelectItem `textValue`, Typeahead, no-op bei Text-Children) bleibt dokumentiert
-    (ArgsTable), aber raus aus `controls.include`. (Select 06-20: SelectTrigger/SelectContent/SelectItem/SelectValue.)
-    **Ist der unsichtbare Effekt wichtig → dedizierte Verhaltens-Story mit `play` statt Control** — eine Komposition,
-    in der die Prop wirklich greift (Select `Typeahead`: non-text Children → Emoji-Flaggen, sodass `textValue` für
-    type-to-select NÖTIG ist; play tippt auf dem closed Trigger + assertet die Auswahl). So wird die Prop bewiesen,
-    nicht nur als toter Control angeboten.
+57. **Composite-Sub-Parts dokumentieren = eigenes Story-File je API-Part (RadioGroupItem-Muster), NICHT `meta.subcomponents`**
+    *(F; finaler Stand nach Select-Review 06-20 — die Zwischenschritte unten als Lehre)* — ein Composite mit dokumentierbaren
+    Sub-Part-Props (`SelectTrigger.size`, `SelectContent.position/align`, `SelectItem.value/…`, `SelectValue.placeholder`)
+    bekommt **pro API-tragendem Part ein eigenes `<part>.stories.tsx`** mit `meta.component = <Part>`,
+    `title: 'UI/<Parent>/<Part>'`, jede Story in den Parent-Kontext gewrappt (Radix braucht den Ancestor) — exakt wie
+    `radio-group-item.stories.tsx` (war schon im Repo). Ergebnis: je Part eine eigene Autodocs-Seite mit **echter ArgsTable
+    UND Live-Controls** (Controls = `args` der Story; ein Part ist nur live, wenn er `meta.component` ist). Die Hauptseite
+    (`UI/Select`) dokumentiert nur den Root + die Usage-Kompositionen und verlinkt die Part-Seiten.
+    **Warum NICHT `meta.subcomponents`** *(verbrannte Iteration)*: (a) `subcomponents` liefert nur **statische** Doc-Tabellen,
+    NIE Controls; (b) ein prop-loser Pass-through (SelectGroup/Label/Separator/ScrollButtons = nur className/children,
+    Radix-Rest vom propFilter gedroppt) erzeugt ein leeres **„Args table … couldn't be auto-generated"** (schlechter als
+    weglassen). Mit eigenem File je API-Part entfällt beides — prop-lose Parts bekommen schlicht KEINE Seite (ihre Nutzung
+    zeigen die Usage-Stories).
+    **Voraussetzung:** der Part muss kuratierte flat-Props haben → ggf. ERST via `/docgen-props` annotieren (Select: Item
+    `value/disabled/textValue`, Value `placeholder` nachgerüstet).
+    **Controls-Hygiene auf der Part-Seite:** nur Props mit **beobachtbarem** Effekt als Control; eine Prop mit unsichtbarem
+    Effekt (SelectItem `textValue` = Typeahead, no-op bei Text-Children) bleibt in der ArgsTable, aber `argTypes.<prop>.control = false`.
+    **Ist der unsichtbare Effekt wichtig → dedizierte Verhaltens-Story mit `play`** auf der Part-Seite, in einer Komposition,
+    wo die Prop wirklich greift (Select `Typeahead` als Sub-Story von SelectItem: non-text Children → Emoji-Flaggen, sodass
+    `textValue` für type-to-select NÖTIG ist; play tippt auf dem closed Trigger + assertet die Auswahl). So wird die Prop
+    bewiesen statt als toter Control angeboten. (s. #61c)
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
@@ -607,9 +604,9 @@ Komponenten-Defekte werden separat gefixt (Code = main, Figma = Re-Brief des Bac
       `[default,focus,disabled,invalid]` + ungateten Ring.
     - **(b) Optionales Leading-Element = Boolean** — `showIcon`-Bool wie CommandItem (`showIcon#3559:5` + Icon-Slot/Swap),
       NICHT ein nicht-abschaltbarer Slot-Default. (= Mechanism-Tabelle „fixed element on/off → Boolean".)
-    - **(c) Doc-Subcomponents = jeder Part mit dokumentierbarer eigener API** (→ #57; NICHT „das eine", aber auch nicht
-      blind ALLE — prop-lose Pass-throughs erzeugen leere „couldn't be auto-generated"-Tabs, s. #57-Update). Im Figma:
-      eigene Parts (SelectGroup) als eigenes Set modellieren, nicht inline im Example.
+    - **(c) Doc-Seite je API-Part** — jeder Part mit kuratierter eigener API bekommt ein eigenes Story-File
+      (RadioGroupItem-Muster, NICHT `meta.subcomponents` → s. #57 für das Warum). Im Figma: eigene Parts (SelectGroup)
+      als eigenes Set modellieren, nicht inline im Example.
     Querverweis #21 (Story-Control-Scoping vom Sibling übernehmen) + #5 (Caveat: Sibling-*Surface* ja, Sibling-*Werte*
     trotzdem prüfen — Vorgänger nicht blind autoritativ).
 
