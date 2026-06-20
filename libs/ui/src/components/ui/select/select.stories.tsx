@@ -40,7 +40,8 @@ const meta: Meta<typeof Select> = {
   args: { disabled: false },
   // type · description · enum come from SelectProps JSDoc via react-docgen (see select.tsx). argTypes
   // adds only a defaultValue per defaulted root prop (the ArgsTable Default column ignores the @default
-  // JSDoc tag). The trigger's `size` control lives on the Default story (a sub-part prop, not a root prop).
+  // JSDoc tag). Sub-part controls (size / position / align / value / placeholder) live on the
+  // per-subcomponent stories below, scoped via controls.include — the Default panel stays Select-root only.
   argTypes: {
     disabled: { table: { defaultValue: { summary: 'false' } } },
   },
@@ -58,44 +59,18 @@ const meta: Meta<typeof Select> = {
 export default meta;
 type Story = StoryObj<typeof Select>;
 
-// Bare playground — a complete working Select. Root props (disabled/required/value…) spread onto
-// <Select> and surface in the main ArgsTable; sub-part props the meta component can't reach are wired
-// as story-local controls so they're actually live (Storybook builds controls from a story's args —
-// `subcomponents` only adds static doc ArgsTables, never controls): `size` → SelectTrigger,
-// `position`/`align` → SelectContent (the "align item with trigger" demo). No controls.include — it
-// would filter the table. The play test drives it: open, pick, assert value.
-export const Default: StoryObj<
-  React.ComponentProps<typeof Select> & {
-    size?: 'sm' | 'default';
-    position?: 'item-aligned' | 'popper';
-    align?: 'start' | 'center' | 'end';
-  }
-> = {
-  args: { size: 'default', position: 'item-aligned', align: 'center' },
-  argTypes: {
-    size: {
-      control: 'inline-radio',
-      options: ['sm', 'default'],
-      table: { category: 'SelectTrigger', defaultValue: { summary: '"default"' } },
-    },
-    position: {
-      control: 'inline-radio',
-      options: ['item-aligned', 'popper'],
-      table: { category: 'SelectContent', defaultValue: { summary: '"item-aligned"' } },
-    },
-    align: {
-      control: 'inline-radio',
-      options: ['start', 'center', 'end'],
-      description: 'Alignment against the trigger — a `SelectContent` prop (popper positioning only).',
-      table: { category: 'SelectContent', defaultValue: { summary: '"center"' } },
-    },
-  },
-  render: ({ size, position, align,  ...args }) => (
+// Bare playground — a complete working Select. The {...args} spread onto <Select> makes the ROOT props
+// (disabled / value / defaultValue / open / required …) live controls + ArgsTable rows. Sub-part props
+// live on their own per-subcomponent stories below (TriggerControls / ContentControls / ItemControls /
+// ValueControls) — Storybook builds controls from a story's args, and `subcomponents` only adds static
+// doc tables, never controls. The play drives it: open, pick, assert the value lands on the trigger.
+export const Default: Story = {
+  render: (args) => (
     <Select {...args}>
-      <SelectTrigger aria-label="Favorite fruit" className="w-50" size={size}>
+      <SelectTrigger aria-label="Favorite fruit" className="w-50">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
-      <SelectContent position={position} align={align}>
+      <SelectContent>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
           <SelectItem value="apple">Apple</SelectItem>
@@ -126,6 +101,149 @@ export const Default: StoryObj<
     await step('blurring clears the focus', async () => {
       trigger.blur();
       await expect(trigger).not.toHaveFocus();
+    });
+  },
+};
+
+// Per-subcomponent control stories — one per part that owns props (the four in the docs ArgsTable). Each
+// scopes its panel via controls.include to ONLY that part's props (the Default playground covers the Select
+// root), wires them through render, and play-asserts the prop takes effect.
+
+// SelectTrigger — `size` (h-8 / h-7) + `disabled`, driven onto the trigger.
+export const TriggerControls: StoryObj<{ size: 'sm' | 'default'; disabled: boolean }> = {
+  args: { size: 'default', disabled: false },
+  argTypes: {
+    size: { control: 'inline-radio', options: ['sm', 'default'], table: { defaultValue: { summary: '"default"' } } },
+    disabled: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
+  },
+  parameters: { controls: { include: ['size', 'disabled'] } },
+  render: ({ size, disabled }) => (
+    <Select>
+      <SelectTrigger aria-label="Trigger size" className="w-50" size={size} disabled={disabled}>
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvas, step }) => {
+    const trigger = canvas.getByRole('combobox', { name: /trigger size/i });
+    await step('reflects the size on data-size', async () => {
+      await expect(trigger).toHaveAttribute('data-size', 'default');
+    });
+    await step('the enabled trigger opens', async () => {
+      await userEvent.click(trigger);
+      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
+      await userEvent.keyboard('{Escape}');
+    });
+  },
+};
+
+// SelectContent — `position` (item-aligned / popper) + `align`, driven onto the dropdown. Toggle them and
+// open to see the placement change.
+export const ContentControls: StoryObj<{
+  position: 'item-aligned' | 'popper';
+  align: 'start' | 'center' | 'end';
+}> = {
+  args: { position: 'item-aligned', align: 'center' },
+  argTypes: {
+    position: {
+      control: 'inline-radio',
+      options: ['item-aligned', 'popper'],
+      table: { defaultValue: { summary: '"item-aligned"' } },
+    },
+    align: {
+      control: 'inline-radio',
+      options: ['start', 'center', 'end'],
+      table: { defaultValue: { summary: '"center"' } },
+    },
+  },
+  parameters: { controls: { include: ['position', 'align'] } },
+  render: ({ position, align }) => (
+    <Select>
+      <SelectTrigger aria-label="Dropdown position" className="w-50">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent position={position} align={align}>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+        <SelectItem value="blueberry">Blueberry</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvas, step }) => {
+    const trigger = canvas.getByRole('combobox', { name: /dropdown position/i });
+    await step('opens the dropdown', async () => {
+      await userEvent.click(trigger);
+      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
+    });
+    await step('closes on Escape, focus back on the trigger', async () => {
+      await userEvent.keyboard('{Escape}');
+      await expect(trigger).toHaveFocus();
+    });
+  },
+};
+
+// SelectItem — `value` (submitted value), `disabled`, `textValue` (typeahead) on one driven item.
+export const ItemControls: StoryObj<{ value: string; disabled: boolean; textValue?: string }> = {
+  args: { value: 'cherry', disabled: false, textValue: undefined },
+  argTypes: {
+    value: { control: 'text', table: { defaultValue: { summary: '"cherry"' } } },
+    disabled: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
+    textValue: { control: 'text' },
+  },
+  parameters: { controls: { include: ['value', 'disabled', 'textValue'] } },
+  render: ({ value, disabled, textValue }) => (
+    <Select>
+      <SelectTrigger aria-label="Item options" className="w-50">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value={value} disabled={disabled} textValue={textValue}>
+          Cherry
+        </SelectItem>
+        <SelectItem value="grapes">Grapes</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvas, step }) => {
+    const trigger = canvas.getByRole('combobox', { name: /item options/i });
+    await step('opens the listbox', async () => {
+      await userEvent.click(trigger);
+      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
+    });
+    await step('selecting the driven item updates the trigger', async () => {
+      await userEvent.click(await screen.findByRole('option', { name: 'Cherry' }));
+      await expect(trigger).toHaveTextContent('Cherry');
+    });
+  },
+};
+
+// SelectValue — `placeholder`, shown while nothing is selected.
+export const ValueControls: StoryObj<{ placeholder: string }> = {
+  args: { placeholder: 'Select a fruit' },
+  argTypes: {
+    placeholder: { control: 'text', table: { defaultValue: { summary: '"Select a fruit"' } } },
+  },
+  parameters: { controls: { include: ['placeholder'] } },
+  render: ({ placeholder }) => (
+    <Select>
+      <SelectTrigger aria-label="Empty value" className="w-50">
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvas, step }) => {
+    const trigger = canvas.getByRole('combobox', { name: /empty value/i });
+    await step('shows the placeholder while empty', async () => {
+      await expect(trigger).toHaveTextContent('Select a fruit');
     });
   },
 };
