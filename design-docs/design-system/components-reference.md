@@ -911,7 +911,8 @@ status_note: >
     **Per-Subcomponent-Control-Stories** (06-20, je controls.include-scoped + play; Anzeige-Name = Part, Export
     kollisionsfrei): SelectTrigger (size/disabled) · SelectContent (position/align) · SelectItem (value/disabled;
     textValue dokumentiert aber KEIN Control — unsichtbarer Typeahead-Effekt, no-op bei Text-Children) · SelectValue
-    (placeholder). Skip-Log: RTL (locale),
+    (placeholder). **Typeahead** (06-20, behavior-Story für textValue: Emoji-Flaggen-Items → Text-Content startet mit
+    dem Emoji, ohne textValue kein Match; play tippt auf dem closed Trigger „portugal" → selektiert). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
     Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
     FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member

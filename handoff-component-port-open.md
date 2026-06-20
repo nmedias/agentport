@@ -559,6 +559,10 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     Part-Bezeichner schon importiert ist). NUR Props mit **beobachtbarem** Effekt als Control — eine Prop mit
     unsichtbarem Effekt (z. B. SelectItem `textValue`, Typeahead, no-op bei Text-Children) bleibt dokumentiert
     (ArgsTable), aber raus aus `controls.include`. (Select 06-20: SelectTrigger/SelectContent/SelectItem/SelectValue.)
+    **Ist der unsichtbare Effekt wichtig → dedizierte Verhaltens-Story mit `play` statt Control** — eine Komposition,
+    in der die Prop wirklich greift (Select `Typeahead`: non-text Children → Emoji-Flaggen, sodass `textValue` für
+    type-to-select NÖTIG ist; play tippt auf dem closed Trigger + assertet die Auswahl). So wird die Prop bewiesen,
+    nicht nur als toter Control angeboten.
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
