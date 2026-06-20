@@ -560,14 +560,16 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     wo die Prop wirklich greift (Select `Typeahead` als Sub-Story von SelectItem: non-text Children → Emoji-Flaggen, sodass
     `textValue` für type-to-select NÖTIG ist; play tippt auf dem closed Trigger + assertet die Auswahl). So wird die Prop
     bewiesen statt als toter Control angeboten. (s. #61c)
-    **Angewandt (06-20): Select + Field + Dialog + InputGroup** — alle nach diesem Muster: Select → `select-{trigger,
-    content,item,value}.stories.tsx`; Field → `field-{group,legend,error}.stories.tsx` (FieldGroup `orientation`,
-    FieldLegend `variant`, FieldError `errors`; die alte In-File-`FieldGroupExample`-Control-Story herausgezogen);
-    Dialog → `dialog-{content,footer}.stories.tsx` (beide `showCloseButton`; play öffnet das Portal + assertet den
-    Close-Button, Content-× im Footer-Beispiel aus, damit „Close" eindeutig); InputGroup → `input-group-{addon,button}.
-    stories.tsx` (InputGroupAddon `align`, InputGroupButton `size`; Button-play assertet `data-size`, Addon display-only).
-    Bestätigt, dass das RadioGroupItem-Muster generalisiert; der nächste Composite-Port folgt ihm direkt (kein
-    subcomponents-Umweg).
+    **Angewandt (06-20): Select + Field + Dialog + InputGroup + Command** — alle nach diesem Muster: Select →
+    `select-{trigger,content,item,value}.stories.tsx`; Field → `field-{group,legend,error}.stories.tsx` (FieldGroup
+    `orientation`, FieldLegend `variant`, FieldError `errors`; die alte In-File-`FieldGroupExample`-Control-Story
+    herausgezogen); Dialog → `dialog-{content,footer}.stories.tsx` (beide `showCloseButton`; play öffnet das Portal +
+    assertet den Close-Button, Content-× im Footer-Beispiel aus, damit „Close" eindeutig); InputGroup →
+    `input-group-{addon,button}.stories.tsx` (InputGroupAddon `align`, InputGroupButton `size`; Button-play assertet
+    `data-size`, Addon display-only); Command → `command-{dialog,separator}.stories.tsx` (CommandDialog `variant`/
+    `showCloseButton` controlled-open + Portal-play, CommandSeparator `label` = Labeled-Rule; cmdk-Root behält seinen
+    `variant`-Control auf der Hauptseite). Bestätigt, dass das RadioGroupItem-Muster generalisiert; der nächste
+    Composite-Port folgt ihm direkt (kein subcomponents-Umweg).
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
