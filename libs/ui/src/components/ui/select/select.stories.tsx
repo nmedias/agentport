@@ -109,8 +109,10 @@ export const Default: Story = {
 // scopes its panel via controls.include to ONLY that part's props (the Default playground covers the Select
 // root), wires them through render, and play-asserts the prop takes effect.
 
-// SelectTrigger — `size` (h-8 / h-7) + `disabled`, driven onto the trigger.
-export const TriggerControls: StoryObj<{ size: 'sm' | 'default'; disabled: boolean }> = {
+// SelectTrigger — `size` (h-8 / h-7) + `disabled`, driven onto the trigger. (Export name avoids the
+// imported `SelectTrigger`; `name` sets the sidebar label.)
+export const Trigger: StoryObj<{ size: 'sm' | 'default'; disabled: boolean }> = {
+  name: 'SelectTrigger',
   args: { size: 'default', disabled: false },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'default'], table: { defaultValue: { summary: '"default"' } } },
@@ -143,10 +145,11 @@ export const TriggerControls: StoryObj<{ size: 'sm' | 'default'; disabled: boole
 
 // SelectContent — `position` (item-aligned / popper) + `align`, driven onto the dropdown. Toggle them and
 // open to see the placement change.
-export const ContentControls: StoryObj<{
+export const Content: StoryObj<{
   position: 'item-aligned' | 'popper';
   align: 'start' | 'center' | 'end';
 }> = {
+  name: 'SelectContent',
   args: { position: 'item-aligned', align: 'center' },
   argTypes: {
     position: {
@@ -186,23 +189,26 @@ export const ContentControls: StoryObj<{
   },
 };
 
-// SelectItem — `value` (submitted value), `disabled`, `textValue` (typeahead) on one driven item.
-export const ItemControls: StoryObj<{ value: string; disabled: boolean; textValue?: string }> = {
-  args: { value: 'cherry', disabled: false, textValue: undefined },
+// SelectItem — `value` (the submitted value) + `disabled`, driven onto one item. `textValue` (typeahead)
+// stays documented in the ArgsTable but is NOT a control here: its effect is invisible and a no-op when
+// the item's children are plain text (Radix derives the typeahead from them) — a control with no
+// observable effect is noise.
+export const Item: StoryObj<{ value: string; disabled: boolean }> = {
+  name: 'SelectItem',
+  args: { value: 'cherry', disabled: false },
   argTypes: {
     value: { control: 'text', table: { defaultValue: { summary: '"cherry"' } } },
     disabled: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
-    textValue: { control: 'text' },
   },
-  parameters: { controls: { include: ['value', 'disabled', 'textValue'] } },
-  render: ({ value, disabled, textValue }) => (
+  parameters: { controls: { include: ['value', 'disabled'] } },
+  render: ({ value, disabled }) => (
     <Select>
       <SelectTrigger aria-label="Item options" className="w-50">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value={value} disabled={disabled} textValue={textValue}>
+        <SelectItem value={value} disabled={disabled}>
           Cherry
         </SelectItem>
         <SelectItem value="grapes">Grapes</SelectItem>
@@ -223,7 +229,8 @@ export const ItemControls: StoryObj<{ value: string; disabled: boolean; textValu
 };
 
 // SelectValue — `placeholder`, shown while nothing is selected.
-export const ValueControls: StoryObj<{ placeholder: string }> = {
+export const Value: StoryObj<{ placeholder: string }> = {
+  name: 'SelectValue',
   args: { placeholder: 'Select a fruit' },
   argTypes: {
     placeholder: { control: 'text', table: { defaultValue: { summary: '"Select a fruit"' } } },
