@@ -21,27 +21,21 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '../field';
 // shadow-elevation); SelectItem highlights on focus via accent-fill + accent-ink and shows a
 // trailing check when selected. Compose with the Field family for labelled / invalid forms.
 //
-// Usage examples mirror ui.shadcn.com/docs/components/select. Skipped (un-ported dep / locale):
-// the "Form" example (needs react-hook-form, un-ported) and the "RTL" Arabic locale demo. The
-// "Align item with trigger" (position popper/item-aligned) demo is folded into a Default control,
-// not a separate structural story.
+// This page documents the value-driven Select ROOT + the usage compositions. Each sub-part with its
+// own API gets its own Autodocs page (UI/Select/SelectTrigger | SelectContent | SelectItem | SelectValue),
+// mirroring UI/RadioGroup → UI/RadioGroup/Item — not meta.subcomponents (which can't surface controls and
+// renders empty tabs for the prop-less parts).
+//
+// Usage examples mirror ui.shadcn.com/docs/components/select. Skipped (un-ported dep / locale): the
+// "Form" example (needs react-hook-form, un-ported) and the "RTL" Arabic locale demo.
 const meta: Meta<typeof Select> = {
   title: 'UI/Select',
   component: Select,
-  // The Autodocs ArgsTable follows meta.component → the Select ROOT props (value/defaultValue/
-  // onValueChange/open/disabled/required/name) from SelectProps JSDoc. `subcomponents` adds an ArgsTable
-  // tab per part — but ONLY for parts with a documentable own API (curated flat props via /docgen-props):
-  // SelectTrigger (size), SelectContent (position/align), SelectItem (value/disabled/textValue), SelectValue
-  // (placeholder). The purely structural pass-throughs (Group/Label/Separator/ScrollButtons) have no own
-  // props → react-docgen yields nothing → an empty "couldn't be auto-generated" tab, so they're omitted
-  // (their use is shown in the Groups/Scrollable stories, not a broken table).
-  subcomponents: { SelectTrigger, SelectContent, SelectItem, SelectValue },
   tags: ['autodocs'],
   args: { disabled: false },
   // type · description · enum come from SelectProps JSDoc via react-docgen (see select.tsx). argTypes
   // adds only a defaultValue per defaulted root prop (the ArgsTable Default column ignores the @default
-  // JSDoc tag). Sub-part controls (size / position / align / value / placeholder) live on the
-  // per-subcomponent stories below, scoped via controls.include — the Default panel stays Select-root only.
+  // JSDoc tag). Sub-part props (size / position / align / value / placeholder) live on their own pages.
   argTypes: {
     disabled: { table: { defaultValue: { summary: 'false' } } },
   },
@@ -50,7 +44,7 @@ const meta: Meta<typeof Select> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS select — a Radix Select whose **trigger** reads as a form field (`bg-input-fill`, `border-input-border`, focus ring, `aria-invalid` red) with a compact `sm` / `default` size, and whose **dropdown** is the raised dialog surface with accent-tinted highlighted items and a check on the selected one. Compose with the **Field** family (`FieldLabel`/`FieldError`) for labelled forms — see the **Invalid** story.',
+          'The DS select — a Radix Select whose **trigger** reads as a form field (`bg-input-fill`, `border-input-border`, focus ring, `aria-invalid` red) with a compact `sm` / `default` size, and whose **dropdown** is the raised dialog surface with accent-tinted highlighted items and a check on the selected one. Compose with the **Field** family (`FieldLabel`/`FieldError`) for labelled forms — see the **Invalid** story. Each sub-part with its own API has a dedicated page: [SelectTrigger](?path=/docs/ui-select-selecttrigger--docs) · [SelectContent](?path=/docs/ui-select-selectcontent--docs) · [SelectItem](?path=/docs/ui-select-selectitem--docs) · [SelectValue](?path=/docs/ui-select-selectvalue--docs).',
       },
     },
   },
@@ -59,11 +53,9 @@ const meta: Meta<typeof Select> = {
 export default meta;
 type Story = StoryObj<typeof Select>;
 
-// Bare playground — a complete working Select. The {...args} spread onto <Select> makes the ROOT props
-// (disabled / value / defaultValue / open / required …) live controls + ArgsTable rows. Sub-part props
-// live on their own per-subcomponent stories below (TriggerControls / ContentControls / ItemControls /
-// ValueControls) — Storybook builds controls from a story's args, and `subcomponents` only adds static
-// doc tables, never controls. The play drives it: open, pick, assert the value lands on the trigger.
+// Playground — a complete working Select. The {...args} spread onto <Select> makes the ROOT props
+// (disabled / value / defaultValue / open / required …) live controls + ArgsTable rows. The play drives
+// it: open, pick, assert the value lands on the trigger.
 export const Default: Story = {
   render: (args) => (
     <Select {...args}>
@@ -98,202 +90,6 @@ export const Default: Story = {
 
     // Selection returns focus to the trigger (→ :focus-visible ring); blur so the end state
     // matches a real mouse user.
-    await step('blurring clears the focus', async () => {
-      trigger.blur();
-      await expect(trigger).not.toHaveFocus();
-    });
-  },
-};
-
-// Per-subcomponent control stories — one per part that owns props (the four in the docs ArgsTable). Each
-// scopes its panel via controls.include to ONLY that part's props (the Default playground covers the Select
-// root), wires them through render, and play-asserts the prop takes effect.
-
-// SelectTrigger — `size` (h-8 / h-7) + `disabled`, driven onto the trigger. (Export name avoids the
-// imported `SelectTrigger`; `name` sets the sidebar label.)
-export const Trigger: StoryObj<{ size: 'sm' | 'default'; disabled: boolean }> = {
-  name: 'SelectTrigger',
-  args: { size: 'default', disabled: false },
-  argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'default'], table: { defaultValue: { summary: '"default"' } } },
-    disabled: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
-  },
-  parameters: { controls: { include: ['size', 'disabled'] } },
-  render: ({ size, disabled }) => (
-    <Select>
-      <SelectTrigger aria-label="Trigger size" className="w-50" size={size} disabled={disabled}>
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value="banana">Banana</SelectItem>
-      </SelectContent>
-    </Select>
-  ),
-  play: async ({ canvas, step }) => {
-    const trigger = canvas.getByRole('combobox', { name: /trigger size/i });
-    await step('reflects the size on data-size', async () => {
-      await expect(trigger).toHaveAttribute('data-size', 'default');
-    });
-    await step('the enabled trigger opens', async () => {
-      await userEvent.click(trigger);
-      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
-      await userEvent.keyboard('{Escape}');
-    });
-  },
-};
-
-// SelectContent — `position` (item-aligned / popper) + `align`, driven onto the dropdown. Toggle them and
-// open to see the placement change.
-export const Content: StoryObj<{
-  position: 'item-aligned' | 'popper';
-  align: 'start' | 'center' | 'end';
-}> = {
-  name: 'SelectContent',
-  args: { position: 'item-aligned', align: 'center' },
-  argTypes: {
-    position: {
-      control: 'inline-radio',
-      options: ['item-aligned', 'popper'],
-      table: { defaultValue: { summary: '"item-aligned"' } },
-    },
-    align: {
-      control: 'inline-radio',
-      options: ['start', 'center', 'end'],
-      table: { defaultValue: { summary: '"center"' } },
-    },
-  },
-  parameters: { controls: { include: ['position', 'align'] } },
-  render: ({ position, align }) => (
-    <Select>
-      <SelectTrigger aria-label="Dropdown position" className="w-50">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent position={position} align={align}>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value="banana">Banana</SelectItem>
-        <SelectItem value="blueberry">Blueberry</SelectItem>
-      </SelectContent>
-    </Select>
-  ),
-  play: async ({ canvas, step }) => {
-    const trigger = canvas.getByRole('combobox', { name: /dropdown position/i });
-    await step('opens the dropdown', async () => {
-      await userEvent.click(trigger);
-      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
-    });
-    await step('closes on Escape, focus back on the trigger', async () => {
-      await userEvent.keyboard('{Escape}');
-      await expect(trigger).toHaveFocus();
-    });
-  },
-};
-
-// SelectItem — `value` (the submitted value) + `disabled`, driven onto one item. `textValue` (typeahead)
-// stays documented in the ArgsTable but is NOT a control here: its effect is invisible and a no-op when
-// the item's children are plain text (Radix derives the typeahead from them) — a control with no
-// observable effect is noise.
-export const Item: StoryObj<{ value: string; disabled: boolean }> = {
-  name: 'SelectItem',
-  args: { value: 'cherry', disabled: false },
-  argTypes: {
-    value: { control: 'text', table: { defaultValue: { summary: '"cherry"' } } },
-    disabled: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
-  },
-  parameters: { controls: { include: ['value', 'disabled'] } },
-  render: ({ value, disabled }) => (
-    <Select>
-      <SelectTrigger aria-label="Item options" className="w-50">
-        <SelectValue placeholder="Select a fruit" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value={value} disabled={disabled}>
-          Cherry
-        </SelectItem>
-        <SelectItem value="grapes">Grapes</SelectItem>
-      </SelectContent>
-    </Select>
-  ),
-  play: async ({ canvas, step }) => {
-    const trigger = canvas.getByRole('combobox', { name: /item options/i });
-    await step('opens the listbox', async () => {
-      await userEvent.click(trigger);
-      await expect(await screen.findByRole('listbox')).toBeInTheDocument();
-    });
-    await step('selecting the driven item updates the trigger', async () => {
-      await userEvent.click(await screen.findByRole('option', { name: 'Cherry' }));
-      await expect(trigger).toHaveTextContent('Cherry');
-    });
-  },
-};
-
-// SelectValue — `placeholder`, shown while nothing is selected.
-export const Value: StoryObj<{ placeholder: string }> = {
-  name: 'SelectValue',
-  args: { placeholder: 'Select a fruit' },
-  argTypes: {
-    placeholder: { control: 'text', table: { defaultValue: { summary: '"Select a fruit"' } } },
-  },
-  parameters: { controls: { include: ['placeholder'] } },
-  render: ({ placeholder }) => (
-    <Select>
-      <SelectTrigger aria-label="Empty value" className="w-50">
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value="banana">Banana</SelectItem>
-      </SelectContent>
-    </Select>
-  ),
-  play: async ({ canvas, step }) => {
-    const trigger = canvas.getByRole('combobox', { name: /empty value/i });
-    await step('shows the placeholder while empty', async () => {
-      await expect(trigger).toHaveTextContent('Select a fruit');
-    });
-  },
-};
-
-// Typeahead — where `textValue` earns its place: each option leads with an aria-hidden flag emoji, so its
-// text CONTENT starts with the emoji, not the country name → Radix's derived typeahead (match-from-start)
-// wouldn't find "portugal". `textValue="Portugal"` restores type-to-select. The play focuses the CLOSED
-// trigger (Radix selects on type, like a native <select>) and types to jump — the behaviour proof a
-// control can't give. This is why textValue is documented but not a SelectItem control (see SelectItem).
-export const Typeahead: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => (
-    <Select>
-      <SelectTrigger aria-label="Country" className="w-60">
-        <SelectValue placeholder="Select a country" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="de" textValue="Germany">
-          <span aria-hidden>🇩🇪</span> Germany
-        </SelectItem>
-        <SelectItem value="fr" textValue="France">
-          <span aria-hidden>🇫🇷</span> France
-        </SelectItem>
-        <SelectItem value="pt" textValue="Portugal">
-          <span aria-hidden>🇵🇹</span> Portugal
-        </SelectItem>
-        <SelectItem value="jp" textValue="Japan">
-          <span aria-hidden>🇯🇵</span> Japan
-        </SelectItem>
-        <SelectItem value="br" textValue="Brazil">
-          <span aria-hidden>🇧🇷</span> Brazil
-        </SelectItem>
-      </SelectContent>
-    </Select>
-  ),
-  play: async ({ canvas, step }) => {
-    const trigger = canvas.getByRole('combobox', { name: /country/i });
-    await step('typing on the focused trigger jumps to the textValue match', async () => {
-      trigger.focus();
-      await userEvent.keyboard('portugal');
-      await expect(trigger).toHaveTextContent('Portugal');
-    });
-    // userEvent leaves the trigger focused; blur so the end state matches a real mouse user.
     await step('blurring clears the focus', async () => {
       trigger.blur();
       await expect(trigger).not.toHaveFocus();
