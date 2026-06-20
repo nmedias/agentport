@@ -51,7 +51,12 @@ function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.G
   return <SelectPrimitive.Group data-slot="select-group" {...props} />;
 }
 
-function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
+interface SelectValueProps extends Omit<React.ComponentProps<typeof SelectPrimitive.Value>, 'placeholder'> {
+  /** Content shown while no value is selected (greyed via `data-placeholder` on the trigger). */
+  placeholder?: React.ReactNode;
+}
+
+function SelectValue({ ...props }: SelectValueProps) {
   return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
@@ -151,7 +156,19 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
   );
 }
 
-function SelectItem({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) {
+interface SelectItemProps extends Omit<React.ComponentProps<typeof SelectPrimitive.Item>, 'value' | 'disabled' | 'textValue'> {
+  /** The value submitted when this item is selected — required, unique within the select. */
+  value: string;
+  /**
+   * Disables the item — not selectable, dimmed.
+   * @default false
+   */
+  disabled?: boolean;
+  /** Typeahead text when the item's content isn't plain text (so the keyboard search still matches). */
+  textValue?: string;
+}
+
+function SelectItem({ className, children, ...props }: SelectItemProps) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -223,4 +240,4 @@ export {
   SelectTrigger,
   SelectValue,
 };
-export type { SelectProps, SelectTriggerProps, SelectContentProps };
+export type { SelectProps, SelectTriggerProps, SelectContentProps, SelectItemProps, SelectValueProps };

@@ -7,8 +7,6 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -32,20 +30,12 @@ const meta: Meta<typeof Select> = {
   component: Select,
   // The Autodocs ArgsTable follows meta.component → the Select ROOT props (value/defaultValue/
   // onValueChange/open/disabled/required/name) from SelectProps JSDoc. `subcomponents` adds an ArgsTable
-  // tab for EVERY exported part (not just the one with curated props) so the full composite API is
-  // documented — react-docgen reads each part's own props (SelectTrigger.size, SelectContent.position/
-  // align) + the inherited Radix surface.
-  subcomponents: {
-    SelectTrigger,
-    SelectContent,
-    SelectItem,
-    SelectGroup,
-    SelectLabel,
-    SelectSeparator,
-    SelectValue,
-    SelectScrollUpButton,
-    SelectScrollDownButton,
-  },
+  // tab per part — but ONLY for parts with a documentable own API (curated flat props via /docgen-props):
+  // SelectTrigger (size), SelectContent (position/align), SelectItem (value/disabled/textValue), SelectValue
+  // (placeholder). The purely structural pass-throughs (Group/Label/Separator/ScrollButtons) have no own
+  // props → react-docgen yields nothing → an empty "couldn't be auto-generated" tab, so they're omitted
+  // (their use is shown in the Groups/Scrollable stories, not a broken table).
+  subcomponents: { SelectTrigger, SelectContent, SelectItem, SelectValue },
   tags: ['autodocs'],
   args: { disabled: false },
   // type · description · enum come from SelectProps JSDoc via react-docgen (see select.tsx). argTypes
@@ -86,13 +76,11 @@ export const Default: StoryObj<
     size: {
       control: 'inline-radio',
       options: ['sm', 'default'],
-      description: 'Trigger height — a `SelectTrigger` prop (`default` h-8 / compact `sm` h-7).',
       table: { category: 'SelectTrigger', defaultValue: { summary: '"default"' } },
     },
     position: {
       control: 'inline-radio',
       options: ['item-aligned', 'popper'],
-      description: 'Dropdown positioning — a `SelectContent` prop (`item-aligned` overlaps the value; `popper` anchors below).',
       table: { category: 'SelectContent', defaultValue: { summary: '"item-aligned"' } },
     },
     align: {
@@ -102,7 +90,7 @@ export const Default: StoryObj<
       table: { category: 'SelectContent', defaultValue: { summary: '"center"' } },
     },
   },
-  render: ({ size, position, align, ...args }) => (
+  render: ({ size, position, align,  ...args }) => (
     <Select {...args}>
       <SelectTrigger aria-label="Favorite fruit" className="w-50" size={size}>
         <SelectValue placeholder="Select a fruit" />
