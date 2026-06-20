@@ -552,6 +552,10 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     (ihre Nutzung zeigen die Usage-Stories). **Controls ≠ subcomponents:** `subcomponents` = nur statische Doc-Tabellen;
     **Controls** entstehen NUR aus den `args` einer Story (für `meta.component` auto, sonst als Story-lokaler arg
     durchgereicht — `size`→Trigger, `position`/`align`→Content). (s. #61c)
+    **Pattern (Composite-Sub-Part-Controls, `/storybook-rules`):** damit jeder Sub-Part-Prop EINEN Live-Control hat,
+    je API-tragendem Part eine eigene Story — `Default` zeigt nur die `meta.component`-(Root-)Controls, je Part eine
+    `<Part>Controls`-Story mit `controls: { include: [<die Part-Props>] }` (scopt das Panel) + eigenem arg-Shape + `play`,
+    das den Prop-Effekt assertet. (Select 06-20: TriggerControls/ContentControls/ItemControls/ValueControls.)
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.

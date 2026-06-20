@@ -906,8 +906,10 @@ status_note: >
     auto-generated"-Tabs — findings #57/#61c). Controls (size/position/align) = Story-lokale args auf Default (subcomponents = nur Docs).
     docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
     SelectTriggerProps (size) + SelectContentProps (position/align) + SelectItemProps (value/disabled/textValue) +
-    SelectValueProps (placeholder) [alle 06-20]. Stories: Default (play: open→Blueberry→assert→blur) ·
-    Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus). Skip-Log: RTL (locale),
+    SelectValueProps (placeholder) [alle 06-20]. Stories: Default (nur Select-Root-Controls; play: open→Blueberry→assert→blur) ·
+    Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus) ·
+    **Per-Subcomponent-Control-Stories** (06-20, je controls.include-scoped + play): TriggerControls (size/disabled) ·
+    ContentControls (position/align) · ItemControls (value/disabled/textValue) · ValueControls (placeholder). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
     Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
     FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member
