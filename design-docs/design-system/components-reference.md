@@ -908,8 +908,10 @@ status_note: >
     SelectTriggerProps (size) + SelectContentProps (position/align) + SelectItemProps (value/disabled/textValue) +
     SelectValueProps (placeholder) [alle 06-20]. Stories: Default (nur Select-Root-Controls; play: open→Blueberry→assert→blur) ·
     Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) · TriggerStates (size×state, pseudo-focus) ·
-    **Per-Subcomponent-Control-Stories** (06-20, je controls.include-scoped + play): TriggerControls (size/disabled) ·
-    ContentControls (position/align) · ItemControls (value/disabled/textValue) · ValueControls (placeholder). Skip-Log: RTL (locale),
+    **Per-Subcomponent-Control-Stories** (06-20, je controls.include-scoped + play; Anzeige-Name = Part, Export
+    kollisionsfrei): SelectTrigger (size/disabled) · SelectContent (position/align) · SelectItem (value/disabled;
+    textValue dokumentiert aber KEIN Control — unsichtbarer Typeahead-Effekt, no-op bei Text-Children) · SelectValue
+    (placeholder). Skip-Log: RTL (locale),
     Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
     Projekt). figma-verify CLEAN; Gate grün (typecheck + test 236 inkl. 6 Select-Specs + 6 Story-Tests mit axe + lint).
     FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member
