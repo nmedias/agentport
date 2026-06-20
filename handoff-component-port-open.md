@@ -46,6 +46,10 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    — offen. **Neu 06-19 (Select-Port): Findings 52–58** — Slot-Merge-Timing · Section-Koord-Doppel-Offset (schärft #16) ·
    Section-Auto-Grow · 1-Removal-pro-Call (schärft #48) · radix-Umbrella-Scope (verengt #3) · Composite-Doc-Prop-Split
    (`subcomponents`) · Select-jsdom-Polyfill-Heuristik — offen.
+   **Neu 06-20 (Select-Review): Findings 59–61** + #57-Schärfung — anchored-Overlay-Composition (Content als absolut-
+   pos. Slot) · `/figma-verify` ist strukturell → Examples screenshotten (Analogon #11) · Sibling-Surface spiegeln
+   (Trigger focus-invalid+gated Ring · Item showIcon-Bool · alle Doc-Subcomponents) — offen. SB2 (Invalid-Story) =
+   kein Skill-Thema (kanonischer Example-Name, Port-Fehler).
 2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
    Branch `feat/form-toggles-port`). **Select 06-19 portiert** (Composite, Branch `feat/select-port`; Figma via
    Background-Agent ausgelagert, Code parallel; Findings A–G s. u.). Kandidaten für den nächsten Schritt: **Slider**
@@ -532,9 +536,52 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     zieht nur `meta.component`; ein zweites dokumentiertes Teil (`SelectTrigger.size` neben den `Select`-Root-Props)
     braucht `meta.subcomponents` (zweite Tabelle) + den Sub-Control als **Story-lokalen** arg (er erreicht den
     meta.component nicht). Regel für `/storybook-rules` (Composite-Prop-Split) + `/docgen-props` (Sub-Part annotieren).
+    **Update (Select-Review 06-20):** `subcomponents` muss ALLE exportierten Parts führen, nicht nur das eine mit
+    eigenen Props — sonst ist die Composite-API in den Docs unvollständig (s. #61c).
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
+
+### Offen — Select-Review (Defekte → Skill-Lücken) — neu 06-20
+
+Quelle: User-Review des Select-Ports (Figma + Storybook). Drei neue Findings + zwei Schärfungen; die zugehörigen
+Komponenten-Defekte werden separat gefixt (Code = main, Figma = Re-Brief des Background-Agents).
+
+**composites.md (Anchored-Overlay-Composite):**
+
+59. **Anchored-Overlay-Composite → Open-State braucht den Overlay-Part als ABSOLUT positionierten, am Trigger
+    verankerten Slot** *(Select #6: „select main component fehlt")* — composites.md deckt bisher nur ZENTRIERTE
+    Overlays (Dialog-Scrim, Command-Palette mittig). Select/Dropdown/Popover/Combobox sind *anchored*: Content schwebt
+    unter/über dem Trigger. Figma kann nicht „öffnen" → eine **Top-Level-Composition** (`Select`) modellieren, die eine
+    Trigger-Instanz + eine Content-Instanz in einem `ABSOLUTE`/`layoutPositioning`-Child (Anchor = Trigger-Kante) nestet —
+    NICHT nur die getrennten Trigger-/Item-/Panel-Sets shippen. Das ist composites.md T4 Layer 3 für den anchored Fall;
+    figma-build.md sollte das `layoutPositioning=ABSOLUTE`-Anchor-Rezept führen.
+
+**SKILL.md T5 + figma-build.md §Usage-examples (Done-Test ist nicht nur strukturell):**
+
+60. **`/figma-verify` ist STRUKTURELL — die reproduzierten Examples zusätzlich SCREENSHOTEN + eyeballen** *(Select #3
+    headline-los · #7 Group-Example falsch + unverifiziert)* — Vektor/Clip/Overlap/Padding-Symmetrie passieren, aber die
+    *semantische* Korrektheit eines Examples (richtige Komposition? jeder Block mit Label?) sieht der Verify NICHT → ein
+    falsch oder headline-los gebautes Example besteht trotzdem. §Usage-examples sagt bereits „one labeled block per example
+    (mirror the sibling Sections)" — der Build droppte die Headlines, der Agent screenshottete die Gruppe nie. Fix: T5
+    Schritt 3 erzwingt einen **Screenshot der Usage-Examples-Gruppe** + Eyeball (Labels da? Komposition korrekt?). Figma-
+    Analogon zu #11 (Code-Render-Check ist zahnlos ohne echtes Rendern).
+
+**SKILL.md T2.6 + composites.md + /docgen-props/storybook-rules (Sibling-Surface spiegeln):**
+
+61. **Ein Port in eine bestehende Familie/Composite muss die Exposure-Surface des NÄCHSTEN geporteten Siblings spiegeln —
+    nicht eine dünnere aus Stock-Source + Brief ableiten** *(Select: 3 Instanzen)* — vor T2.6/T4 die Sibling-Surface aus
+    dem Katalog lesen:
+    - **(a) Trigger-State-Achse = Input-Familien-Kanon** — `focus-invalid` als kombinierter Member UND invalid-Ring
+      **focus-gated** (`aria-invalid:ring-[3px]` RAUS, Breite nur aus `focus-visible:ring-[3px]`; Border + `ring-destructive/20`
+      bleiben). 6 Siblings haben das (Input/Textarea/InputGroup/Checkbox/Switch/Radio); der Select-Trigger hatte nur
+      `[default,focus,disabled,invalid]` + ungateten Ring.
+    - **(b) Optionales Leading-Element = Boolean** — `showIcon`-Bool wie CommandItem (`showIcon#3559:5` + Icon-Slot/Swap),
+      NICHT ein nicht-abschaltbarer Slot-Default. (= Mechanism-Tabelle „fixed element on/off → Boolean".)
+    - **(c) Doc-Subcomponents = ALLE exportierten Parts** (→ schärft #57), nicht nur das eine mit eigenen Props; eigene
+      Parts (SelectGroup) als eigenes Set modellieren, nicht inline im Example.
+    Querverweis #21 (Story-Control-Scoping vom Sibling übernehmen) + #5 (Caveat: Sibling-*Surface* ja, Sibling-*Werte*
+    trotzdem prüfen — Vorgänger nicht blind autoritativ).
 
 ## Quellen
 
