@@ -69,11 +69,19 @@ export default meta;
 type Story = StoryObj<typeof Select>;
 
 // Bare playground — a complete working Select. Root props (disabled/required/value…) spread onto
-// <Select> and surface in the main ArgsTable; the trigger's `size` is a story-local control (a
-// sub-part prop the meta component can't reach) shown in the SelectTrigger subcomponent table. No
-// controls.include — it would filter the table. The play test drives it: open, pick, assert value.
-export const Default: StoryObj<React.ComponentProps<typeof Select> & { size?: 'sm' | 'default' }> = {
-  args: { size: 'default' },
+// <Select> and surface in the main ArgsTable; sub-part props the meta component can't reach are wired
+// as story-local controls so they're actually live (Storybook builds controls from a story's args —
+// `subcomponents` only adds static doc ArgsTables, never controls): `size` → SelectTrigger,
+// `position`/`align` → SelectContent (the "align item with trigger" demo). No controls.include — it
+// would filter the table. The play test drives it: open, pick, assert value.
+export const Default: StoryObj<
+  React.ComponentProps<typeof Select> & {
+    size?: 'sm' | 'default';
+    position?: 'item-aligned' | 'popper';
+    align?: 'start' | 'center' | 'end';
+  }
+> = {
+  args: { size: 'default', position: 'item-aligned', align: 'center' },
   argTypes: {
     size: {
       control: 'inline-radio',
@@ -81,13 +89,25 @@ export const Default: StoryObj<React.ComponentProps<typeof Select> & { size?: 's
       description: 'Trigger height — a `SelectTrigger` prop (`default` h-8 / compact `sm` h-7).',
       table: { category: 'SelectTrigger', defaultValue: { summary: '"default"' } },
     },
+    position: {
+      control: 'inline-radio',
+      options: ['item-aligned', 'popper'],
+      description: 'Dropdown positioning — a `SelectContent` prop (`item-aligned` overlaps the value; `popper` anchors below).',
+      table: { category: 'SelectContent', defaultValue: { summary: '"item-aligned"' } },
+    },
+    align: {
+      control: 'inline-radio',
+      options: ['start', 'center', 'end'],
+      description: 'Alignment against the trigger — a `SelectContent` prop (popper positioning only).',
+      table: { category: 'SelectContent', defaultValue: { summary: '"center"' } },
+    },
   },
-  render: ({ size, ...args }) => (
+  render: ({ size, position, align, ...args }) => (
     <Select {...args}>
       <SelectTrigger aria-label="Favorite fruit" className="w-50" size={size}>
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent position={position} align={align}>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
           <SelectItem value="apple">Apple</SelectItem>
