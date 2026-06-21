@@ -217,10 +217,13 @@ export const Palette: Story = {
 export const PaletteFlat: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <Command variant="palette" className="w-[720px]">
+    // Flat = STATIC list: shouldFilter={false} stops cmdk re-sorting items by match score (the labeled
+    // separators have no item scope, so a re-sort drifts items across them); alwaysRender keeps the
+    // captions visible while typing. Groups (the Palette story) are the searchable alternative.
+    <Command variant="palette" className="w-[720px]" shouldFilter={false}>
       <CommandInput placeholder="type a command, jump or search" />
       <CommandList>
-        <CommandSeparator label="Jump to" alwaysRender/>
+        <CommandSeparator label="Jump to" alwaysRender />
         <CommandItem>
           <RiArrowRightLine />
           <span>invoice</span>
@@ -231,7 +234,7 @@ export const PaletteFlat: Story = {
           <span>customer</span>
           <CommandShortcut>Type · Custom</CommandShortcut>
         </CommandItem>
-        <CommandSeparator label="Search" alwaysRender/>
+        <CommandSeparator label="Search" alwaysRender />
         <CommandItem>
           <RiSearchLine />
           <span>Search all types</span>

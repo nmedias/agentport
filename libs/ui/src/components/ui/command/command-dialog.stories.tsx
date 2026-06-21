@@ -378,6 +378,11 @@ function PaletteFlatDialogDemo() {
         title="Agentport Command Palette"
         description="Befehl, Sprung oder Suche eingeben…"
         className="sm:max-w-[720px]"
+        // Flat = STATIC list: cmdk would otherwise re-sort items by match score on typing/clearing,
+        // but the labeled separators have no item scope and stay fixed → items drift across them.
+        // shouldFilter={false} keeps the order stable (no re-sort). Groups (the Palette story) are the
+        // searchable alternative.
+        shouldFilter={false}
       >
         <CommandInput placeholder="type a command, jump or search" />
         <CommandList>

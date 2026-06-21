@@ -33,7 +33,9 @@ type Story = StoryObj<typeof CommandSeparator>;
 // API playground — the separator captioning a flat item list; clear `label` to get the plain divider line.
 export const Default: Story = {
   render: ({ label }) => (
-    <Command className="w-[450px]">
+    // shouldFilter={false}: a labeled separator has no item scope, so cmdk's filter re-sort would drift
+    // items across it — a flat labeled-separator list is static (see the CommandSeparator docs).
+    <Command className="w-[450px]" shouldFilter={false}>
       <CommandInput placeholder="Type a command or search…" />
       <CommandList>
         <CommandSeparator label={label} alwaysRender />

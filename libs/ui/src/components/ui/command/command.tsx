@@ -99,6 +99,12 @@ interface CommandDialogProps
   showCloseButton?: boolean;
   /** DS surface variant forwarded to the inner Command. @default "default" */
   variant?: CommandVariant;
+  /**
+   * Whether cmdk filters + re-sorts the inner Command by the query. Set `false` for a static/composed
+   * list — a FLAT labeled-separator palette MUST set this, or cmdk's re-sort scrambles items across the
+   * scope-less separators. @default true
+   */
+  shouldFilter?: boolean;
   // The open/modal props are re-declared FLAT (Omit'd from the inherited Dialog type, re-added with
   // JSDoc) so react-docgen surfaces them on this component — the `extends ComponentProps<typeof Dialog>`
   // chain carries the names but loses the JSDoc, leaving empty ArgsTable rows.
@@ -125,6 +131,7 @@ function CommandDialog({
   className,
   showCloseButton = false,
   variant = 'default',
+  shouldFilter,
   ...props
 }: CommandDialogProps) {
   return (
@@ -141,7 +148,7 @@ function CommandDialog({
         )}
         showCloseButton={showCloseButton}
       >
-        <Command variant={variant} className="border-0 shadow-none">
+        <Command variant={variant} shouldFilter={shouldFilter} className="border-0 shadow-none">
           {children}
         </Command>
       </DialogContent>
