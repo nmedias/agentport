@@ -50,6 +50,12 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    pos. Slot) · `/figma-verify` ist strukturell → Examples screenshotten (Analogon #11) · Sibling-Surface spiegeln
    (Trigger focus-invalid+gated Ring · Item showIcon-Bool · alle Doc-Subcomponents) — offen. SB2 (Invalid-Story) =
    kein Skill-Thema (kanonischer Example-Name, Port-Fehler).
+   **Neu/korrigiert 06-21:** **#57 final umgeschrieben** — Composite-Sub-Parts dokumentieren = **eigenes Story-File
+   je API-Part** (RadioGroupItem-Muster), NICHT `meta.subcomponents` (frühere Tracker-Beschreibung „subcomponents"
+   ist überholt; die verbrannte subcomponents-Iteration bleibt als Warum drin). Angewandt auf **Select · Field ·
+   Dialog · InputGroup · Command**; inkl. „Zwei Part-Page-Fallen" (source.code-Snippet bei Wrapper-render +
+   Omit/re-declare geerbter Props für vollständige ArgsTable). **Finding 62** (neu) — flache Command-Palette =
+   statisch → `shouldFilter={false}` (cmdk re-sortiert sonst Items über die scope-losen labeled Separatoren) — offen.
 2. **Composite-Strang: nichts offen.** **Checkbox · Switch · RadioGroup 06-12 portiert** (Form-Toggle-Batch,
    Branch `feat/form-toggles-port`). **Select 06-19 portiert** (Composite, Branch `feat/select-port`; Figma via
    Background-Agent ausgelagert, Code parallel; Findings A–G s. u.). Kandidaten für den nächsten Schritt: **Slider**
