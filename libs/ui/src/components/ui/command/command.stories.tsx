@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent } from 'storybook/test';
 import {
@@ -15,11 +14,8 @@ import {
   RiDownloadLine,
 } from '@remixicon/react';
 
-import { Button } from '../button';
-import { Kbd } from '../kbd';
 import {
   Command,
-  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
@@ -210,51 +206,6 @@ export const Palette: Story = {
       <CommandSeparator alwaysRender />
     </Command>
   ),
-};
-
-// The palette inside CommandDialog — the Agentport ⌘K palette. variant="palette" on the
-// dialog wrapper re-shapes the panel (corner-md, 1.5px border) and flows into the
-// inner Command.
-function PaletteDialogDemo() {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
-    };
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, []);
-
-  return (
-    <>
-      <Button variant="outline" onClick={() => setOpen(true)}>
-        Agentport-Palette
-        <Kbd>⌘K</Kbd>
-      </Button>
-      <CommandDialog
-        variant="palette"
-        open={open}
-        onOpenChange={setOpen}
-        title="Agentport Command Palette"
-        description="Befehl, Sprung oder Suche eingeben…"
-        className="sm:max-w-[720px]"
-      >
-        <CommandInput placeholder="type a command, jump or search" />
-        <CommandList>
-          <PaletteListContent />
-        </CommandList>
-      </CommandDialog>
-    </>
-  );
-}
-
-export const PaletteInDialog: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => <PaletteDialogDemo />,
 };
 
 // The flat alternative to grouped content: CommandSeparator with a label renders the

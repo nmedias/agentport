@@ -1,9 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { RiCalendarLine, RiSettings3Line, RiUserLine } from '@remixicon/react';
+import {
+  RiArrowRightLine,
+  RiArrowUpDownLine,
+  RiCalendarLine,
+  RiDownloadLine,
+  RiPlayLine,
+  RiSearchLine,
+  RiSettings3Line,
+  RiUserLine,
+} from '@remixicon/react';
 
 import { Button } from '../button';
+import { Kbd } from '../kbd';
 import {
   CommandDialog,
   CommandEmpty,
@@ -161,4 +171,104 @@ export const Default: Story = {
       await waitFor(() => expect(body.queryByRole('combobox')).toBeNull());
     });
   },
+};
+
+// Shared palette list content for the palette-variant demo — mirrors the Figma "Example · palette-demo"
+// (3650:63): three groups (jump / search / run) with trailing meta via CommandShortcut. (The inline
+// UI/Command Palette story keeps its own copy — story content, local per page.)
+function PaletteListContent() {
+  return (
+    <>
+      <CommandEmpty>No results.</CommandEmpty>
+      <CommandGroup heading="Jump to">
+        <CommandItem>
+          <RiArrowRightLine />
+          <span>invoice</span>
+          <CommandShortcut>Type · System</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <RiArrowRightLine />
+          <span>customer</span>
+          <CommandShortcut>Type · Custom</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <RiArrowUpDownLine />
+          <span>Switch endpoint …</span>
+          <CommandShortcut>client.example.org</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandGroup heading="Search">
+        <CommandItem>
+          <RiSearchLine />
+          <span>Field “amount…” in invoice</span>
+          <CommandShortcut>7 matches</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <RiSearchLine />
+          <span>Search all types</span>
+          <CommandShortcut>global</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+      <CommandGroup heading="Run">
+        <CommandItem>
+          <RiPlayLine />
+          <span>Run query</span>
+          <CommandShortcut>active query</CommandShortcut>
+        </CommandItem>
+        <CommandItem>
+          <RiDownloadLine />
+          <span>Export result</span>
+          <CommandShortcut>CSV · JSON</CommandShortcut>
+        </CommandItem>
+      </CommandGroup>
+    </>
+  );
+}
+
+// The palette variant inside CommandDialog — the Agentport ⌘K palette. variant="palette" on the dialog
+// wrapper re-shapes the panel (corner-md, 1.5px border) and flows into the inner Command. Toggled with
+// ⌘K / Ctrl+K; starts closed (the docs view shows the button). Moved here from UI/Command.
+function PaletteDialogDemo() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        Agentport-Palette
+        <Kbd>⌘K</Kbd>
+      </Button>
+      <CommandDialog
+        variant="palette"
+        open={open}
+        onOpenChange={setOpen}
+        title="Agentport Command Palette"
+        description="Befehl, Sprung oder Suche eingeben…"
+        className="sm:max-w-[720px]"
+      >
+        <CommandInput placeholder="type a command, jump or search" />
+        <CommandList>
+          <PaletteListContent />
+        </CommandList>
+      </CommandDialog>
+    </>
+  );
+}
+
+// The palette-variant CommandDialog (the Agentport ⌘K). Render-only showcase (no play) — starts closed,
+// open via the button or ⌘K. Moved from UI/Command's "PaletteInDialog" to live beside the other
+// CommandDialog stories.
+export const Palette: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <PaletteDialogDemo />,
 };
