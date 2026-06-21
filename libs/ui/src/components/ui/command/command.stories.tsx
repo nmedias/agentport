@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent } from 'storybook/test';
 import {
   RiCalendarLine,
   RiEmotionLine,
@@ -144,98 +144,6 @@ export const Default: Story = {
   },
 };
 
-// The command-dialog doc example: the same palette inside a CommandDialog,
-// toggled with ⌘J / Ctrl+J like the demo. The DS Button (with the Kbd keycap as
-// shortcut hint) stays as a click affordance — it also pulls focus into the
-// preview iframe so the hotkey lands. Starts open so the story shows the
-// palette; Esc / overlay click close it.
-function CommandDialogDemo() {
-  const [open, setOpen] = useState(true);
-
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === 'j' && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
-      }
-    };
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
-  }, []);
-
-  return (
-    <>
-      <Button variant="outline" onClick={() => setOpen(true)}>
-        Open Command Palette
-        <Kbd>⌘J</Kbd>
-      </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search…" />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>
-              <RiCalendarLine />
-              <span>Calendar</span>
-            </CommandItem>
-            <CommandItem>
-              <RiEmotionLine />
-              <span>Search Emoji</span>
-            </CommandItem>
-            <CommandItem>
-              <RiCalculatorLine />
-              <span>Calculator</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>
-              <RiUserLine />
-              <span>Profile</span>
-              <CommandShortcut>⌘P</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <RiBankCardLine />
-              <span>Billing</span>
-              <CommandShortcut>⌘B</CommandShortcut>
-            </CommandItem>
-            <CommandItem>
-              <RiSettings3Line />
-              <span>Settings</span>
-              <CommandShortcut>⌘S</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
-    </>
-  );
-}
-
-export const InDialog: Story = {
-  parameters: { controls: { disable: true } },
-  render: () => <CommandDialogDemo />,
-  play: async ({ step }) => {
-    // CommandDialog portals to document.body (Radix), OUTSIDE the story canvas — so the
-    // palette is queried via within(document.body), not `canvas`. It starts open.
-    const body = within(document.body);
-    const input = await body.findByRole('combobox');
-
-    await step('the portalled palette filters as you type', async () => {
-      await userEvent.type(input, 'Profile');
-      await expect(
-        await body.findByRole('option', { name: /profile/i })
-      ).toBeInTheDocument();
-      await expect(body.queryByRole('option', { name: /calendar/i })).toBeNull();
-    });
-
-    await step('a non-matching query surfaces the empty state', async () => {
-      await userEvent.clear(input);
-      await userEvent.type(input, 'zxcvbnm');
-      await expect(await body.findByText('No results found.')).toBeInTheDocument();
-    });
-  },
-};
-
 // Shared palette list content — mirrors the Figma "Example · palette-demo" (3650:63):
 // three groups (jump / search / run) with trailing meta via CommandShortcut.
 function PaletteListContent() {
@@ -308,7 +216,7 @@ export const Palette: Story = {
 // dialog wrapper re-shapes the panel (corner-md, 1.5px border) and flows into the
 // inner Command.
 function PaletteDialogDemo() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {

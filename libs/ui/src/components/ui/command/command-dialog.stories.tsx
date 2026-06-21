@@ -27,7 +27,7 @@ function CommandDialogDemo({
   variant?: 'default' | 'palette';
   showCloseButton?: boolean;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
@@ -95,14 +95,62 @@ type Story = StoryObj<typeof CommandDialog>;
 
 // API playground — the palette opens in a portal; toggle variant / showCloseButton. The play drives the
 // portalled palette (filter as you type) and closes it on Escape.
+//
+// The render delegates to a wrapper (CommandDialog has no trigger → it needs a controlled `open` + state),
+// so the auto-generated snippet would only show `<CommandDialogDemo />`. An explicit `source.code` shows the
+// real, full implementation a consumer writes instead.
 export const Default: Story = {
+  parameters: {
+    docs: {
+      source: {
+        code: `
+        const [open, setOpen] = useState(true);
+
+        return (
+          <CommandDialog
+            open={open}
+            onOpenChange={setOpen}
+            title="Command Palette"
+            description="Search for a command to run…"
+          >
+            <CommandInput placeholder="Type a command or search…" />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup heading="Suggestions">
+                <CommandItem>
+                  <RiCalendarLine />
+                  <span>Calendar</span>
+                </CommandItem>
+                <CommandItem>
+                  <RiUserLine />
+                  <span>Profile</span>
+                  <CommandShortcut>⌘P</CommandShortcut>
+                </CommandItem>
+                <CommandItem>
+                  <RiSettings3Line />
+                  <span>Settings</span>
+                  <CommandShortcut>⌘S</CommandShortcut>
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </CommandDialog>
+        );`,
+      },
+    },
+  },
   render: (args) => <CommandDialogDemo {...args} />,
-  play: async ({ step }) => {
-    // CommandDialog portals to document.body → query it there, not the canvas. It starts open.
+  play: async ({ canvas, step }) => {
+    // CommandDialog portals to document.body → query it there, not the canvas. The demo starts closed,
+    // so open it from the button first.
     const body = within(document.body);
-    const input = await body.findByRole('combobox');
+
+    await step('opens the palette from the button', async () => {
+      await userEvent.click(canvas.getByRole('button', { name: 'Open Command Palette' }));
+      await expect(await body.findByRole('combobox')).toBeInTheDocument();
+    });
 
     await step('the portalled palette filters as you type', async () => {
+      const input = await body.findByRole('combobox');
       await userEvent.type(input, 'Profile');
       await expect(await body.findByRole('option', { name: /profile/i })).toBeInTheDocument();
       await expect(body.queryByRole('option', { name: /calendar/i })).toBeNull();

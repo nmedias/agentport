@@ -84,7 +84,11 @@ function Command({
 // override is dropped (DialogContent is already corner-xl); the inner Command
 // sheds its frame (border-0 — the panel owns border + elevation; the inner
 // shadow is clipped by the panel's overflow-hidden either way).
-interface CommandDialogProps extends React.ComponentProps<typeof Dialog> {
+interface CommandDialogProps
+  extends Omit<
+    React.ComponentProps<typeof Dialog>,
+    'open' | 'defaultOpen' | 'onOpenChange' | 'modal'
+  > {
   /** Visually-hidden dialog title (the a11y name). @default "Command Palette" */
   title?: string;
   /** Visually-hidden dialog description. @default "Search for a command to run…" */
@@ -95,6 +99,23 @@ interface CommandDialogProps extends React.ComponentProps<typeof Dialog> {
   showCloseButton?: boolean;
   /** DS surface variant forwarded to the inner Command. @default "default" */
   variant?: CommandVariant;
+  // The open/modal props are re-declared FLAT (Omit'd from the inherited Dialog type, re-added with
+  // JSDoc) so react-docgen surfaces them on this component — the `extends ComponentProps<typeof Dialog>`
+  // chain carries the names but loses the JSDoc, leaving empty ArgsTable rows.
+  /** Controlled open state (pair with `onOpenChange`). CommandDialog has no trigger — drive it here. */
+  open?: boolean;
+  /**
+   * Open state when uncontrolled.
+   * @default false
+   */
+  defaultOpen?: boolean;
+  /** Called with the next open state whenever the palette opens or closes. */
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * When `true` the overlay blocks the page and traps focus; `false` leaves the rest interactive.
+   * @default true
+   */
+  modal?: boolean;
 }
 
 function CommandDialog({

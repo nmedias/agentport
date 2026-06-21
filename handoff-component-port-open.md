@@ -570,6 +570,12 @@ Plugin-Verbindung, Agent exklusiv auf Figma, main code-only).
     `showCloseButton` controlled-open + Portal-play, CommandSeparator `label` = Labeled-Rule; cmdk-Root behält seinen
     `variant`-Control auf der Hauptseite). Bestätigt, dass das RadioGroupItem-Muster generalisiert; der nächste
     Composite-Port folgt ihm direkt (kein subcomponents-Umweg).
+    **Zwei Part-Page-Fallen (CommandDialog-Review):** (1) **Snippet** — delegiert der `render` an eine Wrapper-Komponente
+    (nötig bei controlled-open Composites ohne Trigger-Slot), zeigt „Show code" nur `<Demo/>`; explizites
+    `parameters.docs.source.code` mit der vollen Implementierung setzen. (2) **ArgsTable unvollständig** — geerbte Props
+    via `extends React.ComponentProps<typeof X>` tauchen NAMENTLICH auf, aber react-docgen verliert die JSDoc → leere
+    Description/Default-Zeilen. Fix = die zu dokumentierenden geerbten Props **Omit + flach re-deklarieren** (JSDoc) im
+    Part-Props-Interface (wie es DialogProps für open/defaultOpen/onOpenChange/modal tut; CommandDialogProps zog nach).
 58. **Radix Select braucht KEINEN jsdom-Polyfill, wenn Specs nur „closed" rendern** *(G)* — SelectContent liegt im Portal
     (mountet erst on-open) → ein Trigger/Root-only-Spec läuft ohne `scrollIntoView`/`hasPointerCapture`; den Open-Pfad
     übers Chromium-Storybook-Projekt (play) abdecken. Heuristik für §T6 Headless lib.
