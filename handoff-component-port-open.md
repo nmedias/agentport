@@ -626,6 +626,17 @@ Komponenten-Defekte werden separat gefixt (Code = main, Figma = Re-Brief des Bac
     Querverweis #21 (Story-Control-Scoping vom Sibling übernehmen) + #5 (Caveat: Sibling-*Surface* ja, Sibling-*Werte*
     trotzdem prüfen — Vorgänger nicht blind autoritativ).
 
+### Offen — Command/cmdk (flache Palette) — neu 06-21
+
+62. **Flache Command-Palette (labeled `CommandSeparator` statt `CommandGroup`) MUSS `shouldFilter={false}`** *(Command
+    flat-palette review)* — cmdk re-sortiert beim Filtern die *Items* nach Match-Score; ein labeled `CommandSeparator`
+    ist KEIN Item (kein Scope) und bleibt fix → beim Tippen/Leeren driften die Items über die `alwaysRender`-Separatoren
+    in die falsche Rubrik (sichtbarer „weird grouping"-Bug). Eine flache Liste ist **statisch** → `shouldFilter={false}`
+    (kein Re-Sort) + `alwaysRender` auf den Captions. Gruppen (`CommandGroup`) bleiben die **suchbare** Alternative
+    (cmdk sortiert innerhalb der Gruppe → Items bleiben in ihrer Sektion). `CommandDialog` reicht `shouldFilter` jetzt
+    an die innere `Command` durch (vorher nicht möglich). Angewandt: CommandDialog `PaletteFlat`, inline `PaletteFlat`,
+    `CommandSeparator`-Seite. *(Inline in command.tsx + den Stories dokumentiert.)*
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
