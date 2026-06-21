@@ -21,6 +21,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
   CommandShortcut,
 } from './command';
 
@@ -269,6 +270,128 @@ function PaletteDialogDemo() {
 // open via the button or ⌘K. Moved from UI/Command's "PaletteInDialog" to live beside the other
 // CommandDialog stories.
 export const Palette: Story = {
-  parameters: { controls: { disable: true } },
+  parameters: {
+     controls: {disable: true},
+      docs: {
+        source: {
+          code: `
+            const [open, setOpen] = useState(false);
+          
+            useEffect(() => {
+              const down = (e: KeyboardEvent) => {
+                if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  setOpen((open) => !open);
+                }
+              };
+              document.addEventListener('keydown', down);
+              return () => document.removeEventListener('keydown', down);
+            }, []);
+          
+            return (
+              <>
+                <Button variant="outline" onClick={() => setOpen(true)}>
+                  Agentport-Palette
+                  <Kbd>⌘K</Kbd>
+                </Button>
+                <CommandDialog
+                  variant="palette"
+                  open={open}
+                  onOpenChange={setOpen}
+                  title="Agentport Command Palette"
+                  description="Befehl, Sprung oder Suche eingeben…"
+                  className="sm:max-w-[720px]"
+                >
+                  <CommandInput placeholder="type a command, jump or search" />
+                  <CommandList>
+                    <PaletteListContent />
+                  </CommandList>
+                </CommandDialog>
+              </>`
+        }
+      }
+    },
   render: () => <PaletteDialogDemo />,
+};
+
+// Flat palette content — the same items as PaletteListContent but FLAT: items sit directly in the list,
+// captioned by labeled `CommandSeparator`s (eyebrow + hairline) instead of `CommandGroup` headings. The
+// labeled separator has no item scope, so `alwaysRender` keeps it visible (cmdk hides separators while
+// searching). Prefer this for static/composed palettes; groups for searchable ones (heading tracks items).
+function PaletteFlatListContent() {
+  return (
+    <>
+      <CommandEmpty>No results.</CommandEmpty>
+      <CommandSeparator label="Jump to" alwaysRender />
+      <CommandItem>
+        <RiArrowRightLine />
+        <span>invoice</span>
+        <CommandShortcut>Type · System</CommandShortcut>
+      </CommandItem>
+      <CommandItem>
+        <RiArrowRightLine />
+        <span>customer</span>
+        <CommandShortcut>Type · Custom</CommandShortcut>
+      </CommandItem>
+      <CommandSeparator label="Search" alwaysRender />
+      <CommandItem>
+        <RiSearchLine />
+        <span>Search all types</span>
+        <CommandShortcut>global</CommandShortcut>
+      </CommandItem>
+      <CommandSeparator label="Run" alwaysRender />
+      <CommandItem>
+        <RiPlayLine />
+        <span>Run query</span>
+        <CommandShortcut>active query</CommandShortcut>
+      </CommandItem>
+    </>
+  );
+}
+
+// The flat palette inside CommandDialog — same modal as Palette, but the inner list is composed flat
+// (labeled separators, no groups). Toggled with ⌘K / Ctrl+K; starts closed (the docs view shows the button).
+function PaletteFlatDialogDemo() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        Agentport-Palette (flach)
+        <Kbd>⌘K</Kbd>
+      </Button>
+      <CommandDialog
+        variant="palette"
+        open={open}
+        onOpenChange={setOpen}
+        title="Agentport Command Palette"
+        description="Befehl, Sprung oder Suche eingeben…"
+        className="sm:max-w-[720px]"
+      >
+        <CommandInput placeholder="type a command, jump or search" />
+        <CommandList>
+          <PaletteFlatListContent />
+        </CommandList>
+      </CommandDialog>
+    </>
+  );
+}
+
+// The flat-composition palette CommandDialog — the alternative to Palette's grouped content: labeled
+// CommandSeparators caption a flat item list instead of CommandGroup headings. Render-only showcase
+// (no play) — starts closed, open via the button or ⌘K.
+export const PaletteFlat: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <PaletteFlatDialogDemo />,
 };
