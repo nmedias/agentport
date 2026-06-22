@@ -926,6 +926,52 @@ status_note: >
     SelectGroup items-Slot, Select-Composition-Instanz, focus-invalid beide Größen). Code-Seite (subcomponents-Vollständigkeit,
     focus-gated ring, Invalid-Story, docgen SelectContent) lief parallel in main (Task #7).
 
+- name: Slider
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  source: { registry: "@shadcn", item: slider, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/slider/
+    exports: [Slider, SliderProps]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/slider'"
+  figma:
+    section: { name: "Slider", id: "4348:2225" }
+    set: { name: "Slider", id: "4351:2225" }       # 12 Member, 3 Achsen, 4×3 manuelles Grid (gemischte Member-Größen → kein WRAP)
+    members:
+      "orientation=horizontal, thumbs=single, state=default":  "4350:2225"
+      "orientation=horizontal, thumbs=single, state=focus":    "4350:2229"
+      "orientation=horizontal, thumbs=single, state=disabled": "4350:2233"
+      "orientation=horizontal, thumbs=range, state=default":   "4350:2237"
+      "orientation=horizontal, thumbs=range, state=focus":     "4350:2242"
+      "orientation=horizontal, thumbs=range, state=disabled":  "4350:2247"
+      "orientation=vertical, thumbs=single, state=default":    "4350:2252"
+      "orientation=vertical, thumbs=single, state=focus":      "4350:2256"
+      "orientation=vertical, thumbs=single, state=disabled":   "4350:2260"
+      "orientation=vertical, thumbs=range, state=default":     "4350:2264"
+      "orientation=vertical, thumbs=range, state=focus":       "4350:2269"
+      "orientation=vertical, thumbs=range, state=disabled":    "4350:2274"
+    anatomy: "Root (NONE, clip=false) › Track (FRAME, clip=true, bg input-fill-high, corner-full) › Range (RECT, bg primary-fill, corner-full) + 1–2 Thumb (RECT 12×12, bg surface, border input-border 1px INSIDE, corner-full). horiz Track 200×4 / vert 4×160. Range: horiz 0→Thumb, vert bottom→Thumb, range zwischen Thumbs."
+    axis: { orientation: [horizontal, vertical], thumbs: [single, range], state: [default, focus, disabled] }   # thumbs = Figma-only Fork (Code leitet Thumb-Zahl aus value.length ab, KEIN Prop — wie Field.controlPosition; NICHT als CVA zurücksyncen). KEIN invalid-State (stock-Slider hat keinen).
+    examples: { group: "Usage Examples 4354:2225", Default: "4354:2228", Range: "4354:2234", Vertical: "4354:2244", Disabled: "4354:2253", FieldSlider: "Field-Instanz 4355:2238 (control-Slot = Range-Slider-Instanz 4356:2249, label 'Price Range', description gewrappt)" }
+    vars: { input-fill-high: "4197:9645", primary-fill: "3037:8", input-border: "4197:9644", surface: "3037:2", corner-full: "3073:6" }
+    focus_glow: "literal DROP_SHADOW radius:0 spread:3 ring(ink/800)@50% sbn:false — verbatim von .Input focus 3176:305 (Glow-Rezept: NIE binden, sonst droppt die /50). Pro Thumb auf den focus-Membern; Member clip=false."
+  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
+  notes: >
+    Radix Slider (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Switch-Konvention),
+    kein CVA → Geometrie + State-Achsen wie Switch/Checkbox-Familie. Parts: Root › Track (rail) › Range (fill) +
+    N×Thumb (1 pro value; 2 = range). DS-Clothing: Track-rail = bg-input-fill-high (muted-fill #f9fcfd auf Weiß
+    unsichtbar → Switch-Präzedenz „off-track muss lesen"; Rolle>Name); Range = bg-primary-fill (DS „active/on surface"
+    = dunkles Navy deep/900, wie Switch-Track/Checkbox-Box/Radio-Dot — NICHT cyan primary); Thumb = bg-surface +
+    border-input-border (nova border-ring rollen-korrigiert → input-border, Sibling-Resting-Border) + focus-Ring
+    ring-ring/50 ring-[3px] (hover/focus-visible/active; ring-3→ring-[3px] B15). corner-full (rounded-full). Geometrie
+    numerisch: size-3 Thumb, h-1/w-1 Track (4px), min-h-40 vertical. dark: + inerte disabled:* am Thumb (span, kein
+    :disabled) belassen. A11Y: role="slider" sitzt am Thumb → Component FORWARDET aria-label/-labelledby an jeden Thumb
+    (sonst axe aria-input-field-name rot; Root-Label benennt nichts). thumbs-Achse = Figma-only Fork (range = 2 values).
+    Stories: Default (Playground + Keyboard-play) · Range · FieldSlider (Field-komponiert, schließt den 2026-06-12
+    Field-Skip field-slider) · Vertical · Disabled · AllStates-Galerie. KEIN jsdom-Polyfill nötig (ResizeObserver/
+    scrollIntoView lagen in test-setup.ts). figma-verify CLEAN-by-design (18 Thumb↔Track-Overlaps = beabsichtigte
+    Handle-auf-Rail-Geometrie). Gate grün (260 Tests: 5 Slider-Specs + 6 Slider-Stories + axe).
+
 ## Pending / Removed
 
 ```yaml

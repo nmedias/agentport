@@ -13,6 +13,7 @@ export * from './components/ui/kbd';
 export * from './components/ui/radio-group';
 export * from './components/ui/select';
 export * from './components/ui/separator';
+export * from './components/ui/slider';
 export * from './components/ui/switch';
 export * from './components/ui/textarea';
 export { cn } from './lib/utils';
