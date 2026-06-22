@@ -9,6 +9,9 @@ Recon (`snippets/recon.js`) → build (`snippets/build-variant-set.js`). **Incre
 `use_figma`, screenshot after each step. Bind every property to DS variables **by ID** (names carry
 group paths like `shadcn Default/primary`).
 
+Across calls `figma.currentPage` resets to the first page — `await setCurrentPageAsync(target)` at the
+START of every call, else new nodes land on page 1 and `combineAsVariants` throws "must be in the same page".
+
 ## Mechanism — code construct → Figma property
 
 What to model (**every port**, not just composites): decide **per consumer-variable content** by the
@@ -40,11 +43,15 @@ What to model (**every port**, not just composites): decide **per consumer-varia
   (spacing vars are `GAP`-scoped → cover gap AND padding).
 - **typography** → `setTextStyleIdAsync(formatId)` after `loadFontAsync` of that format's font.
 - **control height** → `resize(w,h)` THEN `layoutSizingHorizontal='HUG'`, `…Vertical='FIXED'`.
+- **variable lookup** → `getVariableByIdAsync` needs the full `VariableID:`-prefixed id; a bare `n:n`
+  returns `null` silently → binding `null` yields an unbound (black) paint. Pass the id verbatim.
 
 ## Slots (swappable / variable content)
 
 Slottable content (icon, leading/trailing adornment, avatar, …) = a real Figma slot:
-`component.createSlot()`, named consistently so it merges to ONE set-level `SLOT` property; drop a
+`component.createSlot()`, named consistently so it merges to ONE set-level `SLOT` property — **the
+merge happens at `combineAsVariants` time, so create slots on standalone comps BEFORE combining**;
+`createSlot` on already-combined members yields N separate un-merged props. Drop a
 sensible default inside (icon → `createNodeFromSvg`, inner VECTOR fill bound per variant; TEXT default →
 a `{Semantic}` placeholder, never committed copy — §Variant set assembly). Slots are
 per-component → the prop appears only on owning variants (fine).
@@ -58,11 +65,25 @@ same session → never assume):
   without growing it; **hug content** = slot `HUG/HUG`. Align (`CENTER/CENTER` …) is per-case, not a rule.
 - Bare `resize()` w/o auto-layout freezes size AND leaves content unmanaged — avoid.
 
+**Optional / toggleable slot** — bind a BOOLEAN property to the slot's `visible` directly; the slot stays
+a fillable SLOT (no wrapper, no FRAME conversion). Keep the parent auto-layout so the off-state collapses
+with no residual gap. (An empty *visible* slot still shows its ~100×100 default box — that's the slot
+geometry, not the toggle; HUG-config it per above if it must stay visible-but-empty.)
+
+**Cloning a variant member that owns a slot** — the clone stays a `SLOT` (NOT a FRAME), but its
+`componentPropertyReferences.slotContentId` is cleared, because the slot property lives on the **set**,
+not the member. After adding the clone as a new member, **re-bind** it
+(`slot.componentPropertyReferences = { slotContentId: '<prop>#id' }`) — don't recreate it via
+`createSlot()` (that auto-creates a second, zero-referenced slot property you'd then have to delete).
+A standalone (non-member) component clone keeps the binding (the property is on the component itself).
+
 **Filling a slot IN AN INSTANCE** (what `composites.md` T4 layer-4 — reproduced example instances —
 silently assumes; the build's most error-prone step):
-- **`appendChild` adds, does not replace.** The default content stays AND your node renders → both
-  show. **Clear first:** `[...slot.children].forEach(c => c.remove())`, then append. (`remove()` of a
-  slot's default children IS allowed inside an instance.)
+- **`appendChild` adds, does not replace** — clear the defaults first. But **one structural mutation per
+  `use_figma` call**: the first remove/append invalidates every cached sibling ref in the same tick, so a
+  second `slot.children[0].remove()` throws "node not found" (even re-reading `children[0]`). So
+  `[...slot.children].forEach(remove)` / `while`-loops fail mid-way — clear N defaults across N calls. The
+  same one-op-per-call limit covers append and deep `setProperties` into a nested-instance slot subtree.
 - **`slot.layoutMode` is locked in an instance** — setting it silently no-ops (stays the main's
   direction). Bake direction into the component, or make it a **Variant axis** (a CSS `has-[]` that
   flips `flex-row`↔`flex-col` → a `layout` axis on the composition, not a per-instance edit).
@@ -102,6 +123,10 @@ glyphs** (notably the `*-s-line` chevrons) → take the exact path from the inst
   `maxWidth = Σ(row widths)+gaps+padding` to wrap one row per primary value. Screenshot to confirm.
 - **Section** — place the set in a Section on the `Components` page; if absent, create it via
   **`/figma-create-section`**. Never hand-roll `figma.createSection()`.
+- **Section coords & size** — a Section child's `x/y` are **relative to the Section origin**; set the
+  offset directly (`set.x = 80`), never `section.absoluteBoundingBox.x + 80` (double-offsets thousands of
+  px out). Sections **don't auto-grow** → after positioning, `section.resizeWithoutConstraints(w, h)` to
+  fit content (width AND height).
 
 ## Interaction states = a `state` axis
 
@@ -115,14 +140,25 @@ real port):
   text too). Mirrors `bg-…/90`.
 - **active** — tint + content pressed 1px down, absolutely positioned in a fixed-size member → no
   layout jump (code: `active:translate-y-px`).
-- **focus** — a ring drop-shadow (`ring`/50, spread 3). Spread renders only when `clipsContent=true`
-  on the effect-bearing node; keep ancestors `clipsContent=false` so the ring isn't clipped.
+- **focus / invalid (glow ring)** — a ring drop-shadow. Spread renders only when `clipsContent=true` on
+  the effect-bearing node; keep ancestors `clipsContent=false` so the ring isn't clipped. Glow recipe:
+  - **Never bind the effect colour to a variable** — binding resolves at the variable's full alpha and
+    drops the literal `/50`,`/20` transparency (ring renders opaque). Set a literal colour at the target
+    alpha + `boundVariables.color = null`; bind the border STROKE normally.
+  - On transparent / fill-less nodes set `showShadowBehindNode: false` (default `true` bleeds the halo
+    through the empty body so the outer ring never reads).
+  - **Copy** the glow effect verbatim from an existing focus template (spread/radius/offset/alpha + flag),
+    don't reconstruct; synthesize a sibling state's glow (e.g. invalid) from the same template at that
+    state's colour + alpha.
+  - A glow fix applies to **every** glow member (focus, invalid, combined), not just the reported one —
+    transparent members expose the defect, opaque ones hide it; screenshot all.
 - **disabled** — member node opacity (dimming the text too is correct here).
 
 ## Usage-examples group (every port)
 
 The Section holds the variant set **and** a permanent **Usage-Examples** group reproducing the T2.5
 stories as real instances — the standing proof the surface is complete. **Every port**, not just composites.
+Build these **after the variant surface is final** — later master/slot edits drop the example instances' overrides.
 
 - One **instance per structurally-distinct story**, composed **only** from the component's controls
   (Properties / Variants / Slots / nested instances) — never a hand-built or re-clothed copy.
@@ -131,6 +167,9 @@ stories as real instances — the standing proof the surface is complete. **Ever
   internals.
 - Lay out in a labeled **vertical auto-layout** group below the set, DS spacing-token gaps, one labeled
   block per example (mirror the sibling Sections).
+- **Screenshot the group and eyeball it** — `/figma-verify` only checks structure (vectors, clipping,
+  overlap), not semantics: a wrong, mislabelled, or wrong-text-style example passes it. Confirm each block
+  has its caption (sibling-Section style) and the composition is correct.
 - **Done-Test:** a story you can't rebuild from controls alone = incomplete surface → fix the component
   (missing variant / slot / swap), never hand-place the missing piece.
 
@@ -140,3 +179,5 @@ stories as real instances — the standing proof the surface is complete. **Ever
 |---|---|
 | Read `componentPropertyDefinitions` off a variant | Readable only on the **set** (or a non-variant component) — throws on a single variant. |
 | Decide a Plugin API is missing because it's not in the typings | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed). |
+| Find a swap/lookup target by name **substring** over members | Member names embed `prop=value` (e.g. a `size=icon-*` member) → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot. |
+| Read `.height`/size right after toggling a child's `visible` | Plugin size reads don't reflect the visibility-driven auto-layout reflow — confirm collapse via screenshot, not size reads. |
