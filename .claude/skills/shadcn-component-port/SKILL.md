@@ -163,6 +163,10 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 - **Prop API docs**: annotate the `.tsx` so react-docgen surfaces the public props (Autodocs ArgsTable
   **and** storybook MCP `get-documentation`) — flat JSDoc props, `Omit`+re-declare for the curated
   Radix/DOM/CVA-derived props the docgen filter drops. Per **`/docgen-props`**.
+- **a11y — name the role element**: when the ARIA `role` widget sits on a **nested child** rather than
+  the component root (e.g. a listbox option, a draggable handle), forward the consumer's
+  `aria-label`/`aria-labelledby` to that child — applying them only to the root names nothing, so axe
+  `aria-input-field-name` fails the gate. One name per role node (repeated role nodes may share it).
 - **Stories**: the T2.5 usage-example set, now running on DS tokens. **Reconcile them per
   `/storybook-rules`** (coverage: every variant×size/state in ≥1 story, overview story if the examples
   miss any; a `play` test for interactive components; the `shoot` / `preview-stories` rendered-output
