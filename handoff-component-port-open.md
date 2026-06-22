@@ -4,7 +4,14 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-12:** `master` = **15 Components** ff (kein Remote, `npm run check` grün, 92 Tests).
+**Stand 2026-06-22:** `master` = **17 Components** ff (kein Remote, `npm run check` grün, 249 Tests / 55 Files).
+**Seit 06-12 (2026-06-16…06-19) dazu:** **ChoiceCard** portiert (DS-authored Composite — 3 dünne
+Wrapper `ChoiceCardCheckbox`/`ChoiceCardSwitch`/`ChoiceCardRadio` über eine interne `ChoiceCardShell`
++ `useFieldId`-Hook; checked-Tint = Zwei-Cyan-Token-Modell, voll variabel-gebunden) und **Select**
+portiert (volles Radix-Primitive, `radix-ui`-Umbrella behalten; Sub-Parts mit eigenen Story-Files).
+Dazwischen ein **Component-Sync-Sweep 2026-06-17** (Figma→Code-Reconcile über ~18 Sets). Der Katalog
+`components-reference.md` ist auf diesem Stand — die dortigen Node-IDs/Status sind autoritativ.
+
 Form-Toggle-Batch (Checkbox · Switch · RadioGroup) **gemerged** (Code + token-gebundene Figma-Sets +
 permanente Usage-Examples + Figma→Code-Sync + Field-komponierte Stories) + Skill-Edit (usage-examples-
 Deliverable + Doc-Treue ins `/shadcn-component-port` gehoben) gemerged. Standard: Glow = literal-Alpha
@@ -13,16 +20,17 @@ DROP_SHADOW `showShadowBehindNode:false` (verbatim vom `.Input`-Focus); Stories 
 dafür `.Field` erweitert — `controlPosition [trailing,leading]`-Achse (control-leading für Checkbox/Radio) +
 neues `.FieldLegend`-Set + invalid-error-Slot-Fix (Ursache: `clone()` degradiert SLOT→FRAME). `controlPosition`
 = **Figma-only Fork** (kein Code-Prop). Details: Katalog `.Field`/`.FieldLegend` + die 3 `examples`-Einträge.
-**15 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
+**17 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
 Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
-Label)**, **Checkbox, Switch, RadioGroup**) + Blocks-Layer (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
+Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**) + Blocks-Layer
+(`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
 über die Brief-4, bewusst) mit `secondary`/`destructive` an ⚠-Platzhalter gebunden; Separator-Achse =
 `orientation` (h/v); AsChild-Control-Footgun gefixt (#21). **Field = Surface-less Composite**
 (`orientation × invalid` + 4 Slots, nur Spacing+Typo gebunden; FieldSet/Group/Legend/Title +
 `responsive` = Code-only; FieldError→`destructive ⚠`); **Label public** (Hard-Dep von Field).
-Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operativ in
-`/shadcn-component-port` (SKILL.md + references/composites.md + references/figma-build.md); Pflege via
-`/component-sync` (Figma→Code).
+Composite-Verfahren validiert (**5×**: InputGroup/Command/Dialog/Field/ChoiceCard; Select = volles
+Radix-Primitive, kein surface-less Composite), operativ in `/shadcn-component-port` (SKILL.md +
+references/composites.md + references/figma-build.md); Pflege via `/component-sync` (Figma→Code).
 
 ## Offene Punkte
 
@@ -31,10 +39,11 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
    **B (26)** = zurückgestellt (Agent kam trotz Skill-Schweigen zum Ergebnis → Kodifizierung, kein
    Bugfix) + **C (C1 · C2)** = Tooling/Backlog. Skills werden nie mid-run editiert; Formulierungs-Regel
    s. Blockquote unter „Skill-Findings".
-2. **Composite-Strang — nächster Schritt** (Verfahren 4× validiert, nichts blockiert): **Slider** porten
-   (letzter zurückgestellter Field-Control → schaltet `field-slider` frei; Field-Example-Inventory:
-   `agent-runs/component-port/2026-06-12-field/notes.md`, Open items #4/#5), weiteres Composite
-   (`/shadcn-component-port <name>`), oder Blocks-Arbeit auf den Palette-Bausteinen.
+2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider**
+   porten bleibt offen (letzter zurückgestellter Field-Control → schaltet `field-slider` frei;
+   Field-Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md`, Open items #4/#5),
+   weiteres Composite (`/shadcn-component-port <name>`), oder Blocks-Arbeit auf den Palette-Bausteinen.
+   *(ChoiceCard ist seit 06-16 erledigt, Select seit 06-19 — beide nicht mehr offen.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
