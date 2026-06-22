@@ -30,7 +30,7 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 1. **Skill-Findings einarbeiten** (Block unten) — User wendet an. **Triage 2026-06-22: alle Findings nach
    A/B/C sortiert — s. „Triage / Sortierung" unten. A-Fälle (Agent kam trotz Skill-Schweigen zum geplanten
    Ergebnis) = ZURÜCKGESTELLT (Kodifizierung, kein Bugfix → niedrige Prio); B-Fälle (Lücke verursachte einen
-   Defekt) = aktiv/vorrangig.** **Noch offen: Findings 15–28** aus den
+   Defekt) = aktiv/vorrangig. B-Strang 2026-06-22 KOMPLETT eingearbeitet (29 ✅ + #62 verworfen).** **Noch offen: Findings 15–28** aus den
    Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21) und dem Field-Composite-Run (22–28:
    Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-Rezept, Slot-statt-Text-Property,
    lokales Nesting via `createInstance`, 2px-Spacing-Rung, 16px-Typo-Rolle) — geprüft: keine davon im
@@ -160,10 +160,10 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — vorrangig (1 offen · 28 ✅ + #62 verworfen — figma-build 14 · SKILL.md 3 · storybook-rules 4 · composites 4 · component-sync 3 — 2026-06-22)
+#### B — ✅ KOMPLETT (29 ✅ + #62 verworfen — figma-build 14 · SKILL.md 3 · storybook-rules 4 · composites 4 · component-sync 3 · snippets 1 — 2026-06-22)
 
 > ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert (Detail-
-> Einträge maßgeblich). #62 verworfen (component-spezifisch). **Offen nur noch:** snippets (#13).
+> Einträge maßgeblich). #62 verworfen (component-spezifisch). **Alle B-Findings eingearbeitet.**
 
 | # | Kurz | Status / was die Lücke kostete |
 |---|------|--------------------------------|
@@ -176,7 +176,7 @@ nie mid-run editiert.
 | ✅ 10 | DOM-Globals + Portal-Asserts | eingearbeitet (storybook-rules §play/Cross-cutting) |
 | ✅ 11 | Render-Verify Sizing-px | eingearbeitet (storybook-rules Gate; ohne Token-Pointer) |
 | ✅ 12 | Shadow-Familie in twMerge | eingearbeitet (`utils.ts` Repo-Fix + T1; runtime+typecheck ✓) |
-| 13 | AUTO-Sizing nach combine | vertikales Padding still gedroppt |
+| ✅ 13 | AUTO-Sizing nach combine | eingearbeitet (build-variant-set.js + #16/#53/#54-Angleich; syntax-geprüft) |
 | ✅ 15 | `setCurrentPageAsync`-Invariante | eingearbeitet |
 | ✅ 16 | Section-relative Koords | eingearbeitet |
 | ✅ 21 | asChild-Control + eigene Story | eingearbeitet (storybook-rules Cross-cutting) |
@@ -260,9 +260,9 @@ dabei korrigiert — s. Detail-Einträge unten)
 - **#57** Composite-Sub-Parts = eigenes Story-File je API-Part (neue Section; `/docgen-props` als
   Voraussetzung referenziert — kein docgen-props-Edit nötig) ✓
 
-**`snippets/build-variant-set.js` (1)**
-- **#13** `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` VOR der Padding-Zuweisung setzen
-  *(zusätzlich berühren #16/#53 die `set.x/y`-Zeilen, #43 `read-set-values.js`)*
+**`snippets/build-variant-set.js` (1)** — ✅ **eingearbeitet 2026-06-22** (syntax-geprüft)
+- **#13** `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` vor der Padding-Zuweisung ✓
+- **+ #16/#53/#54-Angleich:** Set section-relativ platzieren (`set.x/y`) + `resizeWithoutConstraints` (Section fitten) ✓
 
 ### Bereits eingearbeitet ✅ (nur zur Abgrenzung)
 
@@ -287,6 +287,8 @@ dabei korrigiert — s. Detail-Einträge unten)
   diffen → ADD/REMOVE), #41 (gebundener Wert = Delta, nie „Deviation"), #43 (Snippet liest non-slot
   Indicator-Shapes mit; syntax-geprüft). **+ neu:** Figma-Token ohne Code-Utility → blocked delta (Token-
   Layer-Arbeit, out of scope; raw nur als markierter Stopgap).
+- **snippets B-Finding (Batch 2026-06-22)** ✅ — `build-variant-set.js`: #13 (`primary/counterAxisSizingMode
+  = 'AUTO'` vor Padding) + #16/#53/#54-Angleich (Set section-relativ + `resizeWithoutConstraints`); syntax-geprüft.
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
