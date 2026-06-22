@@ -3,7 +3,7 @@
 // Returns: { collections, variablesByCollection, textStyles, effectStyles, pages }
 
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
-const want = ['semantic', 'semantic-dimension']; // color + radius/spacing (see config.json)
+const want = ['<color-collection>', '<dimension-collection>']; // your token collections (color + radius/spacing)
 
 const vars = await figma.variables.getLocalVariablesAsync();
 const variablesByCollection = {};

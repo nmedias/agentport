@@ -1,6 +1,6 @@
 // use_figma — parameterized skeleton for a token-bound component set.
-// Generalised from the Button pilot, extended for FIELD-type components (Input/Textarea).
-// Fill the CFG below from your T3 mapping table (variable IDs from recon.js).
+// Generalised for label + FIELD-type components (input/textarea).
+// Fill the CFG below from your token mapping (variable IDs from recon.js).
 // Split across calls if > ~10 components (atomic, ≤10 ops).
 //
 // Each VARIANT: { props: {a, b}, fillVar?, strokeVar?, textVar?, underline?, height,
@@ -22,11 +22,11 @@
 //                  node clips (the set stays clipsContent=false, below, so the ring is not clipped away).
 
 const CFG = {
-  pageId: 'PAGE_ID',          // Components page (recon.js)
-  sectionId: 'SECTION_ID',    // target Section (create via /figma-create-section if absent)
-  setName: '.Component',
-  textStyleId: 'TEXT_STYLE_ID', // e.g. Label (button) / Body (field) format
-  font: { family: 'Hanken Grotesk', style: 'Medium' }, // the text style's font (Body → Regular)
+  pageId: 'PAGE_ID',          // target page (recon.js)
+  sectionId: 'SECTION_ID',    // target Section (create via the Section-wrapper helper if absent)
+  setName: '<SetName>',       // your set naming convention
+  textStyleId: 'TEXT_STYLE_ID', // the text style's id (recon.js)
+  font: { family: '<Font Family>', style: '<Style>' }, // the text style's font (match the text style)
   variants: [
     // BUTTON: { props: { variant:'default', size:'default' }, fillVar:'…', textVar:'…',
     //          height:36, padXVar:'…', gapVar:'…', radiusVar:'…', label:'Button' },

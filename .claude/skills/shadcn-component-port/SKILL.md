@@ -29,12 +29,16 @@ token values into this skill** — it is the procedure, the reference is the dat
 
 ## Figma Rules
 
-Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before every `use_figma`.
-Every `use_figma` call passes four args — `skillNames:'figma-use'`, `fileKey` (`config.figma.fileKey`),
-a non-empty `description`, `code`; the snippets show only the `code` body, the other three are
-mandatory (omitting `fileKey`/`description` → `-32602 … required`).
-Build in file `FIGMA_FILE_KEY` (`config.json`). **Never detach instances** — edit via
-slots / properties / auto-layout only.
+**Build mechanics + snippets → `/figma-build-rules`** (Plugin-MCP contract, binding recipes, slots,
+variant-set assembly, interaction-state axis, usage-examples group, the controls→clean→faithful verify
+triad, composites). This skill supplies the **project values** that build consumes (`config.json`):
+- `fileKey` `FIGMA_FILE_KEY` (`config.figma.fileKey`) → the `use_figma` `fileKey` arg.
+- page `Shadcn Components` (`config.figma.pageId`) — build sets here; Section via `/figma-create-section`.
+- token source `tokens-reference.md` §6 → the DS variable IDs the snippet CFG binds (collections
+  `semantic` / `semantic-dimension`).
+- icons `@remixicon/react` (vectors) · structural check `/figma-verify` · the text-style font from the format.
+
+**Never detach instances** — edit via slots / properties / auto-layout only.
 
 ## Process
 
@@ -43,15 +47,16 @@ T1   Setup     cn() carries the text-format + named-spacing twMerge extensions (
 T2   Anatomy   land the stock source locally → variant axes/slots + every stock class string
 T2.5 Stories   shadcn doc usage-examples → Storybook stories (author per /storybook-rules), BEFORE Figma
 T3   Translate stock classes → DS utilities (tokens-reference §6) → one mapping table
-T4   Figma     token-bound set: full matrix, sorted grid, in a Section (recipes → figma-build.md)
+T4   Figma     token-bound set: full matrix, sorted grid, in a Section (mechanics → /figma-build-rules)
 T5   Verify    controls live · /figma-verify CLEAN · build every story as a permanent example + verify (token/values/px)
 T6   Code      rewrite per T3 + annotate the prop API (/docgen-props); stories = the T2.5 set; headless lib → jsdom once/lib; gate green
 T7   Notes     mapping table + node/var ids + example-inventory + findings
 ```
 
 **Multi-part composite** (no root element — several `data-slot` parts, e.g. an input with adornments,
-a command palette, a dialog) → **`references/composites.md`** overrides T2–T7 (Examples-First,
-Exposure-Surface, 3-layer build). T1 + T3 and the shared T4 Figma rules still apply.
+a command palette, a dialog) → the **port-process delta** in **`references/composites.md`** + the
+**3-layer build** in **`/figma-build-rules §Composites`** override T2–T7 (Examples-First, Exposure-Surface).
+T1 + T3 and the shared `/figma-build-rules` Figma rules still apply.
 
 ### T1 — Setup (Verify Every Run)
 
@@ -91,10 +96,11 @@ no pseudo-class states) has no state axis → the axis is **content** (e.g. text
 
 **Multi-part composition?** (no root element — several `data-slot` parts that render differently —
 e.g. an input with adornments, a command palette, a dialog). **Different procedure — STOP and switch to
-`references/composites.md`**: Exposure-Surface + Done-Test, Examples-First (T2.5), the Slot≠Slot
-combination (the general construct→property table → `figma-build.md §Mechanism`), the user-ask
-(part-split / Slot-vs-Swap / whole-level variants / slot defaults), and the 3-layer Figma build.
-T1 + T3 (tokens) and the shared T4 Figma rules below still apply.
+`references/composites.md`** (+ `/figma-build-rules §Composites` for the build): Exposure-Surface +
+Done-Test, Examples-First (T2.5), the Slot≠Slot combination (the general construct→property table →
+`/figma-build-rules §Mechanism`), the user-ask (part-split / Slot-vs-Swap / whole-level variants / slot
+defaults), and the 3-layer Figma build. T1 + T3 (tokens) and the shared `/figma-build-rules` Figma rules
+below still apply.
 
 ### T2.5 — Usage-examples → Stories (before Figma)
 
@@ -114,7 +120,7 @@ workflow); this section governs only WHICH examples to port.
   un-ported *before* simplifying — a ported one must be used, not hand-rolled around.
 - Output: the story-set = the canonical usage set. T5 verifies the Figma component against it **and**
   reproduces it as a **permanent Usage-Examples instance group** in the Section — **every port**, not
-  just composites (recipe: `figma-build.md §Usage-examples`).
+  just composites (recipe: `/figma-build-rules §Usage-examples`).
 
 ### T3 — Translate
 
@@ -133,40 +139,21 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 
 ### T4 — Figma Build
 
-Build the token-bound component set and place it in a **Section** on the `Components` page. Which Figma
-property per code construct = **`figma-build.md §Mechanism`**; the Plugin-API recipes (binding by ID,
-slots, icons, variant assembly, the interaction-state pattern) are in the same file. Invariants:
-
-- **Full matrix** — every value of every property (a partial set reads as broken).
-- **Sorted grid** — primary-property-major, one wrapped row per primary value (not scattered append order).
-- **Bind every property by variable ID** — `setBoundVariableForPaint` returns a NEW paint (reassign;
-  never spread a bound paint → it renders the fallback colour).
-- **Slots** for swappable / variable content; config them (`fills=[]`, own auto-layout, sensible
-  default) — never trust default geometry.
-- **Reuse, don't rebuild** — if the component embeds an already-built DS component (icon, sub-part,
-  another ported component), nest a real **instance** of it, never re-clothe a copy (token edits then
-  propagate). For multi-part composites this is build layer 2 — see `references/composites.md`.
-- **Interaction states** = a `state` axis (Figma has no pseudo-classes → each is an explicit variant).
-- **Section** via `/figma-create-section` — never hand-roll `figma.createSection()`.
+Build the token-bound set per **`/figma-build-rules`** (recon → `build-variant-set.js`; fill its CFG with
+the T3 variable IDs + `config.json` page/collections/font): full matrix, sorted grid, bound by variable
+ID, slots, interaction-state axis. **Project specifics:** place it in a `/figma-create-section` Section on
+the `Shadcn Components` page; reuse already-built DS components as nested **instances** (never re-clothe a
+copy). Multi-part composite → the 3-layer build + Slot≠Slot (`/figma-build-rules §Composites`) + the
+port-process delta in `references/composites.md`.
 
 ### T5 — Verify
 
-Three checks on the built set, in order — **functional → clean → faithful**:
-
-1. **Controls live** — instantiate the set and drive **every control** the component exposes, not just
-   variant props: each variant / text / boolean / instance-swap property (`setProperties`), **and** each
-   **slot** (fill or replace its content). Read each back, iterate until it takes effect. A control that
-   exists but does nothing — slot with no default, unbound text, swap that won't take — is broken.
-   Delete the test instances. *(Composite: exercise every part set **and** the composition, not just the
-   top level.)*
-2. **Clean** — `/figma-verify <setId>` must be **CLEAN** (vectors not text, no clipping/overlap,
-   padding symmetry).
-3. **Reproduces the usages (permanent)** — build every T2.5 story as a **permanent** instance in the
-   Section (a labeled group below the set; recipe `figma-build.md §Usage-examples`), each from the
-   component's controls alone (props / variants / slots), then compare token/values/pixels (zoom, raw
-   px). A standing deliverable, not throwaway scaffolding — don't delete after verifying. A story you
-   can't rebuild from controls = the surface is incomplete → fix the component (missing variant/slot),
-   never hand-build or re-clothe the example.
+Run the **controls-live → clean → faithful** triad per **`/figma-build-rules §Verify`**: drive every
+control (incl. each slot) and read it back; `/figma-verify <setId>` must be **CLEAN**; then build every
+T2.5 story as a **permanent** Usage-Examples instance group in the Section
+(`/figma-build-rules §Usage-examples`), each from the component's controls alone, and compare
+token/values/pixels. A story you can't rebuild from controls = incomplete surface → fix the component,
+never hand-build or re-clothe.
 
 ### T6 — Code Port
 
@@ -209,7 +196,7 @@ Two artifacts — a port is **not done** until both exist:
 |---|---|
 | Treat `secondary`/`destructive`/`chart-*` as final | ⚠ placeholders (stock hex), not designed — flag, don't finalize. |
 
-*(Plugin-API red flags — `componentPropertyDefinitions` only on the set, typings lag the runtime — live in `references/figma-build.md`.)*
+*(Plugin-API red flags — `componentPropertyDefinitions` only on the set, typings lag the runtime — live in `/figma-build-rules`.)*
 
 ## Boundaries
 

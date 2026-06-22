@@ -1,21 +1,36 @@
-# Figma Build — recipes & mechanics 
+---
+name: figma-build-rules
+description: "Assemble a token-bound Figma component set (variant matrix) via the Figma Plugin MCP API — the build craft: code-construct→Figma-property mapping, binding paints/radius/padding/typography by variable ID, slots, variant-set assembly (full matrix, sorted grid), the interaction-state axis (Base+tint+glow), the permanent usage-examples group, and the controls-live→clean→faithful verify triad. Multi-part composites add a 3-layer build (Slot≠Slot, nested instances, flexible composition, anchored overlay). Trigger when building/assembling a Figma component set, variant matrix, or token-bound component from code — standalone, or delegated to from a component-port/sync skill. Project-neutral: the caller supplies the build file, target page, token variables and icon set."
+---
 
-The how-to for building a token-bound component set. **SKILL.md T4** states *what to produce*. This file is the Plugin-API *detail*.
-Multi-part composites add three build layers on top — see `references/composites.md`.
+# Figma Build Rules (token-bound component set)
+
+Build a **token-bound** Figma component set via the Plugin MCP API: keep the source component's
+structure + variant logic, bind every property to the caller's design-system variables. The caller
+supplies the build **file**, target **page**, **token/variable** source, **icon** set, Section-wrapper
+helper and structural pre-handoff check; this skill is the **how** (mechanics + snippets).
+
+## Figma access (the contract)
+
+- **Plugin MCP only** (`mcp__plugin_figma_figma__*`); load the **figma-use** skill before EVERY `use_figma`.
+- Every `use_figma` call passes four args — `skillNames:'figma-use'`, `fileKey`, a non-empty `description`,
+  `code`. Snippets show only the `code` body; omitting `fileKey`/`description` → `-32602 … required`.
+- **Never detach instances** — edit via slots / properties / auto-layout only.
+- **Incremental:** ≤10 ops per call, screenshot after each step.
+- `figma.currentPage` resets to page 1 across calls → `await setCurrentPageAsync(target)` at the START of
+  every call, else new nodes land on the wrong page and `combineAsVariants` throws "must be in the same page".
+- **Bind every property by variable ID** (names carry group paths) — never by name.
 
 ## Approach
 
-Recon (`snippets/recon.js`) → build (`snippets/build-variant-set.js`). **Incremental:** ≤10 ops per
-`use_figma`, screenshot after each step. Bind every property to DS variables **by ID** (names carry
-group paths like `shadcn Default/primary`).
-
-Across calls `figma.currentPage` resets to the first page — `await setCurrentPageAsync(target)` at the
-START of every call, else new nodes land on page 1 and `combineAsVariants` throws "must be in the same page".
+Recon (`snippets/recon.js`, read-only → variable/style/page maps to bind against) → build
+(`snippets/build-variant-set.js`, the parameterized set skeleton). Fill the snippet CFG (token IDs,
+target page/section, set name, text-style + its font) from the caller's token source — the snippets ship
+placeholders, no project values.
 
 ## Mechanism — code construct → Figma property
 
-What to model (**every port**, not just composites): decide **per consumer-variable content** by the
-**nature of the variation**.
+What to model (**every build**): decide **per consumer-variable content** by the **nature of the variation**.
 
 | Code construct | Figma | Rule |
 |---|---|---|
@@ -30,7 +45,7 @@ What to model (**every port**, not just composites): decide **per consumer-varia
 - **Variant-axis when** the *layout* (not just content) changes conditionally — modelling only `state`
   then can't reproduce the column-stacking examples (the slot won't flip in an instance).
 - **Swap when** exactly one position; content = component; persists across variants; parent override drives look/size.
-- Code composes an **already-ported** component X → Figma nests an **instance of X** (never re-clothe);
+- Code composes an **already-built** component X → Figma nests an **instance of X** (never re-clothe);
   Swap only if several X-types should be choosable.
 
 ## Binding recipes
@@ -77,8 +92,8 @@ not the member. After adding the clone as a new member, **re-bind** it
 `createSlot()` (that auto-creates a second, zero-referenced slot property you'd then have to delete).
 A standalone (non-member) component clone keeps the binding (the property is on the component itself).
 
-**Filling a slot IN AN INSTANCE** (what `composites.md` T4 layer-4 — reproduced example instances —
-silently assumes; the build's most error-prone step):
+**Filling a slot IN AN INSTANCE** (the reproduced example instances of §Composites layer 4 silently
+assume this; the build's most error-prone step):
 - **`appendChild` adds, does not replace** — clear the defaults first. But **one structural mutation per
   `use_figma` call**: the first remove/append invalidates every cached sibling ref in the same tick, so a
   second `slot.children[0].remove()` throws "node not found" (even re-reading `children[0]`). So
@@ -94,10 +109,9 @@ silently assumes; the build's most error-prone step):
 
 ## Icons
 
-**Remix only**, never a text glyph. The Remix-icon MCP returns **names only** and **misses some
-glyphs** (notably the `*-s-line` chevrons) → take the exact path from the installed package
-(`npm pack remixicon` → `package/icons/<Category>/<name>.svg`) and confirm the React export
-(`node -e "require('@remixicon/react').Ri<Name>"`). Code = `@remixicon/react` as `children`.
+**A vector component from the caller's icon set — never a text glyph.** If the icon source/MCP returns
+names only (and may miss some glyphs), take the exact path from the installed package
+(`<pkg>/icons/<…>.svg`) and confirm the framework export before use. Pass the icon as `children` in code.
 
 ## Variant set assembly
 
@@ -107,22 +121,21 @@ glyphs** (notably the `*-s-line` chevrons) → take the exact path from the inst
   or a standalone comp, then bind the node
   (`node.componentPropertyReferences = { characters|visible|mainComponent: id }`); prop ids change on
   combine → re-read.
-- **Every author-set default text = a `{Semantic}` placeholder — ALWAYS, every port; never committed
-  copy nor the Figma default `text`.** TEXT prop: name = the part's **semantic role** (`label`/
-  `description`/`error`/`legend`/… — `label` is just an example); default value = that name in curly
-  brackets, **`{Semantic}`** (`label`→`{Label}`, `error`→`{Error}`). If the text IS the comp's whole
-  content/children (single-text comp) suffix the name **`(children)`** (`<name> (children)` = `{Name}`);
-  a plain TEXT prop inside a larger comp keeps the bare name. **Slot-default / nested-instance text**
-  (NOT an exposed prop — e.g. a card title via a nested `.Label`, a description in a `.Field` slot) → set
-  its `characters` to the same placeholder, mirroring the text node's layer name (**name = value**, like
-  `.Label` is `{Label}`=`{Label}`). Committed copy lives ONLY in the permanent usage-examples (T5
-  §Usage-examples), never in set members.
+- **Every author-set default text = a `{Semantic}` placeholder — ALWAYS; never committed copy nor the
+  Figma default `text`.** TEXT prop: name = the part's **semantic role** (`label`/`description`/`error`/
+  `legend`/… — `label` is just an example); default value = that name in curly brackets, **`{Semantic}`**
+  (`label`→`{Label}`, `error`→`{Error}`). If the text IS the comp's whole content/children (single-text
+  comp) suffix the name **`(children)`** (`<name> (children)` = `{Name}`); a plain TEXT prop inside a
+  larger comp keeps the bare name. **Slot-default / nested-instance text** (NOT an exposed prop) → set its
+  `characters` to the same placeholder, mirroring the text node's layer name (**name = value**, like
+  `.Label` is `{Label}`=`{Label}`). Committed copy lives ONLY in the permanent usage-examples
+  (§Usage-examples), never in set members.
 - **Full matrix** — every value of every property, not a representative subset (a partial set reads as broken).
 - **Sorted grid** — never leave scattered append order. Reorder primary-property-major, secondary in
   option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP'` and
   `maxWidth = Σ(row widths)+gaps+padding` to wrap one row per primary value. Screenshot to confirm.
-- **Section** — place the set in a Section on the `Components` page; if absent, create it via
-  **`/figma-create-section`**. Never hand-roll `figma.createSection()`.
+- **Section** — place the set in a Section on the target page; if absent, create it via the caller's
+  **Section-wrapper helper**. Never hand-roll `figma.createSection()`.
 - **Section coords & size** — a Section child's `x/y` are **relative to the Section origin**; set the
   offset directly (`set.x = 80`), never `section.absoluteBoundingBox.x + 80` (double-offsets thousands of
   px out). Sections **don't auto-grow** → after positioning, `section.resizeWithoutConstraints(w, h)` to
@@ -130,10 +143,9 @@ glyphs** (notably the `*-s-line` chevrons) → take the exact path from the inst
 
 ## Interaction states = a `state` axis
 
-Figma has no pseudo-classes → each interaction state is an explicit variant. Pattern (validated on a
-real port):
+Figma has no pseudo-classes → each interaction state is an explicit variant. Validated pattern:
 
-- **Base** — extract `.<Comp>/Base` (a set keyed on `size`) carrying structure/geometry; each
+- **Base** — extract a `Base` sub-component (a set keyed on `size`) carrying structure/geometry; each
   `variant×size×state` member nests a base instance and overrides only its delta — base edits propagate.
 - **Tint** — a dedicated `state-layer` Surface under the (always-opaque) content, driven by its
   **appearance/layer opacity** — never fill-opacity (not variable-bindable) nor node-opacity (dims the
@@ -154,24 +166,66 @@ real port):
     transparent members expose the defect, opaque ones hide it; screenshot all.
 - **disabled** — member node opacity (dimming the text too is correct here).
 
-## Usage-examples group (every port)
+## Usage-examples group (every build)
 
-The Section holds the variant set **and** a permanent **Usage-Examples** group reproducing the T2.5
-stories as real instances — the standing proof the surface is complete. **Every port**, not just composites.
+The Section holds the variant set **and** a permanent **Usage-Examples** group reproducing the usage
+stories as real instances — the standing proof the surface is complete. **Every build**, not just composites.
 Build these **after the variant surface is final** — later master/slot edits drop the example instances' overrides.
 
 - One **instance per structurally-distinct story**, composed **only** from the component's controls
   (Properties / Variants / Slots / nested instances) — never a hand-built or re-clothed copy.
-- Nest **real instances** of the set + any already-ported partner (label, field, …); drive state via
+- Nest **real instances** of the set + any already-built partner (label, field, …); drive state via
   `setProperties`. Example-instance slot content is non-editable → compose via instances, not by editing
   internals.
-- Lay out in a labeled **vertical auto-layout** group below the set, DS spacing-token gaps, one labeled
-  block per example (mirror the sibling Sections).
-- **Screenshot the group and eyeball it** — `/figma-verify` only checks structure (vectors, clipping,
-  overlap), not semantics: a wrong, mislabelled, or wrong-text-style example passes it. Confirm each block
-  has its caption (sibling-Section style) and the composition is correct.
+- Lay out in a labeled **vertical auto-layout** group below the set, design-system spacing-token gaps, one
+  labeled block per example (mirror the sibling Sections).
+- **Screenshot the group and eyeball it** — the structural pre-handoff check only verifies structure
+  (vectors, clipping, overlap), not semantics: a wrong, mislabelled, or wrong-text-style example passes it.
+  Confirm each block has its caption and the composition is correct.
 - **Done-Test:** a story you can't rebuild from controls alone = incomplete surface → fix the component
   (missing variant / slot / swap), never hand-place the missing piece.
+
+## Verify — functional → clean → faithful
+
+Three checks on the built set, in order:
+
+1. **Controls live** — instantiate the set and drive **every control** the component exposes, not just
+   variant props: each variant / text / boolean / instance-swap property (`setProperties`), **and** each
+   **slot** (fill or replace its content). Read each back, iterate until it takes effect. A control that
+   exists but does nothing — slot with no default, unbound text, swap that won't take — is broken.
+   Delete the test instances. *(Composite: exercise every part set **and** the composition, not just the top level.)*
+2. **Clean** — run the caller's structural pre-handoff check on the set: vectors not text, no
+   clipping/overlap, padding symmetry. Must come back CLEAN.
+3. **Reproduces the usages (permanent)** — build every usage story as a **permanent** instance in the
+   Section (§Usage-examples), each from the component's controls alone, then compare token/values/pixels
+   (zoom, raw px). A standing deliverable, not throwaway scaffolding. A story you can't rebuild from
+   controls = the surface is incomplete → fix the component (missing variant/slot), never hand-build or re-clothe.
+
+## Composites — multi-part (no root element)
+
+A composite = several independently-rendering parts, **no single root** (e.g. an input with adornments, a
+command palette, a dialog). The single-component rules above still apply; add these.
+
+**Slot ≠ Slot** — a frontend "slot" (`children`) is NOT a Figma Slot. One composite usually combines
+several mechanisms at once: an editable string→Text, an optional element→Boolean, a finite choice
+(align/size/state)→Variant, a one-off swappable element→Instance-Swap, an open region→Slot, a composed
+already-built component→a nested instance. The **conditional-layout → Variant-axis** row bites hardest
+here — it **multiplies the matrix** (state × layout); modelling only `state` can't reproduce the
+column-stacking examples.
+
+**Three build layers + examples:**
+1. **Base sub-components** — factor recurring config shared across large sets into an internal Base;
+   members instance it and override only the **delta** (token edits then propagate). (§Interaction states.)
+2. **Nest existing instances** — a composed already-built component = a real **instance** of it, never a
+   rebuild (token edits propagate).
+3. **Flexible composition component** — the composite as **one** recompose-able component
+   (Props/Swap/Slots per §Mechanism); whole-level variants ride on it. Slot config per §Slots.
+   - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the
+     open state as a top-level composition — a trigger instance + the overlay content in an `ABSOLUTE` /
+     `layoutPositioning` child anchored to the trigger edge, not just separate trigger/content sets.
+4. **Usage-Examples group** (§Usage-examples) — here it is build **layer 4**, reproduction running through
+   slots / swaps / nested instances (= the Done-Test proof). Non-trivial: dropping an instance **into a
+   slot** counts as a control; a hand-placed element beside/without a slot does not.
 
 ## Red flags (Plugin-API)
 
@@ -179,5 +233,6 @@ Build these **after the variant surface is final** — later master/slot edits d
 |---|---|
 | Read `componentPropertyDefinitions` off a variant | Readable only on the **set** (or a non-variant component) — throws on a single variant. |
 | Decide a Plugin API is missing because it's not in the typings | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed). |
-| Find a swap/lookup target by name **substring** over members | Member names embed `prop=value` (e.g. a `size=icon-*` member) → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot. |
+| Find a swap/lookup target by name **substring** over members | Member names embed `prop=value` → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot. |
 | Read `.height`/size right after toggling a child's `visible` | Plugin size reads don't reflect the visibility-driven auto-layout reflow — confirm collapse via screenshot, not size reads. |
+| Clone a slot-owning member and re-`createSlot()` | The clone keeps the SLOT but clears its `slotContentId` (the prop lives on the set) → re-bind the reference; recreating spawns a zero-referenced duplicate prop (§Slots). |

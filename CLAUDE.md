@@ -156,6 +156,11 @@ Installed under `.claude/skills/` (project-local).
 - `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
+- `/figma-build-rules` — the **project-neutral Figma build craft** that `/shadcn-component-port` (T4/T5)
+  + its composites delegate to: Plugin-API binding recipes, slots, variant-set assembly (full matrix,
+  sorted grid), the interaction-state axis, the permanent usage-examples group, the
+  controls→clean→faithful verify triad, and the 3-layer composite build. Owns the build snippets
+  (`recon.js` + `build-variant-set.js`); the port skill supplies the project values (file/page/tokens/icons).
 
 **Storybook**
 - `/docgen-props` — annotate a component's `.tsx` so react-docgen extracts its public prop API.
