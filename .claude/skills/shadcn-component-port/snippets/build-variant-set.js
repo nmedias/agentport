@@ -111,8 +111,13 @@ for (const v of CFG.variants) {
 const set = figma.combineAsVariants(comps, section);
 set.name = CFG.setName;
 set.layoutMode = 'HORIZONTAL'; set.layoutWrap = 'WRAP';
+set.primaryAxisSizingMode = 'AUTO'; set.counterAxisSizingMode = 'AUTO'; // hug content + padding (else HUG members silently drop vertical padding)
 set.itemSpacing = 24; set.counterAxisSpacing = 24; set.counterAxisAlignItems = 'CENTER';
 set.paddingLeft = set.paddingRight = set.paddingTop = set.paddingBottom = 32;
 set.clipsContent = false; // keep false so member focus/invalid rings (clip:true) are not clipped by the set
+
+// place the set in the Section — coords are SECTION-RELATIVE (never section.absoluteBoundingBox.x + …)
+set.x = 80; set.y = 120; // below the Section headline
+section.resizeWithoutConstraints(set.x + set.width + 80, set.y + set.height + 80); // Sections don't auto-grow → fit W+H
 
 return { setId: set.id, componentIds: comps.map((c) => c.id), props: Object.keys(set.componentPropertyDefinitions || {}) };
