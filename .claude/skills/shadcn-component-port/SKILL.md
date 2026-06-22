@@ -32,7 +32,7 @@ token values into this skill** — it is the procedure, the reference is the dat
 **Build mechanics + snippets → `/figma-build-rules`** (Plugin-MCP contract, binding recipes, slots,
 variant-set assembly, interaction-state axis, usage-examples group, the controls→clean→faithful verify
 triad, composites). This skill supplies the **project values** that build consumes (`config.json`):
-- `fileKey` `FIGMA_FILE_KEY` (`config.figma.fileKey`) → the `use_figma` `fileKey` arg.
+- `fileKey` (`config.figma.fileKey`) → the `use_figma` `fileKey` arg.
 - page `Shadcn Components` (`config.figma.pageId`) — build sets here; Section via `/figma-create-section`.
 - token source `tokens-reference.md` §6 → the DS variable IDs the snippet CFG binds (collections
   `semantic` / `semantic-dimension`).
