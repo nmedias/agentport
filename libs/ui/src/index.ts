@@ -10,6 +10,7 @@ export * from './components/ui/input';
 export * from './components/ui/label';
 export * from './components/ui/input-group';
 export * from './components/ui/kbd';
+export * from './components/ui/popover';
 export * from './components/ui/radio-group';
 export * from './components/ui/select';
 export * from './components/ui/separator';

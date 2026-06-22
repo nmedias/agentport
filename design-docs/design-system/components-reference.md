@@ -972,7 +972,44 @@ status_note: >
     scrollIntoView lagen in test-setup.ts). figma-verify CLEAN-by-design (18 Thumb↔Track-Overlaps = beabsichtigte
     Handle-auf-Rail-Geometrie). Gate grün (260 Tests: 5 Slider-Specs + 6 Slider-Stories + axe).
 
-## Pending / Removed
+- name: Popover
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  source: { registry: "@shadcn", item: popover, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/popover/
+    exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger, PopoverContentProps]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
+  figma:
+    section: { name: "Popover", id: "4365:2253" }
+    content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, KEIN State-/Variant-Set (data-[side]=Motion, kein DS-State)
+    slot: { content: "content#4365:0" }                    # die offene Region; Default = genestete PopoverHeader-Instanz
+    header: { name: "PopoverHeader", id: "4367:2253", props: "title#4367:0 (TEXT, {Title}, Label-Style/dialog-ink) · description#4367:1 (TEXT, {Description}, Body-Style/muted-ink)" }
+    examples: { group: "Usage Examples 4368:2255", SimpleContent: "PopoverContent-Instanz 4368:2258 (Slot = konfig. PopoverHeader)", Dimensions: "PopoverContent-Instanz 4368:2274 (Slot = PopoverHeader + 4 Label/Input-Reihen, echte DS-Instanzen Label 3734:1022 / Input 3176:303)" }
+    vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", muted-ink: "3037:13", corner-lg: "3073:4", space-lg: "3070:8", space-md: "3070:6", space-2xs: "3070:3" }
+    effect: { Elevation: "S:92c2d7…" }
+    axis: { }   # KEINE Achse — eine erhabene Fläche, kein interaktiver State-Raum (Motion ≠ DS-State)
+  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
+  notes: >
+    Radix Popover (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-Konvention,
+    B13). Composite OHNE eigenen State — Content = einzige DS-Fläche (Trigger/Anchor = Pass-through, kein Class).
+    7 Exporte: Popover/Trigger/Content/Anchor (stock-4) + PopoverHeader/Title/Description (Nova-Typo-Helfer über
+    new-york). KEIN CVA, KEIN State-/Variant-Set in Figma — eine erhabene Raised-Surface (Schwester von Dialog/Command:
+    `overlay`+`popover` 2026-06-18 zu `dialog` konsolidiert → `bg-popover`/`text-popover-foreground` TOT). DS-Clothing
+    (T3): bg-popover→bg-dialog-fill · text-popover-foreground→text-dialog-ink · rounded-lg→corner-lg (radius/8, control-
+    attached, NICHT Dialogs corner-xl) · ring-1 ring-foreground/10→border (Nova-Raised-Ring → DS-border, verbatim
+    Dialog/Command) · shadow-md→shadow-elevation · gap-2.5/p-2.5 (10px, keine Rung)→gap-md(8)/p-lg(12) per ROLLE
+    (B22/B23) · text-sm→text-format-body. Header: gap-0.5→gap-2xs; Title text-sm/font-medium→text-format-label
+    (kompakte Caption 14/500, NICHT Dialogs title 18 — Popover ist kompakt); Description muted-foreground→muted-ink.
+    Geometrie numerisch (w-72, z-50, sideOffset/align). Motion-Klassen (data-[side]/data-open/data-closed) verbatim.
+    Docgen: PopoverContentProps = Omit+Re-Declare (align/sideOffset) → surfacen nativ in Autodocs + get-documentation;
+    Popover-Root = Pass-through → API in Story-argTypes hand-authored. A11Y: Radix gibt dem Content role="dialog" → axe
+    aria-dialog-name verlangt einen Accessible Name; Popover wired den Title NICHT auto (anders als modaler Dialog) →
+    offenes Panel braucht explizites aria-label/-labelledby (in JSDoc + Stories dokumentiert; alle open-Stories benannt).
+    jsdom-Spec B20-scoped: closed-Pfad + defaultOpen (mountet OHNE Pointer-Capture-Flow → KEIN neuer Polyfill); der
+    klick-getriebene open→Escape-Flow lebt im Chromium-Play-Test. figma-verify CLEAN (0 text-icon/clipped/overlap/pad-
+    asym). Gate grün (3 Specs + 5 Stories + axe). DOWNSTREAM: Popover + Command komponieren den combobox-Connection-
+    Switcher (Explorer) — OUT OF SCOPE dieses Ports, nur als Consumer notiert.
 
 ```yaml
 # Command: re-portiert 2026-06-10 (siehe Components-Liste oben).
