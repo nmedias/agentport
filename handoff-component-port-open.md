@@ -160,10 +160,10 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — vorrangig (4 offen · 25 ✅ + #62 verworfen — figma-build 14 · SKILL.md 3 · storybook-rules 4 · composites 4 — 2026-06-22)
+#### B — vorrangig (1 offen · 28 ✅ + #62 verworfen — figma-build 14 · SKILL.md 3 · storybook-rules 4 · composites 4 · component-sync 3 — 2026-06-22)
 
 > ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert (Detail-
-> Einträge maßgeblich). #62 verworfen (component-spezifisch). **Offen nur noch:** /component-sync (#40/#41/#43) + snippets (#13).
+> Einträge maßgeblich). #62 verworfen (component-spezifisch). **Offen nur noch:** snippets (#13).
 
 | # | Kurz | Status / was die Lücke kostete |
 |---|------|--------------------------------|
@@ -182,9 +182,9 @@ nie mid-run editiert.
 | ✅ 21 | asChild-Control + eigene Story | eingearbeitet (storybook-rules Cross-cutting) |
 | ✅ 30 | Glow-/Ring-Cluster | eingearbeitet (alle 4 Teile live verifiziert) |
 | ✅ 37 | `mv` statt `git mv` | eingearbeitet (SKILL.md T2) |
-| 40 | S3 dritte Diff-Form (ADD) | gebundene Prop ohne Code-Klasse → Sync verfehlt sie |
-| 41 | bound = Delta, nicht „Deviation" | checked-invalid blieb cyan — User-Report |
-| 43 | read-set-values verfehlt Indicator | Thumb/Dot-Fill-Bindung unsichtbar |
+| ✅ 40 | S3 Diff-Form ADD/REMOVE | eingearbeitet (component-sync S3 Tier 1; + blocked-delta-Punkt) |
+| ✅ 41 | bound = Delta, nicht „Deviation" | eingearbeitet (component-sync Red flags) |
+| ✅ 43 | read-set-values: Indicator-Shapes | eingearbeitet (Snippet + S2; syntax-geprüft) |
 | ✅ 46 | Variant-Member-Clone | eingearbeitet — **korrigiert: bleibt SLOT, verliert nur `slotContentId` → re-binden** |
 | ✅ 47 | createSlot-Orphan | eingearbeitet — nur beim Neu-Bauen; #46 re-bindet → meist obsolet |
 | ✅ 51 | `VariableID:`-Präfix nötig | eingearbeitet (bare → `null`) |
@@ -244,10 +244,13 @@ dabei korrigiert — s. Detail-Einträge unten)
   Doc-Page-Verweis auf `/storybook-rules` (§2 T2.6) ✓
 - **#62** ~~flache Palette `shouldFilter=false`~~ → **verworfen** (component-spezifisch; inline in `command.tsx` + Stories)
 
-**`/component-sync` (3)** — Sync-Skill (Figma→Code, read-only)
-- **#40** S3 dritte Diff-Form: gebundene Prop ohne Code-Klasse → **ADD** (den Satz gebundener Props diffen,
-  nicht nur Werte benannter Klassen) · **#41** gebundener Wert = **Delta**, nie „Deviation" (1:1 mappen) ·
-  **#43** `read-set-values.js` liest non-slot Indicator-Kinder (Thumb-ELLIPSE, Radio-Dot) mit *(auch: snippets)*
+**`/component-sync` (3)** — ✅ **eingearbeitet 2026-06-22**
+- **#40** S3: Satz gebundener Props diffen — gebundene Prop ohne Code-Klasse → ADD, code-hardcoded von Figma
+  gedroppt → REMOVE ✓
+- **#41** gebundener Wert = Delta (1:1), nie „Deviation" (Red-flags-Zeile) ✓
+- **#43** Snippet liest non-slot Indicator-Shapes (bound fill) mit + S2-Notiz ✓ (syntax-geprüft)
+- **+ neu (User 2026-06-22):** Figma-Token ohne Code-Utility → **blocked delta** flaggen (Token-Layer-Arbeit,
+  out of scope), raw nur als markierter Stopgap (S3 Tier 1 + S6) ✓
 
 **`/storybook-rules` + `/docgen-props` (4)** — ✅ **eingearbeitet 2026-06-22**
 - **#11** Render-Verify: nur die Sizing-px-Spezifik ergänzt (Eyeball-via-`shoot`/`preview-stories` existierte
@@ -280,6 +283,10 @@ dabei korrigiert — s. Detail-Einträge unten)
   Dep-Datei), #4 (Usage-Contract aus den Doc-Beispielen), #59 (Anchored-Overlay → `ABSOLUTE`-verankerter
   Child), #61 (Sibling-Surface — Figma-Surface + Doc-Page-Verweis auf `/storybook-rules`). #62 verworfen
   (component-spezifisch, inline in `command.tsx` + Stories).
+- **component-sync B-Findings (Batch 2026-06-22)** ✅ — 3 in `/component-sync`: #40 (S3 Satz gebundener Props
+  diffen → ADD/REMOVE), #41 (gebundener Wert = Delta, nie „Deviation"), #43 (Snippet liest non-slot
+  Indicator-Shapes mit; syntax-geprüft). **+ neu:** Figma-Token ohne Code-Utility → blocked delta (Token-
+  Layer-Arbeit, out of scope; raw nur als markierter Stopgap).
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
