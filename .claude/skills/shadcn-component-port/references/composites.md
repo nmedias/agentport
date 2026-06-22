@@ -31,7 +31,9 @@ moved to **`figma-build.md §Mechanism`** (applies to every port). Composite-spe
   dependency-components **too**, always **flat** (`components/ui/<dep>.tsx`). List every written
   file; per foreign dep decide:
   - **un-ported** → port / stub / delete+defer. Never leave one in the tree — breaks the gate
-    (seen: a composite's sub-part imported an un-installed icon lib → gate red).
+    (seen: a composite's sub-part imported an un-installed icon lib → gate red). **delete+defer ≠ just the
+    dep file** — a kept sub-part still importing it leaves dangling imports; remove the whole consuming
+    sub-export (function + barrel line + story) and log it for re-add.
   - **already ported as a folder** (`components/ui/<dep>/`) → **delete the flat stock copy.** It does
     NOT collide with the folder, so `ui:add` reports no overwrite — but module resolution prefers
     `<dep>.tsx` (file) over `<dep>/` (dir), so the flat stock **shadows** the DS version: every import
@@ -46,6 +48,16 @@ write **one story per structurally-distinct composition**, not per part.
 CVA (T2); a composite has **no CVA / no root**, so reconstruct it: union of what the stories vary = the
 control set (Properties / Instance-Swaps / Slots), mapped per `figma-build.md §Mechanism`. *(That the
 surface must reproduce every usage is the general Done-Test, `§Usage-examples`.)*
+
+**Usage-contract from the doc examples, not the style-source** — cross-check the wrapper API against ≥1
+doc example before T3; when the landed source and the doc disagree on the call-site shape (e.g. a wrapper
+rendering `children` bare vs wrapped), reproduce the **doc example's** API and note the source deviation.
+
+**Porting into an existing family?** Mirror the **nearest ported sibling's** exposure surface (read it
+from the catalog) — don't derive a thinner one from stock source + brief: match the family's state-axis
+convention (how focus / invalid / disabled combine + gate), expose optional elements as **booleans** (not
+non-toggleable slot defaults), and give each API part its own story-file/doc page (`/storybook-rules`).
+Mirror the sibling's *surface*, but still verify its *values* — a predecessor isn't blindly authoritative.
 
 **T2.7 — Composition-Plan → ask the user** *(this IS the composite-ask SKILL.md T2 defers here)*
 - Plan in plain language (user doesn't know shadcn): parts list, how they interplay, the
@@ -63,6 +75,9 @@ surface must reproduce every usage is the general Done-Test, `§Usage-examples`.
    never a rebuild (token edits propagate).
 3. **Flexible composition component** — the composite as **one** recompose-able component
    (Props/Swap/Slots from §1); whole-level variants ride on it. Slot config per `references/figma-build.md`.
+   - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the open
+     state as a top-level composition — a trigger instance + the overlay content in an `ABSOLUTE` /
+     `layoutPositioning` child anchored to the trigger edge, not just the separate trigger/content sets.
 4. **Usage-Examples group** — the general permanent group (`references/figma-build.md §Usage-examples`);
    here it is build **layer 4**, reproduction running through slots / swaps / nested instances (= the
    Done-Test proof).
