@@ -160,10 +160,10 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — vorrangig (13 offen · 17 ✅: figma-build 14 + SKILL.md 3 — 2026-06-22)
+#### B — vorrangig (9 offen · 21 ✅: figma-build 14 + SKILL.md 3 + storybook-rules 4 — 2026-06-22)
 
 > ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert (Detail-
-> Einträge maßgeblich). #2/#10/#11/#21/#61 re-homed → composites.md / storybook-rules (bleiben offen).
+> Einträge maßgeblich). #2/#61 re-homed → composites.md (offen); #10/#11/#21 → storybook-rules (✅).
 
 | # | Kurz | Status / was die Lücke kostete |
 |---|------|--------------------------------|
@@ -173,13 +173,13 @@ nie mid-run editiert.
 | ✅ 6 | Swap-Ziel per exaktem NAMEN | eingearbeitet (Red-flags-Zeile) |
 | ✅ 8 | optionaler Slot = Boolean an `visible` | eingearbeitet — **korrigiert: KEIN FRAME, Slot bleibt SLOT** |
 | ✅ 9 | leerer Slot = 100×100 Default-Box | eingearbeitet — **korrigiert: kein HUG-Bug; Boolean+Auto-Layout kollabiert** |
-| 10 | DOM-Globals-Story nicht strippen | → re-homed /storybook-rules (offen) |
-| 11 | Render-Output-Check (Sizing-px) | → re-homed /storybook-rules (offen) |
+| ✅ 10 | DOM-Globals + Portal-Asserts | eingearbeitet (storybook-rules §play/Cross-cutting) |
+| ✅ 11 | Render-Verify Sizing-px | eingearbeitet (storybook-rules Gate; ohne Token-Pointer) |
 | ✅ 12 | Shadow-Familie in twMerge | eingearbeitet (`utils.ts` Repo-Fix + T1; runtime+typecheck ✓) |
 | 13 | AUTO-Sizing nach combine | vertikales Padding still gedroppt |
 | ✅ 15 | `setCurrentPageAsync`-Invariante | eingearbeitet |
 | ✅ 16 | Section-relative Koords | eingearbeitet |
-| 21 | asChild-Control auf Text-Story | → re-homed /storybook-rules (offen) |
+| ✅ 21 | asChild-Control + eigene Story | eingearbeitet (storybook-rules Cross-cutting) |
 | ✅ 30 | Glow-/Ring-Cluster | eingearbeitet (alle 4 Teile live verifiziert) |
 | ✅ 37 | `mv` statt `git mv` | eingearbeitet (SKILL.md T2) |
 | 40 | S3 dritte Diff-Form (ADD) | gebundene Prop ohne Code-Klasse → Sync verfehlt sie |
@@ -192,7 +192,7 @@ nie mid-run editiert.
 | ✅ 53 | Section-Kind-Koords (schärft #16) | eingearbeitet |
 | ✅ 54 | Sections wachsen nicht auto | eingearbeitet (`resizeWithoutConstraints` B+H) |
 | ✅ 55 | 1-Op pro Call (schärft #48) | eingearbeitet |
-| 57 | Composite-Doc = Story-File je Part | verbrannte `subcomponents`-Iteration (leere ArgsTable) |
+| ✅ 57 | Composite-Doc = Story-File je Part | eingearbeitet (storybook-rules neue Section) |
 | 59 | Anchored-Overlay-Composite | Select-Main-Component fehlte — Review fand es |
 | ✅ 60 | Examples screenshotten | eingearbeitet (Verify nur strukturell) |
 | 61 | Sibling-Surface spiegeln | → re-homed composites.md (offen) — Review-Defekt (3×) |
@@ -251,15 +251,13 @@ dabei korrigiert — s. Detail-Einträge unten)
   nicht nur Werte benannter Klassen) · **#41** gebundener Wert = **Delta**, nie „Deviation" (1:1 mappen) ·
   **#43** `read-set-values.js` liest non-slot Indicator-Kinder (Thumb-ELLIPSE, Radio-Dot) mit *(auch: snippets)*
 
-**`/storybook-rules` + `/docgen-props` (4)** *(+ #10/#11 re-homed aus SKILL.md)*
-- **#11** Render-Output verifizieren: Gate/Specs sehen kein kompiliertes CSS → Story rendern
-  (`shoot`/`preview-stories`) + eyeballen; T-Shirt-Sizing-px gegen tokens-ref §3 *(prüfen: nicht schon vorhanden)*
-- **#10** DOM-Globals-Story nicht strippen (storybook-tsconfig hat die DOM-lib)
-- **#21** strukturiert-Children-Boolean (`asChild` & Co.) als Control disablen + eigene Single-Element-Story;
-  Control-Scoping vom geporteten Sibling übernehmen *(re-homed aus SKILL.md)*
-- **#57** Composite-Sub-Parts dokumentieren = **eigenes Story-File je API-Part** (RadioGroupItem-Muster),
-  NICHT `meta.subcomponents`; inkl. „Zwei Part-Page-Fallen" (`source.code`-Snippet bei Wrapper-render +
-  Omit/re-declare geerbter Props für vollständige ArgsTable)
+**`/storybook-rules` + `/docgen-props` (4)** — ✅ **eingearbeitet 2026-06-22**
+- **#11** Render-Verify: nur die Sizing-px-Spezifik ergänzt (Eyeball-via-`shoot`/`preview-stories` existierte
+  schon → keine Redundanz; ohne Token-Referenz-Pointer) ✓
+- **#10** Portal-Asserts (Trigger-ARIA statt Portal-DOM; deep asserts in `.spec`) + DOM-Globals erlaubt ✓
+- **#21** Structured-children-Boolean (`asChild`) → `control:false` + eigene Single-Element-Story ✓
+- **#57** Composite-Sub-Parts = eigenes Story-File je API-Part (neue Section; `/docgen-props` als
+  Voraussetzung referenziert — kein docgen-props-Edit nötig) ✓
 
 **`snippets/build-variant-set.js` (1)**
 - **#13** `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` VOR der Padding-Zuweisung setzen
@@ -276,6 +274,10 @@ dabei korrigiert — s. Detail-Einträge unten)
   umformuliert + Repo-Fix `utils.ts` Shadow-Gruppe, runtime + typecheck verifiziert), #1 + #37 (T2 „Land":
   lucide→`@remixicon`-Swap, plain `mv`). #2/#10/#11/#21/#61 re-homed → composites.md / storybook-rules.
   T1 zusätzlich von DS-Token-Namen befreit.
+- **storybook-rules B-Findings (Batch 2026-06-22)** ✅ — 4 in `/storybook-rules`: #11 (nur Sizing-px-Spezifik
+  ergänzt — Eyeball-via-`shoot` existierte schon, ohne Token-Pointer), #10 (Portal-Asserts + DOM-Globals),
+  #21 (asChild → `control:false` + eigene Story), #57 (neue Section „Composite sub-parts → one file per
+  API-part", NICHT `meta.subcomponents`; `/docgen-props` als Voraussetzung referenziert — kein docgen-props-Edit).
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
