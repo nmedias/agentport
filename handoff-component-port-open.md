@@ -30,7 +30,8 @@ Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**) + Blocks
 `responsive` = Code-only; FieldError→`destructive ⚠`); **Label public** (Hard-Dep von Field).
 Composite-Verfahren validiert (**5×**: InputGroup/Command/Dialog/Field/ChoiceCard; Select = volles
 Radix-Primitive, kein surface-less Composite), operativ in `/shadcn-component-port` (SKILL.md +
-references/composites.md + references/figma-build.md); Pflege via `/component-sync` (Figma→Code).
+references/composites.md) + dem ausgegliederten `/figma-build-rules` (Build-Mechanik + Snippets);
+Pflege via `/component-sync` (Figma→Code).
 
 ## Offene Punkte
 
@@ -102,14 +103,15 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 ### A — gap caused a defect (priority)
 
 > **2026-06-22 KOMPLETT eingearbeitet** (29 ✅ + #62 verworfen) → Entries entfernt. Welcher Fix wohin
-> ging: git-History + die 6 Ziel-Dateien (`figma-build.md` · `SKILL.md` · `composites.md` ·
-> `/component-sync` · `/storybook-rules` · `snippets/build-variant-set.js`). Die ehem. Global-#8/#9/#46/#47
+> ging: git-History + die 6 Ziel-Dateien (`/figma-build-rules` · `SKILL.md` · `composites.md` ·
+> `/component-sync` · `/storybook-rules` · `/figma-build-rules/snippets/build-variant-set.js`). Die ehem.
+> Global-#8/#9/#46/#47
 > wurden dabei live in Figma korrigiert (Slot bleibt SLOT bei Boolean-`visible`; Variant-Clone behält
 > SLOT, verliert nur `slotContentId` → re-binden).
 
 ### B — self-derived, result held (codify · deferred)
 
-#### figma-build.md
+#### /figma-build-rules
 
 **B1 · §Slots — Slot-Defaults in Instanzen: Re-Resolve-Invariant** *(Command #3 · Dialog #3)*
 
@@ -136,7 +138,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Feld | Inhalt |
 |---|---|
 | Why B | Alias-Kette rekursiv aufgelöst → 10%-Rot mit erhaltener Bindung. |
-| Gap | figma-build sagt „Opacity + reale aufgelöste Farbe als Fallback", aber der Var-Wert ist meist `VARIABLE_ALIAS` → Primitive → Color, nicht direkt aus `valuesByMode` lesbar; ohne Rezept spreadet ein Agent den gebundenen Paint (verboten) oder setzt schwarz. |
+| Gap | figma-build-rules sagt „Opacity + reale aufgelöste Farbe als Fallback", aber der Var-Wert ist meist `VARIABLE_ALIAS` → Primitive → Color, nicht direkt aus `valuesByMode` lesbar; ohne Rezept spreadet ein Agent den gebundenen Paint (verboten) oder setzt schwarz. |
 | Verified | `bg-destructive/10` brauchte `resolveColor` über den Alias → 10%-Rot. |
 | Candidate fix | „tinted bound surface"-Rezept: binden → Farbe rekursiv über die Alias-Kette auflösen → als Paint-Fallback setzen → Paint-Level-`opacity` (≠ Node-`opacity`, das dimmt Content mit — nur disabled). *(also: build-variant-set.js `tintVar`/`tintOpacity`-Branch)* |
 | Status | zurückgestellt. |
@@ -156,7 +158,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Feld | Inhalt |
 |---|---|
 | Why B | 10 flache Member ohne Base, controls-live + verify CLEAN. |
-| Gap | figma-build erklärt Base + state-layer für Content-Flächen; ein content-/tint-/active-loser Geometrie-Toggle braucht das nicht. |
+| Gap | figma-build-rules erklärt Base + state-layer für Content-Flächen; ein content-/tint-/active-loser Geometrie-Toggle braucht das nicht. |
 | Verified | 10 flache Member, kein Base, controls-live + verify CLEAN. |
 | Candidate fix | N flache Member (size×state) via `combineAsVariants`, Fill/Stroke/Effect/Layer-Opacity pro Member binden, Thumb-Kind-x numerisch versetzen. Base + state-layer nur für Content-Flächen (Buttons/Inputs). |
 | Status | zurückgestellt. |
@@ -284,7 +286,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Why B | korrekt als Member vs. komponierende Overlays modelliert. |
 | Gap | kein Rule, einen no-CVA-State-Raum aufzuteilen. |
 | Verified | —. |
-| Candidate fix | mutually-exclusive (default/checked) = `state`-Achsen-Member; komponierend (`disabled:`/`focus-visible:`/`aria-invalid:aria-checked:`) = Boolean-Overlays / Interaction-State-Pattern. Nicht in ein flaches Enum zwingen (explodiert oder droppt Zellen). *(also: figma-build, T5)* |
+| Candidate fix | mutually-exclusive (default/checked) = `state`-Achsen-Member; komponierend (`disabled:`/`focus-visible:`/`aria-invalid:aria-checked:`) = Boolean-Overlays / Interaction-State-Pattern. Nicht in ein flaches Enum zwingen (explodiert oder droppt Zellen). *(also: figma-build-rules, T5)* |
 | Status | zurückgestellt. |
 
 **B18 · T2 — Single-Achsen-State-Set kann orthogonale Kombis (checked×disabled) nicht ausdrücken → Instanz-Override** *(Radio #4)*
@@ -294,7 +296,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Why B | legitimer Instanz-`opacity`-Override, in notes vermerkt. |
 | Gap | kein Rule für eine orthogonale State-Kombi außerhalb der Achse. |
 | Verified | —. |
-| Candidate fix | z. B. „erste Option checked unter disabled Group" → Instanz auf `state:checked` + `opacity:0.5`-Override (kein Member, kein Detach), in notes. *(also: figma-build)* |
+| Candidate fix | z. B. „erste Option checked unter disabled Group" → Instanz auf `state:checked` + `opacity:0.5`-Override (kein Member, kein Detach), in notes. *(also: figma-build-rules)* |
 | Status | zurückgestellt. |
 
 **B19 · T2.5/T3 — twMerge-Survival-Guard auf „at-risk DS-Custom-Utility", nicht nur `text-format-*`** *(Radio #2)*
