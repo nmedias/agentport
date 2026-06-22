@@ -51,3 +51,13 @@ Capture-on-the-spot, pre-sorted by triage class × Edit-Target. `Candidate fix` 
 | Verified | Slider 12-member set built fully bespoke (custom mkThumb + per-orientation Track/Range/Thumb positioning); the skeleton's text/fill/HUG path was unusable. |
 | Candidate fix | Add a geometry-primitive scaffold variant (Root `NONE` + absolute children, a `mkHandle` helper, per-orientation track/fill positioning, member opacity for disabled, per-handle glow) — or document that geometry primitives (slider/switch/progress) bypass the label/field skeleton and build members by hand. |
 | Status | open (tooling/backlog). |
+
+**#5 · /storybook-rules — wrapper-render → `source.code` rule exists but was missed (user-found, shipped)**
+
+| Feld | Inhalt |
+|---|---|
+| Why C | The rule is ALREADY in /storybook-rules §invariants ("Wrapper render → real source snippet", ~line 176–178); no new rule needed → "already covered", entry = evidence. But it was a real shipped defect the **user found** in the rendered Storybook. |
+| Gap | A story whose `render` delegates to a stateful helper (`render: () => <PriceRangeField />`) shows that bare reference under "Show code" — the actual Field+useState+Slider composition is hidden. The fix (`parameters.docs.source.code` = real impl) lives only in the buried §invariants list, so the port's story step (T2.5/T6, which delegates to /storybook-rules) skipped it. |
+| Verified | FieldSlider story "Show code" rendered `{ parameters: { controls: { disable: true } }, render: () => <PriceRangeField /> }` — implementation invisible. Added `docs.source.code` with the real composition; snippet now shows the consumer code. |
+| Candidate fix | Promote "wrapper/helper render → set `parameters.docs.source.code`" from §invariants into the S-step author checklist (S3/S4) so it's applied, not buried; and add a one-line reminder in /shadcn-component-port T2.5/T6 ("any story whose render delegates to a named helper needs source.code"). Optionally a check that flags `render: () => <SomeNamedComponent />` stories lacking `source.code`. |
+| Status | fix applied to the story; skill edit open (user reviews). |

@@ -127,7 +127,36 @@ function PriceRangeField() {
 }
 
 export const FieldSlider: Story = {
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    // render delegates to the stateful PriceRangeField wrapper → the auto "Show code"
+    // snippet would just read `<PriceRangeField />` and hide the implementation. Surface
+    // the real composition a consumer writes (/storybook-rules: wrapper render → source.code).
+    docs: {
+      source: {
+        code: `function PriceRangeField() {
+  const [value, setValue] = React.useState([200, 800]);
+  return (
+    <Field>
+      <FieldTitle>Price Range</FieldTitle>
+      <FieldDescription>
+        Set your budget range (\${value[0]} – \${value[1]}).
+      </FieldDescription>
+      <Slider
+        value={value}
+        onValueChange={setValue}
+        min={0}
+        max={1000}
+        step={10}
+        className="mt-md w-full"
+        aria-label="Price Range"
+      />
+    </Field>
+  );
+}`,
+      },
+    },
+  },
   render: () => <PriceRangeField />,
 };
 
