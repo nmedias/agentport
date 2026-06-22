@@ -53,7 +53,8 @@ Fill the snippet's `PAGE_ID` (`config.json` `figma.pageId`) + `SET_ID` (S1), the
 name), text node's text-style + fill, bound radius/padding, effects (focus/invalid rings), opacity,
 w/h, **and auto-layout** — `layoutMode`, flex props (`itemSpacing` + bound var,
 `primary/counterAxisAlignItems`) or grid props (`gridRow/ColumnCount`, `gridRow/ColumnGap`),
-`layoutSizingH/V`. The **bound variable name is the authoritative token** (S3). This is the current
+`layoutSizingH/V`, **and any non-slot indicator child** (a moving thumb / selection dot — its bound fill
+is invisible at member level). The **bound variable name is the authoritative token** (S3). This is the current
 Figma truth.
 
 ### S3 — Diff
@@ -65,7 +66,12 @@ what differs**. Two tiers, in order:
    (Figma var/property ↔ utility) — no role judgement, the binding is the answer. Applies to every bound
    property class (colour token, text-style, radius/padding/gap, auto-layout): a changed/re-bound
    value ⇒ the corresponding utility swap; an added/removed member ⇒ a variant change. The concrete
-   mappings live in §6 — don't restate them here.
+   mappings live in §6 — don't restate them here. Diff the **set of bound properties**, not just the values
+   of named classes: a binding the code expresses as no class at all (an implicit default) ⇒ **ADD** the
+   mapped utility; a value the code hardcodes that Figma dropped ⇒ **REMOVE** it. A bound var with **no DS
+   utility/token in code yet** (a new or ⚠-placeholder var) ⇒ can't map token-faithfully → flag a **blocked
+   delta** (adding the token is token-layer work, out of sync scope); don't invent raw hex — a raw resolved
+   value is a marked stopgap only.
 2. **`use`/`avoid` only on a defect.** Raw value (no bound token) ⇒ pick by role (§6). Binding that is
    semantically wrong (designer error) ⇒ flag it, don't silently propagate. Never re-judge a correct
    binding.
@@ -90,7 +96,8 @@ and surface every URL to the user for visual confirmation.
 `agent-runs/component-sync/<date>-<component>/notes.md`: the applied delta (per member: Figma value →
 code utility), gate state, preview URLs. **Deviations — prominent, the actionable part:** every place
 the code does **not** match the literal Figma binding — a **raw value** tokenised by role (Figma has no
-token → it should get one), or a **binding judged wrong** that was flagged, not propagated. Table:
+token → it should get one), a **binding judged wrong** flagged not propagated, or a **bound token code has
+no utility for yet** (raw stopgap + flag → needs token-layer work). Table:
 `member · property · Figma says ↔ code uses · why`. Record **auto-layout** (layoutMode/align/gap/sizing)
 and **variant** add/remove/restructure the same way, so the design-side fixes are auditable. A
 delta-free, deviation-free run → one-line note is fine.
@@ -102,6 +109,7 @@ delta-free, deviation-free run → one-line note is fine.
 | Write the change back into Figma | Out of scope — sync is **Figma → code** only. A push/redesign is `/shadcn-component-port` or `/design-punk`. |
 | Rewrite beyond the delta | Apply only what differs; opportunistic refactors hide the real change and risk regressions. |
 | Re-judge a correct binding by `use`/`avoid` | A **bound** var is authoritative — map it 1:1 (§6 crosswalk). Role-picking is only for a **raw/unbound** value or to flag a wrong binding. |
+| Log a live bound value as a "Deviation" | A bound var is the truth → propagate it 1:1 (Tier 1). "Deviation" is only for unbound/raw values or a flagged-wrong binding — misfiling a binding there = a false no-delta. |
 
 ## Boundaries
 

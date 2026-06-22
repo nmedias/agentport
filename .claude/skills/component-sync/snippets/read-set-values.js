@@ -52,6 +52,15 @@ for (const m of set.children.filter((n) => n.type === 'COMPONENT')) {
       else if (c.type === 'TEXT') { const sg = c.getStyledTextSegments(['textStyleId']); slot.content.style = sg[0].textStyleId ? (await figma.getStyleByIdAsync(sg[0].textStyleId))?.name : null; slot.content.fill = await paint(c.fills); }
     }
   }
+  // non-slot indicator shapes (a moving thumb, a selection dot, …): a direct ELLIPSE/RECT/VECTOR
+  // child with a bound fill — invisible at member level, so read each separately.
+  const inSlot = (n) => { let p = n.parent; while (p && p !== m) { if (p.type === 'SLOT') return true; p = p.parent; } return false; };
+  const indicators = [];
+  for (const c of m.findAll((n) => n.type === 'ELLIPSE' || n.type === 'RECTANGLE' || n.type === 'VECTOR')) {
+    if (inSlot(c)) continue;
+    const cp = await paint(c.fills);
+    if (cp && cp.var) indicators.push({ type: c.type, name: c.name, x: c.x, fillVar: cp.var, opacity: cp.opacity });
+  }
   out.push({
     name: m.name, w: m.width, h: m.height, minW: m.minWidth, minH: m.minHeight, opacity: m.opacity, clips: m.clipsContent, layout,
     radius: m.cornerRadius, radiusVar: await bound(m, 'topLeftRadius'),
@@ -59,7 +68,7 @@ for (const m of set.children.filter((n) => n.type === 'COMPONENT')) {
     padXVar: await bound(m, 'paddingLeft'), padYVar: await bound(m, 'paddingTop'),
     fill: await paint(m.fills), stroke: await paint(m.strokes), strokeWeight: m.strokeWeight,
     effects: (m.effects || []).map((e) => ({ type: e.type, spread: e.spread, radius: e.radius, color: e.color, visible: e.visible })),
-    text, slot,
+    text, slot, indicators,
   });
 }
 return { set: set.name, members: out };
