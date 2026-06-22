@@ -204,7 +204,7 @@ function Hero() {
 
 const FOUNDATIONS: { label: string; id: string; note: string }[] = [
   { label: 'Colour', id: 'foundations-colors--docs', note: 'Semantic tokens' },
-  { label: 'Typography', id: 'foundations-typography--docs', note: '11 formats' },
+  { label: 'Typography', id: 'foundations-typography--docs', note: '12 formats' },
   {
     label: 'Spacing & Radius',
     id: 'foundations-spacing-radius--docs',
@@ -258,10 +258,12 @@ const GROUPS: Group[] = [
       { label: 'Input', id: 'ui-input--docs' },
       { label: 'Textarea', id: 'ui-textarea--docs' },
       { label: 'Input Group', id: 'ui-inputgroup--docs' },
+      { label: 'Select', id: 'ui-select--docs' },
       { label: 'Label', id: 'ui-label--docs' },
       { label: 'Field', id: 'ui-field--docs' },
       { label: 'Checkbox', id: 'ui-checkbox--docs' },
       { label: 'Switch', id: 'ui-switch--docs' },
+      { label: 'Slider', id: 'ui-slider--docs' },
       { label: 'Radio Group', id: 'ui-radiogroup--docs' },
       { label: 'Choice Card', id: 'ui-choicecards-choicecardradio--docs' },
     ],
@@ -309,7 +311,7 @@ function ComponentsIndex() {
     <Section
       id="components"
       eyebrow="Components"
-      title="Twenty primitives, one block"
+      title="Eighteen primitives, one block"
       lead="The shadcn/ui base, re-clothed in the Agentport tokens and aligned to the denser radix-nova baseline. Each links into its Autodocs page."
     >
       <div className="flex flex-col gap-3xl">
