@@ -27,7 +27,10 @@ Composite-Verfahren validiert (**4×**: InputGroup/Command/Dialog/Field), operat
 
 ## Offene Punkte
 
-1. **Skill-Findings einarbeiten** (Block unten) — User wendet an. **Noch offen: Findings 15–28** aus den
+1. **Skill-Findings einarbeiten** (Block unten) — User wendet an. **Triage 2026-06-22: alle Findings nach
+   A/B/C sortiert — s. „Triage / Sortierung" unten. A-Fälle (Agent kam trotz Skill-Schweigen zum geplanten
+   Ergebnis) = ZURÜCKGESTELLT (Kodifizierung, kein Bugfix → niedrige Prio); B-Fälle (Lücke verursachte einen
+   Defekt) = aktiv/vorrangig.** **Noch offen: Findings 15–28** aus den
    Badge-/Separator-Runs, dem Badge-Stories-Refine (15–21) und dem Field-Composite-Run (22–28:
    Hard-Dep-muss-porten, Flat-Shadow-Evidenz, Surface-less-Composite-Rezept, Slot-statt-Text-Property,
    lokales Nesting via `createInstance`, 2px-Spacing-Rung, 16px-Typo-Rolle) — geprüft: keine davon im
@@ -101,6 +104,161 @@ Field (06-12, + co-port Label) · **Checkbox/Switch/RadioGroup (06-12, Port + er
 Verified-Belege stehen in den Run-Dateien;
 hier der deduplizierte Stand, gruppiert nach Ziel-Datei. **User reviewt + wendet an** — Skills werden
 nie mid-run editiert.
+
+> **Formulierungs-Regel für ALLE Finding-Edits (User 2026-06-22):** der in den Skill eingearbeitete Text
+> ist **kompakt, generisch und agent-gerichtet** — KEIN Run-Bezug, KEINE Component-Namen (kein
+> `.Button`/`Dialog`/…, kein „der X-Port"), keine User-Erklärungen; nur was der Agent zur Ausführung
+> braucht. **Der Skill muss selbst vollständig sein:** Finding-/`skill-feedback.md`-/Run-Notes sind
+> review-temporär und werden gelöscht → NICHT als dauerhafte Referenz verlinken; alles Ausführungs-
+> relevante generisch in den Skill schreiben. Konkrete Belege/Beispiele sind reine Review-Evidenz und
+> verschwinden mit jenen Dateien — nicht zur „Aufbewahrung" in den Skill ziehen. (= Memory `skill-writing-style`.)
+
+### Triage / Sortierung (2026-06-22)
+
+> **Sortier-Achse:** Hat die Skill-Lücke etwas *gekostet*, oder ist der Agent drumherum geroutet und
+> trotzdem beim geplanten Ergebnis gelandet?
+>
+> - **A — selbst hergeleitet, Ergebnis stimmte** → Skill-Edit = Wissen kodifizieren, kein Bugfix.
+>   **Bearbeitung ERSTMAL ZURÜCKGESTELLT** (User-Entscheid 2026-06-22): der Port lief korrekt, die
+>   Kodifizierung spart nur künftiges Neu-Herleiten → niedrige Prio.
+> - **B — Lücke verursachte einen Defekt** (Gate rot · Crash · geworfener Error · falsch gerendert ·
+>   User fand den Bug) → Skill-Edit = Leitplanke. **Aktiv / vorrangig.**
+> - **C — Tooling/Repo-Fix oder schon abgedeckt.**
+>
+> Grenzfall-Entscheide (User 2026-06-22): **#30 · #57 → B** (Ergebnis stimmte erst nach Defekt bzw.
+> verbrannter `subcomponents`-Iteration); **#3 · #7 · #38 · #44 · #45 → A** (Konventions-/Prozess-Nuancen,
+> lief). Die Verified-Belege je Finding stehen in der jeweiligen Sektion unten + den Run-Dateien.
+
+#### A — zurückgestellt (26)
+
+| # | Kurz | Warum A (Beleg) |
+|---|------|-----------------|
+| 3 | radix-Umbrella-Import | lief transitiv; #56 bestätigt: für volle Primitives ist Umbrella sogar richtig |
+| 5 | Layer-2-Nesting-Hard-Case | Base-Override/Icon-Swap-Rezept selbst gefunden, an Dialog re-validiert |
+| 7 | Slot-Default Re-Resolve-Invariant | one-remove-per-resolve-Verhalten selbst beobachtet, Slots gebaut |
+| 17 | ⚠-Suffix-Matcher | dok. `endsWith` gibt []; Agent band per vollem Namens-Scan korrekt (nicht Roh-Hex) |
+| 18 | Tinted bound surface | Alias-Kette rekursiv aufgelöst → 10%-Rot mit erhaltener Bindung (verified) |
+| 19 | gelandete CVA > Brief | 6 Varianten voll in Figma gebaut + im Code belassen (richtig) |
+| 20 | 12px-Sans per Rolle | auf `text-format-label` gesnappt — Caveat „Agent rät" |
+| 22 | Hard-Dep co-porten | `Label` co-portiert (einziger gültiger Weg; Skill bot fälschl. stub/defer an) |
+| 24 | Surface-less Composite | nur ROW + Spacing/Typo gebunden, verify CLEAN |
+| 25 | Text-Region als Slot | 4 Slots → 4 Set-Level-Props (verified) |
+| 26 | lokales Nesting | importByKey warf „not found"; `getNodeByIdAsync`+`createInstance` ok |
+| 27 | 2px-Spacing-Rung | px-Wert-Regel → `gap-2xs` korrekt trotz unvollständiger Beispiel-Liste |
+| 28 | 16px-Sans per Rolle | `text-format-title` (sinnvoll, generalisiert #20) |
+| 31 | `ring-3`→`ring-[3px]` | Sibling-Konvention; funktional identisch (3px) |
+| 32 | Rollen-Token-Kontrast | `bg-input` bewusst behalten (verified `muted`≈1.04:1 vs `input`≥3:1) |
+| 33 | No-CVA-State-Achse | korrekt als Member vs. komponierende Overlays modelliert |
+| 35 | orthogonale Kombi | legitimer Instanz-`opacity`-Override, in notes vermerkt |
+| 38 | twMerge-Guard auf at-risk-Utility | richtige Utility (`corner-*`) identifiziert |
+| 39 | Two-Part-Geometrie-Toggle | 10 flache Member ohne Base, controls-live + verify CLEAN |
+| 42 | no-delta First-Class-Outcome | korrekt gemeldet, nichts erfunden |
+| 44 | Member→Variant-Prefix-Mapping | korrekt angewandt (Doku-Naming) |
+| 45 | wrapper `fileKey`+`description` | minor/env, lief |
+| 48 | Fill-slot-in-instance-Rezept | clear+append / Read-back-im-Folge-Call funktionierte |
+| 50 | control-leading `.Field` | `controlPosition`-Achse selbst gebaut, korrekt genestet |
+| 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
+| 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
+
+#### B — aktiv / vorrangig (30)
+
+| # | Kurz | Was die Lücke kostete |
+|---|------|-----------------------|
+| 1 | lucide-IconPlaceholder-Trap | Gate rot (lib nicht installiert) |
+| 2 | un-portierte Dep deferren | dangling Imports (CommandDialog→Dialog) |
+| 4 | Usage-Contract aus Docs | bare `{children}` bricht Doc-Contract |
+| 6 | Icon-Swap per NAMEN | Substring-Match ersetzt ganze Base (subtil falsch) |
+| 8 | SLOT nie direkt visibility-binden | still zu FRAME, Slot-Inhalt verworfen |
+| 9 | leerer Slot ~100px Resthöhe | sichtbarer Layout-Defekt |
+| 10 | Stories + DOM-Globals | Typecheck rot (Repo-Gap ✅ behoben; Skill-Edit offen) |
+| 11 | T6 rendered-output zahnlos | `sm:max-w-sm` als 6px geshippt — User fand den Bug |
+| 12 | Shadow-Semantik in twMerge | `cn` behält beide Shadow-Klassen |
+| 13 | AUTO-Sizing nach combine | vertikales Padding still gedroppt |
+| 15 | `setCurrentPageAsync`-Invariante | combine wirft „must be in the same page" |
+| 16 | Section-relative Koords | Set tausende px aus der Section, Fit-Resize bläst auf |
+| 21 | asChild-Control auf Text-Story | Toggle → Crash im Controls-Panel (`React.Children.only`) |
+| 30 | Glow-/Ring-Cluster | gebundener Ring rendert 100% (Defekt unterwegs) |
+| 37 | `mv` statt `git mv` | git mv exit 128 (untracked source) |
+| 40 | S3 dritte Diff-Form (ADD) | gebundene Prop ohne Code-Klasse → Sync verfehlt sie |
+| 41 | bound = Delta, nicht „Deviation" | checked-invalid blieb cyan — User-Report |
+| 43 | read-set-values verfehlt Indicator | Thumb/Dot-Fill-Bindung unsichtbar |
+| 46 | clone() degradiert SLOT→FRAME | Ursache des `.Field`-invalid-Flaws |
+| 47 | createSlot()-Orphan-Prop | Junk auf jeder Instanz |
+| 51 | `VariableID:`-Präfix nötig | bare ID → schwarzer unbound Paint |
+| 52 | Slot-Merge zur combine-Zeit | 6 un-merged Props (kaputte Instanz-API) |
+| 53 | Section-Kind-Koords (schärft #16) | content bei abs x≈21000 |
+| 54 | Sections wachsen nicht auto | Section bleibt headline-groß (B/H) |
+| 55 | 1-Op pro Call (schärft #48) | zweite Mutation wirft „node not found" |
+| 57 | Composite-Doc = Story-File je Part | verbrannte `subcomponents`-Iteration (leere ArgsTable) |
+| 59 | Anchored-Overlay-Composite | Select-Main-Component fehlte — Review fand es |
+| 60 | Examples screenshotten | headline-los/falscher Stil bestand `/figma-verify` — Review fand es |
+| 61 | Sibling-Surface spiegeln | Trigger ohne focus-invalid/gated Ring etc. — Review (3×) |
+| 62 | flache Palette `shouldFilter=false` | sichtbarer „weird grouping"-Bug — Review |
+
+#### C — Tooling/Repo / erledigt (3 + 3 ✅)
+
+| # | Kurz | Status |
+|---|------|--------|
+| 14 | Snippet-Scaffold Composite-Sub-Builds | optional, Backlog |
+| 23 | Flat-Shadow-Copy = STOCK | Regel schon eingearbeitet (#1) — hier nur Evidenz |
+| 49 | figma-verify überspringt `visible:false` | figma-verify-Tooling-Refinement |
+| 29 | Text-Property-Konvention | ✅ eingearbeitet (figma-build.md) |
+| 34 | Examples = Deliverable | ✅ eingearbeitet (figma-build.md §Usage-examples) |
+| 36 | Stories in Doc-Komposition | ✅ eingearbeitet (SKILL.md T2.5) |
+
+#### B — gebündelt nach Ziel-Datei (Einarbeitungs-Reihenfolge)
+
+> Pro Datei in **einem Rutsch** einarbeiten. „(auch: X)" = Finding berührt zusätzlich Datei X.
+> Vorschlag-Reihenfolge: `figma-build.md` → `SKILL.md` → `composites.md` → `/component-sync` → Rest.
+> Voller Wortlaut + Verified-Belege je Finding in den Sektionen unten.
+
+**`figma-build.md` (14)** — ✅ **eingearbeitet 2026-06-22** (mehrere Claims live in Figma geprüft; #8/#9/#46/#47
+dabei korrigiert — s. Detail-Einträge unten)
+- **§Icons → Red flags:** **#6** Swap-/Lookup-Ziel per exaktem Main-NAMEN, nicht `/icon/i`-Substring
+- **§Approach:** **#15** `setCurrentPageAsync` als Per-Call-Invariante *(dokumentiert)*
+- **§Binding recipes:** **#51** `getVariableByIdAsync` braucht `VariableID:`-Präfix (bare → `null`) ✓verifiziert
+- **§Slots:** **#52** Slot-Merge zur `combineAsVariants`-Zeit (Slots VOR dem Kombinieren) ✓ · **#8/#9** optionaler
+  Slot = Boolean direkt an `visible` (KEIN Wrapper; Slot bleibt SLOT; leere Default-Box = 100×100) ✓korrigiert ·
+  **#46/#47** Variant-Member-Clone behält SLOT, verliert nur `slotContentId` → re-binden statt neu bauen ✓korrigiert ·
+  **#55** Instanz-Slot-Mutation strikt 1 Op pro Call ✓
+- **§Variant set assembly:** **#16/#53/#54** Section-Kind-Koords section-relativ + Sections wachsen nicht automatisch
+  (`resizeWithoutConstraints` B+H) ✓
+- **§Interaction states:** **#30** Glow-Cluster (literal-Alpha statt Bind · `showShadowBehindNode:false` ·
+  focus-copy/invalid-synth · sweep-all) ✓
+- **§Usage-examples:** **#60** Examples screenshotten + eyeballen (Verify nur strukturell) *(auch: SKILL.md T5)*
+- *Bonus Red-flags:* `.height` spiegelt Visibility-Reflow nicht → Screenshot ✓
+
+**`SKILL.md` (8)** — Task-Steps der Port-Pipeline
+- **T2 Dep-Audit:** **#1** lucide-IconPlaceholder → `@remixicon/react`-Swap (Ziel-Icon im Registry-JSON) ·
+  **#2** un-portierte Dep + den konsumierenden Sub-Part komplett deferren *(beide auch: composites.md §2)*
+- **T2.5/T6 Stories/Verify:** **#10** Stories dürfen DOM-Globals nutzen (Stories-tsconfig-DOM-lib prüfen statt
+  Beispiel strippen) · **#11** mind. eine Story **echt gerendert** prüfen (Sizing-Utility-Kollision T-Shirt→px) ·
+  **#21** strukturiert-Children-Boolean (`asChild`) als Control disablen + eigene Single-Element-Story
+- **T1/T3 twMerge:** **#12** DS-Shadow-Familie in twMerge registrieren *(auch: repo `utils.ts`)*
+- **T2/T6:** **#37** `mv` statt `git mv` für untracked source (minor)
+- **T2.6:** **#61** Sibling-Surface spiegeln (focus-invalid-Member + focus-gated Ring · `showIcon`-Bool ·
+  Doc-Seite je Part) *(auch: composites.md + /docgen-props/storybook-rules)*
+
+**`composites.md` (3)** — Composite-Anatomie
+- **#4** Usage-Contract aus den Doc-Beispielen ziehen, nicht der Style-Source (Wrapper-API vor T3 cross-checken)
+- **#59** Anchored-Overlay-Composite → Open-State als absolut-pos., am Trigger verankerter Slot *(auch:
+  figma-build.md `layoutPositioning=ABSOLUTE`-Anchor-Rezept)*
+- **#62** flache Command-Palette → `shouldFilter={false}` *(bereits in `command.tsx` + Stories angewandt;
+  Skill-Home offen — cmdk-Composite-Note)*
+
+**`/component-sync` (3)** — Sync-Skill (Figma→Code, read-only)
+- **#40** S3 dritte Diff-Form: gebundene Prop ohne Code-Klasse → **ADD** (den Satz gebundener Props diffen,
+  nicht nur Werte benannter Klassen) · **#41** gebundener Wert = **Delta**, nie „Deviation" (1:1 mappen) ·
+  **#43** `read-set-values.js` liest non-slot Indicator-Kinder (Thumb-ELLIPSE, Radio-Dot) mit *(auch: snippets)*
+
+**`/storybook-rules` + `/docgen-props` (1)**
+- **#57** Composite-Sub-Parts dokumentieren = **eigenes Story-File je API-Part** (RadioGroupItem-Muster),
+  NICHT `meta.subcomponents`; inkl. „Zwei Part-Page-Fallen" (`source.code`-Snippet bei Wrapper-render +
+  Omit/re-declare geerbter Props für vollständige ArgsTable)
+
+**`snippets/build-variant-set.js` (1)**
+- **#13** `primaryAxisSizingMode`/`counterAxisSizingMode = 'AUTO'` VOR der Padding-Zuweisung setzen
+  *(zusätzlich berühren #16/#53 die `set.x/y`-Zeilen, #43 `read-set-values.js`)*
 
 ### Bereits eingearbeitet ✅ (nur zur Abgrenzung)
 
@@ -201,14 +359,18 @@ nie mid-run editiert.
    `instance.setProperties(...)` **materialisiert** geerbte Slot-Defaults zu echten Kindern —
    Component-Slot VOR dem Instanziieren leeren oder die materialisierten Kinder danach löschen.
    Per-Instanz komponierte Slots im Component **LEER** bauen.
-8. **SLOT-Node nie direkt visibility-binden** *(Dialog #4)* — `componentPropertyReferences =
-   { visible }` direkt am SLOT konvertiert ihn still zu FRAME (Slot-Verhalten weg, bestehende
-   Instanz-Slot-Inhalte verworfen). Muster: Wrapper-FRAME trägt das Boolean, frischer SLOT als
-   Kind. Außerdem: Master-Slot-Umbauten NACH gebauten Beispiel-Instanzen kosten deren
-   Overrides → Surface erst final definieren, dann Beispiele bauen.
-9. **Leerer Slot rendert ~100px Resthöhe trotz HUG** *(Dialog #5)* — optionale leere Slots
-   hinter das Visibility-Boolean am Wrapper legen (Muster aus #8); Slots mit permanentem
-   Content sind nicht betroffen.
+8. **Optionaler Slot = Boolean direkt an `visible` (KEIN Wrapper, KEINE FRAME-Konversion)** *(Dialog #4
+   war Fehldiagnose — live geprüft 2026-06-22)* — `componentPropertyReferences = { visible }` direkt am
+   SLOT toggelt sauber; der Knoten bleibt `SLOT` (gleiche ID, ref greift, fillable). Parent auto-layout →
+   Off-Variante kollabiert restlos (Screenshot-verifiziert). Der frühere „Wrapper-FRAME trägt das Boolean"-
+   Fix **entfällt** (hing an der falschen FRAME-Diagnose). Separat/unbestritten, aber selbst noch nicht
+   live geprüft: Master-Slot-Umbau NACH gebauten Beispiel-Instanzen kostet deren Overrides → Surface final
+   vor Examples.
+9. **Leerer Slot zeigt seine Default-Box (100×100), kein HUG-Bug** *(Dialog #5 reframed — live geprüft
+   2026-06-22)* — die Resthöhe ist die Default-Slot-Geometrie, sichtbar nur wenn der Slot empty UND
+   visible ist. Fix für optionale Slots = Boolean an `visible` (kollabiert im Auto-Layout, s. #8), KEIN
+   Wrapper. Soll er sichtbar-aber-leer bleiben: HUG-konfigurieren (eigenes Auto-Layout, `fills=[]`).
+   Methodik: Kollaps NICHT per `.height` messen (spiegelt den Visibility-Reflow nicht) → Screenshot.
 
 ### Offen — SKILL.md T2.5/T6 (Stories / Verify)
 
@@ -487,15 +649,21 @@ Quelle: `agent-runs/component-port/2026-06-12-{checkbox,switch,radio-group}/skil
 Runs) + `agent-runs/figma-field-controllead/2026-06-12/notes.md`. Aus dem Umbau der Usage-Example-Gruppen auf
 echtes `.Field`-Reuse + dem `.Field`-control-leading/error-Slot-Fix.
 
-46. **`clone()` degradiert einen SLOT still zu FRAME** (verliert `slotContentId`) *(field-controllead/invalid-fix)*
-    — clone-derived Variant-Member, die einen Slot enthalten, haben hinterher KEINEN funktionierenden Slot mehr
-    (nur ein FRAME ohne Bindung); typecheck/visuell unauffällig. **War die Ursache des `.Field`-invalid-Flaws.**
-    Fix: nach dem Klonen den Slot neu via `createSlot()` bauen + an die Set-Slot-Property rebinden
-    (`componentPropertyReferences = { slotContentId: '<slot>#id' }`) + Wrapper-`visible` an das Show-Boolean.
+46. **Variant-Member-Clone behält den SLOT, verliert nur die `slotContentId`-Bindung — KEIN FRAME** *(field-
+    controllead/invalid-fix; live geprüft 2026-06-22)* — der Klon eines Variant-Members bleibt `SLOT`, aber
+    `componentPropertyReferences` ist leer (`refs:{}`), weil die Slot-Property auf dem **Set** liegt, nicht am
+    Member. Fix: nach dem Hinzufügen als neuer Member den Slot **re-binden** (`componentPropertyReferences =
+    { slotContentId: '<prop>#id' }`) — NICHT via `createSlot()` neu bauen (alte, schwerere Annahme; s. #47).
+    Standalone-Component-Clone behält die Bindung (Property liegt am Component selbst).
     **Update (Select-fix 06-20):** `clone()` ist SICHER für eine TEXT-*Property* — der `value#…`-prop-ref überlebt den
-    Klon (nur SLOTs degradieren). Geklonte Text-Prop-Member (z. B. Trigger-Style-Member) NICHT über-rebuilden.
-47. **`createSlot()` hinterlässt je Aufruf eine verwaiste Slot-Property** *(invalid-fix)* — nach dem Rebind an
-    eine bestehende Slot-ID die zero-referenced Auto-Property löschen, sonst Junk auf jeder Instanz.
+    Klon. Geklonte Text-Prop-Member (z. B. Trigger-Style-Member) NICHT über-rebuilden.
+    *(Korrigiert: die frühere „degradiert zu FRAME"-Diagnose war falsch — der Slot-Typ bleibt, nur die Set-Bindung
+    geht verloren. War der reale Kern des `.Field`-invalid-Flaws: ungebundener statt fehlender Slot.)*
+47. **`createSlot()` legt je Aufruf eine Slot-Property an → Orphan nur beim Neu-Bauen** *(invalid-fix; live geprüft
+    2026-06-22)* — `createSlot()` erzeugt automatisch eine Slot-Component-Property. Ruft man es auf, um einen
+    geklonten Member-Slot „neu zu bauen", und bindet dann an eine bestehende Slot-ID, bleibt die Auto-Property
+    zero-referenced → löschen. Mit dem korrigierten #46 (re-binden statt neu bauen) entsteht der Orphan gar nicht
+    erst — daher nur relevant, falls man den createSlot-Weg doch geht.
 48. **Fill-slot-in-instance — Zusätze zum §Slots-Rezept** *(switch/radio/checkbox-examples)* — Slot-Default-Text-
     Setter wirft „node not found" → clear+append, Read-back im SEPARATEN Call (Instanz-Slot-Mutation invalidiert
     die Node-ID im selben Tick); Clearing eines Slots ko-entfernt/re-injiziert Sibling-Defaults → guarded
