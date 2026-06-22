@@ -52,11 +52,14 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    **B (26)** = zurückgestellt (Agent kam trotz Skill-Schweigen zum Ergebnis → Kodifizierung, kein
    Bugfix) + **C (C1 · C2)** = Tooling/Backlog. Skills werden nie mid-run editiert; Formulierungs-Regel
    s. Blockquote unter „Skill-Findings".
-2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider**
-   porten bleibt offen (letzter zurückgestellter Field-Control → schaltet `field-slider` frei;
-   Field-Example-Inventory: `agent-runs/component-port/2026-06-12-field/notes.md`, Open items #4/#5),
-   weiteres Composite (`/shadcn-component-port <name>`), oder Blocks-Arbeit auf den Palette-Bausteinen.
-   *(ChoiceCard ist seit 06-16 erledigt, Select seit 06-19 — beide nicht mehr offen.)*
+2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
+   2026-06-22 PORTIERT** (Branch `feat/shadcn-slider-port`, lokal committet `0df4af2`, **nicht** auf
+   master gemerged → Push/Merge erst auf Ansage; Gate grün 260 Tests). Geometrie-Primitive wie Switch,
+   kein CVA; Figma-Set 12 Member (`orientation × thumbs × state`, `thumbs` = Figma-only Fork) +
+   Usage-Examples inkl. **FieldSlider → schaltet das beim Field-Port (06-12) übersprungene `field-slider`
+   frei**. Details: `agent-runs/component-port/2026-06-22-slider/notes.md`, Katalog-Eintrag `Slider`.
+   Offen jetzt: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
+   Palette-Bausteinen. *(ChoiceCard seit 06-16, Select seit 06-19, Slider seit 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
