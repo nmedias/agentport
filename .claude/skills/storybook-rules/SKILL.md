@@ -57,6 +57,27 @@ States gallery   AllStates / <Comp>States — every state side by side, at a gla
                    variant/content, NOT state; don't fake focus/disabled/invalid rows (cf. port T2 anatomy)
 ```
 
+## Composite sub-parts → one story file per API-part
+
+A composite (no root; several parts) documents each **API-bearing part** in its **own `<part>.stories.tsx`** — NOT `meta.subcomponents`.
+
+- Per part with curated props: `meta.component = <Part>`, `title: 'UI/<Parent>/<Part>'`, every story wrapped
+  in the parent context the part needs to render → its own Autodocs page with a real ArgsTable **and** live
+  controls (controls = the story's `args`; a part is live only as the `meta.component`). The parent page
+  documents the root + usage compositions and links the part pages.
+- A **prop-less pass-through** part (only className/children) gets **no page** — show its use in the usage
+  stories. (`meta.subcomponents` emits a static control-less table, and an empty "Args table couldn't be
+  auto-generated" for prop-less parts — worse than nothing.)
+- **Prerequisite:** the part needs curated flat props → annotate it per `/docgen-props` first
+  (incl. `Omit`+re-declare for inherited props).
+- **Part-page controls:** only props with an OBSERVABLE effect as live controls; a no-visible-effect prop
+  stays in the ArgsTable but `control: false`. If that effect matters, prove it in a dedicated `play` story
+  composed so the prop actually bites.
+- **Two part-page traps:** (1) when `render` delegates to a wrapper (controlled-open parts with no trigger
+  slot), "Show code" shows only `<Wrapper/>` → set `parameters.docs.source.code` to the full impl;
+  (2) inherited props re-surfaced via `extends ComponentProps<…>` lose their JSDoc → `Omit`+re-declare the
+  ones to document (that's `/docgen-props`).
+
 ## Meta block
 
 ```
@@ -92,6 +113,9 @@ play: async ({ canvas, step }) => {
   `blur()` makes the end-state match a real mouse user (no lingering ring). Recurring, deliberate.
 - **Respect the component contract** — a radio can't be clicked off → Default tests selection only; the
   mutual-exclusion test (one selection deselects another) belongs in the `Group` story.
+- **Portal/overlay content mounts OUTSIDE the canvas** → assert the trigger's ARIA state (`aria-expanded`
+  / the open accessible name), not the portal DOM; deep portal assertions go in the `.spec` (jsdom queries
+  the whole document).
 
 ## Pseudo-states (focus/hover) — §pseudo
 
@@ -124,6 +148,12 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
   when the example demonstrates a prop of a SUB-/SIBLING part the meta component's Default can't reach
   (e.g. `FieldGroup.orientation` while `component: Field`): that prop otherwise has NO playground anywhere.
   The States gallery stays render-only.
+- **Structured-children booleans (`asChild` & co.)** — a boolean that swaps the element for its single
+  child must be `control: false` on any text-children story (toggling crashes the Radix Slot via
+  `React.Children.only`); demonstrate it in a dedicated story with exactly one element child. Lift the
+  control-scoping from a ported sibling, don't re-derive it.
+- **DOM globals are allowed** — a story with global listeners (`document` key events, …) is fine; the
+  storybook tsconfig includes the DOM lib, so don't strip browser-global usage to satisfy types.
 - **Comment discipline** — file-top **contract** comment: name the *mechanism* (which CSS/Slot/attribute
   tints/focuses/wires-a11y, and WHEN), not what the component *is* — "a pill marker" = description ✗;
   "variant sets fill+ink; asChild→Slot renders as `<a>`, becomes focusable→ring" = contract ✓. Each story
@@ -157,4 +187,6 @@ U5 Keep       never delete the States gallery / Usage examples — permanent del
 `npx nx test|typecheck|lint @agentport/ui` green. `nx test` runs **two Vitest projects** — jsdom `.spec`
 units **and** the `storybook` browser project (every story rendered in Chromium via
 `@storybook/addon-vitest` + axe). A story that throws/regresses, or an axe violation, fails the gate.
-Lint/typecheck don't see pixels → eyeball via `shoot` / `preview-stories`.
+Lint/typecheck don't see pixels → eyeball via `shoot` / `preview-stories`. Spec class-assertions don't
+see compiled CSS either — a utility that compiles to an unexpected value still passes; if a sizing/spacing
+value looks off, grep the dist CSS to confirm.
