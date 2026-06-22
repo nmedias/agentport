@@ -63,22 +63,32 @@ States gallery   AllStates / <Comp>States — every state side by side, at a gla
 
 A composite (no root; several parts) documents each **API-bearing part** in its **own `<part>.stories.tsx`** — NOT `meta.subcomponents`.
 
-- Per part with curated props: `meta.component = <Part>`, `title: 'UI/<Parent>/<Part>'`, every story wrapped
+- **Per part with curated props:** `meta.component = <Part>`, `title: 'UI/<Parent>/<Part>'`, every story wrapped
   in the parent context the part needs to render → its own Autodocs page with a real ArgsTable **and** live
-  controls (controls = the story's `args`; a part is live only as the `meta.component`). The parent page
-  documents the root + usage compositions and links the part pages.
-- A **prop-less pass-through** part (only className/children) gets **no page** — show its use in the usage
+  controls (controls = the story's `args`; a part is live only as the `meta.component`). The playground
+  **threads the single meta prop onto the part inside the fixed parent scaffold** — `render: ({ prop }) =>
+  <Parent><Part prop={prop}/></Parent>`, NOT `{...args}` onto the wrapper (the wrapper is scaffolding).
+- **Part-page header comment** names, in order: that it's a *secondary Autodocs page* + what the parent page
+  owns; `meta.component`; where the prop comes from (its JSDoc via react-docgen); why the render wraps it in
+  parent context; and play-or-`display-only → no play`.
+- **Parent ↔ part cross-links:** the parent's `docs.description.component` ends by naming the sub-part pages;
+  each part page points back to where the root API is documented. Deep-link with `?path=/docs/<story-id>--docs`.
+- **Passthrough root (no own props):** a root that only spreads a DOM type (`ComponentProps<'div'>` &c.) gives
+  react-docgen nothing → it still gets the parent page, but its ArgsTable is **hand-authored in `argTypes`**
+  (`description` + `table.type` + control/options) — the one sanctioned docs-in-`argTypes` case (see Meta block).
+- A **prop-less pass-through** *sub-part* (only className/children) gets **no page** — show its use in the usage
   stories. (`meta.subcomponents` emits a static control-less table, and an empty "Args table couldn't be
   auto-generated" for prop-less parts — worse than nothing.)
-- **Prerequisite:** the part needs curated flat props → annotate it via the prop-annotation step first
+- **Prerequisite:** a part with curated flat props → annotate it via the prop-annotation step first
   (incl. `Omit`+re-declare for inherited props).
 - **Part-page controls:** only props with an OBSERVABLE effect as live controls; a no-visible-effect prop
   stays in the ArgsTable but `control: false`. If that effect matters, prove it in a dedicated `play` story
   composed so the prop actually bites.
-- **Two part-page traps:** (1) when `render` delegates to a wrapper (controlled-open parts with no trigger
-  slot), "Show code" shows only `<Wrapper/>` → set `parameters.docs.source.code` to the full impl;
-  (2) inherited props re-surfaced via `extends ComponentProps<…>` lose their JSDoc → `Omit`+re-declare the
-  ones to document (that's the prop-annotation step).
+- **Controlled-open part (no trigger slot):** drive it from a demo wrapper holding the open state + a trigger;
+  the play opens via the trigger before querying the portal (§play), and the wrapper render needs an explicit
+  source snippet (§invariants).
+- **Inherited-prop trap:** props re-surfaced via `extends ComponentProps<…>` lose their JSDoc →
+  `Omit`+re-declare the ones to document (that's the prop-annotation step).
 
 ## Meta block
 
@@ -90,6 +100,9 @@ argTypes: prop type · description · enum come from the component's JSDoc via r
     · control-type override   — e.g. size → control:'inline-radio' (vs the inferred select)
     · default value           — table:{ defaultValue:{ summary } } for EVERY prop that has a default
         (the ArgsTable Default column ignores the @default JSDoc tag → declare it here too, uniformly)
+    · passthrough root        — component only spreads a DOM type (ComponentProps<'div'> &c.) with no own
+        props → react-docgen reads nothing, so hand-author the API HERE (description + table.type +
+        control/options). The lone docs-in-argTypes exception.
   callbacks/functions get no inferred control already; set control:false only to be explicit.
 parameters: { docs: {
   source: { type: 'code' }              // ALWAYS 'code' — never override a story to 'dynamic'
@@ -115,9 +128,12 @@ play: async ({ canvas, step }) => {
   `blur()` makes the end-state match a real mouse user (no lingering ring). Recurring, deliberate.
 - **Respect the component contract** — a radio can't be clicked off → Default tests selection only; the
   mutual-exclusion test (one selection deselects another) belongs in the `Group` story.
-- **Portal/overlay content mounts OUTSIDE the canvas** → assert the trigger's ARIA state (`aria-expanded`
-  / the open accessible name), not the portal DOM; deep portal assertions go in the unit `.spec` (the
-  simulated DOM queries the whole document).
+- **Portal/overlay content mounts OUTSIDE the canvas** → query it via `within(document.body)` (the story
+  `canvas` is scoped to the story root), or assert the trigger's ARIA state (`aria-expanded` / the open
+  accessible name). A controlled-open component with no trigger slot needs a demo wrapper holding the open
+  state + a trigger: the play clicks the trigger to open FIRST, then queries the portal, and asserts Escape
+  unmounts it. Exhaustive portal assertions can also live in the unit `.spec` (its simulated DOM queries the
+  whole document).
 
 ## Pseudo-states (focus/hover) — §pseudo
 
@@ -157,6 +173,9 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
   control-scoping from a sibling that already solved it, don't re-derive it.
 - **DOM globals are allowed** — a story with global listeners (`document` key events, …) is fine; the
   storybook tsconfig includes the DOM lib, so don't strip browser-global usage to satisfy types.
+- **Wrapper render → real source snippet** — when a story's `render` delegates to a stateful/controlled/
+  keyboard-driven demo wrapper, the auto "Show code" snippet is just `<DemoWrapper/>` → set
+  `parameters.docs.source.code` to the real impl a consumer writes. Any such story, not only part pages.
 - **Comment discipline** — file-top **contract** comment: name the *mechanism* (which CSS/Slot/attribute
   tints/focuses/wires-a11y, and WHEN), not what the component *is* — "a pill marker" = description ✗;
   "variant sets fill+ink; asChild→Slot renders as `<a>`, becomes focusable→ring" = contract ✓. Each story
