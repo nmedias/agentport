@@ -4,8 +4,8 @@
 > `design-docs/design-system/components-reference.md` (**zuerst lesen**), Token-Crosswalk:
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
-**Stand 2026-06-22:** `master` = **17 Components** ff (kein Remote, `npm run check` grün, 249 Tests / 55 Files).
-**Slider** 06-22 portiert auf `feat/shadcn-slider-port` (lokal committet, **nicht** gemerged → wäre 18 Components / 260 Tests; s. Offene Punkte #2).
+**Stand 2026-06-22:** `master` = **18 Components** ff (kein Remote, `npm run check` grün, 260 Tests / 57 Files).
+**Slider** 06-22 portiert + per fast-forward auf `master` gemerged (s. Offene Punkte #2).
 **Seit 06-12 (2026-06-16…06-19) dazu:** **ChoiceCard** portiert (DS-authored Composite — 3 dünne
 Wrapper `ChoiceCardCheckbox`/`ChoiceCardSwitch`/`ChoiceCardRadio` über eine interne `ChoiceCardShell`
 + `useFieldId`-Hook; checked-Tint = Zwei-Cyan-Token-Modell, voll variabel-gebunden) und **Select**
@@ -21,9 +21,9 @@ DROP_SHADOW `showShadowBehindNode:false` (verbatim vom `.Input`-Focus); Stories 
 dafür `.Field` erweitert — `controlPosition [trailing,leading]`-Achse (control-leading für Checkbox/Radio) +
 neues `.FieldLegend`-Set + invalid-error-Slot-Fix (Ursache: `clone()` degradiert SLOT→FRAME). `controlPosition`
 = **Figma-only Fork** (kein Code-Prop). Details: Katalog `.Field`/`.FieldLegend` + die 3 `examples`-Einträge.
-**17 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
+**18 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
 Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
-Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**) + Blocks-Layer
+Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**, **Slider**) + Blocks-Layer
 (`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
 über die Brief-4, bewusst) mit `secondary`/`destructive` an ⚠-Platzhalter gebunden; Separator-Achse =
 `orientation` (h/v); AsChild-Control-Footgun gefixt (#21). **Field = Surface-less Composite**
@@ -55,11 +55,11 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    s. Blockquote unter „Skill-Findings".
    **Slider-Run 2026-06-22 (5 Findings, Quelle `…/2026-06-22-slider/skill-feedback.md`):** A: #5
    (/storybook-rules wrapper-render→`source.code`, S4-Promotion) ✅ eingearbeitet (`03178db`) · #2 →
-   **A1** (/shadcn-component-port T6 a11y) eingearbeitet (s. A-Sektion). B27 (/figma-build-rules) +
+   **A1** (/shadcn-component-port T6 a11y) eingearbeitet (`8287d65`). B27 (/figma-build-rules) +
    C3 (/figma-verify) · C4 (build-variant-set.js) zurückgestellt.
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
-   2026-06-22 PORTIERT** (Branch `feat/shadcn-slider-port`, lokal committet `0df4af2`, **nicht** auf
-   master gemerged → Push/Merge erst auf Ansage; Gate grün 260 Tests). Geometrie-Primitive wie Switch,
+   2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
+   260 Tests). Geometrie-Primitive wie Switch,
    kein CVA; Figma-Set 12 Member (`orientation × thumbs × state`, `thumbs` = Figma-only Fork) +
    Usage-Examples inkl. **FieldSlider → schaltet das beim Field-Port (06-12) übersprungene `field-slider`
    frei**. Details: `agent-runs/component-port/2026-06-22-slider/notes.md`, Katalog-Eintrag `Slider`.
@@ -73,29 +73,13 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 5. **Status-Familie** `connected/offline/error/warning`, **Anteils-Balken**, **Rail-Aktiv-Icons**.
    *(Ebenfalls aus dem Token-Handoff.)*
 
-## Nova-Baseline — Standing Notes (aus den gelöschten Handoffs übernommen)
-
-- **Nie `shadcn init` unter radix-nova** — würde die Figma-DS-Schicht (globals.css) mit Nova-CSS
-  überschreiben. `ui:add` injiziert NICHTS in globals.css (Component-Items tragen kein `cssVars/css`).
-- Die **9 data-state Custom-Variants** (`data-open/closed/checked/.../vertical`) + `no-scrollbar`
-  in globals sind token-freie Selector-Plumbing (verbatim aus einem Nova-Init nachgezogen,
-  `4cdcdf5`) — damit Nova-Source-Klassen resolven; keine Werte.
-- Nova-Source referenziert Utilities, die globals.css nicht hat (`rounded-4xl`, dead `text-xs`,
-  `color-mix(--secondary)`, `dark:` inert) → **T3-Übersetzungsziele**, nicht Auto-Add.
-  Re-Clothe-Regel: Dichte **per NAME** auf DS-Tokens mappen, nicht Novas Rohwerte/`--radius`-Skala.
-- `/component-sync` ist **NUR Figma→Code**; ein Code→Figma-Push ist manuell via `use_figma`,
-  nur auf explizite Ansage.
-- cmdk-Polyfills (ResizeObserver/scrollIntoView) in `libs/ui/src/test-setup.ts` **belassen**;
-  jsdom-Polyfill einmalig pro Headless-Lib (Radix Dialog brauchte keine neuen).
-- Storybook (`npm run storybook`, :6006) **vor** Port/Sync starten, sonst kein `preview-stories`.
-- Nova-Source vor `ui:add` ansehen: Registry-JSON `https://ui.shadcn.com/r/styles/radix-nova/<c>.json`.
 
 ## Skill-Findings (konsolidiert · `/skill-feedback`-Format)
 
 Aggregat über mehrere Port-/Sync-Runs (Quellen unten), dedupliziert, **pre-sortiert wie ein
 `skill-feedback.md`**: Triage-Klasse **A → B → C**, darin nach **Ziel-Datei** gruppiert. Je Finding eine
 **`Feld | Inhalt`-Tabelle** (Titelzeile + Zeilen `Why` · `Gap` · `Verified` · `Candidate fix` · `Status`).
-**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B26`, `C1`/`C2`). Jeder Eintrag ist
+**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B27`, `C1`…`C4`). Jeder Eintrag ist
 **selbstständig** — hängen zwei Findings zusammen, steht das verwandte in Kurzform als `Bezug`-Zeile
 (keine Sprung-Verweise zwischen Items). Die Run-Tags in Kursiv *(Badge #3)* = Quell-Nummer im
 Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-run editiert.
@@ -122,27 +106,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### A — gap caused a defect (priority)
 
-> **2026-06-22 KOMPLETT eingearbeitet** (29 ✅ + #62 verworfen) → Entries entfernt. Welcher Fix wohin
-> ging: git-History + die 6 Ziel-Dateien (`/figma-build-rules` · `SKILL.md` · `composites.md` ·
-> `/component-sync` · `/storybook-rules` · `/figma-build-rules/snippets/build-variant-set.js`). Die ehem.
-> Global-#8/#9/#46/#47
-> wurden dabei live in Figma korrigiert (Slot bleibt SLOT bei Boolean-`visible`; Variant-Clone behält
-> SLOT, verliert nur `slotContentId` → re-binden).
->
-> **Slider-Run 2026-06-22:** #5 (/storybook-rules — wrapper-render→`source.code`, S4-Promotion) ✅
-> eingearbeitet (`03178db`). #2 → **A1** ↓ eingearbeitet (T6-a11y-Notiz in `/shadcn-component-port`).
-
-#### /shadcn-component-port
-
-**A1 · T6 — Composite-Rollen-Control: der Accessible Name muss am Rollen-Element sitzen, nicht am Root** *(Slider #2)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | Gate rot — axe `aria-input-field-name` auf mehreren Stories; erst nach dem ersten `nx test` gesehen. |
-| Gap | T6 sagt „rewrite per T3 + prop API annotieren"; nichts flaggt, dass wenn das `role`-Widget ein KIND ist (nicht der Root), `aria-label`/`aria-labelledby` an der Component am Root landen und das Rollen-Element namenlos lassen → axe rot. Sibling-Ports wo Root = Rollen-Element (Switch-Button) verbargen das. |
-| Verified | Label am Root-div, aber `role="slider"` am Thumb-`<span>` ohne Namen → axe-Violation; Forward an jedes Thumb-Element behob es, Gate grün. |
-| Candidate fix | T6-a11y-Notiz: ist das `role`-Widget ein genestetes Element (Slider-Thumb, Listbox-Option …), MUSS die Component `aria-label`/`aria-labelledby` an dieses Element FORWARDEN — nur am Root benennt nichts. Pro Rollen-Element (mehrere Rollen-Knoten teilen sich denselben Namen). *(also: /storybook-rules — eine bare-control-Story braucht den Namen trotzdem am Rollen-Element.)* |
-| Status | ✅ eingearbeitet (`/shadcn-component-port` T6). |
+Keine offenen A-Findings — erledigte stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht), nicht hier.
 
 ### B — self-derived, result held (codify · deferred)
 
