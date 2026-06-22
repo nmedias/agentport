@@ -1,6 +1,8 @@
 ---
 name: skill-feedback
-description: "Toggle ON before/at the start of a skill run to capture skill-IMPROVEMENT feedback — gaps, bugs, candidate fixes that surface while running another skill — into that run's skill-feedback.md, on the spot. Trigger when the user wants to switch on feedback capture for a run: 'skill feedback', 'capture skill gaps/improvements for this run', 'track feedback before I start'."
+description: "Toggle ON before/at the start of a skill run to capture skill-IMPROVEMENT feedback — gaps, bugs, candidate fixes that surface while running another skill — into that run's skill-feedback.md, on the spot. `off` ends capture and finalizes the file. Trigger when the user wants to switch on feedback capture for a run: 'skill feedback', 'capture skill gaps/improvements for this run', 'track feedback before I start'."
+argument-hint: [on|off]
+arguments: state
 disable-model-invocation: true
 ---
 
@@ -9,6 +11,17 @@ disable-model-invocation: true
 Toggle-on capture of **skill-improvement feedback** for one run. Switch it on *before* the run; it then
 stays active and records every skill gap / tooling problem **the moment it surfaces** — so findings are
 not deferred to the end and forgotten (the exact failure this skill exists to fix).
+
+## Argument — `on` | `off`
+
+`$state` (declared in `arguments:`, optional) — **defaults to `on`** when omitted, so bare
+`/skill-feedback` ≡ `/skill-feedback on`.
+
+- **`on`** → start the standing directive below; capture from now until the run ends (or `off`).
+- **`off`** → end capture now: run the *End-of-run sweep* (directive step 5), confirm the file path,
+  then drop the standing directive. Nothing already captured is discarded.
+
+Any other value → treat as `on` and note the assumption.
 
 ## Inputs / Output
 

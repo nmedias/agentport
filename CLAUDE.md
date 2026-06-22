@@ -156,11 +156,6 @@ Installed under `.claude/skills/` (project-local).
 - `/component-sync` — reconcile an **already-built** component after a Figma change: read the live
   per-variant token bindings, diff against the code, apply the delta (**Figma → code**, read-only on
   Figma). Source-agnostic (not shadcn-bound).
-- `/figma-build-rules` — the **project-neutral Figma build craft** that `/shadcn-component-port` (T4/T5)
-  + its composites delegate to: Plugin-API binding recipes, slots, variant-set assembly (full matrix,
-  sorted grid), the interaction-state axis, the permanent usage-examples group, the
-  controls→clean→faithful verify triad, and the 3-layer composite build. Owns the build snippets
-  (`recon.js` + `build-variant-set.js`); the port skill supplies the project values (file/page/tokens/icons).
 
 **Storybook**
 - `/docgen-props` — annotate a component's `.tsx` so react-docgen extracts its public prop API.
@@ -172,13 +167,16 @@ Installed under `.claude/skills/` (project-local).
 - `/figma-clone-sibling` — clone a node into a permanent sibling Section.
 - `/figma-create-section` — create figma section. Canonical Section wrapper. 
 - `/figma-verify` — deterministic pre-handoff check (icons are vectors, no clipping/overlap).
+- `/figma-build-rules` — Figma build craft. Owns rules and the build snippets; the host supplies the
+  project values.
+
 
 **General utils:**
 - `/grill-me` — interview-style stress-test of a plan or design before committing.
 - `/handoff` — freeze the session into a resume doc.
-- `/skill-feedback` — toggle on **before a run** to capture skill-improvement feedback (gaps + candidate
-  fixes) into that run's `skill-feedback.md` as findings surface. Feedback only, not domain notes.
-- `/react-coach` — React coaching mode (mental models · patterns · ecosystem · architecture) for an
+- `/skill-feedback [on|off]` — toggle on **before a run** to capture skill-improvement feedback (gaps +
+  candidate fixes) into that run's `skill-feedback.md` as findings surface.
+- `/react-coach` — React coaching mode for an
   Angular/Vue dev learning React; explains/mentors, not for quick code-only asks.
 
 **Writing/editing skills:** follow the rules in [`.claude/skills/CLAUDE.md`](.claude/skills/CLAUDE.md)
