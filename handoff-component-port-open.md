@@ -30,8 +30,20 @@ Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**) + Blocks
 `responsive` = Code-only; FieldError→`destructive ⚠`); **Label public** (Hard-Dep von Field).
 Composite-Verfahren validiert (**5×**: InputGroup/Command/Dialog/Field/ChoiceCard; Select = volles
 Radix-Primitive, kein surface-less Composite), operativ in `/shadcn-component-port` (SKILL.md +
-references/composites.md) + dem ausgegliederten `/figma-build-rules` (Build-Mechanik + Snippets);
-Pflege via `/component-sync` (Figma→Code).
+references/composites.md) + `/figma-build-rules` (Build-Mechanik + Snippets); Pflege via
+`/component-sync` (Figma→Code).
+
+**Skill-Architektur 2026-06-22 (diese Session):** `/figma-build-rules` **real ausgegliedert** aus
+`/shadcn-component-port` (`8fa6872` Extraktion, `4973188` Grill-Härtung) — projekt-neutrales Build-Skill
+(Plugin-API-Contract, Mechanism-Tabelle, Binding/Slots/Variant-Assembly, Interaction-State-Achse,
+Usage-Examples, Verify-Triade, 3-Layer-Composite). `recon.js` + `build-variant-set.js` **verschoben** nach
+`figma-build-rules/snippets/` + auf Platzhalter neutralisiert (kein fileKey/Font/Collection/SetName);
+`read-set-values.js` bleibt bei `/component-sync`. Port/Sync **delegieren** ans Skill und behalten das
+Projekt-Overlay (`config.json` — jetzt **inkl. `figma.font`**); `composites.md` = nur Port-Prozess-Delta
+(Build-Mechanik → `/figma-build-rules §Composites`); `references/figma-build.md` gelöscht (→ Skill-Body).
+Skill ist **dual-mode** (standalone + delegiert), description trägt jetzt eine negative Grenze gg. den
+Voll-Port. Separat: `/storybook-rules` **projekt-neutral entkoppelt** (`692a4ac`) + um
+Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 
 ## Offene Punkte
 
