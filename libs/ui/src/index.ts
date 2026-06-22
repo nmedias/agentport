@@ -19,5 +19,6 @@ export * from './components/ui/switch';
 export * from './components/ui/textarea';
 export * from './components/ui/toggle';
 export * from './components/ui/toggle-group';
+export * from './components/ui/tooltip';
 export { cn } from './lib/utils';
 export type { Prettify } from './lib/types';

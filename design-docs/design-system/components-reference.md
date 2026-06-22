@@ -1072,6 +1072,55 @@ status_note: >
     Innenecken auf reusten Instanzen nicht ohne Detach → B9-Tradeoff; Code macht's via Klassen). figma-verify CLEAN
     (12 Instanzen alle main=Toggle-Set, 0 text-as-icon). Stories Default(play, multiple)/SingleVsMultiple/Variants/
     Connected/Vertical/Disabled; jsdom-Spec (role=group/button/radio, context-Propagation, spacing). Gate grün.
+- name: Tooltip
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  source: { registry: "@shadcn", item: tooltip, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/tooltip/
+    exports: [Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, TooltipProps, TooltipContentProps]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
+  figma:
+    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
+    component: { name: "Tooltip", id: "4382:2356" }      # die Content-Chip-Component (kein Variant-Set — Single-Member)
+    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label-Style, dialog-ink)" }
+    arrow: { name: "arrow", id: "4382:2358" }            # 10×10 RECT, rotated -45° diamond, ABSOLUTE bottom-center, fill dialog-fill
+    axis: { content: [slot] }                            # KEINE Variant/State-Achse — Tooltip hat nur den Open-Visual; Content = SLOT (offene children-Region)
+    vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", corner-md: "3073:3", space-lg: "3070:8", space-sm: "3070:5" }
+    styles: { text: "Label (S:4e034695…b266f0)", effect: "Elevation (S:92c2d7ac…66b42)" }
+    examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd-Instanz 4385:2390 ⌘S)" }
+  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
+  notes: >
+    Radix Tooltip (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-
+    Konvention; finding B13). Parts: Provider/Root/Trigger = verhaltens-Wrapper ohne Styling; nur
+    TooltipContent + sein Arrow tragen Klassen → KEIN CVA, Single-Surface (Sibling von Badge/Kbd, kein
+    surface-less Composite). DS-Abweichung (Kern-Entscheid): stock-Tooltip ist eine INVERTIERTE dunkle
+    Chip (bg-foreground + text-background) — DS hat keinen invertierten-Overlay-Token → an die
+    konsolidierte RAISED-OVERLAY-Fläche umgekleidet: bg-dialog-fill + text-dialog-ink + border (1px,
+    nova hatte keine) + shadow-elevation (Tiefe, stock ist flach) wie Dialog/Command. Tooltip wird damit
+    eine LIGHT raised Chip (recorded dark→light fork). Geometrie/Typo: rounded-md→corner-md, gap-1.5→gap-sm,
+    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label (kein 12px-Sans-Rung → Rolle „kurzes Label", +2px
+    Snap; B21/B23). Arrow erbt dialog-fill (bg+fill), rounded-[2px] als arbiträre Diamant-Geometrie verbatim,
+    rotate/translate numerisch. Animations-/Layout-/Radix-transform-origin-Utilities verbatim (§6 keep_valid).
+    FIGMA: Content-Region als SLOT modelliert (content#4384:0, {Label}-Default), NICHT TEXT-Prop — der Code
+    nutzt freie `children` (Text, oder Text + Kbd) → /figma-build-rules §Mechanism „open variably-many
+    children → Slot"; ein TEXT-Prop könnte die WithKbd-Komposition nicht reproduzieren (Done-Test). Arrow =
+    ABSOLUTE-Kind (layoutPositioning), bottom-center, halb über die Unterkante (Pointer; clipsContent=false
+    am Component, damit Arrow+Shadow nicht clippen). Usage-Examples-Group reproduziert Default + WithKbd aus
+    Controls (WithKbd nestet eine echte .Kbd-Instanz). figma-verify CLEAN (0 text-icon/clipped/overlap/
+    pad-asym; Arrow-auf-Chip-Overlap by-design = absolute Kind in AL-Frame, wie Slider Thumb-auf-Track C3).
+    A11Y: TooltipContent role=tooltip; Radix verdrahtet aria-describedby Trigger→Content im Open-State;
+    Icon-only-Trigger braucht EIGENEN accessible name (Tooltip = Beschreibung, kein Name) → IconTrigger-Story
+    nutzt DS-Button `icon`-Bool + Pflicht-aria-label. Docgen: TooltipProps (open/defaultOpen/onOpenChange/
+    delayDuration) + TooltipContentProps (side/sideOffset/align/alignOffset) via Omit+re-declare; Provider/
+    Trigger pass-through. Stories: Default (Playground + hover→open play gg. Portal via within(document.body))
+    · Placement (4 Seiten) · WithKbd (Kbd ported) · IconTrigger (a11y). jsdom .spec NUR closed/trigger-Pfad
+    (B20: portal-mounted Content mountet erst on-open → kein zusätzlicher Polyfill; Open-Pfad übers Chromium-
+    Storybook-play). Gate grün (tooltip-scoped): 4 jsdom-Specs + 4 Stories (Chromium + axe), typecheck + lint.
+    OFFENER PUNKT (Kbd): kbd.tsx trägt `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` — getunt für
+    eine INVERTIERTE (dunkle) Tooltip; auf der gewählten LIGHT dialog-fill-Fläche liest das near-invisible.
+    Bewusst NICHT im Tooltip-Port editiert (Scope = ein Component) → als Open Item geflaggt; WithKbd rendert
+    die Kbd as-is. (Quelle: agent-runs/component-port/2026-06-22-tooltip/notes.md + skill-feedback.md.)
 
 ## Pending / Removed
 
