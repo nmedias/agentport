@@ -24,6 +24,10 @@ import { extendTailwindMerge } from 'tailwind-merge';
 //    (tw-utilities.css; rounded-* is dead). twMerge doesn't know them, so corner-lg
 //    + corner-xl would not collapse. Registered with the same side/corner conflict
 //    map as stock rounded (corner beats corner-t beats corner-tl, …).
+// 4. DS shadows — shadow-elevation / shadow-glow are custom @theme utilities twMerge
+//    doesn't know (the stock shadow scale is reset via --shadow-*: initial), so e.g.
+//    shadow-elevation + shadow-none would not collapse. Folded into the built-in
+//    `shadow` group so they conflict with each other and with shadow-none.
 const TEXT_FORMATS = [
   'display',
   'heading',
@@ -43,6 +47,8 @@ const SPACING_STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl',
 
 const CORNER_STEPS = ['sm', 'md', 'lg', 'xl', 'full'];
 
+const SHADOW_STEPS = ['elevation', 'glow'];
+
 type CornerGroup =
   | 'corner'
   | 'corner-t'
@@ -59,6 +65,7 @@ const twMerge = extendTailwindMerge<'text-format' | CornerGroup>({
     theme: { spacing: SPACING_STEPS },
     classGroups: {
       'text-format': [{ 'text-format': TEXT_FORMATS }],
+      shadow: [{ shadow: SHADOW_STEPS }],
       corner: [{ corner: [...CORNER_STEPS, 'none'] }],
       'corner-t': [{ 'corner-t': CORNER_STEPS }],
       'corner-r': [{ 'corner-r': CORNER_STEPS }],
