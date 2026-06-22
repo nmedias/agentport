@@ -188,7 +188,7 @@ export const Default: StoryObj<ComponentProps<typeof X> & pseudoState> = { argTy
 S1 Locate    component folder; storybook MCP up? → get-storybook-story-instructions (canonical CSF/imports)
 S2 Meta      header contract comment; tags autodocs; args defaults; argTypes = control-overrides + a defaultValue per defaulted prop (type/description/enum on the .tsx via the prop-annotation step); docs.description.component; source:'code'
 S3 Default   render: (args)=><X {...args}>…</X> — never {}; full ArgsTable (no include); play if interactive
-S4 Examples  one per structurally-distinct usage, real composition primitives; controls.disable by default — scoped include where a toggle reinforces the point / reaches a sub-part prop (§controls)
+S4 Examples  one per structurally-distinct usage, real composition primitives; controls.disable by default — scoped include where a toggle reinforces the point / reaches a sub-part prop (§controls); a render that delegates to a stateful/helper wrapper → set docs.source.code to the real impl, else Show-code hides it (§invariants)
 S5 States    STATE_ROWS grid (primary axis = columns); focus via pseudo addon
 S6 Verify    gate green (unit specs + storybook browser: real browser + axe); preview/screenshot the story / preview-stories → surface URLs
 ```
