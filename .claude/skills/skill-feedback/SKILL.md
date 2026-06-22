@@ -27,7 +27,7 @@ Any other value → treat as `on` and note the assumption.
 
 ```
 in   run dir, OR kind + subject to build it (else ask user)
-out  agent-runs/<kind>/<date>-<subject>/skill-feedback.md  (next to that run's notes.md; append per finding)
+out  agent-runs/<kind>/<date>-<subject>/skill-feedback.md  
 ```
 
 `<kind>` = the running skill's run-folder (its short name).
@@ -74,7 +74,7 @@ note `(also: <file>)`.
 findings **globally in capture order** (stable `#` so a later finding can cross-ref an earlier one —
 "sharpens #2"); the number stays with the finding regardless of which group it sits in. Lay headings
 down lazily on first hit, keep **A → B → C** order; **each finding renders as a per-finding
-`Feld | Inhalt` table** (see *Entry format*):
+`Field | Value` table** (see *Entry format*):
 
 ```
 # Skill feedback — <kind> (<date>-<subject>)
@@ -95,17 +95,17 @@ down lazily on first hit, keep **A → B → C** order; **each finding renders a
 
 ## Entry format
 
-One **per-finding table** under its class × Edit-Target heading — a title line, then a `Feld | Inhalt`
+One **per-finding table** under its class × Edit-Target heading — a title line, then a `Field | Value`
 table (rows = the sub-points, so a long entry stays scannable):
 
 ```
 **<n> · <area / step> — <title>**   [— ✅ <status>]
 
-| Feld | Inhalt |
+| Field | Value |
 |---|---|
 | Why <class> | one line — what it cost (A) / how you routed around it (B). |
 | Gap | what the skill omits or gets wrong. |
-| Verified | evidence, when probed (result / value). „—" if not verified. |
+| Verified | evidence, when probed (result / value). "—" if not verified. |
 | Candidate fix | general phrasing — what to add/change in the skill (not folded in). Second touched file → `(also: <file>)`. |
 | Status | open · ✅ written into <skill> · ✅ closed (+ commit ref if a repo fix). |
 ```
