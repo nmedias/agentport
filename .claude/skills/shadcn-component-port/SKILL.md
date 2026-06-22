@@ -139,8 +139,8 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 
 ### T4 — Figma Build
 
-Build the token-bound set per **`/figma-build-rules`** (recon → `build-variant-set.js`; fill its CFG with
-the T3 variable IDs + `config.json` page/collections/font): full matrix, sorted grid, bound by variable
+Build the token-bound set per **`/figma-build-rules`** (recon → `build-variant-set.js`, snippets in
+`/figma-build-rules/snippets/`; fill its CFG with the T3 variable IDs + `config.json` page/collections/font): full matrix, sorted grid, bound by variable
 ID, slots, interaction-state axis. **Project specifics:** place it in a `/figma-create-section` Section on
 the `Shadcn Components` page; reuse already-built DS components as nested **instances** (never re-clothe a
 copy). Multi-part composite → the 3-layer build + Slot≠Slot (`/figma-build-rules §Composites`) + the

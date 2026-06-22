@@ -1,6 +1,6 @@
 ---
 name: figma-build-rules
-description: "Assemble a token-bound Figma component set (variant matrix) via the Figma Plugin MCP API — the build craft: code-construct→Figma-property mapping, binding paints/radius/padding/typography by variable ID, slots, variant-set assembly (full matrix, sorted grid), the interaction-state axis (Base+tint+glow), the permanent usage-examples group, and the controls-live→clean→faithful verify triad. Multi-part composites add a 3-layer build (Slot≠Slot, nested instances, flexible composition, anchored overlay). Trigger when building/assembling a Figma component set, variant matrix, or token-bound component from code — standalone, or delegated to from a component-port/sync skill. Project-neutral: the caller supplies the build file, target page, token variables and icon set."
+description: "Assemble a token-bound Figma component set (variant matrix) via the Figma Plugin MCP API — the build craft: code-construct→Figma-property mapping, binding paints/radius/padding/typography by variable ID, slots, variant-set assembly (full matrix, sorted grid), the interaction-state axis (Base+tint+glow), the permanent usage-examples group, and the controls-live→clean→faithful verify triad. Multi-part composites add a 3-layer build (Slot≠Slot, nested instances, flexible composition, anchored overlay). Trigger when building/assembling a Figma component set, variant matrix, or token-bound component from code — standalone, or delegated to from a host port/sync skill. Not a full component port (anatomy→Figma→code→stories→catalog) — that's the host skill; this is the Figma-build step only. Project-neutral: the caller supplies the build file, target page, token variables and icon set."
 ---
 
 # Figma Build Rules (token-bound component set)
@@ -9,6 +9,20 @@ Build a **token-bound** Figma component set via the Plugin MCP API: keep the sou
 structure + variant logic, bind every property to the caller's design-system variables. The caller
 supplies the build **file**, target **page**, **token/variable** source, **icon** set, Section-wrapper
 helper and structural pre-handoff check; this skill is the **how** (mechanics + snippets).
+
+## Inputs (caller-supplied)
+
+Dual-mode: invoked **standalone** (you name these) or **delegated** from a host port/sync skill (it
+supplies them). Either way the build needs:
+
+```
+in   file       Figma file key → the use_figma `fileKey` arg
+     page        target page for the set
+     tokens      the variable / text-style source to bind against (recon.js reads its catalog)
+     icons       the icon set (vectors)
+     section     a Section-wrapper helper for the canonical Section form — optional (else a plain Section)
+     check       a structural pre-handoff check (vectors/clipping/overlap) for the clean gate
+```
 
 ## Figma access (the contract)
 
@@ -134,8 +148,9 @@ names only (and may miss some glyphs), take the exact path from the installed pa
 - **Sorted grid** — never leave scattered append order. Reorder primary-property-major, secondary in
   option order (`for v: for s`), `appendChild` in that sequence; `layoutWrap='WRAP'` and
   `maxWidth = Σ(row widths)+gaps+padding` to wrap one row per primary value. Screenshot to confirm.
-- **Section** — place the set in a Section on the target page; if absent, create it via the caller's
-  **Section-wrapper helper**. Never hand-roll `figma.createSection()`.
+- **Section** — place the set in a Section on the target page. If a **Section-wrapper helper** was
+  supplied, use it (the canonical Section form) and don't hand-roll `figma.createSection()` — the ban
+  protects that canonical wrapper. No helper (standalone) → a plain `figma.createSection()` is fine.
 - **Section coords & size** — a Section child's `x/y` are **relative to the Section origin**; set the
   offset directly (`set.x = 80`), never `section.absoluteBoundingBox.x + 80` (double-offsets thousands of
   px out). Sections **don't auto-grow** → after positioning, `section.resizeWithoutConstraints(w, h)` to

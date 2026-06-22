@@ -5,6 +5,7 @@
     "fileName": "Agentport DS",
     "componentsPage": "Shadcn Components",
     "pageId": "3126-2",
+    "font": { "family": "Hanken Grotesk", "style": "Medium", "comment": "DS text-style font for the build snippet CFG; Medium for Label/Display, Regular for Body/Input — match the chosen textStyleId" },
     "comment": "Build component sets on the 'Components' page (create if absent). Token variables live in this file."
   },
   "collections": {

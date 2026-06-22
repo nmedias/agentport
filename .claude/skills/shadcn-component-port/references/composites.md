@@ -14,14 +14,10 @@ jsdom polyfill once-per-lib; T7 example-inventory).
 
 ## 1 · Exposure model — which mechanism per part
 
-Frontend "slot" (`children`) ≠ Figma Slot; the construct→property table + when-rules live in
-**`/figma-build-rules §Mechanism`**. Composite-specific:
-
-- **One composite usually combines several** — an editable string→Text, an optional element→Boolean,
-  a finite choice (align/size/state)→Variant, a one-off swappable element→Instance-Swap, an open
-  region→Slot, and any composed already-ported component→a nested instance of it.
-- The **conditional-layout → Variant-axis** row bites hardest here: it **multiplies the matrix**
-  (state × layout) — a porter modelling only `state` can't reproduce the column-stacking examples.
+The Slot≠Slot mechanic — frontend `children` ≠ Figma Slot, the construct→property table + when-rules,
+"one composite combines several mechanisms", and the conditional-layout→Variant-axis matrix multiplier —
+lives in **`/figma-build-rules §Composites`** (+ §Mechanism). **Port-specific:** *derive* the exposure
+surface from the union of what the stories vary (T2.6), then map each per that table.
 
 ## 2 · Flow — overrides/extends T2–T7
 
