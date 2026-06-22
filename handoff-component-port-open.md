@@ -160,28 +160,28 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — vorrangig (16 offen · 14 figma-build ✅ eingearbeitet 2026-06-22)
+#### B — vorrangig (13 offen · 17 ✅: figma-build 14 + SKILL.md 3 — 2026-06-22)
 
-> ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert — die
-> Detail-Einträge unten sind maßgeblich.
+> ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert (Detail-
+> Einträge maßgeblich). #2/#10/#11/#21/#61 re-homed → composites.md / storybook-rules (bleiben offen).
 
 | # | Kurz | Status / was die Lücke kostete |
 |---|------|--------------------------------|
-| 1 | lucide-IconPlaceholder-Trap | Gate rot (lib nicht installiert) |
-| 2 | un-portierte Dep deferren | dangling Imports (CommandDialog→Dialog) |
+| ✅ 1 | lucide → `@remixicon`-Swap | eingearbeitet (SKILL.md T2) |
+| 2 | un-portierte Dep deferren | → re-homed composites.md §2 (offen) |
 | 4 | Usage-Contract aus Docs | bare `{children}` bricht Doc-Contract |
 | ✅ 6 | Swap-Ziel per exaktem NAMEN | eingearbeitet (Red-flags-Zeile) |
 | ✅ 8 | optionaler Slot = Boolean an `visible` | eingearbeitet — **korrigiert: KEIN FRAME, Slot bleibt SLOT** |
 | ✅ 9 | leerer Slot = 100×100 Default-Box | eingearbeitet — **korrigiert: kein HUG-Bug; Boolean+Auto-Layout kollabiert** |
-| 10 | Stories + DOM-Globals | Typecheck rot (Repo-Gap ✅ behoben; Skill-Edit offen) |
-| 11 | T6 rendered-output zahnlos | `sm:max-w-sm` als 6px geshippt — User fand den Bug |
-| 12 | Shadow-Semantik in twMerge | `cn` behält beide Shadow-Klassen |
+| 10 | DOM-Globals-Story nicht strippen | → re-homed /storybook-rules (offen) |
+| 11 | Render-Output-Check (Sizing-px) | → re-homed /storybook-rules (offen) |
+| ✅ 12 | Shadow-Familie in twMerge | eingearbeitet (`utils.ts` Repo-Fix + T1; runtime+typecheck ✓) |
 | 13 | AUTO-Sizing nach combine | vertikales Padding still gedroppt |
 | ✅ 15 | `setCurrentPageAsync`-Invariante | eingearbeitet |
 | ✅ 16 | Section-relative Koords | eingearbeitet |
-| 21 | asChild-Control auf Text-Story | Toggle → Crash im Controls-Panel (`React.Children.only`) |
+| 21 | asChild-Control auf Text-Story | → re-homed /storybook-rules (offen) |
 | ✅ 30 | Glow-/Ring-Cluster | eingearbeitet (alle 4 Teile live verifiziert) |
-| 37 | `mv` statt `git mv` | git mv exit 128 (untracked source) |
+| ✅ 37 | `mv` statt `git mv` | eingearbeitet (SKILL.md T2) |
 | 40 | S3 dritte Diff-Form (ADD) | gebundene Prop ohne Code-Klasse → Sync verfehlt sie |
 | 41 | bound = Delta, nicht „Deviation" | checked-invalid blieb cyan — User-Report |
 | 43 | read-set-values verfehlt Indicator | Thumb/Dot-Fill-Bindung unsichtbar |
@@ -195,7 +195,7 @@ nie mid-run editiert.
 | 57 | Composite-Doc = Story-File je Part | verbrannte `subcomponents`-Iteration (leere ArgsTable) |
 | 59 | Anchored-Overlay-Composite | Select-Main-Component fehlte — Review fand es |
 | ✅ 60 | Examples screenshotten | eingearbeitet (Verify nur strukturell) |
-| 61 | Sibling-Surface spiegeln | Trigger ohne focus-invalid/gated Ring etc. — Review (3×) |
+| 61 | Sibling-Surface spiegeln | → re-homed composites.md (offen) — Review-Defekt (3×) |
 | 62 | flache Palette `shouldFilter=false` | sichtbarer „weird grouping"-Bug — Review |
 
 #### C — Tooling/Repo / erledigt (3 + 3 ✅)
@@ -231,21 +231,18 @@ dabei korrigiert — s. Detail-Einträge unten)
 - **§Usage-examples:** **#60** Examples screenshotten + eyeballen (Verify nur strukturell) *(auch: SKILL.md T5)*
 - *Bonus Red-flags:* `.height` spiegelt Visibility-Reflow nicht → Screenshot ✓
 
-**`SKILL.md` (8)** — Task-Steps der Port-Pipeline
-- **T2 Dep-Audit:** **#1** lucide-IconPlaceholder → `@remixicon/react`-Swap (Ziel-Icon im Registry-JSON) ·
-  **#2** un-portierte Dep + den konsumierenden Sub-Part komplett deferren *(beide auch: composites.md §2)*
-- **T2.5/T6 Stories/Verify:** **#10** Stories dürfen DOM-Globals nutzen (Stories-tsconfig-DOM-lib prüfen statt
-  Beispiel strippen) · **#11** mind. eine Story **echt gerendert** prüfen (Sizing-Utility-Kollision T-Shirt→px) ·
-  **#21** strukturiert-Children-Boolean (`asChild`) als Control disablen + eigene Single-Element-Story
-- **T1/T3 twMerge:** **#12** DS-Shadow-Familie in twMerge registrieren *(auch: repo `utils.ts`)*
-- **T2/T6:** **#37** `mv` statt `git mv` für untracked source (minor)
-- **T2.6:** **#61** Sibling-Surface spiegeln (focus-invalid-Member + focus-gated Ring · `showIcon`-Bool ·
-  Doc-Seite je Part) *(auch: composites.md + /docgen-props/storybook-rules)*
+**`SKILL.md` (3)** — ✅ **eingearbeitet 2026-06-22** (#2/#21/#61/#10/#11 re-homed → composites.md / storybook-rules)
+- **T1 twMerge:** **#12** DS-Shadow-Familie registriert — Repo-Fix `utils.ts` (runtime + typecheck verifiziert)
+  + T1 generisch umformuliert (keine DS-Token-Namen mehr) ✓
+- **T2 „Land":** **#1** lucide → `@remixicon/react`-Swap · **#37** `mv` statt `git mv` (untracked source)
 
-**`composites.md` (3)** — Composite-Anatomie
+**`composites.md` (5)** — Composite-Anatomie *(+ #2/#61 re-homed aus SKILL.md)*
+- **#2** un-portierte Dep + konsumierenden Sub-Part komplett deferren (§2 T2 `delete+defer` schärfen)
 - **#4** Usage-Contract aus den Doc-Beispielen ziehen, nicht der Style-Source (Wrapper-API vor T3 cross-checken)
 - **#59** Anchored-Overlay-Composite → Open-State als absolut-pos., am Trigger verankerter Slot *(auch:
   figma-build.md `layoutPositioning=ABSOLUTE`-Anchor-Rezept)*
+- **#61** Sibling-Surface spiegeln (focus-invalid-Member + focus-gated Ring · Leading-Element-Bool · Doc-Seite
+  je API-Part) — T2.6 + composites.md *(auch: /docgen-props/storybook-rules)*
 - **#62** flache Command-Palette → `shouldFilter={false}` *(bereits in `command.tsx` + Stories angewandt;
   Skill-Home offen — cmdk-Composite-Note)*
 
@@ -254,7 +251,12 @@ dabei korrigiert — s. Detail-Einträge unten)
   nicht nur Werte benannter Klassen) · **#41** gebundener Wert = **Delta**, nie „Deviation" (1:1 mappen) ·
   **#43** `read-set-values.js` liest non-slot Indicator-Kinder (Thumb-ELLIPSE, Radio-Dot) mit *(auch: snippets)*
 
-**`/storybook-rules` + `/docgen-props` (1)**
+**`/storybook-rules` + `/docgen-props` (4)** *(+ #10/#11 re-homed aus SKILL.md)*
+- **#11** Render-Output verifizieren: Gate/Specs sehen kein kompiliertes CSS → Story rendern
+  (`shoot`/`preview-stories`) + eyeballen; T-Shirt-Sizing-px gegen tokens-ref §3 *(prüfen: nicht schon vorhanden)*
+- **#10** DOM-Globals-Story nicht strippen (storybook-tsconfig hat die DOM-lib)
+- **#21** strukturiert-Children-Boolean (`asChild` & Co.) als Control disablen + eigene Single-Element-Story;
+  Control-Scoping vom geporteten Sibling übernehmen *(re-homed aus SKILL.md)*
 - **#57** Composite-Sub-Parts dokumentieren = **eigenes Story-File je API-Part** (RadioGroupItem-Muster),
   NICHT `meta.subcomponents`; inkl. „Zwei Part-Page-Fallen" (`source.code`-Snippet bei Wrapper-render +
   Omit/re-declare geerbter Props für vollständige ArgsTable)
@@ -270,6 +272,10 @@ dabei korrigiert — s. Detail-Einträge unten)
   assembly), #30 (§Interaction states), #60 (§Usage-examples) + Bonus Red-flags-Zeile. **Live in Figma
   verifiziert**; #8/#9 (kein Wrapper — Slot bleibt SLOT) + #46/#47 (Variant-Clone behält SLOT, verliert
   nur `slotContentId` → re-binden) dabei **korrigiert**. Handoff-Detaileinträge #8/#9/#46/#47 nachgezogen.
+- **SKILL.md B-Findings (Batch 2026-06-22)** ✅ — 3 SKILL.md-native: #12 (T1 twMerge — generisch
+  umformuliert + Repo-Fix `utils.ts` Shadow-Gruppe, runtime + typecheck verifiziert), #1 + #37 (T2 „Land":
+  lucide→`@remixicon`-Swap, plain `mv`). #2/#10/#11/#21/#61 re-homed → composites.md / storybook-rules.
+  T1 zusätzlich von DS-Token-Namen befreit.
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
