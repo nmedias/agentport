@@ -55,22 +55,13 @@ Exposure-Surface, 3-layer build). T1 + T3 and the shared T4 Figma rules still ap
 
 ### T1 — Setup (Verify Every Run)
 
-Tailwind-merge ignores globals.css / the config, so `libs/ui/src/lib/utils.ts` `cn()` MUST extend
-twMerge with **both** — add whichever is missing before porting:
-
-```ts
-extendTailwindMerge<'text-format'>({ extend: {
-  theme: { spacing: ['2xs','xs','sm','md','lg','xl','2xl','3xl','4xl','5xl'] }, // named spacing → all spacing groups
-  classGroups: { 'text-format': [{ text: [/* the 11 typo formats */] }] },      // typo formats ≠ text-color
-}});
-```
-
-- No `text-format` group → `text-label` + `text-primary-foreground` both file under text-color,
-  collapse → the typo class is silently **dropped**.
-- No spacing theme → `gap-md`/`p-lg` unrecognised → a later `gap-lg` won't override an earlier
-  `gap-md` (CSS source order wins, not className order).
-
-Colours (`bg/border/text-*`) and radius (`sm/md/lg/xl`, standard scale) need no extension.
+Tailwind-merge ignores globals.css / the config, so `cn()` in `libs/ui/src/lib/utils.ts` must register
+**every DS custom-utility family a port overrides via className** — any family whose class names diverge
+from twMerge's built-in scales (multi-property typography, named t-shirt spacing, the DS radius
+vocabulary, DS shadows). Unregistered → two classes of one family both survive and CSS source order (not
+className order) decides → the override is silently lost. Verify the families are registered before
+porting; add any new at-risk family you introduce. Stock colours and the numeric scales need no
+extension. *(Concrete class names + values live in `utils.ts` and `tokens-reference.md`, not here.)*
 
 ### T2 — Anatomy
 
@@ -82,8 +73,11 @@ Land the real source locally, then read it — that file is the rewrite's source
    add-command field.
 2. **Land** — if `libs/ui/src/components/ui/<component>/` is absent: **`npm run ui:add -- <component>`**
    (real source: project-correct `@/` imports + `data-slot`).
-   - shadcn writes it **flat** → move to `components/ui/<component>/<component>.tsx` + add a barrel
-     `index.ts` (`export * from './<component>'`).
+   - shadcn writes it **flat** → move (plain `mv` — the freshly-landed source is untracked, `git mv`
+     throws) to `components/ui/<component>/<component>.tsx` + a barrel `index.ts` (`export * from './<component>'`).
+   - Source lands with `lucide-react` icon imports (shadcn's IconPlaceholder) → swap each to its
+     `@remixicon/react` equivalent (target glyph = the `remixicon` field in the registry JSON);
+     `lucide-react` isn't installed → gate red otherwise.
    - *Offline / no CLI?* → `get_item_examples_from_registries({registries:['@shadcn'],
      query:'<component>'})` (`query` required) for the raw class strings.
 3. **Extract** the anatomy — CVA variant axes + defaults · slots/parts (`data-slot`, `[&_svg]`) ·
@@ -185,7 +179,7 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 - **Stories**: the T2.5 usage-example set, now running on DS tokens. **Reconcile them per
   `/storybook-rules`** (coverage: every variant×size/state in ≥1 story, overview story if the examples
   miss any; a `play` test for interactive components; the `shoot` / `preview-stories` rendered-output
-  check). Neither the gate nor `/figma-verify` sees the render — eyeball it.
+  check).
 - **Headless lib** (e.g. Radix, cmdk): components that touch any browser API jsdom doesn't implement on
   mount (e.g. `ResizeObserver`, `Element.prototype.scrollIntoView`, `matchMedia`, …) need a stub/polyfill
   in the vitest `setupFile` — **once per lib**, else **jsdom specs** can't
