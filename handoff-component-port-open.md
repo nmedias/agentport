@@ -13,6 +13,15 @@ portiert (volles Radix-Primitive, `radix-ui`-Umbrella behalten; Sub-Parts mit ei
 Dazwischen ein **Component-Sync-Sweep 2026-06-17** (Figma→Code-Reconcile über ~18 Sets). Der Katalog
 `components-reference.md` ist auf diesem Stand — die dortigen Node-IDs/Status sind autoritativ.
 
+**Parallel-Batch 06-22 (tooltip · toggle · toggle-group · popover):** 4 Components portiert (Figma + Code;
+3 Background-Agents parallel, Figma-Set-Build über einen `/tmp`-`mkdir`-Mutex serialisiert — eine
+Plugin-Verbindung), zu **22 Components** auf Branch `feat/shadcn-port-batch` integriert (4 Commits, additive
+`index.ts`/Katalog-Konflikte als Union aufgelöst, ff-bereit auf `master`). **Gate grün im voll aufgesetzten
+Main-Tree: `npm run check` = 298 Tests / 66 Files** (lint + typecheck + test; ein Select-Portal-`play`-Test
+flaky, im Re-Run grün — Bestand, nicht aus dem Batch). **NOCH NICHT auf `master` ge-ff-merged (User-Gate).**
+`toggle` = co-portiert (Hard-Dep von toggle-group, Finding B10). Runs:
+`agent-runs/component-port/2026-06-22-{tooltip,toggle-group,popover}/`.
+
 Form-Toggle-Batch (Checkbox · Switch · RadioGroup) **gemerged** (Code + token-gebundene Figma-Sets +
 permanente Usage-Examples + Figma→Code-Sync + Field-komponierte Stories) + Skill-Edit (usage-examples-
 Deliverable + Doc-Treue ins `/shadcn-component-port` gehoben) gemerged. Standard: Glow = literal-Alpha
@@ -57,14 +66,28 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    (/storybook-rules wrapper-render→`source.code`, S4-Promotion) ✅ eingearbeitet (`03178db`) · #2 →
    **A1** (/shadcn-component-port T6 a11y) eingearbeitet (`8287d65`). B27 (/figma-build-rules) +
    C3 (/figma-verify) · C4 (build-variant-set.js) zurückgestellt.
+   **Parallel-Batch 06-22 (9 Findings, Quellen `…/2026-06-22-{tooltip,toggle-group,popover}/skill-feedback.md`):**
+   **A (2, offen, Prio)** = beide `/storybook-rules` (**A2** `userEvent` statt rohem `element.click()`; **A3**
+   Portal-`role=dialog`-`aria-label`, auch `/shadcn-component-port` T6) — Gate-rot bis gefixt, Skill-Edit
+   ausstehend. **B (4, zurückgestellt)** = **B28** /docgen-props (Union-Root `type=` statt `interface extends`) ·
+   **B29** /figma-build-rules (filled Input: Value setzen + Placeholder leeren) · **B30/B31** /shadcn-component-port
+   T3/T6 (invertierte Fläche umkleiden + Sibling-`in-data-[slot]:`-Override grep'en). **C (2)** = Env/Tooling
+   (**C5** Worktree-`npm ci`/`dist` · **C6** nested-Worktree-Nx + `isolation:worktree`-Lehre). B20 (Portal-Spec)
+   durch Tooltip re-bestätigt (3. Datenpunkt). Skills nie mid-run editiert — User reviewt + wendet an.
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
    260 Tests). Geometrie-Primitive wie Switch,
    kein CVA; Figma-Set 12 Member (`orientation × thumbs × state`, `thumbs` = Figma-only Fork) +
    Usage-Examples inkl. **FieldSlider → schaltet das beim Field-Port (06-12) übersprungene `field-slider`
    frei**. Details: `agent-runs/component-port/2026-06-22-slider/notes.md`, Katalog-Eintrag `Slider`.
-   Offen jetzt: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
-   Palette-Bausteinen. *(ChoiceCard seit 06-16, Select seit 06-19, Slider seit 06-22 — alle erledigt.)*
+   **Parallel-Batch 06-22 erledigt:** tooltip · toggle (co-port, Hard-Dep B10) · toggle-group · popover
+   portiert (Figma + Code, Gate grün), auf `feat/shadcn-port-batch` ff-bereit. **`popover` + bereits
+   portiertes `command` schalten den `combobox`-Endpoint-Switcher frei** (Explorer-Analyse) — offener
+   nächster Block-Schritt, nicht gebaut. **Offener Folge-Punkt (Tooltip):** `kbd.tsx`
+   `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
+   near-invisible; bewusst nicht im Single-Port editiert → Kbd-Touch-up nachziehen (s. B31).
+   Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
+   Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
@@ -106,7 +129,29 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### A — gap caused a defect (priority)
 
-Keine offenen A-Findings — erledigte stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht), nicht hier.
+Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht). **Offen (Batch 06-22, 2):**
+
+#### /storybook-rules
+
+**A2 · play-Test muss Radix via `userEvent` treiben, nicht roher `element.click()`** *(toggle-group #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | roher DOM-`.click()` treibt den Radix-State im Chromium-Story-Projekt nicht → 2 play-Tests Gate-rot, bis auf `userEvent` umgestellt. |
+| Gap | die play-Test-Regel sagt nicht, dass Interaktion mit Radix-/portal-Controls `@testing-library/user-event` braucht (echte async Pointer/Key-Sequenz), nicht `element.click()`/`fireEvent`. |
+| Verified | toggle-group play 2× rot mit `.click()`, grün mit `await userEvent.click(...)`. |
+| Candidate fix | in der play-Test-Regel festhalten: Interaktion mit Radix/portal-Controls IMMER über `userEvent` (async); roher `element.click()`/`fireEvent` triggert den Radix-State nicht. |
+| Status | offen — Skill-Edit ausstehend. |
+
+**A3 · Portal-`role=dialog`-Overlay ohne Auto-Titel braucht explizites `aria-label`/`-labelledby`** *(popover #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Popover-Content rendert `role="dialog"`, verdrahtet (anders als modaler Dialog) den Titel NICHT automatisch → axe `aria-dialog-name` rot, bis die offenen Stories `aria-label` tragen. |
+| Gap | weder `/storybook-rules` noch `/shadcn-component-port` T6 nennen, dass ein nicht-modales `role=dialog`-Overlay (Popover/Combobox) einen expliziten Accessible Name pro offener Instanz braucht. |
+| Verified | popover open-Story axe-rot ohne, grün mit `aria-label`. |
+| Candidate fix | Regel: jede offene `role=dialog`/`role=tooltip`/`role=listbox`-Overlay-Instanz braucht einen Accessible Name (`aria-label`/`-labelledby`); modaler Dialog verdrahtet ihn via Title-Slot, Popover/Tooltip/Combobox NICHT → Story/Component muss ihn setzen. *(also: /shadcn-component-port T6 „name the role element")* |
+| Status | offen — Skill-Edit ausstehend. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -393,6 +438,52 @@ Keine offenen A-Findings — erledigte stehen unter **Offene Punkte #1** (bereit
 | Candidate fix | in S2 / Snippet-Header notieren (`fileKey` aus config.json + kurze `description`). *(also: read-set-values.js)* |
 | Status | zurückgestellt. |
 
+#### /docgen-props
+
+**B28 · Discriminated-Union-Radix-Root: Props als `type = ComponentProps & Own`, nicht `interface extends`** *(toggle-group #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet; docgen + Build grün. |
+| Gap | /docgen-props zeigt das Omit+re-declare-Muster für einen normalen Root, nicht für einen Root mit Discriminated-Union-Props (z. B. `type=single\|multiple`). |
+| Verified | `interface … extends ComponentProps<Root>` warf TS2312 über die Union; `type … = ComponentProps<Root> & Own` typecheckt. |
+| Candidate fix | bei einem Root mit Discriminated-Union-Props die Props als `type = ComponentProps<typeof Root> & {…}` (Intersection) deklarieren, NICHT `interface extends` (TS2312 — nur Object-Types/Statics extendbar). |
+| Status | zurückgestellt. |
+
+#### /figma-build-rules
+
+**B29 · §Usage-examples — gefüllter genesteter Input: Value setzen UND Placeholder leeren** *(popover #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst gefunden; Beispiel sauber gerendert. |
+| Gap | §Usage-examples sagt nicht, dass ein „filled"-Beispiel-Input beides braucht — Value setzen UND Placeholder-Text leeren; sonst überlagern sie sich sichtbar. |
+| Verified | gesetzter Value + nicht-geleerter Placeholder rendern übereinander. |
+| Candidate fix | beim Nesten eines gefüllten Input/Field in ein Usage-Example: Value setzen UND den Placeholder leeren (ein `filled`-Bool / nur-Value versteckt den Placeholder nicht). |
+| Status | zurückgestellt. |
+
+#### /shadcn-component-port
+
+**B30 · T3 — invertierte Stock-Fläche → an raised-overlay-Token umkleiden + dark→light-Fork notieren** *(tooltip #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst entschieden; Tooltip korrekt umgekleidet, Verify CLEAN. |
+| Gap | T3 nennt keinen Pfad für eine invertierte Stock-Fläche (`bg-foreground`/`text-background`), wenn das DS keinen invertierten-Overlay-Token hat. |
+| Verified | stock-Tooltip = dunkle Chip; DS hat nur die konsolidierte raised-overlay-Fläche (`dialog-fill`) → Tooltip wird light. |
+| Candidate fix | fehlt ein invertierter-Overlay-Token, die invertierte Stock-Fläche an die raised-overlay-Fläche umkleiden (bg-dialog-fill + border + shadow-elevation) und den dark→light-Fork in notes festhalten — nicht den invertierten Look erzwingen. |
+| Status | zurückgestellt. |
+
+**B31 · T3/T6 — vor dem Umtönen einer Fläche die `in-data-[slot=<this>]:`-Overrides der Sibling-Components grep'en** *(tooltip #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst erkannt; korrekt als Open Item geflaggt statt still kaputt zu lassen. |
+| Gap | T3/T6 warnen nicht, dass ein bereits portierter Sibling (z. B. Kbd) einen `in-data-[slot=<diese-component>]:`-Kontext-Override trägt, der beim Flächen-Ton-Wechsel (dark→light) stale wird. |
+| Verified | kbd.tsx `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` für dunkle Tooltip getunt → auf light near-invisible. |
+| Candidate fix | beim Umtönen einer Component-Fläche das Lib nach `in-data-[slot=<diese-component>]:` der genesteten Siblings grep'en; passt der Kontrast nicht mehr → als Open Item flaggen (Cross-Component-Override = Out-of-Scope für einen Single-Port). |
+| Status | zurückgestellt. |
+
 ### C — tooling / repo / already covered
 
 **C1 · snippets/build-variant-set.js — kein Scaffold für Composite-Sub-Builds** *(Breadcrumb #3, optional)*
@@ -437,12 +528,34 @@ Keine offenen A-Findings — erledigte stehen unter **Offene Punkte #1** (bereit
 | Bezug | Verstärkt C1 (kein Scaffold für Composite-Sub-Builds). |
 | Status | offen (Tooling/Backlog). |
 
+**C5 · Worktree braucht echtes `npm ci` (kein symlinked node_modules) + sauberen `dist`-Build** *(toggle-group #3 · popover)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | Env/Tooling — Code korrekt, nur das Worktree-Setup unvollständig. |
+| Gap | ein frischer Worktree mit symlinked/partiellem `node_modules` lässt das Lib-Gate scheinbar scheitern: `@nx/react/typings/*`/`vite/client.d.ts` fehlen (typecheck), `@storybook/addon-vitest` setup-file-Import bricht (Chromium-Story-Projekt), TS6305 ohne `dist`-Build. |
+| Verified | identischer Code typecheckt/testet grün im voll aufgesetzten Main-Tree; im Worktree 5 reine Typings-Infra-Fehler, keiner referenziert die Component. |
+| Candidate fix | für Parallel-Worktree-Batches je Worktree ein echtes `npm ci` (kein Symlink) + Composite-`dist`-Build sicherstellen, ODER das authoritative `npm run check` nach dem Zusammenführen im Main-Tree fahren (Worktree-Gate nur indikativ). |
+| Status | offen (Env/Tooling). |
+
+**C6 · `isolation: worktree` aus einer Worktree-Session → genestete Worktrees brechen Nx + kollabieren Agents** *(Batch-Orchestrierung 06-22)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | Orchestrierungs-/Harness-Lehre, kein Skill-Prosa-Pfad; die Agents haben sich selbst erholt. |
+| Gap | Background-Agents mit `isolation: worktree` aus einer bereits ge-worktree-ten Session nesten die neuen Worktrees unter `.claude/worktrees/` IM Repo → Nx „projects defined in multiple locations"; zwei Agents landeten im Main-Tree statt im eigenen Worktree (CWD ≠ zugewiesenes Worktree). |
+| Verified | `nx` rot bis untracked `.nxignore` (`.claude/worktrees`) + `nx reset`; tooltip+popover schrieben in den Main-Tree, popover relozierte + cleante selbst. |
+| Candidate fix | solche Batches aus dem MAIN-Checkout starten (nicht aus einem Worktree) ODER Worktrees AUSSERHALB des Repo-Baums anlegen; vor dem Parallel-Lauf je Agent CWD == eigenes Worktree verifizieren; bei genesteten Worktrees `.nxignore` (`.claude/worktrees`) setzen. |
+| Bezug | Schwester von C5 (beide Worktree-Env). |
+| Status | offen (Tooling/Orchestrierung). |
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
-  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider}/skill-feedback.md` +
+  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider,
+  2026-06-22-tooltip,2026-06-22-toggle-group,2026-06-22-popover}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
