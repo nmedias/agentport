@@ -5,6 +5,7 @@
 > `design-docs/design-system/tokens-reference.md`, Run-Details: `agent-runs/`.
 
 **Stand 2026-06-22:** `master` = **17 Components** ff (kein Remote, `npm run check` grün, 249 Tests / 55 Files).
+**Slider** 06-22 portiert auf `feat/shadcn-slider-port` (lokal committet, **nicht** gemerged → wäre 18 Components / 260 Tests; s. Offene Punkte #2).
 **Seit 06-12 (2026-06-16…06-19) dazu:** **ChoiceCard** portiert (DS-authored Composite — 3 dünne
 Wrapper `ChoiceCardCheckbox`/`ChoiceCardSwitch`/`ChoiceCardRadio` über eine interne `ChoiceCardShell`
 + `useFieldId`-Hook; checked-Tint = Zwei-Cyan-Token-Modell, voll variabel-gebunden) und **Select**
@@ -49,9 +50,13 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 
 1. **Skill-Findings** (unten, im `/skill-feedback`-Format: Klasse A/B/C → Ziel-Datei → Entry-Tabelle).
    **A-Strang 2026-06-22 KOMPLETT** in die 6 Skill-Dateien eingearbeitet (29 ✅; #62 verworfen). Offen:
-   **B (26)** = zurückgestellt (Agent kam trotz Skill-Schweigen zum Ergebnis → Kodifizierung, kein
-   Bugfix) + **C (C1 · C2)** = Tooling/Backlog. Skills werden nie mid-run editiert; Formulierungs-Regel
+   **B (27)** = zurückgestellt (Agent kam trotz Skill-Schweigen zum Ergebnis → Kodifizierung, kein
+   Bugfix) + **C (C1 · C2 · C3 · C4)** = Tooling/Backlog. Skills werden nie mid-run editiert; Formulierungs-Regel
    s. Blockquote unter „Skill-Findings".
+   **Slider-Run 2026-06-22 (5 Findings, Quelle `…/2026-06-22-slider/skill-feedback.md`):** A: #5
+   (/storybook-rules wrapper-render→`source.code`, S4-Promotion) ✅ eingearbeitet (`03178db`) · #2 →
+   **A1** (/shadcn-component-port T6 a11y) eingearbeitet (s. A-Sektion). B27 (/figma-build-rules) +
+   C3 (/figma-verify) · C4 (build-variant-set.js) zurückgestellt.
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT** (Branch `feat/shadcn-slider-port`, lokal committet `0df4af2`, **nicht** auf
    master gemerged → Push/Merge erst auf Ansage; Gate grün 260 Tests). Geometrie-Primitive wie Switch,
@@ -123,6 +128,21 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 > Global-#8/#9/#46/#47
 > wurden dabei live in Figma korrigiert (Slot bleibt SLOT bei Boolean-`visible`; Variant-Clone behält
 > SLOT, verliert nur `slotContentId` → re-binden).
+>
+> **Slider-Run 2026-06-22:** #5 (/storybook-rules — wrapper-render→`source.code`, S4-Promotion) ✅
+> eingearbeitet (`03178db`). #2 → **A1** ↓ eingearbeitet (T6-a11y-Notiz in `/shadcn-component-port`).
+
+#### /shadcn-component-port
+
+**A1 · T6 — Composite-Rollen-Control: der Accessible Name muss am Rollen-Element sitzen, nicht am Root** *(Slider #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Gate rot — axe `aria-input-field-name` auf mehreren Stories; erst nach dem ersten `nx test` gesehen. |
+| Gap | T6 sagt „rewrite per T3 + prop API annotieren"; nichts flaggt, dass wenn das `role`-Widget ein KIND ist (nicht der Root), `aria-label`/`aria-labelledby` an der Component am Root landen und das Rollen-Element namenlos lassen → axe rot. Sibling-Ports wo Root = Rollen-Element (Switch-Button) verbargen das. |
+| Verified | Label am Root-div, aber `role="slider"` am Thumb-`<span>` ohne Namen → axe-Violation; Forward an jedes Thumb-Element behob es, Gate grün. |
+| Candidate fix | T6-a11y-Notiz: ist das `role`-Widget ein genestetes Element (Slider-Thumb, Listbox-Option …), MUSS die Component `aria-label`/`aria-labelledby` an dieses Element FORWARDEN — nur am Root benennt nichts. Pro Rollen-Element (mehrere Rollen-Knoten teilen sich denselben Namen). *(also: /storybook-rules — eine bare-control-Story braucht den Namen trotzdem am Rollen-Element.)* |
+| Status | ✅ eingearbeitet (`/shadcn-component-port` T6). |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -196,6 +216,16 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Gap | §Usage-examples geht von einem control-trailing Field aus; eine Checkbox/Radio-Reihe ist control-LEADING. |
 | Verified | — (Figma-only Fork gebaut, s. Katalog `.Field`/`.FieldLegend`). |
 | Candidate fix | Example-Groups für Selektions-Controls nesten ein control-leading `.Field` (`controlPosition`-Achse, Figma-only Fork); Group-/Fieldset-Beispiele mit abweichender Item-Zahl vertikal komponieren (`.FieldSet` nestet fix 2 Fields). Per-field-Error → `.Field`-error-Slot; Gruppen-Error (FieldSet-Ebene) → separater Text. *(also: components-reference Katalog)* |
+| Status | zurückgestellt. |
+
+**B27 · §Mechanism — count-getriebene Sibling-Geometrie → Variant-Achse (nicht Boolean, nicht Slot)** *(Slider #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | Achsen-Modell selbst hergeleitet; User bestätigte 12-Member-Scope. Build hält. |
+| Gap | §Mechanism mappt „variabel-viele Kinder → Slot" und „conditional layout → Variant-Achse", aber nicht den Fall, dass die *Anzahl* eines daten-getriebenen Sub-Elements die **Geometrie eines Siblings** ändert (Range-Fill spannt ZWISCHEN den Handles → ein 2. Handle re-ankert den Fill). Kein Boolean (Figma kann eine Property-Bindung nicht negieren → der Single-Fill versteckt sich nicht, wenn das 2. Element erscheint), kein Slot (Fill-Geometrie gekoppelt, kein freier Inhalt). |
+| Verified | Single = Start→Handle, Range = Handle1→Handle2; ein Boolean auf `handle2.visible` lässt den Start→Handle1-Fill fälschlich stehen (keine inverse Bindung). |
+| Candidate fix | Notiz/Zeile: ändert die *Anzahl* eines daten-getriebenen Elements die Geometrie eines Siblings (Range-Fill, segmentierter Track) → als **Variant-Achse** modellieren (`thumbs: single\|range`), nicht Boolean (keine Property-Negation) noch Slot (gekoppelte Geometrie). **Figma-only Fork**, wenn der Code die Anzahl aus Daten ableitet (z. B. `value.length`) — nicht als Prop zurücksyncen. Multipliziert die Matrix wie die conditional-layout-Zeile. |
 | Status | zurückgestellt. |
 
 #### composites.md
@@ -421,12 +451,34 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Candidate fix | `/figma-verify` überspringt `visible:false`-Nodes. |
 | Status | offen (Tooling). |
 
+**C3 · /figma-verify — Sibling-Overlap-Check flaggt einen beabsichtigten „Handle auf Rail"-Overlap** *(Slider #3)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | `/figma-verify`-Heuristik (kein Skill-Prosa-Pfad); Build korrekt, Caller muss nur bestätigen. |
+| Gap | Step 4 (non-auto-layout Sibling-Overlap) flaggt jedes Slider-Thumb↔Track-Paar (das Thumb MUSS auf der Rail sitzen). Jedes „Handle auf Rail"-Control (Slider/Scrollbar/Range) trippt by-design → erwartete FLAGs lesen wie Defekte. |
+| Verified | Slider-Set: 0 text / 0 clipped / 0 pad-asym, aber 18 Overlaps, alle Track↔Thumb (genau 1 pro Thumb). |
+| Candidate fix | `/figma-verify` einen designierten Overlap als erwartet behandeln lassen — Paare überspringen, wo ein Node-Name einer Caller-Allowlist matcht (Thumb/Handle über Track/Rail), oder einen voll-enthaltenen-Kind-Overlap (Handle-bbox im Member auf dünnem Track) zu SOFT HINT herabstufen. |
+| Bezug | Schwester von C2 (beide /figma-verify-Heuristik-Verfeinerungen). |
+| Status | offen (Tooling). |
+
+**C4 · snippets/build-variant-set.js — kein Scaffold für ein Geometrie-Primitive (absolute Track/Range/Handle)** *(Slider #4)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | Snippet-Coverage-Lücke; die Prosa (§Interaction states, B5 Two-Part-Toggle) deckt die Idee, der Build war handgeschrieben. Verstärkt C1. |
+| Gap | `build-variant-set.js` ist auf Label/Field-Member getunt (HORIZONTAL AL + Text/Icon-Kind + Surface-Fill). Ein Geometrie-Primitive — `NONE`-Root mit absolut positioniertem Track (clipping FRAME) + Range (Fill-RECT, dessen Ausdehnung den Wert kodiert) + N Handle-RECTs — hat kein Scaffold; die Member-Schleife ist komplett bespoke. Slider = 2. Datenpunkt nach Switch (Track+Thumb). |
+| Verified | Slider-12-Member-Set voll bespoke gebaut (eigener Handle-Helper + per-orientation Track/Range/Handle-Positionierung); der Text/Fill/HUG-Pfad der Vorlage war unbrauchbar. |
+| Candidate fix | Geometrie-Primitive-Scaffold-Variante (Root `NONE` + absolute Kinder, `mkHandle`-Helper, per-orientation Track/Fill-Positionierung, Member-Opacity disabled, per-Handle-Glow) — oder dokumentieren, dass Geometrie-Primitives (Slider/Switch/Progress) das Label/Field-Skelett umgehen und Member von Hand bauen. |
+| Bezug | Verstärkt C1 (kein Scaffold für Composite-Sub-Builds). |
+| Status | offen (Tooling/Backlog). |
+
 ## Quellen
 
 - Findings im Original (mit Verified-Belegen): `agent-runs/component-port/
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
-  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select}/skill-feedback.md` +
+  2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
