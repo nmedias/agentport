@@ -160,16 +160,16 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — vorrangig (9 offen · 21 ✅: figma-build 14 + SKILL.md 3 + storybook-rules 4 — 2026-06-22)
+#### B — vorrangig (4 offen · 25 ✅ + #62 verworfen — figma-build 14 · SKILL.md 3 · storybook-rules 4 · composites 4 — 2026-06-22)
 
 > ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert (Detail-
-> Einträge maßgeblich). #2/#61 re-homed → composites.md (offen); #10/#11/#21 → storybook-rules (✅).
+> Einträge maßgeblich). #62 verworfen (component-spezifisch). **Offen nur noch:** /component-sync (#40/#41/#43) + snippets (#13).
 
 | # | Kurz | Status / was die Lücke kostete |
 |---|------|--------------------------------|
 | ✅ 1 | lucide → `@remixicon`-Swap | eingearbeitet (SKILL.md T2) |
-| 2 | un-portierte Dep deferren | → re-homed composites.md §2 (offen) |
-| 4 | Usage-Contract aus Docs | bare `{children}` bricht Doc-Contract |
+| ✅ 2 | delete+defer ≠ nur Dep-Datei | eingearbeitet (composites.md §2 T2) |
+| ✅ 4 | Usage-Contract aus Docs | eingearbeitet (composites.md §2 T2.6) |
 | ✅ 6 | Swap-Ziel per exaktem NAMEN | eingearbeitet (Red-flags-Zeile) |
 | ✅ 8 | optionaler Slot = Boolean an `visible` | eingearbeitet — **korrigiert: KEIN FRAME, Slot bleibt SLOT** |
 | ✅ 9 | leerer Slot = 100×100 Default-Box | eingearbeitet — **korrigiert: kein HUG-Bug; Boolean+Auto-Layout kollabiert** |
@@ -193,10 +193,10 @@ nie mid-run editiert.
 | ✅ 54 | Sections wachsen nicht auto | eingearbeitet (`resizeWithoutConstraints` B+H) |
 | ✅ 55 | 1-Op pro Call (schärft #48) | eingearbeitet |
 | ✅ 57 | Composite-Doc = Story-File je Part | eingearbeitet (storybook-rules neue Section) |
-| 59 | Anchored-Overlay-Composite | Select-Main-Component fehlte — Review fand es |
+| ✅ 59 | Anchored-Overlay-Composite | eingearbeitet (composites.md §2 T4 Layer 3) |
 | ✅ 60 | Examples screenshotten | eingearbeitet (Verify nur strukturell) |
-| 61 | Sibling-Surface spiegeln | → re-homed composites.md (offen) — Review-Defekt (3×) |
-| 62 | flache Palette `shouldFilter=false` | sichtbarer „weird grouping"-Bug — Review |
+| ✅ 61 | Sibling-Surface spiegeln | eingearbeitet (composites.md §2 T2.6; Doc-Page → storybook-rules) |
+| — 62 | flache Palette `shouldFilter=false` | verworfen: component-spezifisch, inline in command.tsx + Stories |
 
 #### C — Tooling/Repo / erledigt (3 + 3 ✅)
 
@@ -236,15 +236,13 @@ dabei korrigiert — s. Detail-Einträge unten)
   + T1 generisch umformuliert (keine DS-Token-Namen mehr) ✓
 - **T2 „Land":** **#1** lucide → `@remixicon/react`-Swap · **#37** `mv` statt `git mv` (untracked source)
 
-**`composites.md` (5)** — Composite-Anatomie *(+ #2/#61 re-homed aus SKILL.md)*
-- **#2** un-portierte Dep + konsumierenden Sub-Part komplett deferren (§2 T2 `delete+defer` schärfen)
-- **#4** Usage-Contract aus den Doc-Beispielen ziehen, nicht der Style-Source (Wrapper-API vor T3 cross-checken)
-- **#59** Anchored-Overlay-Composite → Open-State als absolut-pos., am Trigger verankerter Slot *(auch:
-  figma-build.md `layoutPositioning=ABSOLUTE`-Anchor-Rezept)*
-- **#61** Sibling-Surface spiegeln (focus-invalid-Member + focus-gated Ring · Leading-Element-Bool · Doc-Seite
-  je API-Part) — T2.6 + composites.md *(auch: /docgen-props/storybook-rules)*
-- **#62** flache Command-Palette → `shouldFilter={false}` *(bereits in `command.tsx` + Stories angewandt;
-  Skill-Home offen — cmdk-Composite-Note)*
+**`composites.md` (4)** — ✅ **eingearbeitet 2026-06-22** (#2/#61 re-homed aus SKILL.md; #62 verworfen)
+- **#2** delete+defer ≠ nur die Dep-Datei → konsumierenden Sub-Export ganz raus (§2 T2) ✓
+- **#4** Usage-Contract aus den Doc-Beispielen, nicht der Style-Source (Wrapper-API vor T3 cross-checken; §2 T2.6) ✓
+- **#59** Anchored-Overlay → Open-State als `ABSOLUTE`/trigger-verankerter Child (§2 T4 Layer 3) ✓
+- **#61** Sibling-Surface spiegeln: Figma-Surface (state-axis-Konvention, optionale Elemente als Boolean) +
+  Doc-Page-Verweis auf `/storybook-rules` (§2 T2.6) ✓
+- **#62** ~~flache Palette `shouldFilter=false`~~ → **verworfen** (component-spezifisch; inline in `command.tsx` + Stories)
 
 **`/component-sync` (3)** — Sync-Skill (Figma→Code, read-only)
 - **#40** S3 dritte Diff-Form: gebundene Prop ohne Code-Klasse → **ADD** (den Satz gebundener Props diffen,
@@ -278,6 +276,10 @@ dabei korrigiert — s. Detail-Einträge unten)
   ergänzt — Eyeball-via-`shoot` existierte schon, ohne Token-Pointer), #10 (Portal-Asserts + DOM-Globals),
   #21 (asChild → `control:false` + eigene Story), #57 (neue Section „Composite sub-parts → one file per
   API-part", NICHT `meta.subcomponents`; `/docgen-props` als Voraussetzung referenziert — kein docgen-props-Edit).
+- **composites.md B-Findings (Batch 2026-06-22)** ✅ — 4 in `composites.md`: #2 (delete+defer ≠ nur die
+  Dep-Datei), #4 (Usage-Contract aus den Doc-Beispielen), #59 (Anchored-Overlay → `ABSOLUTE`-verankerter
+  Child), #61 (Sibling-Surface — Figma-Surface + Doc-Page-Verweis auf `/storybook-rules`). #62 verworfen
+  (component-spezifisch, inline in `command.tsx` + Stories).
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
 - **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
