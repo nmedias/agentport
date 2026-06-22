@@ -160,38 +160,41 @@ nie mid-run editiert.
 | 56 | radix-Umbrella für volle Primitives | richtige Wahl (Dialog-Konvention; verengt #3) |
 | 58 | kein jsdom-Polyfill (closed-only Spec) | erkannt, Spec lief grün |
 
-#### B — aktiv / vorrangig (30)
+#### B — vorrangig (16 offen · 14 figma-build ✅ eingearbeitet 2026-06-22)
 
-| # | Kurz | Was die Lücke kostete |
-|---|------|-----------------------|
+> ✅ = eingearbeitet (s. „Bereits eingearbeitet" + Bundle). #8/#9/#46/#47 dabei live-korrigiert — die
+> Detail-Einträge unten sind maßgeblich.
+
+| # | Kurz | Status / was die Lücke kostete |
+|---|------|--------------------------------|
 | 1 | lucide-IconPlaceholder-Trap | Gate rot (lib nicht installiert) |
 | 2 | un-portierte Dep deferren | dangling Imports (CommandDialog→Dialog) |
 | 4 | Usage-Contract aus Docs | bare `{children}` bricht Doc-Contract |
-| 6 | Icon-Swap per NAMEN | Substring-Match ersetzt ganze Base (subtil falsch) |
-| 8 | SLOT nie direkt visibility-binden | still zu FRAME, Slot-Inhalt verworfen |
-| 9 | leerer Slot ~100px Resthöhe | sichtbarer Layout-Defekt |
+| ✅ 6 | Swap-Ziel per exaktem NAMEN | eingearbeitet (Red-flags-Zeile) |
+| ✅ 8 | optionaler Slot = Boolean an `visible` | eingearbeitet — **korrigiert: KEIN FRAME, Slot bleibt SLOT** |
+| ✅ 9 | leerer Slot = 100×100 Default-Box | eingearbeitet — **korrigiert: kein HUG-Bug; Boolean+Auto-Layout kollabiert** |
 | 10 | Stories + DOM-Globals | Typecheck rot (Repo-Gap ✅ behoben; Skill-Edit offen) |
 | 11 | T6 rendered-output zahnlos | `sm:max-w-sm` als 6px geshippt — User fand den Bug |
 | 12 | Shadow-Semantik in twMerge | `cn` behält beide Shadow-Klassen |
 | 13 | AUTO-Sizing nach combine | vertikales Padding still gedroppt |
-| 15 | `setCurrentPageAsync`-Invariante | combine wirft „must be in the same page" |
-| 16 | Section-relative Koords | Set tausende px aus der Section, Fit-Resize bläst auf |
+| ✅ 15 | `setCurrentPageAsync`-Invariante | eingearbeitet |
+| ✅ 16 | Section-relative Koords | eingearbeitet |
 | 21 | asChild-Control auf Text-Story | Toggle → Crash im Controls-Panel (`React.Children.only`) |
-| 30 | Glow-/Ring-Cluster | gebundener Ring rendert 100% (Defekt unterwegs) |
+| ✅ 30 | Glow-/Ring-Cluster | eingearbeitet (alle 4 Teile live verifiziert) |
 | 37 | `mv` statt `git mv` | git mv exit 128 (untracked source) |
 | 40 | S3 dritte Diff-Form (ADD) | gebundene Prop ohne Code-Klasse → Sync verfehlt sie |
 | 41 | bound = Delta, nicht „Deviation" | checked-invalid blieb cyan — User-Report |
 | 43 | read-set-values verfehlt Indicator | Thumb/Dot-Fill-Bindung unsichtbar |
-| 46 | clone() degradiert SLOT→FRAME | Ursache des `.Field`-invalid-Flaws |
-| 47 | createSlot()-Orphan-Prop | Junk auf jeder Instanz |
-| 51 | `VariableID:`-Präfix nötig | bare ID → schwarzer unbound Paint |
-| 52 | Slot-Merge zur combine-Zeit | 6 un-merged Props (kaputte Instanz-API) |
-| 53 | Section-Kind-Koords (schärft #16) | content bei abs x≈21000 |
-| 54 | Sections wachsen nicht auto | Section bleibt headline-groß (B/H) |
-| 55 | 1-Op pro Call (schärft #48) | zweite Mutation wirft „node not found" |
+| ✅ 46 | Variant-Member-Clone | eingearbeitet — **korrigiert: bleibt SLOT, verliert nur `slotContentId` → re-binden** |
+| ✅ 47 | createSlot-Orphan | eingearbeitet — nur beim Neu-Bauen; #46 re-bindet → meist obsolet |
+| ✅ 51 | `VariableID:`-Präfix nötig | eingearbeitet (bare → `null`) |
+| ✅ 52 | Slot-Merge zur combine-Zeit | eingearbeitet (nach combine = N Props) |
+| ✅ 53 | Section-Kind-Koords (schärft #16) | eingearbeitet |
+| ✅ 54 | Sections wachsen nicht auto | eingearbeitet (`resizeWithoutConstraints` B+H) |
+| ✅ 55 | 1-Op pro Call (schärft #48) | eingearbeitet |
 | 57 | Composite-Doc = Story-File je Part | verbrannte `subcomponents`-Iteration (leere ArgsTable) |
 | 59 | Anchored-Overlay-Composite | Select-Main-Component fehlte — Review fand es |
-| 60 | Examples screenshotten | headline-los/falscher Stil bestand `/figma-verify` — Review fand es |
+| ✅ 60 | Examples screenshotten | eingearbeitet (Verify nur strukturell) |
 | 61 | Sibling-Surface spiegeln | Trigger ohne focus-invalid/gated Ring etc. — Review (3×) |
 | 62 | flache Palette `shouldFilter=false` | sichtbarer „weird grouping"-Bug — Review |
 
@@ -262,10 +265,15 @@ dabei korrigiert — s. Detail-Einträge unten)
 
 ### Bereits eingearbeitet ✅ (nur zur Abgrenzung)
 
+- **figma-build B-Findings (Batch 2026-06-22)** ✅ — 14 Findings in `figma-build.md`: #6 (Red flags),
+  #15 (§Approach), #51 (§Binding recipes), #8/#9/#46/#47/#52/#55 (§Slots), #16/#53/#54 (§Variant set
+  assembly), #30 (§Interaction states), #60 (§Usage-examples) + Bonus Red-flags-Zeile. **Live in Figma
+  verifiziert**; #8/#9 (kein Wrapper — Slot bleibt SLOT) + #46/#47 (Variant-Clone behält SLOT, verliert
+  nur `slotContentId` → re-binden) dabei **korrigiert**. Handoff-Detaileinträge #8/#9/#46/#47 nachgezogen.
 - **Shadowing-Fall** im Dependency-Audit — bereits portierte Ordner-Dep wird von `ui:add` flach
   geschattet → flache Kopie löschen (InputGroup #1 → composites.md §2 T2 + §3 trap-1).
-- **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *durch Dialog #3–#5
-  unten teilweise überholt; der Abschnitt braucht das Update aus Findings 7–9.*
+- **Slot-Fill-in-Instanz-Rezept** (InputGroup #2 → figma-build.md §Slots) — *#8/#9 eingearbeitet
+  2026-06-22 (kein Wrapper; Slot bleibt SLOT) + #55 (1 Op/Call); #7 (A) bleibt zurückgestellt.*
 - **Conditional-Layout → Variant-Achse** (`has-[]`-Direction-Flip; InputGroup #3 → figma-build.md §Mechanism, ex composites.md §1).
 - **Text-Property-Konvention** ✅ *(User-Direktive #29; gilt für ALLE Ports, nicht nur Composites)* —
   jede Figma-TEXT-Property sprechend benennen + Default mit Curly-Brackets: Name = semantische Rolle
