@@ -85,7 +85,8 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    portiertes `command` schalten den `combobox`-Endpoint-Switcher frei** (Explorer-Analyse) — offener
    nächster Block-Schritt, nicht gebaut. **Offener Folge-Punkt (Tooltip):** `kbd.tsx`
    `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
-   near-invisible; bewusst nicht im Single-Port editiert → Kbd-Touch-up nachziehen (s. B31).
+   near-invisible; bewusst nicht im Single-Port editiert. **Kbd-Touch-up ERLEDIGT 06-23** (`64cfaf8`): tooltip-content-Override
+   `bg-surface/20`→`bg-muted-fill` (dezent, sichtbarer muted Keycap auf der Light-Chip; `text-ink` lesbar behalten), Gate grün + axe-clean. (s. B31 — der Skill-Edit „Sibling-Overrides vor dem Umtönen grep'en" bleibt als Leitplanke offen.)
    **Popover-Review 06-23:** Code/Docgen-Lücken (Root-Docgen + PopoverContent-Props + Sides-Story) gefixt
    auf `fix/component-review-polish` (s. A4, Gate grün 299). **④ Popover-Figma ERLEDIGT 06-23** (background agent
    `popover-figma`): Section gefixt — Children in ein weißes vertikales AL-Build-Frame `4390:2364` IN der Section
