@@ -62,10 +62,18 @@ function TooltipTrigger({
 interface TooltipContentProps
   extends Omit<
     React.ComponentProps<typeof TooltipPrimitive.Content>,
-    'side' | 'sideOffset' | 'align' | 'alignOffset'
+    | 'side'
+    | 'sideOffset'
+    | 'align'
+    | 'alignOffset'
+    | 'avoidCollisions'
+    | 'collisionPadding'
+    | 'sticky'
+    | 'hideWhenDetached'
+    | 'arrowPadding'
   > {
   /**
-   * Preferred side of the trigger to render on (flips to stay in view).
+   * Preferred side of the trigger to render on (flips to stay in view unless `avoidCollisions` is off).
    * @default "top"
    */
   side?: 'top' | 'right' | 'bottom' | 'left';
@@ -79,8 +87,26 @@ interface TooltipContentProps
    * @default "center"
    */
   align?: 'start' | 'center' | 'end';
-  /** Offset in px from the `align` edge. */
+  /** Offset in px from the `align` edge. @default 0 */
   alignOffset?: number;
+  /**
+   * Flip/shift the tooltip to keep it inside the viewport.
+   * @default true
+   */
+  avoidCollisions?: boolean;
+  /** Padding (px) kept from the viewport edge while avoiding collisions. @default 0 */
+  collisionPadding?:
+    | number
+    | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>;
+  /**
+   * Keep the tooltip attached to the trigger while it is partially scrolled out of view.
+   * @default "partial"
+   */
+  sticky?: 'partial' | 'always';
+  /** Hide the tooltip when the trigger is fully occluded. @default false */
+  hideWhenDetached?: boolean;
+  /** Padding (px) between the arrow and the content's rounded corners. @default 0 */
+  arrowPadding?: number;
 }
 
 /**

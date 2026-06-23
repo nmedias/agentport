@@ -41,7 +41,7 @@ const meta: Meta<typeof Tooltip> = {
       source: { type: 'code' },
       description: {
         component:
-          'A Radix Tooltip: the `TooltipContent` **portals to `document.body`** (so tests query it via `within(document.body)`) and mounts only while open, drawing a raised `dialog-fill` chip with a `shadow-elevation` and a diamond arrow. Requires a `TooltipProvider` ancestor (carries `delayDuration`). The content is `role="tooltip"` and wires `aria-describedby` on the trigger — see the **Default** story for the hover→open flow. An icon-only trigger still needs its own accessible name (**IconTrigger**).',
+          'A Radix Tooltip: the `TooltipContent` **portals to `document.body`** (so tests query it via `within(document.body)`) and mounts only while open, drawing a raised `dialog-fill` chip with a `shadow-elevation` and a diamond arrow. Requires a `TooltipProvider` ancestor (carries `delayDuration`). The content is `role="tooltip"` and wires `aria-describedby` on the trigger — see the **Default** story for the hover→open flow. An icon-only trigger still needs its own accessible name (**IconTrigger**). Sub-part with its own API: [TooltipContent](?path=/docs/ui-tooltip-tooltipcontent--docs).',
       },
     },
   },
