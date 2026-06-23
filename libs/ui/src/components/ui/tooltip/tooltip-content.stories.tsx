@@ -52,7 +52,7 @@ type Story = StoryObj<typeof TooltipContent>;
 export const Default: Story = {
   render: ({ side, sideOffset, ...args }) => (
     <TooltipProvider delayDuration={0}>
-      <div className="grid h-[60vh] place-items-center">
+      <div className="grid m-auto h-[30vh] gap-[7rem] p-[5rem] justify-items-center content-center">
         <Tooltip open>
           <TooltipTrigger asChild>
             <Button variant="outline">Hover</Button>

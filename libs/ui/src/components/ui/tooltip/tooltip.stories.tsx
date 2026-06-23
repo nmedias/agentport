@@ -58,7 +58,7 @@ type Story = StoryObj<typeof Tooltip>;
 export const Default: Story = {
   render: (args) => (
     <TooltipProvider delayDuration={0}>
-      <div className="grid w-1/2 m-auto h-[80vh] grid-cols-1  gap-[7rem] p-[5rem] justify-items-center content-center">
+      <div className="grid m-auto h-[30vh] gap-[7rem] p-[5rem] justify-items-center content-center">
         <Tooltip {...args}>
           <TooltipTrigger asChild>
             <Button variant="outline">Hover</Button>
@@ -122,7 +122,7 @@ export const WithKbd: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <TooltipProvider delayDuration={0}>
-      <div className="grid w-1/2 m-auto h-[80vh] grid-cols-1  gap-[7rem] p-[5rem] justify-items-center content-center">
+      <div className="grid m-auto h-[30vh] gap-[7rem] p-[5rem] justify-items-center content-center">
         <Tooltip open>
           <TooltipTrigger asChild>
             <Button variant="outline">Save</Button>
@@ -144,16 +144,18 @@ export const IconTrigger: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <TooltipProvider delayDuration={0}>
-      <Tooltip open>
-        <TooltipTrigger asChild>
-          <Button icon variant="outline" aria-label="Add to library">
-            +
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Add to library</p>
-        </TooltipContent>
-      </Tooltip>
+      <div className="grid m-auto h-[30vh] gap-[7rem] p-[5rem] justify-items-center content-center">
+        <Tooltip open>
+          <TooltipTrigger asChild>
+            <Button icon variant="outline" aria-label="Add to library">
+              +
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Add to library</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </TooltipProvider>
   ),
 };
