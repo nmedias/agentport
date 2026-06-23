@@ -61,6 +61,9 @@ What to model (**every build**): decide **per consumer-variable content** by the
 - **Swap when** exactly one position; content = component; persists across variants; parent override drives look/size.
 - Code composes an **already-built** component X → Figma nests an **instance of X** (never re-clothe);
   Swap only if several X-types should be choosable.
+- **Swappable trigger on a prototyped member** — keep the reaction on the **member frame** (not the
+  slot/content) so the swap is safe; prefer a **HUG slot** for arbitrary (`asChild`) content, INSTANCE_SWAP
+  only for a fixed component set.
 
 ## Binding recipes
 
@@ -105,6 +108,11 @@ not the member. After adding the clone as a new member, **re-bind** it
 (`slot.componentPropertyReferences = { slotContentId: '<prop>#id' }`) — don't recreate it via
 `createSlot()` (that auto-creates a second, zero-referenced slot property you'd then have to delete).
 A standalone (non-member) component clone keeps the binding (the property is on the component itself).
+
+**Retrofit a SLOT onto an already-combined set** — give the slot its own auto-layout before `HUG` (a SLOT
+isn't an AL frame); `createSlot` post-combine makes N un-merged props → re-bind all to one `slotContentId`
++ delete the dups; slot/structure ops can silently reset the set's auto-layout and eject ancestor-AL
+children → re-assert after.
 
 **Filling a slot IN AN INSTANCE** (the reproduced example instances of §Composites layer 4 silently
 assume this; the build's most error-prone step):
@@ -246,7 +254,9 @@ column-stacking examples.
      open state as a top-level composition — a trigger instance + the overlay content in an `ABSOLUTE` /
      `layoutPositioning` child anchored to the trigger edge, not just separate trigger/content sets.
      `ABSOLUTE` needs an auto-layout parent (`layoutMode≠NONE`) — member = fixed-size AL frame: trigger
-     centred flow child, content the `ABSOLUTE` child.
+     centred flow child, content the `ABSOLUTE` child. Align axis with panel ≫ trigger: keep the panel
+     fixed at the inset, move the **trigger** to encode start/center/end (alignment is relative; fits a
+     panel-sized member).
    - **Interactive (triggered) overlay** (popover/dropdown/select/tooltip-w/-trigger) — model: open/closed
      state axis · content as anchored `ABSOLUTE` child · trigger as Slot/instance-swap (`asChild`) ·
      open/dismiss prototype. A triggerless panel stays static.

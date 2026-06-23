@@ -72,6 +72,10 @@ prop if a doc-friendlier type tempted you to shrink it.
 is still yours → Omit+re-declare it, don't hand-author it in `argTypes` (that escape hatch is only for a
 root with no own props).
 
+**Discriminated-union root** — when the base type is a discriminated union (a `type`-discriminated
+primitive), `interface … extends` throws TS2312 (only record types are extendable) → declare the props as
+a `type` **intersection** (`type XProps = ComponentProps<typeof Root> & { … }`).
+
 ### 3. What react-docgen yields
 
 | Want in… | react-docgen reads | how |

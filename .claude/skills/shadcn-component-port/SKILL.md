@@ -135,6 +135,9 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 - Dead utilities (theme-reset) → DS replacement: `text-*` size / `font-*` / core colours → the right
   token; `shadow-*` → drop (DS is flat), use `shadow-elevation` if depth carries meaning.
 - Control heights / icon sizes (`h-9`, `size-4`) stay **numeric** — geometry ≠ spacing token.
+- **Before re-toning a surface, grep the lib for siblings' `in-data-[slot=<this-component>]:` overrides** —
+  a sibling may be tuned for the old tone → stale on the new one; if contrast breaks, flag it
+  (cross-component fix = out of scope for a single port).
 
 
 ### T4 — Figma Build
