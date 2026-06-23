@@ -37,10 +37,10 @@ in   file       Figma file key → the use_figma `fileKey` arg
 
 ## Approach
 
-Recon (`snippets/recon.js`, read-only → variable/style/page maps to bind against) → build
-(`snippets/build-variant-set.js`, the parameterized set skeleton). Fill the snippet CFG (token IDs,
-target page/section, set name, text-style + its font) from the caller's token source — the snippets ship
-placeholders, no project values.
+Recon (`snippets/recon.js`, read-only → variable/style/page maps to bind against), then build the set
+**directly from the recipes below** (binding · slots · variant-set assembly · interaction states). Fill
+the token IDs / target page+section / set name / text-style + font from the caller's token source —
+`recon.js` ships placeholders, no project values.
 
 ## Mechanism — code construct → Figma property
 
@@ -214,8 +214,10 @@ Three checks on the built set, in order:
    **slot** (fill or replace its content). Read each back, iterate until it takes effect. A control that
    exists but does nothing — slot with no default, unbound text, swap that won't take — is broken.
    Delete the test instances. *(Composite: exercise every part set **and** the composition, not just the top level.)*
-2. **Clean** — run the caller's structural pre-handoff check on the set: vectors not text, no
-   clipping/overlap, padding symmetry. Must come back CLEAN.
+2. **Clean** — run the caller's structural pre-handoff check on the **whole built composition** (the
+   Section/wrapper with its set + examples), not just the variant set — else spill/overlap of the
+   freely-placed Section children goes unseen. Vectors not text, no clipping/overlap, padding symmetry.
+   Must come back CLEAN.
 3. **Reproduces the usages (permanent)** — build every usage story as a **permanent** instance in the
    Section (§Usage-examples), each from the component's controls alone, then compare token/values/pixels
    (zoom, raw px). A standing deliverable, not throwaway scaffolding. A story you can't rebuild from

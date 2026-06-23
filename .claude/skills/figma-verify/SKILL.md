@@ -23,6 +23,8 @@ If no node was given, ask for it.
 
 ## Steps
 
+**Throughout — skip `visible:false` nodes (and their subtrees) in every walk:** a toggled-off slot/part isn't a build defect.
+
 1. **Capture.** `get_design_context` on the node — full tree with text contents,
    types, fills, padding values. Take `get_screenshot` at `maxDimension` ≥ 1200
    for the human-visible record only; checks below are tree-based.
@@ -61,6 +63,11 @@ If no node was given, ask for it.
    → **FLAG · clipped child.** Report node-id, parent-id, and the overflow
    axis + amount. Fix: resize the parent, shrink the child, or set explicit
    truncation/wrap.
+   - **Full-bleed child** — bbox matches the parent's **full** box (flush past the padding, e.g. a
+     `state-layer` at 0,0,W,H), within 1px → **designated, not clipped** (skip / SOFT HINT); often a
+     nested instance, un-editable without detach.
+   - **Section/wrapper** is a container too — a child outside its **filled** area (on the bare canvas) is a
+     spill FLAG, not CLEAN.
 
 4. **Walk every NON-AUTO-LAYOUT container.** For each pair of direct children
    with visible fills/strokes, test bbox intersection. Flag if any two children
@@ -69,6 +76,8 @@ If no node was given, ask for it.
 
    → **FLAG · sibling overlap.** Report the two node-ids and the overlap
    region. Fix: reorder, reposition, or move into an auto-layout frame.
+   - **Designated control overlap** — a child named like a **handle/thumb/knob** over a sibling
+     **track/rail/groove** must sit on it by design → **SOFT HINT**, not FLAG (caller confirms).
 
 5. **Walk every AUTO-LAYOUT FRAME.** For each, read `paddingLeft / Right /
    Top / Bottom`. Flag if:

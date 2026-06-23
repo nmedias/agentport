@@ -139,9 +139,9 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 
 ### T4 — Figma Build
 
-Build the token-bound set per **`/figma-build-rules`** (recon → `build-variant-set.js`, snippets in
-`/figma-build-rules/snippets/`; fill its CFG with the T3 variable IDs + `config.json` page/collections/font): full matrix, sorted grid, bound by variable
-ID, slots, interaction-state axis. **Project specifics:** place it in a `/figma-create-section` Section on
+Build the token-bound set per **`/figma-build-rules`** (recon via `/figma-build-rules/snippets/recon.js`,
+then build from the recipes with the T3 variable IDs + `config.json` page/collections/font): full matrix,
+sorted grid, bound by variable ID, slots, interaction-state axis. **Project specifics:** place it in a `/figma-create-section` Section on
 the `Shadcn Components` page; reuse already-built DS components as nested **instances** (never re-clothe a
 copy). Multi-part composite → the 3-layer build + Slot≠Slot (`/figma-build-rules §Composites`) + the
 port-process delta in `references/composites.md`.
@@ -149,7 +149,8 @@ port-process delta in `references/composites.md`.
 ### T5 — Verify
 
 Run the **controls-live → clean → faithful** triad per **`/figma-build-rules §Verify`**: drive every
-control (incl. each slot) and read it back; `/figma-verify <setId>` must be **CLEAN**; then build every
+control (incl. each slot) and read it back; `/figma-verify <sectionId>` (the whole composition, not just
+the set) must be **CLEAN**; then build every
 T2.5 story as a **permanent** Usage-Examples instance group in the Section
 (`/figma-build-rules §Usage-examples`), each from the component's controls alone, and compare
 token/values/pixels. A story you can't rebuild from controls = incomplete surface → fix the component,
