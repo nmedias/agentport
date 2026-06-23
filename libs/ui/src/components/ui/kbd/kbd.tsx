@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 type KbdEmphasis = 'high' | 'low';
 
 const kbdVariants = cva(
-  "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-xs corner-sm px-xs text-format-kbd select-none in-data-[slot=tooltip-content]:bg-surface/20 in-data-[slot=tooltip-content]:text-ink [&_svg:not([class*='size-'])]:size-3",
+  "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-xs corner-sm px-xs text-format-kbd select-none in-data-[slot=tooltip-content]:bg-muted-fill in-data-[slot=tooltip-content]:text-ink [&_svg:not([class*='size-'])]:size-3",
   {
     variants: {
       emphasis: {
