@@ -213,7 +213,7 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | T3 (Umkleiden) sagt nicht, dass das Stock-Arrow-Idiom eine RANDLOSE Chip voraussetzt — auf einer bordered DS-Fläche (der DS fügt fast immer einen `border` hinzu) bricht der borderless Arrow (Naht / detached). |
 | Verified | tooltip.tsx: Chip `corner-md border bg-dialog-fill`, Arrow `rotate-45 rounded-[2px] bg-dialog-fill fill-dialog-fill` (kein Border) → randloser Diamant an bordered Chip; Figma-Default-Beispiel zeigt zusätzlich eine Lücke. |
 | Candidate fix | Lösung (06-23 in Figma gebaut, Rezept): den Arrow als **TRIANGLE** bauen (nicht bordered Square/Diamond) — Fill = Chip-Fläche (`dialog-fill`), `border`-Stroke NUR auf den 2 SLANTED Edges (Base-Edge OFFEN, joint die Chip → keine Linie über die Base), und den Arrow ~1px in die Chip überlappen (Base deckt die Border-Naht) → connected Pointer. Code: Radix `TooltipArrow` orientiert EINEN Arrow auto per side → custom-SVG (Fill-Triangle + Stroke-Polyline der 2 non-base-Edges) via `asChild` + 1px-Overlap. Figma braucht per-side-Member (Rotation in Instanz nicht overridebar, s. B36). |
-| Status | offen — Skill-Edit ausstehend. Figma-Arrow ERLEDIGT 06-23 (Triangle 4414:2493); Code-Mirror (tooltip.tsx) folgt. |
+| Status | offen — Skill-Edit ausstehend. Arrow ERLEDIGT 06-23: Figma (Triangle 4414:2493) **+ Code** (`tooltip.tsx` custom-SVG `Arrow asChild` — Fill-Triangle `dialog-fill` + `stroke-border` auf den 2 schrägen Kanten + 1px-Overlap; Radix orientiert auto per side). Shoot-verifiziert connected auf allen 4 Seiten, Gate grün (300). |
 
 ### B — self-derived, result held (codify · deferred)
 
