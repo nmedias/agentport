@@ -203,7 +203,7 @@ export const Placements: Story = {
 export const Sides: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid grid-cols-2 gap-[14rem] p-[7rem]">
+    <div className="grid w-3/4 m-auto  h-[80vh] grid-cols-2 gap-[7rem] p-[5rem] justify-items-center content-center">
       {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
         <Popover key={side} defaultOpen>
           <PopoverTrigger asChild>
