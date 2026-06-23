@@ -86,6 +86,11 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    nächster Block-Schritt, nicht gebaut. **Offener Folge-Punkt (Tooltip):** `kbd.tsx`
    `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
    near-invisible; bewusst nicht im Single-Port editiert → Kbd-Touch-up nachziehen (s. B31).
+   **Popover-Review 06-23:** Code/Docgen-Lücken (Root-Docgen + PopoverContent-Props + Sides-Story) gefixt
+   auf `fix/component-review-polish` (s. A4, Gate grün 299). **Offen ④ (Popover-Figma, eigener Schritt):**
+   Set unvollständig + Section-Komposition kaputt (s. A5/C7) → (a) Section auf ein vertikales Auto-Layout-Frame
+   (weißer HUG-Fill) umbauen, (b) `align`-Achse (start/center/end) am Content-Set ODER eine Popover-Root-
+   Component ergänzen (Code hat `align`; Figma modelliert es nicht). Plugin/Figma-Desktop nötig (sonst read-only).
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
    Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -152,6 +157,26 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Verified | popover open-Story axe-rot ohne, grün mit `aria-label`. |
 | Candidate fix | Regel: jede offene `role=dialog`/`role=tooltip`/`role=listbox`-Overlay-Instanz braucht einen Accessible Name (`aria-label`/`-labelledby`); modaler Dialog verdrahtet ihn via Title-Slot, Popover/Tooltip/Combobox NICHT → Story/Component muss ihn setzen. *(also: /shadcn-component-port T6 „name the role element")* |
 | Status | offen — Skill-Edit ausstehend. |
+
+**A4 · /shadcn-component-port T6 (+ /docgen-props) — Pass-through-Primitive-Root MUSS Omit+re-declare bekommen (nicht hand-argTypes); Content re-declariert den vollen kuratierten Satz** *(Popover-Review 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User fand im Review: Popover-Root war nacktes `ComponentProps<Root>` (kein Interface) → react-docgen liest nichts → Root-API in `argTypes` hand-dupliziert; `PopoverContentProps` re-deklarierte nur 2 von ~10 Props (ArgsTable unvollständig). Tooltip im selben Batch machte beides vollständig. |
+| Gap | T6/`/docgen-props` erzwingt nicht, dass der Pass-through-Root eines Primitives ein Omit+re-declare-Interface bekommt (sonst kommt die Root-API nicht aus docgen → Anti-Pattern „Prop-Docs in argTypes"), noch dass Content den vollen kuratierten Placement/Behavior-Satz re-deklariert statt nur align/sideOffset. |
+| Verified | `PopoverProps` (Omit+re-declare open/defaultOpen/onOpenChange/modal) + erweiterte `PopoverContentProps` (side/alignOffset/avoidCollisions/collisionPadding/sticky/hideWhenDetached); hand-argTypes entfernt; Gate grün (299). |
+| Candidate fix | Regel: JEDER docgen-relevante Root/Part eines Pass-through-Primitives bekommt ein FLAT Omit+re-declare-Interface mit JSDoc — NIE Prop-Docs in `argTypes` hand-schreiben (genau das löst `/docgen-props` ab); Content/Trigger re-deklarieren den vollen kuratierten Prop-Satz (Placement + Behavior), nicht nur die 1-2 häufigsten. Tooltip = Referenz. |
+| Status | offen — Skill-Edit ausstehend (Popover-Code bereits gefixt auf `fix/component-review-polish`). |
+
+**A5 · /figma-build-rules (Section-Assembly) — DS-Section ist KEIN Auto-Layout-Frame → Build-Children in ein vertikales Auto-Layout INNERHALB der weißen Fläche hängen** *(Popover-Figma-Review 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User fand das Figma-Output kaputt: Headline-Card überdimensioniert + überlappt die 1. Instanz; PopoverHeader/Usage-Examples liegen auf dem DUNKLEN Canvas (dunkle Schrift auf dunkel = unlesbar). Ursache bestätigt: die Section hat KEIN Auto-Layout. |
+| Gap | `/figma-build-rules` (+ `/figma-create-section`) sagt nicht, dass eine Figma-SECTION kein Auto-Layout-Frame ist → angehängte Children werden NICHT automatisch gestapelt/umschlossen; ohne ein eigenes vertikales Auto-Layout-Frame mit weißem Fill (HUG) überlappen/overflowen sie und spillen auf den dunklen Page-Canvas. |
+| Verified | Section „Popover" 4365:2253: Children frei positioniert, kein AL → Overlap + Canvas-Spill (Screenshot). |
+| Candidate fix | Regel: Build-Children NIE frei als Section-Children positionieren — ein vertikales Auto-Layout-FRAME (weißer Fill, HUG, itemSpacing aus DS) INNERHALB der Section anlegen und die Children dort einhängen (Headline normal dimensioniert). Sonst Overlap + Canvas-Spill (unlesbar). |
+| Status | offen — Skill-Edit ausstehend; Figma-Rebuild = Offene Punkte #2 ④. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -548,6 +573,17 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Candidate fix | solche Batches aus dem MAIN-Checkout starten (nicht aus einem Worktree) ODER Worktrees AUSSERHALB des Repo-Baums anlegen; vor dem Parallel-Lauf je Agent CWD == eigenes Worktree verifizieren; bei genesteten Worktrees `.nxignore` (`.claude/worktrees`) setzen. |
 | Bezug | Schwester von C5 (beide Worktree-Env). |
 | Status | offen (Tooling/Orchestrierung). |
+
+**C7 · /figma-verify — prüft nur das Component-SET, nicht die Section-Komposition + kein Canvas-Spill/Kontrast-Check** *(Popover-Figma-Review 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | `/figma-verify`-Scope-Lücke; der Agent meldete Popover „figma-verify CLEAN", aber die Section-Assembly war sichtbar kaputt (Overlap + Spill, s. A5). |
+| Gap | verify lief auf dem PopoverContent-SET (0 overlap dort) und deckt die SECTION-Komposition (Headline + Instanzen + Examples) nicht ab; zudem kein Check auf „Kind außerhalb der gefüllten Section-Fläche / dunkler Text auf dunklem Canvas". |
+| Verified | Set CLEAN gemeldet, Section visuell defekt (A5). |
+| Candidate fix | `/figma-verify` zusätzlich die Section-/Wrapper-Komposition prüfen: Children innerhalb der gefüllten Fläche (kein Spill auf Canvas), kein Overlap der frei positionierten Section-Children, + ein Kontrast-/Fill-Check (Text-Fill vs. tatsächlicher Hintergrund). |
+| Bezug | Schwester von C2/C3 (alle /figma-verify-Heuristik-/Scope-Lücken). |
+| Status | offen (Tooling). |
 
 ## Quellen
 
