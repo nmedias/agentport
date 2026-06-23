@@ -131,7 +131,26 @@ function TooltipContent({
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-dialog-fill fill-dialog-fill" />
+        {/* Border-aware pointer (A8): a filled triangle on the chip surface with the chip's `border`
+            on the two SLANTED edges only (the base edge is open — it joins the chip), nudged 1px into
+            the content so the chip's bottom-border seam is covered → reads as a connected pointer, not
+            a detached diamond. Radix orients this one arrow per side. */}
+        <TooltipPrimitive.Arrow asChild>
+          <svg
+            width="14"
+            height="7"
+            viewBox="0 0 14 7"
+            aria-hidden
+            className="z-50 block translate-y-[-1px]"
+          >
+            <path d="M0 0H14L7 7Z" className="fill-dialog-fill" />
+            <path
+              d="M0 0L7 7L14 0"
+              className="fill-none stroke-border"
+              strokeWidth="1"
+            />
+          </svg>
+        </TooltipPrimitive.Arrow>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );
