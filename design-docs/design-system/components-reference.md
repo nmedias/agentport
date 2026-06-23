@@ -981,15 +981,21 @@ status_note: >
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger, PopoverContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
   figma:
-    section: { name: "Popover", id: "4365:2253" }
+    section: { name: "Popover", id: "4365:2253" }   # 06-23 resized 321×203→1312×1133 (A5-Fix)
+    build_frame: { name: "Build", id: "4390:2364" } # NEU 06-23: weißes vertikales AL-Frame (HUG, itemSpacing space-2xl, padding space-xl) IN der Section — hält masters + PopoverRoot + Usage Examples (Section ≠ AL-Container → A5-Fix)
     content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, KEIN State-/Variant-Set (data-[side]=Motion, kein DS-State)
     slot: { content: "content#4365:0" }                    # die offene Region; Default = genestete PopoverHeader-Instanz
     header: { name: "PopoverHeader", id: "4367:2253", props: "title#4367:0 (TEXT, {Title}, Label-Style/dialog-ink) · description#4367:1 (TEXT, {Description}, Body-Style/muted-ink)" }
     examples: { group: "Usage Examples 4368:2255", SimpleContent: "PopoverContent-Instanz 4368:2258 (Slot = konfig. PopoverHeader)", Dimensions: "PopoverContent-Instanz 4368:2274 (Slot = PopoverHeader + 4 Label/Input-Reihen, echte DS-Instanzen Label 3734:1022 / Input 3176:303)" }
     vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", muted-ink: "3037:13", corner-lg: "3073:4", space-lg: "3070:8", space-md: "3070:6", space-2xs: "3070:3" }
     effect: { Elevation: "S:92c2d7…" }
-    axis: { }   # KEINE Achse — eine erhabene Fläche, kein interaktiver State-Raum (Motion ≠ DS-State)
-  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
+    axis: { }   # Content-Fläche: KEINE Achse (erhabene Fläche, kein interaktiver State-Raum, Motion ≠ DS-State)
+    root:                                          # NEU 06-23: Popover-Root-Komposition modelliert `align` (#4)
+      set: { name: "PopoverRoot", id: "4393:2391" }
+      axis: { align: [start, center, end] }        # default center; mappt 1:1 auf Code PopoverContent.align (KEIN Fork)
+      members: { start: "4393:2371", center: "4392:2364", end: "4393:2381" }
+      nests: "echte DS-Button-Instanz (Trigger, default 3160:15, Label 'Open') + echte PopoverContent-Instanz (master 4365:2255); Trigger wandert horizontal → kodiert align; clipsContent=false"
+  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22; Figma-Rebuild 2026-06-23)
   notes: >
     Radix Popover (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-Konvention,
     B13). Composite OHNE eigenen State — Content = einzige DS-Fläche (Trigger/Anchor = Pass-through, kein Class).
@@ -1002,14 +1008,21 @@ status_note: >
     (B22/B23) · text-sm→text-format-body. Header: gap-0.5→gap-2xs; Title text-sm/font-medium→text-format-label
     (kompakte Caption 14/500, NICHT Dialogs title 18 — Popover ist kompakt); Description muted-foreground→muted-ink.
     Geometrie numerisch (w-72, z-50, sideOffset/align). Motion-Klassen (data-[side]/data-open/data-closed) verbatim.
-    Docgen: PopoverContentProps = Omit+Re-Declare (align/sideOffset) → surfacen nativ in Autodocs + get-documentation;
-    Popover-Root = Pass-through → API in Story-argTypes hand-authored. A11Y: Radix gibt dem Content role="dialog" → axe
+    Docgen (06-23-Fix A4): PopoverProps am Root (Omit+Re-Declare open/defaultOpen/onOpenChange/modal → ArgsTable aus
+    react-docgen, hand-argTypes raus); PopoverContentProps auf den vollen kuratierten Satz erweitert (side/sideOffset/align/
+    alignOffset/avoidCollisions/collisionPadding/sticky/hideWhenDetached) statt nur align/sideOffset; Sides-Story ergänzt.
+    A11Y: Radix gibt dem Content role="dialog" → axe
     aria-dialog-name verlangt einen Accessible Name; Popover wired den Title NICHT auto (anders als modaler Dialog) →
     offenes Panel braucht explizites aria-label/-labelledby (in JSDoc + Stories dokumentiert; alle open-Stories benannt).
     jsdom-Spec B20-scoped: closed-Pfad + defaultOpen (mountet OHNE Pointer-Capture-Flow → KEIN neuer Polyfill); der
     klick-getriebene open→Escape-Flow lebt im Chromium-Play-Test. figma-verify CLEAN (0 text-icon/clipped/overlap/pad-
     asym). Gate grün (3 Specs + 5 Stories + axe). DOWNSTREAM: Popover + Command komponieren den combobox-Connection-
     Switcher (Explorer) — OUT OF SCOPE dieses Ports, nur als Consumer notiert.
+    FIGMA-REBUILD 06-23 (code→Figma, background agent): (A5-Fix) Section-Komposition repariert — die frei
+    positionierten Children (spillten auf den dunklen Canvas) in ein weißes vertikales AL-Build-Frame `4390:2364`
+    re-parented (kein Detach), Section 321×203→1312×1133 → sectionSpill []; Headline normalisiert. (#4) `align`
+    modelliert als Popover-Root-Set `4393:2391` (align-Achse start/center/end, echte genestete Button+PopoverContent).
+    figma-verify CLEAN + manueller Section-Check PASS. Detail: agent-runs/component-port/2026-06-23-popover-figma/.
 - name: Toggle
   status: nova-aligned
   figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)

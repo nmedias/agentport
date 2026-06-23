@@ -87,10 +87,11 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
    near-invisible; bewusst nicht im Single-Port editiert → Kbd-Touch-up nachziehen (s. B31).
    **Popover-Review 06-23:** Code/Docgen-Lücken (Root-Docgen + PopoverContent-Props + Sides-Story) gefixt
-   auf `fix/component-review-polish` (s. A4, Gate grün 299). **Offen ④ (Popover-Figma, eigener Schritt):**
-   Set unvollständig + Section-Komposition kaputt (s. A5/C7) → (a) Section auf ein vertikales Auto-Layout-Frame
-   (weißer HUG-Fill) umbauen, (b) `align`-Achse (start/center/end) am Content-Set ODER eine Popover-Root-
-   Component ergänzen (Code hat `align`; Figma modelliert es nicht). Plugin/Figma-Desktop nötig (sonst read-only).
+   auf `fix/component-review-polish` (s. A4, Gate grün 299). **④ Popover-Figma ERLEDIGT 06-23** (background agent
+   `popover-figma`): Section gefixt — Children in ein weißes vertikales AL-Build-Frame `4390:2364` IN der Section
+   re-parented, Section 321×203→1312×1133 → kein Spill (A5); `align` modelliert als **PopoverRoot-Set `4393:2391`**
+   (align-Achse start/center/end, echte genestete Button+PopoverContent, kein Fork). figma-verify CLEAN + manueller
+   Section-Check PASS; Katalog aktualisiert. Detail: `agent-runs/component-port/2026-06-23-popover-figma/notes.md`.
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
    Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -175,7 +176,7 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Why A | User fand das Figma-Output kaputt: Headline-Card überdimensioniert + überlappt die 1. Instanz; PopoverHeader/Usage-Examples liegen auf dem DUNKLEN Canvas (dunkle Schrift auf dunkel = unlesbar). Ursache bestätigt: die Section hat KEIN Auto-Layout. |
 | Gap | `/figma-build-rules` (+ `/figma-create-section`) sagt nicht, dass eine Figma-SECTION kein Auto-Layout-Frame ist → angehängte Children werden NICHT automatisch gestapelt/umschlossen; ohne ein eigenes vertikales Auto-Layout-Frame mit weißem Fill (HUG) überlappen/overflowen sie und spillen auf den dunklen Page-Canvas. |
 | Verified | Section „Popover" 4365:2253: Children frei positioniert, kein AL → Overlap + Canvas-Spill (Screenshot). |
-| Candidate fix | Regel: Build-Children NIE frei als Section-Children positionieren — ein vertikales Auto-Layout-FRAME (weißer Fill, HUG, itemSpacing aus DS) INNERHALB der Section anlegen und die Children dort einhängen (Headline normal dimensioniert). Sonst Overlap + Canvas-Spill (unlesbar). |
+| Candidate fix | Regel: Build-Children NIE frei als Section-Children positionieren — ein vertikales Auto-Layout-FRAME (weißer Fill, HUG, itemSpacing aus DS) INNERHALB der Section anlegen und die Children dort einhängen (Headline = Section-Label, normal dimensioniert); danach die Section per `resizeWithoutConstraints` auf Inhalt+Inset fitten (eine Section auto-growt NICHT). Sonst Overlap + Canvas-Spill (unlesbar). *(06-23 mit Fix re-validiert — `/figma-create-section` cross-noten.)* |
 | Status | offen — Skill-Edit ausstehend; Figma-Rebuild = Offene Punkte #2 ④. |
 
 ### B — self-derived, result held (codify · deferred)
@@ -509,6 +510,18 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Candidate fix | beim Umtönen einer Component-Fläche das Lib nach `in-data-[slot=<diese-component>]:` der genesteten Siblings grep'en; passt der Kontrast nicht mehr → als Open Item flaggen (Cross-Component-Override = Out-of-Scope für einen Single-Port). |
 | Status | zurückgestellt. |
 
+#### /figma-build-rules
+
+**B32 · §Composites (Anchored overlay) — `align`-Achse: den TRIGGER relativ zum fixen Panel bewegen (Ausrichtung ist relativ)** *(Popover-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet; Align-Set liest korrekt, kein Defekt. |
+| Gap | §Composites „Anchored overlay" sagt, den Overlay-Content an die Trigger-Kante zu ankern, deckt aber nicht den Fall, dass das Panel viel BREITER ist als der Trigger (z. B. 288px-Popover an 58px-Button) — ein fixer/zentrierter Trigger schiebt das Panel für start/end aus dem Member. |
+| Verified | Trigger zentriert + Panel angeankert → align=start schob das 288px-Panel auf 191..479 (Member 440px übergelaufen); invertiert (Panel fix am Inset, Trigger bewegt: start trigger.left=panel.left · center zentriert · end trigger.right=panel.right) → passt in 320px-Member, liest identisch. |
+| Candidate fix | Für eine `align`-Achse an einem Anchored-Overlay mit Panel ≫ Trigger: das PANEL am Inset fix lassen und den TRIGGER bewegen, um align zu kodieren (start/center/end). Liest gleich (Ausrichtung ist relativ), passt in einen panel-großen Member; mappt 1:1 auf das Code-`align`-Prop (kein Fork). |
+| Status | zurückgestellt. |
+
 ### C — tooling / repo / already covered
 
 **C1 · snippets/build-variant-set.js — kein Scaffold für Composite-Sub-Builds** *(Breadcrumb #3, optional)*
@@ -583,6 +596,17 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Verified | Set CLEAN gemeldet, Section visuell defekt (A5). |
 | Candidate fix | `/figma-verify` zusätzlich die Section-/Wrapper-Komposition prüfen: Children innerhalb der gefüllten Fläche (kein Spill auf Canvas), kein Overlap der frei positionierten Section-Children, + ein Kontrast-/Fill-Check (Text-Fill vs. tatsächlicher Hintergrund). |
 | Bezug | Schwester von C2/C3 (alle /figma-verify-Heuristik-/Scope-Lücken). |
+| Status | offen (Tooling). |
+
+**C8 · /figma-verify — clipped-Check flaggt ein Kind, das den Parent exakt füllt (full-bleed = flush an der `>`-Grenze), z. B. der `state-layer` eines Buttons** *(Popover-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | /figma-verify-Heuristik-Rauschen; Build korrekt, Caller bestätigt nur. |
+| Gap | Step 3 (clipped child) flaggt `child.x+child.width > parent.width - paddingRight`. Ein Kind, das den Parent EXAKT füllt (full-bleed-Overlay wie ein Button-`state-layer`-RECT bei 0,0,W,H), sitzt flush → mit striktem `>` + 1px-Toleranz liest es als clipped, obwohl beabsichtigt (und in einer reused Instanz, die man nicht editieren darf). |
+| Verified | Die reused DS-Button-Instanzen meldeten je ihren `state-layer` (50×32 == Parent 50×32, clipsContent=false) als „clipped" — 6 False-Positives, alles Button-Anatomie. |
+| Candidate fix | Ein Kind, dessen bbox exakt der Parent-Innenbox entspricht (full-bleed, in Toleranz), als designierten/erwarteten Fall behandeln (skip / SOFT HINT), nicht als clipped-FLAG — besonders wenn es in einer genesteten Instanz lebt (ohne Detach un-editierbar). |
+| Bezug | Schwester von C2/C3/C7 (/figma-verify-Heuristik); echot C3 (Designated-Overlap-Allowlist). |
 | Status | offen (Tooling). |
 
 ## Quellen
