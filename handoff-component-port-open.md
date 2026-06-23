@@ -67,9 +67,13 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    **A1** (/shadcn-component-port T6 a11y) eingearbeitet (`8287d65`). B27 (/figma-build-rules) +
    C3 (/figma-verify) · C4 (build-variant-set.js) zurückgestellt.
    **Parallel-Batch 06-22 (9 Findings, Quellen `…/2026-06-22-{tooltip,toggle-group,popover}/skill-feedback.md`):**
-   **A (2, offen, Prio)** = beide `/storybook-rules` (**A2** `userEvent` statt rohem `element.click()`; **A3**
-   Portal-`role=dialog`-`aria-label`, auch `/shadcn-component-port` T6) — Gate-rot bis gefixt, Skill-Edit
-   ausstehend. **B (4, zurückgestellt)** = **B28** /docgen-props (Union-Root `type=` statt `interface extends`) ·
+   **A-Strang (A2 · A4 · A5 · A6 · A7 · A8) eingearbeitet 2026-06-23** in 4 Skill-Dateien: **A2**
+   /storybook-rules (`userEvent` statt rohem `element.click()`) · **A4** /docgen-props (Pass-through-Root ≠
+   prop-less → Omit+re-declare) · **A5** /figma-build-rules + /figma-create-section (Section ≠ Auto-Layout →
+   vertikales Build-AL-Frame) · **A6** /figma-build-rules §Composites (interactive triggered overlay) · **A7**
+   ebd. (`ABSOLUTE` braucht AL-Parent) · **A8** /figma-build-rules §Icons (connected sub-shape border-aware).
+   **A3 verworfen** (Radix/shadcn-spezifisches a11y-Verhalten — gehört nicht ins framework-neutrale
+   House-Pattern). **B (4, zurückgestellt)** = **B28** /docgen-props (Union-Root `type=` statt `interface extends`) ·
    **B29** /figma-build-rules (filled Input: Value setzen + Placeholder leeren) · **B30/B31** /shadcn-component-port
    T3/T6 (invertierte Fläche umkleiden + Sibling-`in-data-[slot]:`-Override grep'en). **C (2)** = Env/Tooling
    (**C5** Worktree-`npm ci`/`dist` · **C6** nested-Worktree-Nx + `isolation:worktree`-Lehre). B20 (Portal-Spec)
@@ -141,79 +145,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### A — gap caused a defect (priority)
 
-Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht). **Offen (Batch 06-22, 2):**
-
-#### /storybook-rules
-
-**A2 · play-Test muss Radix via `userEvent` treiben, nicht roher `element.click()`** *(toggle-group #1)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | roher DOM-`.click()` treibt den Radix-State im Chromium-Story-Projekt nicht → 2 play-Tests Gate-rot, bis auf `userEvent` umgestellt. |
-| Gap | die play-Test-Regel sagt nicht, dass Interaktion mit Radix-/portal-Controls `@testing-library/user-event` braucht (echte async Pointer/Key-Sequenz), nicht `element.click()`/`fireEvent`. |
-| Verified | toggle-group play 2× rot mit `.click()`, grün mit `await userEvent.click(...)`. |
-| Candidate fix | in der play-Test-Regel festhalten: Interaktion mit Radix/portal-Controls IMMER über `userEvent` (async); roher `element.click()`/`fireEvent` triggert den Radix-State nicht. |
-| Status | offen — Skill-Edit ausstehend. |
-
-**A3 · Portal-`role=dialog`-Overlay ohne Auto-Titel braucht explizites `aria-label`/`-labelledby`** *(popover #1)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | Popover-Content rendert `role="dialog"`, verdrahtet (anders als modaler Dialog) den Titel NICHT automatisch → axe `aria-dialog-name` rot, bis die offenen Stories `aria-label` tragen. |
-| Gap | weder `/storybook-rules` noch `/shadcn-component-port` T6 nennen, dass ein nicht-modales `role=dialog`-Overlay (Popover/Combobox) einen expliziten Accessible Name pro offener Instanz braucht. |
-| Verified | popover open-Story axe-rot ohne, grün mit `aria-label`. |
-| Candidate fix | Regel: jede offene `role=dialog`/`role=tooltip`/`role=listbox`-Overlay-Instanz braucht einen Accessible Name (`aria-label`/`-labelledby`); modaler Dialog verdrahtet ihn via Title-Slot, Popover/Tooltip/Combobox NICHT → Story/Component muss ihn setzen. *(also: /shadcn-component-port T6 „name the role element")* |
-| Status | offen — Skill-Edit ausstehend. |
-
-**A4 · /shadcn-component-port T6 (+ /docgen-props) — Pass-through-Primitive-Root MUSS Omit+re-declare bekommen (nicht hand-argTypes); Content re-declariert den vollen kuratierten Satz** *(Popover-Review 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | User fand im Review: Popover-Root war nacktes `ComponentProps<Root>` (kein Interface) → react-docgen liest nichts → Root-API in `argTypes` hand-dupliziert; `PopoverContentProps` re-deklarierte nur 2 von ~10 Props (ArgsTable unvollständig). Tooltip im selben Batch machte beides vollständig. |
-| Gap | T6/`/docgen-props` erzwingt nicht, dass der Pass-through-Root eines Primitives ein Omit+re-declare-Interface bekommt (sonst kommt die Root-API nicht aus docgen → Anti-Pattern „Prop-Docs in argTypes"), noch dass Content den vollen kuratierten Placement/Behavior-Satz re-deklariert statt nur align/sideOffset. |
-| Verified | `PopoverProps` (Omit+re-declare open/defaultOpen/onOpenChange/modal) + erweiterte `PopoverContentProps` (side/alignOffset/avoidCollisions/collisionPadding/sticky/hideWhenDetached); hand-argTypes entfernt; Gate grün (299). |
-| Candidate fix | Regel: JEDER docgen-relevante Root/Part eines Pass-through-Primitives bekommt ein FLAT Omit+re-declare-Interface mit JSDoc — NIE Prop-Docs in `argTypes` hand-schreiben (genau das löst `/docgen-props` ab); Content/Trigger re-deklarieren den vollen kuratierten Prop-Satz (Placement + Behavior), nicht nur die 1-2 häufigsten. Tooltip = Referenz. |
-| Status | offen — Skill-Edit ausstehend (Popover-Code bereits gefixt auf `fix/component-review-polish`). |
-
-**A5 · /figma-build-rules (Section-Assembly) — DS-Section ist KEIN Auto-Layout-Frame → Build-Children in ein vertikales Auto-Layout INNERHALB der weißen Fläche hängen** *(Popover-Figma-Review 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | User fand das Figma-Output kaputt: Headline-Card überdimensioniert + überlappt die 1. Instanz; PopoverHeader/Usage-Examples liegen auf dem DUNKLEN Canvas (dunkle Schrift auf dunkel = unlesbar). Ursache bestätigt: die Section hat KEIN Auto-Layout. |
-| Gap | `/figma-build-rules` (+ `/figma-create-section`) sagt nicht, dass eine Figma-SECTION kein Auto-Layout-Frame ist → angehängte Children werden NICHT automatisch gestapelt/umschlossen; ohne ein eigenes vertikales Auto-Layout-Frame mit weißem Fill (HUG) überlappen/overflowen sie und spillen auf den dunklen Page-Canvas. |
-| Verified | Section „Popover" 4365:2253: Children frei positioniert, kein AL → Overlap + Canvas-Spill (Screenshot). |
-| Candidate fix | Regel: Build-Children NIE frei als Section-Children positionieren — ein vertikales Auto-Layout-FRAME (weißer Fill, HUG, itemSpacing aus DS) INNERHALB der Section anlegen und die Children dort einhängen (Headline = Section-Label, normal dimensioniert); danach die Section per `resizeWithoutConstraints` auf Inhalt+Inset fitten (eine Section auto-growt NICHT). Sonst Overlap + Canvas-Spill (unlesbar). *(06-23 mit Fix re-validiert — `/figma-create-section` cross-noten.)* |
-| Status | offen — Skill-Edit ausstehend; Figma-Rebuild = Offene Punkte #2 ④. |
-
-**A6 · /figma-build-rules §Composites — „interactive overlay" (getriggertes Overlay: Popover/Dropdown/Select/Tooltip-mit-Trigger) braucht State-Achse + absoluten anchored Content + Slot-Trigger + side×align + Prototype** *(Popover-Figma-Review 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | User fand die Root-Composition substanziell unvollständig: gebaut als STATISCHES align-Composition (fixe Button-Instanz als Trigger, Content im Flow, nur align-Achse) statt eines faithful interaktiven Overlays. Schon der Erstport (06-22) baute das Content-Set als statische Fläche „ohne State" → langjährige Lücke, kein Agent-Fehler eines einzelnen Runs. |
-| Gap | §Composites/Anchored-overlay deckt die Overlay-GEOMETRIE, aber kein Muster für ein getriggertes interaktives Overlay: es fehlt (a) open/closed-State-Achse, (b) Content `layoutPositioning: ABSOLUTE` (anchored Overlay statt Flow-Sibling → toggelt ohne Trigger-Reflow), (c) Trigger als Slot/Instance-Swap (tauschbar, spiegelt Code `asChild`), (d) Positionierungs-Achsen `side`×`align`, (e) On-click-Prototype (Trigger→open, Dismiss→closed). |
-| Verified | Popover-Root 4393:2391: nur align-Achse, fixe Button-Trigger-Instanz, Content im Flow, kein open/closed, kein Prototype (Build-Notes + User-Review). |
-| Candidate fix | §Composites „interactive overlay"-Muster ergänzen: ein getriggertes Overlay als Root-Composition mit open/closed-State-Achse + Content `layoutPositioning: ABSOLUTE` (anchored, kein Flow) + Trigger als Slot/Instance-Swap + Positionierungs-Achsen side×align + On-click-Prototype-Reaktionen. Abgrenzung: eine reine Raised-Surface (Dialog-Panel ohne eigenen Trigger) bleibt statisch — Trigger/State/Prototype gilt nur für getriggerte Overlays. *(also: /shadcn-component-port — Overlay-Ports von Anfang an so modellieren)* |
-| Status | offen — Skill-Edit ausstehend; Figma-Rebuild ERLEDIGT (Popover-Set 4402:2589, 24 Member state×side×align + HUG-SLOT-Trigger + absoluter Content + open/close-Prototype). |
-
-**A7 · /figma-build-rules §Composites (Anchored overlay) — `layoutPositioning=ABSOLUTE` braucht einen AUTO-LAYOUT-Parent (wirft auf NONE-Frame)** *(Popover-Figma-Follow-up 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | Das Anchored-overlay-Rezept nennt `ABSOLUTE`/`layoutPositioning` für den schwebenden Content. Member als NONE-Layout-Frame gebaut (naheliegend für frei positionierte Kinder) + `content.layoutPositioning='ABSOLUTE'` → ERROR „Can only set layoutPositioning = ABSOLUTE if the parent node has layoutMode !== NONE". Eine verbrannte Iteration (atomar, nichts angelegt, aber echter Fehlansatz). |
-| Gap | Das Rezept nennt `ABSOLUTE`, aber nicht die Figma-Regel: `layoutPositioning='ABSOLUTE'` ist NUR setzbar, wenn der Parent Auto-Layout hat (`layoutMode!==NONE`). Auf einem NONE-Frame sind Kinder eh frei positioniert → die Property ist unnötig UND wirft. |
-| Verified | NONE-Member + ABSOLUTE-Content → throw. Member als FIXED Auto-Layout-Frame (Trigger = zentriertes Flow-Kind) → ABSOLUTE-Content sauber, kein Reflow. |
-| Candidate fix | Im Anchored-overlay-Rezept: für `layoutPositioning='ABSOLUTE'` muss der Parent ein Auto-Layout-Frame sein (`layoutMode!==NONE`); Member als Auto-Layout-Frame modellieren (Trigger = zentriertes Flow-Kind, Content = ABSOLUTE-Kind). FIXED Member-Größe für einen stabilen Variant-Grid-Bounding-Box. |
-| Status | offen — Skill-Edit ausstehend. |
-
-**A8 · /shadcn-component-port T3 — arrow-tragendes Overlay auf einer BORDERED DS-Fläche: das Stock-borderless-Arrow-Idiom bricht (Arrow liest detached / der Border fließt nicht um den Arrow)** *(Tooltip-Review 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | User fand den Tooltip-Arrow „seltsam": der DS hat der Chip einen `border` verpasst (Stock-Dark-Tooltip hatte KEINEN), aber der Arrow ist der Stock-borderless-Fill-Diamant (`bg-dialog-fill fill-dialog-fill`, kein Border) → der Chip-Border fließt nicht um den Arrow, er liest als abgetrennte randlose Form. Gilt im Code (gleiche Klasse) wie in Figma; in Figma zusätzlich mit Lücke (Arrow-Positionierung überlappt die Kante nicht). |
-| Gap | T3 (Umkleiden) sagt nicht, dass das Stock-Arrow-Idiom eine RANDLOSE Chip voraussetzt — auf einer bordered DS-Fläche (der DS fügt fast immer einen `border` hinzu) bricht der borderless Arrow (Naht / detached). |
-| Verified | tooltip.tsx: Chip `corner-md border bg-dialog-fill`, Arrow `rotate-45 rounded-[2px] bg-dialog-fill fill-dialog-fill` (kein Border) → randloser Diamant an bordered Chip; Figma-Default-Beispiel zeigt zusätzlich eine Lücke. |
-| Candidate fix | Lösung (06-23 in Figma gebaut, Rezept): den Arrow als **TRIANGLE** bauen (nicht bordered Square/Diamond) — Fill = Chip-Fläche (`dialog-fill`), `border`-Stroke NUR auf den 2 SLANTED Edges (Base-Edge OFFEN, joint die Chip → keine Linie über die Base), und den Arrow ~1px in die Chip überlappen (Base deckt die Border-Naht) → connected Pointer. Code: Radix `TooltipArrow` orientiert EINEN Arrow auto per side → custom-SVG (Fill-Triangle + Stroke-Polyline der 2 non-base-Edges) via `asChild` + 1px-Overlap. Figma braucht per-side-Member (Rotation in Instanz nicht overridebar, s. B36). |
-| Status | offen — Skill-Edit ausstehend. Arrow ERLEDIGT 06-23: Figma (Triangle 4414:2493) **+ Code** (`tooltip.tsx` custom-SVG `Arrow asChild` — Fill-Triangle `dialog-fill` + `stroke-border` auf den 2 schrägen Kanten + 1px-Overlap; Radix orientiert auto per side). Shoot-verifiziert connected auf allen 4 Seiten, Gate grün (300). |
+Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht). **Keine offenen A-Findings.**
 
 ### B — self-derived, result held (codify · deferred)
 
