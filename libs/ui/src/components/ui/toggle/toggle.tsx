@@ -24,9 +24,9 @@ const toggleVariants = cva(
       } as const satisfies Record<ToggleVariant, string>,
       size: {
         default:
-          'h-8 min-w-8 px-2.5 has-data-[icon=inline-end]:pr-md has-data-[icon=inline-start]:pl-md',
-        sm: 'h-7 min-w-7 corner-md px-2.5 has-data-[icon=inline-end]:pr-sm has-data-[icon=inline-start]:pl-sm [&_svg:not([class*=size-])]:size-3.5',
-        lg: 'h-9 min-w-9 px-2.5 has-data-[icon=inline-end]:pr-md has-data-[icon=inline-start]:pl-md',
+          'h-8 min-w-8 px-md has-data-[icon=inline-end]:pr-md has-data-[icon=inline-start]:pl-md',
+        sm: 'h-7 min-w-7 corner-md px-md has-data-[icon=inline-end]:pr-sm has-data-[icon=inline-start]:pl-sm [&_svg:not([class*=size-])]:size-3.5',
+        lg: 'h-9 min-w-9 px-md has-data-[icon=inline-end]:pr-md has-data-[icon=inline-start]:pl-md',
       } as const satisfies Record<ToggleSize, string>,
     },
     defaultVariants: {

@@ -95,7 +95,7 @@ function PopoverHeader({ className, ...props }: React.ComponentProps<'div'>) {
  */
 function PopoverTitle({ className, ...props }: React.ComponentProps<'h2'>) {
   return (
-    <div
+    <h2
       data-slot="popover-title"
       className={cn('text-format-label', className)}
       {...props}

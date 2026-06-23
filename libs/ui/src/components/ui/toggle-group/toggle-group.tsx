@@ -94,12 +94,14 @@ function ToggleGroup({
 interface ToggleGroupItemProps
   extends React.ComponentProps<typeof ToggleGroupPrimitive.Item> {
   /**
-   * Per-item visual style override. Falls back to the group's `variant`.
+   * Per-item `variant`. The group's `variant` takes precedence — this applies only
+   * when the group leaves it unset.
    * @default "default"
    */
   variant?: ToggleVariant;
   /**
-   * Per-item size override. Falls back to the group's `size`.
+   * Per-item `size`. The group's `size` takes precedence — this applies only when
+   * the group leaves it unset.
    * @default "default"
    */
   size?: ToggleSize;
