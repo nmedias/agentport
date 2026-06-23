@@ -204,6 +204,16 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Candidate fix | Im Anchored-overlay-Rezept: für `layoutPositioning='ABSOLUTE'` muss der Parent ein Auto-Layout-Frame sein (`layoutMode!==NONE`); Member als Auto-Layout-Frame modellieren (Trigger = zentriertes Flow-Kind, Content = ABSOLUTE-Kind). FIXED Member-Größe für einen stabilen Variant-Grid-Bounding-Box. |
 | Status | offen — Skill-Edit ausstehend. |
 
+**A8 · /shadcn-component-port T3 — arrow-tragendes Overlay auf einer BORDERED DS-Fläche: das Stock-borderless-Arrow-Idiom bricht (Arrow liest detached / der Border fließt nicht um den Arrow)** *(Tooltip-Review 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User fand den Tooltip-Arrow „seltsam": der DS hat der Chip einen `border` verpasst (Stock-Dark-Tooltip hatte KEINEN), aber der Arrow ist der Stock-borderless-Fill-Diamant (`bg-dialog-fill fill-dialog-fill`, kein Border) → der Chip-Border fließt nicht um den Arrow, er liest als abgetrennte randlose Form. Gilt im Code (gleiche Klasse) wie in Figma; in Figma zusätzlich mit Lücke (Arrow-Positionierung überlappt die Kante nicht). |
+| Gap | T3 (Umkleiden) sagt nicht, dass das Stock-Arrow-Idiom eine RANDLOSE Chip voraussetzt — auf einer bordered DS-Fläche (der DS fügt fast immer einen `border` hinzu) bricht der borderless Arrow (Naht / detached). |
+| Verified | tooltip.tsx: Chip `corner-md border bg-dialog-fill`, Arrow `rotate-45 rounded-[2px] bg-dialog-fill fill-dialog-fill` (kein Border) → randloser Diamant an bordered Chip; Figma-Default-Beispiel zeigt zusätzlich eine Lücke. |
+| Candidate fix | beim Umkleiden eines arrow-tragenden Overlays (Tooltip/Popover) auf eine BORDERED Fläche den Arrow border-aware bauen: entweder einen Arrow mit passendem Stroke (Radix `Arrow` kann SVG-Stroke tragen) ODER so weit über die Kante überlappen, dass die Naht verdeckt ist und nur die randlose Spitze peekt — und in Figma den Arrow die Kante überlappen lassen (kein Gap). Sonst flaggen. *(also: /figma-build-rules — Arrow-Member überlappt die Chip-Kante)* |
+| Status | offen — Skill-Edit ausstehend; Arrow-Fix (Code + Figma) in der Tooltip-Figma/Design-Phase eingeplant. |
+
 ### B — self-derived, result held (codify · deferred)
 
 #### /figma-build-rules
