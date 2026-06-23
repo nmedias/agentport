@@ -120,3 +120,30 @@ not a Slot (the member frame must keep the click reaction)**
 | Verified | 24 members wired (closed→open ON_CLICK; open→closed ON_CLICK + Esc); read-back confirms destinations point at the matching counterpart. |
 | Candidate fix | Add a short "interactive variant prototype" note: toggle/open-close between two variant members = `NODE`+`CHANGE_TO` reactions (`setReactionsAsync`), one per direction; for an overlay's dismiss, click-outside isn't available on a variant member (overlay-background only) → use click-on-member + `ON_KEY_DOWN`(Esc). Closed/open pairs must be distinct member nodes to carry distinct reactions (justifies "degenerate" closed members in a full state×… matrix). |
 | Status | zurückgestellt. |
+
+---
+
+# Follow-up findings — INSTANCE_SWAP → SLOT trigger conversion (2026-06-23)
+
+### B — self-derived, result held (codify · deferred)
+
+**B(popover-figma-4) · CORRECTION to B33 — a SLOT works for a prototyped/stateful swappable trigger as
+long as the reaction is on the MEMBER FRAME; a HUG slot is MORE flexible than INSTANCE_SWAP**
+
+| Feld | Inhalt |
+|---|---|
+| Why B | The user preferred a SLOT and it works cleanly — B33's "prefer INSTANCE_SWAP over Slot for a prototyped/persistent trigger" was over-cautious. |
+| Gap | B33 claimed INSTANCE_SWAP is the right choice for a swappable control on a member that carries prototype reactions, reasoning the slot's default content would "own" the reaction. That's wrong: the reaction lives on the **member frame**, not the slot or its content → a slot swap leaves the reaction intact. A SLOT is also MORE flexible than INSTANCE_SWAP (a HUG slot accepts ANY content, not only a same-size component instance) and gives the `asChild` semantics more faithfully. |
+| Verified | Converted the trigger to a SLOT (default DS Button, HUG); all 24 members keep their ON_CLICK + ON_KEY_DOWN(Esc) reactions ON THE MEMBER FRAME (slot/Button carry none); prototype fires; sizing chain child→slot HUG→member HUG holds (all 50×32). |
+| Candidate fix | Soften/correct B33: for a swappable control on a member that carries prototype reactions, EITHER a SLOT or INSTANCE_SWAP works — keep the reaction on the **member frame** (not the slot/content) and the swap is safe. Prefer a **SLOT** when the consumer should be able to drop in arbitrary content (a HUG slot accepts any child, mirrors `asChild` more faithfully); INSTANCE_SWAP only when the swap must be constrained to a fixed set of component instances. |
+| Status | zurückgestellt — supersedes/corrects B33. |
+
+**B(popover-figma-5) · Converting INSTANCE_SWAP→SLOT on an already-combined set: the HUG-slot mechanics + the prop-merge + the layout-regression trap**
+
+| Feld | Inhalt |
+|---|---|
+| Why B | Self-derived; conversion done, verified CLEAN. No defect shipped, but two non-obvious traps cost iterations. |
+| Gap | §Slots covers building slots on standalone comps before combining, but not retrofitting a SLOT onto an already-combined variant set, nor the HUG-slot sizing, nor that disrupting member internal layout can eject a parent auto-layout's children. |
+| Verified | (1) `slot.layoutSizingHorizontal='HUG'` THROWS — a SLOT isn't itself an auto-layout frame; give the slot its OWN auto-layout (`layoutMode='HORIZONTAL'`, padding 0, fills []) first, THEN HUG → sizing chain child→slot→member. (2) `createSlot()` on already-combined members made 24 separate un-merged SLOT props; merged by re-binding each `slot.componentPropertyReferences={slotContentId:'<one>'}` + deleting the 23 duplicates → one set-level prop. (3) the slot ops reset the SET's own auto-layout to NONE and ejected the build-frame's children to the section (collapsed the section); had to restore the set grid + re-parent. |
+| Candidate fix | Note for retrofitting a SLOT onto a combined set: a SLOT needs its OWN auto-layout before HUG; createSlot post-combine yields N un-merged props → re-bind all to one `slotContentId` + delete duplicates; and slot/structure ops can silently reset the SET's auto-layout AND eject an ancestor auto-layout's children — re-assert the set's layout + the parent frame's children after, and re-run the section-composition check. |
+| Status | zurückgestellt. |

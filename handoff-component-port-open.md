@@ -93,7 +93,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    (align-Achse start/center/end, echte genestete Button+PopoverContent, kein Fork). figma-verify CLEAN + manueller
    Section-Check PASS; Katalog aktualisiert. Detail: `agent-runs/component-port/2026-06-23-popover-figma/notes.md`.
    **ERWEITERUNG 06-23 ERLEDIGT (s. A6):** Root-Modell static→voll interaktives Overlay — **PopoverRoot-Set `4402:2589`**
-   (24 Member: open/closed × side × align), **INSTANCE_SWAP-Trigger** (`asChild`-Proxy statt Slot — Member-Frame trägt die
+   (24 Member: open/closed × side × align), **HUG-SLOT-Trigger** (`asChild`-Proxy, default Button — Member-Frame trägt die
    Prototype-Reaction), Content `layoutPositioning=ABSOLUTE` (anchored, kein Reflow), **on-click+Esc-Prototype** (closed↔open).
    Member **HUGgen den Trigger** (Footprint=Trigger 50×32, Content floatet absolut außerhalb); alt `4393:2391` entfernt;
    Set **umbenannt PopoverRoot→Popover** (matcht Code-Root-Export); Section → 1718×2528. figma-verify CLEAN + Section-Check PASS; Katalog aktualisiert.
@@ -192,7 +192,7 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | §Composites/Anchored-overlay deckt die Overlay-GEOMETRIE, aber kein Muster für ein getriggertes interaktives Overlay: es fehlt (a) open/closed-State-Achse, (b) Content `layoutPositioning: ABSOLUTE` (anchored Overlay statt Flow-Sibling → toggelt ohne Trigger-Reflow), (c) Trigger als Slot/Instance-Swap (tauschbar, spiegelt Code `asChild`), (d) Positionierungs-Achsen `side`×`align`, (e) On-click-Prototype (Trigger→open, Dismiss→closed). |
 | Verified | Popover-Root 4393:2391: nur align-Achse, fixe Button-Trigger-Instanz, Content im Flow, kein open/closed, kein Prototype (Build-Notes + User-Review). |
 | Candidate fix | §Composites „interactive overlay"-Muster ergänzen: ein getriggertes Overlay als Root-Composition mit open/closed-State-Achse + Content `layoutPositioning: ABSOLUTE` (anchored, kein Flow) + Trigger als Slot/Instance-Swap + Positionierungs-Achsen side×align + On-click-Prototype-Reaktionen. Abgrenzung: eine reine Raised-Surface (Dialog-Panel ohne eigenen Trigger) bleibt statisch — Trigger/State/Prototype gilt nur für getriggerte Overlays. *(also: /shadcn-component-port — Overlay-Ports von Anfang an so modellieren)* |
-| Status | offen — Skill-Edit ausstehend; Figma-Rebuild ERLEDIGT (PopoverRoot 4402:2589, 24 Member state×side×align + INSTANCE_SWAP-Trigger + absoluter Content + open/close-Prototype). |
+| Status | offen — Skill-Edit ausstehend; Figma-Rebuild ERLEDIGT (Popover-Set 4402:2589, 24 Member state×side×align + HUG-SLOT-Trigger + absoluter Content + open/close-Prototype). |
 
 **A7 · /figma-build-rules §Composites (Anchored overlay) — `layoutPositioning=ABSOLUTE` braucht einen AUTO-LAYOUT-Parent (wirft auf NONE-Frame)** *(Popover-Figma-Follow-up 06-23)*
 
@@ -557,14 +557,14 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Candidate fix | Für eine `align`-Achse an einem Anchored-Overlay mit Panel ≫ Trigger: das PANEL am Inset fix lassen und den TRIGGER bewegen, um align zu kodieren (start/center/end). Liest gleich (Ausrichtung ist relativ), passt in einen panel-großen Member; mappt 1:1 auf das Code-`align`-Prop (kein Fork). |
 | Status | zurückgestellt. |
 
-**B33 · §Mechanism — tauschbarer Trigger auf einem prototypierten/stateful Overlay-Member → INSTANCE_SWAP, nicht Slot (der Member-Frame muss die Click-Reaction behalten)** *(Popover-Figma 06-23)*
+**B33 · §Mechanism — tauschbarer Trigger auf einem prototypierten/stateful Overlay-Member → SLOT *oder* INSTANCE_SWAP (Reaction am Member-Frame); für `asChild`-artige beliebige Trigger einen HUG-SLOT bevorzugen** *(Popover-Figma 06-23, KORRIGIERT 06-23 via SLOT-Konvertierung)*
 
 | Feld | Inhalt |
 |---|---|
 | Why B | selbst hergeleitet; INSTANCE_SWAP gewählt, funktioniert. |
 | Gap | §Mechanism mappt „tauschbares Element, das Component sein muss → Instance-Swap" und „open variably-many Kinder → Slot", sagt aber nicht, was bei einem `asChild`-artigen tauschbaren TRIGGER gewinnt, wenn der Member zusätzlich eine Prototype-Reaction trägt. Ein Slot-Default ist per-Instanz und würde die Reaction besitzen → Swap könnte die Verdrahtung droppen. |
 | Verified | INSTANCE_SWAP-Prop `trigger#…` (default DS-Button), Trigger-`mainComponent` daran gebunden; Member-Frame trägt die ON_CLICK-Reaction → Swap intakt. |
-| Candidate fix | Für ein EINZELNES tauschbares Control (Trigger/Action) auf einem Member mit Prototype-Reactions: **INSTANCE_SWAP** (Instanz-`mainComponent` an Set-Level-Swap-Prop binden, default = DS-Component) statt Slot — der Member-Frame behält die Reaction, der Swap stört sie nicht. Slot bleibt für open variably-many *Content*-Regionen. |
+| Candidate fix | Für ein tauschbares Control (Trigger/Action) auf einem Member mit Prototype-Reactions: **Reaction am MEMBER-FRAME halten** (nicht an Slot/Inhalt) → dann ist der Swap sicher, egal ob SLOT oder INSTANCE_SWAP. **SLOT bevorzugen**, wenn der Consumer beliebigen Inhalt droppen können soll (ein HUG-Slot nimmt jedes Kind, spiegelt `asChild` treuer); INSTANCE_SWAP nur, wenn der Swap auf einen festen Satz Component-Instanzen beschränkt sein muss. *(Korrektur: B33 sagte ursprünglich fälschlich „INSTANCE_SWAP statt Slot".)* |
 | Status | zurückgestellt. |
 
 **B34 · §Composites — interaktives Variant↔Variant-Prototype (open/close, Toggle) via `setReactionsAsync` + CHANGE_TO; click-outside-Dismiss ist auf Variant-Membern nicht ausdrückbar** *(Popover-Figma 06-23)*
@@ -575,6 +575,16 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | Die Build-Skills decken statische Variant-Matrizen, aber kein Wiring eines interaktiven open/close (oder Toggle) ZWISCHEN Variant-Membern. |
 | Verified | 24 Member verdrahtet (closed→open ON_CLICK; open→closed ON_CLICK + Esc); Read-back bestätigt die Ziele. |
 | Candidate fix | „Interactive variant prototype"-Notiz: Toggle/open-close zwischen zwei Variant-Membern = `NODE`+`CHANGE_TO`-Reactions (`setReactionsAsync`), je eine pro Richtung; für einen Overlay-Dismiss ist click-outside auf einem Variant-Member NICHT verfügbar (nur Overlay-Background) → click-on-member + `ON_KEY_DOWN`(Esc). closed/open-Paare müssen distinkte Member-Nodes sein (rechtfertigt die „degenerierten" closed-Member in einer vollen state×…-Matrix). |
+| Status | zurückgestellt. |
+
+**B35 · §Slots — eine SLOT nachträglich auf ein bereits kombiniertes Variant-Set retrofitten: HUG-Slot-Mechanik + Prop-Merge + Layout-Eject-Falle** *(Popover-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet; Konvertierung CLEAN, aber zwei nicht-offensichtliche Fallen kosteten Iterationen. |
+| Gap | §Slots deckt Slots auf Standalone-Comps VOR dem Kombinieren, aber nicht das Retrofitten einer SLOT auf ein bereits kombiniertes Variant-Set, nicht die HUG-Slot-Größe, und nicht, dass das Stören der Member-Internals die Kinder eines Parent-Auto-Layouts auswirft. |
+| Verified | (1) `slot.layoutSizingHorizontal='HUG'` wirft — eine SLOT ist selbst kein Auto-Layout-Frame; der Slot braucht ein EIGENES Auto-Layout (`layoutMode='HORIZONTAL'`, padding 0, fills []) ZUERST, dann HUG → Kette Kind→Slot→Member. (2) `createSlot()` auf bereits kombinierten Membern erzeugt N un-merged SLOT-Props → per `componentPropertyReferences={slotContentId:'<eine>'}` re-binden + Duplikate löschen → eine Set-Level-Prop. (3) Slot-/Struktur-Ops resetten das Auto-Layout des SETs auf NONE UND werfen die Kinder des Build-Frames in die Section → Set-Grid + Parent-Children danach wiederherstellen + Section-Check neu. |
+| Candidate fix | Notiz fürs Retrofitten einer SLOT auf ein kombiniertes Set: SLOT braucht ein eigenes Auto-Layout vor HUG; createSlot post-combine → N un-merged Props → alle auf eine `slotContentId` re-binden + Duplikate löschen; Slot-/Struktur-Ops können das Set-Auto-Layout still resetten + Kinder eines Ancestor-Auto-Layouts auswerfen → Set-Layout + Parent-Frame-Children danach re-asserten, Section-Composition-Check neu fahren. |
 | Status | zurückgestellt. |
 
 ### C — tooling / repo / already covered

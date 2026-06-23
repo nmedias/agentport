@@ -993,7 +993,7 @@ status_note: >
     root:                                          # 06-23 Follow-up: Popover (umbenannt von PopoverRoot) = VOLLES interaktives Overlay (war static align-only 4393:2391, ENTFERNT)
       set: { name: "Popover", id: "4402:2589" }    # Set-Name "Popover" (matcht Code-Root-Export); Member HUGgen den Trigger (50×32)
       axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 Member; defaults open/bottom/center
-      props: "trigger#4402:0 (INSTANCE_SWAP, default DS-Button 3160:15 — spiegelt asChild, Trigger tauschbar)"
+      props: "trigger#4408:0 (SLOT, HUG, default DS-Button — spiegelt asChild; Kind bestimmt Slot-W/H → Member huggt den Trigger; Reaction am Member-Frame → Slot-Swap stört Prototype nicht). Caveat: absolute Content-Offsets für Default-Button-Größe gerechnet — anders großer Swap-Trigger bräuchte Offset-Anpassung (Figma-Static-Variant-Limit)"
       structure: "je Member = Auto-Layout HUG → Footprint = nur Trigger (50×32), clipsContent=false; Trigger = einziges Flow-Kind; PopoverContent = layoutPositioning=ABSOLUTE (floatet AUSSERHALB der Trigger-Bounds — absolute Kinder zählen nicht zur Hug-Größe), per side+align verankert (neg. Offsets für top/left), sideOffset 8, KEIN Reflow; closed = content visible=false (nur Trigger). Set-Grid gespaced (itemSpacing 640 / counterAxis 180) → 0 Panel-Kollisionen"
       prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside ist auf Variant-Membern nicht ausdrückbar"
       members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total
@@ -1026,7 +1026,7 @@ status_note: >
     re-parented (kein Detach), Section 321×203→1312×1133 → sectionSpill []; Headline normalisiert. (#4) `align`
     modelliert als Popover-Root-Set `4393:2391` (align-Achse start/center/end, echte genestete Button+PopoverContent).
     figma-verify CLEAN + manueller Section-Check PASS. FOLLOW-UP 06-23: PopoverRoot von static align-only auf
-    VOLLES interaktives Overlay erweitert — Set `4402:2589`, 24 Member (state×side×align), INSTANCE_SWAP-Trigger
+    VOLLES interaktives Overlay erweitert — Set `4402:2589`, 24 Member (state×side×align), HUG-SLOT-Trigger
     (asChild-Proxy), absoluter Content (anchored, kein Reflow), on-click+Esc-Prototype (closed↔open); alt
     `4393:2391` entfernt; Member HUGgen den Trigger (Footprint=Trigger, Content floatet absolut außerhalb), Set umbenannt „Popover"; Section → 1718×2528. figma-verify CLEAN + Section-Check PASS. Detail:
     agent-runs/component-port/2026-06-23-popover-figma/.

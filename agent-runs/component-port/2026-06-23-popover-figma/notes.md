@@ -335,5 +335,81 @@ collisions. figma-verify CLEAN; manual section check PASS; section → 1718×252
 | Set (renamed + members HUG) | `4402:2589` | `PopoverRoot`→**`Popover`**; 24 members each FIXED 650×178 → **HUG 50×32** |
 | Section (resized) | `4365:2253` | 2334×2772 → **1718×2528** (members hug → smaller set) |
 
+---
+
+# Refinement 2 — trigger INSTANCE_SWAP → HUG SLOT (default DS Button) — 2026-06-23
+
+User prefers a **SLOT** over INSTANCE_SWAP for the trigger. Converted the trigger on set `4402:2589`
+from the INSTANCE_SWAP prop `trigger#4402:0` to a **SLOT** with a DS Button default. (B33 "prefer
+INSTANCE_SWAP" was over-cautious — see skill-feedback correction.)
+
+## What changed
+
+- **Removed** the INSTANCE_SWAP property `trigger#4402:0` (`deleteComponentProperty` auto-cleared the
+  per-member `mainComponent` bindings).
+- On each of the 24 members, the trigger Button is now wrapped in a **SLOT** (named `trigger`) whose
+  **default content = the DS Button instance**. A consumer can swap the slot content (any content, not
+  only a same-size component — a HUG slot accepts anything).
+- **Sizing chain (all HUG):** Button child (50×32) → **slot HUG** (slot has its own HORIZONTAL
+  auto-layout, `layoutSizing*='HUG'`, padding 0, fills []) → **member HUG** (50×32). Footprint = the
+  trigger child. Verified all 24 = 50×32.
+- **PopoverContent** stays `layoutPositioning=ABSOLUTE` + `clipsContent=false`, floating outside the
+  trigger-sized bounds (offsets unchanged).
+- **Prototype reactions stay on the MEMBER FRAME** (verified: each member carries ON_CLICK +
+  ON_KEY_DOWN(Esc) → CHANGE_TO; the slot/Button carry none) → swapping the slot content never breaks the
+  prototype. This is exactly why a SLOT is fine here (and why B33's "prefer INSTANCE_SWAP" was over-cautious).
+
+## Build mechanics (the tricky parts)
+
+- A **SLOT is not itself an auto-layout frame** → `layoutSizingHorizontal='HUG'` throws on it directly.
+  Give the slot its **own auto-layout** (`layoutMode='HORIZONTAL'`, padding 0, fills []) first, THEN HUG.
+- **`createSlot()` on already-combined members yields N un-merged SLOT props** (confirmed: 24 distinct
+  `trigger#4408:0`…`trigger#4409:550`). Merged them by re-binding every slot's
+  `componentPropertyReferences = { slotContentId: 'trigger#4408:0' }` and **deleting the 23 duplicate
+  props** → ONE set-level `trigger` SLOT property remains.
+- **Layout-regression caught + repaired:** disrupting the set's internal layout during slot ops reset the
+  SET's auto-layout to NONE AND ejected the build-frame children (masters + set) out to the section
+  directly (section collapsed to 496 wide). Repaired: restored the set's WRAP grid (640/180, 3 cols),
+  re-parented masters + set + Usage Examples back into the white Build frame `4390:2364` (vertical AL,
+  white fill, HUG, space-2xl/space-xl bindings), repositioned + resized the section.
+
+## Verify (slot version)
+
+- All 24 members 50×32 (HUG chain). ONE trigger SLOT prop (`trigger#4408:0`). All 24 retain prototype
+  reactions (sample: ON_CLICK + ON_KEY_DOWN(Esc) → CHANGE_TO matching counterpart).
+- `/figma-verify`: text-as-icon 0, padding-asym 0, member panel-collision 0 → **CLEAN**.
+- **Manual section-composition check: PASS** — section SOLID white, `sectionSpill=[]`, `frameOut=[]`,
+  full matrix + masters + examples read on white (screenshot). Section 1718×2528 (unchanged from the HUG
+  version).
+
+## Updated catalog delta — Popover entry `components-reference.md` (supersedes the prior `props:` line)
+
+(Team-lead applies + commits.) In the `root:` block, change only the trigger property + the structure/note:
+
+```
+root:
+  set: { name: "Popover", id: "4402:2589" }
+  axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 members
+  props: "trigger#4408:0 (SLOT, HUG, default = DS Button instance — mirrors asChild; swappable trigger, accepts ANY content)"   # CHANGED: was INSTANCE_SWAP trigger#4402:0
+  defaults: "state=open, side=bottom, align=center"
+  structure: "each member HUGS the trigger (footprint 50×32). Trigger = a SLOT (own HORIZONTAL auto-layout, HUG) holding a DS Button default → sizing chain child→slot HUG→member HUG. PopoverContent = layoutPositioning=ABSOLUTE + clipsContent=false, floats OUTSIDE the trigger-sized bounds anchored by side+align, sideOffset 8. closed = content visible=false. Set WRAP grid 640/180, 0 collisions. NOTE: the absolute content offsets are computed for the DEFAULT Button size — a different-size swapped trigger would need offset adjustment (Figma static-variant limitation)."
+  prototype: "reactions on the MEMBER FRAME (survive slot swap): closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s)."
+  members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }
+  note: "state×side×align = Figma-only interactive model; not a CVA. Do not sync back as code props. Trigger is a SLOT (not INSTANCE_SWAP) — the open/close prototype lives on the member frame, so swapping the trigger is safe."
+```
+
+notes addendum: "2026-06-23 (refinement 2): trigger converted INSTANCE_SWAP→**SLOT** (HUG, default DS
+Button) — prototype reactions stay on the member frame so the swap is safe; a HUG slot accepts any
+content. One merged set-level SLOT prop `trigger#4408:0`. figma-verify CLEAN; manual section check PASS."
+
+### Changed Figma node IDs (refinement 2)
+
+| Node | ID | Note |
+|---|---|---|
+| Trigger property | `trigger#4408:0` | **SLOT** (HUG, default DS Button) — replaced INSTANCE_SWAP `trigger#4402:0` |
+| Set | `4402:2589` | members unchanged size (50×32); trigger now slot-wrapped; grid/section unchanged (1718×2528) |
+
+(24 members, absolute content, prototype reactions, token bindings, set name "Popover" — all intact.)
+
 (Member IDs, trigger swap prop, prototype reactions, token bindings — unchanged. Absolute panel
 positions recomputed in-place on the same panel nodes.)
