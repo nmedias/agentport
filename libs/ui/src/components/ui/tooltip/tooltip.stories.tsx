@@ -58,14 +58,16 @@ type Story = StoryObj<typeof Tooltip>;
 export const Default: Story = {
   render: (args) => (
     <TooltipProvider delayDuration={0}>
-      <Tooltip {...args}>
-        <TooltipTrigger asChild>
-          <Button variant="outline">Hover</Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Add to library</p>
-        </TooltipContent>
-      </Tooltip>
+      <div className="grid w-1/2 m-auto h-[80vh] grid-cols-1  gap-[7rem] p-[5rem] justify-items-center content-center">
+        <Tooltip {...args}>
+          <TooltipTrigger asChild>
+            <Button variant="outline">Hover</Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Add to library</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </TooltipProvider>
   ),
   play: async ({ canvas, step }) => {
@@ -95,8 +97,9 @@ export const Default: Story = {
 export const Placement: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <TooltipProvider delayDuration={0}>
-      <div className="flex flex-wrap items-center justify-center gap-2xl p-4xl">
+
+      <TooltipProvider delayDuration={0} >
+      <div className="grid w-3/4 m-auto  h-[80vh] grid-cols-2 gap-[7rem] p-[5rem] justify-items-center content-center">
         {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
           <Tooltip key={side} open>
             <TooltipTrigger asChild>
@@ -119,15 +122,17 @@ export const WithKbd: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <TooltipProvider delayDuration={0}>
-      <Tooltip open>
-        <TooltipTrigger asChild>
-          <Button variant="outline">Save</Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>Save changes</p>
-          <Kbd>⌘S</Kbd>
-        </TooltipContent>
-      </Tooltip>
+      <div className="grid w-1/2 m-auto h-[80vh] grid-cols-1  gap-[7rem] p-[5rem] justify-items-center content-center">
+        <Tooltip open>
+          <TooltipTrigger asChild>
+            <Button variant="outline">Save</Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Save changes</p>
+            <Kbd>⌘S</Kbd>
+          </TooltipContent>
+        </Tooltip>
+     </div>
     </TooltipProvider>
   ),
 };
