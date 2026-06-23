@@ -3,15 +3,37 @@ import { Popover as PopoverPrimitive } from 'radix-ui';
 
 import { cn } from '@/lib/utils';
 
+// react-docgen surfaces the public API from FLAT own props with JSDoc (Omit+re-declare the curated
+// Radix props; the default propFilter drops node_modules-declared props). PopoverProps documents the
+// Root open/modal API; PopoverContentProps the placement/collision API. Trigger/Anchor stay
+// pass-through (no curated API → no own-props interface).
+
+interface PopoverProps
+  extends Omit<
+    React.ComponentProps<typeof PopoverPrimitive.Root>,
+    'open' | 'defaultOpen' | 'onOpenChange' | 'modal'
+  > {
+  /** Controlled open state (pair with `onOpenChange`). */
+  open?: boolean;
+  /**
+   * Open state on first render for an uncontrolled popover.
+   * @default false
+   */
+  defaultOpen?: boolean;
+  /** Fires when the open state changes (controlled or uncontrolled). */
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * When `true`, blocks outside interaction and traps focus (the content gets `role="dialog"`).
+   * @default false
+   */
+  modal?: boolean;
+}
+
 /**
  * Popover root — a Radix Popover that floats a single raised panel anchored to its trigger.
- * Pass-through wrapper over `PopoverPrimitive.Root`; compose with `PopoverTrigger` /
- * `PopoverContent` (and optionally `PopoverAnchor`). State props (`open`, `defaultOpen`,
- * `onOpenChange`, `modal`) are forwarded to Radix.
+ * Compose with `PopoverTrigger` / `PopoverContent` (and optionally `PopoverAnchor`).
  */
-function Popover({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Root>) {
+function Popover({ ...props }: PopoverProps) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
 }
 
@@ -28,12 +50,45 @@ function PopoverTrigger({
 interface PopoverContentProps
   extends Omit<
     React.ComponentProps<typeof PopoverPrimitive.Content>,
-    'align' | 'sideOffset'
+    | 'side'
+    | 'sideOffset'
+    | 'align'
+    | 'alignOffset'
+    | 'avoidCollisions'
+    | 'collisionPadding'
+    | 'sticky'
+    | 'hideWhenDetached'
   > {
-  /** Edge alignment of the panel against the trigger/anchor. @default "center" */
-  align?: 'start' | 'center' | 'end';
+  /**
+   * Preferred side of the trigger to render on (flips to stay in view unless `avoidCollisions` is off).
+   * @default "bottom"
+   */
+  side?: 'top' | 'right' | 'bottom' | 'left';
   /** Gap in px between the panel and the trigger/anchor edge. @default 4 */
   sideOffset?: number;
+  /**
+   * Edge alignment of the panel against the trigger/anchor.
+   * @default "center"
+   */
+  align?: 'start' | 'center' | 'end';
+  /** Offset in px from the `align` edge. @default 0 */
+  alignOffset?: number;
+  /**
+   * Flip/shift the panel to keep it inside the viewport.
+   * @default true
+   */
+  avoidCollisions?: boolean;
+  /** Padding (px) kept from the viewport edge while avoiding collisions. @default 0 */
+  collisionPadding?:
+    | number
+    | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>;
+  /**
+   * Keep the panel attached to the trigger while it is partially scrolled out of view.
+   * @default "partial"
+   */
+  sticky?: 'partial' | 'always';
+  /** Hide the panel when the trigger is fully occluded. @default false */
+  hideWhenDetached?: boolean;
 }
 
 /**
@@ -129,4 +184,4 @@ export {
   PopoverTrigger,
 };
 
-export type { PopoverContentProps };
+export type { PopoverProps, PopoverContentProps };

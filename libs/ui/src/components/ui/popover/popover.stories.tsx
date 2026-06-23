@@ -38,33 +38,9 @@ const meta: Meta<typeof Popover> = {
   args: {
     modal: false,
   },
-  // Popover (Root) only spreads Radix's PopoverPrimitive.Root props — a pass-through root with no
-  // own props, so react-docgen reads nothing. Hand-author the public API here (the one sanctioned
-  // docs-in-argTypes case). PopoverContent's own props (align/sideOffset) are documented on its
-  // dedicated page via react-docgen.
-  argTypes: {
-    open: {
-      control: 'boolean',
-      description: 'Controlled open state. Pair with `onOpenChange`.',
-      table: { type: { summary: 'boolean' } },
-    },
-    defaultOpen: {
-      control: 'boolean',
-      description: 'Open state on mount when uncontrolled.',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    modal: {
-      control: 'boolean',
-      description:
-        'When `true`, interaction outside the content is blocked and focus is trapped (content gets `role="dialog"`).',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
-    onOpenChange: {
-      control: false,
-      description: 'Fires with the next open state on every open/close.',
-      table: { type: { summary: '(open: boolean) => void' } },
-    },
-  },
+  // Popover (Root) exposes its public API via the `PopoverProps` JSDoc → react-docgen fills the
+  // ArgsTable + controls from the component; no hand-authored argTypes. PopoverContent's own props
+  // (side/align/sideOffset/avoidCollisions/…) are documented on its dedicated page, also via docgen.
   parameters: {
     docs: {
       source: { type: 'code' },
@@ -213,6 +189,35 @@ export const Placements: Story = {
               <PopoverDescription>
                 The panel edge follows the chosen alignment.
               </PopoverDescription>
+            </PopoverHeader>
+          </PopoverContent>
+        </Popover>
+      ))}
+    </div>
+  ),
+};
+
+// Sides — the `side` axis (top / right / bottom / left): which edge of the trigger the panel opens
+// toward (pairs with Placements, the `align` axis). avoidCollisions is off so each panel renders on
+// its literal side; generous spacing keeps the open panels from colliding. Render-only.
+export const Sides: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="grid grid-cols-2 gap-[14rem] p-[7rem]">
+      {(['top', 'right', 'bottom', 'left'] as const).map((side) => (
+        <Popover key={side} defaultOpen>
+          <PopoverTrigger asChild>
+            <Button variant="outline">side={side}</Button>
+          </PopoverTrigger>
+          <PopoverContent
+            side={side}
+            avoidCollisions={false}
+            className="w-56"
+            aria-label={`Popover on ${side}`}
+          >
+            <PopoverHeader>
+              <PopoverTitle>side={side}</PopoverTitle>
+              <PopoverDescription>Opens toward the {side}.</PopoverDescription>
             </PopoverHeader>
           </PopoverContent>
         </Popover>
