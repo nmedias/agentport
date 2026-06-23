@@ -57,27 +57,10 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 
 ## Offene Punkte
 
-1. **Skill-Findings** (unten, im `/skill-feedback`-Format: Klasse A/B/C → Ziel-Datei → Entry-Tabelle).
-   **A-Strang 2026-06-22 KOMPLETT** in die 6 Skill-Dateien eingearbeitet (29 ✅; #62 verworfen). Offen:
-   **B (27)** = zurückgestellt (Agent kam trotz Skill-Schweigen zum Ergebnis → Kodifizierung, kein
-   Bugfix) + **C (C1 · C2 · C3 · C4)** = Tooling/Backlog. Skills werden nie mid-run editiert; Formulierungs-Regel
-   s. Blockquote unter „Skill-Findings".
-   **Slider-Run 2026-06-22 (5 Findings, Quelle `…/2026-06-22-slider/skill-feedback.md`):** A: #5
-   (/storybook-rules wrapper-render→`source.code`, S4-Promotion) ✅ eingearbeitet (`03178db`) · #2 →
-   **A1** (/shadcn-component-port T6 a11y) eingearbeitet (`8287d65`). B27 (/figma-build-rules) +
-   C3 (/figma-verify) · C4 (build-variant-set.js) zurückgestellt.
-   **Parallel-Batch 06-22 (9 Findings, Quellen `…/2026-06-22-{tooltip,toggle-group,popover}/skill-feedback.md`):**
-   **A-Strang (A2 · A4 · A5 · A6 · A7 · A8) eingearbeitet 2026-06-23** in 4 Skill-Dateien: **A2**
-   /storybook-rules (`userEvent` statt rohem `element.click()`) · **A4** /docgen-props (Pass-through-Root ≠
-   prop-less → Omit+re-declare) · **A5** /figma-build-rules + /figma-create-section (Section ≠ Auto-Layout →
-   vertikales Build-AL-Frame) · **A6** /figma-build-rules §Composites (interactive triggered overlay) · **A7**
-   ebd. (`ABSOLUTE` braucht AL-Parent) · **A8** /figma-build-rules §Icons (connected sub-shape border-aware).
-   **A3 verworfen** (Radix/shadcn-spezifisches a11y-Verhalten — gehört nicht ins framework-neutrale
-   House-Pattern). **B (4, zurückgestellt)** = **B28** /docgen-props (Union-Root `type=` statt `interface extends`) ·
-   **B29** /figma-build-rules (filled Input: Value setzen + Placeholder leeren) · **B30/B31** /shadcn-component-port
-   T3/T6 (invertierte Fläche umkleiden + Sibling-`in-data-[slot]:`-Override grep'en). **C (2)** = Env/Tooling
-   (**C5** Worktree-`npm ci`/`dist` · **C6** nested-Worktree-Nx + `isolation:worktree`-Lehre). B20 (Portal-Spec)
-   durch Tooltip re-bestätigt (3. Datenpunkt). Skills nie mid-run editiert — User reviewt + wendet an.
+1. **Skill-Findings** (Format + Triage s. **## Skill-Findings**; Formulierungs-Regel + „nie mid-run
+   editiert" s. Blockquote dort). **Offen: nur B (27, zurückgestellt)** — selbst hergeleitet, Ergebnis
+   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). Alle **erledigten** Findings (A-Strang
+   06-22, Slider, A2/A4–A8, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
    260 Tests). Geometrie-Primitive wie Switch,
@@ -118,7 +101,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 Aggregat über mehrere Port-/Sync-Runs (Quellen unten), dedupliziert, **pre-sortiert wie ein
 `skill-feedback.md`**: Triage-Klasse **A → B → C**, darin nach **Ziel-Datei** gruppiert. Je Finding eine
 **`Feld | Inhalt`-Tabelle** (Titelzeile + Zeilen `Why` · `Gap` · `Verified` · `Candidate fix` · `Status`).
-**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B27`, `C1`…`C4`). Jeder Eintrag ist
+**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B38`). Jeder Eintrag ist
 **selbstständig** — hängen zwei Findings zusammen, steht das verwandte in Kurzform als `Bezug`-Zeile
 (keine Sprung-Verweise zwischen Items). Die Run-Tags in Kursiv *(Badge #3)* = Quell-Nummer im
 Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-run editiert.
@@ -143,9 +126,30 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 > Grenzfall → die Klasse, deren *Test* zutrifft (korrekt erst NACH Defekt/verbrannter Iteration = A).
 > *(Die `*(A)*`…`*(G)*`-/`#n`-Tags in den Titeln sind Run-interne Aufzählungen, NICHT die Klasse.)*
 
+### Erledigt (chronologisch)
+
+**Alle erledigten Findings sammeln sich hier** — die A/B/C-Sections unten führen nur noch Offenes/Deferred.
+
+- **A-Strang (29, 2026-06-22)** in die 6 Skill-Dateien eingearbeitet (#62 verworfen).
+- **Slider-Run (2026-06-22):** A #5 /storybook-rules (wrapper-render→`source.code`, S4-Promotion,
+  `03178db`) · #2 → **A1** /shadcn-component-port T6 a11y (`8287d65`).
+- **A2 · A4 · A5 · A6 · A7 · A8 (2026-06-23)** in 4 Skill-Dateien: **A2** /storybook-rules (`userEvent`
+  statt rohem `element.click()`) · **A4** /docgen-props (Pass-through-Root ≠ prop-less → Omit+re-declare) ·
+  **A5** /figma-build-rules + /figma-create-section (Section ≠ Auto-Layout → vertikales Build-AL-Frame) ·
+  **A6** /figma-build-rules §Composites (interactive triggered overlay) · **A7** ebd. (`ABSOLUTE` braucht
+  AL-Parent) · **A8** /figma-build-rules §Icons (connected sub-shape border-aware). **A3 verworfen**
+  (Radix/shadcn-spezifisches a11y-Verhalten — gehört nicht ins framework-neutrale House-Pattern).
+- **C1–C8 (2026-06-23):** **C1+C4** `build-variant-set.js` **gelöscht** (label/field-Zielfamilie
+  durchportiert; neuere Ports umgehen es eh; Mechanik = Prosa in /figma-build-rules; Referenzen §Approach +
+  T4 → „build from the recipes"; `recon.js` bleibt). **C2·C3·C7·C8** in /figma-verify: `visible:false`-Nodes
+  skippen (C2) · Control-`handle/thumb/knob` über `track/rail/groove` → SOFT HINT (C3) · ganze Komposition
+  statt nur Set prüfen (Caller: §Verify + T5) + Kind außerhalb der gefüllten Fläche = Spill-FLAG (C7, **ohne**
+  Kontrast-Check) · full-bleed-Kind ≠ clipped (C8). **C5·C6** already covered im Memory
+  `parallel-batch-worktree-pitfall`.
+
 ### A — gap caused a defect (priority)
 
-Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersicht). **Keine offenen A-Findings.**
+**Keine offenen A-Findings** — erledigte s. **### Erledigt**.
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -542,90 +546,7 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 
 ### C — tooling / repo / already covered
 
-**C1 · snippets/build-variant-set.js — kein Scaffold für Composite-Sub-Builds** *(Breadcrumb #3, optional)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | Tooling-Backlog — die Prosa deckt es, nur ein Scaffold fehlt. |
-| Gap | Text-Segment-Set, Icon-Adornment, `createSlot()` + Instance-Prefill sind nur als Prosa gedeckt; ein Scaffold (mind. fürs Slot+Prefill-Muster) fehlt. |
-| Verified | —. |
-| Candidate fix | Scaffold für das Slot+Prefill-Muster ergänzen. |
-| Status | optional, Backlog. |
-
-**C2 · /figma-verify — sollte `visible:false`-Nodes überspringen** *(radio-examples)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | `/figma-verify`-Tooling-Refinement (kein Skill-Prosa-Pfad). |
-| Gap | toggled-off Slots (`Show error/description=false`) erzeugen False-Positives bei clipped/overlap. |
-| Verified | —. |
-| Candidate fix | `/figma-verify` überspringt `visible:false`-Nodes. |
-| Status | offen (Tooling). |
-
-**C3 · /figma-verify — Sibling-Overlap-Check flaggt einen beabsichtigten „Handle auf Rail"-Overlap** *(Slider #3)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | `/figma-verify`-Heuristik (kein Skill-Prosa-Pfad); Build korrekt, Caller muss nur bestätigen. |
-| Gap | Step 4 (non-auto-layout Sibling-Overlap) flaggt jedes Slider-Thumb↔Track-Paar (das Thumb MUSS auf der Rail sitzen). Jedes „Handle auf Rail"-Control (Slider/Scrollbar/Range) trippt by-design → erwartete FLAGs lesen wie Defekte. |
-| Verified | Slider-Set: 0 text / 0 clipped / 0 pad-asym, aber 18 Overlaps, alle Track↔Thumb (genau 1 pro Thumb). |
-| Candidate fix | `/figma-verify` einen designierten Overlap als erwartet behandeln lassen — Paare überspringen, wo ein Node-Name einer Caller-Allowlist matcht (Thumb/Handle über Track/Rail), oder einen voll-enthaltenen-Kind-Overlap (Handle-bbox im Member auf dünnem Track) zu SOFT HINT herabstufen. |
-| Bezug | Schwester von C2 (beide /figma-verify-Heuristik-Verfeinerungen). |
-| Status | offen (Tooling). |
-
-**C4 · snippets/build-variant-set.js — kein Scaffold für ein Geometrie-Primitive (absolute Track/Range/Handle)** *(Slider #4)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | Snippet-Coverage-Lücke; die Prosa (§Interaction states, B5 Two-Part-Toggle) deckt die Idee, der Build war handgeschrieben. Verstärkt C1. |
-| Gap | `build-variant-set.js` ist auf Label/Field-Member getunt (HORIZONTAL AL + Text/Icon-Kind + Surface-Fill). Ein Geometrie-Primitive — `NONE`-Root mit absolut positioniertem Track (clipping FRAME) + Range (Fill-RECT, dessen Ausdehnung den Wert kodiert) + N Handle-RECTs — hat kein Scaffold; die Member-Schleife ist komplett bespoke. Slider = 2. Datenpunkt nach Switch (Track+Thumb). |
-| Verified | Slider-12-Member-Set voll bespoke gebaut (eigener Handle-Helper + per-orientation Track/Range/Handle-Positionierung); der Text/Fill/HUG-Pfad der Vorlage war unbrauchbar. |
-| Candidate fix | Geometrie-Primitive-Scaffold-Variante (Root `NONE` + absolute Kinder, `mkHandle`-Helper, per-orientation Track/Fill-Positionierung, Member-Opacity disabled, per-Handle-Glow) — oder dokumentieren, dass Geometrie-Primitives (Slider/Switch/Progress) das Label/Field-Skelett umgehen und Member von Hand bauen. |
-| Bezug | Verstärkt C1 (kein Scaffold für Composite-Sub-Builds). |
-| Status | offen (Tooling/Backlog). |
-
-**C5 · Worktree braucht echtes `npm ci` (kein symlinked node_modules) + sauberen `dist`-Build** *(toggle-group #3 · popover)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | Env/Tooling — Code korrekt, nur das Worktree-Setup unvollständig. |
-| Gap | ein frischer Worktree mit symlinked/partiellem `node_modules` lässt das Lib-Gate scheinbar scheitern: `@nx/react/typings/*`/`vite/client.d.ts` fehlen (typecheck), `@storybook/addon-vitest` setup-file-Import bricht (Chromium-Story-Projekt), TS6305 ohne `dist`-Build. |
-| Verified | identischer Code typecheckt/testet grün im voll aufgesetzten Main-Tree; im Worktree 5 reine Typings-Infra-Fehler, keiner referenziert die Component. |
-| Candidate fix | für Parallel-Worktree-Batches je Worktree ein echtes `npm ci` (kein Symlink) + Composite-`dist`-Build sicherstellen, ODER das authoritative `npm run check` nach dem Zusammenführen im Main-Tree fahren (Worktree-Gate nur indikativ). |
-| Status | offen (Env/Tooling). |
-
-**C6 · `isolation: worktree` aus einer Worktree-Session → genestete Worktrees brechen Nx + kollabieren Agents** *(Batch-Orchestrierung 06-22)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | Orchestrierungs-/Harness-Lehre, kein Skill-Prosa-Pfad; die Agents haben sich selbst erholt. |
-| Gap | Background-Agents mit `isolation: worktree` aus einer bereits ge-worktree-ten Session nesten die neuen Worktrees unter `.claude/worktrees/` IM Repo → Nx „projects defined in multiple locations"; zwei Agents landeten im Main-Tree statt im eigenen Worktree (CWD ≠ zugewiesenes Worktree). |
-| Verified | `nx` rot bis untracked `.nxignore` (`.claude/worktrees`) + `nx reset`; tooltip+popover schrieben in den Main-Tree, popover relozierte + cleante selbst. |
-| Candidate fix | solche Batches aus dem MAIN-Checkout starten (nicht aus einem Worktree) ODER Worktrees AUSSERHALB des Repo-Baums anlegen; vor dem Parallel-Lauf je Agent CWD == eigenes Worktree verifizieren; bei genesteten Worktrees `.nxignore` (`.claude/worktrees`) setzen. |
-| Bezug | Schwester von C5 (beide Worktree-Env). |
-| Status | offen (Tooling/Orchestrierung). |
-
-**C7 · /figma-verify — prüft nur das Component-SET, nicht die Section-Komposition + kein Canvas-Spill/Kontrast-Check** *(Popover-Figma-Review 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | `/figma-verify`-Scope-Lücke; der Agent meldete Popover „figma-verify CLEAN", aber die Section-Assembly war sichtbar kaputt (Overlap + Spill, s. A5). |
-| Gap | verify lief auf dem PopoverContent-SET (0 overlap dort) und deckt die SECTION-Komposition (Headline + Instanzen + Examples) nicht ab; zudem kein Check auf „Kind außerhalb der gefüllten Section-Fläche / dunkler Text auf dunklem Canvas". |
-| Verified | Set CLEAN gemeldet, Section visuell defekt (A5). |
-| Candidate fix | `/figma-verify` zusätzlich die Section-/Wrapper-Komposition prüfen: Children innerhalb der gefüllten Fläche (kein Spill auf Canvas), kein Overlap der frei positionierten Section-Children, + ein Kontrast-/Fill-Check (Text-Fill vs. tatsächlicher Hintergrund). |
-| Bezug | Schwester von C2/C3 (alle /figma-verify-Heuristik-/Scope-Lücken). |
-| Status | offen (Tooling). |
-
-**C8 · /figma-verify — clipped-Check flaggt ein Kind, das den Parent exakt füllt (full-bleed = flush an der `>`-Grenze), z. B. der `state-layer` eines Buttons** *(Popover-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why C | /figma-verify-Heuristik-Rauschen; Build korrekt, Caller bestätigt nur. |
-| Gap | Step 3 (clipped child) flaggt `child.x+child.width > parent.width - paddingRight`. Ein Kind, das den Parent EXAKT füllt (full-bleed-Overlay wie ein Button-`state-layer`-RECT bei 0,0,W,H), sitzt flush → mit striktem `>` + 1px-Toleranz liest es als clipped, obwohl beabsichtigt (und in einer reused Instanz, die man nicht editieren darf). |
-| Verified | Die reused DS-Button-Instanzen meldeten je ihren `state-layer` (50×32 == Parent 50×32, clipsContent=false) als „clipped" — 6 False-Positives, alles Button-Anatomie. |
-| Candidate fix | Ein Kind, dessen bbox exakt der Parent-Innenbox entspricht (full-bleed, in Toleranz), als designierten/erwarteten Fall behandeln (skip / SOFT HINT), nicht als clipped-FLAG — besonders wenn es in einer genesteten Instanz lebt (ohne Detach un-editierbar). |
-| Bezug | Schwester von C2/C3/C7 (/figma-verify-Heuristik); echot C3 (Designated-Overlap-Allowlist). |
-| Status | offen (Tooling). |
+**Keine offenen C-Findings** — erledigte s. **### Erledigt**.
 
 ## Quellen
 
