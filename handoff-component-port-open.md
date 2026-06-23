@@ -95,7 +95,8 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    **ERWEITERUNG 06-23 ERLEDIGT (s. A6):** Root-Modell static→voll interaktives Overlay — **PopoverRoot-Set `4402:2589`**
    (24 Member: open/closed × side × align), **INSTANCE_SWAP-Trigger** (`asChild`-Proxy statt Slot — Member-Frame trägt die
    Prototype-Reaction), Content `layoutPositioning=ABSOLUTE` (anchored, kein Reflow), **on-click+Esc-Prototype** (closed↔open).
-   alt `4393:2391` entfernt; Section → 2334×2772. figma-verify CLEAN + Section-Check PASS; Katalog aktualisiert.
+   Member **HUGgen den Trigger** (Footprint=Trigger 50×32, Content floatet absolut außerhalb); alt `4393:2391` entfernt;
+   Set **umbenannt PopoverRoot→Popover** (matcht Code-Root-Export); Section → 1718×2528. figma-verify CLEAN + Section-Check PASS; Katalog aktualisiert.
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
    Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).

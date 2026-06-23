@@ -981,7 +981,7 @@ status_note: >
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger, PopoverContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
   figma:
-    section: { name: "Popover", id: "4365:2253" }   # 06-23 resized 321×203→1312×1133 (A5-Fix) → 2334×2772 (Follow-up: interaktiver PopoverRoot)
+    section: { name: "Popover", id: "4365:2253" }   # 06-23: 321×203→1312×1133 (A5-Fix) → 1718×2528 (Follow-up: interaktives Popover, Member HUG-Trigger, gespaceter Grid)
     build_frame: { name: "Build", id: "4390:2364" } # NEU 06-23: weißes vertikales AL-Frame (HUG, itemSpacing space-2xl, padding space-xl) IN der Section — hält masters + PopoverRoot + Usage Examples (Section ≠ AL-Container → A5-Fix)
     content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, KEIN State-/Variant-Set (data-[side]=Motion, kein DS-State)
     slot: { content: "content#4365:0" }                    # die offene Region; Default = genestete PopoverHeader-Instanz
@@ -990,11 +990,11 @@ status_note: >
     vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", muted-ink: "3037:13", corner-lg: "3073:4", space-lg: "3070:8", space-md: "3070:6", space-2xs: "3070:3" }
     effect: { Elevation: "S:92c2d7…" }
     axis: { }   # Content-Fläche: KEINE Achse (erhabene Fläche, kein interaktiver State-Raum, Motion ≠ DS-State)
-    root:                                          # 06-23 Follow-up: PopoverRoot = VOLLES interaktives Overlay (war static align-only 4393:2391, ENTFERNT)
-      set: { name: "PopoverRoot", id: "4402:2589" }
+    root:                                          # 06-23 Follow-up: Popover (umbenannt von PopoverRoot) = VOLLES interaktives Overlay (war static align-only 4393:2391, ENTFERNT)
+      set: { name: "Popover", id: "4402:2589" }    # Set-Name "Popover" (matcht Code-Root-Export); Member HUGgen den Trigger (50×32)
       axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 Member; defaults open/bottom/center
       props: "trigger#4402:0 (INSTANCE_SWAP, default DS-Button 3160:15 — spiegelt asChild, Trigger tauschbar)"
-      structure: "je Member = FIXED 650×178 Auto-Layout, clipsContent=false; Trigger = zentriertes Flow-Kind (echte DS-Button-Instanz); PopoverContent = layoutPositioning=ABSOLUTE, per side+align verankert, sideOffset 8 (anchored Overlay, KEIN Reflow); closed = content visible=false (nur Trigger)"
+      structure: "je Member = Auto-Layout HUG → Footprint = nur Trigger (50×32), clipsContent=false; Trigger = einziges Flow-Kind; PopoverContent = layoutPositioning=ABSOLUTE (floatet AUSSERHALB der Trigger-Bounds — absolute Kinder zählen nicht zur Hug-Größe), per side+align verankert (neg. Offsets für top/left), sideOffset 8, KEIN Reflow; closed = content visible=false (nur Trigger). Set-Grid gespaced (itemSpacing 640 / counterAxis 180) → 0 Panel-Kollisionen"
       prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside ist auf Variant-Membern nicht ausdrückbar"
       members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total
       note: "state×side×align = Figma-only interaktives Modell; Code treibt side/align via PopoverContent-Props + open/closed via Radix-Runtime → KEIN CVA, NICHT als Code-Props zurücksyncen"
@@ -1028,7 +1028,7 @@ status_note: >
     figma-verify CLEAN + manueller Section-Check PASS. FOLLOW-UP 06-23: PopoverRoot von static align-only auf
     VOLLES interaktives Overlay erweitert — Set `4402:2589`, 24 Member (state×side×align), INSTANCE_SWAP-Trigger
     (asChild-Proxy), absoluter Content (anchored, kein Reflow), on-click+Esc-Prototype (closed↔open); alt
-    `4393:2391` entfernt; Section → 2334×2772. figma-verify CLEAN + Section-Check PASS. Detail:
+    `4393:2391` entfernt; Member HUGgen den Trigger (Footprint=Trigger, Content floatet absolut außerhalb), Set umbenannt „Popover"; Section → 1718×2528. figma-verify CLEAN + Section-Check PASS. Detail:
     agent-runs/component-port/2026-06-23-popover-figma/.
 - name: Toggle
   status: nova-aligned

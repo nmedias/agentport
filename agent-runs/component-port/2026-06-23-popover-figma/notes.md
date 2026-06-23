@@ -265,3 +265,75 @@ removed. figma-verify CLEAN; manual section check PASS. Section → 2334×2772."
 | trigger swap prop | `trigger#4402:0` | INSTANCE_SWAP, default Button `3160:15` |
 | old static PopoverRoot | `4393:2391` | **REMOVED** (replaced) |
 | Section (resized again) | `4365:2253` | 1312×1133 → **2334×2772** |
+
+---
+
+# Refinement — HUG the trigger + rename PopoverRoot → Popover — 2026-06-23
+
+Two follow-up refinements to set `4402:2589` (same run):
+
+## 1. Each member HUGs the trigger (not the FIXED 650×178 box)
+
+Changed all 24 members from FIXED 650×178 to **HUG both axes** (`primaryAxisSizingMode='AUTO'` +
+`counterAxisSizingMode='AUTO'`): the member footprint is now **exactly the trigger = 50×32** (verified
+all 24). The trigger is the only flow child (sits at origin); the **PopoverContent stays
+`layoutPositioning=ABSOLUTE` + `clipsContent=false`** → absolute children are excluded from HUG sizing,
+so the panel floats OUTSIDE the trigger-sized member bounds (correct for an overlay).
+
+**Recomputed absolute content offsets** (relative to trigger at origin, trigger 50×32, panel 288×65,
+sideOffset 8 — negative for top/left, as expected for a floating overlay):
+- `side=bottom` y=40 · `side=top` y=−73 · `side=right` x=58 · `side=left` x=−296
+- horizontal align (top/bottom): start x=0 · center x=−119 · end x=−238
+- vertical align (left/right): start y=0 · center y=−16 · end y=−33
+
+**Set-grid spacing:** trigger-sized members with overflowing panels would collide at the old
+itemSpacing 48. Re-spaced the WRAP grid generously — **itemSpacing 640, counterAxisSpacing 180**
+(maxWidth 1526 = 3 columns) — computed so the right-reaching panel of one member (+346 from its trigger)
+clears the left-reaching panel of the next (−296). **Verified 0 member-to-member panel collisions** in
+the set (full visual-extent bbox test). So the grid is cleanly SPACED, not overlapping — no by-design
+overlap flag needed. (The component HUGs the trigger as required; the set-grid stays readable.)
+
+## 2. Renamed set `PopoverRoot` → `Popover`
+
+Set `4402:2589` renamed to **`Popover`** (matches the code's `Popover` root export). `PopoverContent`
+master `4365:2255`, `PopoverHeader` master `4367:2253` keep their names.
+
+## Verify (after HUG + rename)
+
+- All 24 members = 50×32 (trigger-sized) — HUG confirmed.
+- `/figma-verify`: text-as-icon 0, padding-asym 0 → CLEAN. Member panel-collision in set: **0**.
+- Manual section-composition check: **PASS** — section SOLID white, `sectionSpill=[]`, `frameOut=[]`,
+  full matrix + masters + examples read on white (screenshot). Build frame → 1558×2288, section resized
+  1718×2528 (smaller than the FIXED-box version since members now hug).
+- Prototype reactions, INSTANCE_SWAP `trigger#4402:0`, token bindings — all intact (untouched).
+
+## Updated catalog delta — Popover entry `components-reference.md` (supersedes the prior `root:` block)
+
+(Team-lead applies + commits.) Update the `root:` block:
+
+```
+root:
+  set: { name: "Popover", id: "4402:2589" }              # RENAMED from "PopoverRoot"
+  axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 members
+  props: "trigger#4402:0 (INSTANCE_SWAP, default DS Button 3160:15 — mirrors asChild; swappable trigger)"
+  defaults: "state=open, side=bottom, align=center"
+  structure: "each member HUGS the trigger (footprint = trigger 50×32, auto-layout HUG both axes); trigger = sole flow child at origin (real DS Button instance); PopoverContent = layoutPositioning=ABSOLUTE + clipsContent=false, floats OUTSIDE the trigger-sized bounds anchored by side+align, sideOffset 8 (anchored overlay, no reflow). closed = content visible=false (trigger only). Set WRAP grid spaced itemSpacing 640 / counterAxisSpacing 180 so overflowing panels don't collide (0 collisions)."
+  prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s). open/close flow demoable."
+  members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total
+  note: "state×side×align is a Figma-only interactive model; the code drives side/align via PopoverContent props and open/closed via Radix runtime — NOT a CVA. Do not sync state/side/align back as code props."
+```
+
+notes addendum: "2026-06-23 (refinement): each member now HUGS the trigger (footprint = trigger 50×32,
+not the FIXED 650×178 box); PopoverContent floats as an ABSOLUTE overlay outside those bounds (offsets
+recomputed rel. trigger-at-origin). Set renamed PopoverRoot→Popover. WRAP grid spaced 640/180 → 0 panel
+collisions. figma-verify CLEAN; manual section check PASS; section → 1718×2528."
+
+### Changed Figma node IDs (refinement)
+
+| Node | ID | Note |
+|---|---|---|
+| Set (renamed + members HUG) | `4402:2589` | `PopoverRoot`→**`Popover`**; 24 members each FIXED 650×178 → **HUG 50×32** |
+| Section (resized) | `4365:2253` | 2334×2772 → **1718×2528** (members hug → smaller set) |
+
+(Member IDs, trigger swap prop, prototype reactions, token bindings — unchanged. Absolute panel
+positions recomputed in-place on the same panel nodes.)
