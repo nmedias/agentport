@@ -1101,11 +1101,19 @@ status_note: >
     exports: [Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, TooltipProps, TooltipContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
   figma:
-    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
+    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357; 06-23 + Build-Frame 4420:2530 + Tooltip-Root-Set, resized 953×789→1368×909
     component: { name: "Tooltip", id: "4382:2356" }      # die Content-Chip-Component (kein Variant-Set — Single-Member)
     slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label-Style, dialog-ink)" }
-    arrow: { name: "arrow", id: "4382:2358" }            # 10×10 RECT, rotated -45° diamond, ABSOLUTE bottom-center, fill dialog-fill
-    axis: { content: [slot] }                            # KEINE Variant/State-Achse — Tooltip hat nur den Open-Visual; Content = SLOT (offene children-Region)
+    arrow: { name: "arrow", id: "4414:2493" }            # 06-23 A8-Fix: down-pointing TRIANGLE (war borderless rotated square 4382:2358 — entfernt). White fill (dialog-fill) + border-Stroke NUR auf den 2 SLANTED Edges (Base offen = joint die Chip); Base überlappt 1px in die Chip → connected Pointer, kein Gap/Seam. showArrow#4418:0 toggelt ihn (per-side Member-Arrow-Swap in Tooltip Root)
+    axis: { content: [slot] }                            # Content-Chip: KEINE Variant/State-Achse — nur der Open-Visual; Content = SLOT (offene children-Region)
+    root:                                                # NEU 06-23: Tooltip-Root = interaktives Overlay (schlank, A6)
+      set: { name: "Tooltip Root", id: "4419:2781" }
+      axis: { state: [closed, open], side: [top, right, bottom, left] }   # 8 Member, SCHLANK (kein align — Tooltips zentrieren); defaults open/top
+      props: "trigger#4419:0 (SLOT, HUG, default DS-Button — tauschbarer Trigger; Reaction am Member-Frame → swap-safe)"
+      structure: "je Member HUGgt den Trigger (54×32); Trigger = HUG-SLOT mit DS-Button-Default; Content = Tooltip-Chip-Instanz 4382:2356 als layoutPositioning=ABSOLUTE + clipsContent=false, per side verankert, sideOffset 6, center; closed = Chip+Arrow visible=false. Per-side-Arrow: side=top nutzt den baked Down-Arrow (showArrow=true); bottom/left/right setzen showArrow=false + ein Member-Level oriented Triangle (Figma kann Arrow-Rotation in einer Instanz nicht overriden, und das Drehen der Instanz dreht das Label mit)"
+      prototype: "ON_HOVER ('While hovering') je closed-Member → CHANGE_TO matching open (DISSOLVE 0.15s); Figma auto-revertet bei Leave = open-on-hover/close-on-leave. Kein Click, kein Esc"
+      build_frame: { name: "Build", id: "4420:2530" }    # weißes vertikales AL in der Section (wie Popover)
+      note: "state×side = Figma-only interaktives Modell; Code treibt side via TooltipContent.side + open/close via Radix-Hover-Runtime → KEIN CVA, nicht zurücksyncen"
     vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", corner-md: "3073:3", space-lg: "3070:8", space-sm: "3070:5" }
     styles: { text: "Label (S:4e034695…b266f0)", effect: "Elevation (S:92c2d7ac…66b42)" }
     examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd-Instanz 4385:2390 ⌘S)" }

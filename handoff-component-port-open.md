@@ -212,8 +212,8 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Why A | User fand den Tooltip-Arrow „seltsam": der DS hat der Chip einen `border` verpasst (Stock-Dark-Tooltip hatte KEINEN), aber der Arrow ist der Stock-borderless-Fill-Diamant (`bg-dialog-fill fill-dialog-fill`, kein Border) → der Chip-Border fließt nicht um den Arrow, er liest als abgetrennte randlose Form. Gilt im Code (gleiche Klasse) wie in Figma; in Figma zusätzlich mit Lücke (Arrow-Positionierung überlappt die Kante nicht). |
 | Gap | T3 (Umkleiden) sagt nicht, dass das Stock-Arrow-Idiom eine RANDLOSE Chip voraussetzt — auf einer bordered DS-Fläche (der DS fügt fast immer einen `border` hinzu) bricht der borderless Arrow (Naht / detached). |
 | Verified | tooltip.tsx: Chip `corner-md border bg-dialog-fill`, Arrow `rotate-45 rounded-[2px] bg-dialog-fill fill-dialog-fill` (kein Border) → randloser Diamant an bordered Chip; Figma-Default-Beispiel zeigt zusätzlich eine Lücke. |
-| Candidate fix | beim Umkleiden eines arrow-tragenden Overlays (Tooltip/Popover) auf eine BORDERED Fläche den Arrow border-aware bauen: entweder einen Arrow mit passendem Stroke (Radix `Arrow` kann SVG-Stroke tragen) ODER so weit über die Kante überlappen, dass die Naht verdeckt ist und nur die randlose Spitze peekt — und in Figma den Arrow die Kante überlappen lassen (kein Gap). Sonst flaggen. *(also: /figma-build-rules — Arrow-Member überlappt die Chip-Kante)* |
-| Status | offen — Skill-Edit ausstehend; Arrow-Fix (Code + Figma) in der Tooltip-Figma/Design-Phase eingeplant. |
+| Candidate fix | Lösung (06-23 in Figma gebaut, Rezept): den Arrow als **TRIANGLE** bauen (nicht bordered Square/Diamond) — Fill = Chip-Fläche (`dialog-fill`), `border`-Stroke NUR auf den 2 SLANTED Edges (Base-Edge OFFEN, joint die Chip → keine Linie über die Base), und den Arrow ~1px in die Chip überlappen (Base deckt die Border-Naht) → connected Pointer. Code: Radix `TooltipArrow` orientiert EINEN Arrow auto per side → custom-SVG (Fill-Triangle + Stroke-Polyline der 2 non-base-Edges) via `asChild` + 1px-Overlap. Figma braucht per-side-Member (Rotation in Instanz nicht overridebar, s. B36). |
+| Status | offen — Skill-Edit ausstehend. Figma-Arrow ERLEDIGT 06-23 (Triangle 4414:2493); Code-Mirror (tooltip.tsx) folgt. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -586,6 +586,26 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | §Slots deckt Slots auf Standalone-Comps VOR dem Kombinieren, aber nicht das Retrofitten einer SLOT auf ein bereits kombiniertes Variant-Set, nicht die HUG-Slot-Größe, und nicht, dass das Stören der Member-Internals die Kinder eines Parent-Auto-Layouts auswirft. |
 | Verified | (1) `slot.layoutSizingHorizontal='HUG'` wirft — eine SLOT ist selbst kein Auto-Layout-Frame; der Slot braucht ein EIGENES Auto-Layout (`layoutMode='HORIZONTAL'`, padding 0, fills []) ZUERST, dann HUG → Kette Kind→Slot→Member. (2) `createSlot()` auf bereits kombinierten Membern erzeugt N un-merged SLOT-Props → per `componentPropertyReferences={slotContentId:'<eine>'}` re-binden + Duplikate löschen → eine Set-Level-Prop. (3) Slot-/Struktur-Ops resetten das Auto-Layout des SETs auf NONE UND werfen die Kinder des Build-Frames in die Section → Set-Grid + Parent-Children danach wiederherstellen + Section-Check neu. |
 | Candidate fix | Notiz fürs Retrofitten einer SLOT auf ein kombiniertes Set: SLOT braucht ein eigenes Auto-Layout vor HUG; createSlot post-combine → N un-merged Props → alle auf eine `slotContentId` re-binden + Duplikate löschen; Slot-/Struktur-Ops können das Set-Auto-Layout still resetten + Kinder eines Ancestor-Auto-Layouts auswerfen → Set-Layout + Parent-Frame-Children danach re-asserten, Section-Composition-Check neu fahren. |
+| Status | zurückgestellt. |
+
+**B36 · §Composites — per-side Arrow auf einem Overlay-Variant-Set: `rotation` ist in einer Instanz nicht overridebar (+ Instanz drehen dreht das Label) → `showArrow`-Boolean + Member-Level oriented Arrow** *(Tooltip-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet; per-side-Arrows korrekt, Text upright. |
+| Gap | §Composites sagt nicht, wie man einen richtungs-abhängigen Arrow (Tooltip/Popover per side) über eine side-Achse modelliert. `rotation` wirft „cannot be overridden in an instance"; die ganze Chip-Instanz zu drehen dreht das Label mit (unlesbar). |
+| Verified | side=top nutzt den baked Down-Arrow; bottom/left/right: `showArrow=false` (Boolean an der Chip) + ein Member-Level oriented Triangle (gleicher border-aware Bau) → Text upright, Arrow korrekt. |
+| Candidate fix | für einen per-side-Arrow auf einer side-Achse: am Content-Chip einen `showArrow`-Boolean (toggelt den baked Default-side-Arrow); für die anderen Sides `showArrow=false` + ein Member-Level oriented Arrow (gleicher Bau, gedreht). Nie die Chip-Instanz drehen (Label kippt), kein `rotation`-Instanz-Override (wirft). Im Code unnötig — Radix orientiert einen Arrow auto. |
+| Status | zurückgestellt. |
+
+**B38 · §Composites — getriggertes Overlay mit Hover-Semantik (Tooltip): `ON_HOVER` ('While hovering') auto-revertet → EINE Reaction pro closed-Member** *(Tooltip-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst aus der Reactions-API hergeleitet; demoable Hover-Flow. |
+| Gap | das interaktive-Overlay-Muster (A6/B34) deckt den CLICK-Toggle (Popover: open↔closed je eine Reaction), aber nicht die HOVER-Semantik des Tooltips. |
+| Verified | je closed-Member `ON_HOVER` → CHANGE_TO matching open (DISSOLVE 0.15s); Figmas While-hovering revertet bei mouse-leave automatisch zu closed → open-on-hover/close-on-leave. Kein Click, kein Esc, KEINE open→closed-Reaction. |
+| Candidate fix | für ein hover-getriggertes Overlay (Tooltip): `ON_HOVER` ('While hovering') am closed-Member → open; Figma auto-revertet bei Leave, also NUR eine Reaction pro closed-Member (kein open→closed). Gegenstück: ein click-getriggertes Overlay (Popover) braucht beide Richtungen (open→closed click+Esc, s. B34). |
 | Status | zurückgestellt. |
 
 ### C — tooling / repo / already covered
