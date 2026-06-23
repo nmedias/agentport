@@ -162,3 +162,106 @@ The Popover `figma:` block currently has: `section`, `content`, `slot`, `header`
 
 Unchanged (reused, re-parented into the build frame): PopoverContent master `4365:2255`, PopoverHeader
 master `4367:2253`, Usage Examples `4368:2255` (and its children).
+
+---
+
+# Follow-up — PopoverRoot extended to a FULL interactive-overlay model — 2026-06-23
+
+Second task on the same run: the review found the first PopoverRoot (`4393:2391`) was a **static**
+3-member `align`-only composition. The user wanted the **complete interactive-overlay model, full scope
+("voll")** — all three axes + a swappable trigger + absolute content + an on-click prototype. Rebuilt
+the PopoverRoot as a new 24-member set; the old static set `4393:2391` was **removed** (replaced in the
+white Build frame). Reuse-not-rebuild on the nested instances (no detach).
+
+## New set — `PopoverRoot` `4402:2589` (replaces the static `4393:2391`)
+
+**Variant matrix — 3 axes, 24 members (full "voll"):**
+`state` [closed, open] × `side` [top, right, bottom, left] × `align` [start, center, end] = **24**.
+Plus an **INSTANCE_SWAP** property `trigger#4402:0` (default = DS Button member `3160:15`). Property
+defaults: state=open, side=bottom, align=center.
+
+- **open** (12 members): trigger + PopoverContent both present; content positioned per (side, align).
+- **closed** (12 members): trigger only, the content instance `visible=false` (degenerate across
+  side/align — visually identical trigger-only, as the user accepted; built anyway for the full axes
+  AND because each closed member carries a distinct prototype reaction to its matching open member).
+
+**Trigger as INSTANCE_SWAP (mirrors `asChild`):** the trigger is a real DS Button instance whose
+`mainComponent` is bound to the set-level INSTANCE_SWAP prop `trigger#4402:0` → a consumer can swap in
+their own control. Chose INSTANCE_SWAP over a Slot because the trigger must exist in all 24 members and
+the **member frame** (not the swapped instance) carries the prototype click reaction → swapping the
+trigger doesn't break the prototype.
+
+**Content absolutely positioned (anchored overlay, no reflow):** each member is a **FIXED-size
+(650×178) auto-layout COMPONENT** with `clipsContent=false`; the **trigger is the centered flow child**
+and the **PopoverContent is `layoutPositioning=ABSOLUTE`** anchored to the trigger by (side, align) with
+an 8px sideOffset gap. Toggling closed→open reveals/hides the absolute content WITHOUT reflowing the
+trigger (the requirement). Trigger reference box centered at (296,73), 58×32; panel 288×65.
+
+Absolute content positions (member-frame coords):
+- `side=bottom` y=113 · `side=top` y=0 · `side=right` x=362 · `side=left` x=0
+- horizontal align (top/bottom): start x=296 · center x=181 · end x=66
+- vertical align (left/right): start y=73 · center y=57 · end y=40
+
+**Why a FIXED auto-layout frame (Figma constraint — see skill-feedback):** `layoutPositioning=ABSOLUTE`
+throws `Can only set … if the parent node has layoutMode !== NONE`. A Figma SECTION-style NONE frame
+can't carry an ABSOLUTE child. So the member is an auto-layout frame (trigger = flow child, centered via
+`primaryAxisAlignItems/counterAxisAlignItems=CENTER`), content = ABSOLUTE child by x/y. FIXED size so the
+member has a stable bounding box for the variant grid.
+
+**On-click prototype (`setReactionsAsync`, CHANGE_TO between variants):**
+- each **closed** member: `ON_CLICK` → CHANGE_TO the matching **open** member (same side/align),
+  DISSOLVE 0.2s.
+- each **open** member: `ON_CLICK` → CHANGE_TO the matching **closed** member, AND
+  `ON_KEY_DOWN [27/Esc]` → CHANGE_TO the matching closed member. (Click-outside isn't expressible on a
+  variant member — that's overlay-background behaviour — so the open-state dismiss is click-on-member +
+  Esc; demoable open/close flow.)
+- Verified: closed bottom/center `4402:2469` → open `4399:2385`; open `4399:2385` → closed `4402:2469`
+  (+ Esc). All 24 wired.
+
+**Layout:** the set is a sorted WRAP grid (3 `align` columns × 8 `side`/`state` rows), placed in the
+white Build frame `4390:2364` in the old set's slot (between the masters and Usage Examples). Section
+`4365:2253` resized to **2334×2772**.
+
+## Verify (extended set)
+
+- `/figma-verify` tree checks on set `4402:2589` + build frame: **text-as-icon 0 · visible
+  trigger↔panel overlap 0 · padding-asym 0 → CLEAN**. (ABSOLUTE panels don't overlap the trigger box —
+  sideOffset keeps them apart; hidden closed panels excluded.)
+- **Manual section-composition check: PASS** — section SOLID white, `sectionSpill=[]`,
+  `buildFrameChildrenOutOfBounds=[]`, full matrix + masters + examples all read on white (screenshot).
+- **Prototype (can't auto-verify):** screenshotted closed bottom/center (trigger only, trigger at the
+  SAME position as open → no reflow) + open right/start (panel anchored right, top-aligned) + the full
+  24-member grid. Reactions read back correctly (destinations point at the matching counterpart).
+
+## Updated catalog delta — Popover entry `components-reference.md`
+
+(Team-lead applies + commits.) The `root:` block added in commit 094095f described the **static** set
+`4393:2391` — **replace it** with the interactive model:
+
+```
+root:
+  set: { name: "PopoverRoot", id: "4402:2589" }          # was 4393:2391 (static align-only) — REMOVED/replaced
+  axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 members
+  props: "trigger#4402:0 (INSTANCE_SWAP, default DS Button 3160:15 — mirrors asChild; swappable trigger)"
+  defaults: "state=open, side=bottom, align=center"
+  structure: "each member = FIXED 650×178 auto-layout, clipsContent=false; trigger = centered flow child (real DS Button instance); PopoverContent = layoutPositioning=ABSOLUTE anchored by side+align, sideOffset 8 (anchored overlay, no reflow). closed = content visible=false (trigger only)."
+  prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s). open/close flow demoable."
+  members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total in the set
+  note: "state×side×align is a Figma-only interactive model; the code drives side/align via PopoverContent props and open/closed via Radix runtime — NOT a CVA. Do not sync state/side/align back as code props."
+```
+
+notes addendum: "2026-06-23 (follow-up): PopoverRoot rebuilt static→FULL interactive overlay — set
+`4402:2589`, 24 members (state×side×align), INSTANCE_SWAP trigger (`asChild` proxy), absolute-positioned
+content (anchored overlay, no reflow), on-click+Esc prototype (closed↔open). Old static set `4393:2391`
+removed. figma-verify CLEAN; manual section check PASS. Section → 2334×2772."
+
+### New / changed Figma node IDs (follow-up)
+
+| Node | ID | Note |
+|---|---|---|
+| PopoverRoot set (interactive) | `4402:2589` | NEW — 24 members, state×side×align + trigger INSTANCE_SWAP |
+| · base open/bottom/center | `4399:2385` | template member (trigger `4399:2386`, abs panel `4399:2390`) |
+| · closed/bottom/center | `4402:2469` | trigger-only; prototype → open `4399:2385` |
+| trigger swap prop | `trigger#4402:0` | INSTANCE_SWAP, default Button `3160:15` |
+| old static PopoverRoot | `4393:2391` | **REMOVED** (replaced) |
+| Section (resized again) | `4365:2253` | 1312×1133 → **2334×2772** |

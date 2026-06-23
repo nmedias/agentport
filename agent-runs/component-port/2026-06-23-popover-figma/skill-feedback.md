@@ -72,3 +72,51 @@ canvas-spill / fill-contrast check** *(re-validates C7)*
 | Candidate fix | Treat a child whose bbox exactly equals the parent inner box (full-bleed, within tolerance) as a designated/expected case (skip or SOFT HINT), not a clipped FLAG — especially when it lives inside a nested instance (un-editable without detach). |
 | Bezug | Sister of C2/C3/C7 (/figma-verify heuristic refinements); echoes C3 (designated-overlap allowlist). |
 | Status | offen (Tooling). |
+
+---
+
+# Follow-up findings — interactive-overlay extension (2026-06-23)
+
+The PopoverRoot was extended static→full interactive model (state×side×align + INSTANCE_SWAP trigger +
+absolute content + prototype). New gaps below.
+
+### A — gap caused a defect (priority)
+
+#### /figma-build-rules (§Composites — Anchored overlay)
+
+**A(popover-figma-2) · `layoutPositioning=ABSOLUTE` requires an AUTO-LAYOUT parent — it throws on a
+NONE-layout frame; the anchored-overlay recipe must say so**
+
+| Feld | Inhalt |
+|---|---|
+| Why A | §Composites "Anchored overlay" says model the open overlay as an `ABSOLUTE`/`layoutPositioning` child anchored to the trigger. Building the member as a NONE-layout frame (the natural choice for free-positioned children) and then setting `content.layoutPositioning='ABSOLUTE'` **errored**: `Can only set layoutPositioning = ABSOLUTE if the parent node has layoutMode !== NONE`. A burned iteration (atomic, so nothing was created, but a real wrong-approach failure). |
+| Gap | The recipe names `ABSOLUTE`/`layoutPositioning` but doesn't state the Figma rule that `layoutPositioning='ABSOLUTE'` is **only settable when the parent has auto-layout** (`layoutMode !== NONE`). On a NONE frame all children are already free-positioned, so the property is both unnecessary AND throws — the agent must instead make the member an auto-layout frame (trigger = flow child) so the content can be a true ABSOLUTE child. |
+| Verified | NONE-layout member + `content.layoutPositioning='ABSOLUTE'` → threw. Rebuilt member as a FIXED-size auto-layout frame (trigger flow child, centered via primary/counterAxisAlignItems) → `ABSOLUTE` content set cleanly; no reflow on open/close. |
+| Candidate fix | In the anchored-overlay recipe: to use `layoutPositioning='ABSOLUTE'` for the floating content, the **parent must be an auto-layout frame** (`layoutMode!==NONE`); model the member as an auto-layout frame with the trigger as the (centered) flow child and the content as the ABSOLUTE child. A NONE-layout frame can't carry an ABSOLUTE child (free-positioning is already implicit there, but the property throws). Use a FIXED member size if a stable variant-grid bounding box is needed. |
+| Status | offen — Skill-Edit ausstehend. |
+
+### B — self-derived, result held (codify · deferred)
+
+#### /figma-build-rules (§Mechanism / §Composites)
+
+**B(popover-figma-2) · Swappable trigger on a stateful/prototyped overlay → INSTANCE_SWAP on the member,
+not a Slot (the member frame must keep the click reaction)**
+
+| Feld | Inhalt |
+|---|---|
+| Why B | Self-derived; chose INSTANCE_SWAP over Slot, works. No defect. |
+| Gap | §Mechanism maps "one swappable element that must be a component → Instance-Swap" and "open variably-many children → Slot". For a `asChild`-style swappable TRIGGER on a member that ALSO carries a prototype reaction, it doesn't say which wins. A Slot's default content is per-instance and would own the reaction; swapping it could drop the wiring. INSTANCE_SWAP keeps the trigger a stable child whose `mainComponent` is the swap point, while the **member frame** holds the reaction → swapping the trigger never breaks the prototype. |
+| Verified | INSTANCE_SWAP prop `trigger#...` (default DS Button), trigger instance `mainComponent` bound to it; member frame carries the ON_CLICK reaction. Swappable + prototype intact. |
+| Candidate fix | For a single swappable control (trigger/action) on a member that carries prototype reactions or must persist across variants, prefer **INSTANCE_SWAP** (bind the instance's `mainComponent` to a set-level swap prop, default = the DS component) over a Slot — the member frame keeps the reaction, swapping the control doesn't disturb it. Slot stays for open variably-many *content* regions. |
+| Status | zurückgestellt. |
+
+**B(popover-figma-3) · Variant↔variant prototype (open/close, toggle) = `NODE`/`CHANGE_TO` reactions via
+`setReactionsAsync`; an overlay's "click-outside" dismiss isn't expressible on a variant member**
+
+| Feld | Inhalt |
+|---|---|
+| Why B | Self-derived from the reactions API; demoable flow built. No defect. |
+| Gap | The build skill covers static variant matrices but has no note on wiring an interactive open/close (or any toggle) **between** variant members. The recipe: `setReactionsAsync([{ trigger:{type:'ON_CLICK'}, actions:[{type:'NODE', destinationId:<otherVariantId>, navigation:'CHANGE_TO', transition:{type:'DISSOLVE',easing,duration}}] }])`. Also: a real popover's **click-outside** dismiss is overlay-background behaviour, NOT expressible as a reaction on a variant member → the open-state dismiss is modelled as click-on-member + `ON_KEY_DOWN`(Esc, keyCode 27). |
+| Verified | 24 members wired (closed→open ON_CLICK; open→closed ON_CLICK + Esc); read-back confirms destinations point at the matching counterpart. |
+| Candidate fix | Add a short "interactive variant prototype" note: toggle/open-close between two variant members = `NODE`+`CHANGE_TO` reactions (`setReactionsAsync`), one per direction; for an overlay's dismiss, click-outside isn't available on a variant member (overlay-background only) → use click-on-member + `ON_KEY_DOWN`(Esc). Closed/open pairs must be distinct member nodes to carry distinct reactions (justifies "degenerate" closed members in a full state×… matrix). |
+| Status | zurückgestellt. |

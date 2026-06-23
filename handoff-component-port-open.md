@@ -92,9 +92,10 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    re-parented, Section 321×203→1312×1133 → kein Spill (A5); `align` modelliert als **PopoverRoot-Set `4393:2391`**
    (align-Achse start/center/end, echte genestete Button+PopoverContent, kein Fork). figma-verify CLEAN + manueller
    Section-Check PASS; Katalog aktualisiert. Detail: `agent-runs/component-port/2026-06-23-popover-figma/notes.md`.
-   **ERWEITERUNG 06-23 läuft (s. A6):** Review fand das Root-Modell zu statisch → voll interaktives Overlay
-   (open/closed × side × align = 24 Member + Slot-Trigger + absoluter Content + On-click-Prototype) — `popover-figma`
-   re-task; Katalog/Status werden nach dem Report final nachgezogen.
+   **ERWEITERUNG 06-23 ERLEDIGT (s. A6):** Root-Modell static→voll interaktives Overlay — **PopoverRoot-Set `4402:2589`**
+   (24 Member: open/closed × side × align), **INSTANCE_SWAP-Trigger** (`asChild`-Proxy statt Slot — Member-Frame trägt die
+   Prototype-Reaction), Content `layoutPositioning=ABSOLUTE` (anchored, kein Reflow), **on-click+Esc-Prototype** (closed↔open).
+   alt `4393:2391` entfernt; Section → 2334×2772. figma-verify CLEAN + Section-Check PASS; Katalog aktualisiert.
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
    Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -190,7 +191,17 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | §Composites/Anchored-overlay deckt die Overlay-GEOMETRIE, aber kein Muster für ein getriggertes interaktives Overlay: es fehlt (a) open/closed-State-Achse, (b) Content `layoutPositioning: ABSOLUTE` (anchored Overlay statt Flow-Sibling → toggelt ohne Trigger-Reflow), (c) Trigger als Slot/Instance-Swap (tauschbar, spiegelt Code `asChild`), (d) Positionierungs-Achsen `side`×`align`, (e) On-click-Prototype (Trigger→open, Dismiss→closed). |
 | Verified | Popover-Root 4393:2391: nur align-Achse, fixe Button-Trigger-Instanz, Content im Flow, kein open/closed, kein Prototype (Build-Notes + User-Review). |
 | Candidate fix | §Composites „interactive overlay"-Muster ergänzen: ein getriggertes Overlay als Root-Composition mit open/closed-State-Achse + Content `layoutPositioning: ABSOLUTE` (anchored, kein Flow) + Trigger als Slot/Instance-Swap + Positionierungs-Achsen side×align + On-click-Prototype-Reaktionen. Abgrenzung: eine reine Raised-Surface (Dialog-Panel ohne eigenen Trigger) bleibt statisch — Trigger/State/Prototype gilt nur für getriggerte Overlays. *(also: /shadcn-component-port — Overlay-Ports von Anfang an so modellieren)* |
-| Status | offen — Skill-Edit ausstehend; Figma-Rebuild läuft (popover-figma re-task: voll state×side×align + Slot + absoluter Content + Prototype). |
+| Status | offen — Skill-Edit ausstehend; Figma-Rebuild ERLEDIGT (PopoverRoot 4402:2589, 24 Member state×side×align + INSTANCE_SWAP-Trigger + absoluter Content + open/close-Prototype). |
+
+**A7 · /figma-build-rules §Composites (Anchored overlay) — `layoutPositioning=ABSOLUTE` braucht einen AUTO-LAYOUT-Parent (wirft auf NONE-Frame)** *(Popover-Figma-Follow-up 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Das Anchored-overlay-Rezept nennt `ABSOLUTE`/`layoutPositioning` für den schwebenden Content. Member als NONE-Layout-Frame gebaut (naheliegend für frei positionierte Kinder) + `content.layoutPositioning='ABSOLUTE'` → ERROR „Can only set layoutPositioning = ABSOLUTE if the parent node has layoutMode !== NONE". Eine verbrannte Iteration (atomar, nichts angelegt, aber echter Fehlansatz). |
+| Gap | Das Rezept nennt `ABSOLUTE`, aber nicht die Figma-Regel: `layoutPositioning='ABSOLUTE'` ist NUR setzbar, wenn der Parent Auto-Layout hat (`layoutMode!==NONE`). Auf einem NONE-Frame sind Kinder eh frei positioniert → die Property ist unnötig UND wirft. |
+| Verified | NONE-Member + ABSOLUTE-Content → throw. Member als FIXED Auto-Layout-Frame (Trigger = zentriertes Flow-Kind) → ABSOLUTE-Content sauber, kein Reflow. |
+| Candidate fix | Im Anchored-overlay-Rezept: für `layoutPositioning='ABSOLUTE'` muss der Parent ein Auto-Layout-Frame sein (`layoutMode!==NONE`); Member als Auto-Layout-Frame modellieren (Trigger = zentriertes Flow-Kind, Content = ABSOLUTE-Kind). FIXED Member-Größe für einen stabilen Variant-Grid-Bounding-Box. |
+| Status | offen — Skill-Edit ausstehend. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -533,6 +544,26 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Gap | §Composites „Anchored overlay" sagt, den Overlay-Content an die Trigger-Kante zu ankern, deckt aber nicht den Fall, dass das Panel viel BREITER ist als der Trigger (z. B. 288px-Popover an 58px-Button) — ein fixer/zentrierter Trigger schiebt das Panel für start/end aus dem Member. |
 | Verified | Trigger zentriert + Panel angeankert → align=start schob das 288px-Panel auf 191..479 (Member 440px übergelaufen); invertiert (Panel fix am Inset, Trigger bewegt: start trigger.left=panel.left · center zentriert · end trigger.right=panel.right) → passt in 320px-Member, liest identisch. |
 | Candidate fix | Für eine `align`-Achse an einem Anchored-Overlay mit Panel ≫ Trigger: das PANEL am Inset fix lassen und den TRIGGER bewegen, um align zu kodieren (start/center/end). Liest gleich (Ausrichtung ist relativ), passt in einen panel-großen Member; mappt 1:1 auf das Code-`align`-Prop (kein Fork). |
+| Status | zurückgestellt. |
+
+**B33 · §Mechanism — tauschbarer Trigger auf einem prototypierten/stateful Overlay-Member → INSTANCE_SWAP, nicht Slot (der Member-Frame muss die Click-Reaction behalten)** *(Popover-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet; INSTANCE_SWAP gewählt, funktioniert. |
+| Gap | §Mechanism mappt „tauschbares Element, das Component sein muss → Instance-Swap" und „open variably-many Kinder → Slot", sagt aber nicht, was bei einem `asChild`-artigen tauschbaren TRIGGER gewinnt, wenn der Member zusätzlich eine Prototype-Reaction trägt. Ein Slot-Default ist per-Instanz und würde die Reaction besitzen → Swap könnte die Verdrahtung droppen. |
+| Verified | INSTANCE_SWAP-Prop `trigger#…` (default DS-Button), Trigger-`mainComponent` daran gebunden; Member-Frame trägt die ON_CLICK-Reaction → Swap intakt. |
+| Candidate fix | Für ein EINZELNES tauschbares Control (Trigger/Action) auf einem Member mit Prototype-Reactions: **INSTANCE_SWAP** (Instanz-`mainComponent` an Set-Level-Swap-Prop binden, default = DS-Component) statt Slot — der Member-Frame behält die Reaction, der Swap stört sie nicht. Slot bleibt für open variably-many *Content*-Regionen. |
+| Status | zurückgestellt. |
+
+**B34 · §Composites — interaktives Variant↔Variant-Prototype (open/close, Toggle) via `setReactionsAsync` + CHANGE_TO; click-outside-Dismiss ist auf Variant-Membern nicht ausdrückbar** *(Popover-Figma 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst aus der Reactions-API hergeleitet; demoable Flow gebaut. |
+| Gap | Die Build-Skills decken statische Variant-Matrizen, aber kein Wiring eines interaktiven open/close (oder Toggle) ZWISCHEN Variant-Membern. |
+| Verified | 24 Member verdrahtet (closed→open ON_CLICK; open→closed ON_CLICK + Esc); Read-back bestätigt die Ziele. |
+| Candidate fix | „Interactive variant prototype"-Notiz: Toggle/open-close zwischen zwei Variant-Membern = `NODE`+`CHANGE_TO`-Reactions (`setReactionsAsync`), je eine pro Richtung; für einen Overlay-Dismiss ist click-outside auf einem Variant-Member NICHT verfügbar (nur Overlay-Background) → click-on-member + `ON_KEY_DOWN`(Esc). closed/open-Paare müssen distinkte Member-Nodes sein (rechtfertigt die „degenerierten" closed-Member in einer vollen state×…-Matrix). |
 | Status | zurückgestellt. |
 
 ### C — tooling / repo / already covered
