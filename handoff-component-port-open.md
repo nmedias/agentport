@@ -92,6 +92,9 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    re-parented, Section 321×203→1312×1133 → kein Spill (A5); `align` modelliert als **PopoverRoot-Set `4393:2391`**
    (align-Achse start/center/end, echte genestete Button+PopoverContent, kein Fork). figma-verify CLEAN + manueller
    Section-Check PASS; Katalog aktualisiert. Detail: `agent-runs/component-port/2026-06-23-popover-figma/notes.md`.
+   **ERWEITERUNG 06-23 läuft (s. A6):** Review fand das Root-Modell zu statisch → voll interaktives Overlay
+   (open/closed × side × align = 24 Member + Slot-Trigger + absoluter Content + On-click-Prototype) — `popover-figma`
+   re-task; Katalog/Status werden nach dem Report final nachgezogen.
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
    Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
@@ -178,6 +181,16 @@ Erledigte A-Findings stehen unter **Offene Punkte #1** (bereits-erledigt-Übersi
 | Verified | Section „Popover" 4365:2253: Children frei positioniert, kein AL → Overlap + Canvas-Spill (Screenshot). |
 | Candidate fix | Regel: Build-Children NIE frei als Section-Children positionieren — ein vertikales Auto-Layout-FRAME (weißer Fill, HUG, itemSpacing aus DS) INNERHALB der Section anlegen und die Children dort einhängen (Headline = Section-Label, normal dimensioniert); danach die Section per `resizeWithoutConstraints` auf Inhalt+Inset fitten (eine Section auto-growt NICHT). Sonst Overlap + Canvas-Spill (unlesbar). *(06-23 mit Fix re-validiert — `/figma-create-section` cross-noten.)* |
 | Status | offen — Skill-Edit ausstehend; Figma-Rebuild = Offene Punkte #2 ④. |
+
+**A6 · /figma-build-rules §Composites — „interactive overlay" (getriggertes Overlay: Popover/Dropdown/Select/Tooltip-mit-Trigger) braucht State-Achse + absoluten anchored Content + Slot-Trigger + side×align + Prototype** *(Popover-Figma-Review 06-23)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User fand die Root-Composition substanziell unvollständig: gebaut als STATISCHES align-Composition (fixe Button-Instanz als Trigger, Content im Flow, nur align-Achse) statt eines faithful interaktiven Overlays. Schon der Erstport (06-22) baute das Content-Set als statische Fläche „ohne State" → langjährige Lücke, kein Agent-Fehler eines einzelnen Runs. |
+| Gap | §Composites/Anchored-overlay deckt die Overlay-GEOMETRIE, aber kein Muster für ein getriggertes interaktives Overlay: es fehlt (a) open/closed-State-Achse, (b) Content `layoutPositioning: ABSOLUTE` (anchored Overlay statt Flow-Sibling → toggelt ohne Trigger-Reflow), (c) Trigger als Slot/Instance-Swap (tauschbar, spiegelt Code `asChild`), (d) Positionierungs-Achsen `side`×`align`, (e) On-click-Prototype (Trigger→open, Dismiss→closed). |
+| Verified | Popover-Root 4393:2391: nur align-Achse, fixe Button-Trigger-Instanz, Content im Flow, kein open/closed, kein Prototype (Build-Notes + User-Review). |
+| Candidate fix | §Composites „interactive overlay"-Muster ergänzen: ein getriggertes Overlay als Root-Composition mit open/closed-State-Achse + Content `layoutPositioning: ABSOLUTE` (anchored, kein Flow) + Trigger als Slot/Instance-Swap + Positionierungs-Achsen side×align + On-click-Prototype-Reaktionen. Abgrenzung: eine reine Raised-Surface (Dialog-Panel ohne eigenen Trigger) bleibt statisch — Trigger/State/Prototype gilt nur für getriggerte Overlays. *(also: /shadcn-component-port — Overlay-Ports von Anfang an so modellieren)* |
+| Status | offen — Skill-Edit ausstehend; Figma-Rebuild läuft (popover-figma re-task: voll state×side×align + Slot + absoluter Content + Prototype). |
 
 ### B — self-derived, result held (codify · deferred)
 
