@@ -108,6 +108,6 @@ No screenshot. No user interaction. The caller appends its build as children of 
 |---|---|
 | "I'll hardcode the values straight into the snippet" | No. config.json is authoritative; substitute its values. |
 | "I'll tweak the inset/font for this caller" | No. The Section is one fixed spec — change config.json or nothing. |
-| "I'll add an inner auto-layout frame, it's cleaner" | No. Section + Headline only — no inner frame is the chosen anatomy. |
+| "I'll add an inner auto-layout frame, it's cleaner" | No. Section + Headline only — no inner frame is the chosen anatomy. *(caller's build still goes in its own AL frame.)* |
 | "I'll use figma-console, it's quicker" | Banned. Plugin MCP only, `/figma-use` first. |
 | "Headline is optional, I'll skip the text node" | No. The wrapper always has Section + Headline. |

@@ -123,6 +123,7 @@ play: async ({ canvas, step }) => {
 };
 ```
 
+- **Radix/portal controls → `userEvent` (always `await`), never `element.click()` / `fireEvent`** — a raw click doesn't drive the state machine.
 - **Uncontrolled instance for toggle tests** (no `checked` arg) — a controlled one freezes, the click shows nothing.
 - **Final `blur()`** — `userEvent.click` leaves the element programmatically focused (→ `:focus-visible` ring);
   `blur()` makes the end-state match a real mouse user (no lingering ring). Recurring, deliberate.

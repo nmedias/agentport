@@ -68,6 +68,10 @@ native `string | number | readonly string[]`) and any caller spreading native pr
 forwarding `ComponentProps<'…'>` — fails to assign (`TS2322`). Match the native type; widen the JSDoc'd
 prop if a doc-friendlier type tempted you to shrink it.
 
+**A root that spreads an inherited component's props is not a prop-less passthrough** — that inherited API
+is still yours → Omit+re-declare it, don't hand-author it in `argTypes` (that escape hatch is only for a
+root with no own props).
+
 ### 3. What react-docgen yields
 
 | Want in… | react-docgen reads | how |

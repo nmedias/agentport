@@ -127,6 +127,9 @@ assume this; the build's most error-prone step):
 names only (and may miss some glyphs), take the exact path from the installed package
 (`<pkg>/icons/<…>.svg`) and confirm the framework export before use. Pass the icon as `children` in code.
 
+- **Connected sub-shape on a bordered surface** (arrow/notch/tab) — built borderless it reads detached →
+  stroke exposed edges only, overlap the joint seam.
+
 ## Variant set assembly
 
 - `combineAsVariants(comps, section)`; name each `propA=valA, propB=valB` → props auto-derive. Append
@@ -155,6 +158,8 @@ names only (and may miss some glyphs), take the exact path from the installed pa
   offset directly (`set.x = 80`), never `section.absoluteBoundingBox.x + 80` (double-offsets thousands of
   px out). Sections **don't auto-grow** → after positioning, `section.resizeWithoutConstraints(w, h)` to
   fit content (width AND height).
+- **Section ≠ auto-layout** → wrap the build in a vertical AL frame (surface fill, HUG, token gap) inside
+  it; bare children don't stack (overlap/spill).
 
 ## Interaction states = a `state` axis
 
@@ -238,6 +243,11 @@ column-stacking examples.
    - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the
      open state as a top-level composition — a trigger instance + the overlay content in an `ABSOLUTE` /
      `layoutPositioning` child anchored to the trigger edge, not just separate trigger/content sets.
+     `ABSOLUTE` needs an auto-layout parent (`layoutMode≠NONE`) — member = fixed-size AL frame: trigger
+     centred flow child, content the `ABSOLUTE` child.
+   - **Interactive (triggered) overlay** (popover/dropdown/select/tooltip-w/-trigger) — model: open/closed
+     state axis · content as anchored `ABSOLUTE` child · trigger as Slot/instance-swap (`asChild`) ·
+     open/dismiss prototype. A triggerless panel stays static.
 4. **Usage-Examples group** (§Usage-examples) — here it is build **layer 4**, reproduction running through
    slots / swaps / nested instances (= the Done-Test proof). Non-trivial: dropping an instance **into a
    slot** counts as a control; a hand-placed element beside/without a slot does not.
