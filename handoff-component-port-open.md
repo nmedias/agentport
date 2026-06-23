@@ -73,7 +73,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    nächster Block-Schritt, nicht gebaut. **Offener Folge-Punkt (Tooltip):** `kbd.tsx`
    `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
    near-invisible; bewusst nicht im Single-Port editiert. **Kbd-Touch-up ERLEDIGT 06-23** (`64cfaf8`): tooltip-content-Override
-   `bg-surface/20`→`bg-muted-fill` (dezent, sichtbarer muted Keycap auf der Light-Chip; `text-ink` lesbar behalten), Gate grün + axe-clean. (s. B31 — der Skill-Edit „Sibling-Overrides vor dem Umtönen grep'en" bleibt als Leitplanke offen.)
+   `bg-surface/20`→`bg-muted-fill` (dezent, sichtbarer muted Keycap auf der Light-Chip; `text-ink` lesbar behalten), Gate grün + axe-clean. (Skill-Leitplanke „Sibling-`in-data-[slot]:`-Overrides vor dem Umtönen grep'en" = B31, eingearbeitet 06-23, s. ### Erledigt.)
    **Popover-Review 06-23:** Code/Docgen-Lücken (Root-Docgen + PopoverContent-Props + Sides-Story) gefixt
    auf `fix/component-review-polish` (s. A4, Gate grün 299). **④ Popover-Figma ERLEDIGT 06-23** (background agent
    `popover-figma`): Section gefixt — Children in ein weißes vertikales AL-Build-Frame `4390:2364` IN der Section
@@ -101,7 +101,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 Aggregat über mehrere Port-/Sync-Runs (Quellen unten), dedupliziert, **pre-sortiert wie ein
 `skill-feedback.md`**: Triage-Klasse **A → B → C**, darin nach **Ziel-Datei** gruppiert. Je Finding eine
 **`Feld | Inhalt`-Tabelle** (Titelzeile + Zeilen `Why` · `Gap` · `Verified` · `Candidate fix` · `Status`).
-**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B38`). Jeder Eintrag ist
+**ID = Klasse + laufende Nummer in Anzeige-Reihenfolge** (`B1`…`B27`). Jeder Eintrag ist
 **selbstständig** — hängen zwei Findings zusammen, steht das verwandte in Kurzform als `Bezug`-Zeile
 (keine Sprung-Verweise zwischen Items). Die Run-Tags in Kursiv *(Badge #3)* = Quell-Nummer im
 Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-run editiert.
@@ -146,6 +146,11 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   statt nur Set prüfen (Caller: §Verify + T5) + Kind außerhalb der gefüllten Fläche = Spill-FLAG (C7, **ohne**
   Kontrast-Check) · full-bleed-Kind ≠ clipped (C8). **C5·C6** already covered im Memory
   `parallel-batch-worktree-pitfall`.
+- **B-Batch B28–B38 (2026-06-23, aus den Overlay-Builds):** **B28** /docgen-props (Discriminated-Union-Root →
+  `type`-Intersection statt `interface extends`) · **B31** /shadcn-component-port T3 (vor dem Umtönen die
+  Sibling-`in-data-[slot]:`-Overrides grep'en) · **B32** /figma-build-rules §Composites (align-Achse: Trigger
+  bewegen, nicht Panel) · **B33** ebd. §Mechanism (swappable Trigger → Reaction am Member-Frame, HUG-Slot) ·
+  **B35** ebd. §Slots (SLOT auf kombiniertes Set retrofitten). Rest des Batches verworfen.
 
 ### A — gap caused a defect (priority)
 
@@ -434,114 +439,6 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Gap | der Snippet-Header nennt `fileKey`/`description` nicht. |
 | Verified | —. |
 | Candidate fix | in S2 / Snippet-Header notieren (`fileKey` aus config.json + kurze `description`). *(also: read-set-values.js)* |
-| Status | zurückgestellt. |
-
-#### /docgen-props
-
-**B28 · Discriminated-Union-Radix-Root: Props als `type = ComponentProps & Own`, nicht `interface extends`** *(toggle-group #2)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst hergeleitet; docgen + Build grün. |
-| Gap | /docgen-props zeigt das Omit+re-declare-Muster für einen normalen Root, nicht für einen Root mit Discriminated-Union-Props (z. B. `type=single\|multiple`). |
-| Verified | `interface … extends ComponentProps<Root>` warf TS2312 über die Union; `type … = ComponentProps<Root> & Own` typecheckt. |
-| Candidate fix | bei einem Root mit Discriminated-Union-Props die Props als `type = ComponentProps<typeof Root> & {…}` (Intersection) deklarieren, NICHT `interface extends` (TS2312 — nur Object-Types/Statics extendbar). |
-| Status | zurückgestellt. |
-
-#### /figma-build-rules
-
-**B29 · §Usage-examples — gefüllter genesteter Input: Value setzen UND Placeholder leeren** *(popover #2)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst gefunden; Beispiel sauber gerendert. |
-| Gap | §Usage-examples sagt nicht, dass ein „filled"-Beispiel-Input beides braucht — Value setzen UND Placeholder-Text leeren; sonst überlagern sie sich sichtbar. |
-| Verified | gesetzter Value + nicht-geleerter Placeholder rendern übereinander. |
-| Candidate fix | beim Nesten eines gefüllten Input/Field in ein Usage-Example: Value setzen UND den Placeholder leeren (ein `filled`-Bool / nur-Value versteckt den Placeholder nicht). |
-| Status | zurückgestellt. |
-
-#### /shadcn-component-port
-
-**B30 · T3 — invertierte Stock-Fläche → an raised-overlay-Token umkleiden + dark→light-Fork notieren** *(tooltip #1)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst entschieden; Tooltip korrekt umgekleidet, Verify CLEAN. |
-| Gap | T3 nennt keinen Pfad für eine invertierte Stock-Fläche (`bg-foreground`/`text-background`), wenn das DS keinen invertierten-Overlay-Token hat. |
-| Verified | stock-Tooltip = dunkle Chip; DS hat nur die konsolidierte raised-overlay-Fläche (`dialog-fill`) → Tooltip wird light. |
-| Candidate fix | fehlt ein invertierter-Overlay-Token, die invertierte Stock-Fläche an die raised-overlay-Fläche umkleiden (bg-dialog-fill + border + shadow-elevation) und den dark→light-Fork in notes festhalten — nicht den invertierten Look erzwingen. |
-| Status | zurückgestellt. |
-
-**B31 · T3/T6 — vor dem Umtönen einer Fläche die `in-data-[slot=<this>]:`-Overrides der Sibling-Components grep'en** *(tooltip #2)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst erkannt; korrekt als Open Item geflaggt statt still kaputt zu lassen. |
-| Gap | T3/T6 warnen nicht, dass ein bereits portierter Sibling (z. B. Kbd) einen `in-data-[slot=<diese-component>]:`-Kontext-Override trägt, der beim Flächen-Ton-Wechsel (dark→light) stale wird. |
-| Verified | kbd.tsx `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` für dunkle Tooltip getunt → auf light near-invisible. |
-| Candidate fix | beim Umtönen einer Component-Fläche das Lib nach `in-data-[slot=<diese-component>]:` der genesteten Siblings grep'en; passt der Kontrast nicht mehr → als Open Item flaggen (Cross-Component-Override = Out-of-Scope für einen Single-Port). |
-| Status | zurückgestellt. |
-
-#### /figma-build-rules
-
-**B32 · §Composites (Anchored overlay) — `align`-Achse: den TRIGGER relativ zum fixen Panel bewegen (Ausrichtung ist relativ)** *(Popover-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst hergeleitet; Align-Set liest korrekt, kein Defekt. |
-| Gap | §Composites „Anchored overlay" sagt, den Overlay-Content an die Trigger-Kante zu ankern, deckt aber nicht den Fall, dass das Panel viel BREITER ist als der Trigger (z. B. 288px-Popover an 58px-Button) — ein fixer/zentrierter Trigger schiebt das Panel für start/end aus dem Member. |
-| Verified | Trigger zentriert + Panel angeankert → align=start schob das 288px-Panel auf 191..479 (Member 440px übergelaufen); invertiert (Panel fix am Inset, Trigger bewegt: start trigger.left=panel.left · center zentriert · end trigger.right=panel.right) → passt in 320px-Member, liest identisch. |
-| Candidate fix | Für eine `align`-Achse an einem Anchored-Overlay mit Panel ≫ Trigger: das PANEL am Inset fix lassen und den TRIGGER bewegen, um align zu kodieren (start/center/end). Liest gleich (Ausrichtung ist relativ), passt in einen panel-großen Member; mappt 1:1 auf das Code-`align`-Prop (kein Fork). |
-| Status | zurückgestellt. |
-
-**B33 · §Mechanism — tauschbarer Trigger auf einem prototypierten/stateful Overlay-Member → SLOT *oder* INSTANCE_SWAP (Reaction am Member-Frame); für `asChild`-artige beliebige Trigger einen HUG-SLOT bevorzugen** *(Popover-Figma 06-23, KORRIGIERT 06-23 via SLOT-Konvertierung)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst hergeleitet; INSTANCE_SWAP gewählt, funktioniert. |
-| Gap | §Mechanism mappt „tauschbares Element, das Component sein muss → Instance-Swap" und „open variably-many Kinder → Slot", sagt aber nicht, was bei einem `asChild`-artigen tauschbaren TRIGGER gewinnt, wenn der Member zusätzlich eine Prototype-Reaction trägt. Ein Slot-Default ist per-Instanz und würde die Reaction besitzen → Swap könnte die Verdrahtung droppen. |
-| Verified | INSTANCE_SWAP-Prop `trigger#…` (default DS-Button), Trigger-`mainComponent` daran gebunden; Member-Frame trägt die ON_CLICK-Reaction → Swap intakt. |
-| Candidate fix | Für ein tauschbares Control (Trigger/Action) auf einem Member mit Prototype-Reactions: **Reaction am MEMBER-FRAME halten** (nicht an Slot/Inhalt) → dann ist der Swap sicher, egal ob SLOT oder INSTANCE_SWAP. **SLOT bevorzugen**, wenn der Consumer beliebigen Inhalt droppen können soll (ein HUG-Slot nimmt jedes Kind, spiegelt `asChild` treuer); INSTANCE_SWAP nur, wenn der Swap auf einen festen Satz Component-Instanzen beschränkt sein muss. *(Korrektur: B33 sagte ursprünglich fälschlich „INSTANCE_SWAP statt Slot".)* |
-| Status | zurückgestellt. |
-
-**B34 · §Composites — interaktives Variant↔Variant-Prototype (open/close, Toggle) via `setReactionsAsync` + CHANGE_TO; click-outside-Dismiss ist auf Variant-Membern nicht ausdrückbar** *(Popover-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst aus der Reactions-API hergeleitet; demoable Flow gebaut. |
-| Gap | Die Build-Skills decken statische Variant-Matrizen, aber kein Wiring eines interaktiven open/close (oder Toggle) ZWISCHEN Variant-Membern. |
-| Verified | 24 Member verdrahtet (closed→open ON_CLICK; open→closed ON_CLICK + Esc); Read-back bestätigt die Ziele. |
-| Candidate fix | „Interactive variant prototype"-Notiz: Toggle/open-close zwischen zwei Variant-Membern = `NODE`+`CHANGE_TO`-Reactions (`setReactionsAsync`), je eine pro Richtung; für einen Overlay-Dismiss ist click-outside auf einem Variant-Member NICHT verfügbar (nur Overlay-Background) → click-on-member + `ON_KEY_DOWN`(Esc). closed/open-Paare müssen distinkte Member-Nodes sein (rechtfertigt die „degenerierten" closed-Member in einer vollen state×…-Matrix). |
-| Status | zurückgestellt. |
-
-**B35 · §Slots — eine SLOT nachträglich auf ein bereits kombiniertes Variant-Set retrofitten: HUG-Slot-Mechanik + Prop-Merge + Layout-Eject-Falle** *(Popover-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst hergeleitet; Konvertierung CLEAN, aber zwei nicht-offensichtliche Fallen kosteten Iterationen. |
-| Gap | §Slots deckt Slots auf Standalone-Comps VOR dem Kombinieren, aber nicht das Retrofitten einer SLOT auf ein bereits kombiniertes Variant-Set, nicht die HUG-Slot-Größe, und nicht, dass das Stören der Member-Internals die Kinder eines Parent-Auto-Layouts auswirft. |
-| Verified | (1) `slot.layoutSizingHorizontal='HUG'` wirft — eine SLOT ist selbst kein Auto-Layout-Frame; der Slot braucht ein EIGENES Auto-Layout (`layoutMode='HORIZONTAL'`, padding 0, fills []) ZUERST, dann HUG → Kette Kind→Slot→Member. (2) `createSlot()` auf bereits kombinierten Membern erzeugt N un-merged SLOT-Props → per `componentPropertyReferences={slotContentId:'<eine>'}` re-binden + Duplikate löschen → eine Set-Level-Prop. (3) Slot-/Struktur-Ops resetten das Auto-Layout des SETs auf NONE UND werfen die Kinder des Build-Frames in die Section → Set-Grid + Parent-Children danach wiederherstellen + Section-Check neu. |
-| Candidate fix | Notiz fürs Retrofitten einer SLOT auf ein kombiniertes Set: SLOT braucht ein eigenes Auto-Layout vor HUG; createSlot post-combine → N un-merged Props → alle auf eine `slotContentId` re-binden + Duplikate löschen; Slot-/Struktur-Ops können das Set-Auto-Layout still resetten + Kinder eines Ancestor-Auto-Layouts auswerfen → Set-Layout + Parent-Frame-Children danach re-asserten, Section-Composition-Check neu fahren. |
-| Status | zurückgestellt. |
-
-**B36 · §Composites — per-side Arrow auf einem Overlay-Variant-Set: `rotation` ist in einer Instanz nicht overridebar (+ Instanz drehen dreht das Label) → `showArrow`-Boolean + Member-Level oriented Arrow** *(Tooltip-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst hergeleitet; per-side-Arrows korrekt, Text upright. |
-| Gap | §Composites sagt nicht, wie man einen richtungs-abhängigen Arrow (Tooltip/Popover per side) über eine side-Achse modelliert. `rotation` wirft „cannot be overridden in an instance"; die ganze Chip-Instanz zu drehen dreht das Label mit (unlesbar). |
-| Verified | side=top nutzt den baked Down-Arrow; bottom/left/right: `showArrow=false` (Boolean an der Chip) + ein Member-Level oriented Triangle (gleicher border-aware Bau) → Text upright, Arrow korrekt. |
-| Candidate fix | für einen per-side-Arrow auf einer side-Achse: am Content-Chip einen `showArrow`-Boolean (toggelt den baked Default-side-Arrow); für die anderen Sides `showArrow=false` + ein Member-Level oriented Arrow (gleicher Bau, gedreht). Nie die Chip-Instanz drehen (Label kippt), kein `rotation`-Instanz-Override (wirft). Im Code unnötig — Radix orientiert einen Arrow auto. |
-| Status | zurückgestellt. |
-
-**B38 · §Composites — getriggertes Overlay mit Hover-Semantik (Tooltip): `ON_HOVER` ('While hovering') auto-revertet → EINE Reaction pro closed-Member** *(Tooltip-Figma 06-23)*
-
-| Feld | Inhalt |
-|---|---|
-| Why B | selbst aus der Reactions-API hergeleitet; demoable Hover-Flow. |
-| Gap | das interaktive-Overlay-Muster (A6/B34) deckt den CLICK-Toggle (Popover: open↔closed je eine Reaction), aber nicht die HOVER-Semantik des Tooltips. |
-| Verified | je closed-Member `ON_HOVER` → CHANGE_TO matching open (DISSOLVE 0.15s); Figmas While-hovering revertet bei mouse-leave automatisch zu closed → open-on-hover/close-on-leave. Kein Click, kein Esc, KEINE open→closed-Reaction. |
-| Candidate fix | für ein hover-getriggertes Overlay (Tooltip): `ON_HOVER` ('While hovering') am closed-Member → open; Figma auto-revertet bei Leave, also NUR eine Reaction pro closed-Member (kein open→closed). Gegenstück: ein click-getriggertes Overlay (Popover) braucht beide Richtungen (open→closed click+Esc, s. B34). |
 | Status | zurückgestellt. |
 
 ### C — tooling / repo / already covered
