@@ -21,6 +21,9 @@ Main-Tree: `npm run check` = 298 Tests / 66 Files** (lint + typecheck + test; ei
 flaky, im Re-Run grün — Bestand, nicht aus dem Batch). **NOCH NICHT auf `master` ge-ff-merged (User-Gate).**
 `toggle` = co-portiert (Hard-Dep von toggle-group, Finding B10). Runs:
 `agent-runs/component-port/2026-06-22-{tooltip,toggle-group,popover}/`.
+**Entfernt 2026-06-24:** `toggle` + `toggle-group` komplett ausgebaut (Code-Ordner + Barrel-Exporte +
+Katalog-Einträge + Run-Notes `2026-06-22-toggle-group/`) — wird in Figma neu gemacht. Aus dem Batch
+bleiben im Code **tooltip · popover**.
 
 Form-Toggle-Batch (Checkbox · Switch · RadioGroup) **gemerged** (Code + token-gebundene Figma-Sets +
 permanente Usage-Examples + Figma→Code-Sync + Field-komponierte Stories) + Skill-Edit (usage-examples-
@@ -67,8 +70,9 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    kein CVA; Figma-Set 12 Member (`orientation × thumbs × state`, `thumbs` = Figma-only Fork) +
    Usage-Examples inkl. **FieldSlider → schaltet das beim Field-Port (06-12) übersprungene `field-slider`
    frei**. Details: `agent-runs/component-port/2026-06-22-slider/notes.md`, Katalog-Eintrag `Slider`.
-   **Parallel-Batch 06-22 erledigt:** tooltip · toggle (co-port, Hard-Dep B10) · toggle-group · popover
-   portiert (Figma + Code, Gate grün), auf `feat/shadcn-port-batch` ff-bereit. **`popover` + bereits
+   **Parallel-Batch 06-22 erledigt:** tooltip · popover portiert (Figma + Code, Gate grün), auf
+   `feat/shadcn-port-batch` ff-bereit; `toggle` + `toggle-group` 06-24 wieder entfernt (Figma-Neuaufbau).
+   **`popover` + bereits
    portiertes `command` schalten den `combobox`-Endpoint-Switcher frei** (Explorer-Analyse) — offener
    nächster Block-Schritt, nicht gebaut. **Offener Folge-Punkt (Tooltip):** `kbd.tsx`
    `in-data-[slot=tooltip-content]:`-Override war für die alte DUNKLE Tooltip getunt → auf der neuen LIGHT-Chip
@@ -451,7 +455,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
   2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider,
-  2026-06-22-tooltip,2026-06-22-toggle-group,2026-06-22-popover}/skill-feedback.md` +
+  2026-06-22-tooltip,2026-06-22-popover,2026-06-23-tooltip-root-mirror}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
