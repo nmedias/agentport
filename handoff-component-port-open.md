@@ -61,9 +61,9 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 ## Offene Punkte
 
 1. **Skill-Findings** (Format + Triage s. **## Skill-Findings**; Formulierungs-Regel + „nie mid-run
-   editiert" s. Blockquote dort). **Offen: nur noch A10 (Variation-No-Go) — vorrangig; B zurückgestellt (inkl. B41)** — selbst hergeleitet, Ergebnis
-   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). **A9 + A11 06-24 kodifiziert** (s. **### Erledigt**; inkl. A9-Containment-Bullet — Option c eingelöst). Alle **erledigten** Findings (A-Strang
-   06-22, Slider, A2/A4–A8, A9, A11, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
+   editiert" s. Blockquote dort). **Keine offenen A-Findings mehr (A9 + A10 + A11 06-24 kodifiziert); offen nur noch B (zurückgestellt, inkl. B41)** — selbst hergeleitet, Ergebnis
+   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). Alle **erledigten** Findings (A-Strang
+   06-22, Slider, A2/A4–A8, A9, A10, A11, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
    260 Tests). Geometrie-Primitive wie Switch,
@@ -168,23 +168,16 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   ABSOLUTE-Kind BEIDE Richtungen (Tracking + Selbst-Wachstum) steuern und je Seite die Gegenkante brauchen.
   **Containment-Bullet (Set-Padding) ebenfalls kodifiziert** (§Composites Layer 3, „Containing the overlay
   variant set" — Set selbst padden, nicht äußerer Wrapper; bei fixed-axis-Set die Achse um dasselbe
-  Padding mitwachsen, damit das Grid nicht umbricht). *(A10 weiter offen.)*
+  Padding mitwachsen, damit das Grid nicht umbricht).
+- **A10 (2026-06-24)** in /figma-build-rules §Red flags eingearbeitet (Heading von „Red flags (Plugin-API)"
+  auf „Red flags" generalisiert): No-Go — eine Variation faken durch Element-an-der-Instanz-ausblenden +
+  Ersatz-danebenkleben (doppelt, prop-los, verstreut, Drift) → die abweichende Ausprägung als
+  **Varianten-Achse** modellieren (eine pro Variante, prop-geschaltet), aus den gebauten Formen geklont.
+  **Damit alle A-Findings erledigt.**
 
 ### A — gap caused a defect (priority)
 
-#### /figma-build-rules
-
-**A10 · §Mechanism — Variation NIE durch „Element an der Instanz ausblenden + Ersatz drankleben" faken → als Varianten-Achse anlegen (No-Go)** *(Tooltip-Root-Mirror)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | User stufte den bestehenden Bau als **No-Go** ein: ein Element war an der Instanz ausgeblendet + ein neues drangeklebt, statt Varianten anzulegen. → Leitplanke, vorrangig. |
-| Gap | Die Build-Skills benennen das Anti-Muster nicht: braucht ein Element je Kontext/Zustand/Richtung eine andere Ausprägung, wird es gern **an der Instanz ausgeblendet** und ein **neues, ad-hoc Element danebengeklebt** — statt die Ausprägung als **Variante** zu modellieren. Folge: das Element existiert doppelt (verstecktes Original + geklebtes Duplikat), verstreut über Instanzen/Member, nichts per Prop gesteuert, skaliert nicht, Overrides driften. |
-| Verified | Konkret hier: der Per-Seiten-Arrow war im Content gebacken-aber-`hidden` + pro Member ein extra Arrow drangeklebt (`showArrow`-Boolean). Ersetzt durch eine `side`-Varianten-Achse auf der Content-Component (eine Ausprägung pro Variante, per Prop geschaltet) → 0 Duplikate, nichts auf Member-Ebene, Prototype + Usage-Examples intakt. |
-| Candidate fix | **No-Go:** ein Element an der Instanz ausblenden und einen Ersatz danebenkleben, um eine Variation vorzutäuschen. Braucht dasselbe Element je Kontext/Zustand/Richtung eine andere Ausprägung → als **Varianten-Achse auf der Component** modellieren (eine Ausprägung pro Variante, per Property geschaltet); der Consumer/das Parent-Set stellt sie per Prop ein. Varianten aus den bereits gebauten Ausprägungen klonen, nicht Original verstecken + ersetzen. *(Löst den verworfenen B36-Member-Arrow-Ansatz ab.)* |
-| Status | offen (vorrangig). |
-
-*(Erledigte A-Findings s. **### Erledigt**.)*
+**Keine offenen A-Findings** — erledigte s. **### Erledigt**.
 
 ### B — self-derived, result held (codify · deferred)
 
