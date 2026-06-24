@@ -61,9 +61,9 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 ## Offene Punkte
 
 1. **Skill-Findings** (Format + Triage s. **## Skill-Findings**; Formulierungs-Regel + „nie mid-run
-   editiert" s. Blockquote dort). **Offen: A9 (Positionierung SIDE×ALIGN — am Popover 06-24 gebaut, Zwei-Stufen-Anker) + A10 (Variation-No-Go) + A11 (/figma-verify Section-Spill bis Leaves rekursieren, Popover-A9-Anchor) — alle vorrangig; B zurückgestellt (inkl. B41)** — selbst hergeleitet bzw. Defekt gefunden, Ergebnis
-   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). Alle **erledigten** Findings (A-Strang
-   06-22, Slider, A2/A4–A8, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
+   editiert" s. Blockquote dort). **Offen: nur noch A10 (Variation-No-Go) — vorrangig; B zurückgestellt (inkl. B41)** — selbst hergeleitet, Ergebnis
+   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). **A9 + A11 06-24 kodifiziert** (s. **### Erledigt**; inkl. A9-Containment-Bullet — Option c eingelöst). Alle **erledigten** Findings (A-Strang
+   06-22, Slider, A2/A4–A8, A9, A11, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
    260 Tests). Geometrie-Primitive wie Switch,
@@ -155,21 +155,24 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   Sibling-`in-data-[slot]:`-Overrides grep'en) · **B32** /figma-build-rules §Composites (align-Achse: Trigger
   bewegen, nicht Panel) · **B33** ebd. §Mechanism (swappable Trigger → Reaction am Member-Frame, HUG-Slot) ·
   **B35** ebd. §Slots (SLOT auf kombiniertes Set retrofitten). Rest des Batches verworfen.
+- **A11 (2026-06-24)** in /figma-verify §3 eingearbeitet: Spill-Check für **ABSOLUTE-Overlay-Nachfahren** —
+  bis zur sichtbaren Leaf rekursieren + deren `absoluteBoundingBox` gegen **jeden** umschließenden Container
+  (eigene Component/Set-Frame **und** Section) testen, FLAG wenn sie *irgendeinen* überschreitet (nur den
+  äußersten zu prüfen liest CLEAN, während sie eine innere Frame kreuzt); **nie** `absoluteRenderBounds`
+  (clippt unter `clipsContent` → falsches PASS).
+- **A9 (2026-06-24)** in /figma-build-rules §Composites kodifiziert: „Anchored overlay" vom alten
+  Fixed-Member/Trigger-bewegen-Modell auf **HUG-Member + Constraint-Positionierung** umgeschrieben — SIDE
+  pinnt die Senkrechte (top→vert MIN · bottom→MAX · left→horiz MIN · right→MAX), ALIGN die Parallele
+  (start/center/end→MIN/CENTER/MAX), `CENTER ⟺ align=center`; **Zwei-Stufen-Anker** (Panel Position trackt
+  die Kante / Panel Content invertierte Seitenachse → wächst weg) als eigener Bullet, weil constraints am
+  ABSOLUTE-Kind BEIDE Richtungen (Tracking + Selbst-Wachstum) steuern und je Seite die Gegenkante brauchen.
+  **Containment-Bullet (Set-Padding) ebenfalls kodifiziert** (§Composites Layer 3, „Containing the overlay
+  variant set" — Set selbst padden, nicht äußerer Wrapper; bei fixed-axis-Set die Achse um dasselbe
+  Padding mitwachsen, damit das Grid nicht umbricht). *(A10 weiter offen.)*
 
 ### A — gap caused a defect (priority)
 
 #### /figma-build-rules
-
-**A9 · §Composites (Anchored overlay) — Positionierung = SIDE × ALIGN; Cross-Achse folgt align (`CENTER` ⟺ align=center), nie hardcoden** *(Tooltip-Root-Mirror)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | Die fehlende/zu enge Positionierungs-Regel führte zu sichtbaren Defekten, die der User fand: zu großer Gap bei kleinerem Trigger + Panel über dem Trigger; Center war fälschlich fix verdrahtet statt = `align=center`. → Leitplanke, vorrangig. |
-| Gap | §Composites „Anchored overlay" gibt kein Per-Seiten-Anker-Rezept fürs 4-Seiten-Set UND bäckt CENTER in die Cross-Achse — nur korrekt ohne align-Achse. Mit start/center/end muss die Cross-Achse über align parametrisiert werden. |
-| Verified | Tooltip = nur `align=center` → Cross-Achse CENTER (der eine Slice). Popover = state × side × align (start/center/end, 24 Member) → Cross-Achse variiert; center ist 1 von 3, kein Konstant. |
-| Candidate fix | Anker = dünnes `Panel Position` (NONE, ABSOLUTE, `fills=[]`, `clipsContent=false`, w≈0×Trigger-Höhe, an der Trigger-Kante) + `Panel Content`-Group; Footprint bleibt = Trigger. Position aus ZWEI orthogonalen Achsen: **SIDE** (welche Trigger-Kante) → senkrechte Achse, pinnt ans Edge für konstanten Gap bei Resize — top→(vert)`MIN` · bottom→`MAX` · left→(horiz)`MIN` · right→`MAX`. **ALIGN** (wo entlang der Kante) → parallele Achse — start→`MIN` · center→`CENTER` · end→`MAX`. Zusammengesetzt `{horizontal, vertical}`: top/bottom `vertical=side, horizontal=align`; left/right `horizontal=side, vertical=align`. **`CENTER` ⟺ `align=center`** (gleiche Regel wie Popover) — nie unabhängig von align hardcoden. Caveat (Panel ≫ Trigger): parallele Constraint kann überlaufen → Panel am Inset fix, Trigger bewegen für start/center/end (s. erledigtes B32). HUG-Content wächst das Panel in AL-Richtung (top/left → langer Text Richtung Trigger; pfeillos okay, sonst bottom/right-Sub-Anker). |
-| Refinement (Popover 06-24) | **Beim Bau am Popover bestätigt + präzisiert:** Figma-constraints steuern an einem ABSOLUTE-Kind BEIDE Resize-Richtungen — Parent-Resize-Tracking UND den Selbst-Wachstums-Anker (empirisch: `vert=MAX`→Boden fix, wächst hoch; `vert=MIN`→Top fix, wächst runter). Folge: **ein** Constraint kann Tracking (ferne Kante) und Grow-Away (nahe Kante) NICHT zugleich → der „Sub-Anker" ist **nicht optional, sondern Pflicht**, sobald „Content wächst vom Trigger weg" (Krit. 3) gefordert ist. Also ZWEI Stufen: **Panel Position** (FIXED, `fills[]`, ABSOLUTE) trägt SIDE×ALIGN-Tracking; **Panel Content** (ABSOLUTE-Kind davon) trägt GROW-AWAY = **Seitenachse INVERTIERT** (bottom→`MIN` · top→`MAX` · left→`MAX` · right→`MIN`), Align-Achse = align. Volle Tabellen + Belege: `agent-runs/component-port/2026-06-24-popover-a9-anchor/notes.md`. |
-| Status | **Muster am Popover-Set `4402:2589` gebaut + verifiziert (06-24, alle 24 Varianten: Trigger-Resize + Content-Wachstum → Gap 8, 0 Überlapp; figma-verify CLEAN).** Skill-Kodifizierung (`/figma-build-rules`) noch offen (vorrangig) — beim Einarbeiten das Refinement oben mit aufnehmen (Zwei-Stufen als Default, nicht Caveat). |
 
 **A10 · §Mechanism — Variation NIE durch „Element an der Instanz ausblenden + Ersatz drankleben" faken → als Varianten-Achse anlegen (No-Go)** *(Tooltip-Root-Mirror)*
 
@@ -180,18 +183,6 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Verified | Konkret hier: der Per-Seiten-Arrow war im Content gebacken-aber-`hidden` + pro Member ein extra Arrow drangeklebt (`showArrow`-Boolean). Ersetzt durch eine `side`-Varianten-Achse auf der Content-Component (eine Ausprägung pro Variante, per Prop geschaltet) → 0 Duplikate, nichts auf Member-Ebene, Prototype + Usage-Examples intakt. |
 | Candidate fix | **No-Go:** ein Element an der Instanz ausblenden und einen Ersatz danebenkleben, um eine Variation vorzutäuschen. Braucht dasselbe Element je Kontext/Zustand/Richtung eine andere Ausprägung → als **Varianten-Achse auf der Component** modellieren (eine Ausprägung pro Variante, per Property geschaltet); der Consumer/das Parent-Set stellt sie per Prop ein. Varianten aus den bereits gebauten Ausprägungen klonen, nicht Original verstecken + ersetzen. *(Löst den verworfenen B36-Member-Arrow-Ansatz ab.)* |
 | Status | offen (vorrangig). |
-
-#### /figma-verify
-
-**A11 · §3 Section/Wrapper-Spill — bis zu den sichtbaren LEAVES rekursieren + `absoluteBoundingBox` (nicht nur Direktkinder, nicht `absoluteRenderBounds`)** *(Popover-A9-Anchor)*
-
-| Feld | Inhalt |
-|---|---|
-| Why A | Der Section-Spill-Check meldete `sectionSpill=[]`, obwohl die Rand-Panels sichtbar über die Section-Grenze auf die Canvas ragten — **falsches PASS, der User fand den Defekt** (galt schon in den früheren Popover-Runs). → Leitplanke, vorrangig. |
-| Gap | §3 prüft „Kind außerhalb der gefüllten Section-Fläche = Spill". Praktisch wurde nur über die **Section-Direktkinder** (Headline + Build-Frame) per `absoluteBoundingBox` geprüft → deren Nominal-Box liegt in der Section → PASS. Der Überstand kommt aber von **tief genesteten ABSOLUTE-Overlay-Leaves** (~5 Ebenen tiefer: section→build→set→member→Panel Position→PopoverContent), die außerhalb der Vorfahren floaten. Zwei Fallen: (a) `absoluteBoundingBox` eines Mid-Tree-Frames enthält den Überstand eines tiefen ABSOLUTE-Nachfahren NICHT; (b) `absoluteRenderBounds` ist hier unbrauchbar — das COMPONENT_SET hat `clipsContent=true`, also kommen die Panel-Render-Bounds **auf die Set-Box geclippt** zurück (≈Set-Breite), obwohl sie sichtbar darüber hinaus rendern → zweites falsches PASS. |
-| Verified | Reale Spill 152px je Seite (Panel-Union per `absoluteBoundingBox` 11465..13487 vs Section 11617..13335). Erst die Rekursion bis zu den sichtbaren `PopoverContent`-Leaves + `absoluteBoundingBox`-Union fand ihn. |
-| Candidate fix | §3-Spill-Regel: bis zu den **sichtbaren Leaf-Nodes rekursieren** (nicht beim Wrapper-Direktkind stoppen) und die **`absoluteBoundingBox`** unionen — NIE `absoluteRenderBounds` (clippt unter `clipsContent` eines Vorfahren → blind für genestete ABSOLUTE-Overlays: Popover/Tooltip/Dropdown-Panels). Union der sichtbaren Overlay-Leaves gegen die Section-Box testen; ragt sie raus → Spill-FLAG. |
-| Status | offen (vorrangig). Beim Popover-A9-Anchor-Run direkt gefixt (Section verbreitert, Content zentriert) — Skill-Kodifizierung noch offen. Detail: `agent-runs/component-port/2026-06-24-popover-a9-anchor/notes.md`. |
 
 *(Erledigte A-Findings s. **### Erledigt**.)*
 
