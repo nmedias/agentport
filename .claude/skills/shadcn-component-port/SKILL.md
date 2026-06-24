@@ -149,7 +149,7 @@ the `Shadcn Components` page; reuse already-built DS components as nested **inst
 copy). Multi-part composite → the 3-layer build + Slot≠Slot (`/figma-build-rules §Composites`) + the
 port-process delta in `references/composites.md`.
 
-### T5 — Verify
+### T5 — Figma Verify
 
 Run the **controls-live → clean → faithful** triad per **`/figma-build-rules §Verify`**: drive every
 control (incl. each slot) and read it back; `/figma-verify <sectionId>` (the whole composition, not just
