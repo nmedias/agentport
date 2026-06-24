@@ -225,7 +225,10 @@ Three checks on the built set, in order:
 2. **Clean** — run the caller's structural pre-handoff check on the **whole built composition** (the
    Section/wrapper with its set + examples), not just the variant set — else spill/overlap of the
    freely-placed Section children goes unseen. Vectors not text, no clipping/overlap, padding symmetry.
-   Must come back CLEAN.
+   Must come back CLEAN. **A green structural check is necessary, not sufficient:** confirm the *same*
+   invariant in the rendered composition. If render and check disagree, the **render wins** — the check is
+   scoped wrong (e.g. it tested only the outer wrapper while content crosses an inner frame; the boundary a
+   consumer reads is the inner one), so fix the check's scope and re-run rather than declaring CLEAN.
 3. **Reproduces the usages (permanent)** — build every usage story as a **permanent** instance in the
    Section (§Usage-examples), each from the component's controls alone, then compare token/values/pixels
    (zoom, raw px). A standing deliverable, not throwaway scaffolding. A story you can't rebuild from
@@ -250,16 +253,34 @@ column-stacking examples.
    rebuild (token edits propagate).
 3. **Flexible composition component** — the composite as **one** recompose-able component
    (Props/Swap/Slots per §Mechanism); whole-level variants ride on it. Slot config per §Slots.
-   - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the
-     open state as a top-level composition — a trigger instance + the overlay content in an `ABSOLUTE` /
-     `layoutPositioning` child anchored to the trigger edge, not just separate trigger/content sets.
-     `ABSOLUTE` needs an auto-layout parent (`layoutMode≠NONE`) — member = fixed-size AL frame: trigger
-     centred flow child, content the `ABSOLUTE` child. Align axis with panel ≫ trigger: keep the panel
-     fixed at the inset, move the **trigger** to encode start/center/end (alignment is relative; fits a
-     panel-sized member).
+   - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the open
+     state as a top-level composition — trigger a flow child, overlay an `ABSOLUTE`/`layoutPositioning` child
+     (needs an auto-layout parent, `layoutMode≠NONE`). **Member HUGs the trigger** (footprint = trigger) so
+     its bounds track a resized/swapped trigger. Position the panel from **two orthogonal constraint axes,
+     never hardcoded offsets**: **SIDE** (which trigger edge) pins the perpendicular axis → constant gap on
+     resize — `top→vert MIN · bottom→vert MAX · left→horiz MIN · right→horiz MAX`; **ALIGN** (where along the
+     edge) sets the parallel axis — `start→MIN · center→CENTER · end→MAX`. **`CENTER` ⟺ `align=center`** —
+     never hardcode the cross axis independent of align.
+   - **Two-stage anchor** (when the panel must *also* grow away from the trigger as HUG content grows):
+     Figma constraints govern an `ABSOLUTE` child in **both** senses — parent-resize tracking AND its own
+     HUG-growth anchor — and each side needs the **opposite** edge for the two, so one element can't serve
+     both. Split: (1) **Panel Position** — invisible (`fills=[]`) FIXED anchor, `ABSOLUTE`, carrying the
+     SIDE×ALIGN *tracking* constraints above (glues to the trigger edge on resize); (2) **Panel Content** —
+     `ABSOLUTE` child of Panel Position, side-axis constraint **inverted** (`bottom→MIN · top→MAX · left→MAX
+     · right→MIN`), align axis = align → HUG-growth extends *away* from the trigger. Caveat (panel ≫ trigger,
+     the parallel constraint can overflow): pin the panel at the inset and move the **trigger** to encode
+     start/center/end instead (alignment is relative).
    - **Interactive (triggered) overlay** (popover/dropdown/select/tooltip-w/-trigger) — model: open/closed
      state axis · content as anchored `ABSOLUTE` child · trigger as Slot/instance-swap (`asChild`) ·
      open/dismiss prototype. A triggerless panel stays static.
+   - **Containing the overlay variant set (display).** With HUG members the anchored content floats
+     *outside* each member — hence outside the set's auto-sized frame — so it crosses every outer wrapper.
+     The frame that must enclose the panels is **the set itself, via padding**; widening an outer container
+     (wrapper/section) only relocates where they cross, never contains them. Measure each visible panel's
+     overflow beyond the set per edge and pad the set by `overflow + margin` (side-axis overflow = panel
+     extent along that axis + `sideOffset`). For a **fixed primary-axis** set (GRID / fixed AL), grow that
+     axis by the same total padding so the content area stays constant → the grid doesn't squeeze or
+     re-flow. (Verify per /figma-verify §3: each visible-leaf `absoluteBoundingBox` inside the set frame.)
 4. **Usage-Examples group** (§Usage-examples) — here it is build **layer 4**, reproduction running through
    slots / swaps / nested instances (= the Done-Test proof). Non-trivial: dropping an instance **into a
    slot** counts as a control; a hand-placed element beside/without a slot does not.

@@ -68,6 +68,13 @@ If no node was given, ask for it.
      nested instance, un-editable without detach.
    - **Section/wrapper** is a container too — a child outside its **filled** area (on the bare canvas) is a
      spill FLAG, not CLEAN.
+   - **Absolute overlay descendant** (`layoutPositioning=ABSOLUTE` floating outside its parent — anchored
+     panels/menus) escapes a direct-children walk and is absent from any ancestor's `absoluteBoundingBox`.
+     **Recurse to the visible leaf** and test its **`absoluteBoundingBox`** against *every* enclosing
+     container it must stay inside — its own component/set frame **and** the section — flag if it exceeds
+     **any** (checking only the outermost reads CLEAN while it still crosses an inner frame). **Never
+     `absoluteRenderBounds`** here: it clips to the nearest `clipsContent` ancestor, so an overflowing
+     panel reads in-bounds (false PASS).
 
 4. **Walk every NON-AUTO-LAYOUT container.** For each pair of direct children
    with visible fills/strokes, test bbox intersection. Flag if any two children
