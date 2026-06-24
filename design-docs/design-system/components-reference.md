@@ -974,14 +974,14 @@ status_note: >
 
 - name: Popover
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  figma_synced: true                            # Erstport 2026-06-22; Figma-Rebuild 06-23; A9-Anchor-Umbau 2026-06-24 (Figma-only)
   source: { registry: "@shadcn", item: popover, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/popover/
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger, PopoverContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
   figma:
-    section: { name: "Popover", id: "4365:2253" }   # 06-23: 321×203→1312×1133 (A5-Fix) → 1718×2528 (Follow-up: interaktives Popover, Member HUG-Trigger, gespaceter Grid)
+    section: { name: "Popover", id: "4365:2253" }   # 06-23: 321×203→1312×1133 (A5-Fix) → 1718×2528 → 06-24 A9-Spill-Fix → 2278×2585. ECHTER Fix: der GRID-Set selbst bekommt Padding (s. root.structure), sodass seine EIGENE Frame die floatenden Overlay-Panels einschließt → kein Member/Set/Build/Section-Rand wird mehr von Panels gekreuzt. Build-Frame zentriert (counterAxisAlignItems CENTER, padding 16), Section umschließt mit 80px-Inset; Tooltip-Section nach rechts genudged für Platz. Spill-Check MUSS bis zu den sichtbaren PopoverContent-LEAVES rekursieren + absoluteBoundingBox nehmen (NICHT nur Direktkinder, NICHT absoluteRenderBounds — clippt unter set.clipsContent → falsches PASS)
     build_frame: { name: "Build", id: "4390:2364" } # NEU 06-23: weißes vertikales AL-Frame (HUG, itemSpacing space-2xl, padding space-xl) IN der Section — hält masters + PopoverRoot + Usage Examples (Section ≠ AL-Container → A5-Fix)
     content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, KEIN State-/Variant-Set (data-[side]=Motion, kein DS-State)
     slot: { content: "content#4365:0" }                    # die offene Region; Default = genestete PopoverHeader-Instanz
@@ -990,14 +990,14 @@ status_note: >
     vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", muted-ink: "3037:13", corner-lg: "3073:4", space-lg: "3070:8", space-md: "3070:6", space-2xs: "3070:3" }
     effect: { Elevation: "S:92c2d7…" }
     axis: { }   # Content-Fläche: KEINE Achse (erhabene Fläche, kein interaktiver State-Raum, Motion ≠ DS-State)
-    root:                                          # 06-23 Follow-up: Popover (umbenannt von PopoverRoot) = VOLLES interaktives Overlay (war static align-only 4393:2391, ENTFERNT)
+    root:                                          # 06-23 Follow-up: Popover (umbenannt von PopoverRoot) = VOLLES interaktives Overlay; 06-24: A9-ZWEI-STUFEN-ANKER (constraint-getrieben, resize-fest)
       set: { name: "Popover", id: "4402:2589" }    # Set-Name "Popover" (matcht Code-Root-Export); Member HUGgen den Trigger (50×32)
       axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 Member; defaults open/bottom/center
-      props: "trigger#4408:0 (SLOT, HUG, default DS-Button — spiegelt asChild; Kind bestimmt Slot-W/H → Member huggt den Trigger; Reaction am Member-Frame → Slot-Swap stört Prototype nicht). Caveat: absolute Content-Offsets für Default-Button-Größe gerechnet — anders großer Swap-Trigger bräuchte Offset-Anpassung (Figma-Static-Variant-Limit)"
-      structure: "je Member = Auto-Layout HUG → Footprint = nur Trigger (50×32), clipsContent=false; Trigger = einziges Flow-Kind; PopoverContent = layoutPositioning=ABSOLUTE (floatet AUSSERHALB der Trigger-Bounds — absolute Kinder zählen nicht zur Hug-Größe), per side+align verankert (neg. Offsets für top/left), sideOffset 8, KEIN Reflow; closed = content visible=false (nur Trigger). Set-Grid gespaced (itemSpacing 640 / counterAxis 180) → 0 Panel-Kollisionen"
+      props: "trigger#4408:0 (SLOT, HUG, default DS-Button — spiegelt asChild; Kind bestimmt Slot-W/H → Member huggt den Trigger; Reaction am Member-Frame → Slot-Swap stört Prototype nicht)"
+      structure: "je Member = Auto-Layout HUG → Footprint = nur Trigger (50×32), clipsContent=false; Trigger = einziges Flow-Kind. ZWEI-STUFEN-ANKER (A9, 06-24): (1) Panel Position = unsichtbares (fills[]) FIXED-50×32-Auto-Layout, ABSOLUTE Kind des Members, constraints=SIDE×ALIGN-TRACKING [top→vert MIN · bottom→vert MAX · left→horiz MIN · right→horiz MAX; align start/center/end → MIN/CENTER/MAX auf der Parallel-Achse] → trackt die Trigger-Kante, wenn der (geHUGgte) Trigger die Größe ändert → konstanter Gap, kein Überlapp. (2) PopoverContent = ABSOLUTE Kind der Panel Position, constraints=GROW-AWAY [Seitenachse INVERTIERT: bottom→MIN · top→MAX · left→MAX · right→MIN; Parallel-Achse = align] → HUG-Wachstum geht vom Trigger WEG (kein Überlapp). sideOffset 8, KEIN Reflow; closed = content visible=false. Set-Grid (layoutMode GRID) → 0 Panel-Kollisionen. (Grund für 2 Stufen: Figma-constraints steuern BEIDE — Parent-Resize-Tracking UND Selbst-Wachstums-Anker eines ABSOLUTE-Kinds — und die beiden brauchen je Seite die GEGENÜBERLIEGENDE Kante → eine Stufe kann nicht beides; empirisch belegt.) PANEL-CONTAINMENT (06-24): da Member den Trigger HUGgen, floaten die Panels per Design außerhalb der Member → ohne Gegenmaßnahme überstehen sie Set/Build/Section. Fix: der GRID-Set bekommt Padding ≈ Panel-Überstand+Marge (padL/R 328, padT 105, padB 48; Überstand = Panelbreite 288 + Gap 8 = 296 seitlich, 73 oben) UND die Set-Breite wächst um denselben Betrag (→ 2086), damit die Content-Area (1430) konstant bleibt und das GRID NICHT umbricht → die Set-Frame umschließt ihre eigenen Panels (verifiziert: panelsOutsideSet=0, 0 Kollisionen)."
       prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside ist auf Variant-Membern nicht ausdrückbar"
-      members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total
-      note: "state×side×align = Figma-only interaktives Modell; Code treibt side/align via PopoverContent-Props + open/closed via Radix-Runtime → KEIN CVA, NICHT als Code-Props zurücksyncen"
+      members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total; je Member jetzt: Trigger-SLOT + Panel-Position-Anker (mit genestetem PopoverContent)
+      note: "state×side×align = Figma-only interaktives Modell; Code treibt side/align via PopoverContent-Props + open/closed via Radix-Runtime → KEIN CVA, NICHT als Code-Props zurücksyncen. A9-Anker = Figma-Modell-Treue (Radix-Popper macht das gleiche zur Laufzeit) → KEINE Code-Änderung. Verifiziert 06-24: Trigger-Resize (50×32→110×60) + Content-Wachstum (288×65→364×235) → Gap bleibt 8, 0 Überlapp, alle 24 Varianten."
   skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22; Figma-Rebuild 2026-06-23)
   notes: >
     Radix Popover (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-Konvention,

@@ -61,7 +61,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 ## Offene Punkte
 
 1. **Skill-Findings** (Format + Triage s. **## Skill-Findings**; Formulierungs-Regel + „nie mid-run
-   editiert" s. Blockquote dort). **Offen: nur B (27, zurückgestellt)** — selbst hergeleitet, Ergebnis
+   editiert" s. Blockquote dort). **Offen: A9 (Positionierung SIDE×ALIGN — am Popover 06-24 gebaut, Zwei-Stufen-Anker) + A10 (Variation-No-Go) + A11 (/figma-verify Section-Spill bis Leaves rekursieren, Popover-A9-Anchor) — alle vorrangig; B zurückgestellt (inkl. B41)** — selbst hergeleitet bzw. Defekt gefunden, Ergebnis
    stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). Alle **erledigten** Findings (A-Strang
    06-22, Slider, A2/A4–A8, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
@@ -158,7 +158,42 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### A — gap caused a defect (priority)
 
-**Keine offenen A-Findings** — erledigte s. **### Erledigt**.
+#### /figma-build-rules
+
+**A9 · §Composites (Anchored overlay) — Positionierung = SIDE × ALIGN; Cross-Achse folgt align (`CENTER` ⟺ align=center), nie hardcoden** *(Tooltip-Root-Mirror)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Die fehlende/zu enge Positionierungs-Regel führte zu sichtbaren Defekten, die der User fand: zu großer Gap bei kleinerem Trigger + Panel über dem Trigger; Center war fälschlich fix verdrahtet statt = `align=center`. → Leitplanke, vorrangig. |
+| Gap | §Composites „Anchored overlay" gibt kein Per-Seiten-Anker-Rezept fürs 4-Seiten-Set UND bäckt CENTER in die Cross-Achse — nur korrekt ohne align-Achse. Mit start/center/end muss die Cross-Achse über align parametrisiert werden. |
+| Verified | Tooltip = nur `align=center` → Cross-Achse CENTER (der eine Slice). Popover = state × side × align (start/center/end, 24 Member) → Cross-Achse variiert; center ist 1 von 3, kein Konstant. |
+| Candidate fix | Anker = dünnes `Panel Position` (NONE, ABSOLUTE, `fills=[]`, `clipsContent=false`, w≈0×Trigger-Höhe, an der Trigger-Kante) + `Panel Content`-Group; Footprint bleibt = Trigger. Position aus ZWEI orthogonalen Achsen: **SIDE** (welche Trigger-Kante) → senkrechte Achse, pinnt ans Edge für konstanten Gap bei Resize — top→(vert)`MIN` · bottom→`MAX` · left→(horiz)`MIN` · right→`MAX`. **ALIGN** (wo entlang der Kante) → parallele Achse — start→`MIN` · center→`CENTER` · end→`MAX`. Zusammengesetzt `{horizontal, vertical}`: top/bottom `vertical=side, horizontal=align`; left/right `horizontal=side, vertical=align`. **`CENTER` ⟺ `align=center`** (gleiche Regel wie Popover) — nie unabhängig von align hardcoden. Caveat (Panel ≫ Trigger): parallele Constraint kann überlaufen → Panel am Inset fix, Trigger bewegen für start/center/end (s. erledigtes B32). HUG-Content wächst das Panel in AL-Richtung (top/left → langer Text Richtung Trigger; pfeillos okay, sonst bottom/right-Sub-Anker). |
+| Refinement (Popover 06-24) | **Beim Bau am Popover bestätigt + präzisiert:** Figma-constraints steuern an einem ABSOLUTE-Kind BEIDE Resize-Richtungen — Parent-Resize-Tracking UND den Selbst-Wachstums-Anker (empirisch: `vert=MAX`→Boden fix, wächst hoch; `vert=MIN`→Top fix, wächst runter). Folge: **ein** Constraint kann Tracking (ferne Kante) und Grow-Away (nahe Kante) NICHT zugleich → der „Sub-Anker" ist **nicht optional, sondern Pflicht**, sobald „Content wächst vom Trigger weg" (Krit. 3) gefordert ist. Also ZWEI Stufen: **Panel Position** (FIXED, `fills[]`, ABSOLUTE) trägt SIDE×ALIGN-Tracking; **Panel Content** (ABSOLUTE-Kind davon) trägt GROW-AWAY = **Seitenachse INVERTIERT** (bottom→`MIN` · top→`MAX` · left→`MAX` · right→`MIN`), Align-Achse = align. Volle Tabellen + Belege: `agent-runs/component-port/2026-06-24-popover-a9-anchor/notes.md`. |
+| Status | **Muster am Popover-Set `4402:2589` gebaut + verifiziert (06-24, alle 24 Varianten: Trigger-Resize + Content-Wachstum → Gap 8, 0 Überlapp; figma-verify CLEAN).** Skill-Kodifizierung (`/figma-build-rules`) noch offen (vorrangig) — beim Einarbeiten das Refinement oben mit aufnehmen (Zwei-Stufen als Default, nicht Caveat). |
+
+**A10 · §Mechanism — Variation NIE durch „Element an der Instanz ausblenden + Ersatz drankleben" faken → als Varianten-Achse anlegen (No-Go)** *(Tooltip-Root-Mirror)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User stufte den bestehenden Bau als **No-Go** ein: ein Element war an der Instanz ausgeblendet + ein neues drangeklebt, statt Varianten anzulegen. → Leitplanke, vorrangig. |
+| Gap | Die Build-Skills benennen das Anti-Muster nicht: braucht ein Element je Kontext/Zustand/Richtung eine andere Ausprägung, wird es gern **an der Instanz ausgeblendet** und ein **neues, ad-hoc Element danebengeklebt** — statt die Ausprägung als **Variante** zu modellieren. Folge: das Element existiert doppelt (verstecktes Original + geklebtes Duplikat), verstreut über Instanzen/Member, nichts per Prop gesteuert, skaliert nicht, Overrides driften. |
+| Verified | Konkret hier: der Per-Seiten-Arrow war im Content gebacken-aber-`hidden` + pro Member ein extra Arrow drangeklebt (`showArrow`-Boolean). Ersetzt durch eine `side`-Varianten-Achse auf der Content-Component (eine Ausprägung pro Variante, per Prop geschaltet) → 0 Duplikate, nichts auf Member-Ebene, Prototype + Usage-Examples intakt. |
+| Candidate fix | **No-Go:** ein Element an der Instanz ausblenden und einen Ersatz danebenkleben, um eine Variation vorzutäuschen. Braucht dasselbe Element je Kontext/Zustand/Richtung eine andere Ausprägung → als **Varianten-Achse auf der Component** modellieren (eine Ausprägung pro Variante, per Property geschaltet); der Consumer/das Parent-Set stellt sie per Prop ein. Varianten aus den bereits gebauten Ausprägungen klonen, nicht Original verstecken + ersetzen. *(Löst den verworfenen B36-Member-Arrow-Ansatz ab.)* |
+| Status | offen (vorrangig). |
+
+#### /figma-verify
+
+**A11 · §3 Section/Wrapper-Spill — bis zu den sichtbaren LEAVES rekursieren + `absoluteBoundingBox` (nicht nur Direktkinder, nicht `absoluteRenderBounds`)** *(Popover-A9-Anchor)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Der Section-Spill-Check meldete `sectionSpill=[]`, obwohl die Rand-Panels sichtbar über die Section-Grenze auf die Canvas ragten — **falsches PASS, der User fand den Defekt** (galt schon in den früheren Popover-Runs). → Leitplanke, vorrangig. |
+| Gap | §3 prüft „Kind außerhalb der gefüllten Section-Fläche = Spill". Praktisch wurde nur über die **Section-Direktkinder** (Headline + Build-Frame) per `absoluteBoundingBox` geprüft → deren Nominal-Box liegt in der Section → PASS. Der Überstand kommt aber von **tief genesteten ABSOLUTE-Overlay-Leaves** (~5 Ebenen tiefer: section→build→set→member→Panel Position→PopoverContent), die außerhalb der Vorfahren floaten. Zwei Fallen: (a) `absoluteBoundingBox` eines Mid-Tree-Frames enthält den Überstand eines tiefen ABSOLUTE-Nachfahren NICHT; (b) `absoluteRenderBounds` ist hier unbrauchbar — das COMPONENT_SET hat `clipsContent=true`, also kommen die Panel-Render-Bounds **auf die Set-Box geclippt** zurück (≈Set-Breite), obwohl sie sichtbar darüber hinaus rendern → zweites falsches PASS. |
+| Verified | Reale Spill 152px je Seite (Panel-Union per `absoluteBoundingBox` 11465..13487 vs Section 11617..13335). Erst die Rekursion bis zu den sichtbaren `PopoverContent`-Leaves + `absoluteBoundingBox`-Union fand ihn. |
+| Candidate fix | §3-Spill-Regel: bis zu den **sichtbaren Leaf-Nodes rekursieren** (nicht beim Wrapper-Direktkind stoppen) und die **`absoluteBoundingBox`** unionen — NIE `absoluteRenderBounds` (clippt unter `clipsContent` eines Vorfahren → blind für genestete ABSOLUTE-Overlays: Popover/Tooltip/Dropdown-Panels). Union der sichtbaren Overlay-Leaves gegen die Section-Box testen; ragt sie raus → Spill-FLAG. |
+| Status | offen (vorrangig). Beim Popover-A9-Anchor-Run direkt gefixt (Section verbreitert, Content zentriert) — Skill-Kodifizierung noch offen. Detail: `agent-runs/component-port/2026-06-24-popover-a9-anchor/notes.md`. |
+
+*(Erledigte A-Findings s. **### Erledigt**.)*
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -242,6 +277,16 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Gap | §Mechanism mappt „variabel-viele Kinder → Slot" und „conditional layout → Variant-Achse", aber nicht den Fall, dass die *Anzahl* eines daten-getriebenen Sub-Elements die **Geometrie eines Siblings** ändert (Range-Fill spannt ZWISCHEN den Handles → ein 2. Handle re-ankert den Fill). Kein Boolean (Figma kann eine Property-Bindung nicht negieren → der Single-Fill versteckt sich nicht, wenn das 2. Element erscheint), kein Slot (Fill-Geometrie gekoppelt, kein freier Inhalt). |
 | Verified | Single = Start→Handle, Range = Handle1→Handle2; ein Boolean auf `handle2.visible` lässt den Start→Handle1-Fill fälschlich stehen (keine inverse Bindung). |
 | Candidate fix | Notiz/Zeile: ändert die *Anzahl* eines daten-getriebenen Elements die Geometrie eines Siblings (Range-Fill, segmentierter Track) → als **Variant-Achse** modellieren (`thumbs: single\|range`), nicht Boolean (keine Property-Negation) noch Slot (gekoppelte Geometrie). **Figma-only Fork**, wenn der Code die Anzahl aus Daten ableitet (z. B. `value.length`) — nicht als Prop zurücksyncen. Multipliziert die Matrix wie die conditional-layout-Zeile. |
+| Status | zurückgestellt. |
+
+**B41 · Red flags (Plugin-API) — leere GROUP löst sich auf · `setCurrentPageAsync`-Fehler · `combineAsVariants` braucht eine Page** *(Tooltip-Root-Mirror)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | Je 1 atomarer Fehler, drumherum geroutet, Ergebnis korrekt. |
+| Gap | Drei Plugin-API-Fallen fehlen in der Red-flags-Tabelle. |
+| Verified | (a) alle Kinder aus einer GROUP raus → Figma löst die GROUP automatisch auf → spätere Referenz wirft „node does not exist". (b) `setCurrentPageAsync(page)` warf `Internal Figma error: Unknown node type … getPublicNodeType` auf einer schon geladenen/aktuellen Page; ohne Page-Switch lief's. (c) `combineAsVariants` warf „Grouped nodes must be in the same page as the parent", weil die Klone an `figma.currentPage` (≠ Build-Page) hingen. |
+| Candidate fix | Red-flags-Zeilen: GROUP nach dem Leeren nicht mehr referenzieren (Figma löst leere GROUPs auto-auf). · Ist die Ziel-Page schon current/geladen, `setCurrentPageAsync` weglassen (redundanter Switch kann intern `getPublicNodeType` werfen). · `combineAsVariants` braucht ALLE Components + Parent auf EINER Page → Klone an die Parent-Page hängen (Ancestor-Walk zur PAGE + `page.appendChild`), nie an `figma.currentPage`. |
 | Status | zurückgestellt. |
 
 #### composites.md
