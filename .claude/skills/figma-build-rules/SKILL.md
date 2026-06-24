@@ -285,7 +285,7 @@ column-stacking examples.
    slots / swaps / nested instances (= the Done-Test proof). Non-trivial: dropping an instance **into a
    slot** counts as a control; a hand-placed element beside/without a slot does not.
 
-## Red flags (Plugin-API)
+## Red flags
 
 | Trap | Reality |
 |---|---|
@@ -294,3 +294,4 @@ column-stacking examples.
 | Find a swap/lookup target by name **substring** over members | Member names embed `prop=value` → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot. |
 | Read `.height`/size right after toggling a child's `visible` | Plugin size reads don't reflect the visibility-driven auto-layout reflow — confirm collapse via screenshot, not size reads. |
 | Clone a slot-owning member and re-`createSlot()` | The clone keeps the SLOT but clears its `slotContentId` (the prop lives on the set) → re-bind the reference; recreating spawns a zero-referenced duplicate prop (§Slots). |
+| **Hide an element on the instance + glue a replacement beside it** to fake a per-context variation | Ends up doubled (hidden original + duplicate), prop-less, scattered across members → doesn't scale, overrides drift. Model the differing form as a **variant axis** (one per variant, prop-switched), cloned from the built forms. |
