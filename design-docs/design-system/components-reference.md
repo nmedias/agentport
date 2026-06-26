@@ -1088,6 +1088,52 @@ status_note: >
     Bewusst NICHT im Tooltip-Port editiert (Scope = ein Component) → als Open Item geflaggt; WithKbd rendert
     die Kbd as-is. (Quelle: agent-runs/component-port/2026-06-22-tooltip/notes.md + skill-feedback.md.)
 
+- name: Item
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-26 (Figma + Code zusammen gebaut); figma-verify CLEAN
+  source: { registry: "@shadcn", item: item, style: radix-nova }   # registryDependencies: separator (flache Stock-Kopie gelöscht — shadowte den DS-Folder)
+  code:
+    dir: libs/ui/src/components/ui/item/
+    exports: [Item, ItemMedia, ItemContent, ItemActions, ItemGroup, ItemSeparator, ItemTitle, ItemDescription, ItemHeader, ItemFooter, itemVariants, itemMediaVariants, ItemProps, ItemMediaProps]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/item'"
+    stories: "item.stories.tsx (UI/Item) + item-media.stories.tsx (UI/Item/ItemMedia — Per-API-Part-Page; nur Item+ItemMedia haben kuratierte Props, die 8 prop-losen Pass-throughs via Usage-Stories)"
+  figma:
+    section: { name: "Item", id: "4494:2471" }          # headline 4494:2472
+    set: { name: "Item", id: "4498:2551" }              # 9 Member (variant × size); master = outline/default 4495:2471
+    axis: { variant: [default, outline, muted], size: [default, sm, xs] }
+    props: "media#4498:0 (SLOT, default check-circle icon) · actions#4498:1 (SLOT, default chevron muted-ink) · title#4499:0 (TEXT {Title}, Label) · description#4499:10 (TEXT {Description}, Body/muted-ink)"
+    media_set: { name: "ItemMedia", id: "4500:2477", axis: { variant: [default, icon, image] } }   # 3 Member
+    examples:
+      group: "Usage Examples 4501:2471"
+      typelist: "4501:2472 — 3 muted-Instanzen, TEXT-Props treiben invoice/contract/document (explorer NavListItem)"
+      states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring + Glow effect) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, KEIN Set-Member)"
+    state_axis: "BEWUSST examples-only (NICHT als Set-Achse): hover/focus/selected-Delta ist uniform über variant×size → 18/27 Member wären redundant. Die States leben in der Usage-Examples-States-Gruppe (spiegelt die AllStates-Story). Extend zu variant×size×state (27) nur falls explizit gewünscht."
+    vars: { muted-fill: "3037:12", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", border: "3038:4", ring: "3038:6", space-xs: "3070:4", space-md: "3070:6", space-lg: "3070:8", corner-sm: "3073:2", corner-lg: "3073:4" }
+    styles: { text: "Label (S:4e034695…b266f0) + Body (S:7e1bf8f1…2911fb)", effect: "Glow (S:768ea662…1005fa7, focus)" }
+  skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props; 2026-06-26)
+  notes: >
+    10-teiliges Composite (Item/Media/Content/Title/Description/Actions/Group/Separator/Header/Footer),
+    volle Familie portiert. Generische Listenzeile → Root-Barrel-Primitiv (kein Block); Use-case =
+    explorer NavListItem. KERN-ENTSCHEIDE: (1) Selektion bleibt CALL-SITE/Block-Sache — Item ist
+    stock-treu (kein selected-Prop); der ListNavigator-Block setzt aria-current + DS-accent-Tint. Kontrast
+    zu SelectItem (selected-Axis nur, weil Radix dort intrinsischen Selected-State liefert). (2) hover
+    (`[a]:hover:bg-muted-fill`) + focus-ring sind LINK-ONLY by design — der [a]:-Selektor + ein bare-div
+    ist nicht fokussierbar → beide States nur an der asChild-Link-Form. DS-Mapping: rounded-lg→corner-lg,
+    text-sm→text-format-body (base) / text-format-label (title) / body+muted-ink (desc); 10px-Padding/Gap
+    (gap-2.5/py-2.5/px-2.5) ist OFF-GRID → auf benannte Steps gesnappt (default/sm = lg=12, xs = md=8); das
+    Haus snappt (kein 2.5/[10px] in der Lib). GEDROPPT: xs:text-xs (12px) — kein sub-14 Sans-Format (Open
+    Item). Focus-Klassen unverändert (schon DS = badge/button). DEPENDENCY-AUDIT: ui:add schrieb flache
+    separator.tsx (Stock) → shadowte den DS-Folder (file beats dir in resolution, typecheck grün auf einer
+    Lüge) → flache Kopie GELÖSCHT, Import löst auf den Barrel. FIGMA: .Item-Set = variant×size (9, die
+    echten Design-Achsen); media+actions als SLOTs (swappable content, §Mechanism), title/description als
+    TEXT-Props ({Semantic}-Defaults); .ItemMedia eigenes 3-Member-Set. State-Achse examples-only (s.
+    state_axis). figma-verify CLEAN (0 flags). STORIES: house-konform nach /storybook-rules (anfangs Badge
+    statt Composite-Muster gespiegelt → korrigiert): item-media.stories.tsx als Per-Part-Page, AllStates via
+    pseudo-states-Addon (hover/focusVisible) + Selected call-site, Cross-Links. a11y: ItemGroup role=list →
+    role=listitem an den Kindern am Call-Site (axe aria-required-children). Docgen: ItemProps (variant/size/
+    asChild) + ItemMediaProps (variant) via lokale Named-Aliase + Slot. Gate grün (300/300 inkl. Chromium+
+    axe, typecheck, lint). (Quelle: agent-runs/component-port/2026-06-26-item/notes.md.)
+
 ## Pending / Removed
 
 ```yaml
