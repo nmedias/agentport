@@ -26,6 +26,18 @@
 | Candidate fix | In references/composites.md T2.7 ergänzen: Wenn der Inhalt eines Leaf-Parts Daten/Werte sind (eine Zelle, ein Listenzeilen-Body, ein Menü-Item-Label), **per Default als open content behandeln** → Slot-vs-Swap-vs-Text fragen, NICHT auf TEXT-Prop defaulten. Eine TEXT-Prop ist nur richtig, wenn der Inhalt nachweislich text-only ist. (also: SKILL.md T2.6 Exposure-Surface.) |
 | Status | open |
 
+### .claude/skills/figma-build-rules/SKILL.md (§Usage-examples / §Composites)
+
+**6 · Done-Test-Miss — Composition backte fixes Content → variierte Beispiele hand-gebaut statt Component-Instanzen**
+
+| Field | Value |
+|---|---|
+| Why A | User fand, dass 3 von 4 Usage-Examples (Selection/Empty/Component-cells) **hand-gebaute Frames** waren, keine Table-Component-Instanzen → Rework (Composition auf content-Slot umstrukturieren + 3 Beispiele konvertieren). Die Composition backte ein **fixes** Invoice (kein content-Slot) → die variierten Beispiele waren nicht als Instanz baubar → ich habe sie als Geschwister-Frames hand-gebaut. Genau die Done-Test-Falle. |
+| Gap | §Usage-examples/§Composites sagt „composed only from controls; never hand-build". Für ein **recompose-able Container-Composite** (Table/List/Card-mit-Body), dessen Beispiele den *Content variieren*, heißt das: die Composition braucht einen **CONTENT-SLOT** (Default = ein gebackenes Demo) → jedes Beispiel ist eine **Instanz**, die den Slot füllt. Die Skill warnt nicht explizit vor der verführerischen Alternative: fixen Content in die Composition backen + die variierten Beispiele als Geschwister-Frames hand-bauen. Das besteht den flüchtigen Blick, fällt aber den Done-Test (die Beispiele nutzen die Component nicht). |
+| Verified | 3 hand-gebaute Frames → nach Umbau der Table-Composition auf einen content-Slot wurden alle 4 Beispiele echte Table-Instanzen (Slot-gefüllt, alte Frames in die Slots verschoben); 0 Regressionen, 0 geclippte Nodes. |
+| Candidate fix | In §Usage-examples (oder §Composites Build-Layer-4) ergänzen: *„Recompose-able Container-Composite (Content variiert pro Beispiel) → Composition bekommt einen CONTENT-Slot (Default = EIN gebackenes Demo). Jedes Beispiel ist eine INSTANZ, die den Slot füllt — KEIN hand-gebauter Geschwister-Frame. Fixen Content backen + variierte Beispiele hand-bauen fällt den Done-Test (Beispiele nutzen die Component nicht)."* |
+| Status | open |
+
 ## B — self-derived, result held (codify · deferred)
 
 ### .claude/skills/figma-build-rules/SKILL.md (§Slots / §Usage-examples)

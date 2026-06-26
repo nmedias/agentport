@@ -62,8 +62,17 @@ Section **Table** `4514:2597`. User chose granularity **Cell + Row + Table** + a
 | TableHead (set) | `4515:2603` | `align` [left,center,right] · TEXT `head (children)#4515:0` ({Head}) · Label + ink, h-10, px-md |
 | TableCell (set) | `4515:2610` | `align` [left,center,right] · TEXT `cell (children)#4515:4` ({Cell}) **+ SLOT `content#4527:0`** · Body + ink, p-md |
 | TableRow (set) | `4520:2621` | `state` [default,hover,selected] · SLOT `cells#4520:3` (empty) · bottom-border→border · hover muted-fill/50 · selected accent-fill · minHeight 37 |
-| Table (composition) | `4521:2597` | BOOL `showFooter#4522:0` · BOOL `showCaption#4522:1` · TEXT `caption#4522:2`. Bakes the invoice (header + 3 body rows + footer band + caption); body built from Row/Head/Cell instances |
-| Usage Examples (group) | `4523:2635` | Default (Table instance) · Selection (header+2 rows, row2 selected) · Empty (No results) · **Component cells** (`4529:2758` — Checkbox + Badge in cells) |
+| Table (composition) | `4521:2597` | **SLOT `content#4537:0`** (default = invoice interior) · BOOL `showCaption#4522:1` · TEXT `caption#4522:2`. Recompose-able: the content slot holds header+body+footer rows; caption below |
+| Usage Examples (group) | `4523:2635` | **all 4 = Table instances** (content slot filled): Default (`4523:2638`, slot-default invoice + caption) · Selection (`4538:2802`, row2 selected) · Empty (`4538:2890`, No results) · Component cells (`4538:2963`, Checkbox + Badge) |
+
+**Table composition is slot-based (2026-06-26 revision, user request "table component should be used in the
+examples"):** the interior (header + body + footer rows) is a `content` SLOT whose default child is the baked
+invoice — so the Table master + Default example show the invoice for free, and the other examples are Table
+instances whose slot is filled with their own rows (clear the 1 default child + append the rows frame; the
+old hand-built example frames were moved into the slots, not rebuilt). `showFooter` dropped (the footer band
+is part of the slotted content). Earlier all examples but Default were hand-built frames not using the Table
+component — fixed. (The clipping the user saw in the Default invoice was the pre-fix cell-bloat; the
+text-in-slot height fix resolved it — verified 0 clipped text nodes across the section.)
 
 **TableCell content model (2026-06-26 revision, user request "eine table cell nimmt auch components an"):**
 the cell holds a `content` SLOT whose default child is the `{Cell}` text node bound to the

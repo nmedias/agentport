@@ -1154,8 +1154,8 @@ status_note: >
     head: { set: "TableHead", id: "4515:2603", axis: "align [left,center,right]", prop: "head (children)#4515:0 ({Head}); Label+ink, h-10, px-md" }
     cell: { set: "TableCell", id: "4515:2610", axis: "align [left,center,right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — Zelle nimmt auch Components (Checkbox/Badge/Button …, Text-Default liegt IM Slot, swapbar); Body+ink, p-md" }
     row: { set: "TableRow", id: "4520:2621", axis: "state [default,hover,selected]", slot: "cells#4520:3 (leer)", notes: "bottom-border→border; hover muted-fill/50; selected accent-fill; minHeight 37" }
-    composition: { name: "Table", id: "4521:2597", props: "showFooter#4522:0 · showCaption#4522:1 · caption#4522:2 (text)", notes: "bakt Invoice (Header + 3 Body + Footer-Band + Caption)" }
-    examples: { group: "4523:2635 (Usage Examples)", members: "Default (Table-Instanz) · Selection (Header+2 Zeilen, Zeile 2 selected) · Empty (No results) · Component cells (Checkbox + Badge in Zellen, 4529:2758)" }
+    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, Default = Invoice-Interieur) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: content-Slot hält Header+Body+Footer-Rows (Slot-Default = gebackenes Invoice); Caption boolean+text darunter. showFooter entfallen (Footer = Teil des Slot-Contents)" }
+    examples: { group: "4523:2635 (Usage Examples)", members: "ALLE = Table-Instanzen (content-Slot gefüllt): Default (4523:2638, Slot-Default Invoice + Caption) · Selection (4538:2802, Zeile 2 selected) · Empty (4538:2890, No results) · Component cells (4538:2963, Checkbox + Badge)" }
     axis: { head_align: [left, center, right], cell_align: [left, center, right], row_state: [default, hover, selected] }
   skill: /shadcn-component-port (+ references/composites.md, 2026-06-26)
   notes: >
@@ -1168,8 +1168,9 @@ status_note: >
     ACCENT (bg-accent-fill, wie Command-Selektion — muted-fill #f9fcfd wäre für eine selektierte Zeile
     unsichtbar); Text bleibt ink (stock recolort selected nicht). dark: entfernt.
     FIGMA (User-Granularität „Cell+Row+Table", align l/c/r): TableHead/TableCell-Sets (align-Achse, TEXT-
-    Prop), TableRow-Set (state-Achse, cells-SLOT LEER gebaut + minHeight), Table-Komposition (bakt das
-    Invoice-Beispiel, showFooter/showCaption/caption-Props), Usage-Examples-Group (Default/Selection/Empty).
+    Prop), TableRow-Set (state-Achse, cells-SLOT LEER gebaut + minHeight), Table-Komposition (recompose-able:
+    content-SLOT hält Header+Body+Footer-Rows, Slot-Default = Invoice; showCaption+caption-Props). Usage-Examples
+    = 4 ECHTE Table-Instanzen (content-Slot gefüllt): Default/Selection/Empty/Component-cells.
     Cells = TEXT-Prop ({Cell}) PLUS content-SLOT (2026-06-26 nachgerüstet, User-Wunsch): Zelle nimmt auch
     Components (Checkbox/Badge/Button); Text-Default liegt IM Slot (swapbar), für eine Component-Zelle Text
     leeren + Component in den Slot. Beispiel „Component cells" (4529:2758). Footer-Cells bleiben Body
