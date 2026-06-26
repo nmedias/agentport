@@ -13,6 +13,7 @@ import {
   TableRow,
 } from './table';
 import { Checkbox } from '../checkbox';
+import { Badge } from '../badge';
 
 // Table contract — a multi-part data-table composite (no single root; each part is a data-slot
 // element wrapping a native table tag):
@@ -256,6 +257,49 @@ export const Alignment: Story = {
         <TableRow>
           <TableCell>contract</TableCell>
           <TableCell className="text-center">Pending</TableCell>
+          <TableCell className="text-right">$150.00</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  ),
+};
+
+// Cells hold arbitrary components, not just text — a Checkbox in a select column, a Badge in a status
+// column (the table cell is just a `<td>`; its children can be any element). Mirrors the Figma
+// "Component cells" example. Render-only; the interactive selection flow lives in Selectable.
+export const ComponentCells: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <Table className="w-full max-w-xl">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-0">
+            <Checkbox aria-label="Select all rows" />
+          </TableHead>
+          <TableHead>Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>
+            <Checkbox aria-label="Select INV001" />
+          </TableCell>
+          <TableCell className="text-format-label">INV001</TableCell>
+          <TableCell>
+            <Badge variant="secondary">Paid</Badge>
+          </TableCell>
+          <TableCell className="text-right">$250.00</TableCell>
+        </TableRow>
+        <TableRow data-state="selected">
+          <TableCell>
+            <Checkbox aria-label="Select INV002" checked />
+          </TableCell>
+          <TableCell className="text-format-label">INV002</TableCell>
+          <TableCell>
+            <Badge variant="outline">Pending</Badge>
+          </TableCell>
           <TableCell className="text-right">$150.00</TableCell>
         </TableRow>
       </TableBody>

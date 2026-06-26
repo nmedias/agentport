@@ -60,10 +60,18 @@ Section **Table** `4514:2597`. User chose granularity **Cell + Row + Table** + a
 | Node | id | axis / props |
 |---|---|---|
 | TableHead (set) | `4515:2603` | `align` [left,center,right] · TEXT `head (children)#4515:0` ({Head}) · Label + ink, h-10, px-md |
-| TableCell (set) | `4515:2610` | `align` [left,center,right] · TEXT `cell (children)#4515:4` ({Cell}) · Body + ink, p-md |
+| TableCell (set) | `4515:2610` | `align` [left,center,right] · TEXT `cell (children)#4515:4` ({Cell}) **+ SLOT `content#4527:0`** · Body + ink, p-md |
 | TableRow (set) | `4520:2621` | `state` [default,hover,selected] · SLOT `cells#4520:3` (empty) · bottom-border→border · hover muted-fill/50 · selected accent-fill · minHeight 37 |
 | Table (composition) | `4521:2597` | BOOL `showFooter#4522:0` · BOOL `showCaption#4522:1` · TEXT `caption#4522:2`. Bakes the invoice (header + 3 body rows + footer band + caption); body built from Row/Head/Cell instances |
-| Usage Examples (group) | `4523:2635` | Default (Table instance) · Selection (header+2 rows, row2 selected) · Empty (No results) |
+| Usage Examples (group) | `4523:2635` | Default (Table instance) · Selection (header+2 rows, row2 selected) · Empty (No results) · **Component cells** (`4529:2758` — Checkbox + Badge in cells) |
+
+**TableCell content model (2026-06-26 revision, user request "eine table cell nimmt auch components an"):**
+the cell holds a `content` SLOT whose default child is the `{Cell}` text node bound to the
+`cell (children)` TEXT prop. Text cells → use the text prop (default). Component cells → blank the text +
+drop a component (Checkbox/Badge/Button) into the slot. Slot HUGs its content, aligned by the cell's
+`align` axis (primaryAxisAlignItems). Retrofit gotcha hit + fixed: an **empty** slot is intrinsically
+~100×100 (HUG doesn't collapse it) → bloated cells to 116px and propagated into the baked composition;
+fix = nest the text INSIDE the slot so it's never empty (slot HUGs text/component → cell back to 37px).
 
 **Bound variables:** ink `3037:3` · border `3038:4` · muted-fill `3037:12` · muted-ink `3037:13` ·
 accent-fill `3037:14` · space-md `3070:6` · space-xl `3070:9` · text-styles Body `S:7e1bf8…` / Label
@@ -74,10 +82,10 @@ prop; showFooter/showCaption collapse cleanly) · `/figma-verify` **CLEAN** (no 
 padding-asym; the 3 "unbound strokes" = variant-set boundary chrome, not design strokes) · faithful ✓.
 
 ### Figma build deviations / decisions
-- **Cells use a TEXT property, not a content slot** → the Figma cell can't literally nest a Checkbox. The
-  Selectable story's checkbox column is therefore represented by the **selected-row tint** only; the
-  Checkbox is the separate ported component composed at the call site. Honest scoping (logged), not a
-  surface gap for the table itself.
+- **Cells = TEXT prop + content slot** (slot added 2026-06-26 on user request — see skill-feedback #4). The
+  cell holds a `content` slot (default = the bound `{Cell}` text) → text by default, or a swapped component
+  (Checkbox/Badge/Button). Example "Component cells" proves it. *(Initial port shipped TEXT-prop-only — a
+  too-thin surface; I should have asked the Slot-vs-Swap fork on cell content in T2.7.)*
 - **Footer cells stay Body** (not Label-weight). Code `tfoot` adds `text-format-label` (font-medium); the
   Figma footer band's muted fill + top border carry the distinction. Minor, acknowledged divergence.
 - **TableRow `cells` slot built EMPTY** (DS "Slots LEER gebaut" convention) + row `minHeight 37` so the
@@ -93,7 +101,9 @@ padding-asym; the 3 "unbound strokes" = variant-set boundary chrome, not design 
 | (DS-authored) | RowStates, Alignment | row state axis + align capability; Figma = TableRow set + Head/Cell align axes |
 
 ## Open items
-- Cells as TEXT-prop (no content slot) → no in-cell Checkbox/Badge nesting in Figma. Revisit with a content
-  slot if rich-content cells become a real need (would also fully reproduce the Selectable checkbox column).
+- ~~Cells as TEXT-prop (no content slot)~~ **RESOLVED 2026-06-26** — content slot added; cells nest
+  components (Component cells example).
+- TableHead stays TEXT-prop (no content slot) → a select-all checkbox / sort button in a header isn't
+  nestable in Figma yet. Same retrofit would apply if needed.
 - Footer label-weight is code-only (Figma footer cells Body).
 - `secondary`/`destructive` placeholder tokens — N/A here (table binds only ink/border/muted/accent, all real).
