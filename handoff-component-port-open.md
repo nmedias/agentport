@@ -186,10 +186,51 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   **B42** ebd. §Red flags (named Effekt-Style ≠ Focus-Ring). **B43** ebd. §Composites (Build-scope per
   Part: Layout-only Container = Component ODER Frame, nicht für Peers mischen). Damit A12/A13 erledigt;
   offene B = nur die vor-Item zurückgestellten (B1–B13, B27, B41).
+- **Table-Run (2026-06-26)** — Findings OFFEN in den A/B/C-Sections (noch nicht eingearbeitet): **A14**
+  /figma-build-rules §Usage-examples (recompose-able Container-Composite → content-Slot, variierte Beispiele
+  nie hand-bauen — Done-Test) · **A15** composites.md T2.7 (content-tragender Leaf = open content → Slot-vs-Swap
+  fragen, nicht TEXT-Prop) · **A16** SKILL.md T2.5→T4 (Story geschrieben + Gate grün VOR jeder Figma-Aktion) ·
+  **B44/B45** /figma-build-rules §Slots/§Mechanism (Many-Child-Slot leer bauen + append-only · „text-ODER-
+  component"-Leaf = Slot mit prop-gebundenem Text-Default) · **C9** tokens-reference §6 (`text-muted-foreground`
+  →`text-muted-ink`, schon abgedeckt).
 
 ### A — gap caused a defect (priority)
 
-**Keine offenen A-Findings** — erledigte s. **### Erledigt**.
+#### /figma-build-rules
+
+**A14 · §Usage-examples / §Composites — recompose-able Container-Composite braucht content-Slot; variierte Beispiele nie hand-bauen (Done-Test-Miss)** *(Table #6)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | 3 von 4 Usage-Examples waren hand-gebaute Frames statt Table-Instanzen; User fand es → Rework (Composition auf content-Slot umbauen + 3 Beispiele konvertieren). |
+| Gap | §Usage-examples sagt „composed only from controls; never hand-build", warnt aber nicht: ein recompose-able Container-Composite (Table/List/Card-mit-Body), dessen Beispiele den Content *variieren*, braucht einen CONTENT-Slot (Default = ein gebackenes Demo) → jedes Beispiel = Instanz, die den Slot füllt. Falle: fixen Content in die Composition backen + variierte Beispiele als Geschwister-Frames hand-bauen (besteht den flüchtigen Blick, fällt den Done-Test). |
+| Verified | nach Umbau auf content-Slot wurden alle 4 Beispiele echte Table-Instanzen (alte Frames in die Slots verschoben), 0 Regressionen, 0 geclippte Nodes. |
+| Candidate fix | §Usage-examples (bzw. §Composites Build-Layer-4) ergänzen: recompose-able Container-Composite (Content variiert pro Beispiel) → Composition bekommt einen CONTENT-Slot (Default = EIN gebackenes Demo); jedes Beispiel = INSTANZ, die den Slot füllt, kein hand-gebauter Geschwister-Frame. |
+| Status | offen. |
+
+#### composites.md
+
+**A15 · §2 T2.7 — content-tragender Leaf-Part defaultet auf open content (Slot-vs-Swap fragen), nicht TEXT-Prop** *(Table #4)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Zellinhalt still als TEXT-Prop (text-only) modelliert; User kam nach Handoff zurück und verlangte component-fähige Zellen → Round-Trip + Figma-Retrofit (content-Slot ins kombinierte Cell-Set). |
+| Gap | T2.7 listet „Slot vs Swap per open content" als Fork, flaggt aber nicht, dass content-tragende Leaf-Parts in einem Data-Display-Composite (Zellen, Listenzeilen-Body, Menü-Item-Label) per Default OPEN content sind → der Agent kann still eine TEXT-Prop wählen + eine zu dünne Surface liefern. Der Done-Test maskierte es (Checkbox als „Call-Site" weg-scoped). |
+| Verified | Data-Table-Doc-Demo nutzt Checkbox/Badge/Button in Zellen; User-Request „table cell nimmt auch components an". |
+| Candidate fix | T2.7 ergänzen — ist der Inhalt eines Leaf-Parts Daten/Werte (Zelle, Zeilen-Body, Item-Label), per Default als open content behandeln → Slot-vs-Swap-vs-Text fragen, nicht auf TEXT-Prop defaulten; TEXT-Prop nur bei nachweislich text-only. *(also: SKILL.md T2.6)* |
+| Status | offen. |
+
+#### SKILL.md
+
+**A16 · T2.5→T4 — harter Gate: keine Figma-Aktion (inkl. Recon) vor geschriebener + grüner Story** *(Table #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | T4-Figma-Recon (recon.js, `whoami`) begonnen, bevor eine T2.5-Story geschrieben war; User unterbrach + redirectete. |
+| Gap | T2.5 sagt „author … BEFORE Figma" nur als Parenthese; kein blockierender Checkpoint zwischen T2.5 und T4. „Doc-Beispiele gelesen" fühlt sich wie „T2.5 erledigt" an, ist es aber nicht. |
+| Verified | vom User abgefangen, bevor Figma-Schreibzugriff erfolgte. |
+| Candidate fix | am Ende von T2.5 ein harter Gate-Satz: „Keine Figma-Aktion — Recon eingeschlossen — bevor die Story-Datei geschrieben UND das Gate grün ist." Optional in composites.md §2 spiegeln (T2.6/T2.7 schieben noch mehr Schritte dazwischen). |
+| Status | offen. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -283,6 +324,28 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Gap | Drei Plugin-API-Fallen fehlen in der Red-flags-Tabelle. |
 | Verified | (a) alle Kinder aus einer GROUP raus → Figma löst die GROUP automatisch auf → spätere Referenz wirft „node does not exist". (b) `setCurrentPageAsync(page)` warf `Internal Figma error: Unknown node type … getPublicNodeType` auf einer schon geladenen/aktuellen Page; ohne Page-Switch lief's. (c) `combineAsVariants` warf „Grouped nodes must be in the same page as the parent", weil die Klone an `figma.currentPage` (≠ Build-Page) hingen. |
 | Candidate fix | Red-flags-Zeilen: GROUP nach dem Leeren nicht mehr referenzieren (Figma löst leere GROUPs auto-auf). · Ist die Ziel-Page schon current/geladen, `setCurrentPageAsync` weglassen (redundanter Switch kann intern `getPublicNodeType` werfen). · `combineAsVariants` braucht ALLE Components + Parent auf EINER Page → Klone an die Parent-Page hängen (Ancestor-Walk zur PAGE + `page.appendChild`), nie an `figma.currentPage`. |
+| Status | zurückgestellt. |
+
+**B44 · §Slots / §Usage-examples — Many-Child-Slot LEER bauen + Demo backen; Beispiele append-only (nicht clear-then-refill)** *(Table #3)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | selbst hergeleitet (2 Probe-Calls), Slots korrekt gebaut. Tabelle = Row→Cells→Table = bis zu 3 Slot-Ebenen mit vielen Kindern. |
+| Gap | §Slots dokumentiert (a) Clearing von Instance-Slot-Defaults = ein Remove pro Call und (b) Append-Re-Resolve getrennt, verbindet sie aber nicht zur STRATEGIE für Slots mit vielen Kindern (Table-Cells, List-Items). |
+| Verified | 3 gebackene Cells clearen → Fehler nach 1 Remove (`Node … not found`); in leeren Slot 2 appenden + letztes Kind neu auflösen → 0 Fehler. |
+| Candidate fix | Slot mit vielen Kindern (deren Beispiele ihn füllen) LEER bauen, Demo-Content in ein Kompositions-Member backen (Konvention „Slots LEER gebaut"); Reproduktion **append-only** (letztes Kind für FILL/props neu auflösen); keine Defaults backen, die man später clearen muss (Instance-Slot-Default-Clear = one-remove-per-call). |
+| Bezug | Re-Resolve-/one-remove-Invariante = B1 (§Slots); diese Finding hängt die *Strategie* dran (leer bauen statt clearen). |
+| Status | zurückgestellt. |
+
+**B45 · §Mechanism / §Slots — „text ODER component"-Leaf = content-Slot mit prop-gebundenem TEXT-Default (nicht leerer Slot neben Text)** *(Table #5)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | beim Cell-Retrofit hergeleitet; korrekt gelöst (eine Iteration gekostet). |
+| Gap | §Slots/§Mechanism sagt „drop a default inside" + „empty slot ~100×100", aber nicht als Pattern für ein Leaf, das *text ODER component* hält: der content-Slot bekommt als Default das **prop-gebundene TEXT-Node** (Text IN den Slot), nie ein leeres Slot-Feld neben dem Text. „Leerer Slot + Text als Geschwister" ist die Falle. |
+| Verified | leerer Slot neben Text → Member 116px (Slot 100×100, HUG kollabiert nicht); Text in den Slot genestet → 37px, Slot HUGt Text, TEXT-Prop bindet weiter, Component-Swap (Checkbox/Badge) ok. |
+| Candidate fix | Leaf, das Text ODER Component hält → EIN content-Slot, dessen Default das prop-gebundene Text-Node ist (Text in den Slot nesten); nie einen leeren Slot neben einem Text-Node führen (leerer Slot ist ~100×100 und bläht den Container). |
+| Bezug | Generalisiert B12 (composites.md: Text-Region als SLOT-mit-Default statt Text-Prop) auf den „text-ODER-component"-Fall + die Empty-Slot-Bloat-Falle. |
 | Status | zurückgestellt. |
 
 #### composites.md
@@ -488,7 +551,17 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### C — tooling / repo / already covered
 
-**Keine offenen C-Findings** — erledigte s. **### Erledigt**.
+#### tokens-reference.md
+
+**C9 · §6 — stock `text-muted-foreground` → DS `text-muted-ink` (-ink-Suffix), schon abgedeckt** *(Table #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why C | kein Defekt; das Mapping steht korrekt in §6 `color_renames`. User markierte es als wiederkehrende Stolperstelle (Sekundärtext: Caption, muted-Labels). |
+| Gap | der Text-vs-Fläche-Suffix-Split (`-ink`=Text/Icon, `-fill`=Fläche) ist leicht zu vermischen → ein Port schreibt evtl. `text-muted` / `text-muted-fill` statt `text-muted-ink`. |
+| Verified | §6 `color_renames`: `text-muted-foreground → text-muted-ink`; `item.tsx:176` nutzt `text-muted-ink`. |
+| Candidate fix | bereits in §6 abgedeckt — beim Port konsequent §6 lesen statt nach Namens-Ähnlichkeit raten. Skill-Prosa bleibt token-namen-frei (`.claude/skills/CLAUDE.md`); Home = tokens-reference §6. Entry = Evidenz. |
+| Status | abgedeckt. |
 
 ## Quellen
 
@@ -496,7 +569,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
   2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider,
-  2026-06-22-tooltip,2026-06-22-popover,2026-06-23-tooltip-root-mirror,2026-06-26-item}/skill-feedback.md` +
+  2026-06-22-tooltip,2026-06-22-popover,2026-06-23-tooltip-root-mirror,2026-06-26-item,2026-06-26-table}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
