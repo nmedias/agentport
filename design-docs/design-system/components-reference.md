@@ -1101,14 +1101,15 @@ status_note: >
     section: { name: "Item", id: "4494:2471" }          # headline 4494:2472
     set: { name: "Item", id: "4498:2551" }              # 9 Member (variant × size); master = outline/default 4495:2471
     axis: { variant: [default, outline, muted], size: [default, sm, xs] }
-    props: "media#4498:0 (SLOT, default check-circle icon) · actions#4498:1 (SLOT, default chevron muted-ink) · title#4499:0 (TEXT {Title}, Label) · description#4499:10 (TEXT {Description}, Body/muted-ink)"
-    media_set: { name: "ItemMedia", id: "4500:2477", axis: { variant: [default, icon, image] } }   # 3 Member
+    props: "media#4498:0 (SLOT, default = nested .ItemMedia-Instanz variant=icon) · actions#4498:1 (SLOT, default chevron muted-ink) · title#4499:0 (TEXT {Title}, Label, ink-gebunden) · description#4499:10 (TEXT {Description}, Body/muted-ink)"
+    media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable Glyph/Image; icon-Default an ink gebunden)" }   # 3 Member: default 4508:2534 / icon 4508:2537 / image
+    group_component: { name: "ItemGroup", id: "4511:2575", slot: "items#4511:0", note: "vertikales AL, gap-xl; Layout-only (responsiver has-data-Gap nicht in Figma abbildbar)" }
     examples:
       group: "Usage Examples 4501:2471"
       typelist: "4501:2472 — 3 muted-Instanzen, TEXT-Props treiben invoice/contract/document (explorer NavListItem)"
-      states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring + Glow effect) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, KEIN Set-Member)"
+      states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring-ring/50 3px DROP_SHADOW, verbatim vom Select-Focus 4308:2001 kopiert — NICHT die generische Glow-Style) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, KEIN Set-Member)"
     state_axis: "BEWUSST examples-only (NICHT als Set-Achse): hover/focus/selected-Delta ist uniform über variant×size → 18/27 Member wären redundant. Die States leben in der Usage-Examples-States-Gruppe (spiegelt die AllStates-Story). Extend zu variant×size×state (27) nur falls explizit gewünscht."
-    vars: { muted-fill: "3037:12", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", border: "3038:4", ring: "3038:6", space-xs: "3070:4", space-md: "3070:6", space-lg: "3070:8", corner-sm: "3073:2", corner-lg: "3073:4" }
+    vars: { ink: "3037:3", muted-fill: "3037:12", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", border: "3038:4", ring: "3038:6", space-xs: "3070:4", space-md: "3070:6", space-lg: "3070:8", space-xl: "3070:9", corner-sm: "3073:2", corner-lg: "3073:4" }
     styles: { text: "Label (S:4e034695…b266f0) + Body (S:7e1bf8f1…2911fb)", effect: "Glow (S:768ea662…1005fa7, focus)" }
   skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props; 2026-06-26)
   notes: >
@@ -1132,7 +1133,13 @@ status_note: >
     pseudo-states-Addon (hover/focusVisible) + Selected call-site, Cross-Links. a11y: ItemGroup role=list →
     role=listitem an den Kindern am Call-Site (axe aria-required-children). Docgen: ItemProps (variant/size/
     asChild) + ItemMediaProps (variant) via lokale Named-Aliase + Slot. Gate grün (300/300 inkl. Chromium+
-    axe, typecheck, lint). (Quelle: agent-runs/component-port/2026-06-26-item/notes.md.)
+    axe, typecheck, lint). REVIEW-FIXES (User-Review, 2026-06-26): (1) Item media-Slot-Default = genested
+    .ItemMedia-Instanz statt Roh-Vektor; (2) Title + ItemMedia-Icon an `ink` gebunden (Recon hatte ink
+    vergessen → roher Hex); (3) Focus-Ring korrekt (ring-ring/50 3px DROP_SHADOW, verbatim vom Select-Focus
+    kopiert — vorher fälschlich die generische cyan Glow-Style); (4) ItemGroup als Component (4511:2575,
+    items-Slot); (5) ItemMedia content-Slot (swappable). figma-verify CLEAN nach Fixes; Skill-Findings →
+    skill-feedback.md (A1 Recon-ink-Tokens · A2 Composite-Part-Nesting+Slot). (Quelle:
+    agent-runs/component-port/2026-06-26-item/notes.md + skill-feedback.md.)
 
 ## Pending / Removed
 

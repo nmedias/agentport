@@ -120,3 +120,25 @@ Preview: `ui-item--default` · `ui-item--all-states` · `ui-item--group` · `ui-
   uses a mono `IN` placeholder.
 - State axis is examples-only by design (see scoping decision) — extend `.Item` to a 27-member
   `variant×size×state` matrix only if the redundancy is later wanted.
+
+## Review fixes (2026-06-26, user review)
+
+User review of the Figma build found 5 issues — all confirmed real defects/inconsistencies from rushing
+T4. Skill-process gaps logged in `skill-feedback.md` (A1 recon ink-tokens, A2 composite part nesting +
+slot; B3 focus-glow trap, B4 container-component scoping). Fixes applied:
+
+1. **ItemMedia nested** — each Item member's `media` slot default is now a nested `.ItemMedia` instance
+   (variant=icon), not a raw icon frame (was re-clothed instead of nesting the built component).
+2. **Title + default icon bound to `ink`** — recon had omitted `Base/ink` (`3037:3`), so the title text
+   colour + default icon fill were raw hex. Bound all 9 member titles + the ItemMedia icon default to ink.
+3. **Focus ring corrected** — the States/Focus example used the generic `Glow` effect style (cyan
+   `#009fe3@50%`, spread 0) — wrong. Replaced with the verified `ring-ring/50` 3px DROP_SHADOW (slate
+   `#4a5562@50%`, spread 3, showShadowBehindNode false) copied verbatim from the Select focus member
+   (`4308:2001`).
+4. **ItemGroup is now a component** (`4511:2575`, `items#4511:0` slot) — was a plain frame in the example.
+   Layout-only (the responsive `has-data-[size]` gap can't be expressed in Figma; gap-xl fixed).
+5. **ItemMedia content is swappable** — rebuilt `.ItemMedia` (`4508:2544`) with a `content#4508:3` SLOT
+   per member (was a baked glyph/image with no slot). Old slot-less set `4500:2477` deleted.
+
+Re-verified: **figma-verify CLEAN** (0 flags). 7 remaining unbound text fills = example
+scaffolding (headline + captions), not component surfaces — consistent with sibling sections.
