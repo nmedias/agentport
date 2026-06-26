@@ -1141,6 +1141,42 @@ status_note: >
     skill-feedback.md (A1 Recon-ink-Tokens · A2 Composite-Part-Nesting+Slot). (Quelle:
     agent-runs/component-port/2026-06-26-item/notes.md + skill-feedback.md.)
 
+- name: Table
+  status: nova-aligned
+  figma_synced: true                            # Erstport 2026-06-26 (Figma + Code zusammen gebaut)
+  source: { registry: "@shadcn", item: table, style: radix-nova }
+  code:
+    dir: libs/ui/src/components/ui/table/
+    exports: [Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption]
+    barrel: "libs/ui/src/index.ts → export * from './components/ui/table'"
+  figma:
+    section: { name: "Table", id: "4514:2597" }
+    head: { set: "TableHead", id: "4515:2603", axis: "align [left,center,right]", prop: "head (children)#4515:0 ({Head}); Label+ink, h-10, px-md" }
+    cell: { set: "TableCell", id: "4515:2610", axis: "align [left,center,right]", prop: "cell (children)#4515:4 ({Cell}); Body+ink, p-md" }
+    row: { set: "TableRow", id: "4520:2621", axis: "state [default,hover,selected]", slot: "cells#4520:3 (leer)", notes: "bottom-border→border; hover muted-fill/50; selected accent-fill; minHeight 37" }
+    composition: { name: "Table", id: "4521:2597", props: "showFooter#4522:0 · showCaption#4522:1 · caption#4522:2 (text)", notes: "bakt Invoice (Header + 3 Body + Footer-Band + Caption)" }
+    examples: { group: "4523:2635 (Usage Examples)", members: "Default (Table-Instanz) · Selection (Header+2 Zeilen, Zeile 2 selected) · Empty (No results)" }
+    axis: { head_align: [left, center, right], cell_align: [left, center, right], row_state: [default, hover, selected] }
+  skill: /shadcn-component-port (+ references/composites.md, 2026-06-26)
+  notes: >
+    Multi-Part-Composite OHNE Root-Element, 8 prop-lose Pass-Through-Parts (Table/Header/Body/Footer/Row/
+    Head/Cell/Caption), KEIN CVA. Einzige Interaktions-Achse = TableRow state. Deps: keine (ui:add schrieb
+    nur table.tsx, keine lucide-Icons). DS-Mapping: text-sm→text-format-body; head/footer font-medium→
+    text-format-label; text-foreground→text-ink; text-muted-foreground→text-muted-ink; px-2/p-2→px-md/p-md;
+    mt-4→mt-xl; border-b/-t/-0 = nur Breite, Farbe via Base-Layer (border-border), kein Class.
+    ROW-TINT (User-Entscheid 2026-06-26): hover NEUTRAL (bg-muted-fill/50, wie Item-Zeilen) ≠ selected
+    ACCENT (bg-accent-fill, wie Command-Selektion — muted-fill #f9fcfd wäre für eine selektierte Zeile
+    unsichtbar); Text bleibt ink (stock recolort selected nicht). dark: entfernt.
+    FIGMA (User-Granularität „Cell+Row+Table", align l/c/r): TableHead/TableCell-Sets (align-Achse, TEXT-
+    Prop), TableRow-Set (state-Achse, cells-SLOT LEER gebaut + minHeight), Table-Komposition (bakt das
+    Invoice-Beispiel, showFooter/showCaption/caption-Props), Usage-Examples-Group (Default/Selection/Empty).
+    Cells = TEXT-Prop (KEIN content-Slot) → die Checkbox-Spalte der Selectable-Story wird durch den
+    selected-row-Tint repräsentiert; die Checkbox ist die separate Component am Call-Site (bewusste Scope-
+    Entscheidung, geloggt). Footer-Cells bleiben Body (Code-tfoot label-weight = Code-only, minor Divergenz).
+    Slot-Strategie: leer bauen, Demo backen, Beispiele append-only (skill-feedback #3). Gate grün (9 Specs +
+    5 Stories Browser/axe/play). figma-verify CLEAN. Quelle:
+    agent-runs/component-port/2026-06-26-table/notes.md + skill-feedback.md.
+
 ## Pending / Removed
 
 ```yaml
