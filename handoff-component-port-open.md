@@ -61,8 +61,10 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
 ## Offene Punkte
 
 1. **Skill-Findings** (Format + Triage s. **## Skill-Findings**; Formulierungs-Regel + „nie mid-run
-   editiert" s. Blockquote dort). **Keine offenen A-Findings mehr (A9 + A10 + A11 06-24 kodifiziert); offen nur noch B (zurückgestellt, inkl. B41)** — selbst hergeleitet, Ergebnis
-   stimmte → kodifizieren, kein Bugfix (Tabellen s. **### B**). Alle **erledigten** Findings (A-Strang
+   editiert" s. Blockquote dort). **Offen: A12 + A13 (Item-Review 06-26, User-gefundene Defekte —
+   A12 Recon-`ink`/`foreground`-Tokens · A13 Composite-Part-Nesting+Slot) + B (zurückgestellt, inkl.
+   B41–B43: B42 Focus-Glow-Trap, B43 Container-Component-Scoping).** A-Findings = Leitplanke, vorrangig;
+   B = kodifizieren, kein Bugfix (Tabellen s. **### A** / **### B**). Alle **erledigten** Findings (A-Strang
    06-22, Slider, A2/A4–A8, A9, A10, A11, C1–C8) → **### Erledigt** (nicht in den Finding-Sections).
 2. **Composite-Strang — nächster Schritt** (Verfahren mehrfach validiert, nichts blockiert): **Slider
    2026-06-22 PORTIERT + per fast-forward auf `master` gemerged** (`0df4af2`…`1ae9fab`; Gate grün
@@ -89,8 +91,16 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    Prototype-Reaction), Content `layoutPositioning=ABSOLUTE` (anchored, kein Reflow), **on-click+Esc-Prototype** (closed↔open).
    Member **HUGgen den Trigger** (Footprint=Trigger 50×32, Content floatet absolut außerhalb); alt `4393:2391` entfernt;
    Set **umbenannt PopoverRoot→Popover** (matcht Code-Root-Export); Section → 1718×2528. figma-verify CLEAN + Section-Check PASS; Katalog aktualisiert.
+   **Item 2026-06-26 PORTIERT** (Figma + Code, Gate grün 300; `.Item`-Set variant×size 9 Member +
+   `.ItemMedia`-Set + `ItemGroup`-Component + Usage-Examples, figma-verify CLEAN; State-Achse bewusst
+   examples-only). Schaltet den Explorer **NavListItem** (Typ-Liste) frei. User-Review fand
+   5 Figma-Defekte → alle gefixt (media-Slot nestet `.ItemMedia` · Title/Icon an `ink` · Focus-Ring
+   korrekt · ItemGroup als Component · ItemMedia content-Slot); Skill-Findings A12/A13/B42/B43. Offene
+   Item-Punkte: `xs`-Description bleibt 14px (kein Sub-14-Sans-Format); `image`-ItemMedia nutzt grauen
+   Platzhalter (kein Bild-Fill). Auf `feat/shadcn-item-port`, ff-bereit (noch nicht gemerged). Details:
+   `agent-runs/component-port/2026-06-26-item/notes.md`, Katalog-Eintrag `Item`.
    Offen jetzt sonst: weiteres Composite (`/shadcn-component-port <name>`) oder Blocks-Arbeit auf den
-   Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22 — alle erledigt.)*
+   Palette-Bausteinen. *(ChoiceCard 06-16, Select 06-19, Slider 06-22, Batch-4 06-22, Item 06-26 — alle erledigt.)*
 3. **Dark-Mode-Token-Satz** in Figma + `.dark`-Block in globals.css (`--background-fixed` ausnehmen).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
@@ -177,7 +187,29 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 
 ### A — gap caused a defect (priority)
 
-**Keine offenen A-Findings** — erledigte s. **### Erledigt**.
+#### /shadcn-component-port
+
+**A12 · T3 / recon — Recon-Needle-Liste muss die Kern-`ink`/`foreground`+`surface`-Tokens IMMER führen** *(Item #1)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | User-Review: Title-Textfarbe + Default-Icon-Fill waren roher Hex statt gebunden, während Nachbar-Elemente (description/chevron) korrekt an `muted-ink` hingen. |
+| Gap | Die Recon-Needle-Liste ist autor-gewählt und tendiert zu den „interessanten" Tokens (muted/accent/border/ring); die Default-Vordergrundfarbe (`ink`/`foreground`) ist die häufigste (Body-Title, Default-Icons) und wird am ehesten vergessen → ohne Var-ID Fallback auf Roh-Hex, Bindung still verloren (sieht korrekt aus, verfehlt token-faithful). |
+| Verified | Title-Node `boundVariables={}`, color roher Hex; das Ink-Token existierte, war nur nicht reconned. |
+| Candidate fix | Recon (T3 / recon.js) MUSS die Kern-Vordergrund-/Flächen-Tokens immer in der Needle-Liste führen — mindestens `ink`/`foreground`, `surface`/`background`, `card`(-fill/-ink) — auch wenn die Component „nur muted/accent" zu nutzen scheint. T3-Checklist-Zeile: jeder Text-Node + jedes Default-Icon braucht eine gebundene Farbe, der Default ist `ink`, kein Roh-Hex. Post-Build-Guard (Verify-Triade): jeder TEXT/VECTOR-Fill mit `boundVariables=={}` = wahrscheinlich vergessene Bindung → flaggen. *(also: recon.js, /figma-build-rules §Binding recipes)* |
+| Status | offen. |
+
+#### /figma-build-rules
+
+**A13 · §Composites — gebautes Part-Component MUSS im Parent-Slot genested sein + eigener variabler Content als Slot** *(Item #2)*
+
+| Feld | Inhalt |
+|---|---|
+| Why A | Zwei User-gefundene Defekte aus einer Wurzel: (a) der Parent-Media-Slot-Default war ein Roh-Vektor statt einer Instanz des gebauten Media-Components; (b) das Media-Set hatte nur eine `variant`-Prop, keinen Slot → Glyph/Image un-swappable. |
+| Gap | §Composites sagt „nest an instance, never re-clothe" und §Slots „swappable content = slot", aber keine Regel greift als Composite-Vollständigkeits-Check zur Build-Zeit: existiert ein Part-Component X, muss (a) der korrespondierende Parent-Slot-Default eine Instanz von X sein, (b) X's eigener variabler Content selbst ein Slot. Part-Set + Parent-Slot unabhängig gebaut → beide rendern, nichts flaggt, dass sie nicht komponieren. |
+| Verified | Parent-Slot-Kind = raw FRAME (keine INSTANCE); Part-Set `componentPropertyDefinitions` = nur `[variant]`, kein SLOT. |
+| Candidate fix | §Composites-Vollständigkeitsregel: für jeden Part, der selbst ein gebautes Component X ist — (a) der korrespondierende Parent-Slot-Default = eine genestete Instanz von X (repräsentative Variante gesetzt), nie ein re-clothed Primitiv; (b) X's eigener offener/variabler Content (Icon-Glyph, Image, Avatar) = ein SLOT auf X. Done-Test-Zeile: „lässt sich der Part-Content aus Controls tauschen?" — fehlt X ein Slot/Swap, ist die Surface unvollständig. Strukturell verifizieren (welcher Main nested wo), nicht per Screenshot. |
+| Status | offen. |
 
 ### B — self-derived, result held (codify · deferred)
 
@@ -271,6 +303,26 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
 | Gap | Drei Plugin-API-Fallen fehlen in der Red-flags-Tabelle. |
 | Verified | (a) alle Kinder aus einer GROUP raus → Figma löst die GROUP automatisch auf → spätere Referenz wirft „node does not exist". (b) `setCurrentPageAsync(page)` warf `Internal Figma error: Unknown node type … getPublicNodeType` auf einer schon geladenen/aktuellen Page; ohne Page-Switch lief's. (c) `combineAsVariants` warf „Grouped nodes must be in the same page as the parent", weil die Klone an `figma.currentPage` (≠ Build-Page) hingen. |
 | Candidate fix | Red-flags-Zeilen: GROUP nach dem Leeren nicht mehr referenzieren (Figma löst leere GROUPs auto-auf). · Ist die Ziel-Page schon current/geladen, `setCurrentPageAsync` weglassen (redundanter Switch kann intern `getPublicNodeType` werfen). · `combineAsVariants` braucht ALLE Components + Parent auf EINER Page → Klone an die Parent-Page hängen (Ancestor-Walk zur PAGE + `page.appendChild`), nie an `figma.currentPage`. |
+| Status | zurückgestellt. |
+
+**B42 · §Interaction states / Red flags — eine named `Glow`/`Focus`-Effekt-Style ≠ der Focus-Ring (Trap)** *(Item #3)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | User-gefundener Defekt, aber gegen eine BESTEHENDE Regel: die generische `Glow`-Style appliziert (cyan, spread 0) statt des Focus-Rings. §Interaction states sagt bereits „copy the glow verbatim from a focus template, don't reconstruct" + „never bind the effect colour to a variable". |
+| Gap | Die Regel existiert, warnt aber nicht vor der konkreten Falle: ein File kann eine named Effekt-Style `Glow`/`Focus` führen, die NICHT der Component-Focus-Ring ist — sie zu applizieren fühlt sich richtig an, ist aber falsche Farbe/Spread/Flag. |
+| Verified | named `Glow` = DROP_SHADOW radius4 spread0 cyan@50% showBehind:true; korrekter Focus = slate ring@50%, spread 3, showBehind:false. |
+| Candidate fix | Red-flag-/Rationalisierungs-Zeile: „Eine named `Glow`/`Focus`-Effekt-Style ≠ der Component-Focus-Ring — nicht applizieren. Der Focus-Ring ist ein per-Component-LITERAL-Drop-Shadow (spread = die `ring-[Npx]`-Breite, Farbe = der Ring-Token-Hex bei der `/NN`-Alpha, `showShadowBehindNode:false` auf fill-losen Nodes). Verbatim von einem verifizierten Geschwister-Focus-Member kopieren, nie von einer gleichnamigen Style." |
+| Status | zurückgestellt. |
+
+**B43 · §Composites — welche Layout-only Container-Parts werden Figma-Components** *(Item #4)*
+
+| Feld | Inhalt |
+|---|---|
+| Why B | User-gefundene Inkonsistenz: Parent + Media-Part als Components gebaut, der Group-Container-Part als plain Frame. |
+| Gap | §Composites listet die Part-Mechanismen (slot/swap/variant/nested instance), sagt aber nicht, ob ein Layout-only Container-Part (Group/Header/Footer-Wrapper — keine Fläche, keine per-Variant-Tokens, Verhalten das Figma nicht ausdrücken kann) ein eigenes Component oder nur ein Frame im Beispiel sein soll → Inkonsistenz ohne Regel. |
+| Verified | Group-Container im Beispiel = FRAME, nicht Component; sein responsiver `has-data-[size]`-Gap hat kein Figma-Äquivalent. |
+| Candidate fix | §Composites-Notiz: ein Layout-only Container-Part DARF ein simples Component sein (Auto-Layout + Gap + items-Slot) für Katalog-Vollständigkeit/Konsistenz, oder ein dokumentierter Frame in den Usage-Examples — aber pro Build EINE Regel wählen + nennen. Sind Parent-Set + ein Media-artiger Part Components, die benannten Container-Parts konsistenterweise auch (außer sie tragen null wiederverwendbare Struktur). |
 | Status | zurückgestellt. |
 
 #### composites.md
@@ -484,7 +536,7 @@ Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-
   {2026-06-08-breadcrumb,2026-06-10-input-group,2026-06-10-command,2026-06-10-dialog,
   2026-06-11-command-dialog,2026-06-12-badge,2026-06-12-separator,2026-06-12-field,
   2026-06-12-checkbox,2026-06-12-switch,2026-06-12-radio-group,2026-06-19-select,2026-06-22-slider,
-  2026-06-22-tooltip,2026-06-22-popover,2026-06-23-tooltip-root-mirror}/skill-feedback.md` +
+  2026-06-22-tooltip,2026-06-22-popover,2026-06-23-tooltip-root-mirror,2026-06-26-item}/skill-feedback.md` +
   `agent-runs/component-sync/2026-06-12-{checkbox,switch,radio-group}/skill-feedback.md`
 - Component-Locator/Status: `design-docs/design-system/components-reference.md` (zuerst lesen)
 - Token-Crosswalk: `design-docs/design-system/tokens-reference.md` (§3 Kollisions-Regel,
