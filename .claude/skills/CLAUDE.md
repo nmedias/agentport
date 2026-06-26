@@ -3,6 +3,18 @@
 ## General
 Skill code: compact, precise, prefer pseudocode — no content loss. Structure over prose. No redundancy.
 
+Skill **content** is reusable instructions an agent reads cold → **generic + agent-directed**:
+- **No run/component specifics, no user-facing framing** (no "in the X run", no report-to-user tone).
+- **Minimal why** — a rationale only where it changes what the agent does; one clause, not a paragraph.
+- **Abstract the rule wording** — never bind a rule to named DS components, nor enumerate DS token /
+  utility-class names (typography · spacing · radius · shadow …); describe by **role/category** (icon,
+  leading/trailing adornment, region, typography family, spacing scale, radius vocabulary). Concrete
+  names live in the token reference + the code, never duplicated in a skill.
+- **Load-bearing non-token pointers stay concrete** — a real file path, command, or package/registry
+  field is a pointer, not a rule binding.
+- **Self-contained.** Per-run findings + candidate fixes → `<run>/skill-feedback.md`, never the skill;
+  never link review-temporary files (skill-feedback / run-notes / handoff) as a durable reference.
+
 ## New or edited skills
  **must** follow `superpowers:writing-skills` (TDD for skills):                                                        
 1. **RED** — Run baseline scenario without skill, document failure       

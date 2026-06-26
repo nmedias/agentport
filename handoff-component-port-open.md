@@ -120,15 +120,10 @@ Aggregat über mehrere Port-/Sync-Runs (Quellen unten), dedupliziert, **pre-sort
 (keine Sprung-Verweise zwischen Items). Die Run-Tags in Kursiv *(Badge #3)* = Quell-Nummer im
 Quell-Run, unverändert. **User reviewt + wendet an** — Skills werden nie mid-run editiert.
 
-> **Formulierungs-Regel für ALLE Finding-Edits (User 2026-06-22):** der in den Skill eingearbeitete Text
-> ist **kompakt, generisch und agent-gerichtet** — KEIN Run-Bezug, KEINE Component-Namen (kein
-> `.Button`/`Dialog`/…, kein „der X-Port"), keine User-Erklärungen; nur was der Agent zur Ausführung
-> braucht. **Der Skill muss selbst vollständig sein:** Finding-/`skill-feedback.md`-/Run-Notes sind
-> review-temporär und werden gelöscht → NICHT als dauerhafte Referenz verlinken; alles Ausführungs-
-> relevante generisch in den Skill schreiben. Konkrete Belege/Beispiele sind reine Review-Evidenz und
-> verschwinden mit jenen Dateien — nicht zur „Aufbewahrung" in den Skill ziehen. (= Memory `skill-writing-style`.)
-> *(Run-Bezug/`Why`/`Verified` in DIESEM Tracker sind Review-Evidenz und korrekt — sie wandern NICHT mit
-> in den Skill; nur der `Candidate fix` ist die Edit-Vorlage.)*
+> **Formulierungs-Regel für Finding-Edits:** der eingearbeitete Text folgt den Skill Writing Rules
+> (`.claude/skills/CLAUDE.md`). *Tracker-spezifisch* (steht nicht im Skill): Run-Bezug / `Why` /
+> `Verified` hier sind Review-Evidenz und wandern NICHT mit in den Skill — nur der `Candidate fix` ist
+> die Edit-Vorlage; Skills werden nie mid-run editiert.
 
 > **Triage-Achse** (= `/skill-feedback`): hat die Skill-Lücke etwas *gekostet*, oder bist du drumherum
 > geroutet und trotzdem beim geplanten Ergebnis gelandet?
