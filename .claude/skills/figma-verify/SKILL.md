@@ -102,6 +102,13 @@ If no node was given, ask for it.
    hint — intentional vs. accidental crop is the caller's verdict; report so
    they can confirm.
 
+7. **Walk every token-backed property at a raw literal** — fill/stroke colour,
+   radius, padding/gap whose `boundVariables` entry is empty (a literal, not a
+   `VariableID:`):
+
+   → **SOFT HINT · unbound token-backed value.** node-id + property. Legitimate
+   only where no token exists; else a missed binding — caller confirms.
+
 ## Output
 
 Markdown table — id, check, PASS/FLAG/HINT, evidence — followed by:

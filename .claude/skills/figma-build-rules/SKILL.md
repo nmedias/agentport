@@ -67,6 +67,10 @@ What to model (**every build**): decide **per consumer-variable content** by the
 
 ## Binding recipes
 
+**Bind every token-backed property** (colour · radius · padding/gap · typography); a raw literal only
+where no token exists (then deliberately), never a silent fallback for an id not in hand. Which token +
+whether it exists = `tokens`; recon = the live id. CSS-inherited values still bind explicitly (no Figma cascade).
+
 - **fills / strokes / text colour** → `setBoundVariableForPaint(paint,'color',variable)` — returns a
   **NEW** paint, reassign it. **Never clone/spread a bound paint** (`{...boundPaint, opacity}`): it
   loses live resolution → renders the fallback colour (often black). Build fresh; for opacity, set it
@@ -246,11 +250,17 @@ already-built component→a nested instance. The **conditional-layout → Varian
 here — it **multiplies the matrix** (state × layout); modelling only `state` can't reproduce the
 column-stacking examples.
 
+**Build scope per part** — a layout-only container part (no surface/tokens beyond gap; behaviour Figma
+can't express) → either its own simple component (AL + gap + slot) or a frame in the examples; pick one
+per build and match the peer parts (don't mix component + frame for peers).
+
 **Three build layers + examples:**
 1. **Base sub-components** — factor recurring config shared across large sets into an internal Base;
    members instance it and override only the **delta** (token edits then propagate). (§Interaction states.)
 2. **Nest existing instances** — a composed already-built component = a real **instance** of it, never a
-   rebuild (token edits propagate).
+   rebuild (token edits propagate). If a part IS such a component: the parent's slot-default for it = a
+   nested instance (not a re-clothed primitive), and that component's own variable content = a slot (else
+   un-swappable — Done-Test catches it).
 3. **Flexible composition component** — the composite as **one** recompose-able component
    (Props/Swap/Slots per §Mechanism); whole-level variants ride on it. Slot config per §Slots.
    - **Anchored overlay** (content floats at the trigger, not centred — Figma can't "open"): model the open
@@ -287,11 +297,12 @@ column-stacking examples.
 
 ## Red flags
 
-| Trap | Reality |
-|---|---|
-| Read `componentPropertyDefinitions` off a variant | Readable only on the **set** (or a non-variant component) — throws on a single variant. |
-| Decide a Plugin API is missing because it's not in the typings | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed). |
-| Find a swap/lookup target by name **substring** over members | Member names embed `prop=value` → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot. |
-| Read `.height`/size right after toggling a child's `visible` | Plugin size reads don't reflect the visibility-driven auto-layout reflow — confirm collapse via screenshot, not size reads. |
-| Clone a slot-owning member and re-`createSlot()` | The clone keeps the SLOT but clears its `slotContentId` (the prop lives on the set) → re-bind the reference; recreating spawns a zero-referenced duplicate prop (§Slots). |
+| Trap                                                                                               | Reality                                                                                                                                                                                                                            |
+|----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Read `componentPropertyDefinitions` off a variant                                                  | Readable only on the **set** (or a non-variant component) — throws on a single variant.                                                                                                                                            |
+| Decide a Plugin API is missing because it's not in the typings                                     | Typings lag the runtime — probe it (enumerate keys / try in `use_figma`) before changing approach (e.g. `createSlot` runs but isn't typed).                                                                                        |
+| Find a swap/lookup target by name **substring** over members                                       | Member names embed `prop=value` → false-match, silently hits the wrong node. Match the target's **exact main-component name**; after a structural swap verify **structurally** (which main is nested where), not by screenshot.    |
+| Read `.height`/size right after toggling a child's `visible`                                       | Plugin size reads don't reflect the visibility-driven auto-layout reflow — confirm collapse via screenshot, not size reads.                                                                                                        |
+| Clone a slot-owning member and re-`createSlot()`                                                   | The clone keeps the SLOT but clears its `slotContentId` (the prop lives on the set) → re-bind the reference; recreating spawns a zero-referenced duplicate prop (§Slots).                                                          |
 | **Hide an element on the instance + glue a replacement beside it** to fake a per-context variation | Ends up doubled (hidden original + duplicate), prop-less, scattered across members → doesn't scale, overrides drift. Model the differing form as a **variant axis** (one per variant, prop-switched), cloned from the built forms. |
+| Apply a named effect style as the focus ring                                                       | Not the ring — wrong colour/spread/flag. Copy the ring verbatim from a verified focus member, never from a same-named style (§Interaction states).                                                                                 |
