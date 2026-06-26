@@ -67,7 +67,7 @@ const meta: Meta<typeof Item> = {
       source: { type: 'code' },
       description: {
         component:
-          'A flexible list-row composite — a leading **`ItemMedia`** (icon/image), an **`ItemContent`** (title + description), and trailing **`ItemActions`**, composed inside an **`Item`** whose two axes are `variant` (default/outline/muted) and `size` (default/sm/xs). Stack rows in an **`ItemGroup`** with **`ItemSeparator`**, or wrap an `<a>` via **`asChild`** for a clickable link row (see the **Link** story).',
+          'A flexible list-row composite — a leading **`ItemMedia`** (icon/image), an **`ItemContent`** (title + description), and trailing **`ItemActions`**, composed inside an **`Item`** whose two axes are `variant` (default/outline/muted) and `size` (default/sm/xs). Stack rows in an **`ItemGroup`** with **`ItemSeparator`**, or wrap an `<a>` via **`asChild`** for a clickable link row — the interactive form that gains the `[a]:hover` tint and the focus ring (see the **Link** and **All States** stories). The leading media kinds are documented on the [`UI/Item/ItemMedia`](?path=/docs/ui-item-itemmedia--docs) page.',
       },
     },
   },
@@ -301,4 +301,64 @@ export const Link: Story = {
       await expect(link).not.toHaveFocus();
     });
   },
+};
+
+// The interaction-state gallery — every state of the interactive (asChild link) form, side by side.
+// Item itself is a static <div>: hover (`[a]:hover:bg-muted-fill`) and focus only fire on the focusable
+// link form, so every cell is an asChild <a>. Hover/Focus rows are forced via the pseudo-states addon
+// (targeting each cell's id). `selected` is NOT a primitive state (Item stays stock-faithful) — it's the
+// call-site contract: `aria-current` + the DS accent tint, exactly what the ListNavigator block applies.
+const ST_VARIANTS = ['default', 'outline', 'muted'] as const;
+const ST_ROWS = [
+  { key: 'base', label: 'Base' },
+  { key: 'hover', label: 'Hover' },
+  { key: 'focus', label: 'Focus' },
+  { key: 'selected', label: 'Selected' },
+] as const;
+
+export const AllStates: Story = {
+  parameters: {
+    controls: { disable: true },
+    pseudo: {
+      hover: ST_VARIANTS.map((v) => `#it-${v}-hover`),
+      focusVisible: ST_VARIANTS.map((v) => `#it-${v}-focus`),
+    },
+  },
+  render: () => (
+    <div className="flex w-full flex-col gap-lg">
+      <div className="flex items-center gap-lg">
+        <span className="w-20 shrink-0" />
+        {ST_VARIANTS.map((v) => (
+          <span key={v} className="flex-1 text-format-eyebrow text-muted-ink">
+            {v}
+          </span>
+        ))}
+      </div>
+      {ST_ROWS.map((r) => (
+        <div key={r.key} className="flex items-center gap-lg">
+          <span className="w-20 shrink-0 text-format-eyebrow text-muted-ink">{r.label}</span>
+          {ST_VARIANTS.map((v) => (
+            <div key={v} className="min-w-0 flex-1">
+              <Item
+                asChild
+                id={`it-${v}-${r.key}`}
+                variant={v}
+                aria-current={r.key === 'selected' ? 'true' : undefined}
+                className={r.key === 'selected' ? 'bg-accent-fill text-accent-ink' : undefined}
+              >
+                <a href="#state">
+                  <ItemMedia variant="icon">
+                    <RiShieldCheckLine />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>invoice</ItemTitle>
+                  </ItemContent>
+                </a>
+              </Item>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
 };
