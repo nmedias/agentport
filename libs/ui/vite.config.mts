@@ -6,6 +6,28 @@ import dts from 'vite-plugin-dts';
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
 import * as path from 'path';
+import * as fs from 'fs';
+
+// The lib build emits JS + .d.ts only — the DS token layer (src/styles/*.css) is not in
+// the JS module graph, so it never reaches dist. Copy it into dist/styles/ on build so the
+// package's `./styles` export resolves for a built/published consumer too. (Monorepo dev
+// reads src live via the `agentport-monorepo` condition.) Build-only, dependency-free.
+function copyDsStyles() {
+  return {
+    name: 'ap-copy-ds-styles',
+    apply: 'build' as const,
+    closeBundle() {
+      const srcDir = path.resolve(import.meta.dirname, 'src/styles');
+      const outDir = path.resolve(import.meta.dirname, 'dist/styles');
+      fs.mkdirSync(outDir, { recursive: true });
+      for (const file of fs.readdirSync(srcDir)) {
+        if (file.endsWith('.css')) {
+          fs.copyFileSync(path.join(srcDir, file), path.join(outDir, file));
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig(() => ({
   root: import.meta.dirname,
@@ -15,7 +37,7 @@ export default defineConfig(() => ({
       '@': path.resolve(import.meta.dirname, 'src'),
     },
   },
-  plugins: [react(), tailwindcss(), dts({ entryRoot: 'src', tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json') })],
+  plugins: [react(), tailwindcss(), dts({ entryRoot: 'src', tsconfigPath: path.join(import.meta.dirname, 'tsconfig.lib.json') }), copyDsStyles()],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [],

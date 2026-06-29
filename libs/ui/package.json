@@ -24,7 +24,8 @@
       "types": "./dist/blocks/explorer/index.d.ts",
       "import": "./dist/blocks/explorer/index.js",
       "default": "./dist/blocks/explorer/index.js"
-    }
+    },
+    "./styles": "./dist/styles/globals.css"
   },
   "dependencies": {
     "@fontsource-variable/geist-mono": "^5.2.8",
