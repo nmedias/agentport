@@ -10,6 +10,7 @@
     "build": "nx build agentport",
     "preview": "nx preview agentport",
     "test": "nx run-many -t test",
+    "test:app:unit": "vitest run --project agentport --config apps/agentport/vite.config.mts",
     "test:unit": "vitest run --project @agentport/ui --config libs/ui/vite.config.mts",
     "test:stories": "vitest run --project storybook --config libs/ui/vite.config.mts",
     "lint": "nx run-many -t lint",

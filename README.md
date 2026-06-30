@@ -36,24 +36,25 @@ npm run storybook    # browse components in isolation
 
 ## Scripts
 
-| Script                     | What it runs                                                         |
-|----------------------------|----------------------------------------------------------------------|
-| `npm run dev`              | App dev server (`nx dev agentport`, port 4200)                         |
-| `npm run build`            | App production build                                                 |
-| `npm run preview`          | Preview the production build locally                                 |
-| `npm test`                 | All tests — jsdom unit + browser story tests (`nx run-many -t test`) |
-| `npm run test:unit`        | Unit specs only, jsdom (`@agentport/ui` Vitest project)               |
-| `npm run test:stories`     | Storybook stories as browser tests (Playwright/Chromium)             |
-| `npm run lint`             | Lint all projects                                                    |
-| `npm run typecheck`        | TypeScript typecheck all projects                                    |
-| `npm run check`            | lint + test + typecheck (the CI gate)                                |
-| `npm run storybook`        | Storybook dev server for `@agentport/ui`                              |
-| `npm run build-storybook`  | Build Storybook static site                                          |
-| `npm run shoot -- <id>`    | Screenshot a story from running Storybook (visual check)             |
-| `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui`                                |
-| `npm run graph`            | Open the Nx project graph                                            |
-| `npm run sync`             | Sync tsconfig project references                                     |
-| `npm run reset`            | Reset the Nx cache / daemon                                          |
+| Script                     | What it runs                                                              |
+|----------------------------|---------------------------------------------------------------------------|
+| `npm run dev`              | App dev server (`nx dev agentport`, port 4200)                              |
+| `npm run build`            | App production build                                                      |
+| `npm run preview`          | Preview the production build locally                                      |
+| `npm test`                 | All tests — jsdom unit + browser story tests (`nx run-many -t test`)      |
+| `npm run test:app:unit`    | Unit specs only, jsdom (App `agentport` Vitest project)                     |
+| `npm run test:unit`        | Unit specs only, jsdom (`@agentport/ui` Vitest project)                    |
+| `npm run test:stories`     | Storybook stories (`@agentport/ui`) as browser tests (Playwright/Chromium) |
+| `npm run lint`             | Lint all projects                                                         |
+| `npm run typecheck`        | TypeScript typecheck all projects                                         |
+| `npm run check`            | lint + test + typecheck (the CI gate)                                     |
+| `npm run storybook`        | Storybook dev server for `@agentport/ui`                                   |
+| `npm run build-storybook`  | Build Storybook static site                                               |
+| `npm run shoot -- <id>`    | Screenshot a story from running Storybook (visual check)                  |
+| `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui`                                     |
+| `npm run graph`            | Open the Nx project graph                                                 |
+| `npm run sync`             | Sync tsconfig project references                                          |
+| `npm run reset`            | Reset the Nx cache / daemon                                               |
 
 You can always call Nx directly: `npx nx <target> <project>` (e.g. `npx nx test @agentport/ui`).
 

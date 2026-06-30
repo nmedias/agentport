@@ -49,9 +49,10 @@ npm run ui:add -- <component>     # add a shadcn component into libs/ui
 ```
 
 ### Testing = two Vitest projects under one `npm run test`:
-  - @agentport/ui — jsdom .spec units
-  - storybook    — every story rendered in Chromium (@storybook/addon-vitest) + axe a11y
-A story that throws/regresses fails the gate. `test:unit` / `test:stories` scope to one project.
+  - app agentport — jsdom .spec units `test:app:unit`
+  - @agentport/ui — jsdom .spec units `test:unit`
+  - @agentport/ui storybook    — every story rendered in Chromium (@storybook/addon-vitest) + axe a11y `test:stories`
+
 
 ### Visual verification: 
 `npm run shoot -- <storyId> …` drives headless Chromium over a RUNNING
