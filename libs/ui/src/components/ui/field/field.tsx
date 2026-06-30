@@ -157,7 +157,7 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
 function FieldTitle({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="field-label"
+      data-slot="field-title"
       className={cn(
         // in a checked choice-card the title reads as accent-ink (signal/600) on the
         // accent tint — scoped to the FieldLabel card group so plain field rows are unaffected.
