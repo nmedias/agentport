@@ -39,6 +39,7 @@ function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, on
     const id = useFieldId(idProp);
 
     return (
+    <div data-slot="choice-card-checkbox">
       <ChoiceCardShell id={id} title={title} description={description} disabled={disabled} error={error}>
           <Checkbox
               id={id}
@@ -51,6 +52,7 @@ function ChoiceCardCheckbox({id: idProp, title, description, error, disabled, on
               {...props}
           />
       </ChoiceCardShell>
+    </div>
   );
 }
 
