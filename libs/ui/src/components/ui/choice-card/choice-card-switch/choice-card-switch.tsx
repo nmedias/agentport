@@ -41,6 +41,7 @@ function ChoiceCardSwitch({id: idProp, title, description, error, disabled, ...p
     const id = useFieldId(idProp);
 
     return (
+    <div data-slot="choice-card-switch">
       <ChoiceCardShell id={id} title={title} description={description} disabled={disabled} error={error}>
           <Switch
               id={id}
@@ -50,6 +51,7 @@ function ChoiceCardSwitch({id: idProp, title, description, error, disabled, ...p
               {...props}
           />
       </ChoiceCardShell>
+    </div>
   );
 }
 

@@ -32,6 +32,7 @@ function ChoiceCardRadio({id: idProp, title, description, error, disabled, ...pr
     const id = useFieldId(idProp);
 
     return (
+    <div data-slot="choice-card-radio">
       <ChoiceCardShell id={id} title={title} description={description} disabled={disabled} error={error}>
           <RadioGroupItem
               id={id}
@@ -41,6 +42,7 @@ function ChoiceCardRadio({id: idProp, title, description, error, disabled, ...pr
               {...props}
           />
       </ChoiceCardShell>
+    </div>
   );
 }
 
