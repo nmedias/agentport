@@ -290,9 +290,15 @@
   --ap-sys-input-fill-high:       var(--ap-color-ink-400);   /* emphasised field fill (new) */
   --ap-sys-input-border:          var(--ap-color-ink-400);   /* field border (AA); was: input */
 
-  /* --- Inverse (Figma: Inverse/) ----------------------------------------- */
-  --ap-sys-inverse-fill:  var(--ap-color-deep-950);  /* was: inverse (neutral/900) */
-  --ap-sys-inverse-ink:   var(--ap-color-ink-50);       /* was: inverse-foreground */
+  /* --- Inverse (Figma: Inverse/) — dark-surface family (rail, kbd badges) - */
+  --ap-sys-inverse-fill:            var(--ap-color-deep-950);  /* #00121C — dark surface */
+  --ap-sys-inverse-ink:             var(--ap-color-ink-75);       /* #E4E6EB — text on inverse (2026-07-01: was ink-50) */
+  --ap-sys-inverse-ink-muted:       var(--ap-color-ink-400);      /* #7F848B — muted text/icon on inverse (new 2026-07-01) */
+  --ap-sys-inverse-border:          var(--ap-color-deep-900);  /* #0D2531 — edge on inverse (new 2026-07-01) */
+  /* container tints = deep/900 at alpha (Figma stores raw RGBA) → color-mix on the primitive, like scrim */
+  --ap-sys-inverse-container:       color-mix(in srgb, var(--ap-color-deep-900) 30%, transparent);  /* #0D25314D (new 2026-07-01) */
+  --ap-sys-inverse-container-low:   color-mix(in srgb, var(--ap-color-deep-900) 20%, transparent);  /* #0D253133 (new 2026-07-01) */
+  --ap-sys-inverse-container-hover: color-mix(in srgb, var(--ap-color-deep-900) 55%, transparent);  /* #0D25318C (new 2026-07-01) */
 
   /* --- Theme-invariant --------------------------------------------------- */
   --ap-sys-background-fixed:  var(--ap-color-base-white);  /* do NOT override in .dark (toggle knob) */
@@ -351,7 +357,7 @@
   /* Title */
   --ap-sys-title-family:   var(--ap-font-family-sans);
   --ap-sys-title-size:     var(--ap-font-size-step-1);
-  --ap-sys-title-weight:   var(--ap-font-weight-semibold);
+  --ap-sys-title-weight:   var(--ap-font-weight-extrabold);  /* 2026-07-01: was semibold (600) */
   --ap-sys-title-line-height:  normal;
   --ap-sys-title-tracking: var(--ap-font-tracking-normal);
 
@@ -376,12 +382,21 @@
   --ap-sys-body-strong-line-height:  normal;
   --ap-sys-body-strong-tracking: var(--ap-font-tracking-normal);
 
-  /* Label */
-  --ap-sys-label-family:   var(--ap-font-family-sans);
-  --ap-sys-label-size:     var(--ap-font-size-step-0);
-  --ap-sys-label-weight:   var(--ap-font-weight-medium);
-  --ap-sys-label-line-height:  normal;
-  --ap-sys-label-tracking: var(--ap-font-tracking-normal);
+  /* Label-md (default UI label; Figma renamed label → label-md 2026-07-01. Values
+     unchanged; the code utility stays `text-format-label-md` = this md tier. See
+     text-format-label-sm for the new small tier.) */
+  --ap-sys-label-md-family:   var(--ap-font-family-sans);
+  --ap-sys-label-md-size:     var(--ap-font-size-step-0);
+  --ap-sys-label-md-weight:   var(--ap-font-weight-medium);
+  --ap-sys-label-md-line-height:  normal;
+  --ap-sys-label-md-tracking: var(--ap-font-tracking-normal);
+
+  /* Label-sm (small UI label — 11px; new 2026-07-01) */
+  --ap-sys-label-sm-family:   var(--ap-font-family-sans);
+  --ap-sys-label-sm-size:     var(--ap-font-size-step-neg1);
+  --ap-sys-label-sm-weight:   var(--ap-font-weight-medium);
+  --ap-sys-label-sm-line-height:  normal;
+  --ap-sys-label-sm-tracking: var(--ap-font-tracking-normal);
 
   /* Eyebrow (uppercase micro-labels) */
   --ap-sys-eyebrow-family:   var(--ap-font-family-mono);
@@ -390,12 +405,20 @@
   --ap-sys-eyebrow-line-height:  normal;
   --ap-sys-eyebrow-tracking: var(--ap-font-tracking-wide);
 
-  /* Data-sm (mono table data; was: data) */
+  /* Data-sm (micro mono label — 9px; retiered 2026-07-01: was 11px/regular/normal,
+     the 11px mono role moved to data-md) */
   --ap-sys-data-sm-family:   var(--ap-font-family-mono);
-  --ap-sys-data-sm-size:     var(--ap-font-size-step-neg1);
-  --ap-sys-data-sm-weight:   var(--ap-font-weight-regular);
+  --ap-sys-data-sm-size:     var(--ap-font-size-step-neg2);
+  --ap-sys-data-sm-weight:   var(--ap-font-weight-medium);
   --ap-sys-data-sm-line-height:  normal;
-  --ap-sys-data-sm-tracking: var(--ap-font-tracking-normal);
+  --ap-sys-data-sm-tracking: var(--ap-font-tracking-wide);
+
+  /* Data-md (mono data — 11px; new 2026-07-01, takes the prior data-sm 11px role) */
+  --ap-sys-data-md-family:   var(--ap-font-family-mono);
+  --ap-sys-data-md-size:     var(--ap-font-size-step-neg1);
+  --ap-sys-data-md-weight:   var(--ap-font-weight-medium);
+  --ap-sys-data-md-line-height:  normal;
+  --ap-sys-data-md-tracking: var(--ap-font-tracking-normal);
 
   /* Data-lg (large mono data: command/query input; was: input) */
   --ap-sys-data-lg-family:   var(--ap-font-family-mono);

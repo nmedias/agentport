@@ -75,7 +75,7 @@ describe('Item', () => {
       </Item>
     );
     expect(container.querySelector('[data-slot="item-title"]')?.className).toContain(
-      'text-format-label'
+      'text-format-label-md'
     );
     const desc = container.querySelector('[data-slot="item-description"]')?.className ?? '';
     expect(desc).toContain('text-format-body');

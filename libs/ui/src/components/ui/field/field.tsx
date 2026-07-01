@@ -38,7 +38,7 @@ function FieldLegend({ className, variant = 'legend', ...props }: FieldLegendPro
       data-slot="field-legend"
       data-variant={variant}
       className={cn(
-        'mb-sm data-[variant=label]:text-format-label data-[variant=legend]:text-format-title',
+        'mb-sm data-[variant=label]:text-format-label-md data-[variant=legend]:text-format-title',
         className,
       )}
       {...props}
@@ -161,7 +161,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<'div'>) {
       className={cn(
         // in a checked choice-card the title reads as accent-ink (signal/600) on the
         // accent tint — scoped to the FieldLabel card group so plain field rows are unaffected.
-        'flex w-fit items-center gap-md text-format-label group-data-[disabled=true]/field:opacity-50 group-has-data-checked/field-label:text-accent-ink',
+        'flex w-fit items-center gap-md text-format-label-md group-data-[disabled=true]/field:opacity-50 group-has-data-checked/field-label:text-accent-ink',
         className,
       )}
       {...props}

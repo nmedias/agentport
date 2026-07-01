@@ -83,7 +83,7 @@ export const Default: Story = {
       <TableBody>
         {invoices.map((row) => (
           <TableRow key={row.invoice}>
-            <TableCell className="text-format-label">{row.invoice}</TableCell>
+            <TableCell className="text-format-label-md">{row.invoice}</TableCell>
             <TableCell>{row.status}</TableCell>
             <TableCell>{row.method}</TableCell>
             <TableCell className="text-right">{row.amount}</TableCell>
@@ -146,7 +146,7 @@ function SelectableDemo() {
                 }
               />
             </TableCell>
-            <TableCell className="text-format-label">{r.invoice}</TableCell>
+            <TableCell className="text-format-label-md">{r.invoice}</TableCell>
             <TableCell>{r.status}</TableCell>
             <TableCell className="text-right">{r.amount}</TableCell>
           </TableRow>
@@ -286,7 +286,7 @@ export const ComponentCells: Story = {
           <TableCell>
             <Checkbox aria-label="Select INV001" />
           </TableCell>
-          <TableCell className="text-format-label">INV001</TableCell>
+          <TableCell className="text-format-label-md">INV001</TableCell>
           <TableCell>
             <Badge variant="secondary">Paid</Badge>
           </TableCell>
@@ -296,7 +296,7 @@ export const ComponentCells: Story = {
           <TableCell>
             <Checkbox aria-label="Select INV002" checked />
           </TableCell>
-          <TableCell className="text-format-label">INV002</TableCell>
+          <TableCell className="text-format-label-md">INV002</TableCell>
           <TableCell>
             <Badge variant="outline">Pending</Badge>
           </TableCell>
@@ -326,17 +326,17 @@ export const RowStates: Story = {
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell className="text-format-label">Default</TableCell>
+          <TableCell className="text-format-label-md">Default</TableCell>
           <TableCell>INV001</TableCell>
           <TableCell className="text-right">$250.00</TableCell>
         </TableRow>
         <TableRow id="tr-hover">
-          <TableCell className="text-format-label">Hover</TableCell>
+          <TableCell className="text-format-label-md">Hover</TableCell>
           <TableCell>INV002</TableCell>
           <TableCell className="text-right">$150.00</TableCell>
         </TableRow>
         <TableRow data-state="selected">
-          <TableCell className="text-format-label">Selected</TableCell>
+          <TableCell className="text-format-label-md">Selected</TableCell>
           <TableCell>INV003</TableCell>
           <TableCell className="text-right">$350.00</TableCell>
         </TableRow>

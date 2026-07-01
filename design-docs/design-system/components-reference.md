@@ -103,7 +103,7 @@ status_note: >
   notes: >
     Single-element CVA span (asChild via Radix Slot, data-slot/data-variant, [&>svg]:size-3 icon).
     radix-nova source = 6 variants (ghost/link are Nova extras over the doc's 4) — all kept in code
-    AND the full Figma matrix. Geometry: rounded-4xl→corner-full (full pill); text-format-label
+    AND the full Figma matrix. Geometry: rounded-4xl→corner-full (full pill); text-format-label-md
     (no 12px sans → role-picked, 14px); px-2→px-md, py-0.5→py-2xs, gap-1→gap-xs; h-5/size-3 numeric;
     focus border-ring + ring/50 ring-[3px]; dark: dropped. Colour clothing (Figma Badge bindings,
     2026-06-17 -fill/-ink): default bg-primary-fill + text-primary-ink · secondary bg-secondary +
@@ -133,7 +133,7 @@ status_note: >
     Colour-Clothing (Figma .Button-Bindings, 2026-06-17): default = bg-primary-fill + text-primary-ink ·
     secondary = bg-secondary + text-secondary-ink · destructive = bg-destructive + text-destructive-ink ·
     outline = bg-surface + border + hover bg-accent-fill/text-accent-ink · ghost = hover accent-fill/-ink ·
-    link = text-primary. Radius per NAME (corner-lg/-md), text-format-label. Figma treibt hover/active
+    link = text-primary. Radius per NAME (corner-lg/-md), text-format-label-md. Figma treibt hover/active
     über ein state-layer-Overlay → Code nutzt das /opacity-Idiom. Focus-Ring = ring-ring/50 (Figma-Effekt
     ist rohes #4a5562@50%, unbound → sollte an ring gebunden werden). Icon-only (size=icon*) verlangt
     aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
@@ -153,7 +153,7 @@ status_note: >
   skill: /shadcn-component-port
   notes: >
     h-8 / corner-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
-    text → text-format-label; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
+    text → text-format-label-md; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
     invalid destructive (⚠ Platzhalter-Token). dark: entfernt.
 
 - name: Textarea
@@ -171,7 +171,7 @@ status_note: >
   skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
   notes: >
     Feld-Zwilling von Input, höher. min-h-16 / corner-lg / px-md / py-md; field-sizing-content (auto-grow).
-    bg-transparent → bg-input-background; text → text-format-label; placeholder:text-input-placeholder;
+    bg-transparent → bg-input-background; text → text-format-label-md; placeholder:text-input-placeholder;
     focus border-ring + ring/50 ring-[3px]; invalid destructive (⚠). Figma: Text top-aligned
     (counter=MIN), keine Truncation. dark: + disabled:bg-input/50 entfernt.
 
@@ -199,7 +199,7 @@ status_note: >
     6-teiliges Composite, RE-PORT nach Skill-Rework. Deps: Button ✓, Input ✓, Textarea ✓, Kbd ✓. Die GRUPPE
     besitzt Fläche+Border+Focus/Invalid/Disabled (has-[control:focus-visible]/has-[aria-invalid]/has-disabled);
     Controls randlos (border-0 bg-transparent, data-slot=input-group-control). DS: Gruppe trägt bg-input-background
-    (opak); Addon text-format-label muted; Text text-format-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
+    (opak); Addon text-format-label-md muted; Text text-format-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
     Beispiel-Instanzen (Done-Test): Container-Komposition (state×layout) mit Children-Slot, Addon mit content-Slot,
     Input/Textarea/Text als Text-Prop. **Button nestet eine echte ghost .Button-Instanz** (nicht standalone re-clothed)
     → Token+Component-Propagation; Geometrie-Delta via Base-Override, Icon-Content via swapComponent (DS-Button
@@ -314,7 +314,7 @@ status_note: >
     bricht den Doc-Usage-Contract; Story InDialog = Doc-Demo inkl. ⌘J/Ctrl+J-Listener — DOM-lib dafür
     in tsconfig.storybook.json nachgerüstet — plus Button+Kbd-Trigger als Klick-Affordance). DS-Abweichungen:
     Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
-    text-format-label (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
+    text-format-label-md (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
     auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
     Selektion = accent-Cyan-Tint (data-selected bg-accent + text-accent-foreground), NICHT Stock-Neutralgrau;
     Group-Heading = text-format-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-format-kbd
@@ -423,9 +423,9 @@ status_note: >
   notes: >
     Radix Label (LabelPrimitive.Root), als HARTE Field-Dependency mitportiert (FieldLabel wrappt Label;
     delete/defer würde Field brechen). Single-Element, kein CVA im Code. DS: text-sm leading-none font-medium →
-    text-format-label (14/500, Rolle Form-/Toggle-Labels, fill=foreground); gap-2→gap-md (itemSpacing bound).
+    text-format-label-md (14/500, Rolle Form-/Toggle-Labels, fill=foreground); gap-2→gap-md (itemSpacing bound).
     select-none + group/peer-disabled Opacity unverändert. Eigene Stories (Default/WithControl/Disabled) + Spec
-    (3 Tests inkl. text-format-label-Survival). FIGMA-REVISION 2026-06-12: eigenes .Label-Set gebaut (HORIZONTAL
+    (3 Tests inkl. text-format-label-md-Survival). FIGMA-REVISION 2026-06-12: eigenes .Label-Set gebaut (HORIZONTAL
     auto-layout gap-md, Title→nein, Label-Style + foreground; text-Prop). Achse state=[default,disabled] —
     disabled = opacity 0.5 (das einzige reale Label-State; im Code group/peer-disabled-getrieben, kein CVA → in
     Figma als state-Achse modelliert, damit ein echtes Set statt Einzel-Component). Als label-Slot-Default in
@@ -465,7 +465,7 @@ status_note: >
     Kardinalitätslücke bewusst). Code-only (kein Figma-Set): FieldLegend (lebt als Slot in .FieldSet),
     FieldTitle + orientation=responsive (Container-Query @md → Figma kann das nicht; Wrap-Proxy verworfen, s.
     Revision-Note). Deps: Input ✓, Textarea ✓, Separator ✓, Button ✓; Label NEU co-portiert (harte Field-Dep).
-    DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter); Typo text-sm→text-format-label/
+    DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter); Typo text-sm→text-format-label-md/
     -body, legend text-base(16, kein Rung)→text-format-title (Rolle Section-Caption); FieldError = ⚠
     destructive-PLATZHALTER (VariableID:3038:3, bound aber NICHT final). dark: entfernt.
     4 Slots mergen set-level (konsistente Namen). figma-verify CLEAN.
@@ -515,7 +515,7 @@ status_note: >
   skill: Figma-Revision (2026-06-12)
   notes: >
     Text-Component (war .Field code_only_part, jetzt eigenes Set — aus code_only_parts entfernt). variant=legend
-    → text-format-title (18/600, Section-Caption-Rolle); variant=label → text-format-label (14/500); fill
+    → text-format-title (18/600, Section-Caption-Rolle); variant=label → text-format-label-md (14/500); fill
     foreground (VariableID:3037:3). variant MAPPT aufs Code-Prop FieldLegend.variant (KEIN Fork — anders als
     Field.controlPosition). Text-Property-Konvention: legend (children)/{Legend}. figma-verify CLEAN.
 
@@ -871,7 +871,7 @@ status_note: >
       scroll_buttons: { up: "4314:1998 (RiArrowUpSLine)", down: "4314:2023 (RiArrowDownSLine)" }
     group_set:                                                                      # NEW 06-20 FIX3 — SelectGroup als eigenes Set
       component: { name: "SelectGroup", id: "4326:2371" }
-      props: { label: "label#4326:8 (TEXT '{Label}', SelectLabel-Region px-sm/py-xs, text-format-label, muted-ink)", items: "items#4326:7 (SLOT, default 2 SelectItem-Instanzen)" }
+      props: { label: "label#4326:8 (TEXT '{Label}', SelectLabel-Region px-sm/py-xs, text-format-label-md, muted-ink)", items: "items#4326:7 (SLOT, default 2 SelectItem-Instanzen)" }
       note: "labeled group container = SelectLabel-Text + items-SLOT, container p-xs. Reusable; nistet in den SelectContent items-Slot. Ersetzt das frühere inline-SelectLabel (kein eigenes Set davor)."
     composition_set:                                                                # NEW 06-20 FIX4 — Top-level Select (open-state, anchored)
       component: { name: "Select", id: "4326:2477" }
@@ -892,9 +892,9 @@ status_note: >
     USER-DECISIONS (T2.7): (1) Trigger-Fill = bg-input-fill (Input-Parität, bewusste Abweichung vom Nova-bg-transparent;
     der geschlossene Trigger liest identisch zu Input/Textarea/InputGroup). (2) Scope = volles Composite.
     DS-Clothing: Trigger = Input-Klon (corner-lg/sm corner-md, border-input-border, focus border-ring + ring/50
-    ring-[3px], invalid destructive ⚠ + ring/20, placeholder→input-ink-placeholder, text-format-label, h-8/h-7 numerisch,
+    ring-[3px], invalid destructive ⚠ + ring/20, placeholder→input-ink-placeholder, text-format-label-md, h-8/h-7 numerisch,
     Chevron muted-ink); Content = Command-Surface (dialog-fill + border + shadow-elevation + corner-lg, popover→dialog
-    konsolidiert); Item = accent-fill/accent-ink-Highlight (= Command-Selektion) + Check, corner-md; Label text-format-label
+    konsolidiert); Item = accent-fill/accent-ink-Highlight (= Command-Selektion) + Check, corner-md; Label text-format-label-md
     muted-ink (12px-Sans→14 Rolle-Snap, findings #20/#28); Separator -mx-xs/my-xs bg-border. dark: + inerter
     not-data-[variant=destructive]-Selektor (Nova-Item hat kein variant-Prop) gedroppt.
     DESIGN-FORKS / CODE↔FIGMA (für /component-sync): D1 SelectItem-Check = Figma trailing Layout-Vektor (pr-md/right-2),
@@ -1008,7 +1008,7 @@ status_note: >
     (T3): bg-popover→bg-dialog-fill · text-popover-foreground→text-dialog-ink · rounded-lg→corner-lg (radius/8, control-
     attached, NICHT Dialogs corner-xl) · ring-1 ring-foreground/10→border (Nova-Raised-Ring → DS-border, verbatim
     Dialog/Command) · shadow-md→shadow-elevation · gap-2.5/p-2.5 (10px, keine Rung)→gap-md(8)/p-lg(12) per ROLLE
-    (B22/B23) · text-sm→text-format-body. Header: gap-0.5→gap-2xs; Title text-sm/font-medium→text-format-label
+    (B22/B23) · text-sm→text-format-body. Header: gap-0.5→gap-2xs; Title text-sm/font-medium→text-format-label-md
     (kompakte Caption 14/500, NICHT Dialogs title 18 — Popover ist kompakt); Description muted-foreground→muted-ink.
     Geometrie numerisch (w-72, z-50, sideOffset/align). Motion-Klassen (data-[side]/data-open/data-closed) verbatim.
     Docgen (06-23-Fix A4): PopoverProps am Root (Omit+Re-Declare open/defaultOpen/onOpenChange/modal → ArgsTable aus
@@ -1065,7 +1065,7 @@ status_note: >
     konsolidierte RAISED-OVERLAY-Fläche umgekleidet: bg-dialog-fill + text-dialog-ink + border (1px,
     nova hatte keine) + shadow-elevation (Tiefe, stock ist flach) wie Dialog/Command. Tooltip wird damit
     eine LIGHT raised Chip (recorded dark→light fork). Geometrie/Typo: rounded-md→corner-md, gap-1.5→gap-sm,
-    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label (kein 12px-Sans-Rung → Rolle „kurzes Label", +2px
+    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label-md (kein 12px-Sans-Rung → Rolle „kurzes Label", +2px
     Snap; B21/B23). Arrow erbt dialog-fill (bg+fill), rounded-[2px] als arbiträre Diamant-Geometrie verbatim,
     rotate/translate numerisch. Animations-/Layout-/Radix-transform-origin-Utilities verbatim (§6 keep_valid).
     FIGMA: Content-Region als SLOT modelliert (content#4384:0, {Label}-Default), NICHT TEXT-Prop — der Code
@@ -1120,7 +1120,7 @@ status_note: >
     zu SelectItem (selected-Axis nur, weil Radix dort intrinsischen Selected-State liefert). (2) hover
     (`[a]:hover:bg-muted-fill`) + focus-ring sind LINK-ONLY by design — der [a]:-Selektor + ein bare-div
     ist nicht fokussierbar → beide States nur an der asChild-Link-Form. DS-Mapping: rounded-lg→corner-lg,
-    text-sm→text-format-body (base) / text-format-label (title) / body+muted-ink (desc); 10px-Padding/Gap
+    text-sm→text-format-body (base) / text-format-label-md (title) / body+muted-ink (desc); 10px-Padding/Gap
     (gap-2.5/py-2.5/px-2.5) ist OFF-GRID → auf benannte Steps gesnappt (default/sm = lg=12, xs = md=8); das
     Haus snappt (kein 2.5/[10px] in der Lib). GEDROPPT: xs:text-xs (12px) — kein sub-14 Sans-Format (Open
     Item). Focus-Klassen unverändert (schon DS = badge/button). DEPENDENCY-AUDIT: ui:add schrieb flache
@@ -1162,7 +1162,7 @@ status_note: >
     Multi-Part-Composite OHNE Root-Element, 8 prop-lose Pass-Through-Parts (Table/Header/Body/Footer/Row/
     Head/Cell/Caption), KEIN CVA. Einzige Interaktions-Achse = TableRow state. Deps: keine (ui:add schrieb
     nur table.tsx, keine lucide-Icons). DS-Mapping: text-sm→text-format-body; head/footer font-medium→
-    text-format-label; text-foreground→text-ink; text-muted-foreground→text-muted-ink; px-2/p-2→px-md/p-md;
+    text-format-label-md; text-foreground→text-ink; text-muted-foreground→text-muted-ink; px-2/p-2→px-md/p-md;
     mt-4→mt-xl; border-b/-t/-0 = nur Breite, Farbe via Base-Layer (border-border), kein Class.
     ROW-TINT (User-Entscheid 2026-06-26): hover NEUTRAL (bg-muted-fill/50, wie Item-Zeilen) ≠ selected
     ACCENT (bg-accent-fill, wie Command-Selektion — muted-fill #f9fcfd wäre für eine selektierte Zeile

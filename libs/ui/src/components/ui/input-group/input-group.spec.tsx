@@ -62,6 +62,6 @@ describe('InputGroup', () => {
         <InputGroupTextarea placeholder="Notes" />
       </InputGroup>
     );
-    expect(getByRole('textbox').className).toContain('text-format-label');
+    expect(getByRole('textbox').className).toContain('text-format-label-md');
   });
 });

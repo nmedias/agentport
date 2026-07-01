@@ -10,7 +10,7 @@ describe('Badge', () => {
   it('carries the DS label typography format', () => {
     const { container } = render(<Badge>New</Badge>);
     expect(container.querySelector('[data-slot="badge"]')?.className).toContain(
-      'text-format-label'
+      'text-format-label-md'
     );
   });
 

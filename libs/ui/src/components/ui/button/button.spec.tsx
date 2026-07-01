@@ -39,7 +39,7 @@ describe('Button asChild', () => {
     const cls = link.className.split(/\s+/);
     expect(cls).toContain('h-6'); // size=xs geometry
     expect(cls).toContain('corner-md'); // xs radius step
-    expect(cls).toContain('text-format-label'); // DS typography survives the merge
+    expect(cls).toContain('text-format-label-md'); // DS typography survives the merge
     expect(cls).toContain('custom-marker'); // child className preserved
   });
 

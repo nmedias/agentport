@@ -44,13 +44,13 @@ describe('Select', () => {
   });
 
   // Guards the T3 picks against the theme reset: corner-lg is a DS custom utility (rounded-* is
-  // dead) and text-format-label is a multi-prop typo @utility — both must survive twMerge (the
+  // dead) and text-format-label-md is a multi-prop typo @utility — both must survive twMerge (the
   // cn() extension knows the corner-* + text-format groups), or the trigger silently loses its
   // radius / type. Assert they reach markup.
-  it('carries the DS corner-lg radius + text-format-label utilities on the trigger', () => {
+  it('carries the DS corner-lg radius + text-format-label-md utilities on the trigger', () => {
     const { getByRole } = renderSelect();
     const cls = getByRole('combobox').className;
     expect(cls).toContain('corner-lg');
-    expect(cls).toContain('text-format-label');
+    expect(cls).toContain('text-format-label-md');
   });
 });

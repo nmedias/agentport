@@ -159,7 +159,7 @@ function Hero() {
 
         <p
             aria-hidden
-            className="mt-xl text-format-label uppercase tracking-[0.5em]"
+            className="mt-xl text-format-label-md uppercase tracking-[0.5em]"
         >
           design system
         </p>

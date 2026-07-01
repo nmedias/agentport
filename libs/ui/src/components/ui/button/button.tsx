@@ -14,7 +14,7 @@ type ButtonSize = 'default' | 'xs' | 'sm' | 'lg';
 type IconSize = 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap corner-lg text-format-label transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+  "inline-flex items-center justify-center whitespace-nowrap corner-lg text-format-label-md transition-all active:translate-y-px disabled:pointer-events-none disabled:opacity-50 shrink-0 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:border-destructive aria-invalid:ring-destructive/20",
   {
     variants: {
       variant: {

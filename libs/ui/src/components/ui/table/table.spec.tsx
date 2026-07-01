@@ -58,7 +58,7 @@ describe('Table', () => {
   it('head cell = label format + ink, px-md, h-10 (no dead text-foreground/font-medium)', () => {
     const { container } = renderTable();
     const c = cls(container.querySelector('[data-slot="table-head"]'));
-    expect(c).toContain('text-format-label');
+    expect(c).toContain('text-format-label-md');
     expect(c).toContain('text-ink');
     expect(c).toContain('px-md');
     expect(c).toContain('h-10');
@@ -77,7 +77,7 @@ describe('Table', () => {
     const { container } = renderTable();
     const c = cls(container.querySelector('[data-slot="table-footer"]'));
     expect(c).toContain('bg-muted-fill/50');
-    expect(c).toContain('text-format-label');
+    expect(c).toContain('text-format-label-md');
     expect(c).toContain('border-t');
     expect(c).not.toContain('font-medium');
   });

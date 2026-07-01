@@ -1,7 +1,7 @@
 import { FoundationsPage, Group, TypeSpecimen } from './foundations-kit';
 
 /*
-  Foundations / Typography — all 12 composition formats (tokens-reference.md §4).
+  Foundations / Typography — all 14 composition formats (tokens-reference.md §4).
   Each is a single `text-format-*` utility composing family + size + weight +
   line-height + tracking; the raw text-/font- utilities are dead. Specimen +
   the 5 part values + role, quoted from tokens-reference.
@@ -43,7 +43,7 @@ const FORMATS = [
     sample: 'Title',
     family: 'sans',
     size: '18',
-    weight: '600 semibold',
+    weight: '800 extrabold',
     lineHeight: 'normal',
     tracking: '0',
     role: 'Section / panel title.',
@@ -79,14 +79,24 @@ const FORMATS = [
     role: 'Emphasised body copy.',
   },
   {
-    format: 'text-format-label',
+    format: 'text-format-label-md',
     sample: 'Label',
     family: 'sans',
     size: '14',
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Form / toggle labels, button text.',
+    role: 'Default UI label — form / toggle labels, button text.',
+  },
+  {
+    format: 'text-format-label-sm',
+    sample: 'Small label',
+    family: 'sans',
+    size: '11',
+    weight: '500 medium',
+    lineHeight: 'normal',
+    tracking: '0',
+    role: 'Small UI label.',
   },
   {
     format: 'text-format-eyebrow uppercase',
@@ -100,13 +110,23 @@ const FORMATS = [
   },
   {
     format: 'text-format-data-sm',
+    sample: 'choice-card-switch · L3 · 2 parts',
+    family: 'mono',
+    size: '9',
+    weight: '500 medium',
+    lineHeight: 'normal',
+    tracking: '0.5px',
+    role: 'Micro mono label (rail meta, storybook slug).',
+  },
+  {
+    format: 'text-format-data-md',
     sample: 'documentType · 2026-06-18 · 1,204 rows',
     family: 'mono',
     size: '11',
-    weight: '400 regular',
+    weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Small tabular mono data (also filenames etc.).',
+    role: 'Tabular mono data (filenames, property values).',
   },
   {
     format: 'text-format-data-lg',
@@ -139,7 +159,7 @@ export function Typography() {
     >
       <Group
         name="The format ladder"
-        note="Twelve formats, each a single text-format-* utility. The five part values are shown beside every specimen."
+        note="Fourteen formats, each a single text-format-* utility. The five part values are shown beside every specimen."
       >
         <div className="flex flex-col">
           {FORMATS.map((f) => (

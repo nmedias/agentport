@@ -20,6 +20,6 @@ describe('Label', () => {
     const { container } = render(<Label>Email</Label>);
     expect(
       (container.querySelector('[data-slot="label"]') as HTMLElement).className,
-    ).toContain('text-format-label');
+    ).toContain('text-format-label-md');
   });
 });

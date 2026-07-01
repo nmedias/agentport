@@ -1,7 +1,7 @@
 /*
   ── DS utility classes ──────────────────────────────────────────────────────
   Custom @utility definitions on top of the theme bridge (tw-theme.css):
-  named spacing steps, the 11 typography formats, no-scrollbar.
+  named spacing steps, the typography formats, no-scrollbar.
 */
 
 /* ── Named spacing steps → utilities ─────────────────────────────────────────
@@ -128,12 +128,21 @@
   line-height: var(--ap-sys-body-strong-line-height);
   letter-spacing: var(--ap-sys-body-strong-tracking);
 }
-@utility text-format-label {
-  font-family: var(--ap-sys-label-family);
-  font-size: var(--ap-sys-label-size);
-  font-weight: var(--ap-sys-label-weight);
-  line-height: var(--ap-sys-label-line-height);
-  letter-spacing: var(--ap-sys-label-tracking);
+/* text-format-label-md = the md tier (Figma: Label/label-md). Utility keeps the short
+   name — it's the default UI label (53+ call sites); the small tier is -label-sm below. */
+@utility text-format-label-md {
+  font-family: var(--ap-sys-label-md-family);
+  font-size: var(--ap-sys-label-md-size);
+  font-weight: var(--ap-sys-label-md-weight);
+  line-height: var(--ap-sys-label-md-line-height);
+  letter-spacing: var(--ap-sys-label-md-tracking);
+}
+@utility text-format-label-sm {
+  font-family: var(--ap-sys-label-sm-family);
+  font-size: var(--ap-sys-label-sm-size);
+  font-weight: var(--ap-sys-label-sm-weight);
+  line-height: var(--ap-sys-label-sm-line-height);
+  letter-spacing: var(--ap-sys-label-sm-tracking);
 }
 @utility text-format-eyebrow {
   font-family: var(--ap-sys-eyebrow-family);
@@ -148,6 +157,13 @@
   font-weight: var(--ap-sys-data-sm-weight);
   line-height: var(--ap-sys-data-sm-line-height);
   letter-spacing: var(--ap-sys-data-sm-tracking);
+}
+@utility text-format-data-md {
+  font-family: var(--ap-sys-data-md-family);
+  font-size: var(--ap-sys-data-md-size);
+  font-weight: var(--ap-sys-data-md-weight);
+  line-height: var(--ap-sys-data-md-line-height);
+  letter-spacing: var(--ap-sys-data-md-tracking);
 }
 @utility text-format-data-lg {
   font-family: var(--ap-sys-data-lg-family);

@@ -133,9 +133,14 @@
   --color-input-fill-high: var(--ap-sys-input-fill-high);
   --color-input-border: var(--ap-sys-input-border);
 
-  /* Inverse */
+  /* Inverse — dark-surface family (rail, kbd badges) */
   --color-inverse-fill: var(--ap-sys-inverse-fill);
   --color-inverse-ink: var(--ap-sys-inverse-ink);
+  --color-inverse-ink-muted: var(--ap-sys-inverse-ink-muted);
+  --color-inverse-border: var(--ap-sys-inverse-border);
+  --color-inverse-container: var(--ap-sys-inverse-container);
+  --color-inverse-container-low: var(--ap-sys-inverse-container-low);
+  --color-inverse-container-hover: var(--ap-sys-inverse-container-hover);
 
   /* Theme-invariant */
   --color-background-fixed: var(--ap-sys-background-fixed);

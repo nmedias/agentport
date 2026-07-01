@@ -68,9 +68,9 @@ describe('Command', () => {
 
   // Guards the T1 twMerge setup: the DS typography classes must survive in the markup
   // (text-format group, else they collapse under text-color and get dropped).
-  it('keeps the DS typography classes (text-format-label on the field, text-format-body on items)', () => {
+  it('keeps the DS typography classes (text-format-label-md on the field, text-format-body on items)', () => {
     const { getByPlaceholderText, getByText } = render(<Palette />);
-    expect(getByPlaceholderText('Search…').className).toContain('text-format-label');
+    expect(getByPlaceholderText('Search…').className).toContain('text-format-label-md');
     expect(
       getByText('Profile').closest('[data-slot=command-item]')?.className
     ).toContain('text-format-body');

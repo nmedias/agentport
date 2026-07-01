@@ -158,9 +158,14 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 - { token: input-fill-high,       css_var: --ap-sys-input-fill-high,       primitive: ink/400, value: "#7f848b", utilities: [bg-input-fill-high],          use: "Betonter Feld-Fill.", note: "neu" }
 - { token: input-border,          css_var: --ap-sys-input-border,          primitive: ink/400, value: "#7f848b", utilities: [border-input-border],         use: "Feld-Border.", note: "war: input (neutral/450)" }
 
-# Inverse (Figma: Inverse/)
-- { token: inverse-fill, css_var: --ap-sys-inverse-fill, primitive: deep/950, value: "#00121c", utilities: [bg-inverse-fill],  use: "Dunkle Fläche (invertierte Chips/Pillen).", note: "war: inverse (neutral/900)" }
-- { token: inverse-ink,  css_var: --ap-sys-inverse-ink,  primitive: ink/50,      value: "#f3f5fa", utilities: [text-inverse-ink], use: "Text auf inverse-fill." }
+# Inverse (Figma: Inverse/) — dark-surface family (Rail, kbd-Badges). 2026-07-01: +ink-muted/border/container-Trio; inverse-ink ink/50→ink/75.
+- { token: inverse-fill,            css_var: --ap-sys-inverse-fill,            primitive: deep/950, value: "#00121c",   utilities: [bg-inverse-fill],            use: "Dunkle Fläche (Rail, invertierte Chips/Pillen).", note: "war: inverse (neutral/900)" }
+- { token: inverse-ink,             css_var: --ap-sys-inverse-ink,             primitive: ink/75,      value: "#e4e6eb",   utilities: [text-inverse-ink],           use: "Text auf inverse-fill.", note: "2026-07-01: war ink/50" }
+- { token: inverse-ink-muted,       css_var: --ap-sys-inverse-ink-muted,       primitive: ink/400,     value: "#7f848b",   utilities: [text-inverse-ink-muted],     use: "Gedämpfter Text/Icon auf inverse-fill.", note: "neu 2026-07-01" }
+- { token: inverse-border,          css_var: --ap-sys-inverse-border,          primitive: deep/900, value: "#0d2531",   utilities: [border-inverse-border],      use: "Kante auf inverse-fill.", note: "neu 2026-07-01" }
+- { token: inverse-container,       css_var: --ap-sys-inverse-container,       primitive: "deep/900 @30%", value: "#0d25314d", utilities: [bg-inverse-container],       use: "Container-Tint auf inverse-fill (Card in der Rail).", note: "neu 2026-07-01; color-mix (Alpha) wie scrim" }
+- { token: inverse-container-low,   css_var: --ap-sys-inverse-container-low,   primitive: "deep/900 @20%", value: "#0d253133", utilities: [bg-inverse-container-low],   use: "Leiser Container-Tint (Idle/inaktiv).", note: "neu 2026-07-01; color-mix" }
+- { token: inverse-container-hover, css_var: --ap-sys-inverse-container-hover, primitive: "deep/900 @55%", value: "#0d25318c", utilities: [bg-inverse-container-hover], use: "Container-Tint Hover/aktiv.", note: "neu 2026-07-01; color-mix" }
 
 # Theme-invariant
 - { token: background-fixed, css_var: --ap-sys-background-fixed, primitive: base/white, value: "#ffffff", utilities: [bg-background-fixed], use: "Theme-invariante weiße Fläche (Toggle-Knob).", avoid: "Im künftigen .dark NICHT überschreiben." }
@@ -279,10 +284,11 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
 
 - token: title
   css_var: "--ap-sys-title-{family,size,weight,line-height,tracking}"
-  primitive: { family: family/sans, size: size/step-1, weight: weight/semibold, line-height: normal, tracking: tracking/normal }
-  value: { family: sans, size: 18, weight: 600, line-height: normal, tracking: "0" }
+  primitive: { family: family/sans, size: size/step-1, weight: weight/extrabold, line-height: normal, tracking: tracking/normal }
+  value: { family: sans, size: 18, weight: 800, line-height: normal, tracking: "0" }
   utilities: [text-format-title]
   use: "Abschnitts-/Sektions-Titel."
+  note: "2026-07-01: weight 600→800 (extrabold). Betrifft FieldTitle/FieldLegend + DialogTitle."
 
 - token: lead
   css_var: "--ap-sys-lead-{family,size,weight,line-height,tracking}"
@@ -305,12 +311,21 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
   utilities: [text-format-body-strong]
   use: "Betonter Fließtext."
 
-- token: label
-  css_var: "--ap-sys-label-{family,size,weight,line-height,tracking}"
+- token: label-md
+  css_var: "--ap-sys-label-md-{family,size,weight,line-height,tracking}"
   primitive: { family: family/sans, size: size/step-0, weight: weight/medium, line-height: normal, tracking: tracking/normal }
   value: { family: sans, size: 14, weight: 500, line-height: normal, tracking: "0" }
-  utilities: [text-format-label]
-  use: "Labels: Form-/Toggle-Labels, Button-Text."
+  utilities: [text-format-label-md]
+  use: "Default-UI-Label (Form-/Toggle-Labels, Button-Text)."
+  note: "2026-07-01: Figma-Rename label→label-md; Utility bleibt bewusst `text-format-label-md` (53+ Call-Sites, kein Rename-Churn)."
+
+- token: label-sm
+  css_var: "--ap-sys-label-sm-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/sans, size: size/step-neg1, weight: weight/medium, line-height: normal, tracking: tracking/normal }
+  value: { family: sans, size: 11, weight: 500, line-height: normal, tracking: "0" }
+  utilities: [text-format-label-sm]
+  use: "Kleines UI-Label (11px)."
+  note: "neu 2026-07-01."
 
 - token: eyebrow
   css_var: "--ap-sys-eyebrow-{family,size,weight,line-height,tracking}"
@@ -321,10 +336,19 @@ Figma-Teil-Token — diese Formate haben 4 statt 5 Figma-Vars):
 
 - token: data-sm
   css_var: "--ap-sys-data-sm-{family,size,weight,line-height,tracking}"
-  primitive: { family: family/mono, size: size/step-neg1, weight: weight/regular, line-height: normal, tracking: tracking/normal }
-  value: { family: mono, size: 11, weight: 400, line-height: normal, tracking: "0" }
+  primitive: { family: family/mono, size: size/step-neg2, weight: weight/medium, line-height: normal, tracking: tracking/wide }
+  value: { family: mono, size: 9, weight: 500, line-height: normal, tracking: "0.5px" }
   utilities: [text-format-data-sm]
-  use: "Kleine tabellarische Mono-Daten (auch Dateinamen u. ä.). War: data."
+  use: "Micro-Mono-Label (9px; Rail-Meta, Storybook-Slug)."
+  note: "2026-07-01: retiered — war 11px/400/normal; die 11px-Rolle ist jetzt data-md. (Spec = eyebrow, aber sans-caps-frei.)"
+
+- token: data-md
+  css_var: "--ap-sys-data-md-{family,size,weight,line-height,tracking}"
+  primitive: { family: family/mono, size: size/step-neg1, weight: weight/medium, line-height: normal, tracking: tracking/normal }
+  value: { family: mono, size: 11, weight: 500, line-height: normal, tracking: "0" }
+  utilities: [text-format-data-md]
+  use: "Tabellarische Mono-Daten 11px (Dateinamen, Property-Werte)."
+  note: "neu 2026-07-01; übernimmt die vorige data-sm-11px-Rolle."
 
 - token: data-lg
   css_var: "--ap-sys-data-lg-{family,size,weight,line-height,tracking}"

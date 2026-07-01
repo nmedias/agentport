@@ -84,7 +84,7 @@ function SelectTrigger({ className, size = 'default', children, ...props }: Sele
         // Invalid ring is FOCUS-GATED (= Input/Checkbox/Switch/Radio family): aria-invalid alone shows
         // only the destructive border; the 3px ring width comes solely from focus-visible (ring/50 →
         // ring-destructive/20 recolours it when also invalid). No standalone aria-invalid:ring-[3px].
-        "flex w-fit items-center justify-between gap-sm corner-lg border border-input-border bg-input-fill py-md px-md text-format-label whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-input-ink-placeholder data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:corner-md *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "flex w-fit items-center justify-between gap-sm corner-lg border border-input-border bg-input-fill py-md px-md text-format-label-md whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-input-ink-placeholder data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:corner-md *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -150,7 +150,7 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn('px-sm py-xs text-format-label text-muted-ink', className)}
+      className={cn('px-sm py-xs text-format-label-md text-muted-ink', className)}
       {...props}
     />
   );
@@ -173,7 +173,7 @@ function SelectItem({ className, children, ...props }: SelectItemProps) {
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-sm corner-md py-xs pr-3xl pl-sm text-format-label outline-hidden select-none focus:bg-accent-fill focus:text-accent-ink data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-md",
+        "relative flex w-full cursor-default items-center gap-sm corner-md py-xs pr-3xl pl-sm text-format-label-md outline-hidden select-none focus:bg-accent-fill focus:text-accent-ink data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-md",
         className,
       )}
       {...props}

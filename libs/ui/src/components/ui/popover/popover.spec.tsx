@@ -76,7 +76,7 @@ describe('Popover', () => {
       </Popover>
     );
 
-    expect(getByText('Heading').className).toContain('text-format-label');
+    expect(getByText('Heading').className).toContain('text-format-label-md');
     const desc = getByText('Muted line').className;
     expect(desc).toContain('text-format-body');
     expect(desc).toContain('text-muted-ink');

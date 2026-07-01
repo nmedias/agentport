@@ -29,7 +29,7 @@ function Textarea({ className, ...props }: TextareaProps) {
     <textarea
       data-slot="textarea"
       className={cn(
-        'field-sizing-content min-h-16 w-full corner-lg border border-input-border bg-input-fill px-md py-md text-format-label transition-[color,box-shadow] outline-none selection:bg-primary-fill selection:text-primary-ink placeholder:text-input-ink-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        'field-sizing-content min-h-16 w-full corner-lg border border-input-border bg-input-fill px-md py-md text-format-label-md transition-[color,box-shadow] outline-none selection:bg-primary-fill selection:text-primary-ink placeholder:text-input-ink-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
         'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
         className

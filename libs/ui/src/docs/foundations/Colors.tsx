@@ -376,7 +376,7 @@ export function Colors() {
         </Rows>
       </Group>
 
-      <Group name="Inverse">
+      <Group name="Inverse" note="Dark-surface family (Rail, kbd badges). The container tints are deep/900 at 20 / 30 / 55% alpha, composed via color-mix like scrim.">
         <Rows>
           <Row>
             <FillSwatch
@@ -386,17 +386,69 @@ export function Colors() {
               primitive="deep/950"
               scope="fill"
               value="#00121c"
-              role="Dark surface (inverted chips / pills)."
+              role="Dark surface (Rail, inverted chips / pills)."
             />
             <TextSwatch
               text="text-inverse-ink"
               token="inverse-ink"
               utilities="text-inverse-ink"
-              primitive="ink/50"
+              primitive="ink/75"
               scope="text"
-              value="#f3f5fa"
+              value="#e4e6eb"
               role="Text on inverse-fill."
               onFill="bg-inverse-fill"
+            />
+          </Row>
+          <Row>
+            <TextSwatch
+              text="text-inverse-ink-muted"
+              token="inverse-ink-muted"
+              utilities="text-inverse-ink-muted"
+              primitive="ink/400"
+              scope="text"
+              value="#7f848b"
+              role="Muted text / icon on inverse-fill."
+              onFill="bg-inverse-fill"
+            />
+            <BorderSwatch
+              border="border-inverse-border"
+              token="inverse-border"
+              utilities="border-inverse-border"
+              primitive="deep/900"
+              scope="stroke"
+              value="#0d2531"
+              role="Edge on inverse-fill."
+            />
+          </Row>
+          <Row>
+            <FillSwatch
+              bg="bg-inverse-container-low"
+              token="inverse-container-low"
+              utilities="bg-inverse-container-low"
+              primitive="deep/900 @20%"
+              scope="fill"
+              value="#0d253133"
+              role="Quiet container tint (idle)."
+            />
+            <FillSwatch
+              bg="bg-inverse-container"
+              token="inverse-container"
+              utilities="bg-inverse-container"
+              primitive="deep/900 @30%"
+              scope="fill"
+              value="#0d25314d"
+              role="Container tint (Rail card)."
+            />
+          </Row>
+          <Row>
+            <FillSwatch
+              bg="bg-inverse-container-hover"
+              token="inverse-container-hover"
+              utilities="bg-inverse-container-hover"
+              primitive="deep/900 @55%"
+              scope="fill"
+              value="#0d25318c"
+              role="Container tint hover / active."
             />
           </Row>
         </Rows>

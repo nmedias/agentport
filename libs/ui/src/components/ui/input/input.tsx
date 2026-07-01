@@ -40,7 +40,7 @@ function Input({ className, type, ...props }: InputProps) {
       type={type}
       data-slot="input"
       className={cn(
-        'h-8 w-full min-w-0 corner-lg border border-input-border bg-input-fill px-md py-xs text-format-label transition-[color,box-shadow] outline-none selection:bg-primary-fill selection:text-primary-ink file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-format-label file:text-ink placeholder:text-input-ink-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        'h-8 w-full min-w-0 corner-lg border border-input-border bg-input-fill px-md py-xs text-format-label-md transition-[color,box-shadow] outline-none selection:bg-primary-fill selection:text-primary-ink file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-format-label-md file:text-ink placeholder:text-input-ink-placeholder disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
         'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
         'aria-invalid:border-destructive aria-invalid:ring-destructive/20',
         className

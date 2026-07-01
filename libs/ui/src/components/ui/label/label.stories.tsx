@@ -4,7 +4,7 @@ import { Label } from './label';
 import { Input } from '../input';
 import { Checkbox } from '../checkbox';
 
-// Label contract — a Radix Label re-clothed in DS tokens (text-format-label), DISPLAY-ONLY:
+// Label contract — a Radix Label re-clothed in DS tokens (text-format-label-md), DISPLAY-ONLY:
 //  · htmlFor↔id is the whole job: it names the associated control, so clicking the label
 //    focuses/toggles that control and screen readers read the caption as the field's name.
 //    A label is only accessible when an id-matched control exists — that pairing is the a11y gate.
