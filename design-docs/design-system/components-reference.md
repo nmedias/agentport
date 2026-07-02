@@ -1238,8 +1238,8 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     (A11y-Zusatz — Provenienz bleibt für SR benannt; Figma blendet den Text-Node aus). data-slot=
     "drill-rail-origin" + data-origin. Stories Default/LevelTinted/AllStates (dunkler
     bg-inverse-fill-Chip als Habitat, axe-Kontrast), Spec 4 Tests (sr-only-Kontrakt + Token-Survival).
-    Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028) /
-    Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
+    Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028)
+    stehen noch aus (s. Wireflow-Handoff).
 
 - name: DrillRailLevel
   status: built
@@ -1308,6 +1308,37 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     -level/-selected. Stories Default (play: Klick=Drill)/InChildrenList/AllStates
     (pseudo-hover via Element-IDs — Addon-Klasse landet auf der Row = group, treibt bg UND
     Tint), Spec 5 Tests (size-Faltung, Tint-Kontrakt, origin-Forward, aria-current).
+
+- name: DrillRailStorybookLink
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (Figma war zuerst da, User-Design)
+  source: { registry: none, item: custom-showcase-part }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail-storybook-link/
+    exports: [DrillRailStorybookLink, DrillRailStorybookLinkProps, DrillRailStorybookLinkLevel]
+    barrel: "drill-rail-storybook-link/index.ts (lokal; nicht im decompose-Barrel)"
+  figma:
+    component: { name: "Rail StorybookLink", id: "4663:4416" }   # Einzel-Component, keine Varianten; 157×24
+    nests: ".Button/Base-Instanz (3460:488) um das Label — h-24/px-sm/corner-md/gap-xs = die xs-Base des DS-Buttons"
+    icons: "Book 20px + Pfeil 14px — die Vektoren SIND Remix-Glyphen im 24er-Grid (RiBookOpenLine / RiArrowRightUpLine, Pfad-verifiziert gegen @remixicon/react)"
+    binding: "Label + Glyphen an Level/block (Master); die Karten-Master overriden den Tint pro Level"
+  mapping: "children → Label · level ('screen'|'block'|'primitive', default block = Master) → Tint · href re-declared (docgen)"
+  skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    "Open in Storybook"-Link der Rail-Cards. Konstruktion = DS Button asChild → <a>
+    (variant=link, size=xs — die xs-Base IST die Figma-.Button/Base-Pill), User-Entscheid
+    2026-07-02: Button-Component nutzen + Remix Icons. Geometrie-Delta via Override:
+    px-0 (Icons sitzen in Figma bündig AUSSERHALB der Label-Pill) + gap-sm (die px-sm der
+    Pill wird zum 6px-Rhythmus) → 20+6+Label+6+14 = exakt der Figma-Kasten. Tint über
+    currentColor: text-level-* ersetzt das text-primary der link-Variante (twMerge);
+    hover/active-Underline + Focus-Ring = Button-link-Kontrakt (nicht Component-eigen).
+    Icons aria-hidden (Name kommt aus children). data-slot="drill-rail-storybook-link"
+    (überschreibt Buttons data-slot via Prop-Spread) + data-level. Stories Default (play:
+    role link + href + Tint; kein Klick — würde das Story-iframe navigieren)/AllStates
+    (3 Level-Tints), Spec 4 Tests (asChild-Anchor, Tint-Swap, xs-Base+Overrides, Remix-
+    Glyphen). FIGMA-SCHULD (Wireflow-Handoff, offen): TEXT-Prop "Storybook Link" ist im
+    Set nicht aufs .Button/Base-Label verdrahtet; Karten-Master nennen den Link-Node
+    "Link" statt "Rail StorybookLink".
 ```
 
 ## Befehle / Skills
