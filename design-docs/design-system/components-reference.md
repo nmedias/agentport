@@ -1239,7 +1239,35 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     "drill-rail-origin" + data-origin. Stories Default/LevelTinted/AllStates (dunkler
     bg-inverse-fill-Chip als Habitat, axe-Kontrast), Spec 4 Tests (sr-only-Kontrakt + Token-Survival).
     Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028) /
-    Children-Items / Rail Level / Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
+    Children-Items / Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
+
+- name: DrillRailLevel
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (Figma war zuerst da, User-Design)
+  source: { registry: none, item: custom-showcase-part }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail-level/
+    exports: [DrillRailLevel, DrillRailLevelProps, DrillRailLevelKind]
+    barrel: "drill-rail-level/index.ts (lokal; nicht im decompose-Barrel)"
+  figma:
+    set: { name: "Rail Level", id: "4663:4358" }
+    members: { "Type=block": "4663:4356", "Type=primitive": "4663:4359", "Type=Screen": "4663:4703" }
+    axis: { Type: [block, primitive, Screen] }    # ⚠ Casing-Ausreißer in Figma: "Screen" groß, Rest klein
+    nests: "jede Member nestet eine echte DS-Badge-Instanz (block/primitive → secondary, Screen → default) mit Overrides: Fill/Ink → Level/*-Variablen, Text-Style → Data/sm, Höhe 16"
+  mapping: "Code-Prop level ('screen'|'block'|'primitive', default block) ↔ Figma-Achse Type; Werte lowercase (Caps via CSS uppercase)"
+  skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    Tiefen-Leiter-Badge der Rail-Cards. Code spiegelt die Figma-Konstruktion: DS Badge
+    (einheitlich variant=secondary — der Figma-Fork default/secondary ist rein konstruktiv,
+    beide Farben werden overridet) + twMerge-Re-Clothing: bg-level-{level}-fill +
+    text-level-{level} (Showcase-Token-Layer, ersetzt bg/text-secondary-*) · h-4 (16px,
+    ersetzt h-5) · text-format-data-sm (ersetzt text-format-label-md) · uppercase (Wort =
+    lowercase NodeLevel-Wert). Level-Union lokal (DrillRailLevelKind, docgen kann Exclude<>
+    nicht auflösen) + satisfies Record<NodeLevel,…> als beidseitiger Drift-Guard gegen die
+    decompose-store-Leiter. Inertes Rest-Token [a]:hover:bg-secondary-fill/80 bleibt nach
+    Merge stehen (Anchor-Modifier, in der Rail nie aktiv). data-slot="drill-rail-level" +
+    data-level. Stories Default/AllStates (dunkler Chip), Spec 3 Tests (Re-Clothing-Kontrakt).
+    Kontraste text-auf-fill: screen 11.5:1 · block 4.75:1 · primitive 6.4:1 (axe-clean).
 ```
 
 ## Befehle / Skills
