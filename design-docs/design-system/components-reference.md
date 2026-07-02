@@ -1413,6 +1413,58 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     im bereits gecachten CSS-JS-Modul des laufenden Storybook-Dev-Servers (auch nach
     Reload/Neustart-Race) → vor dem Shoot `touch apps/agentport/src/styles.css`; Gate/
     Vitest kompilieren immer frisch.
+
+- name: DrillRail
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (User-Design + Wireflows waren zuerst da)
+  source: { registry: none, item: custom-showcase-composition }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail/
+    exports: [DrillRail, DrillRailProps]
+    barrel: "drill-rail/index.ts (lokal; nicht im decompose-Barrel — Public-Surface bleibt Decompose)"
+  figma:
+    demo: { section: "Examples", id: "4663:7155" }        # Karten-Stack-Demo (User-Design)
+    line: { example: "4719:8058", panel_a: "4729:180" }   # Linie ist KEIN Figma-Component (je Panel neu gezeichnet) — Panel A = Geometrie-Referenz
+    behavior: handoff-drill-rail-wireflow-konzept.md      # Regeln 1–10 (Verhaltens-Referenz)
+  mapping: >
+    Store-Pfad → Karten-Stack, Position diktiert den Karten-State (alles CONTROLLED):
+    Tip = expanded+selected, PARTS = sm-Items, Klick = drill (Push, Regel 3) · direkte
+    Eltern-Karte = expanded, md-Items, gedrilltes Kind selected/aria-current ·
+    Vorfahren darüber = Collapsed-Row (Regel 6), deren Expand-Geste = pop(i)
+    (Breadcrumb-Semantik auf der Zeile). Karten-Flavour aus der REGISTRY (Regel 1):
+    container/level/origin/description sind Element-Natur (origin+description = neue
+    Display-Felder am SlotMeta, KEINE Selektions-Semantik); Kinder-Listen aus dem
+    Live-App-DOM (readSlot über resolve(selector, root)). Rail-Linie (Regel 9,
+    Panel-A-Geometrie): 28px-Spalte links, 1px-Track inverse-border volle Höhe,
+    Dot je Karte (Collapsed → Zeilenmitte · erste expandierte Karte → Oberkante ·
+    sonst Mitte der ersten Namens-Zeile, per Range-Rect gemessen — Title-Style hat
+    line-height:normal), aktives Segment erster-Dot→Tip-Dot + 22px-Tick + 11px-Dot
+    in Tip-Level-Farbe; Messung im Layout-Effect + ResizeObserver (jsdom-guarded).
+    Chrome: bg-inverse-fill · p-2xl · Karten w-[292px] · gap-md; Dock im Frame
+    (decompose.tsx): absolute inset-y-0 right-0.
+  skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    Umbau 2026-07-02 (Branch feat/drill-rail-components): ersetzt die Spike-Roh-Optik
+    (Breadcrumb + SlotInspector) — der SlotInspector wird von der Rail NICHT mehr
+    gehostet (Token-Rung hat im Karten-Design keinen Platz; Komponente bleibt für
+    später bestehen). BEWUSST NICHT verdrahtet (User-Vorgabe: Selektions-Verhalten
+    unangetastet): Geschwister-Klick in der Eltern-Liste (in den Wireflows undefiniert
+    — Buttons rendern ohne onClick, Spec lockt das) · storybookHref hat keine
+    Datenquelle (Link-Zeile entfällt; Registry-Feld wäre der Kandidat) · Pop auf die
+    DIREKTE Eltern-Karte gibt es railseitig nicht (nur Collapsed-Rows poppen; App-Klick
+    reselektiert). Code-Deltas ggü. Figma: passive Dots ungebunden #D9D9D9 → nächstes
+    Semantic inverse-ink (Marker-Fill) · Screen-Karte OHNE Textur (Registry hat
+    container:false am Screen — das Flag trägt Pointer-Semantik (closestContainer),
+    Figma-Demo zeichnet den Screen als Container: offener Entscheid Registry-Flag vs.
+    separate Display-Regel) · Dot-Anker "Titelhöhe" = Namens-Zeilenmitte (deterministisch)
+    statt der handgezeichneten ~53px. Stories (App-SB :6007, Showcase/Decompose/DrillRail):
+    Default (echter Store + SpikeStage-Substrat, play = drill→drill→pop-Zyklus) ·
+    ScreenAnchor (Screen als Tip, blaue Linie) · AncestorChain (5 Glieder: 3 Collapsed-
+    Rows + Eltern-md + Blatt-Tip). Spec 5 Tests (Pfad→Karten-Mapping, drill/pop-Wiring,
+    unwired-Siblings, Blatt, Linie aria-hidden) + decompose.spec liest die Selektion
+    jetzt über den Tip-Kartennamen. Registry-Erweiterung: SlotMeta.origin
+    ('custom'|'shadcn', Fallback custom; Field/Checkbox/RadioGroup-Familie = shadcn per
+    Katalog) + SlotMeta.description (Info-Region-Copy, provisorische Ein-Zeiler).
 ```
 
 ## Befehle / Skills
