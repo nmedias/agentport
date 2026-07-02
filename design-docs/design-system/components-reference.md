@@ -1388,11 +1388,13 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     expandable allein schaltet scharf und die Karte besitzt den State (uncontrolled,
     Seed defaultExpanded); expanded-Prop pinnt den State (controlled, Host wendet
     onExpandedChange an); ohne Flag statisches Display. Collapsed-Zeile wird <button
-    aria-expanded=false> und feuert (true); expandiert wird der KOMPLETTE Header zur
-    Collapse-Schaltfläche (aria-label="Collapse", feuert false; Chevron-Up als visuelle
-    Affordance) — symmetrisch zur Collapsed-Zeile als Ganz-Zeilen-Ziel; Badge/Origin
-    sind nicht-interaktiv, also valides Button-Innenleben. FIGMA-SCHULD: die Collapse-
-    Affordance hat KEIN Figma-Gegenstück (minimal gehaltener Kandidat, Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
+    aria-expanded=false> und feuert (true); expandiert ist die GANZE Karte die
+    Collapse-Fläche — Stretched-Button-Pattern: leerer absolut gespannter <button
+    aria-label="Collapse"> HINTER dem Inhalt (ein Button darf keine interaktiven Kinder
+    enthalten), StorybookLink + PARTS-Region per `relative` darüber gehoben und
+    eigenständig klickbar; Chevron-Up im Header als visuelle Affordance; Focus-Ring
+    umläuft die Karte. FIGMA-SCHULD: die Collapse-Affordance hat KEIN Figma-Gegenstück
+    (minimal gehaltener Kandidat, Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
     Default (play: Count-Derivation + Info-Lifting)/ExpandCollapse (uncontrolled-Demo
     OHNE State-Owner, play: voller Zyklus + aria-expanded)/Uncontrolled (NUR
     expandable+defaultExpanded als scoped Live-Controls; key-Remount, weil der Seed nur
