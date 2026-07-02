@@ -1360,10 +1360,11 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     gehoben, JEDES andere Kind = PARTS-Item — hasChildren/childrenCount werden ABGELEITET
     (keine Props; Figma-Props Count/hasChildren entfallen). Parent-Props: level (required)
     · container (bool) · origin ('custom'|'shadcn') · selected (State=Selected; Hover =
-    CSS) · expanded (false = Collapsed-Set; User-Korrektur 2026-07-02: war open) ·
-    expandable (bool-Flag: Karte bietet die Geste überhaupt an) · onExpandedChange
-    (controlled Toggle, feuert den NÄCHSTEN Zustand) · storybookHref (Link-Zeile
-    entfällt ohne URL).
+    CSS) · expandable (bool-Flag: Karte BESITZT den Toggle — uncontrolled, interner
+    State) · defaultExpanded (Seed für uncontrolled, default true) · expanded
+    (CONTROLLED override; false = Collapsed-Set) · onExpandedChange (meldet jeden
+    Toggle mit dem NÄCHSTEN Zustand, beide Modi) · storybookHref (Link-Zeile entfällt
+    ohne URL).
   skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
   notes: >
     Karten-Rezept (expanded = collapsed): unselected bg-inverse-fill ohne Stroke ·
@@ -1383,21 +1384,24 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     group-data-container/drill-card: text-format-title (18) → text-format-heading-sm
     (22) — kein Context nötig. CONTAINS-Zeile: text-format-data-sm muted + RiArrowDownLine
     size-2 + "{n} PARTS". Header-Origin bleibt neutral (inverse-ink), NUR der Collapsed-
-    Glyph ist level-getintet. Interaktion = controlled TOGGLE: expandable-Flag UND
-    onExpandedChange zusammen schalten scharf (eines allein = statisches Display) —
-    Collapsed-Zeile wird <button aria-expanded=false> und feuert (true); der expandierte
-    Header bekommt ein Collapse-Control (Chevron-Up-Ghost, aria-label="Collapse",
-    feuert false). FIGMA-SCHULD: das Collapse-Control hat KEIN Figma-Gegenstück
-    (minimal gehaltener Kandidat, Design offen). Die Rail mappt die Geste auf ihren
-    Pfad. Stories Default (play: Count-Derivation + Info-Lifting)/ExpandCollapse
-    (Wired-Toggle-Demo, play: beide Richtungen + aria-expanded)/AncestorChain (Name via
-    asChild als h2, Collapsed-Anker expandable)/AllStates (pseudo-hover) + SUB-PART-SEITE
+    Glyph ist level-getintet. Interaktion = TOGGLE mit controlled/uncontrolled-Pattern:
+    expandable allein schaltet scharf und die Karte besitzt den State (uncontrolled,
+    Seed defaultExpanded); expanded-Prop pinnt den State (controlled, Host wendet
+    onExpandedChange an); ohne Flag statisches Display. Collapsed-Zeile wird <button
+    aria-expanded=false> und feuert (true); der expandierte Header bekommt ein
+    Collapse-Control (Chevron-Up-Ghost, aria-label="Collapse", feuert false).
+    FIGMA-SCHULD: das Collapse-Control hat KEIN Figma-Gegenstück (minimal gehaltener
+    Kandidat, Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
+    Default (play: Count-Derivation + Info-Lifting)/ExpandCollapse (uncontrolled-Demo
+    OHNE State-Owner, play: voller Zyklus + aria-expanded)/AncestorChain (Name via
+    asChild als h2, Collapsed-Anker controlled gepinnt)/AllStates (pseudo-hover) +
+    SUB-PART-SEITE
     drill-rail-card-name.stories.tsx (storybook-rules Composite-Regel: Part mit
     kuratiertem Prop → eigene Autodocs-Seite, Stories im festen Card-Scaffold, asChild
     control:false auf Text-Children + dedizierte AsChild-Demo, Cross-Links Eltern↔Part;
-    Description = prop-loser Passthrough, KEINE Seite). Spec 8 Tests (Partition, State-
-    Rezept, Textur+Heading-Flag, Collapsed-Faltung, Toggle beide Richtungen,
-    expandable-Gate, asChild-Slotting+Unwrap).
+    Description = prop-loser Passthrough, KEINE Seite). Spec 9 Tests (Partition, State-
+    Rezept, Textur+Heading-Flag, Collapsed-Faltung, uncontrolled-Zyklus, controlled-
+    Pinning, expandable-Gate, asChild-Slotting+Unwrap).
     DEV-QUIRK (2026-07-02, betrifft alle neuen
     Showcase-Components): legt man eine NEUE Datei an, fehlen deren Tailwind-Kandidaten
     im bereits gecachten CSS-JS-Modul des laufenden Storybook-Dev-Servers (auch nach
