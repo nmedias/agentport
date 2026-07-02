@@ -75,6 +75,12 @@ whether it exists = `tokens`; recon = the live id. CSS-inherited values still bi
   **NEW** paint, reassign it. **Never clone/spread a bound paint** (`{...boundPaint, opacity}`): it
   loses live resolution → renders the fallback colour (often black). Build fresh; for opacity, set it
   plus the real resolved colour as the paint's fallback.
+  - **Instance sub-node paint overrides can render the fallback, not the live variable** — the binding
+    reads back correct while the canvas shows the fallback (API-set overrides only, per node type
+    inconsistently; UI-set ones resolve). Fix in two parts: (1) resolved colour as fallback (above),
+    (2) if render still disagrees with data, force re-evaluation on the node: `fills=[]` →
+    `visible=false` → `visible=true` → re-set the bound paint. A data-identical re-write alone does
+    NOT invalidate the renderer — verify by screenshot, never by read-back.
 - **radius / padding / gap** → `node.setBoundVariable('topLeftRadius'|'paddingLeft'|'itemSpacing'|…, v)`
   (spacing vars are `GAP`-scoped → cover gap AND padding).
 - **typography** → `setTextStyleIdAsync(formatId)` after `loadFontAsync` of that format's font.
