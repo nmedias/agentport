@@ -1380,14 +1380,19 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     group-data-container/drill-card: text-format-title (18) → text-format-heading-sm
     (22) — kein Context nötig. CONTAINS-Zeile: text-format-data-sm muted + RiArrowDownLine
     size-2 + "{n} PARTS". Header-Origin bleibt neutral (inverse-ink), NUR der Collapsed-
-    Glyph ist level-getintet. Kein Interaktions-API am Card-Root (Rail verdrahtet Klicks;
-    div + Props-Passthrough). Stories Default (play: Count-Derivation + Info-Lifting)/
-    AncestorChain (Name via asChild als h2)/AllStates (pseudo-hover) + SUB-PART-SEITE
+    Glyph ist level-getintet. Interaktion: onExpand?-Callback macht NUR die Collapsed-
+    Zeile zum echten <button aria-expanded=false> (+ DS-Focus-Ring; Chevron-Versprechen,
+    tastatur-erreichbar) — ohne Callback statisches div; die expandierte Karte ignoriert
+    ihn (Interaktion sitzt in den Parts), die Rail mappt den Klick auf ihr pop. Stories
+    Default (play: Count-Derivation + Info-Lifting)/ExpandOnClick (Wired-Demo, play:
+    aria-expanded + Klick→Expand)/AncestorChain (Name via asChild als h2, Collapsed-Anker
+    mit onExpand)/AllStates (pseudo-hover) + SUB-PART-SEITE
     drill-rail-card-name.stories.tsx (storybook-rules Composite-Regel: Part mit
     kuratiertem Prop → eigene Autodocs-Seite, Stories im festen Card-Scaffold, asChild
     control:false auf Text-Children + dedizierte AsChild-Demo, Cross-Links Eltern↔Part;
-    Description = prop-loser Passthrough, KEINE Seite). Spec 6 Tests (Partition, State-
-    Rezept, Textur+Heading-Flag, Collapsed-Faltung, asChild-Slotting+Unwrap).
+    Description = prop-loser Passthrough, KEINE Seite). Spec 7 Tests (Partition, State-
+    Rezept, Textur+Heading-Flag, Collapsed-Faltung, onExpand-Button-Upgrade,
+    asChild-Slotting+Unwrap).
     DEV-QUIRK (2026-07-02, betrifft alle neuen
     Showcase-Components): legt man eine NEUE Datei an, fehlen deren Tailwind-Kandidaten
     im bereits gecachten CSS-JS-Modul des laufenden Storybook-Dev-Servers (auch nach
