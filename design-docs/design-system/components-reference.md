@@ -1238,8 +1238,8 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     (A11y-Zusatz — Provenienz bleibt für SR benannt; Figma blendet den Text-Node aus). data-slot=
     "drill-rail-origin" + data-origin. Stories Default/LevelTinted/AllStates (dunkler
     bg-inverse-fill-Chip als Habitat, axe-Kontrast), Spec 4 Tests (sr-only-Kontrakt + Token-Survival).
-    Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028)
-    stehen noch aus (s. Wireflow-Handoff).
+    Erste Component der Rail-Familie — Familie seit 2026-07-02 komplett (Origin, Level,
+    ChildrenItem, StorybookLink, Card inkl. Collapsed).
 
 - name: DrillRailLevel
   status: built
@@ -1339,6 +1339,49 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     Glyphen). FIGMA-SCHULD (Wireflow-Handoff, offen): TEXT-Prop "Storybook Link" ist im
     Set nicht aufs .Button/Base-Label verdrahtet; Karten-Master nennen den Link-Node
     "Link" statt "Rail StorybookLink".
+
+- name: DrillRailCard
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (Figma war zuerst da, User-Design)
+  source: { registry: none, item: custom-showcase-part }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail-card/
+    exports: [DrillRailCard, DrillRailCardName, DrillRailCardDescription, DrillRailCardProps, DrillRailCardLevel, DrillRailCardOrigin]
+    barrel: "drill-rail-card/index.ts (lokal; nicht im decompose-Barrel)"
+    assets: [pattern-block.png, pattern-primitive.png, pattern-screen.png]   # Figma-Pattern-Quellen 4757:11400/11415/11424, 2x-Export
+  figma:
+    sets:                                        # EIN Code-Component; Collapsed via open-Prop gefaltet (User-Entscheid)
+      card: { name: "Rail Card", id: "4663:4535", axis: "Level [Block,Primitive,Screen] × Container [true,false] × State [Unselected,Selected,Hover]" }
+      collapsed: { name: "Rail Card Collapsed", id: "4747:2028", axis: "Level × State × Custom", height: 32 }
+    nests: "Rail Level + Rail Origin (Header, Origin neutral inverse-ink) · Rail StorybookLink · Rail Children item(s) im children-Slot · Collapsed: Origin glyph-only (Level-getintet, ALLE States — Wireflow-Regel 7) + Name + Chevron"
+    texture: "Container=true-Member (alle States): GROUP blend=EXCLUSION opacity=5% → Gradient-Maske (alpha 1→0 top→bottom) + PATTERN-Paint (HORIZONTAL_HEXAGONAL, Quelle pro Level; 292×318, Ränder nahtlos horizontal)"
+  mapping: >
+    Composition über children: DrillRailCardName/-Description werden in die Info-Region
+    gehoben, JEDES andere Kind = PARTS-Item — hasChildren/childrenCount werden ABGELEITET
+    (keine Props; Figma-Props Count/hasChildren entfallen). Parent-Props: level (required)
+    · container (bool) · origin ('custom'|'shadcn') · selected (State=Selected; Hover =
+    CSS) · open (false = Collapsed-Set) · storybookHref (Link-Zeile entfällt ohne URL).
+  skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    Karten-Rezept (expanded = collapsed): unselected bg-inverse-fill ohne Stroke ·
+    hover:bg-inverse-container-low · selected bg-inverse-container-low + 1px border-
+    level-{level} (sonst border-transparent für stabile Geometrie). corner-lg · p-xl ·
+    gap-lg; Collapsed h-8/px-xl/py-md/gap-sm, Name text-format-label-sm, Chevron
+    RiArrowDownSLine size-3 (inverse-ink-muted). Container: Textur als repeat-x
+    background-image (User-Ansage) — absolute -inset-px -z-10, opacity-5 +
+    mix-blend-exclusion + [mask-image:linear-gradient(to_bottom,black,transparent)];
+    root `isolate` hält den Blend in der Karte. Name-Typo container-abhängig via
+    group-data-[container]/drill-card: text-format-title (18) → text-format-heading-sm
+    (22) — kein Context nötig. CONTAINS-Zeile: text-format-data-sm muted + RiArrowDownLine
+    size-2 + "{n} PARTS". Header-Origin bleibt neutral (inverse-ink), NUR der Collapsed-
+    Glyph ist level-getintet. Kein Interaktions-API am Card-Root (Rail verdrahtet Klicks;
+    div + Props-Passthrough). Stories Default (play: Count-Derivation + Info-Lifting)/
+    AncestorChain/AllStates (pseudo-hover), Spec 5 Tests (Partition, State-Rezept,
+    Textur+Heading-Flag, Collapsed-Faltung). DEV-QUIRK (2026-07-02, betrifft alle neuen
+    Showcase-Components): legt man eine NEUE Datei an, fehlen deren Tailwind-Kandidaten
+    im bereits gecachten CSS-JS-Modul des laufenden Storybook-Dev-Servers (auch nach
+    Reload/Neustart-Race) → vor dem Shoot `touch apps/agentport/src/styles.css`; Gate/
+    Vitest kompilieren immer frisch.
 ```
 
 ## Befehle / Skills
