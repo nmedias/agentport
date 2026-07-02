@@ -1382,8 +1382,13 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     size-2 + "{n} PARTS". Header-Origin bleibt neutral (inverse-ink), NUR der Collapsed-
     Glyph ist level-getintet. Kein Interaktions-API am Card-Root (Rail verdrahtet Klicks;
     div + Props-Passthrough). Stories Default (play: Count-Derivation + Info-Lifting)/
-    AncestorChain/AllStates (pseudo-hover), Spec 5 Tests (Partition, State-Rezept,
-    Textur+Heading-Flag, Collapsed-Faltung). DEV-QUIRK (2026-07-02, betrifft alle neuen
+    AncestorChain (Name via asChild als h2)/AllStates (pseudo-hover) + SUB-PART-SEITE
+    drill-rail-card-name.stories.tsx (storybook-rules Composite-Regel: Part mit
+    kuratiertem Prop → eigene Autodocs-Seite, Stories im festen Card-Scaffold, asChild
+    control:false auf Text-Children + dedizierte AsChild-Demo, Cross-Links Eltern↔Part;
+    Description = prop-loser Passthrough, KEINE Seite). Spec 6 Tests (Partition, State-
+    Rezept, Textur+Heading-Flag, Collapsed-Faltung, asChild-Slotting+Unwrap).
+    DEV-QUIRK (2026-07-02, betrifft alle neuen
     Showcase-Components): legt man eine NEUE Datei an, fehlen deren Tailwind-Kandidaten
     im bereits gecachten CSS-JS-Modul des laufenden Storybook-Dev-Servers (auch nach
     Reload/Neustart-Race) → vor dem Shoot `touch apps/agentport/src/styles.css`; Gate/
