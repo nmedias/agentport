@@ -1346,9 +1346,9 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
   source: { registry: none, item: custom-showcase-part }
   code:
     dir: apps/agentport/src/showcase/decompose/drill-rail-card/
-    exports: [DrillRailCard, DrillRailCardName, DrillRailCardDescription, DrillRailCardProps, DrillRailCardLevel, DrillRailCardOrigin]
+    exports: [DrillRailCard, DrillRailCardName, DrillRailCardDescription, DrillRailCardProps, DrillRailCardNameProps, DrillRailCardLevel, DrillRailCardOrigin]
     barrel: "drill-rail-card/index.ts (lokal; nicht im decompose-Barrel)"
-    assets: [pattern-block.png, pattern-primitive.png, pattern-screen.png]   # Figma-Pattern-Quellen 4757:11400/11415/11424, 2x-Export
+    assets: [texture.svg, drill-rail-card.css]   # EIN Alpha-SVG für alle Level (rekonstruiert aus den Figma-Quellen 4757:11400/11415/11424 "Halftone / Diamond") + Masken-Stack-CSS
   figma:
     sets:                                        # EIN Code-Component; Collapsed via open-Prop gefaltet (User-Entscheid)
       card: { name: "Rail Card", id: "4663:4535", axis: "Level [Block,Primitive,Screen] × Container [true,false] × State [Unselected,Selected,Hover]" }
@@ -1367,11 +1367,17 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     hover:bg-inverse-container-low · selected bg-inverse-container-low + 1px border-
     level-{level} (sonst border-transparent für stabile Geometrie). corner-lg · p-xl ·
     gap-lg; Collapsed h-8/px-xl/py-md/gap-sm, Name text-format-label-sm, Chevron
-    RiArrowDownSLine size-3 (inverse-ink-muted). Container: Textur als repeat-x
-    background-image (User-Ansage) — absolute -inset-px -z-10, opacity-5 +
-    mix-blend-exclusion + [mask-image:linear-gradient(to_bottom,black,transparent)];
-    root `isolate` hält den Blend in der Karte. Name-Typo container-abhängig via
-    group-data-[container]/drill-card: text-format-title (18) → text-format-heading-sm
+    RiArrowDownSLine size-3 (inverse-ink-muted). Container: Textur als EIN SVG-Alpha-
+    Pattern (texture.svg — horizontal nahtlos, 292.333 = 27×10.827-Perioden; 55 Reihen-
+    Gesetz aus dem Figma-Halftone geparst) als mask-image repeat-x × Fade-Gradient
+    (mask-composite intersect, drill-rail-card.css — CSS-Datei, weil die url() Vite-
+    Auflösung braucht); Farbe = bg-level-{level} am Element (die Figma-Dot-Fills SIND
+    die Level-Akzente, verifiziert #9B87F5/#35C9B0/#A4E5FF) · absolute -inset-px -z-10 ·
+    opacity-5 + mix-blend-exclusion; root `isolate` hält den Blend in der Karte.
+    DrillRailCardName mit asChild (Radix Slot, @radix-ui/react-slot) — Headline-Level
+    von außen wählbar; die Collapsed-Zeile entpackt das geslottete Element (Text ohne
+    Heading in der Row). Name-Typo container-abhängig via
+    group-data-container/drill-card: text-format-title (18) → text-format-heading-sm
     (22) — kein Context nötig. CONTAINS-Zeile: text-format-data-sm muted + RiArrowDownLine
     size-2 + "{n} PARTS". Header-Origin bleibt neutral (inverse-ink), NUR der Collapsed-
     Glyph ist level-getintet. Kein Interaktions-API am Card-Root (Rail verdrahtet Klicks;
