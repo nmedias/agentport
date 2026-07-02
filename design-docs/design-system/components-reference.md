@@ -1239,7 +1239,7 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     "drill-rail-origin" + data-origin. Stories Default/LevelTinted/AllStates (dunkler
     bg-inverse-fill-Chip als Habitat, axe-Kontrast), Spec 4 Tests (sr-only-Kontrakt + Token-Survival).
     Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028) /
-    Children-Items / Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
+    Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
 
 - name: DrillRailLevel
   status: built
@@ -1265,10 +1265,49 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     NodeLevel-Wert). Höhe bleibt die Badge-eigene h-5 (20px) — bewusste Code-Abweichung
     vom 16px-Instanz-Override in Figma (User-Entscheid 2026-07-02: DS-Geometrie gewinnt). Level-Union lokal (DrillRailLevelKind, docgen kann Exclude<>
     nicht auflösen) + satisfies Record<NodeLevel,…> als beidseitiger Drift-Guard gegen die
-    decompose-store-Leiter. Inertes Rest-Token [a]:hover:bg-secondary-fill/80 bleibt nach
+    decompose-store-Leiter. Inertes Rest-Token [a]:hover:bg-primary-fill/80 bleibt nach
     Merge stehen (Anchor-Modifier, in der Rail nie aktiv). data-slot="drill-rail-level" +
     data-level. Stories Default/AllStates (dunkler Chip), Spec 3 Tests (Re-Clothing-Kontrakt).
     Kontraste text-auf-fill: screen 11.5:1 · block 4.75:1 · primitive 6.4:1 (axe-clean).
+
+- name: DrillRailChildrenItem
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (Figma war zuerst da, User-Design)
+  source: { registry: none, item: custom-showcase-part }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail-children-item/
+    exports: [DrillRailChildrenItem, DrillRailChildrenItemProps, DrillRailChildrenItemLevel, DrillRailChildrenItemOrigin, DrillRailChildrenItemSize]
+    barrel: "drill-rail-children-item/index.ts (lokal; nicht im decompose-Barrel)"
+  figma:
+    sets:                                        # EIN Code-Component mit size-Achse (User-Entscheid) — zwei Sets nur organisatorisch
+      md: { name: "Rail Children item", id: "4663:4997", height: 37 }
+      sm: { name: "Rail Children item Small", id: "4663:5629", height: 29 }
+    axis: { State: [Default, Hover, Selected, Selected-Hover], Level: [notSet, Primitive, Block], Custom: [true, false] }
+    props: "component name (text)"
+    nests: "Rail Origin-Instanz (glyph-only, showLabel=false) rechts; Glyph-Fill in Hover/Selected-Members an Level/*-Variablen"
+  mapping: >
+    Code: size ('md'|'sm', default md) faltet die zwei Sets · Custom-Achse → origin
+    ('custom'|'shadcn') · component name → children · State-Achse → selected-Prop
+    (Selected) + CSS :hover (Hover/Selected-Hover; kein Prop) · Level [Primitive, Block]
+    → level-Prop (required, 'block'|'primitive'; Figma "notSet" = Behelf des Default-
+    Members, weil ein statisches Tool nicht hovern kann — im Code ist level immer bekannt).
+  skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    Drill-bare Kind-Zeile der PARTS-Liste einer Rail Card, echtes <button type=button>.
+    Bindings: Fläche bg-inverse-container + hover:bg-inverse-container-hover · border-
+    inverse-border · corner-sm · px-lg · gap-md · Name text-format-body + text-inverse-ink
+    (flex-1 min-w-0 truncate) · py-md (md) / py-xs (sm). Höhen h-[37px]/h-[29px] fix
+    (Figma inside-stroke; py-Tokens dokumentieren den Rhythmus, Flex zentriert).
+    Glyph-Tint-Mechanik: nested DrillRailOrigin erbt currentColor → selected setzt
+    text-level-{level} konstant, sonst group-hover/drill-item:text-level-{level}
+    (Selected-Hover ergibt sich) — satisfies Record<Exclude<NodeLevel,'screen'>,…> bindet
+    die level-Achse an die Tiefen-Leiter (Kinder nie screen). Code-only-Zusätze: focus-
+    visible-Ring (DS-Idiom outline-none/border-ring/ring-[3px]/ring-ring/50 — Figma-Set hat
+    kein Focus-Member) + aria-current bei selected. Set-Breite 260 ist Canvas-Konvention →
+    Code w-full (Stories pinnen 260). data-slot="drill-rail-children-item" + data-size/
+    -level/-selected. Stories Default (play: Klick=Drill)/InChildrenList/AllStates
+    (pseudo-hover via Element-IDs — Addon-Klasse landet auf der Row = group, treibt bg UND
+    Tint), Spec 5 Tests (size-Faltung, Tint-Kontrakt, origin-Forward, aria-current).
 ```
 
 ## Befehle / Skills
