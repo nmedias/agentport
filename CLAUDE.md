@@ -40,7 +40,8 @@ Full table in [`README.md`](./README.md). Essentials:
 
 ```
 npm run dev                       # app at http://localhost:4200
-npm run storybook                 # components in isolation (@agentport/ui)
+npm run storybook                 # components in isolation (@agentport/ui, port 6006)
+npm run storybook:app             # app/showcase components in isolation (agentport, port 6007)
 npm run check                     # lint + test + typecheck — THE GATE (test/lint alone don't typecheck)
 npm run test:unit                 # jsdom .spec units only (@agentport/ui project)
 npm run test:stories              # stories as browser tests (storybook project → Chromium + axe a11y)
@@ -48,8 +49,9 @@ npm run shoot -- <storyId>        # screenshot a story from a RUNNING Storybook 
 npm run ui:add -- <component>     # add a shadcn component into libs/ui
 ```
 
-### Testing = two Vitest projects under one `npm run test`:
+### Testing = four Vitest projects under one `npm run test`:
   - app agentport — jsdom .spec units `test:app:unit`
+  - app agentport storybook — app/showcase stories in Chromium + axe a11y `test:app:stories`
   - @agentport/ui — jsdom .spec units `test:unit`
   - @agentport/ui storybook    — every story rendered in Chromium (@storybook/addon-vitest) + axe a11y `test:stories`
 
@@ -58,6 +60,7 @@ npm run ui:add -- <component>     # add a shadcn component into libs/ui
 `npm run shoot -- <storyId> …` drives headless Chromium over a RUNNING
 Storybook → PNGs in tools/screenshots; Claude eyeballs the render itself.
 SELECTOR=.docblock-argstable crops to one element. Start `npm run storybook` first.
+For app/showcase stories: `npm run storybook:app` + `npm run shoot:app -- <storyId>` (:6007).
 
 
 ## shadcn Gotchas
@@ -70,7 +73,8 @@ SELECTOR=.docblock-argstable crops to one element. Start `npm run storybook` fir
 ## Repo Structure / Key Files
 
 ```
-apps/agentport/       React + Vite app — composes UI states against mock data (port 4200)
+apps/agentport/       React + Vite app — composes UI states against mock data (port 4200);
+                    own Storybook (.storybook/, port 6007) for app/showcase components
 libs/ui/            @agentport/ui — shadcn primitives + signature components, globals.css token layer
 Agentport/            Brief + roadmaps + design direction
 design-docs/   Machine-readable DS data (e.g. design-system/tokens-reference.md)
