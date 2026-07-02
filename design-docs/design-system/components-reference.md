@@ -1204,6 +1204,44 @@ ausgeliefert über Subpath. Orientieren sich visuell an `handoff-agentport-desig
   notes: "Erster Block. Weitere Organismen (WorkspaceHeader, PropertyTable, InspectorPanel, ListNavigator, StatusBar) folgen mit ihren WELLE-1/2-Primitives."
 ```
 
+## Showcase-Frame (apps/agentport)
+
+App-owned Präsentations-Components des decompose-Layers unter `apps/agentport/src/showcase/decompose/<name>/`
+— **nicht** Teil von `@agentport/ui` (Frame ≠ App; abnehmbar). Ein Ordner pro Component (`.tsx` + `.stories.tsx`
+[+ `.spec.tsx`] + Barrel), Stories im **App-Storybook** (`npm run storybook:app`, :6007, Titel `Showcase/Decompose/…`).
+Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rail-Familie auf Page „Showcase"
+(Demo-Section `4663:7155`); Verhaltens-Referenz `handoff-drill-rail-wireflow-konzept.md`.
+
+```yaml
+- name: DrillRailOrigin
+  status: built
+  figma_synced: true                            # Figma→Code-Erstbau 2026-07-02 (Figma war zuerst da, User-Design)
+  source: { registry: none, item: custom-showcase-part }
+  code:
+    dir: apps/agentport/src/showcase/decompose/drill-rail-origin/
+    exports: [DrillRailOrigin, DrillRailOriginProps, DrillRailOriginKind]
+    barrel: "drill-rail-origin/index.ts (lokal; bewusst NICHT im decompose-Barrel — Public-Surface bleibt Decompose)"
+  figma:
+    set: { name: "Rail Origin", id: "4663:4325" }   # Live-Name; Wireflow-Handoff nennt ihn "Rail Origin Name"
+    members: { "shadcn=false": "4663:4324", "shadcn=true": "4663:4326" }
+    props: "showLabel (bool, default true)"
+    axis: { shadcn: [false, true] }
+  mapping: "Code-Prop origin ('custom'|'shadcn', default custom) ↔ Figma-Achse shadcn=false/true"
+  skill: manueller Figma→Code-Erstbau (kein shadcn-Port; /storybook-rules + /docgen-props für Story/Props)
+  notes: >
+    Provenienz-Marker der Rail-Cards: 12px-Glyph (◆ Diamant-Vektor | shadcn-Logo, beide als inline-SVG
+    size-3 numerisch, fill-current) + Origin-Wort. Bindings: Gap Space/space-xs → gap-xs · Wort Data/sm →
+    text-format-data-sm · Farbe Inverse/inverse-ink → text-inverse-ink am Root (Glyph-Fill in Figma
+    unbound #E4E6EB = inverse-ink-Wert → Code erbt via currentColor). Host-Re-Tint über className
+    (Rail-Cards tinten den Glyph per Level-Farbe, Wireflow-Regel 7) — Story LevelTinted zeigt den
+    Kontrakt mit text-level-*. Code-Delta ggü. Figma: showLabel=false rendert das Wort sr-only
+    (A11y-Zusatz — Provenienz bleibt für SR benannt; Figma blendet den Text-Node aus). data-slot=
+    "drill-rail-origin" + data-origin. Stories Default/LevelTinted/AllStates (dunkler
+    bg-inverse-fill-Chip als Habitat, axe-Kontrast), Spec 4 Tests (sr-only-Kontrakt + Token-Survival).
+    Erste Component der Rail-Familie — Rail Card (4663:4535) / Rail Card Collapsed (4747:2028) /
+    Children-Items / Rail Level / Rail StorybookLink stehen noch aus (s. Wireflow-Handoff).
+```
+
 ## Befehle / Skills
 
 - Neuer Erstport: `/shadcn-component-port <name>` · Figma→Code-Sync: `/component-sync <name>`
