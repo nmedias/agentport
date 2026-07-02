@@ -1392,9 +1392,10 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     Collapse-Fläche — Stretched-Button-Pattern: leerer absolut gespannter <button
     aria-label="Collapse"> HINTER dem Inhalt (ein Button darf keine interaktiven Kinder
     enthalten), StorybookLink + PARTS-Region per `relative` darüber gehoben und
-    eigenständig klickbar; Chevron-Up im Header als visuelle Affordance; Focus-Ring
-    umläuft die Karte. FIGMA-SCHULD: die Collapse-Affordance hat KEIN Figma-Gegenstück
-    (minimal gehaltener Kandidat, Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
+    eigenständig klickbar; Focus-Ring umläuft die Karte. Der Chevron existiert NUR im
+    Collapsed-State (Figma-treu) — expandiert hat der Collapse keine eigene Optik.
+    FIGMA-SCHULD: die unsichtbare Ganz-Flächen-Collapse-Geste hat kein designtes
+    Gegenstück (Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
     Default (play: Count-Derivation + Info-Lifting)/ExpandCollapse (uncontrolled-Demo
     OHNE State-Owner, play: voller Zyklus + aria-expanded)/Uncontrolled (NUR
     expandable+defaultExpanded als scoped Live-Controls; key-Remount, weil der Seed nur
