@@ -1258,11 +1258,12 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
   skill: manueller Figma→Code-Erstbau (/storybook-rules + /docgen-props für Story/Props)
   notes: >
     Tiefen-Leiter-Badge der Rail-Cards. Code spiegelt die Figma-Konstruktion: DS Badge
-    (einheitlich variant=secondary — der Figma-Fork default/secondary ist rein konstruktiv,
+    (ohne variant-Prop, default — der Figma-Fork default/secondary ist rein konstruktiv,
     beide Farben werden overridet) + twMerge-Re-Clothing: bg-level-{level}-fill +
-    text-level-{level} (Showcase-Token-Layer, ersetzt bg/text-secondary-*) · h-4 (16px,
-    ersetzt h-5) · text-format-data-sm (ersetzt text-format-label-md) · uppercase (Wort =
-    lowercase NodeLevel-Wert). Level-Union lokal (DrillRailLevelKind, docgen kann Exclude<>
+    text-level-{level} (Showcase-Token-Layer, ersetzt die default-Farben) ·
+    text-format-data-sm (ersetzt text-format-label-md) · uppercase (Wort = lowercase
+    NodeLevel-Wert). Höhe bleibt die Badge-eigene h-5 (20px) — bewusste Code-Abweichung
+    vom 16px-Instanz-Override in Figma (User-Entscheid 2026-07-02: DS-Geometrie gewinnt). Level-Union lokal (DrillRailLevelKind, docgen kann Exclude<>
     nicht auflösen) + satisfies Record<NodeLevel,…> als beidseitiger Drift-Guard gegen die
     decompose-store-Leiter. Inertes Rest-Token [a]:hover:bg-secondary-fill/80 bleibt nach
     Merge stehen (Anchor-Modifier, in der Rail nie aktiv). data-slot="drill-rail-level" +
