@@ -1393,7 +1393,9 @@ Tokens: DS-Utilities + Showcase-Level-Farben (`showcase-tokens.css`). Figma: Rai
     FIGMA-SCHULD: das Collapse-Control hat KEIN Figma-Gegenstück (minimal gehaltener
     Kandidat, Design offen). Die Rail nutzt controlled (Pfad = State-Owner). Stories
     Default (play: Count-Derivation + Info-Lifting)/ExpandCollapse (uncontrolled-Demo
-    OHNE State-Owner, play: voller Zyklus + aria-expanded)/AncestorChain (Name via
+    OHNE State-Owner, play: voller Zyklus + aria-expanded)/Uncontrolled (NUR
+    expandable+defaultExpanded als scoped Live-Controls; key-Remount, weil der Seed nur
+    beim Mount gelesen wird)/AncestorChain (Name via
     asChild als h2, Collapsed-Anker controlled gepinnt)/AllStates (pseudo-hover) +
     SUB-PART-SEITE
     drill-rail-card-name.stories.tsx (storybook-rules Composite-Regel: Part mit
