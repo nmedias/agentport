@@ -11,6 +11,7 @@ data. See [`CLAUDE.md`](./CLAUDE.md) for the full product context, design pipeli
 ```
 apps/
   agentport/        React + Vite app — harness that composes UI states (port 4200)
+                  └─ .storybook/          app/showcase components in isolation (port 6007)
 libs/
   ui/             @agentport/ui — shadcn primitives + Agentport signature components
                   ├─ src/components/ui/   shadcn components (e.g. button)
@@ -43,14 +44,18 @@ npm run storybook    # browse components in isolation
 | `npm run preview`          | Preview the production build locally                                      |
 | `npm test`                 | All tests — jsdom unit + browser story tests (`nx run-many -t test`)      |
 | `npm run test:app:unit`    | Unit specs only, jsdom (App `agentport` Vitest project)                     |
+| `npm run test:app:stories` | App Storybook stories as browser tests (Playwright/Chromium)              |
 | `npm run test:unit`        | Unit specs only, jsdom (`@agentport/ui` Vitest project)                    |
 | `npm run test:stories`     | Storybook stories (`@agentport/ui`) as browser tests (Playwright/Chromium) |
 | `npm run lint`             | Lint all projects                                                         |
 | `npm run typecheck`        | TypeScript typecheck all projects                                         |
 | `npm run check`            | lint + test + typecheck (the CI gate)                                     |
-| `npm run storybook`        | Storybook dev server for `@agentport/ui`                                   |
-| `npm run build-storybook`  | Build Storybook static site                                               |
+| `npm run storybook`        | Storybook dev server for `@agentport/ui` (port 6006)                       |
+| `npm run storybook:app`    | Storybook dev server for the app (`agentport`, port 6007)                   |
+| `npm run build-storybook`  | Build Storybook static site (`@agentport/ui`)                              |
+| `npm run build-storybook:app` | Build the app Storybook static site                                    |
 | `npm run shoot -- <id>`    | Screenshot a story from running Storybook (visual check)                  |
+| `npm run shoot:app -- <id>` | Same, against the app Storybook on :6007                                 |
 | `npm run ui:add -- <name>` | Add a shadcn component into `libs/ui`                                     |
 | `npm run graph`            | Open the Nx project graph                                                 |
 | `npm run sync`             | Sync tsconfig project references                                          |
