@@ -19,12 +19,6 @@
       "import": "./dist/blocks/index.js",
       "default": "./dist/blocks/index.js"
     },
-    "./blocks/explorer": {
-      "agentport-monorepo": "./src/blocks/explorer/index.ts",
-      "types": "./dist/blocks/explorer/index.d.ts",
-      "import": "./dist/blocks/explorer/index.js",
-      "default": "./dist/blocks/explorer/index.js"
-    },
     "./styles": "./dist/styles/globals.css"
   },
   "dependencies": {
