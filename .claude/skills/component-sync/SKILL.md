@@ -1,6 +1,6 @@
 ---
 name: component-sync
-description: "Reconcile an already-built DS component with its Figma component set after a Figma change — read the live per-variant token bindings, diff against the current code's DS utilities, and apply the delta (Figma → code). Trigger when a component already exists in libs/ui AND its Figma set changed (a swapped text style, recoloured state, adjusted radius/padding) and the code must catch up. Not first-time creation (use /shadcn-component-port) and not visual redesign (/design-punk)."
+description: "Reconcile an already-built DS component with its Figma component set after a Figma change — read the live per-variant token bindings, diff against the current code's DS utilities, and apply the delta (Figma → code). Trigger when a component already exists in libs/ui AND its Figma set changed (a swapped text style, recoloured state, adjusted radius/padding) and the code must catch up. Not first-time creation (use /shadcn-component-port) and not visual redesign (out of scope)."
 ---
 
 # Component Sync (Figma → Code)
@@ -107,7 +107,7 @@ delta-free, deviation-free run → one-line note is fine.
 
 | Trap | Reality |
 |---|---|
-| Write the change back into Figma | Out of scope — sync is **Figma → code** only. A push/redesign is `/shadcn-component-port` or `/design-punk`. |
+| Write the change back into Figma | Out of scope — sync is **Figma → code** only. A push is `/shadcn-component-port`; a redesign is out of scope. |
 | Rewrite beyond the delta | Apply only what differs; opportunistic refactors hide the real change and risk regressions. |
 | Re-judge a correct binding by `use`/`avoid` | A **bound** var is authoritative — map it 1:1 (§6 crosswalk). Role-picking is only for a **raw/unbound** value or to flag a wrong binding. |
 | Log a live bound value as a "Deviation" | A bound var is the truth → propagate it 1:1 (Tier 1). "Deviation" is only for unbound/raw values or a flagged-wrong binding — misfiling a binding there = a false no-delta. |
@@ -115,5 +115,5 @@ delta-free, deviation-free run → one-line note is fine.
 ## Boundaries
 
 - One component per run, **Figma → code only**. First-time build → `/shadcn-component-port`; visual
-  redesign → `/design-punk`; code → Figma push is out of scope.
+  redesign and code → Figma push are out of scope.
 - Token-faithful: change only what the Figma delta demands.

@@ -209,4 +209,4 @@ Two artifacts — a port is **not done** until both exist:
 ## Boundaries
 
 - One component per run, **initial port only**. An already-built component whose Figma changed →
-  `/component-sync`. Signature redesign is `/design-punk`, not here.
+  `/component-sync`. Signature redesign is out of scope here.

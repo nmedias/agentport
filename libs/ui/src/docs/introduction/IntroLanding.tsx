@@ -164,7 +164,7 @@ function Hero() {
           design system
         </p>
         <p className="mt-md  text-format-eyebrow uppercase tracking-[0.35em]">
-          ECM · the vendor
+          agent-driven shadcn port
         </p>
         {/* wordmark — sized + weighted for the hero (not bound to a text token);
             family + tight tracking still come from text-format-display. The
@@ -179,7 +179,7 @@ function Hero() {
 
         {/* one small sentence */}
         <p className="mt-2xl  text-format-title font-[500]">
-          The missing UI and token layer of the Agentport.
+          shadcn/ui, re-clothed in its own token layer through an agent-driven Figma ↔ code pipeline.
         </p>
 
 
@@ -281,6 +281,8 @@ const GROUPS: Group[] = [
     entries: [
       { label: 'Dialog', id: 'ui-dialog--docs' },
       { label: 'Command', id: 'ui-command--docs' },
+      { label: 'Popover', id: 'ui-popover--docs' },
+      { label: 'Tooltip', id: 'ui-tooltip--docs' },
     ],
   },
   {
@@ -291,12 +293,10 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    name: 'Blocks',
+    name: 'Data & Lists',
     entries: [
-      {
-        label: 'Explorer · MetadataList',
-        id: 'ui-blocks-explorer-metadatalist--docs',
-      },
+      { label: 'Table', id: 'ui-table--docs' },
+      { label: 'Item', id: 'ui-item--docs' },
     ],
   },
 ];
@@ -311,7 +311,7 @@ function ComponentsIndex() {
     <Section
       id="components"
       eyebrow="Components"
-      title="Eighteen primitives, one block"
+      title="Twenty-two primitives"
       lead="The shadcn/ui base, re-clothed in the Agentport tokens and aligned to the denser radix-nova baseline. Each links into its Autodocs page."
     >
       <div className="flex flex-col gap-3xl">
@@ -367,8 +367,8 @@ function Footer() {
             <Eyebrow>Develop</Eyebrow>
             <ul className="flex flex-col gap-xs text-format-body text-ink">
               <li>
-                <code className="text-format-data-sm text-ink">npm run dev</code> —
-                the app on :4200
+                <code className="text-format-data-sm text-ink">npm run test:stories</code> —
+                every story in Chromium + axe
               </li>
               <li>
                 <code className="text-format-data-sm text-ink">
@@ -393,7 +393,7 @@ function Footer() {
         </div>
         <div className="border-t border-border pt-xl">
           <span className="text-format-eyebrow uppercase text-muted-ink">
-            Agentport DS — Agentport · the vendor
+            Agentport DS
           </span>
         </div>
       </div>

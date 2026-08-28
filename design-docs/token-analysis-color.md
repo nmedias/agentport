@@ -182,7 +182,7 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 
 ## Vorab: Farb-DNA des Screens
 
-- **Monochrom + EIN Akzent.** Neutrale Graustufen-Rampe + ECM-Cyan (Brand `#009FE3`, im Token `cyan/500` = `#0098DA` für AA), dazu nur zwei
+- **Monochrom + EIN Akzent.** Neutrale Graustufen-Rampe + Signal-Cyan (Brand `#009FE3`, im Token `cyan/500` = `#0098DA` für AA), dazu nur zwei
   Cyan-Ableitungen: dunkle Lesefassung `#0077A8` und Tint `#E9F6FC`. Mehr Buntfarbe gibt es nicht.
 - **Keine Status-Ampel im Screen.** Kein Grün/Rot/Gelb. Der Verbindungs-Punkt ist Cyan (nicht grün),
   das Pflicht-Häkchen ist dunkle Tinte `#1A2230` (nicht grün). → `destructive`/Erfolg/Warnung müssen
@@ -227,7 +227,7 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
 
 ---
 
-## 3 · Akzent — ECM-Cyan (Signatur)
+## 3 · Akzent — Signal-Cyan (Signatur)
 
 | Token | Quelle | Roh-Wert(e) | Wo im Layout |
 |---|---|---|---|

@@ -1,6 +1,6 @@
 ---
 name: figma-verify
-description: "Deterministic pre-return check for any Figma build agent. Trigger before returning a built or redesigned node from design-punk or sketch-jammer runs, or when the user says 'verify the build', 'check icons', 'check clipping', 'check overlap', 'verify before handoff', 'is this icon a vector', 'pre-handoff check'."
+description: "Deterministic pre-return check for any Figma build agent. Trigger before returning a built or redesigned node from a component port or sync run, or when the user says 'verify the build', 'check icons', 'check clipping', 'check overlap', 'verify before handoff', 'is this icon a vector', 'pre-handoff check'."
 user-invocable: false
 ---
 
@@ -98,7 +98,7 @@ If no node was given, ask for it.
 6. **Walk every FRAME / RECTANGLE / VECTOR with solid fill.** Flag if any
    edge of the node is flush with (within 1px of) the outer container's edge:
 
-   → **SOFT HINT · edge-flush mass.** Same status as slop-check's edge-flush
+   → **SOFT HINT · edge-flush mass.** Same status as an aesthetic edge-flush
    hint — intentional vs. accidental crop is the caller's verdict; report so
    they can confirm.
 
@@ -122,7 +122,7 @@ Markdown table — id, check, PASS/FLAG/HINT, evidence — followed by:
 - Read-only. Skill diagnoses; the caller fixes.
 - List is fixed. If something else looks broken, mention it in the verdict
   line — don't invent rows.
-- This skill does not replace `slop-check` (aesthetic) or visual review —
+- This skill does not replace aesthetic or visual review —
   it covers deterministic build correctness only.
 
 ## Common rationalisations to refuse

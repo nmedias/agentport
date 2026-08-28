@@ -1,6 +1,6 @@
 ---
 name: figma-create-section
-description: "Internal sub-skill — creates the canonical DS Section wrapper (white Section + Headline, no inner frame) on a target page. Called by the sketch-jammer agent (one section per direction) and other skills needing a labeled build container. Fixed values live in config.json. Returns sectionId + headlineId. Caller appends its build as section children below the headline. Not user-invocable directly."
+description: "Internal sub-skill — creates the canonical DS Section wrapper (white Section + Headline, no inner frame) on a target page. Called by the component-port skill and other skills needing a labeled build container. Fixed values live in config.json. Returns sectionId + headlineId. Caller appends its build as section children below the headline. Not user-invocable directly."
 user-invocable: false
 ---
 

@@ -36,7 +36,7 @@ neues `.FieldLegend`-Set + invalid-error-Slot-Fix (Ursache: `clone()` degradiert
 **18 Components** portiert + nova-aligned (Button, Input, Textarea, Kbd, Breadcrumb, InputGroup,
 Command inkl. Palette-Variante + CommandDialog, Dialog, Badge, Separator, **Field (+ co-ported
 Label)**, **Checkbox, Switch, RadioGroup**, **Select**, **ChoiceCard**, **Slider**) + Blocks-Layer
-(`explorer/metadata-list`). Badge: 6 nova-Varianten (`ghost`/`link`
+(Struktur, noch ohne Organismen). Badge: 6 nova-Varianten (`ghost`/`link`
 über die Brief-4, bewusst) mit `secondary`/`destructive` an ⚠-Platzhalter gebunden; Separator-Achse =
 `orientation` (h/v); AsChild-Control-Footgun gefixt (#21). **Field = Surface-less Composite**
 (`orientation × invalid` + 4 Slots, nur Spacing+Typo gebunden; FieldSet/Group/Legend/Title +
@@ -105,7 +105,7 @@ Composite-Story-Doc-Regeln erweitert (`110ab0d`).
    Bis dahin: Light = einziger Mode.
 4. **9 ⚠-Platzhalter-Tokens echt designen:** `secondary*`, `destructive*`, `chart-1…5`
    (`destructive` = invalid-State von `.Input`/`.Textarea`, jetzt auch Badge `secondary`/`destructive`-
-   Varianten + Field `FieldError`). *(Übernommen aus `handoff-agentport-tokens-color.md`.)*
+   Varianten + Field `FieldError`).
 5. **Status-Familie** `connected/offline/error/warning`, **Anteils-Balken**, **Rail-Aktiv-Icons**.
    *(Ebenfalls aus dem Token-Handoff.)*
 

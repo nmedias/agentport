@@ -246,7 +246,7 @@ function PaletteDialogDemo() {
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
-        Agentport-Palette
+        Agentport palette
         <Kbd>⌘K</Kbd>
       </Button>
       <CommandDialog
@@ -291,7 +291,7 @@ export const Palette: Story = {
             return (
               <>
                 <Button variant="outline" onClick={() => setOpen(true)}>
-                  Agentport-Palette
+                  Agentport palette
                   <Kbd>⌘K</Kbd>
                 </Button>
                 <CommandDialog
@@ -368,7 +368,7 @@ function PaletteFlatDialogDemo() {
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
-        Agentport-Palette (flach)
+        Agentport palette (flat)
         <Kbd>⌘K</Kbd>
       </Button>
       <CommandDialog
