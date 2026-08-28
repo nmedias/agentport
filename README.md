@@ -128,10 +128,18 @@ Copy `.mcp.json.example` to `.mcp.json` (git-ignored) and adjust:
 |------------------|----------------------------------------------------------|----------------------------------------------------------------|
 | `shadcn`         | `npx shadcn@latest mcp` (no install, no token)           | reading component anatomy from the shadcn registry             |
 | `storybook`      | HTTP `http://localhost:6006/mcp`, served by `@storybook/addon-mcp` while `npm run storybook` runs | story docs, previews, story-test runs for the agent |
-| `figma-console`  | `npx -y figma-console-mcp@latest`; needs a personal access token in `FIGMA_ACCESS_TOKEN` | optional REST/console bridge (variable probes); Plugin MCP is the default channel |
+| `figma-console`  | `npx -y figma-console-mcp@latest`; authenticates with a Figma personal access token (see below) | optional REST/console bridge (variable probes); Plugin MCP is the default channel and needs no token |
 
-Never commit `.mcp.json` with a token in it. After editing, restart Claude Code or run `/mcp` to
-reconnect.
+**Figma token for `figma-console`** (skip this if you only use the Plugin MCP):
+
+1. In Figma: account menu → *Settings* → *Security* → *Personal access tokens* → *Generate new token*.
+   Scopes: *File content: Read* and *Variables: Read* (add *Variables: Write* only if the console bridge
+   should write variables). Figma shows the token once — copy it right away.
+2. Paste it into `.mcp.json` as the value of `mcpServers.figma-console.env.FIGMA_ACCESS_TOKEN`
+   (the placeholder `<your Figma personal access token>` in the example file marks the spot).
+
+Never commit `.mcp.json` with a token in it — the file is git-ignored for that reason. After editing,
+restart Claude Code or run `/mcp` to reconnect.
 
 ## Figma
 
