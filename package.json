@@ -5,6 +5,7 @@
     "libs/*"
   ],
   "scripts": {
+    "postinstall": "playwright install chromium",
     "storybook": "nx storybook @agentport/ui --port 6006",
     "build-storybook": "nx build-storybook @agentport/ui",
     "test": "nx run-many -t test",

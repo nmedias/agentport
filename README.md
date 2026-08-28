@@ -28,16 +28,16 @@ tools/shoot-stories.mjs      Playwright screenshots of a running Storybook, for 
 
 ## Prerequisites
 
-- **Node ≥ 24** and **npm ≥ 11** (npm workspaces; the lockfile is authoritative)
-- **Chromium for Playwright** — story tests run in a real browser: `npx playwright install chromium`
-- Optional, only for running the design pipeline: **Claude Code** with the Figma plugin, **Figma
-  Desktop** with the Figma MCP plugin enabled, and your own Figma file (see *Figma* below)
+- **Node ≥ 24** and **npm ≥ 11** (npm workspaces; the lockfile is authoritative). `npm install` also
+  fetches Chromium for the story tests (`postinstall` → `playwright install chromium`).
+- Only for running the design pipeline: **Claude Code** with the plugins and MCP servers listed under
+  *Agent tooling*, **Figma Desktop** with the Figma MCP plugin enabled, and access to the Figma file
+  that holds the design system (see *Figma* below)
 
 ## Getting started
 
 ```bash
-npm install
-npx playwright install chromium
+npm install                # installs deps + Chromium for Playwright
 npm run storybook          # http://localhost:6006 — the entry point
 npm run check              # lint + tests + typecheck — the gate
 ```
@@ -98,31 +98,55 @@ Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
 
 Writing rules for skills live in `.claude/skills/CLAUDE.md`.
 
-## MCP setup
+## Agent tooling
 
-Copy `.mcp.json.example` to `.mcp.json` (git-ignored) and fill in what you use:
+The pipeline runs in **Claude Code**. It needs two kinds of tooling: plugins (installed once per
+machine, enabled per project in `.claude/settings.json`) and MCP servers (configured per project in
+`.mcp.json`).
 
-- **Figma Plugin MCP** — comes with the Claude Code Figma plugin (`.claude/settings.json` enables
-  it); needs Figma Desktop with the MCP plugin running. This is the default Figma channel.
-- **`figma-console`** — optional REST/console bridge; needs a personal access token in
-  `FIGMA_ACCESS_TOKEN`. Never commit the token.
-- **shadcn MCP** — registry access for anatomy reads (`npx shadcn@latest mcp`).
-- **Storybook MCP** — served by `@storybook/addon-mcp` on `http://localhost:6006/mcp` while
-  `npm run storybook` runs; gives agents story docs, previews and test runs.
+### Claude Code plugins
+
+`.claude/settings.json` enables these plugins; install them once from inside Claude Code:
+
+```
+/plugin install figma@claude-plugins-official          # Figma Plugin MCP + figma-use skills (required)
+/plugin marketplace add Remix-Design/remixicon-mcp      # third-party marketplace for the icon MCP
+/plugin install remix-icon-mcp@remix-icon-mcp           # Remix Icon search MCP (required for icon picks)
+/plugin install superpowers@claude-plugins-official     # brainstorming / planning / TDD workflow (recommended)
+/plugin install claude-md-management@claude-plugins-official   # CLAUDE.md maintenance (optional)
+/plugin install skill-creator@claude-plugins-official   # authoring/evaluating skills (optional)
+```
+
+The Figma plugin talks to **Figma Desktop**: open the file there, enable the local MCP server in
+Figma's preferences, then `/figma-status` in Claude Code confirms the link.
+
+### MCP servers (`.mcp.json`)
+
+Copy `.mcp.json.example` to `.mcp.json` (git-ignored) and adjust:
+
+| Server           | How it runs                                              | Used for                                                       |
+|------------------|----------------------------------------------------------|----------------------------------------------------------------|
+| `shadcn`         | `npx shadcn@latest mcp` (no install, no token)           | reading component anatomy from the shadcn registry             |
+| `storybook`      | HTTP `http://localhost:6006/mcp`, served by `@storybook/addon-mcp` while `npm run storybook` runs | story docs, previews, story-test runs for the agent |
+| `figma-console`  | `npx -y figma-console-mcp@latest`; needs a personal access token in `FIGMA_ACCESS_TOKEN` | optional REST/console bridge (variable probes); Plugin MCP is the default channel |
+
+Never commit `.mcp.json` with a token in it. After editing, restart Claude Code or run `/mcp` to
+reconnect.
 
 ## Figma
 
-The token layer (`libs/ui/src/styles/tokens.css`) is an export of the Figma variable collections;
-the skills read and build in a Figma file of your own. Point them at it:
+The token layer (`libs/ui/src/styles/tokens.css`) is exported from the Figma variable collections
+`semantic` (color) and `semantic-dimension` (dimension); component sets live on the page
+`Shadcn Components`. Names and IDs are documented in `design-docs/design-system/tokens-reference.md`
+and `components-reference.md`. To point the skills at the file:
 
-1. Create a Figma file with a page named `Shadcn Components` and the variable collections
-   `semantic` (color) and `semantic-dimension` (dimension) — names as in
-   `design-docs/design-system/tokens-reference.md`.
-2. Enter its file key in `.claude/skills/shadcn-component-port/config.json` and
+1. Enter its file key in `.claude/skills/shadcn-component-port/config.json` and
    `.claude/skills/component-sync/config.json` (`figma.fileKey`, currently the placeholder
-   `FIGMA_FILE_KEY`) and the page ID in `figma.pageId`.
-3. Node IDs recorded in `components-reference.md` and the run notes refer to the original file and
-   will be replaced as sets are rebuilt.
+   `FIGMA_FILE_KEY`) and the components page ID in `figma.pageId`.
+2. Open the file in Figma Desktop with the MCP plugin enabled; `/figma-status` should report both
+   channels connected.
+3. Node IDs recorded in `components-reference.md` and the run notes refer to that file; if a set is
+   rebuilt, the catalog is updated as part of the run.
 
 ## Adding a component
 
