@@ -155,7 +155,7 @@ export const AllStates: Story = {
     <div className="flex w-80 flex-col gap-lg">
       {STATE_ROWS.map((r) => (
         <div key={r.id} className="flex flex-col gap-xs">
-          <span className="text-format-eyebrow text-muted-ink">{r.label}</span>
+          <span className="text-format-eyebrow text-muted">{r.label}</span>
           <Textarea
             id={r.id}
             aria-label={r.label}

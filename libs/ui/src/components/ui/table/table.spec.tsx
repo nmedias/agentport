@@ -104,7 +104,7 @@ describe('Table', () => {
   it('caption = muted secondary text, named mt-xl margin (no dead text-muted-foreground)', () => {
     const { container } = renderTable();
     const c = cls(container.querySelector('[data-slot="table-caption"]'));
-    expect(c).toContain('text-muted-ink');
+    expect(c).toContain('text-muted');
     expect(c).toContain('text-format-body');
     expect(c).toContain('mt-xl');
     expect(c).not.toContain('text-muted-foreground');

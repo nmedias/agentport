@@ -35,7 +35,7 @@ function Eyebrow({
   return (
     <span
       className={`inline-flex items-center gap-md text-format-eyebrow uppercase ${
-        tone === 'inverse' ? 'text-inverse-ink' : 'text-muted-ink'
+        tone === 'inverse' ? 'text-inverse-ink' : 'text-muted'
       } ${className}`}
     >
       <span
@@ -233,10 +233,10 @@ function FoundationsPointer() {
               {f.label}
               <RiArrowRightLine
                 aria-hidden
-                className="size-4 text-muted-ink transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
+                className="size-4 text-muted transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
               />
             </span>
-            <span className="text-format-data-sm text-muted-ink">{f.note}</span>
+            <span className="text-format-data-sm text-muted">{f.note}</span>
           </a>
         ))}
       </div>
@@ -334,7 +334,7 @@ function ComponentsIndex() {
                   {entry.label}
                   <RiArrowRightLine
                     aria-hidden
-                    className="size-4 text-muted-ink transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
+                    className="size-4 text-muted transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
                   />
                 </a>
               ))}
@@ -392,7 +392,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-border pt-xl">
-          <span className="text-format-eyebrow uppercase text-muted-ink">
+          <span className="text-format-eyebrow uppercase text-muted">
             Agentport DS
           </span>
         </div>

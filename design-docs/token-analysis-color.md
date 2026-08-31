@@ -48,7 +48,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - 7 Custom (aliased): `input-placeholder`, `border-emphasis`, `border-strong`, `inverse`,
     `inverse-foreground`, `scrim` (→ `neutral/900`) + `scrim-opacity` (FLOAT → `opacity/10`;
     s. Batch 6 Update). *(`border-subtle` 2026-06-10 entfernt, s. Log.)*
-  - `background-fixed` — **Alias auf `base/white`**, **theme-invariant**: bleibt in Light **und** Dark
+  - `background-fixed` *(2026-08-31 **entfernt** — nie gebunden, nie im Code konsumiert; Absatz bleibt als Historie)* — **Alias auf `base/white`**, **theme-invariant**: bleibt in Light **und** Dark
     weiß. Für den **Toggle-Knob** (3× `knob`, vorher an `background` → wäre im Dark Mode dunkel geworden).
     Fix bleibt erhalten, weil `base/white` in der Single-Mode-`reference`-Collection liegt; beim späteren
     Hinzufügen eines Dark-Modes muss der Dark-Wert von `background-fixed` **denselben Alias** behalten.
@@ -61,7 +61,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
     `destructive-foreground`, `chart-1…5`.
   - **Gruppen** (rein organisatorisch — Token-Leaf-Namen unverändert):
     `shadcn Default/` (seit 2026-06-11 **flach** — `Sidebar/`/`Chart/`-Untergruppen aufgelöst),
-    `Overlay/`, `Input/`, `Border/`, `Inverse/`; `background-fixed` gruppenlos.
+    `Overlay/`, `Input/`, `Border/`, `Inverse/`; `background-fixed` gruppenlos *(2026-08-31 entfernt)*.
     Beim CSS-Export zählt nur der Leaf-Name, geprefixt: `shadcn Default/background` →
     `--ap-sys-background`, `Overlay/overlay` → `--ap-sys-overlay`.
 

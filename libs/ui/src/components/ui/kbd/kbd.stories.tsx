@@ -123,7 +123,7 @@ export const Combo: Story = {
   render: () => (
     <KbdGroup>
       <Kbd>Ctrl</Kbd>
-      <span className="text-muted-ink text-format-kbd">+</span>
+      <span className="text-muted text-format-kbd">+</span>
       <Kbd>B</Kbd>
     </KbdGroup>
   ),

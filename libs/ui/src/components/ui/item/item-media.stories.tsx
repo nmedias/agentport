@@ -87,7 +87,7 @@ export const Kinds: Story = {
       </Item>
       <Item variant="outline">
         <ItemMedia variant="default">
-          <span className="text-format-data-sm text-muted-ink">IN</span>
+          <span className="text-format-data-sm text-muted">IN</span>
         </ItemMedia>
         <ItemContent>
           <ItemTitle>default</ItemTitle>

@@ -91,7 +91,7 @@ function SelectTrigger({ className, size = 'default', children, ...props }: Sele
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <RiArrowDownSLine className="pointer-events-none size-4 text-muted-ink" />
+        <RiArrowDownSLine className="pointer-events-none size-4 text-muted" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -150,7 +150,7 @@ function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select
   return (
     <SelectPrimitive.Label
       data-slot="select-label"
-      className={cn('px-sm py-xs text-format-label-md text-muted-ink', className)}
+      className={cn('px-sm py-xs text-format-label-md text-muted', className)}
       {...props}
     />
   );

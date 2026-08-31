@@ -2,8 +2,8 @@ import { FoundationsPage, Group } from './foundations-kit';
 
 /*
   Foundations / Effects — the two DS shadows (tokens-reference §5). Glow is the
-  brand focus/active accent (signal/400 @ 50%); elevation is the raised-overlay
-  drop shadow (neutral/900 @ 18%). The system is otherwise flat: depth is implied,
+  focus / active halo on small emphasised shapes (signal/400 @ 50%); elevation is
+  the drop shadow of floating surfaces (neutral/900 @ 18%). The system is otherwise flat: depth is implied,
   not stacked — all stock shadow-xs/sm/md/lg are dead.
 */
 
@@ -12,7 +12,7 @@ export function Effects() {
     <FoundationsPage
       eyebrow="Foundations · Effects"
       title="Effects"
-      intro="Two shadows, each a single utility. Depth is implied, not stacked — the system is otherwise flat, and the stock shadow-xs/sm/md/lg utilities are dead. Use glow only on brand focus/active accents; use elevation only on raised overlays and menus."
+      intro="Two shadows, each a single utility. Depth is implied, not stacked — the system is otherwise flat, and the stock shadow-xs/sm/md/lg utilities are dead. Use glow only as the focus / active halo on small emphasised shapes; use elevation only on surfaces floating above the layout."
     >
       <Group name="Shadows">
         <div className="grid gap-2xl sm:grid-cols-2">
@@ -25,11 +25,11 @@ export function Effects() {
             </div>
             <div className="flex flex-col gap-2xs">
               <span className="text-format-data-sm text-ink">shadow-glow</span>
-              <span className="text-format-data-sm text-muted-ink">
+              <span className="text-format-data-sm text-muted">
                 0 0 4px 0 · signal/400 @ 50%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
-                Glow on brand markers (focus / active accent).
+                Halo on an emphasised marker — focus / active halo on small shapes. Not a depth cue.
               </span>
             </div>
           </div>
@@ -43,11 +43,11 @@ export function Effects() {
             </div>
             <div className="flex flex-col gap-2xs">
               <span className="text-format-data-sm text-ink">shadow-elevation</span>
-              <span className="text-format-data-sm text-muted-ink">
+              <span className="text-format-data-sm text-muted">
                 0 14px 36px -6px · neutral/900 @ 18%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
-                Drop shadow for raised overlays / menus.
+                Drop shadow of surfaces floating above the layout (dialog-fill). The only depth cue in the system.
               </span>
             </div>
           </div>

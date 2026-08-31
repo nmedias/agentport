@@ -189,43 +189,43 @@ export const AllStates: Story = {
     <div className="flex flex-col gap-lg">
       <div className="flex items-center gap-md">
         <Switch aria-label="Unchecked" />
-        <span className="text-format-body text-muted-ink">Unchecked</span>
+        <span className="text-format-body text-muted">Unchecked</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch id="sw-focus" aria-label="Focus" />
-        <span className="text-format-body text-muted-ink">Focus</span>
+        <span className="text-format-body text-muted">Focus</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-label="Checked" defaultChecked />
-        <span className="text-format-body text-muted-ink">Checked</span>
+        <span className="text-format-body text-muted">Checked</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch id="sw-checked-focus" aria-label="Checked and focused" defaultChecked />
-        <span className="text-format-body text-muted-ink">Checked + focus</span>
+        <span className="text-format-body text-muted">Checked + focus</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-label="Disabled" disabled />
-        <span className="text-format-body text-muted-ink">Disabled</span>
+        <span className="text-format-body text-muted">Disabled</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-label="Checked and disabled" defaultChecked disabled />
-        <span className="text-format-body text-muted-ink">Checked + disabled</span>
+        <span className="text-format-body text-muted">Checked + disabled</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-label="Invalid" aria-invalid />
-        <span className="text-format-body text-muted-ink">Invalid</span>
+        <span className="text-format-body text-muted">Invalid</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch aria-label="Invalid and checked" aria-invalid defaultChecked />
-        <span className="text-format-body text-muted-ink">Invalid (checked)</span>
+        <span className="text-format-body text-muted">Invalid (checked)</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch id="sw-focus-invalid" aria-label="Invalid and focused" aria-invalid />
-        <span className="text-format-body text-muted-ink">Invalid + focus</span>
+        <span className="text-format-body text-muted">Invalid + focus</span>
       </div>
       <div className="flex items-center gap-md">
         <Switch id="sw-checked-focus-invalid" aria-label="Checked, invalid and focused" aria-invalid defaultChecked />
-        <span className="text-format-body text-muted-ink">Checked + invalid + focus</span>
+        <span className="text-format-body text-muted">Checked + invalid + focus</span>
       </div>
     </div>
   ),

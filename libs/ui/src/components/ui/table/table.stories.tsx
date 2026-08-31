@@ -226,7 +226,7 @@ export const EmptyState: Story = {
       </TableHeader>
       <TableBody>
         <TableRow>
-          <TableCell colSpan={4} className="h-24 text-center text-muted-ink">
+          <TableCell colSpan={4} className="h-24 text-center text-muted">
             No results.
           </TableCell>
         </TableRow>

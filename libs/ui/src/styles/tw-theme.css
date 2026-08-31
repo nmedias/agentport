@@ -8,8 +8,7 @@
 
 /* Dark mode: currently light-only (Figma has no dark-mode token set yet).
    shadcn's default dark is disabled for now so Light=Figma doesn't mix with
-   Dark=shadcn-neutral. Re-enable once dark tokens exist
-   (`--background-fixed` must then be excluded).
+   Dark=shadcn-neutral. Re-enable once dark tokens exist.
    NOTE: the --ap-sys-* names below are PRE-rework (background/foreground/
    -foreground); rewrite to the new -fill/-ink/-border leaves (surface/ink/…)
    from the Figma dark mode when it exists.
@@ -70,7 +69,7 @@
 
   /* Color — keys follow the Figma leaf names (2026-06-17 -fill/-ink/-border
      rework). New utilities: bg-surface, text-ink, bg-muted-fill,
-     text-muted-ink, bg-accent-fill, text-accent-ink, border-accent-border,
+     text-muted-ink, text-muted, bg-accent-fill, text-accent-ink, border-accent-border,
      bg-primary-fill, text-primary-ink, border-input-border, … */
 
   /* Core surface + ink */
@@ -79,7 +78,8 @@
   --color-card-fill: var(--ap-sys-card-fill);
   --color-card-ink: var(--ap-sys-card-ink);
   --color-muted-fill: var(--ap-sys-muted-fill);
-  --color-muted-ink: var(--ap-sys-muted-ink);
+  --color-muted-ink: var(--ap-sys-muted-ink);      /* text on muted-fill only */
+  --color-muted: var(--ap-sys-muted);              /* text-muted · bg-muted/fill-muted = shape only (like primary/ink) */
 
   /* Primary / secondary / accent */
   --color-primary: var(--ap-sys-primary);
@@ -142,8 +142,6 @@
   --color-inverse-container-low: var(--ap-sys-inverse-container-low);
   --color-inverse-container-hover: var(--ap-sys-inverse-container-hover);
 
-  /* Theme-invariant */
-  --color-background-fixed: var(--ap-sys-background-fixed);
 
   /* Corner — lookup keys for the corner-* utilities (tw-utilities.css), same
      pattern as --space-step-*. rounded-* is dead (--radius-*: initial, no

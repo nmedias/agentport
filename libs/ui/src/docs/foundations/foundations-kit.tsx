@@ -53,7 +53,7 @@ export function Eyebrow({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-md text-format-eyebrow uppercase text-muted-ink ${className}`}
+      className={`inline-flex items-center gap-md text-format-eyebrow uppercase text-muted ${className}`}
     >
       <span aria-hidden className="h-px w-6 bg-border-strong" />
       {children}
@@ -121,11 +121,11 @@ function TokenMeta({
   return (
     <div className="flex flex-col gap-2xs">
       <span className="text-format-data-sm text-ink">{token}</span>
-      <span className="text-format-data-sm text-muted-ink">{utilities}</span>
-      <span className="text-format-data-sm text-muted-ink/60">
+      <span className="text-format-data-sm text-muted">{utilities}</span>
+      <span className="text-format-data-sm text-muted/60">
         {primitive} · {value}
       </span>
-      <span className="text-format-data-sm text-muted-ink/60">scope: {scope}</span>
+      <span className="text-format-data-sm text-muted/60">scope: {scope}</span>
       {role && (
         <span className="mt-2xs text-format-body text-ink text-pretty">
           {role}
@@ -351,7 +351,7 @@ export function TypeSpecimen({
     <div className="grid gap-lg border-t border-border py-2xl lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-sm">
         <span className={`${format} text-ink`}>{sample}</span>
-        <span className="text-format-data-sm text-muted-ink">
+        <span className="text-format-data-sm text-muted">
           text-format-{format.replace('text-format-', '')}
         </span>
       </div>
@@ -370,7 +370,7 @@ export function TypeSpecimen({
 function Part({ k, v, span = false }: { k: string; v: string; span?: boolean }) {
   return (
     <div className={`flex flex-col gap-2xs ${span ? 'col-span-2' : ''}`}>
-      <dt className="text-muted-ink">{k}</dt>
+      <dt className="text-muted">{k}</dt>
       <dd className="text-ink">{v}</dd>
     </div>
   );

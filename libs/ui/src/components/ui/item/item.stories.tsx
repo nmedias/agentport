@@ -279,7 +279,7 @@ export const Link: Story = {
           <ItemDescription>Jump to the type in the explorer.</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <RiArrowRightSLine className="size-4 text-muted-ink" />
+          <RiArrowRightSLine className="size-4 text-muted" />
         </ItemActions>
       </a>
     </Item>
@@ -329,14 +329,14 @@ export const AllStates: Story = {
       <div className="flex items-center gap-lg">
         <span className="w-20 shrink-0" />
         {ST_VARIANTS.map((v) => (
-          <span key={v} className="flex-1 text-format-eyebrow text-muted-ink">
+          <span key={v} className="flex-1 text-format-eyebrow text-muted">
             {v}
           </span>
         ))}
       </div>
       {ST_ROWS.map((r) => (
         <div key={r.key} className="flex items-center gap-lg">
-          <span className="w-20 shrink-0 text-format-eyebrow text-muted-ink">{r.label}</span>
+          <span className="w-20 shrink-0 text-format-eyebrow text-muted">{r.label}</span>
           {ST_VARIANTS.map((v) => (
             <div key={v} className="min-w-0 flex-1">
               <Item

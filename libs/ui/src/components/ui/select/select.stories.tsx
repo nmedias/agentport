@@ -243,7 +243,7 @@ export const TriggerStates: Story = {
   render: () => {
     const cell = (label: string, props: React.ComponentProps<typeof SelectTrigger>) => (
       <div className="flex flex-col gap-xs">
-        <span className="text-format-eyebrow text-muted-ink">{label}</span>
+        <span className="text-format-eyebrow text-muted">{label}</span>
         <Select>
           <SelectTrigger aria-label={label} className="w-50" {...props}>
             <SelectValue placeholder="Select a fruit" />

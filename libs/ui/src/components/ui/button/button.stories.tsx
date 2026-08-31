@@ -155,12 +155,12 @@ export const AllStates: Story = {
     <div className="flex flex-col gap-lg">
       <div className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
         <span />
-        <span className="text-format-eyebrow text-muted-ink">Default</span>
-        <span className="text-format-eyebrow text-muted-ink">Outline</span>
+        <span className="text-format-eyebrow text-muted">Default</span>
+        <span className="text-format-eyebrow text-muted">Outline</span>
       </div>
       {STATE_ROWS.map((r) => (
         <div key={r.key} className="grid grid-cols-[7rem_1fr_1fr] items-center gap-lg">
-          <span className="text-format-eyebrow text-muted-ink">{r.label}</span>
+          <span className="text-format-eyebrow text-muted">{r.label}</span>
           {ST_VARIANTS.map((v) => (
             <div key={v}>
               <Button

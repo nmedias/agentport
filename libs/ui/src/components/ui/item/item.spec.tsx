@@ -79,7 +79,7 @@ describe('Item', () => {
     );
     const desc = container.querySelector('[data-slot="item-description"]')?.className ?? '';
     expect(desc).toContain('text-format-body');
-    expect(desc).toContain('text-muted-ink');
+    expect(desc).toContain('text-muted');
   });
 
   it('sizes an icon media slot and rounds an image media slot with the DS corner token', () => {

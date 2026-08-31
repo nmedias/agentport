@@ -27,6 +27,20 @@ Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 > `1099:9710`, Section „Final") trägt noch Inhalt aus dem Ursprungsprojekt — wird in einem eigenen Abschnitt
 > aufgeräumt; bis dahin den fileKey nicht pushen.
 
+> **Token-Beschreibungs-Audit 2026-08-31 (Figma ↔ tokens-reference ↔ Storybook, Plugin-MCP):** alle Beschreibungen
+> auf **eine englische Rollen-Formulierung** je Token gebracht (Figma-Variable = `tokens-reference.md` `use` =
+> Foundations-Rolle in `Colors.tsx`/`SpacingRadius.tsx`/`Typography.tsx`/`Effects.tsx`); Qualitätsregel: eindeutig,
+> gegen Nachbar-Tokens abgegrenzt, semantisch statt Komponentennamen, Gruppenwörter (primary/secondary/accent/brand/
+> muted/inverse) nie als Adjektiv. Gesetzt: 52 `semantic` + 15 `semantic-dimension` + 14 Text-Styles + 2 Effect-Styles
+> (vorher 42 DE/EN gemischt, 10 + 15 + 16 leer); `reference` unverändert bis auf `Color/opacity/10` (CSS-Name
+> `--ap-color-opacity-10`). Strukturell: `Muted/muted` (VariableID:4492:2666, bisher Figma-only) ist jetzt der
+> **Standalone**-Token `--ap-sys-muted` / `text-muted` (Paar-Regel: `muted-ink` nur auf `muted-fill`) — 120 Bindings
+> auf `Muted/muted-ink` außerhalb von `muted-fill` auf `Muted/muted` umgehängt (64 Main-Nodes + 56 Instanz-Overrides),
+> 62 Code-Call-Sites `text-muted-ink` → `text-muted` · `Inverse/inverse-ink/muted` → **`Inverse/inverse-ink-muted`**
+> (ID `4663:4413` bleibt) · Variable `background-fixed` (`3116:2`) **gelöscht** (0 Bindings, 0 Call-Sites; Code +
+> Docs bereinigt) · `Inverse/inverse-container-hover`: Code/Docs von 55 % auf den Figma-Wert **70 %** (`#0d2531b2`).
+> Nebenbefund (offen): Button `size=icon` bindet `.Button/Base` an `corner-lg`, den `state-layer` aber an `corner-md`.
+
 > **Colour-Rework 2026-06-17 (`-fill`/`-ink`/`-border`-Token-System):** alle Components unten via
 > `/component-sync` (Figma → Code) auf die neuen DS-Color-Utilities umgekleidet. Live-Figma-Set-Namen
 > aktualisiert (Top-Level-Sets ohne führenden `.`; Composites flachgezogen, z. B. `.Command/Item`→`CommandItem`,

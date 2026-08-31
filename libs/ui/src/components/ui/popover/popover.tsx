@@ -168,7 +168,7 @@ function PopoverDescription({
   return (
     <p
       data-slot="popover-description"
-      className={cn('text-format-body text-muted-ink', className)}
+      className={cn('text-format-body text-muted', className)}
       {...props}
     />
   );

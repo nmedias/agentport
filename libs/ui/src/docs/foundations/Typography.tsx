@@ -4,7 +4,7 @@ import { FoundationsPage, Group, TypeSpecimen } from './foundations-kit';
   Foundations / Typography — all 14 composition formats (tokens-reference.md §4).
   Each is a single `text-format-*` utility composing family + size + weight +
   line-height + tracking; the raw text-/font- utilities are dead. Specimen +
-  the 5 part values + role, quoted from tokens-reference.
+  the 5 part values + role — the same sentence that sits on the Figma text style.
 */
 
 const FORMATS = [
@@ -16,7 +16,7 @@ const FORMATS = [
     weight: '800 extrabold',
     lineHeight: '1.0',
     tracking: '-0.5px',
-    role: 'Hero headline.',
+    role: 'Hero headline — one per page at most.',
   },
   {
     format: 'text-format-heading',
@@ -26,7 +26,7 @@ const FORMATS = [
     weight: '800 extrabold',
     lineHeight: '1.2',
     tracking: '-0.5px',
-    role: 'Heading.',
+    role: 'Page / section heading.',
   },
   {
     format: 'text-format-heading-sm',
@@ -36,7 +36,7 @@ const FORMATS = [
     weight: '800 extrabold',
     lineHeight: '1.2',
     tracking: '-0.5px',
-    role: 'Smaller heading.',
+    role: 'Sub-heading inside a section.',
   },
   {
     format: 'text-format-title',
@@ -46,7 +46,7 @@ const FORMATS = [
     weight: '800 extrabold',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Section / panel title.',
+    role: 'Title of a panel, group or dialog; the largest text inside a component.',
   },
   {
     format: 'text-format-lead',
@@ -56,7 +56,7 @@ const FORMATS = [
     weight: '400 regular',
     lineHeight: '1.5',
     tracking: '0',
-    role: 'Large intro / lead body.',
+    role: 'Large intro paragraph under a heading.',
   },
   {
     format: 'text-format-body',
@@ -66,7 +66,7 @@ const FORMATS = [
     weight: '400 regular',
     lineHeight: '1.5',
     tracking: '0',
-    role: 'Body copy; the app body default.',
+    role: 'Running text; the app default.',
   },
   {
     format: 'text-format-body-strong',
@@ -76,7 +76,7 @@ const FORMATS = [
     weight: '600 semibold',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Emphasised body copy.',
+    role: 'Emphasised run inside body text.',
   },
   {
     format: 'text-format-label-md',
@@ -86,7 +86,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Default UI label — form / toggle labels, button text.',
+    role: 'Default UI label — control labels, button text, field labels.',
   },
   {
     format: 'text-format-label-sm',
@@ -96,7 +96,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Small UI label.',
+    role: 'Small UI label — secondary controls, dense rows.',
   },
   {
     format: 'text-format-eyebrow uppercase',
@@ -106,7 +106,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0.5px',
-    role: 'Uppercase micro-labels.',
+    role: 'Uppercase micro-label above a title or group (mono, tracked).',
   },
   {
     format: 'text-format-data-sm',
@@ -116,7 +116,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0.5px',
-    role: 'Micro mono label (rail meta, storybook slug).',
+    role: 'Micro mono value — meta, slugs, counters.',
   },
   {
     format: 'text-format-data-md',
@@ -126,7 +126,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Tabular mono data (filenames, property values).',
+    role: 'Tabular mono value — identifiers, paths, property values.',
   },
   {
     format: 'text-format-data-lg',
@@ -136,7 +136,7 @@ const FORMATS = [
     weight: '400 regular',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Large mono data: command / query input.',
+    role: 'Large mono value — the text of a command / query input.',
   },
   {
     format: 'text-format-kbd',
@@ -146,7 +146,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0',
-    role: 'Keyboard key text.',
+    role: 'Keycap text.',
   },
 ];
 

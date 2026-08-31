@@ -174,7 +174,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="field-description"
       className={cn(
-        'text-left text-format-body text-muted-ink group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-sm',
+        'text-left text-format-body text-muted group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-sm',
         'last:mt-0 nth-last-2:-mt-xs',
         '[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary',
         className,
@@ -204,7 +204,7 @@ function FieldSeparator({
       <Separator className="absolute inset-0 top-1/2" />
       {children && (
         <span
-          className="relative mx-auto block w-fit bg-surface px-md text-muted-ink"
+          className="relative mx-auto block w-fit bg-surface px-md text-muted"
           data-slot="field-separator-content"
         >
           {children}

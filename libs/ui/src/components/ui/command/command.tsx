@@ -238,7 +238,7 @@ function CommandEmpty({
       role="option"
       aria-disabled
       aria-selected={false}
-      className={cn('py-2xl text-center text-format-body text-muted-ink', className)}
+      className={cn('py-2xl text-center text-format-body text-muted', className)}
       {...props}
     />
   );
@@ -254,8 +254,8 @@ function CommandGroup({
       data-slot="command-group"
       className={cn(
         variant === 'palette'
-          ? "overflow-hidden px-md text-ink **:[[cmdk-group-heading]]:flex **:[[cmdk-group-heading]]:items-center **:[[cmdk-group-heading]]:gap-md **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:pt-lg **:[[cmdk-group-heading]]:pb-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-ink **:[[cmdk-group-heading]]:after:h-px **:[[cmdk-group-heading]]:after:flex-1 **:[[cmdk-group-heading]]:after:bg-border **:[[cmdk-group-heading]]:after:content-['']"
-          : "overflow-hidden p-xs text-ink **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:py-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted-ink",
+          ? "overflow-hidden px-md text-ink **:[[cmdk-group-heading]]:flex **:[[cmdk-group-heading]]:items-center **:[[cmdk-group-heading]]:gap-md **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:pt-lg **:[[cmdk-group-heading]]:pb-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted **:[[cmdk-group-heading]]:after:h-px **:[[cmdk-group-heading]]:after:flex-1 **:[[cmdk-group-heading]]:after:bg-border **:[[cmdk-group-heading]]:after:content-['']"
+          : "overflow-hidden p-xs text-ink **:[[cmdk-group-heading]]:px-md **:[[cmdk-group-heading]]:py-sm **:[[cmdk-group-heading]]:text-format-eyebrow **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:text-muted",
         className
       )}
       {...props}
@@ -291,7 +291,7 @@ function CommandSeparator({
         className={cn('flex items-center gap-md px-xl pt-lg pb-sm', className)}
         {...props}
       >
-        <span className="text-format-eyebrow uppercase text-muted-ink">
+        <span className="text-format-eyebrow uppercase text-muted">
           {label}
         </span>
         <span className="h-px flex-1 bg-border" />
@@ -339,7 +339,7 @@ function CommandShortcut({
     <span
       data-slot="command-shortcut"
       className={cn(
-        'ml-auto text-format-kbd text-muted-ink group-data-selected/command-item:text-accent-ink',
+        'ml-auto text-format-kbd text-muted group-data-selected/command-item:text-accent-ink',
         className
       )}
       {...props}

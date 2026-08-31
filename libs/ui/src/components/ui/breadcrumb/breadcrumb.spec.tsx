@@ -35,7 +35,7 @@ describe('Breadcrumb', () => {
     const { container } = render(<Trail />);
     const list = container.querySelector('[data-slot="breadcrumb-list"]');
     expect(list?.className).toContain('text-format-body');
-    expect(list?.className).toContain('text-muted-ink');
+    expect(list?.className).toContain('text-muted');
   });
 
   it('marks the current page with aria-current and ink colour', () => {

@@ -150,7 +150,7 @@ export const Anchored: Story = {
     <Popover defaultOpen>
       <div className="flex items-center gap-lg">
         <PopoverAnchor asChild>
-          <span className="text-format-body text-muted-ink">Anchored here</span>
+          <span className="text-format-body text-muted">Anchored here</span>
         </PopoverAnchor>
         <PopoverTrigger asChild>
           <Button variant="outline">Toggle</Button>

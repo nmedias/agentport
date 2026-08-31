@@ -71,14 +71,14 @@ export const HorizontalBetweenBlocks: Story = {
     <div className="w-[320px]">
       <div className="flex flex-col gap-xs">
         <h4 className="text-format-body-strong">Radix Primitives</h4>
-        <p className="text-format-body text-muted-ink">
+        <p className="text-format-body text-muted">
           An open-source UI component library.
         </p>
       </div>
       <Separator className="my-xl" />
       <div className="flex flex-col gap-xs">
         <h4 className="text-format-body-strong">shadcn/ui</h4>
-        <p className="text-format-body text-muted-ink">
+        <p className="text-format-body text-muted">
           Components built on Radix and Tailwind.
         </p>
       </div>
@@ -110,7 +110,7 @@ export const Orientations: Story = {
   render: () => (
     <div className="flex flex-col gap-2xl">
       <div className="flex flex-col gap-md">
-        <span className="text-format-eyebrow uppercase text-muted-ink">
+        <span className="text-format-eyebrow uppercase text-muted">
           Horizontal
         </span>
         <div className="w-[280px]">
@@ -120,7 +120,7 @@ export const Orientations: Story = {
         </div>
       </div>
       <div className="flex flex-col gap-md">
-        <span className="text-format-eyebrow uppercase text-muted-ink">
+        <span className="text-format-eyebrow uppercase text-muted">
           Vertical
         </span>
         <div className="flex h-5 items-center gap-xl text-format-body">

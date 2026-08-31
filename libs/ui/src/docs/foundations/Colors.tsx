@@ -15,7 +15,8 @@ import {
   grouped by family and laid out in rows that keep a related set (a fill + its
   ink + its border) together. Each token shows its NAME, the possible utility
   CLASSES, the PRIMITIVE it aliases, its scope (short form), the raw value, and
-  the role — all from tokens-reference (not invented). Rendered per scope: frame
+  the role — all from tokens-reference (not invented); the role text is the same
+  sentence that sits on the Figma variable description. Rendered per scope: frame
   fills as a bg- swatch; ink/text as type; borders as a line; ring as a focus
   sample; scrim as an overlay.
 */
@@ -25,9 +26,9 @@ export function Colors() {
     <FoundationsPage
       eyebrow="Foundations · Colour"
       title="Colour"
-      intro="The semantic colour layer — every token is an alias onto the OKLCH ramps (see the Primitives page for the raw ramps). Use them through their utility classes: bg-{name} for fills, text-{name} for ink, border-{name} for edges, ring-{name} for focus. The scope tells you how a token may be applied (fill = surface, text = ink, stroke = edge/ring, shape = icon/marker — note primary and ink have no fill). A neutral light base carries dense data; the brand-blue accent marks selection and focus; dark surfaces are reserved for brand and inverse moments. Light mode is the only mode for now."
+      intro="The semantic colour layer — every token is an alias onto the OKLCH ramps (see the Primitives page for the raw ramps). Use them through their utility classes: bg-{name} for fills, text-{name} for ink, border-{name} for edges, ring-{name} for focus. The scope tells you how a token may be applied (fill = surface, text = ink, stroke = edge/ring, shape = icon/marker — note primary, ink and muted have no frame fill). A neutral light base carries dense data; the brand-blue accent marks selection and focus; dark surfaces are reserved for brand and inverse moments. Light mode is the only mode for now."
     >
-      <Group name="Core · surface & ink">
+      <Group name="Core · surface & ink" note="ink and muted are standalone colours (no surface partner); the -fill / -ink pairs always belong together.">
         <Rows>
           <Row>
             <FillSwatch
@@ -47,7 +48,7 @@ export function Colors() {
               primitive="neutral/900"
               scope="text · shape"
               value="#0d1016"
-              role="Primary text / icon (no frame fill)."
+              role="Default text / icon colour. Shape fill only — no frame fill (dark surfaces use inverse-fill)."
             />
           </Row>
           <Row>
@@ -67,7 +68,7 @@ export function Colors() {
               primitive="neutral/900"
               scope="text"
               value="#0d1016"
-              role="Text on card."
+              role="Text on card-fill."
               onFill="bg-card-fill"
             />
           </Row>
@@ -79,7 +80,7 @@ export function Colors() {
               primitive="neutral/25"
               scope="fill"
               value="#f9fcfd"
-              role="Quiet chrome surface."
+              role="Low-emphasis surface that recedes behind content — footer strips, row hover, quiet variants of a control. Content panels use card-fill instead."
               border
             />
             <TextSwatch
@@ -89,19 +90,17 @@ export function Colors() {
               primitive="neutral/500"
               scope="text"
               value="#656971"
-              role="Secondary text."
+              role="Text / icon on muted-fill only. For de-emphasised text on any other surface use muted."
+              onFill="bg-muted-fill"
             />
-          </Row>
-          <Row>
-            <FillSwatch
-              bg="bg-background-fixed"
-              token="background-fixed"
-              utilities="bg-background-fixed"
-              primitive="base/white"
-              scope="fill"
-              value="#ffffff"
-              role="Theme-invariant white surface (toggle knob) — must stay white when dark mode lands."
-              border
+            <TextSwatch
+              text="text-muted"
+              token="muted"
+              utilities="text-muted · bg-muted (shape)"
+              primitive="neutral/500"
+              scope="text · shape"
+              value="#656971"
+              role="De-emphasised text, icon or marker on surfaces other than muted-fill — descriptions, hints, group headings, secondary glyphs. Shape fill only — no frame fill (surfaces use muted-fill)."
             />
           </Row>
         </Rows>
@@ -117,7 +116,7 @@ export function Colors() {
               primitive="signal/600"
               scope="text · stroke · shape"
               value="#0063bb"
-              role="Brand accent (AA on white) as text / icon / stroke."
+              role="Emphasis colour for interactive text and glyphs on light surfaces (AA on white) — links, link-style actions, caret / marker shapes. Shape fill only — no frame fill (surfaces use primary-fill). On dark surfaces use brand-ink; for state tints use accent-fill."
             />
             <FillSwatch
               bg="bg-primary-fill"
@@ -126,7 +125,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill"
               value="#0d2531"
-              role="Dark primary surface (buttons)."
+              role="Dark surface of the main action and of the checked / on state of a control (check box, radio dot, switch track, filled range). Pairs with primary-ink."
             />
             <TextSwatch
               text="text-primary-ink"
@@ -135,7 +134,7 @@ export function Colors() {
               primitive="signal/100"
               scope="text"
               value="#a4e5ff"
-              role="Ink on primary-fill."
+              role="Text / icon on primary-fill only."
               onFill="bg-primary-fill"
             />
           </Row>
@@ -147,7 +146,7 @@ export function Colors() {
               primitive="still/100"
               scope="fill"
               value="#bde4fd"
-              role="Secondary surface."
+              role="Light surface of the secondary action — secondary buttons, badges. Lower weight than primary-fill; for quiet chrome use muted-fill. Pairs with secondary-ink."
             />
             <TextSwatch
               text="text-secondary-ink"
@@ -156,7 +155,7 @@ export function Colors() {
               primitive="deep/900"
               scope="text"
               value="#0d2531"
-              role="Text on secondary."
+              role="Text / icon on secondary-fill only."
               onFill="bg-secondary-fill"
             />
           </Row>
@@ -168,7 +167,7 @@ export function Colors() {
               primitive="deep/50"
               scope="fill"
               value="#eaf8ff"
-              role="Selection / active tint."
+              role="Tint that marks state — selected rows, active items, hover on list entries. Not an action surface (that is secondary-fill / primary-fill). Pairs with accent-ink and accent-border."
             />
             <TextSwatch
               text="text-accent-ink"
@@ -177,7 +176,7 @@ export function Colors() {
               primitive="signal/600"
               scope="text"
               value="#0063bb"
-              role="Text on accent-fill."
+              role="Text / icon on accent-fill only."
               onFill="bg-accent-fill"
             />
             <BorderSwatch
@@ -187,7 +186,7 @@ export function Colors() {
               primitive="still/200"
               scope="stroke"
               value="#9fcdeb"
-              role="Accent edge."
+              role="Edge of an accent-fill area — outlines the selected / active item. Not a focus ring (use ring)."
             />
           </Row>
         </Rows>
@@ -206,7 +205,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill"
               value="#0d2531"
-              role="Dark brand surface."
+              role="Dark surface reserved for brand moments — hero, intro, wordmark panels. Not for functional dark chrome (use inverse-fill). Pairs with brand-ink."
             />
             <TextSwatch
               text="text-brand-ink"
@@ -215,7 +214,7 @@ export function Colors() {
               primitive="signal/400"
               scope="text · shape"
               value="#009fe3"
-              role="Brand cyan accent on dark — text, icon, or marker. Brand content only; not a primary replacement."
+              role="Signal-blue text, icon or marker on brand-fill only — the one place the full brand hue (signal/400) is used. On light surfaces use primary. Shape fill only — no frame fill."
               onFill="bg-brand-fill"
             />
           </Row>
@@ -232,7 +231,7 @@ export function Colors() {
               primitive="error/600"
               scope="fill · text · stroke"
               value="#b01207"
-              role="Error / destructive action (fill, text, border + ring)."
+              role="Colour of irreversible actions and errors — delete buttons, invalid-field borders, error text, its focus ring. One token for fill, text and stroke. Not for warnings (no token yet). Pairs with destructive-ink when used as a surface."
             />
             <TextSwatch
               text="text-destructive-ink"
@@ -241,7 +240,7 @@ export function Colors() {
               primitive="error/50"
               scope="text · stroke"
               value="#ffe3d9"
-              role="Text / edge on destructive."
+              role="Text / icon / edge on a destructive surface only."
               onFill="bg-destructive"
             />
           </Row>
@@ -250,7 +249,7 @@ export function Colors() {
 
       <Group
         name="Ring & borders"
-        note="The line ladder rises border → border-emphasis → border-strong. ring is the focus indicator."
+        note="The line ladder rises border → border-emphasis → border-strong; start at border. ring is the keyboard-focus indicator, accent-border the selection edge."
       >
         <Rows>
           <Row>
@@ -261,7 +260,7 @@ export function Colors() {
               primitive="neutral/75"
               scope="stroke"
               value="#e4e6eb"
-              role="Default edge (base layer)."
+              role="Default edge — dividers, card and field outlines on light surfaces. Start here; step up only when a line must read stronger."
             />
             <BorderSwatch
               border="border-border-emphasis"
@@ -270,7 +269,7 @@ export function Colors() {
               primitive="neutral/200"
               scope="stroke"
               value="#b8bbc0"
-              role="Emphasised line."
+              role="Second step of the line ladder — table header rules, group separators that must stand out from border."
             />
             <BorderSwatch
               border="border-border-strong"
@@ -279,7 +278,7 @@ export function Colors() {
               primitive="neutral/300"
               scope="stroke"
               value="#9b9fa5"
-              role="Heaviest line."
+              role="Top step of the line ladder — the one line that must dominate (axis, hard cut). Use sparingly."
             />
           </Row>
           <Row>
@@ -290,7 +289,7 @@ export function Colors() {
               primitive="neutral/800"
               scope="stroke"
               value="#1e2229"
-              role="Focus indicator."
+              role="Keyboard-focus indicator on light surfaces. Not a border and not a selection edge (use accent-border)."
             />
           </Row>
         </Rows>
@@ -306,7 +305,7 @@ export function Colors() {
               primitive="base/white"
               scope="fill"
               value="#ffffff"
-              role="Raised surface (dialog / popover / command / menu)."
+              role="Surface of anything floating above the layout — dialogs, popovers, menus, command palette, tooltips. Pairs with dialog-ink and the Elevation effect. For in-flow panels use card-fill."
               border
             />
             <TextSwatch
@@ -316,7 +315,7 @@ export function Colors() {
               primitive="neutral/900"
               scope="text"
               value="#0d1016"
-              role="Text on dialog."
+              role="Default text / icon on dialog-fill."
             />
             <ScrimSwatch
               token="scrim"
@@ -324,7 +323,7 @@ export function Colors() {
               primitive="neutral/900 × opacity/10"
               scope="fill"
               value="#0d1016 @ 10%"
-              role="Modal backdrop dimmer."
+              role="Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength (10 %) comes from scrim-opacity, composed via color-mix."
             />
           </Row>
         </Rows>
@@ -340,7 +339,7 @@ export function Colors() {
               primitive="neutral/25"
               scope="fill"
               value="#f9fcfd"
-              role="Field fill (opaque)."
+              role="Resting surface of an editable field — text inputs, selects, check boxes before they are checked. Pairs with ink for the value and input-ink-placeholder for the hint."
               border
             />
             <FillSwatch
@@ -350,7 +349,7 @@ export function Colors() {
               primitive="neutral/400"
               scope="fill"
               value="#7f848b"
-              role="Emphasised field fill."
+              role="Resting track of a range or toggle control (the unfilled part). The filled / on part is primary-fill. Same tone as input-border so control and edge read as one."
             />
           </Row>
           <Row>
@@ -361,7 +360,7 @@ export function Colors() {
               primitive="neutral/400"
               scope="stroke"
               value="#7f848b"
-              role="Field border."
+              role="Edge of fields and controls (AA against surface). Deliberately stronger than border; for the focused state add ring."
             />
             <TextSwatch
               text="text-input-ink-placeholder"
@@ -370,13 +369,13 @@ export function Colors() {
               primitive="neutral/500"
               scope="text"
               value="#656971"
-              role="Placeholder text."
+              role="Placeholder / hint text inside a field. The entered value uses ink; helper text outside the field uses muted."
             />
           </Row>
         </Rows>
       </Group>
 
-      <Group name="Inverse" note="Dark-surface family (Rail, kbd badges). The container tints are deep/900 at 20 / 30 / 55% alpha, composed via color-mix like scrim.">
+      <Group name="Inverse" note="Dark functional surfaces (rail, keycaps, dark chips). The container tints are deep/900 at 20 / 30 / 70% alpha — raw RGBA in Figma (no alias possible), composed via color-mix in CSS like scrim.">
         <Rows>
           <Row>
             <FillSwatch
@@ -386,7 +385,7 @@ export function Colors() {
               primitive="deep/950"
               scope="fill"
               value="#00121c"
-              role="Dark surface (Rail, inverted chips / pills)."
+              role="Dark functional surface — icon rail, keyboard badges, dark chips. Not for brand moments (use brand-fill). Pairs with inverse-ink."
             />
             <TextSwatch
               text="text-inverse-ink"
@@ -395,7 +394,7 @@ export function Colors() {
               primitive="neutral/75"
               scope="text"
               value="#e4e6eb"
-              role="Text on inverse-fill."
+              role="Default text / icon on inverse-fill."
               onFill="bg-inverse-fill"
             />
           </Row>
@@ -407,7 +406,7 @@ export function Colors() {
               primitive="neutral/400"
               scope="text"
               value="#7f848b"
-              role="Muted text / icon on inverse-fill."
+              role="De-emphasised text / icon on inverse-fill — the dark-surface counterpart of muted."
               onFill="bg-inverse-fill"
             />
             <BorderSwatch
@@ -417,7 +416,7 @@ export function Colors() {
               primitive="deep/900"
               scope="stroke"
               value="#0d2531"
-              role="Edge on inverse-fill."
+              role="Dividers and edges on inverse-fill."
             />
           </Row>
           <Row>
@@ -428,7 +427,7 @@ export function Colors() {
               primitive="deep/900 @20%"
               scope="fill"
               value="#0d253133"
-              role="Quiet container tint (idle)."
+              role="Idle / inactive inner panel on inverse-fill — deep/900 at 20 %."
             />
             <FillSwatch
               bg="bg-inverse-container"
@@ -437,7 +436,7 @@ export function Colors() {
               primitive="deep/900 @30%"
               scope="fill"
               value="#0d25314d"
-              role="Container tint (Rail card)."
+              role="Resting inner panel on inverse-fill (card in the rail) — deep/900 at 30 %."
             />
           </Row>
           <Row>
@@ -445,10 +444,10 @@ export function Colors() {
               bg="bg-inverse-container-hover"
               token="inverse-container-hover"
               utilities="bg-inverse-container-hover"
-              primitive="deep/900 @55%"
+              primitive="deep/900 @70%"
               scope="fill"
-              value="#0d25318c"
-              role="Container tint hover / active."
+              value="#0d2531b2"
+              role="Hovered / active inner panel on inverse-fill — deep/900 at 70 %."
             />
           </Row>
         </Rows>
@@ -464,7 +463,7 @@ export function Colors() {
               primitive="neutral/25"
               scope="fill"
               value="#f9fcfd"
-              role="Sidebar / rail surface."
+              role="Surface of the navigation sidebar / rail. Only inside the sidebar; elsewhere use surface or muted-fill."
               border
             />
             <TextSwatch
@@ -474,7 +473,7 @@ export function Colors() {
               primitive="neutral/900"
               scope="text"
               value="#0d1016"
-              role="Text in sidebar."
+              role="Default text / icon on sidebar-fill."
             />
           </Row>
           <Row>
@@ -485,7 +484,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill · text"
               value="#0d2531"
-              role="Sidebar accent surface (also as text / icon)."
+              role="Surface of the sidebar's main action (e.g. the workspace / brand button); also usable as its text / icon colour. Pairs with sidebar-primary-ink."
             />
             <TextSwatch
               text="text-sidebar-primary-ink"
@@ -494,7 +493,7 @@ export function Colors() {
               primitive="signal/200"
               scope="text"
               value="#7cceff"
-              role="Text on sidebar-primary-fill."
+              role="Text / icon on sidebar-primary-fill only."
               onFill="bg-sidebar-primary-fill"
             />
           </Row>
@@ -506,7 +505,7 @@ export function Colors() {
               primitive="deep/50"
               scope="fill"
               value="#eaf8ff"
-              role="Active tint in the sidebar."
+              role="Tint of the active / hovered navigation item. Pairs with sidebar-accent-ink."
             />
             <TextSwatch
               text="text-sidebar-accent-ink"
@@ -515,7 +514,7 @@ export function Colors() {
               primitive="signal/600"
               scope="text"
               value="#0063bb"
-              role="Text on sidebar-accent-fill."
+              role="Text / icon on sidebar-accent-fill only."
               onFill="bg-sidebar-accent-fill"
             />
           </Row>
@@ -527,7 +526,7 @@ export function Colors() {
               primitive="neutral/50"
               scope="stroke"
               value="#f3f5fa"
-              role="Sidebar divider."
+              role="Dividers and the sidebar edge."
             />
             <RingSwatch
               ring="ring-sidebar-ring"
@@ -536,7 +535,7 @@ export function Colors() {
               primitive="neutral/800"
               scope="stroke"
               value="#1e2229"
-              role="Focus in the sidebar."
+              role="Keyboard-focus indicator inside the sidebar."
             />
           </Row>
         </Rows>
@@ -544,7 +543,7 @@ export function Colors() {
 
       <Group
         name="Charts"
-        note="Ramp-bound data-series colours (also available as border-chart-*)."
+        note="Five data-series colours in fixed order (also available as border-chart-*). No status meaning."
       >
         <Rows>
           <Row>
@@ -555,7 +554,7 @@ export function Colors() {
               primitive="warning/700"
               scope="fill · stroke"
               value="#753100"
-              role="Data series 1."
+              role="Data-series colour 1 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-2"
@@ -564,7 +563,7 @@ export function Colors() {
               primitive="success/600"
               scope="fill · stroke"
               value="#298058"
-              role="Data series 2."
+              role="Data-series colour 2 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-3"
@@ -573,7 +572,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill · stroke"
               value="#0d2531"
-              role="Data series 3."
+              role="Data-series colour 3 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
           </Row>
           <Row>
@@ -584,7 +583,7 @@ export function Colors() {
               primitive="warning/400"
               scope="fill · stroke"
               value="#c8923f"
-              role="Data series 4."
+              role="Data-series colour 4 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-5"
@@ -593,7 +592,7 @@ export function Colors() {
               primitive="error/500"
               scope="fill · stroke"
               value="#c54235"
-              role="Data series 5."
+              role="Data-series colour 5 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
           </Row>
         </Rows>

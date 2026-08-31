@@ -193,23 +193,23 @@ export const AllStates: Story = {
   render: () => (
     <div className="flex w-full max-w-sm flex-col gap-xl">
       <div className="flex flex-col gap-xs">
-        <span className="text-format-body text-muted-ink">Default</span>
+        <span className="text-format-body text-muted">Default</span>
         <Slider defaultValue={[50]} aria-label="Default" />
       </div>
       <div className="flex flex-col gap-xs" id="sl-focus">
-        <span className="text-format-body text-muted-ink">Focus</span>
+        <span className="text-format-body text-muted">Focus</span>
         <Slider defaultValue={[50]} aria-label="Focus" />
       </div>
       <div className="flex flex-col gap-xs">
-        <span className="text-format-body text-muted-ink">Disabled</span>
+        <span className="text-format-body text-muted">Disabled</span>
         <Slider defaultValue={[50]} disabled aria-label="Disabled" />
       </div>
       <div className="flex flex-col gap-xs">
-        <span className="text-format-body text-muted-ink">Range</span>
+        <span className="text-format-body text-muted">Range</span>
         <Slider defaultValue={[25, 75]} aria-label="Range" />
       </div>
       <div className="flex flex-col gap-xs" id="sl-range-focus">
-        <span className="text-format-body text-muted-ink">Range + focus</span>
+        <span className="text-format-body text-muted">Range + focus</span>
         <Slider defaultValue={[25, 75]} aria-label="Range focus" />
       </div>
     </div>

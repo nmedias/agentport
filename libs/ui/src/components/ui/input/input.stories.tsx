@@ -197,7 +197,7 @@ export const AllStates: Story = {
     <div className="flex w-80 flex-col gap-lg">
       {STATE_ROWS.map((row) => (
         <div key={row.id} className="flex flex-col gap-xs">
-          <span className="text-format-eyebrow text-muted-ink">{row.label}</span>
+          <span className="text-format-eyebrow text-muted">{row.label}</span>
           <Input id={row.id} aria-label={row.label} {...row.props} />
         </div>
       ))}

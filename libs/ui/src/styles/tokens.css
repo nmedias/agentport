@@ -229,12 +229,13 @@
   --ap-sys-ink:            var(--ap-color-neutral-900);      /* was: foreground */
   --ap-sys-card-fill:      var(--ap-color-neutral-50);       /* was: card */
   --ap-sys-card-ink:       var(--ap-color-neutral-900);      /* was: card-foreground */
-  --ap-sys-muted-fill:     var(--ap-color-neutral-25);       /* was: muted */
-  --ap-sys-muted-ink:      var(--ap-color-neutral-500);      /* was: muted-foreground */
+  --ap-sys-muted-fill:     var(--ap-color-neutral-25);       /* low-emphasis surface; was: muted */
+  --ap-sys-muted-ink:      var(--ap-color-neutral-500);      /* text/icon on muted-fill ONLY; was: muted-foreground */
+  --ap-sys-muted:          var(--ap-color-neutral-500);      /* standalone de-emphasised text/icon/marker on any other surface (2026-08-31; SHAPE_FILL+TEXT_FILL, no frame fill) */
 
   /* --- Primary / secondary / accent (Figma: Primary/ · Secondary/ · Accent/) - */
-  --ap-sys-primary:        var(--ap-color-signal-600);   /* brand accent, AA on white; was cyan/500 */
-  --ap-sys-primary-fill:   var(--ap-color-deep-900);     /* dark primary surface (new) */
+  --ap-sys-primary:        var(--ap-color-signal-600);   /* interactive emphasis (links, glyphs), AA on white; shape fill only; was cyan/500 */
+  --ap-sys-primary-fill:   var(--ap-color-deep-900);     /* dark surface of the main action + checked/on control state (new) */
   --ap-sys-primary-ink:    var(--ap-color-signal-100);   /* ink on primary-fill; was primary-foreground */
   --ap-sys-secondary-fill: var(--ap-color-still-100);    /* was: secondary (renamed 2026-06-19, -fill convention) */
   --ap-sys-secondary-ink:  var(--ap-color-deep-900);     /* was: secondary-foreground */
@@ -287,7 +288,7 @@
   /* --- Input (Figma: Input/) --------------------------------------------- */
   --ap-sys-input-ink-placeholder: var(--ap-color-neutral-500);  /* was: input-placeholder */
   --ap-sys-input-fill:            var(--ap-color-neutral-25);    /* field fill; was: input-background */
-  --ap-sys-input-fill-high:       var(--ap-color-neutral-400);   /* emphasised field fill (new) */
+  --ap-sys-input-fill-high:       var(--ap-color-neutral-400);   /* resting track of range/toggle controls (filled part = primary-fill) (new) */
   --ap-sys-input-border:          var(--ap-color-neutral-400);   /* field border (AA); was: input */
 
   /* --- Inverse (Figma: Inverse/) — dark-surface family (rail, kbd badges) - */
@@ -298,10 +299,8 @@
   /* container tints = deep/900 at alpha (Figma stores raw RGBA) → color-mix on the primitive, like scrim */
   --ap-sys-inverse-container:       color-mix(in srgb, var(--ap-color-deep-900) 30%, transparent);  /* #0D25314D (new 2026-07-01) */
   --ap-sys-inverse-container-low:   color-mix(in srgb, var(--ap-color-deep-900) 20%, transparent);  /* #0D253133 (new 2026-07-01) */
-  --ap-sys-inverse-container-hover: color-mix(in srgb, var(--ap-color-deep-900) 55%, transparent);  /* #0D25318C (new 2026-07-01) */
+  --ap-sys-inverse-container-hover: color-mix(in srgb, var(--ap-color-deep-900) 70%, transparent);  /* #0D2531B2 (new 2026-07-01; 2026-08-31: 55% → 70%, aligned to Figma) */
 
-  /* --- Theme-invariant --------------------------------------------------- */
-  --ap-sys-background-fixed:  var(--ap-color-base-white);  /* do NOT override in .dark (toggle knob) */
 
 
   /* ===========================================================================
