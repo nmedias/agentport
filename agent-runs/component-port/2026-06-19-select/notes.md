@@ -164,7 +164,7 @@ Quelle: `ui.shadcn.com/docs/components/select`. Strukturell-distinkt, deduplizie
 
 ## T4+T5 — Figma build (DONE, Background-Agent `figma-select-build`)
 
-File `FIGMA_FILE_KEY`, page Shadcn Components `3126:2`. **Section `Select` `4307:1997`**. `/figma-verify`
+File `ejFKo4MNuvC9TSDKOCUvyq`, page Shadcn Components `3126:2`. **Section `Select` `4307:1997`**. `/figma-verify`
 CLEAN über alle 3 Sets + Composition + 4 Examples (0 text-as-icon, 0 clip, 0 overlap); controls-live ALL PASS;
 keine orphan slot-props. IDs vollständig im Katalog-Eintrag (`components-reference.md`).
 

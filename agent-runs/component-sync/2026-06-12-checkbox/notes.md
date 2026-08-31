@@ -2,7 +2,7 @@
 
 Date: 2026-06-12 · Skill: /component-sync (S1–S4 + S6; S5 gate run once by orchestrator) · **Read-only on Figma**.
 
-- Set `.Checkbox` `3795:1184` · page `3126:2` · file `FIGMA_FILE_KEY`.
+- Set `.Checkbox` `3795:1184` · page `3126:2` · file `ejFKo4MNuvC9TSDKOCUvyq`.
 - Members: default `3792:1184` · checked `3792:1185` · focus `3794:1184` · disabled `3794:1185` · invalid `3794:1186` · checked-invalid `3794:1187`.
 - Edit target: `libs/ui/src/components/ui/checkbox/checkbox.tsx`.
 

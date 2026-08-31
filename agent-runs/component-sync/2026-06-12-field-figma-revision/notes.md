@@ -2,7 +2,7 @@
 
 Figma-side design-feedback revision of the already-built `.Field` component (Agentport DS), per a
 6-item user punch-list. **Figma-only** (no code touched, no git-write). Branch `feat/field-figma-revision`.
-Plugin MCP only. Page "Shadcn Components" (`3126:2`), fileKey `FIGMA_FILE_KEY`.
+Plugin MCP only. Page "Shadcn Components" (`3126:2`), fileKey `ejFKo4MNuvC9TSDKOCUvyq`.
 
 ## Connection
 Plugin MCP authenticated (Manu / <redacted>); file open; live read of `.Field` 3716:1020

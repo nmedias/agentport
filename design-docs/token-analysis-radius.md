@@ -1,7 +1,7 @@
 # Token-Analyse — Kategorie Radius (Corner-Radius)
 
 Screen: Referenz-Screen „Quiet", node `1099:9710` (Figma „Agentport DS", fileKey
-`FIGMA_FILE_KEY`). Schwester-Dokument zu `token-analysis-color.md`.
+`ejFKo4MNuvC9TSDKOCUvyq`). Schwester-Dokument zu `token-analysis-color.md`.
 Ziel: keine Roh-Radien mehr — alle Corner-Radii hängen an semantischen Tokens, die ins
 shadcn-Naming passen (`radius` Basis + `sm/md/lg/xl`, ergänzt um `xs`/`full`).
 

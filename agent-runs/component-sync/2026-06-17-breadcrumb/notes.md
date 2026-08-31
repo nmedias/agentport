@@ -5,7 +5,7 @@ token rework. Read-only on Figma; code = the authoritative target.
 
 ## Structure read (Figma)
 
-- File `FIGMA_FILE_KEY`, page **"Shadcn Components"** `3126:2`.
+- File `ejFKo4MNuvC9TSDKOCUvyq`, page **"Shadcn Components"** `3126:2`.
 - Section **`Breadcrumb`** `3249:302`. Children (LIVE names):
   - `Breadcrumb` (TEXT headline) `3249:303`
   - `Breadcrumb` (COMPONENT, composition) `3254:302`

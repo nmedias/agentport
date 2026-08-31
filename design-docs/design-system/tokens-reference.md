@@ -25,7 +25,7 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 ## Architektur
 
 ```
-Figma „Agentport DS" (fileKey FIGMA_FILE_KEY)
+Figma „Agentport DS" (fileKey ejFKo4MNuvC9TSDKOCUvyq)
   reference = Primitives, EINE Collection mit Gruppen Color/ Dimension/ Font/ Effect (scopes:[]
               alias-only; Ausnahme Effect/* = EFFECT_*-Scopes, direkt von den Effect Styles gebunden)
   semantic* = Semantics (Alias → Primitive)

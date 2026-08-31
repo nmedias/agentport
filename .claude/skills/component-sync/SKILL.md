@@ -27,7 +27,7 @@ No Figma set yet, or no code yet → wrong skill (first-time build → `/shadcn-
 
 Plugin MCP only (`mcp__plugin_figma_figma__*`); load `/figma:figma-use` before any `use_figma` (the
 4-arg `use_figma` contract is in `/figma-build-rules §Figma access`). **Read-only** — never write to
-Figma (a push is out of scope). File `FIGMA_FILE_KEY` (`config.json`).
+Figma (a push is out of scope). File key from `config.json` (`figma.fileKey`).
 
 ## Process
 

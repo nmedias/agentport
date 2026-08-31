@@ -1,7 +1,7 @@
 # Token-Analyse — Kategorie Farbe
 
 **Screen:** „Quiet" — Referenz-Screen (Tabelle + Inspektor)
-**Figma:** Agentport DS, fileKey `FIGMA_FILE_KEY`, node `1099:9710`
+**Figma:** Agentport DS, fileKey `ejFKo4MNuvC9TSDKOCUvyq`, node `1099:9710`
 **Stand:** Screen nutzt **null Variablen** (`get_variable_defs` → `{}`) — komplett Raw-Values.
 **Repo-Basis:** Standard-shadcn-Set in `libs/ui/src/styles/globals.css` vorhanden
 (`background, foreground, card, popover, primary, secondary, muted, accent, destructive, border, input, ring, sidebar*`; keine `chart-*`).

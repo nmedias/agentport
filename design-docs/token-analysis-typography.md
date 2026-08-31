@@ -1,7 +1,7 @@
 # Token-Analyse — Kategorie Typografie
 
 Screen: Referenz-Screen „Quiet", node `1099:9710` (Figma „Agentport DS", fileKey
-`FIGMA_FILE_KEY`). Schwester zu `token-analysis-color/-radius/-spacing.md`.
+`ejFKo4MNuvC9TSDKOCUvyq`). Schwester zu `token-analysis-color/-radius/-spacing.md`.
 Ziel: ein Typo-Token-System nach **Hybrid (III)** — Referenz-Teile als Variablen, zu
 **Formaten** (Composition-Tokens) gebündelt, angewandt über **Figma Text Styles**.
 

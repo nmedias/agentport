@@ -2,7 +2,7 @@
 
 Figma → code reconciliation after the DS colour-semantics rework (`-fill`/`-ink`/`-border`
 system). Read-only on Figma (Plugin MCP). Source of truth = live per-variant token bindings on
-the six `.Command/*` sub-sets, file `FIGMA_FILE_KEY`, page "Shadcn Components" `3126:2`.
+the six `.Command/*` sub-sets, file `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" `3126:2`.
 
 The code already carried the correct *structure* and *non-colour* tokens (space/corner/typography
 were untouched by the rework and matched Figma 1:1). This sync is a pure **colour-utility

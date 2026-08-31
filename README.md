@@ -226,18 +226,18 @@ restart Claude Code or run `/mcp` to reconnect.
 
 ## Figma
 
-The token layer (`libs/ui/src/styles/tokens.css`) is exported from the Figma variable collections
-`semantic` (color) and `semantic-dimension` (dimension); component sets live on the page
-`Shadcn Components`. Names and IDs are documented in `design-docs/design-system/tokens-reference.md`
-and `components-reference.md`. To point the skills at the file:
+The design system lives in the Figma file **[Agentport DS](https://www.figma.com/design/ejFKo4MNuvC9TSDKOCUvyq/Agentport-DS?node-id=3126-2)**
+(view access via link). Component sets live on the page `Shadcn Components` (`3126:2`); the token
+layer (`libs/ui/src/styles/tokens.css`) is exported from its variable collections `semantic` (color)
+and `semantic-dimension` (dimension). Names and node IDs are documented in
+`design-docs/design-system/tokens-reference.md` and `components-reference.md`.
 
-1. Enter its file key in `.claude/skills/shadcn-component-port/config.json` and
-   `.claude/skills/component-sync/config.json` (`figma.fileKey`, currently the placeholder
-   `FIGMA_FILE_KEY`) and the components page ID in `figma.pageId`.
-2. Open the file in Figma Desktop with the MCP plugin enabled; `/figma-status` should report both
-   channels connected.
-3. Node IDs recorded in `components-reference.md` and the run notes refer to that file; if a set is
-   rebuilt, the catalog is updated as part of the run.
+The skills read the file through `.claude/skills/shadcn-component-port/config.json` and
+`.claude/skills/component-sync/config.json` (`figma.fileKey`, `figma.pageId`). To run the pipeline
+against it, open the file in Figma Desktop with the MCP plugin enabled and confirm the link with
+`/figma-status`; writes go through your own Figma login, view access alone is not enough. To work on
+a copy of the file, duplicate it in Figma (node IDs survive duplication) and change the two
+`fileKey` values.
 
 ## Adding a component
 

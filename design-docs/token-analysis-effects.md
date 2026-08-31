@@ -1,7 +1,7 @@
 # Token-Analyse — Kategorie Effekte (Schatten / Glow)
 
 Screen: Referenz-Screen „Quiet", node `1099:9710` (Figma „Agentport DS", fileKey
-`FIGMA_FILE_KEY`). Schwester zu `token-analysis-color/-radius/-spacing/-typography.md`.
+`ejFKo4MNuvC9TSDKOCUvyq`). Schwester zu `token-analysis-color/-radius/-spacing/-typography.md`.
 Ziel: keine rohen Effekt-Werte mehr — Schatten/Glow hängen an **Effect Styles**, deren Teile
 über Variablen tokenisiert sind.
 

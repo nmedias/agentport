@@ -1,7 +1,7 @@
 # Token-Analyse — Kategorie Spacing (Gaps + Paddings)
 
 Screen: Referenz-Screen „Quiet", node `1099:9710` (Figma „Agentport DS", fileKey
-`FIGMA_FILE_KEY`). Schwester-Dokument zu `token-analysis-color.md` / `…-radius.md`.
+`ejFKo4MNuvC9TSDKOCUvyq`). Schwester-Dokument zu `token-analysis-color.md` / `…-radius.md`.
 Ziel: keine Roh-Spacing-Werte mehr — Gaps (`itemSpacing`) und Paddings hängen an semantischen
 Spacing-Tokens. Ein Spacing-System bedient **beides** (Gap + Padding).
 

@@ -9,6 +9,20 @@ Quelle: `libs/ui/src/components/ui/*`, `libs/ui/src/index.ts`, `libs/ui/{compone
 Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 (dieses Doc nachziehen, nicht umgekehrt). Figma-Lesen ist read-only (Pipeline-Regel).
 
+> **Datei-Wechsel 2026-08-31:** Die Figma-Datei ist jetzt `ejFKo4MNuvC9TSDKOCUvyq` („Agentport DS", view-shared via
+> Link) — ein **Duplikat** der vorherigen Datei, daher sind alle Node-IDs unten unverändert gültig (Page
+> `Shadcn Components` behält `3126:2`). Verifiziert per Plugin-MCP (26 Sections, Probe-IDs Table/Checkbox/Select
+> gefunden). Gleichzeitig entfernt: die verwaiste Section **Toggle** `4802:2819` (Set + Usage Examples, 61
+> Components) — Toggle war seit 2026-06-24 ohne Code-Gegenstück (`handoff-component-port-open.md`).
+> Weitere Bereinigung am selben Tag (Plugin-MCP): Page „Color" → Frame `4178:2` (Markenfarben) gelöscht, Frame
+> „Colors" bleibt · Collection `reference`: 33 Rampen-Variablen `Color/os-{signal,still,deep}/*` →
+> `Color/{signal,still,deep}/*` (entspricht `tokens.css` `--ap-color-signal-*` …) · 4 `semantic`-Beschreibungen
+> neutralisiert (`Primary/primary`, `Primary/primary-fill`, `Secondary/secondary-fill`, `Destructive/destructive-ink`) ·
+> Collection `showcase` (6 Vars, 0 Bindings) gelöscht · Command-Section: Separator-Labels „Springe zu / Suche /
+> Führe aus" → „Jump to / Search / Run" (= Stories). **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
+> `1099:9710`, Section „Final") trägt noch Inhalt aus dem Ursprungsprojekt — wird in einem eigenen Abschnitt
+> aufgeräumt; bis dahin den fileKey nicht pushen.
+
 > **Colour-Rework 2026-06-17 (`-fill`/`-ink`/`-border`-Token-System):** alle Components unten via
 > `/component-sync` (Figma → Code) auf die neuen DS-Color-Utilities umgekleidet. Live-Figma-Set-Namen
 > aktualisiert (Top-Level-Sets ohne führenden `.`; Composites flachgezogen, z. B. `.Command/Item`→`CommandItem`,
@@ -33,8 +47,8 @@ Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
   `removed` = bewusst entfernt. `figma-synced: true` = mind. ein `/component-sync`- oder Push-Durchlauf.
 - **Geometrie bleibt numerisch** (`h-8`, `size-3`, `min-w-5`); nur Farbe/Typo/Spacing/Radius binden an
   Tokens. Kein Dark-Mode (Light = einziger Mode).
-- IDs sind **Figma-Node-IDs** in der Datei `FIGMA_FILE_KEY` (Placeholder — eigenen fileKey in
-  `.claude/skills/{shadcn-component-port,component-sync}/config.json` eintragen). Sie sind stabil (keine Session-IDs).
+- IDs sind **Figma-Node-IDs** in der Datei `ejFKo4MNuvC9TSDKOCUvyq` („Agentport DS", konfiguriert in
+  `.claude/skills/{shadcn-component-port,component-sync}/config.json`). Sie sind stabil (keine Session-IDs).
 
 ## Schema (pro Component)
 
@@ -52,7 +66,7 @@ shadcn (@shadcn/<item>, style radix-nova)
    → /shadcn-component-port: Anatomie lesen → Figma token-gebundenes Set bauen → Code auf DS-Utilities
    → /component-sync: Figma-Änderung → Code-Delta (read-only Figma)
 
-Figma „Agentport DS"  fileKey FIGMA_FILE_KEY
+Figma „Agentport DS"  fileKey ejFKo4MNuvC9TSDKOCUvyq
    Page „Shadcn Components"  3126:2   ← alle UI-Component-Sets liegen hier
 Code  libs/ui/src/components/ui/<name>/   →  Barrel libs/ui/src/index.ts  →  @agentport/ui
 Blocks (Organismen)  libs/ui/src/blocks/<screen>/<name>/  →  @agentport/ui/blocks[/<screen>]
@@ -62,7 +76,7 @@ Blocks (Organismen)  libs/ui/src/blocks/<screen>/<name>/  →  @agentport/ui/blo
 
 ```yaml
 figma:
-  file_key: FIGMA_FILE_KEY
+  file_key: ejFKo4MNuvC9TSDKOCUvyq
   file_name: "Agentport DS"
   components_page: { name: "Shadcn Components", id: "3126:2" }
 baseline:

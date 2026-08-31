@@ -45,7 +45,7 @@ source. Gate green, `/figma-verify` CLEAN.
 
 ## Figma — `.Badge` set
 
-- file `FIGMA_FILE_KEY` · page **Shadcn Components** `3126:2`
+- file `ejFKo4MNuvC9TSDKOCUvyq` · page **Shadcn Components** `3126:2`
 - Section **Badge** `3687:1016` (left lane, x=-151 y=1152, below Input — clear of the sibling
   Separator section at x=9073 and all other content)
 - **Set** `.Badge` `3697:1016`

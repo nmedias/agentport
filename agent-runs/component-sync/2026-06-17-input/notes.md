@@ -5,7 +5,7 @@ Figma → code reconciliation of `input` after the DS colour-semantics rework
 
 ## Source
 
-- File: "Agentport DS" `FIGMA_FILE_KEY`, page "Shadcn Components" `3126:2`.
+- File: "Agentport DS" `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" `3126:2`.
 - Set `.Input` `3177:302` (Section "Input" `3176:302`).
 - Axis = `state` [default, focus, filled, disabled, invalid, focus-invalid]. No CVA in code
   (single element); states are pseudo-/aria-driven.
