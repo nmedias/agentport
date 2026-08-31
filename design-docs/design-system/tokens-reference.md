@@ -22,11 +22,13 @@ utilities, `token-analysis-*` for semantics.
 - **Naming = role suffix.** Surface token = bare name or `-fill`; `-ink` = text / icon on exactly one
   `-fill`; `-border` = edge of that area. Standalone colours (`ink`, `primary`, `muted`, `brand-ink`)
   have no surface partner: scope `SHAPE_FILL` + text, **no** `FRAME_FILL` — `bg-ink` / `bg-primary` /
-  `bg-muted` are valid for shape / marker fills only, never as a container surface. Their `use`
-  sentence repeats this as a ¹ footnote because the sentence is pushed to Figma and Storybook.
+  `bg-muted` are valid for shape / marker fills only, never as a container surface. The scope
+  consequence sits in `note`, the `use` sentence only says "shape fill only".
 - **`use` is the canonical sentence** — the same text sits on the Figma variable / style description
   and in the Storybook foundations (`Colors.tsx`, `SpacingRadius.tsx`, `Typography.tsx`,
-  `Effects.tsx`). Change it here, then push to both.
+  `Effects.tsx`). Change it here, then push to both. The Figma description = `use`, followed by the
+  `note` only when the note concerns Figma itself (raw RGBA, raw effect colour) and, for `Space/*`,
+  the `figma_suffix`.
 - **`note`** = a present-day remark an implementer needs (Figma representability, scope, composition) —
   never history. Old names / values belong in the changelog.
 - **`status: placeholder`** = stock shadcn default, not yet designed → never treat as final.
@@ -89,17 +91,17 @@ Semantics (Figma collection `semantic`; utilities derive from `--color-{name}`: 
 ```yaml
 # Core surface + ink (Figma: Base/ · Cards/ · Muted/)
 - { token: surface,     css_var: --ap-sys-surface,     primitive: base/white,  value: "#ffffff", utilities: [bg-surface],          use: "App base surface." }
-- { token: ink,         css_var: --ap-sys-ink,         primitive: neutral/900, value: "#0d1016", utilities: [text-ink, "bg-ink¹/fill-ink¹"],  use: "Default text / icon colour. Shape fill only — no frame fill (dark surfaces use inverse-fill). ¹SHAPE_FILL allowed → bg-ink/fill-ink ONLY for shape / marker fills, NOT as a container / frame surface." }
+- { token: ink,         css_var: --ap-sys-ink,         primitive: neutral/900, value: "#0d1016", utilities: [text-ink, bg-ink, fill-ink],  use: "Default text / icon colour. Shape fill only — no frame fill (dark surfaces use inverse-fill).", note: "Scopes SHAPE_FILL + TEXT_FILL, no FRAME_FILL → bg-ink / fill-ink only for shape / marker fills, never as a container surface." }
 - { token: card-fill,   css_var: --ap-sys-card-fill,   primitive: neutral/50,  value: "#f3f5fa", utilities: [bg-card-fill],        use: "Raised / secondary panel surface." }
 - { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: neutral/900, value: "#0d1016", utilities: [text-card-ink],       use: "Text on card-fill." }
 - { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: neutral/25,  value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Low-emphasis surface that recedes behind content — footer strips, row hover, quiet variants of a control. Content panels use card-fill instead." }
 - { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: neutral/500, value: "#656971", utilities: [text-muted-ink],      use: "Text / icon on muted-fill only. For de-emphasised text on any other surface use muted." }
-- { token: muted,       css_var: --ap-sys-muted,       primitive: neutral/500, value: "#656971", utilities: [text-muted, "bg-muted¹/fill-muted¹"], use: "De-emphasised text, icon or marker on surfaces other than muted-fill — descriptions, hints, group headings, secondary glyphs. Shape fill only — no frame fill (surfaces use muted-fill). ¹SHAPE_FILL allowed → bg-muted ONLY for shape / marker fills." }
+- { token: muted,       css_var: --ap-sys-muted,       primitive: neutral/500, value: "#656971", utilities: [text-muted, bg-muted, fill-muted], use: "De-emphasised text, icon or marker on surfaces other than muted-fill — descriptions, hints, group headings, secondary glyphs. Shape fill only — no frame fill (surfaces use muted-fill).", note: "Scopes SHAPE_FILL + TEXT_FILL, no FRAME_FILL → bg-muted / fill-muted only for shape / marker fills." }
 
 # Primary / secondary / accent (Figma: Primary/ · Secondary/ · Accent/)
-- { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary, "bg-primary¹/fill-primary¹"], use: "Emphasis colour for interactive text and glyphs on light surfaces (AA on white) — links, link-style actions, caret / marker shapes. Shape fill only — no frame fill (surfaces use primary-fill). On dark surfaces use brand-ink; for state tints use accent-fill. ¹SHAPE_FILL allowed → bg-primary/fill-primary ONLY for shape / marker fills (a rectangle / vector in Figma), NOT as a container / frame surface." }
-- { token: primary-fill,   css_var: --ap-sys-primary-fill,   primitive: deep/900,   value: "#0d2531", utilities: [bg-primary-fill],  use: "Dark surface of the main action and of the checked / on state of a control (check box, radio dot, switch track, filled range). Pairs with primary-ink." }
-- { token: primary-ink,    css_var: --ap-sys-primary-ink,    primitive: signal/100, value: "#a4e5ff", utilities: [text-primary-ink], use: "Text / icon on primary-fill only." }
+- { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary, bg-primary, fill-primary], use: "Emphasis colour for interactive text and glyphs on light surfaces (AA on white) — links, link-style actions, caret / marker shapes. Shape fill only — no frame fill (surfaces use primary-fill). On dark surfaces use brand-ink; for state tints use accent-fill.", note: "Scopes SHAPE_FILL + TEXT_FILL + STROKE_COLOR, no FRAME_FILL → bg-primary / fill-primary only for shape / marker fills (a rectangle / vector in Figma — e.g. the command caret), never as a container surface." }
+- { token: primary-fill,   css_var: --ap-sys-primary-fill,   primitive: deep/900,   value: "#0d2531", utilities: [bg-primary-fill, border-primary-fill],  use: "Dark surface of the main action and of the checked / on state of a control (check box, radio dot, switch track, filled range). Pairs with primary-ink." }
+- { token: primary-ink,    css_var: --ap-sys-primary-ink,    primitive: signal/100, value: "#a4e5ff", utilities: [text-primary-ink, bg-primary-ink], use: "Text / icon on primary-fill only.", note: "Scope SHAPE_FILL → bg-primary-ink for the marker inside a primary-fill control (radio dot)." }
 - { token: secondary-fill, css_var: --ap-sys-secondary-fill, primitive: still/100,  value: "#bde4fd", utilities: [bg-secondary-fill], use: "Light surface of the secondary action — secondary buttons, badges. Lower weight than primary-fill; for quiet chrome use muted-fill. Pairs with secondary-ink." }
 - { token: secondary-ink,  css_var: --ap-sys-secondary-ink,  primitive: deep/900,   value: "#0d2531", utilities: [text-secondary-ink], use: "Text / icon on secondary-fill only." }
 - { token: accent-fill,    css_var: --ap-sys-accent-fill,    primitive: deep/50,    value: "#eaf8ff", utilities: [bg-accent-fill],   use: "Tint that marks state — selected rows, active items, hover on list entries. Not an action surface (that is secondary-fill / primary-fill). Pairs with accent-ink and accent-border." }
@@ -108,40 +110,40 @@ Semantics (Figma collection `semantic`; utilities derive from `--color-{name}`: 
 
 # Brand (Figma: Brand/) — on-dark brand moment
 - { token: brand-fill, css_var: --ap-sys-brand-fill, primitive: deep/900,   value: "#0d2531", utilities: [bg-brand-fill], use: "Dark surface reserved for brand moments — hero, intro, wordmark panels. Not for functional dark chrome (use inverse-fill). Pairs with brand-ink." }
-- { token: brand-ink,  css_var: --ap-sys-brand-ink,  primitive: signal/400, value: "#009fe3", utilities: [text-brand-ink, "bg-brand-ink¹/fill-brand-ink¹"], use: "Signal-blue text, icon or marker on brand-fill only — the one place the full brand hue (signal/400) is used. On light surfaces use primary. Shape fill only — no frame fill. ¹SHAPE_FILL → bg-brand-ink ONLY as shape / marker fill." }
+- { token: brand-ink,  css_var: --ap-sys-brand-ink,  primitive: signal/400, value: "#009fe3", utilities: [text-brand-ink, bg-brand-ink, fill-brand-ink], use: "Signal-blue text, icon or marker on brand-fill only — the one place the full brand hue (signal/400) is used. On light surfaces use primary. Shape fill only — no frame fill.", note: "Scopes SHAPE_FILL + TEXT_FILL + STROKE_COLOR, no FRAME_FILL → bg-brand-ink / fill-brand-ink only for shape / marker fills." }
 
 # Destructive (Figma: Destructive/)
 - { token: destructive,     css_var: --ap-sys-destructive,     primitive: error/600, value: "#b01207", utilities: [bg-destructive, text-destructive, border-destructive, ring-destructive], use: "Colour of irreversible actions and errors — delete buttons, invalid-field borders, error text, its focus ring. One token for fill, text and stroke. Not for warnings (no token yet). Pairs with destructive-ink when used as a surface.", note: "Scope includes STROKE_COLOR → also ring-destructive (focus)." }
-- { token: destructive-ink, css_var: --ap-sys-destructive-ink, primitive: error/50,  value: "#ffe3d9", utilities: [text-destructive-ink, border-destructive-ink], use: "Text / icon / edge on a destructive surface only." }
+- { token: destructive-ink, css_var: --ap-sys-destructive-ink, primitive: error/50,  value: "#ffe3d9", utilities: [text-destructive-ink, border-destructive-ink, bg-destructive-ink], use: "Text / icon / edge on a destructive surface only.", note: "Scope SHAPE_FILL → bg-destructive-ink for the marker inside a destructive control (invalid radio dot)." }
 
 # Ring + borders (Figma: Focus/ · Border/) — line ladder ascending: border < border-emphasis < border-strong
-- { token: ring,            css_var: --ap-sys-ring,            primitive: neutral/800, value: "#1e2229", utilities: [ring-ring, outline-ring],   use: "Keyboard-focus indicator on light surfaces. Not a border and not a selection edge (use accent-border)." }
-- { token: border,          css_var: --ap-sys-border,          primitive: neutral/75,  value: "#e4e6eb", utilities: [border-border],              use: "Default edge — dividers, card and field outlines on light surfaces. Start here; step up only when a line must read stronger." }
+- { token: ring,            css_var: --ap-sys-ring,            primitive: neutral/800, value: "#1e2229", utilities: [ring-ring, outline-ring, border-ring],   use: "Keyboard-focus indicator on light surfaces. Not a border and not a selection edge (use accent-border)." }
+- { token: border,          css_var: --ap-sys-border,          primitive: neutral/75,  value: "#e4e6eb", utilities: [border-border, bg-border],   use: "Default edge — dividers, card and field outlines on light surfaces. Start here; step up only when a line must read stronger." }
 - { token: border-emphasis, css_var: --ap-sys-border-emphasis, primitive: neutral/200, value: "#b8bbc0", utilities: [border-border-emphasis],     use: "Second step of the line ladder — table header rules, group separators that must stand out from border." }
 - { token: border-strong,   css_var: --ap-sys-border-strong,   primitive: neutral/300, value: "#9b9fa5", utilities: [border-border-strong],       use: "Top step of the line ladder — the one line that must dominate (axis, hard cut). Use sparingly." }
 
 # Sidebar (Figma: Sidebar/) — no sidebar component exists yet; the family mirrors the main layer for a future one
 - { token: sidebar-fill,         css_var: --ap-sys-sidebar-fill,         primitive: neutral/25,  value: "#f9fcfd", utilities: [bg-sidebar-fill],          use: "Surface of the navigation sidebar / rail. Only inside the sidebar; elsewhere use surface or muted-fill." }
 - { token: sidebar-ink,          css_var: --ap-sys-sidebar-ink,          primitive: neutral/900, value: "#0d1016", utilities: [text-sidebar-ink],         use: "Default text / icon on sidebar-fill." }
-- { token: sidebar-primary-fill, css_var: --ap-sys-sidebar-primary-fill, primitive: deep/900,    value: "#0d2531", utilities: [bg-sidebar-primary-fill, text-sidebar-primary-fill],  use: "Surface of the sidebar's main action (e.g. the workspace / brand button); also usable as its text / icon colour. Pairs with sidebar-primary-ink." }
+- { token: sidebar-primary-fill, css_var: --ap-sys-sidebar-primary-fill, primitive: deep/900,    value: "#0d2531", utilities: [bg-sidebar-primary-fill, text-sidebar-primary-fill],  use: "Surface of the main sidebar action (e.g. the workspace / brand button); also usable as its text / icon colour. Pairs with sidebar-primary-ink." }
 - { token: sidebar-primary-ink,  css_var: --ap-sys-sidebar-primary-ink,  primitive: signal/200,  value: "#7cceff", utilities: [text-sidebar-primary-ink], use: "Text / icon on sidebar-primary-fill only." }
 - { token: sidebar-accent-fill,  css_var: --ap-sys-sidebar-accent-fill,  primitive: deep/50,     value: "#eaf8ff", utilities: [bg-sidebar-accent-fill],   use: "Tint of the active / hovered navigation item. Pairs with sidebar-accent-ink." }
 - { token: sidebar-accent-ink,   css_var: --ap-sys-sidebar-accent-ink,   primitive: signal/600,  value: "#0063bb", utilities: [text-sidebar-accent-ink],  use: "Text / icon on sidebar-accent-fill only." }
 - { token: sidebar-border,       css_var: --ap-sys-sidebar-border,       primitive: neutral/50,  value: "#f3f5fa", utilities: [border-sidebar-border],    use: "Dividers and the sidebar edge." }
 - { token: sidebar-ring,         css_var: --ap-sys-sidebar-ring,         primitive: neutral/800, value: "#1e2229", utilities: [ring-sidebar-ring],        use: "Keyboard-focus indicator inside the sidebar." }
 
-# Charts — ramp-bound (Figma: Charts/); use = "Data-series colour N of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
-- { token: chart-1, css_var: --ap-sys-chart-1, primitive: warning/700, value: "#753100", utilities: [bg-chart-1, border-chart-1] }
-- { token: chart-2, css_var: --ap-sys-chart-2, primitive: success/600, value: "#298058", utilities: [bg-chart-2, border-chart-2] }
-- { token: chart-3, css_var: --ap-sys-chart-3, primitive: deep/900,    value: "#0d2531", utilities: [bg-chart-3, border-chart-3] }
-- { token: chart-4, css_var: --ap-sys-chart-4, primitive: warning/400, value: "#c8923f", utilities: [bg-chart-4, border-chart-4] }
-- { token: chart-5, css_var: --ap-sys-chart-5, primitive: error/500,   value: "#c54235", utilities: [bg-chart-5, border-chart-5] }
+# Charts — ramp-bound (Figma: Charts/)
+- { token: chart-1, css_var: --ap-sys-chart-1, primitive: warning/700, value: "#753100", utilities: [bg-chart-1, border-chart-1], use: "Data-series colour 1 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive." }
+- { token: chart-2, css_var: --ap-sys-chart-2, primitive: success/600, value: "#298058", utilities: [bg-chart-2, border-chart-2], use: "Data-series colour 2 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive." }
+- { token: chart-3, css_var: --ap-sys-chart-3, primitive: deep/900, value: "#0d2531", utilities: [bg-chart-3, border-chart-3], use: "Data-series colour 3 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive." }
+- { token: chart-4, css_var: --ap-sys-chart-4, primitive: warning/400, value: "#c8923f", utilities: [bg-chart-4, border-chart-4], use: "Data-series colour 4 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive." }
+- { token: chart-5, css_var: --ap-sys-chart-5, primitive: error/500, value: "#c54235", utilities: [bg-chart-5, border-chart-5], use: "Data-series colour 5 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive." }
 
 # Dialog + scrim (Figma: Dialog/ · Scrim/) — one raised-surface token for everything floating
-- { token: dialog-fill,         css_var: --ap-sys-dialog-fill,         primitive: base/white,  value: "#ffffff", utilities: [bg-dialog-fill],        use: "Surface of anything floating above the layout — dialogs, popovers, menus, command palette, tooltips. Pairs with dialog-ink and the Elevation effect. For in-flow panels use card-fill." }
+- { token: dialog-fill,         css_var: --ap-sys-dialog-fill,         primitive: base/white,  value: "#ffffff", utilities: [bg-dialog-fill, fill-dialog-fill], use: "Surface of anything floating above the layout — dialogs, popovers, menus, command palette, tooltips. Pairs with dialog-ink and the Elevation effect. For in-flow panels use card-fill." }
 - { token: dialog-ink,          css_var: --ap-sys-dialog-ink,          primitive: neutral/900, value: "#0d1016", utilities: [text-dialog-ink],        use: "Default text / icon on dialog-fill." }
-- { token: scrim,               css_var: --ap-sys-scrim,               primitive: "neutral/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength comes from scrim-opacity on the overlay layer (CSS composes both via color-mix) — no opacity modifier on top." }
-- { token: scrim-opacity,       css_var: --ap-sys-scrim-opacity,       primitive: opacity/10,  value: "10%", utilities: [], use: "Strength of the modal backdrop (10 %). FLOAT, scope OPACITY — bound to the overlay layer's opacity in Figma; composes with scrim." }
+- { token: scrim,               css_var: --ap-sys-scrim,               primitive: "neutral/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength comes from scrim-opacity on the overlay layer (CSS composes both via color-mix).", note: "No opacity modifier on top of bg-scrim — the strength is already composed." }
+- { token: scrim-opacity,       css_var: --ap-sys-scrim-opacity,       primitive: opacity/10,  value: "10%", utilities: [], use: "Strength of the modal backdrop (10 %) — bound to the opacity of the overlay layer in Figma; composes with scrim.", note: "FLOAT, scope OPACITY, alias → opacity/10. No utility of its own (composed into bg-scrim via color-mix); no foundations swatch (not a colour)." }
 
 # Input (Figma: Input/)
 - { token: input-ink-placeholder, css_var: --ap-sys-input-ink-placeholder, primitive: neutral/500, value: "#656971", utilities: [text-input-ink-placeholder], use: "Placeholder / hint text inside a field. The entered value uses ink; helper text outside the field uses muted." }
@@ -154,9 +156,9 @@ Semantics (Figma collection `semantic`; utilities derive from `--color-{name}`: 
 - { token: inverse-ink,             css_var: --ap-sys-inverse-ink,             primitive: neutral/75,      value: "#e4e6eb",   utilities: [text-inverse-ink],           use: "Default text / icon on inverse-fill." }
 - { token: inverse-ink-muted,       css_var: --ap-sys-inverse-ink-muted,       primitive: neutral/400,     value: "#7f848b",   utilities: [text-inverse-ink-muted],     use: "De-emphasised text / icon on inverse-fill — the dark-surface counterpart of muted." }
 - { token: inverse-border,          css_var: --ap-sys-inverse-border,          primitive: deep/900,        value: "#0d2531",   utilities: [border-inverse-border],      use: "Dividers and edges on inverse-fill." }
-- { token: inverse-container,       css_var: --ap-sys-inverse-container,       primitive: "deep/900 @30%", value: "#0d25314d", utilities: [bg-inverse-container],       use: "Resting inner panel on inverse-fill (card in the rail) — deep/900 at 30 %.", note: "Raw RGBA in Figma (no alias possible); color-mix in CSS like scrim." }
-- { token: inverse-container-low,   css_var: --ap-sys-inverse-container-low,   primitive: "deep/900 @20%", value: "#0d253133", utilities: [bg-inverse-container-low],   use: "Idle / inactive inner panel on inverse-fill — deep/900 at 20 %.", note: "Raw RGBA in Figma; color-mix in CSS." }
-- { token: inverse-container-hover, css_var: --ap-sys-inverse-container-hover, primitive: "deep/900 @70%", value: "#0d2531b2", utilities: [bg-inverse-container-hover], use: "Hovered / active inner panel on inverse-fill — deep/900 at 70 %.", note: "Raw RGBA in Figma; color-mix in CSS." }
+- { token: inverse-container,       css_var: --ap-sys-inverse-container,       primitive: "deep/900 @30%", value: "#0d25314d", utilities: [bg-inverse-container],       use: "Resting inner panel on inverse-fill (card in the rail) — deep/900 at 30 %.", note: "Raw RGBA: Figma cannot alias an alpha; CSS composes it via color-mix." }
+- { token: inverse-container-low,   css_var: --ap-sys-inverse-container-low,   primitive: "deep/900 @20%", value: "#0d253133", utilities: [bg-inverse-container-low],   use: "Idle / inactive inner panel on inverse-fill — deep/900 at 20 %.", note: "Raw RGBA, see inverse-container." }
+- { token: inverse-container-hover, css_var: --ap-sys-inverse-container-hover, primitive: "deep/900 @70%", value: "#0d2531b2", utilities: [bg-inverse-container-hover], use: "Hovered / active inner panel on inverse-fill — deep/900 at 70 %.", note: "Raw RGBA, see inverse-container." }
 ```
 
 ---
@@ -208,7 +210,7 @@ One scale for gap, padding, margin and inset; the step is picked by the px dista
 space_utilities:
   figma_scope: GAP
   primitive: "Dimension/space/base → --ap-dimension-space-base (4px); steps are direct values in Figma (only space-xs aliases base), calc(base × n) in CSS"
-  group_note: "One scale for gap, padding and margin — pick the step by the distance needed."   # Storybook group text (SpacingRadius.tsx), not a per-token suffix
+  figma_suffix: "One scale for gap, padding and margin — pick the step by the distance needed."   # appended to every Space/* description in Figma; Storybook shows it once as the group note (SpacingRadius.tsx)
   pick_by: "px value (§6 geometry_vs_token.spacing) — the use per step is a role hint, not a rule"
   lookup:  "--space-step-* (@utility) — deliberately NOT Tailwind's --spacing-* (§6 keep_valid: that namespace feeds every sizing utility and resolves before --container)"
   step:    "<2xs|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl>"
@@ -235,7 +237,7 @@ typo_format:
   parts:      [family, size, weight, line-height, tracking]
   figma_path: "<OrgGroup>/<format>/<part>"   # collection semantic-typo, 70 vars
   org_groups: { Display: [display], Heading: [heading, heading-sm], Title: [title], Lead: [lead], Body: [body, body-strong], Label: [label-md, label-sm], Eyebrow: [eyebrow], Data: [data-sm, data-md, data-lg], Kbd: [kbd] }
-  text_styles: "Display … Kbd bind family / size / weight / tracking. Line height cannot be bound by a text style → every <format>/line-height var is a value store for export only; the style carries the raw auto / % value"
+  text_styles: "Display · Heading · Heading-sm · Title · Lead · Body · Body-strong · Label/md · Label/sm · Eyebrow · Data/sm · Data/md · Data/lg · Kbd — bind family / size / weight / tracking. Line height cannot be bound by a text style → every <format>/line-height var is a value store for export only (its Figma description says so); the style carries the raw auto / % value"
   line_height_normal: "resolves to the STRING primitive Font/line-height/normal"
   single_utilities: "text-* / font-* / tracking-* / leading-* are dead (§6 dead_utilities)"
 ```
@@ -245,8 +247,9 @@ Primitives (internal; Figma group `Font/` — the YAML uses the short paths, CSS
 ```yaml
 family:      { sans: "Hanken Grotesk", mono: "Geist Mono" }                 # --ap-font-family-sans/-mono
 weight:      { regular: 400, medium: 500, semibold: 600, extrabold: 800 }   # --ap-font-weight-*
+scale:       { scale: 1.25 }                                                # Font/scale → --ap-font-scale; CSS also derives --ap-font-scale-2 … -5 (powers, no Figma counterpart)
 size:        { base: 14, step-neg2: 9, step-neg1: 11, step-0: 14, step-1: 18, step-2: 22, step-3: 27, step-4: "34 (spare)", step-5: 43 }
-             # --ap-font-size-step-* — modular scale: base × scale^n; Font/scale = 1.25 → --ap-font-scale
+             # --ap-font-size-step-* — round(base × scale^n) to whole px in CSS; Figma stores the rounded values
 line-height: { tight: 1.0, snug: 1.2, relaxed: 1.5, normal: "CSS keyword (STRING primitive Font/line-height/normal)" }   # --ap-font-line-height-*
 tracking:    { tight: "-0.5px", normal: "0", wide: "0.5px" }                # --ap-font-tracking-*
 ```
@@ -365,15 +368,15 @@ Two shadows; everything else stays flat.
 effects_model:
   figma: "Effect Styles \"Glow\" / \"Elevation\" bind the Effect/* primitives directly (scopes EFFECT_COLOR / EFFECT_FLOAT) — no semantic variable in Figma"
   css:   "--ap-sys-shadow-* exists in CSS only; the colour part is composed from the colour ramps via color-mix"
-  colour_divergence: "Figma cannot alias an effect colour onto a ramp (a colour binding replaces the whole RGBA) → Effect/*/color holds raw values on purpose; code is the source for the effect colours, the divergence is accepted (no Figma to-do)"
+  colour_divergence: "Figma cannot alias an effect colour onto a ramp (a colour binding replaces the whole RGBA) → Effect/*/color holds raw values on purpose (glow #009fe3 = signal/400, elevation #1a2230 ≠ neutral/900); code is the source for the effect colours, the divergence is accepted (no Figma to-do)"
   flat_otherwise: "depth is implied, not stacked — shadow-elevation is the only depth cue; stock shadow-* are dead (§6 dead_utilities)"
 ```
 
 Primitives (internal; Figma group `Effect/` — the YAML uses the short paths, CSS = `--ap-effect-…`):
 
 ```yaml
-glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma holds raw #0098da
-elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }  # --ap-effect-elevation-* · Figma holds raw #1a2230
+glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma Effect/glow/color holds raw #009fe3 @ 50 %
+elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }  # --ap-effect-elevation-* · Figma Effect/elevation/color holds raw #1a2230 @ 18 % (not neutral/900 #0d1016)
 ```
 
 ```yaml
@@ -383,7 +386,7 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color
   value: "0 0 4px 0 · signal/400 @ 50%"
   utilities: [shadow-glow]
   use: "Halo on an emphasised marker — focus / active halo on small shapes. Not a depth cue."
-  note: "Figma: Effect Style \"Glow\" (effects_model)."
+  note: "Colour is a raw value here; CSS composes signal/400 at 50 % via color-mix."
 
 - token: shadow-elevation
   css_var: --ap-sys-shadow-elevation
@@ -391,7 +394,7 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color
   value: "0 14px 36px -6px · neutral/900 @ 18%"
   utilities: [shadow-elevation]
   use: "Drop shadow of surfaces floating above the layout (dialog-fill). The only depth cue in the system — everything else stays flat."
-  note: "Figma: Effect Style \"Elevation\" (effects_model)."
+  note: "Colour is a raw value here; CSS composes neutral/900 at 18 % via color-mix."
 ```
 
 ---

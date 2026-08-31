@@ -323,7 +323,7 @@ export function Colors() {
               primitive="neutral/900 × opacity/10"
               scope="fill"
               value="#0d1016 @ 10%"
-              role="Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength (10 %) comes from scrim-opacity, composed via color-mix."
+              role="Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength comes from scrim-opacity on the overlay layer (CSS composes both via color-mix)."
             />
           </Row>
         </Rows>
@@ -484,7 +484,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill · text"
               value="#0d2531"
-              role="Surface of the sidebar's main action (e.g. the workspace / brand button); also usable as its text / icon colour. Pairs with sidebar-primary-ink."
+              role="Surface of the main sidebar action (e.g. the workspace / brand button); also usable as its text / icon colour. Pairs with sidebar-primary-ink."
             />
             <TextSwatch
               text="text-sidebar-primary-ink"
@@ -554,7 +554,7 @@ export function Colors() {
               primitive="warning/700"
               scope="fill · stroke"
               value="#753100"
-              role="Data-series colour 1 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
+              role="Data-series colour 1 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-2"
@@ -563,7 +563,7 @@ export function Colors() {
               primitive="success/600"
               scope="fill · stroke"
               value="#298058"
-              role="Data-series colour 2 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
+              role="Data-series colour 2 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-3"
@@ -572,7 +572,7 @@ export function Colors() {
               primitive="deep/900"
               scope="fill · stroke"
               value="#0d2531"
-              role="Data-series colour 3 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
+              role="Data-series colour 3 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
           </Row>
           <Row>
@@ -583,7 +583,7 @@ export function Colors() {
               primitive="warning/400"
               scope="fill · stroke"
               value="#c8923f"
-              role="Data-series colour 4 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
+              role="Data-series colour 4 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
             <FillSwatch
               bg="bg-chart-5"
@@ -592,7 +592,7 @@ export function Colors() {
               primitive="error/500"
               scope="fill · stroke"
               value="#c54235"
-              role="Data-series colour 5 of 5 — assign in order. Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
+              role="Data-series colour 5 of 5 — assign in order (series 1 → chart-1). Carries no status meaning even where the hue matches a status ramp; for errors use destructive."
             />
           </Row>
         </Rows>

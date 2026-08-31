@@ -42,6 +42,16 @@ shape / marker fill.
 - `inverse-container-hover`: code and docs said 55 %, Figma held 70 %; the Figma value was adopted
   (`deep/900 @ 70%`, `#0d2531b2`).
 
+**Consistency pass (reference ↔ code ↔ Figma).** `use` is now the Figma description verbatim (the SHAPE_FILL
+footnotes moved into `note`); chart tokens carry their sentence per row; six utilities the code already used were
+added to the crosswalk (`border-ring`, `bg-border`, `bg-primary-ink`, `bg-destructive-ink`, `border-primary-fill`,
+`fill-dialog-fill`); `Font/scale` listed among the primitives. Figma side: `Brand/brand-ink` gained `SHAPE_FILL`,
+`Primary/primary-fill` gained `STROKE_COLOR` (both already used that way in code), the 79 `Color/*` primitives were set
+to scopes `[]` (alias-only, as the architecture states), the text style `Data/md` had its weight bound to
+`Data/data-sm/weight` and now binds `Data/data-md/weight`, five `<format>/line-height` variables received the
+value-store description the other nine already had, and two descriptions were reworded without an apostrophe
+(the Plugin API returns it HTML-escaped). Storybook foundations aligned for scrim, chart-1…5 and elevation.
+
 ---
 
 ## 2026-07-01 — Inverse family completed, typography re-tiered

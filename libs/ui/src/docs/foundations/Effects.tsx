@@ -47,7 +47,7 @@ export function Effects() {
                 0 14px 36px -6px · neutral/900 @ 18%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
-                Drop shadow of surfaces floating above the layout (dialog-fill). The only depth cue in the system.
+                Drop shadow of surfaces floating above the layout (dialog-fill). The only depth cue in the system — everything else stays flat.
               </span>
             </div>
           </div>
