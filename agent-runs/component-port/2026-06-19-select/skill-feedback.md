@@ -1,51 +1,51 @@
-# Skill-Feedback — Select-Port (2026-06-19)
+# Skill feedback — Select port (2026-06-19)
 
-Run: `/shadcn-component-port select` (Composite). Figma = Background-Agent `figma-select-build`, Code = main parallel.
-Findings = Skill-Lücken + Kandidaten-Fixes. **Nicht mid-run angewandt** (Memory `skill-writing-style`). User reviewt.
+Run: `/shadcn-component-port select` (composite). Figma = background agent `figma-select-build`, code = main in parallel.
+Findings = skill gaps + candidate fixes. **Not applied mid-run** (memory `skill-writing-style`). User reviews.
 
-## Figma-Build (figma-build.md / composites.md / snippets) — vom Background-Agent
+## Figma build (figma-build.md / composites.md / snippets) — from the background agent
 
-**A. Slot-Merge passiert zur `combineAsVariants`-Zeit, NICHT danach.** *(verified: Instanz exponierte 6 un-merged
-`leadingIcon#…`-Props)* — `§Slots` sagt „named consistently so it merges to ONE set-level SLOT property", aber nicht
-WANN. `createSlot()` auf jedem Member eines BEREITS kombinierten Sets → N separate gleichnamige Props (kaputte
-Instanz-API). Fix: Slots auf den **standalone Comps VOR `combineAsVariants`** bauen. Explizite Zeile in
-`§Slots` / `§Variant set assembly`. *(= Deviation D3 dieses Runs: erst post-combine gebaut → gelöscht + neu.)*
+**A. Slot merge happens at `combineAsVariants` time, NOT afterwards.** *(verified: instance exposed 6 un-merged
+`leadingIcon#…` props)* — `§Slots` says "named consistently so it merges to ONE set-level SLOT property", but not
+WHEN. `createSlot()` on every member of an ALREADY combined set → N separate same-named props (broken
+instance API). Fix: build slots on the **standalone comps BEFORE `combineAsVariants`**. Explicit line in
+`§Slots` / `§Variant set assembly`. *(= deviation D3 of this run: first built post-combine → deleted + rebuilt.)*
 
-**B. `member.x = section.x + N` DOPPEL-OFFSETet.** *(verified: content bei abs x≈21000 für Section bei x≈10600)* —
-sharpens **#16**: Section-Kinder nehmen section-RELATIVE x/y (Headline liegt bei 80,80). Der Reflex `set.x = section.x + 80`
-rendert bei `section.x + (section.x + 80)`. Fix: konkretes WRONG/RIGHT in `composites.md` + `build-variant-set.js` —
-Kind-Koords sind **reine Offsets vom Section-Ursprung**, NIE `section.x` addieren.
+**B. `member.x = section.x + N` DOUBLE-offsets.** *(verified: content at abs x≈21000 for a section at x≈10600)* —
+sharpens **#16**: section children take section-RELATIVE x/y (the headline sits at 80,80). The reflex `set.x = section.x + 80`
+renders at `section.x + (section.x + 80)`. Fix: concrete WRONG/RIGHT in `composites.md` + `build-variant-set.js` —
+child coords are **pure offsets from the section origin**, NEVER add `section.x`.
 
-**C. Sections wachsen NICHT automatisch mit den Kindern** — nach dem Positionieren `resizeWithoutConstraints` (hug),
-sonst bleibt die Section headline-groß. Paart mit B. Gehört an die Section-Invariante in `figma-build.md`.
+**C. Sections do NOT grow automatically with their children** — after positioning, `resizeWithoutConstraints` (hug),
+otherwise the section stays headline-sized. Pairs with B. Belongs at the section invariant in `figma-build.md`.
 
-**D. Instanz-Slot-Default-Removal ist strikt EINS pro `use_figma`-Call** *(sharpens #48)* — selbst mit Re-Fetch per
-stabiler ID wirft das ZWEITE `slot.children[0].remove()` im selben Tick „node not found". Eine guarded while-Schleife
-funktioniert in EINEM Call NICHT — jedes Default-Kind braucht einen eigenen Round-Trip (3 Calls, um 3 Defaults zu leeren).
-`§Slots` „Filling a slot in an instance" entsprechend verschärfen.
+**D. Instance slot-default removal is strictly ONE per `use_figma` call** *(sharpens #48)* — even with a re-fetch by
+stable ID, the SECOND `slot.children[0].remove()` in the same tick throws "node not found". A guarded while loop
+does NOT work in ONE call — every default child needs its own round trip (3 calls to empty 3 defaults).
+Tighten `§Slots` "Filling a slot in an instance" accordingly.
 
-## Code-Seite (SKILL.md / composites.md / docgen-props / storybook-rules) — main
+## Code side (SKILL.md / composites.md / docgen-props / storybook-rules) — main
 
-**E. `radix-ui`-Umbrella-Import für volle Primitives BEHALTEN — Finding #3 enger fassen.** Finding #3
-(„Radix-Umbrella → per-primitive") galt dem **Breadcrumb-`Slot`-aus-`radix-ui`-Fall**. Für ein volles Primitive
-(`Select`, `Dialog`) ist `import { Select as SelectPrimitive } from 'radix-ui'` die Projekt-Konvention (Dialog identisch)
-und `radix-ui` eine **deklarierte** Dep. Composite-Dep-Audit (§2 T2) sollte unterscheiden: voll-Primitive-Umbrella behalten,
-nur einzelne Sub-Imports (`Slot`) auf per-primitive umstellen.
+**E. KEEP the `radix-ui` umbrella import for full primitives — narrow finding #3.** Finding #3
+("Radix umbrella → per-primitive") applied to the **Breadcrumb `Slot`-from-`radix-ui` case**. For a full primitive
+(`Select`, `Dialog`), `import { Select as SelectPrimitive } from 'radix-ui'` is the project convention (Dialog identical)
+and `radix-ui` a **declared** dep. The composite dep audit (§2 T2) should distinguish: keep the full-primitive umbrella,
+only switch single sub-imports (`Slot`) to per-primitive.
 
-**F. Composite-Doc-Prop über Root + Sub-Part → `meta.component` + `subcomponents`.** *(storybook-rules/docgen-props-Lücke)*
-— Select hat dokumentierbare Props auf ZWEI Teilen: Root (`Select`: value/open/…) + Trigger (`SelectTrigger`: size). Die
-Autodocs-ArgsTable zieht nur `meta.component`. Lösung: `component: Select` + `meta.subcomponents = { SelectTrigger }` →
-zweite ArgsTable; der Sub-Part-Control (`size`) lebt als **Story-lokaler** arg auf Default (er erreicht den meta.component
-nicht). Regel für `/storybook-rules` (Composite mit Prop-Split) + `/docgen-props` (Sub-Part annotieren, dann subcomponents).
+**F. Composite doc prop across root + sub-part → `meta.component` + `subcomponents`.** *(storybook-rules/docgen-props gap)*
+— Select has documentable props on TWO parts: root (`Select`: value/open/…) + trigger (`SelectTrigger`: size). The
+Autodocs ArgsTable pulls only `meta.component`. Solution: `component: Select` + `meta.subcomponents = { SelectTrigger }` →
+second ArgsTable; the sub-part control (`size`) lives as a **story-local** arg on Default (it does not reach the meta.component).
+Rule for `/storybook-rules` (composite with prop split) + `/docgen-props` (annotate the sub-part, then subcomponents).
 
-**G. Radix Select braucht KEINEN jsdom-Polyfill, wenn die Specs nur „closed" rendern.** SelectContent liegt im Portal
-(mountet erst on-open) → ein Spec, der nur Trigger/Root rendert, läuft ohne `scrollIntoView`/`hasPointerCapture`. Den
-Open-Pfad (Dropdown) übers Chromium-Storybook-Projekt (play) abdecken. `§T6 Headless lib` könnte die „closed-render-spec
-vermeidet den Polyfill"-Heuristik nennen.
+**G. Radix Select needs NO jsdom polyfill if the specs only render "closed".** SelectContent sits in the portal
+(mounts only on open) → a spec that renders only trigger/root runs without `scrollIntoView`/`hasPointerCapture`. Cover the
+open path (dropdown) via the Chromium storybook project (play). `§T6 Headless lib` could name the "closed-render spec
+avoids the polyfill" heuristic.
 
-## Build-Deviations (Domain, fürs Protokoll — nicht Skill)
+## Build deviations (domain, for the record — not skill)
 
-- **D1** SelectItem-Check = Figma trailing Layout-Vektor (`pr-md`/`right-2`); Code = `absolute right-md` + `pr-3xl`-Clearance
-  (shadcn-Idiom). Visuell äquivalent → für `/component-sync` als bekannte Struktur-Divergenz markiert, KEIN Token-Delta.
-- **D2** SelectItem-Padding `pl-sm`(6)/`pr-md`(8) asymmetrisch (einziger verify-Hint) — gewollt.
-- **D4** SelectLabel inline komponiert (kein eigenes Set) — Brief listet es als layer-3 slot content.
+- **D1** SelectItem check = Figma trailing layout vector (`pr-md`/`right-2`); code = `absolute right-md` + `pr-3xl` clearance
+  (shadcn idiom). Visually equivalent → marked for `/component-sync` as a known structural divergence, NO token delta.
+- **D2** SelectItem padding `pl-sm`(6)/`pr-md`(8) asymmetric (the only verify hint) — intended.
+- **D4** SelectLabel composed inline (no set of its own) — the brief lists it as layer-3 slot content.

@@ -1,6 +1,6 @@
 # Popover — Figma rebuild (code→Figma push) — 2026-06-23
 
-Item ④ from the popover review (handoff Offene Punkte #2 ④). A **code→Figma build/push** (the
+Item ④ from the popover review (handoff Open items #2 ④). A **code→Figma build/push** (the
 documented exception to the read-only pipeline), governed by `/figma-build-rules` + `/figma-use`.
 Two deliverables: **A** fix the broken section composition (finding A5), **B** model the `align`
 prop the code has but Figma didn't (finding ④). Background agent, Plugin MCP only, no detach.

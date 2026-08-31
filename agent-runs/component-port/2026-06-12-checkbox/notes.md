@@ -50,9 +50,9 @@ Authority: `tokens-reference.md` §6 (translation) + §1/§2/§4 (token semantic
 |---|---|---|
 | `rounded-[4px]` | `corner-sm` | §2: DS 4px radius for "kleine Controls/Chips/Marker" — exactly a checkbox box. ALL `rounded-*` dead under theme reset; `corner-*` is the only radius vocab. Drop the arbitrary `[4px]`. |
 | `border border-input` | `border border-input` | §1 `input`: "Form-Control-Border; Fokus → ring". Same name, role fits 1:1 — the control edge that hands off to the ring on focus. |
-| `data-checked:bg-primary` | `data-checked:bg-primary` | §1 `primary`: surface use "als Fläche … wenn die Fläche ‚selektiert/primär/hier handeln' bedeutet". Checked = selected → primary fill is the documented surface role. |
+| `data-checked:bg-primary` | `data-checked:bg-primary` | §1 `primary`: surface use "as a surface … when the surface means 'selected/primary/act here'". Checked = selected → primary fill is the documented surface role. |
 | `data-checked:border-primary` | `data-checked:border-primary` | Edge matches the fill so the box reads as one solid primary mark. |
-| `data-checked:text-primary-foreground` | `data-checked:text-primary-foreground` | §1 `primary-foreground`: "Text/Icon auf primary-Fläche" — the check glyph sits on the primary fill, so icon-on-primary, NOT `foreground` (that's text-on-base). |
+| `data-checked:text-primary-foreground` | `data-checked:text-primary-foreground` | §1 `primary-foreground`: "Text/icon on a primary surface" — the check glyph sits on the primary fill, so icon-on-primary, NOT `foreground` (that's text-on-base). |
 | `focus-visible:border-ring` | `focus-visible:border-ring` | §1 `ring`: "Fokus-Indikator". Same role. |
 | `focus-visible:ring-ring/50 ring-3` | `focus-visible:ring-ring/50 ring-[3px]` | `ring-3`→`ring-[3px]` to match the **Input/InputGroup sibling** focus convention (they use `ring-[3px]`); keeps the field-family ring uniform. `/50` opacity-modifier kept (§6 keep_valid). |
 | `aria-invalid:border-destructive` | same | §1 `destructive` = ⚠ **PLACEHOLDER** (stock hex `#e7000b`, `status: placeholder`, `use: tbd`). Bound but NOT finalized — same treatment as Input/Badge. |

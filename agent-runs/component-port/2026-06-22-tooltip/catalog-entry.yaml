@@ -4,7 +4,7 @@
 
 - name: Tooltip
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  figma_synced: true                            # initial port 2026-06-22 (Figma + code built together)
   source: { registry: "@shadcn", item: tooltip, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/tooltip/
@@ -12,42 +12,42 @@
     barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
   figma:
     section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
-    component: { name: "Tooltip", id: "4382:2356" }      # die Content-Chip-Component (kein Variant-Set — Single-Member)
-    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label-Style, dialog-ink)" }
+    component: { name: "Tooltip", id: "4382:2356" }      # the content-chip component (no variant set — single member)
+    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label style, dialog-ink)" }
     arrow: { name: "arrow", id: "4382:2358" }            # 10×10 RECT, rotated -45° diamond, ABSOLUTE bottom-center, fill dialog-fill
-    axis: { content: [slot] }                            # KEINE Variant/State-Achse — Tooltip hat nur den Open-Visual; Content = SLOT (offene children-Region)
+    axis: { content: [slot] }                            # NO variant/state axis — Tooltip only has the open visual; content = SLOT (open children region)
     vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", corner-md: "3073:3", space-lg: "3070:8", space-sm: "3070:5" }
     styles: { text: "Label (S:4e034695…b266f0)", effect: "Elevation (S:92c2d7ac…66b42)" }
-    examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd-Instanz 4385:2390 ⌘S)" }
+    examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd instance 4385:2390 ⌘S)" }
   skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
   notes: >
-    Radix Tooltip (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-
-    Konvention; finding B13). Parts: Provider/Root/Trigger = verhaltens-Wrapper ohne Styling; nur
-    TooltipContent + sein Arrow tragen Klassen → KEIN CVA, Single-Surface (Sibling von Badge/Kbd, kein
-    surface-less Composite). DS-Abweichung (Kern-Entscheid): stock-Tooltip ist eine INVERTIERTE dunkle
-    Chip (bg-foreground + text-background) — DS hat keinen invertierten-Overlay-Token → an die
-    konsolidierte RAISED-OVERLAY-Fläche umgekleidet: bg-dialog-fill + text-dialog-ink + border (1px,
-    nova hatte keine) + shadow-elevation (Tiefe, stock ist flach) wie Dialog/Command. Tooltip wird damit
-    eine LIGHT raised Chip (recorded dark→light fork). Geometrie/Typo: rounded-md→corner-md, gap-1.5→gap-sm,
-    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label (kein 12px-Sans-Rung → Rolle „kurzes Label", +2px
-    Snap; B21/B23). Arrow erbt dialog-fill (bg+fill), rounded-[2px] als arbiträre Diamant-Geometrie verbatim,
-    rotate/translate numerisch. Animations-/Layout-/Radix-transform-origin-Utilities verbatim (§6 keep_valid).
-    FIGMA: Content-Region als SLOT modelliert (content#4384:0, {Label}-Default), NICHT TEXT-Prop — der Code
-    nutzt freie `children` (Text, oder Text + Kbd) → /figma-build-rules §Mechanism „open variably-many
-    children → Slot"; ein TEXT-Prop könnte die WithKbd-Komposition nicht reproduzieren (Done-Test). Arrow =
-    ABSOLUTE-Kind (layoutPositioning), bottom-center, halb über die Unterkante (Pointer; clipsContent=false
-    am Component, damit Arrow+Shadow nicht clippen). Usage-Examples-Group reproduziert Default + WithKbd aus
-    Controls (WithKbd nestet eine echte .Kbd-Instanz). figma-verify CLEAN (0 text-icon/clipped/overlap/
-    pad-asym; Arrow-auf-Chip-Overlap by-design = absolute Kind in AL-Frame, wie Slider Thumb-auf-Track C3).
-    A11Y: TooltipContent role=tooltip; Radix verdrahtet aria-describedby Trigger→Content im Open-State;
-    Icon-only-Trigger braucht EIGENEN accessible name (Tooltip = Beschreibung, kein Name) → IconTrigger-Story
-    nutzt DS-Button `icon`-Bool + Pflicht-aria-label. Docgen: TooltipProps (open/defaultOpen/onOpenChange/
+    Radix Tooltip (radix-ui umbrella import kept = full primitive, declared dep, Dialog/Select
+    convention; finding B13). Parts: Provider/Root/Trigger = behaviour wrappers without styling; only
+    TooltipContent + its arrow carry classes → NO CVA, single surface (sibling of Badge/Kbd, not a
+    surface-less composite). DS deviation (core decision): the stock tooltip is an INVERTED dark
+    chip (bg-foreground + text-background) — the DS has no inverted-overlay token → re-clothed onto the
+    consolidated RAISED-OVERLAY surface: bg-dialog-fill + text-dialog-ink + border (1px,
+    nova had none) + shadow-elevation (depth, stock is flat) like Dialog/Command. Tooltip thereby becomes
+    a LIGHT raised chip (recorded dark→light fork). Geometry/typography: rounded-md→corner-md, gap-1.5→gap-sm,
+    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label (no 12px sans rung → role "short label", +2px
+    snap; B21/B23). Arrow inherits dialog-fill (bg+fill), rounded-[2px] kept verbatim as arbitrary diamond geometry,
+    rotate/translate numeric. Animation/layout/Radix transform-origin utilities verbatim (§6 keep_valid).
+    FIGMA: content region modelled as a SLOT (content#4384:0, {Label} default), NOT a TEXT prop — the code
+    uses free `children` (text, or text + Kbd) → /figma-build-rules §Mechanism "open variably-many
+    children → Slot"; a TEXT prop could not reproduce the WithKbd composition (done test). Arrow =
+    ABSOLUTE child (layoutPositioning), bottom-center, half over the bottom edge (pointer; clipsContent=false
+    on the component so arrow+shadow do not clip). Usage-examples group reproduces Default + WithKbd from
+    controls (WithKbd nests a real .Kbd instance). figma-verify CLEAN (0 text-icon/clipped/overlap/
+    pad-asym; arrow-on-chip overlap by design = absolute child in AL frame, like Slider thumb-on-track C3).
+    A11Y: TooltipContent role=tooltip; Radix wires aria-describedby trigger→content in the open state;
+    an icon-only trigger needs its OWN accessible name (tooltip = description, not name) → IconTrigger story
+    uses the DS Button `icon` bool + mandatory aria-label. Docgen: TooltipProps (open/defaultOpen/onOpenChange/
     delayDuration) + TooltipContentProps (side/sideOffset/align/alignOffset) via Omit+re-declare; Provider/
-    Trigger pass-through. Stories: Default (Playground + hover→open play gg. Portal via within(document.body))
-    · Placement (4 Seiten) · WithKbd (Kbd ported) · IconTrigger (a11y). jsdom .spec NUR closed/trigger-Pfad
-    (B20: portal-mounted Content mountet erst on-open → kein zusätzlicher Polyfill; Open-Pfad übers Chromium-
-    Storybook-play). Gate grün (tooltip-scoped): 4 jsdom-Specs + 4 Stories (Chromium + axe), typecheck + lint.
-    OFFENER PUNKT (Kbd): kbd.tsx trägt `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` — getunt für
-    eine INVERTIERTE (dunkle) Tooltip; auf der gewählten LIGHT dialog-fill-Fläche liest das near-invisible.
-    Bewusst NICHT im Tooltip-Port editiert (Scope = ein Component) → als Open Item geflaggt; WithKbd rendert
-    die Kbd as-is. (Quelle: agent-runs/component-port/2026-06-22-tooltip/notes.md + skill-feedback.md.)
+    Trigger pass-through. Stories: Default (playground + hover→open play against the portal via within(document.body))
+    · Placement (4 sides) · WithKbd (Kbd ported) · IconTrigger (a11y). jsdom .spec ONLY the closed/trigger path
+    (B20: portal-mounted content mounts only on-open → no additional polyfill; open path via the Chromium
+    Storybook play). Gate green (tooltip-scoped): 4 jsdom specs + 4 stories (Chromium + axe), typecheck + lint.
+    OPEN ITEM (Kbd): kbd.tsx carries `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` — tuned for
+    an INVERTED (dark) tooltip; on the chosen LIGHT dialog-fill surface it reads near-invisible.
+    Deliberately NOT edited in the Tooltip port (scope = one component) → flagged as an open item; WithKbd renders
+    the Kbd as-is. (Source: agent-runs/component-port/2026-06-22-tooltip/notes.md + skill-feedback.md.)

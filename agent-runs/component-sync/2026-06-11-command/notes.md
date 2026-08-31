@@ -1,54 +1,54 @@
 # component-sync · 2026-06-11 · Command
 
-Sync der neuen Figma-Variant-Achsen in den Code (Figma → Code). Sets: `.Command` `3642:2`,
-`.Command/Input` `3639:2`, `.Command/Group` `3640:9`, `.Command/Separator` `3653:6` (alle
-`variant`-Achse, 2026-06-11 gebaut aus C2-Frame `3554:859`). `.Command/Item` `3559:2` unverändert.
-API-Fixierungen (User, Plan `melodic-cooking-church.md` Teil B): variant nur auf der Command-Root +
-Context-Vererbung; Items unverändert; CommandSeparator bekommt `label`.
+Sync of the new Figma variant axes into the code (Figma → code). Sets: `.Command` `3642:2`,
+`.Command/Input` `3639:2`, `.Command/Group` `3640:9`, `.Command/Separator` `3653:6` (all
+`variant` axis, built 2026-06-11 from C2 frame `3554:859`). `.Command/Item` `3559:2` unchanged.
+API decisions (user, plan `melodic-cooking-church.md` part B): variant only on the Command root +
+context inheritance; items unchanged; CommandSeparator gets `label`.
 
-## Delta (pro Member: Figma-Wert → Code-Utility)
+## Delta (per member: Figma value → code utility)
 
-| Member | Figma (live Bindings) | Code |
+| Member | Figma (live bindings) | Code |
 |---|---|---|
-| `.Command` palette | p 0 (raw) · `Corner/corner-md` · stroke 1.5 (raw) · `Overlay/overlay` · Effect `Elevation` | cva `palette: 'corner-md border-[1.5px]'` (kein Padding; overlay/elevation aus der Base), `data-variant` + `CommandVariantContext`-Provider |
-| `.Command/Input` palette | row · `shadcn Default/card` · pad `space-xl` · gap `space-lg` · Caret 2.5×18 `shadcn Default/primary` + Effect `Glow` (radius 1 raw) · value/placeholder Text-Style `Input`, fills `foreground`/`Input/input-placeholder` · Kbd-Instanz | Wrapper `flex items-center gap-lg border-b bg-card p-xl`; Caret-Span `h-[18px] w-[2.5px] bg-primary shadow-glow`; Input `min-w-0 flex-1 text-input text-foreground caret-primary placeholder:text-input-placeholder`; `<Kbd>Esc</Kbd>` |
-| `.Command/Group` palette | Container pad `[0, space-md, 0, space-md]` · Heading = genestete `.Command/Separator[labeled]`-Instanz | Container `px-md`; Heading per `**:[[cmdk-group-heading]]:` → `flex items-center gap-md px-md pt-lg pb-sm text-eyebrow uppercase text-muted-foreground` + `after:`-Rule (`h-px flex-1 bg-border`) — px-Abweichung s. Deviations |
-| `.Command` palette · list-Slot | padT/padB `space-md` | `CommandList` + `py-md` (Context) |
-| `.Command/Separator` labeled | row `gap space-md` · pad `[space-lg, space-xl, space-sm, space-xl]` · Label fill `muted-foreground`, textCase UPPER (Style detached) · Rule h1 fill `border`, FILL | `label`-Prop → `div role=separator` `flex items-center gap-md px-xl pt-lg pb-sm` + Eyebrow-Span + `h-px flex-1 bg-border`; **gleicher hide-on-search-Vertrag wie die Linien-Form** (`useCommandState`, `alwaysRender`-Opt-out — Nachschärfung auf User-Review) |
-| `.Command/Separator` default in p-0-Panel | FILL im randlosen Panel | Linie verliert `-mx-xs` im palette-Context (`h-px bg-border`) |
-| CommandDialog (kein Figma-Artefakt) | — | `variant`-Pass-Through; DialogContent + `corner-md border-[1.5px]` bei palette |
+| `.Command` palette | p 0 (raw) · `Corner/corner-md` · stroke 1.5 (raw) · `Overlay/overlay` · Effect `Elevation` | cva `palette: 'corner-md border-[1.5px]'` (no padding; overlay/elevation from the base), `data-variant` + `CommandVariantContext` provider |
+| `.Command/Input` palette | row · `shadcn Default/card` · pad `space-xl` · gap `space-lg` · caret 2.5×18 `shadcn Default/primary` + Effect `Glow` (radius 1 raw) · value/placeholder text style `Input`, fills `foreground`/`Input/input-placeholder` · Kbd instance | Wrapper `flex items-center gap-lg border-b bg-card p-xl`; caret span `h-[18px] w-[2.5px] bg-primary shadow-glow`; input `min-w-0 flex-1 text-input text-foreground caret-primary placeholder:text-input-placeholder`; `<Kbd>Esc</Kbd>` |
+| `.Command/Group` palette | container pad `[0, space-md, 0, space-md]` · heading = nested `.Command/Separator[labeled]` instance | Container `px-md`; heading via `**:[[cmdk-group-heading]]:` → `flex items-center gap-md px-md pt-lg pb-sm text-eyebrow uppercase text-muted-foreground` + `after:` rule (`h-px flex-1 bg-border`) — px deviation see Deviations |
+| `.Command` palette · list slot | padT/padB `space-md` | `CommandList` + `py-md` (context) |
+| `.Command/Separator` labeled | row `gap space-md` · pad `[space-lg, space-xl, space-sm, space-xl]` · label fill `muted-foreground`, textCase UPPER (style detached) · rule h1 fill `border`, FILL | `label` prop → `div role=separator` `flex items-center gap-md px-xl pt-lg pb-sm` + eyebrow span + `h-px flex-1 bg-border`; **same hide-on-search contract as the line form** (`useCommandState`, `alwaysRender` opt-out — sharpened on user review) |
+| `.Command/Separator` default in p-0 panel | FILL in the borderless panel | line loses `-mx-xs` in the palette context (`h-px bg-border`) |
+| CommandDialog (no Figma artefact) | — | `variant` pass-through; DialogContent + `corner-md border-[1.5px]` for palette |
 
-Default-Member: alle unverändert → kein Delta am Bestand (Default-Klassenstrings byte-identisch,
-Bestands-Specs unverändert grün).
+Default members: all unchanged → no delta on the existing code (default class strings byte-identical,
+existing specs still green).
 
-## DEVIATIONS (Code ≠ literales Figma-Binding)
+## DEVIATIONS (code ≠ literal Figma binding)
 
-| Member | Property | Figma sagt ↔ Code nutzt | Warum |
+| Member | Property | Figma says ↔ code uses | Why |
 |---|---|---|---|
-| `.Command/Group` palette | Heading-Struktur + px | genestete `Separator[labeled]`-Instanz mit `px-xl` → Label-Einzug **24px** (Group px-md 8 + Instanz 16) ↔ Heading-Styling `px-md` → Einzug **16px** | Die Instanz-Nestung kam nach dem User-Gate ins File (Architektur-Dedup ok), aber der px-xl-Default der Instanz verschob das Label 8px gegen das approbierte C2-Raster. **AUFGELÖST 2026-06-11:** Instanz-Padding im Group-Member auf `space-md` overridet (Node 3645:1039) — Label-Einzug 16px, deckungsgleich mit Code + C2-Frame, im Beispiel 3650:63 verifiziert. Folge der Nestung: das `heading#3640:1`-Prop ist im palette-Member inert — Gruppen-Titel laufen dort über das `label#3653:1`-Prop der genesteten Separator-Instanz. |
-| `.Command` palette | Prompt-Divider | eigene `Separator`-Instanz zwischen Input und Liste ↔ `border-b` am Input-Wrapper | Code-Ergonomie: Konsument schreibt `<CommandInput/><CommandList/>` ohne Pflicht-Separator; visuell identisch. |
-| `.Command` palette | Footer-Divider | `Separator`-Instanz nach dem list-Slot ↔ Kompositions-Detail (Story setzt `<CommandSeparator alwaysRender/>`) | Kein Komponenten-Feature; bewusst beim Konsumenten. |
-| `.Command/Input` palette | Caret-Radius 1px (raw) | ohne Radius | Bei 2.5px Breite unsichtbar; `rounded-*` ist im DS tot, 1px hat keine corner-Stufe. |
-| `.Command/Input` palette | value+placeholder koexistent (Mid-Typing-Mock) | Standard-Placeholder-Verhalten, echte Caret via `caret-primary` | Frame zeigt einen Zustand, kein Ghost-Text-Feature (Plan-Fixierung). |
-| `.Command/Separator` labeled + `.Command/Group` Heading | Text-Style `Eyebrow` **detached** (textCase-UPPER-Override löst den Style) | `text-eyebrow uppercase` | Pre-existing Pattern-Defekt auch am Bestands-Heading; Code bindet ans Format. **Figma-Fix-Kandidat:** Style re-applizieren, UPPER neu setzen. |
-| Items / Shortcut | Frame zeigt px-xl/py-md/text-label + text-data-Meta | unverändert `px-md py-sm text-body` / `text-kbd` | User-Entscheid „items sind gleich"; 16px-Flucht stattdessen via Group `px-md`. |
+| `.Command/Group` palette | heading structure + px | nested `Separator[labeled]` instance with `px-xl` → label indent **24px** (Group px-md 8 + instance 16) ↔ heading styling `px-md` → indent **16px** | The instance nesting entered the file after the user gate (architecture dedup ok), but the instance's px-xl default shifted the label 8px against the approved C2 grid. **RESOLVED 2026-06-11:** instance padding in the Group member overridden to `space-md` (node 3645:1039) — label indent 16px, congruent with code + C2 frame, verified in example 3650:63. Consequence of the nesting: the `heading#3640:1` prop is inert in the palette member — group titles there run via the `label#3653:1` prop of the nested Separator instance. |
+| `.Command` palette | prompt divider | own `Separator` instance between input and list ↔ `border-b` on the input wrapper | Code ergonomics: the consumer writes `<CommandInput/><CommandList/>` without a mandatory separator; visually identical. |
+| `.Command` palette | footer divider | `Separator` instance after the list slot ↔ composition detail (story sets `<CommandSeparator alwaysRender/>`) | Not a component feature; deliberately left to the consumer. |
+| `.Command/Input` palette | caret radius 1px (raw) | no radius | Invisible at 2.5px width; `rounded-*` is dead in the DS, 1px has no corner step. |
+| `.Command/Input` palette | value+placeholder coexisting (mid-typing mock) | standard placeholder behaviour, real caret via `caret-primary` | The frame shows one state, not a ghost-text feature (plan decision). |
+| `.Command/Separator` labeled + `.Command/Group` heading | text style `Eyebrow` **detached** (textCase-UPPER override detaches the style) | `text-eyebrow uppercase` | Pre-existing pattern defect also on the existing heading; code binds to the format. **Figma fix candidate:** re-apply the style, set UPPER again. |
+| Items / Shortcut | frame shows px-xl/py-md/text-label + text-data meta | unchanged `px-md py-sm text-body` / `text-kbd` | User decision "items stay the same"; the 16px alignment comes via Group `px-md` instead. |
 
 ## Gate
 
-`nx test|typecheck|lint @agentport/ui` grün — **50 Tests** (Bestand 42 + 8 neue: Default-Regression,
-Palette-Surface, Context-Vererbung Input, Labeled-Rule-Heading, List py-md, Separator labeled/mx,
-Dialog-Pass-Through). Typo-Survival: `text-input` + `caret-primary` im Markup verifiziert.
+`nx test|typecheck|lint @agentport/ui` green — **50 tests** (existing 42 + 8 new: default regression,
+palette surface, context inheritance Input, labeled-rule heading, list py-md, separator labeled/mx,
+dialog pass-through). Typography survival: `text-input` + `caret-primary` verified in the markup.
 
-## Nachtrag (gleicher Tag, nach dem Run)
+## Addendum (same day, after the run)
 
-User-Refinements direkt im Code (Tabellen oben = Stand zur Run-Zeit, nicht umgeschrieben):
-`caret-primary` wieder entfernt (Standard-Caret), CommandDialog mittig zentriert
-(`top-1/2 -translate-y-1/2` statt `top-1/3`), Liste `max-h-96` statt `max-h-72`, Such-Icon
-`text-foreground` statt `opacity-50`. Außerdem repo-weiter Utility-Rename
-`text-<format>` → `text-format-<format>` (Kollision mit Tailwind-Farb-Utility `text-input`
-aus `--color-input`; s. tokens-reference §4) — betrifft alle Klassen-Nennungen oben.
+User refinements directly in the code (tables above = status at run time, not rewritten):
+`caret-primary` removed again (standard caret), CommandDialog centred vertically
+(`top-1/2 -translate-y-1/2` instead of `top-1/3`), list `max-h-96` instead of `max-h-72`, search icon
+`text-foreground` instead of `opacity-50`. Additionally a repo-wide utility rename
+`text-<format>` → `text-format-<format>` (collision with the Tailwind colour utility `text-input`
+from `--color-input`; see tokens-reference §4) — affects all class mentions above.
 
-## Storybook-Previews
+## Storybook previews
 
 - Palette: http://localhost:6006/?path=/story/ui-command--palette
 - Palette In Dialog (⌘K): http://localhost:6006/?path=/story/ui-command--palette-in-dialog

@@ -81,7 +81,7 @@ SHAPE_FILL. Code keeps **`bg-primary`** (the literal Figma-name utility). This i
 the binding *and* renders the exact colour Figma shows, because `--color-primary` IS defined in
 `tw-theme.css` (= `--ap-sys-primary` = signal/600), so Tailwind generates a live `bg-primary`.
 
-It sits against tokens-reference §6 ("bg-primary GIBT ES NICHT") + §1 (primary's documented
+It sits against tokens-reference §6 ("bg-primary DOES NOT EXIST") + §1 (primary's documented
 utilities are `text-/border-/ring-primary`). Two alternatives were rejected:
 - `bg-primary-fill` → deep/900 (#0d2531, near-black) = **wrong colour**, visual regression.
 - `bg-accent-ink` → also signal/600, SHAPE_FILL-scoped, DS-legal as a fill, identical colour —

@@ -1,42 +1,42 @@
 # Component-Sync — Kbd (Figma → Code, 2026-06-09)
 
-Set `.Kbd` `3217:308` (Page „Shadcn Components" `3126:2`) → `libs/ui/src/components/ui/kbd/kbd.tsx`.
+Set `.Kbd` `3217:308` (page "Shadcn Components" `3126:2`) → `libs/ui/src/components/ui/kbd/kbd.tsx`.
 
-## Delta (angewandt)
+## Delta (applied)
 
-**Variant-Add — neue Achse `emphasis` (high | low), default `high`.** Das Set trägt jetzt zwei
-Achsen: `content` (text | icon) × `emphasis` (high | low) = 4 Member. Im Code wird nur `emphasis`
-zur Prop (cva `kbdVariants`); `content` bleibt children-getrieben (Icon = svg-Child, Text = String).
+**Variant add — new axis `emphasis` (high | low), default `high`.** The set now carries two
+axes: `content` (text | icon) × `emphasis` (high | low) = 4 members. In the code only `emphasis`
+becomes a prop (cva `kbdVariants`); `content` stays children-driven (icon = svg child, text = string).
 
-| Member-Binding | Figma-Var | → Code-Utility |
+| Member binding | Figma var | → Code utility |
 |---|---|---|
-| Fill `emphasis=high` | `Inverse/inverse` | `bg-inverse` (Variant high) |
-| Text/Icon `emphasis=high` | `Inverse/inverse-foreground` | `text-inverse-foreground` (Variant high) |
-| Fill `emphasis=low` | `shadcn Default/muted` | `bg-muted` (Variant low — **neu**) |
-| Text/Icon `emphasis=low` | `shadcn Default/muted-foreground` | `text-muted-foreground` (Variant low — **neu**) |
+| Fill `emphasis=high` | `Inverse/inverse` | `bg-inverse` (variant high) |
+| Text/Icon `emphasis=high` | `Inverse/inverse-foreground` | `text-inverse-foreground` (variant high) |
+| Fill `emphasis=low` | `shadcn Default/muted` | `bg-muted` (variant low — **new**) |
+| Text/Icon `emphasis=low` | `shadcn Default/muted-foreground` | `text-muted-foreground` (variant low — **new**) |
 
-Code: `emphasis` Prop via cva, `defaultVariants: { emphasis: 'high' }` (= Figma `defaultVariant
-content=text, emphasis=high`). Icon-Farbe folgt der Text-Farbe (svg currentColor) — kein eigener Bind.
-Export `kbdVariants` ergänzt (Parität zu `buttonVariants`). Stories: `Emphasis`-Story (high vs low) +
-`argTypes.emphasis`. Spec: +2 Guards (default high = bg-inverse, low = bg-muted).
+Code: `emphasis` prop via cva, `defaultVariants: { emphasis: 'high' }` (= Figma `defaultVariant
+content=text, emphasis=high`). Icon colour follows the text colour (svg currentColor) — no separate binding.
+Export `kbdVariants` added (parity with `buttonVariants`). Stories: `Emphasis` story (high vs low) +
+`argTypes.emphasis`. Spec: +2 guards (default high = bg-inverse, low = bg-muted).
 
-## Unverändert (bound, matcht den Code 1:1 — kein Delta)
+## Unchanged (bound, matches the code 1:1 — no delta)
 
-- Radius `Radius/radius-sm` → `rounded-sm` · Gap `Space/space-xs` (4) → `gap-xs` · padX `Space/space-xs`
+- Radius `Radius/radius-sm` → `rounded-sm` · gap `Space/space-xs` (4) → `gap-xs` · padX `Space/space-xs`
   (4) → `px-xs` · padY none.
-- Textstyle „Kbd" (Geist Mono Medium, 11px) → `text-kbd`.
-- Geometrie: h 20 → `h-5` · minW 20 → `min-w-5` · `content=text` HUG → `w-fit` · `content=icon` FIXED 20.
-- Icon-Slot: Vector 9×9 im 12px-Slot → `[&_svg…]:size-3` (12px).
-- Tooltip-Kontext `in-data-[slot=tooltip-content]:` bleibt (kein Figma-Signal, v4-Idiom).
+- Text style "Kbd" (Geist Mono Medium, 11px) → `text-kbd`.
+- Geometry: h 20 → `h-5` · minW 20 → `min-w-5` · `content=text` HUG → `w-fit` · `content=icon` FIXED 20.
+- Icon slot: vector 9×9 in a 12px slot → `[&_svg…]:size-3` (12px).
+- Tooltip context `in-data-[slot=tooltip-content]:` stays (no Figma signal, v4 idiom).
 
 ## Deviations
 
-Keine. Alle gebundenen Variablen mappen 1:1 über den §6-Crosswalk; keine Roh-Werte, keine falschen
-Bindings. (`emphasis=low` ist exakt der alte Stock-shadcn-Look — `muted`/`muted-foreground` — den der
-ursprüngliche Port hatte, bevor er per früherem Sync auf die invertierte Keycap = `high` umgestellt wurde.)
+None. All bound variables map 1:1 via the §6 crosswalk; no raw values, no wrong
+bindings. (`emphasis=low` is exactly the old stock-shadcn look — `muted`/`muted-foreground` — that the
+original port had before an earlier sync switched it to the inverted keycap = `high`.)
 
 ## Gate
 
-`nx test|typecheck|lint @agentport/ui` grün — **18 Tests** (kbd.spec 5). `text-kbd` überlebt das
-gerenderte Markup. **Storybook-MCP (:6006) nicht gestartet** → kein `preview-stories`; visueller
-Gegencheck über Storybook offen (bei Bedarf `npm run storybook`, Story `UI/Kbd › Emphasis`).
+`nx test|typecheck|lint @agentport/ui` green — **18 tests** (kbd.spec 5). `text-kbd` survives the
+rendered markup. **Storybook MCP (:6006) not started** → no `preview-stories`; visual
+cross-check via Storybook still open (if needed `npm run storybook`, story `UI/Kbd › Emphasis`).

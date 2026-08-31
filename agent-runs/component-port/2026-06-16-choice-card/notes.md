@@ -77,14 +77,14 @@ invalidates sibling node IDs mid-`findAll` → resolve each target text by exact
 
 ## CHECKED-STATE TINT (user-decided 2026-06-16 — FINAL, fully token-bound)
 
-The checked members use the **two-cyan tint model** (user instruction "für fill accent verwenden und
-stroke auf primary, accent foreground auf title für checked"):
+The checked members use the **two-cyan tint model** (user instruction "use accent for the fill and
+primary for the stroke, accent foreground on the title for checked"):
 
-- **Card fill → `accent`** (`VariableID:3037:14`, cyan/50 #e9f6fc — token `use`: "Selektions-/Aktiv-
-  Tint-Fläche"). Bound, opacity 1.
+- **Card fill → `accent`** (`VariableID:3037:14`, cyan/50 #e9f6fc — token `use`: "selection/active
+  tint surface"). Bound, opacity 1.
 - **Card stroke → `primary`** (`VariableID:3037:8`). Bound, weight 1.
 - **Title (`{Label}`) → `accent-foreground`** (`VariableID:3038:2`, cyan/700 #0077a8 — token `use`:
-  "Lesbares Cyan für Text auf accent-Tint ≈5:1"). Bound. Description stays `muted-foreground`.
+  "readable cyan for text on accent tint ≈5:1"). Bound. Description stays `muted-foreground`.
 
 All three are now **proper variable bindings** that **survive instancing** (the usage-example
 instances picked up the change automatically) — because `accent`/`primary`/`accent-foreground` are

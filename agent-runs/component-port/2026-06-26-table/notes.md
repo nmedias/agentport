@@ -74,7 +74,7 @@ is part of the slotted content). Earlier all examples but Default were hand-buil
 component — fixed. (The clipping the user saw in the Default invoice was the pre-fix cell-bloat; the
 text-in-slot height fix resolved it — verified 0 clipped text nodes across the section.)
 
-**TableCell content model (2026-06-26 revision, user request "eine table cell nimmt auch components an"):**
+**TableCell content model (2026-06-26 revision, user request "a table cell also accepts components"):**
 the cell holds a `content` SLOT whose default child is the `{Cell}` text node bound to the
 `cell (children)` TEXT prop. Text cells → use the text prop (default). Component cells → blank the text +
 drop a component (Checkbox/Badge/Button) into the slot. Slot HUGs its content, aligned by the cell's

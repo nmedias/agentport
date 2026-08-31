@@ -80,7 +80,7 @@ Doc source: `ui.shadcn.com/docs/components/popover` → exactly ONE structurally
 | `rounded-lg` | `corner-lg` | DEAD rounded-*; corner-lg = exact radius/8 map + "Buttons/Fields/Toggles" rung (control-attached panel, distinct from Dialog's large corner-xl) |
 | `bg-popover` | `bg-dialog-fill` | `popover` token REMOVED 2026-06-18 → consolidated into `dialog` raised-surface |
 | `p-2.5` (10px) | `p-lg` (12) | no 10px rung; role = compact control-grade panel padding (nearest rung, matches corner-lg "lg" family) |
-| `text-sm` | `text-format-body` | DEAD text-*; body = app default fließtext (14, the panel's prose) |
+| `text-sm` | `text-format-body` | DEAD text-*; body = app default body text (14, the panel's prose) |
 | `text-popover-foreground` | `text-dialog-ink` | `popover-foreground` REMOVED → `dialog-ink` |
 | `shadow-md` | `shadow-elevation` | DEAD shadow scale; depth carries meaning (raised overlay) → DS elevation |
 | `ring-1 ring-foreground/10` | `border` | Nova raised-surface ring → DS family replaces with `border` (verbatim Dialog/Command) |

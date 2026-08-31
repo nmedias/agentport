@@ -5,93 +5,93 @@
 
 ## Decisions (user, T2.7)
 
-- **Trigger fill = `bg-input-fill`** (Input-Parität). Nova-Source ist `bg-transparent`; unsere Feld-Familie
-  (Input/Textarea/InputGroup) trägt opakes `input-fill` → der geschlossene Trigger liest identisch zu den
-  Feld-Geschwistern. Bewusste Abweichung von Nova.
-- **Scope = volles Composite** — Trigger-Set + Item-Set + offenes Content-Panel + permanente Usage-Examples
-  (Done-Test).
+- **Trigger fill = `bg-input-fill`** (Input parity). Nova source is `bg-transparent`; our field family
+  (Input/Textarea/InputGroup) carries opaque `input-fill` → the closed trigger reads identically to its
+  field siblings. Deliberate deviation from Nova.
+- **Scope = full composite** — trigger set + item set + open content panel + permanent usage examples
+  (done-test).
 
-## Dependency-Audit (composite §2 T2)
+## Dependency audit (composite §2 T2)
 
-`npm run ui:add -- select` schrieb **nur** `select.tsx` (flat) — **keine** Foreign-Component-Files (Nova-Select
-hängt nur an `radix-ui` + IconPlaceholder, keine eigenen Sub-Components). Audit sauber.
+`npm run ui:add -- select` wrote **only** `select.tsx` (flat) — **no** foreign component files (Nova Select
+depends only on `radix-ui` + IconPlaceholder, no sub-components of its own). Audit clean.
 
-- **`radix-ui` Umbrella-Import BEHALTEN** — `"radix-ui": "^1.5.0"` ist deklarierte Dep in `libs/ui/package.json`;
-  Dialog importiert identisch (`import { Dialog as DialogPrimitive } from 'radix-ui'`). Finding #3 (per-primitive)
-  galt nur dem Breadcrumb-`Slot`-Fall, nicht vollen Primitives. → Select: `import { Select as SelectPrimitive } from 'radix-ui'`.
-- **`lucide-react` NICHT installiert** → Icon-Swap auf `@remixicon/react` (vorhanden, `^4.9.0`) ist Pflicht (Finding #1):
-  - `ChevronDownIcon` → `RiArrowDownSLine` (Trigger + ScrollDownButton)
+- **KEEP the `radix-ui` umbrella import** — `"radix-ui": "^1.5.0"` is a declared dep in `libs/ui/package.json`;
+  Dialog imports identically (`import { Dialog as DialogPrimitive } from 'radix-ui'`). Finding #3 (per-primitive)
+  applied only to the Breadcrumb `Slot` case, not to full primitives. → Select: `import { Select as SelectPrimitive } from 'radix-ui'`.
+- **`lucide-react` NOT installed** → icon swap to `@remixicon/react` (present, `^4.9.0`) is mandatory (finding #1):
+  - `ChevronDownIcon` → `RiArrowDownSLine` (trigger + ScrollDownButton)
   - `ChevronUpIcon` → `RiArrowUpSLine` (ScrollUpButton)
   - `CheckIcon` → `RiCheckLine` (ItemIndicator)
-  - `*-s-line`-Chevrons: exakter Pfad aus `node_modules/@remixicon/react` verifizieren (MCP listet sie ggf. nicht).
+  - `*-s-line` chevrons: verify the exact path from `node_modules/@remixicon/react` (the MCP may not list them).
 
 ## Anatomy (parts, data-slot)
 
-| Part | data-slot | Rolle |
+| Part | data-slot | Role |
 |---|---|---|
-| Select | select | Radix Root, kein Styling |
-| SelectValue | select-value | Display-Wert (gestylt über Trigger-`*:data-[slot=select-value]`) |
-| **SelectTrigger** | select-trigger | geschlossener Control-Button; CVA-`size [sm,default]`; Chevron-down |
-| **SelectContent** | select-content | Dropdown-Panel (Portal); hält ScrollUp + Viewport(items) + ScrollDown |
-| **SelectItem** | select-item | Options-Zeile; focus-highlight + Check-Indikator rechts |
-| SelectGroup | select-group | `p-1` Gruppen-Container |
-| SelectLabel | select-label | Gruppen-Caption (muted) |
-| SelectSeparator | select-separator | full-bleed 1px-Linie |
-| SelectScrollUp/DownButton | select-scroll-* | Scroll-Affordance mit Chevron |
+| Select | select | Radix root, no styling |
+| SelectValue | select-value | display value (styled via trigger `*:data-[slot=select-value]`) |
+| **SelectTrigger** | select-trigger | closed control button; CVA `size [sm,default]`; chevron-down |
+| **SelectContent** | select-content | dropdown panel (portal); holds ScrollUp + viewport(items) + ScrollDown |
+| **SelectItem** | select-item | option row; focus highlight + check indicator on the right |
+| SelectGroup | select-group | `p-1` group container |
+| SelectLabel | select-label | group caption (muted) |
+| SelectSeparator | select-separator | full-bleed 1px line |
+| SelectScrollUp/DownButton | select-scroll-* | scroll affordance with chevron |
 
-## Composition-Plan / Exposure-Model (Figma)
+## Composition plan / exposure model (Figma)
 
-Select ist ein **Popover-Composite** (Dropdown portaled, nur „open" sichtbar). Figma kann nicht „öffnen" →
-offener Zustand als statische Composition (wie Command/Dialog). Vier Build-Layer (composites.md T4):
+Select is a **popover composite** (dropdown portaled, only visible when "open"). Figma cannot "open" →
+open state as a static composition (like Command/Dialog). Four build layers (composites.md T4):
 
-1. **Trigger-Set** — `size [sm, default]` × `state [default, focus, disabled, invalid]` (8 Member).
-   Input-Klon: nest/mirror `.Input` (Set `3177:302`, default-Member `3176:303`, focus `3176:305`, invalid `3176:311`).
-   Value = TEXT-Slot/Prop (Placeholder-Default greyed, Konvention `{Value}`); Chevron-down = fixer Vektor (RiArrowDownSLine, muted-ink).
-   Focus/Invalid-Glow = literal-Alpha DROP_SHADOW `showShadowBehindNode:false` **verbatim vom `.Input`-Focus** (Finding #30).
-2. **Item-Set** — `state [default, focus, disabled]` + Boolean `selected` (Check sichtbar). CommandItem-Muster
-   (mirror `CommandItem` Set `3559:2`: state default/selected/disabled/checked). Label = TEXT-Prop; optionaler
-   Leading-Icon-Slot; Check rechts (RiCheckLine, sichtbar bei `selected`).
-3. **Content-Panel-Composition** — Command-Surface (mirror `Command` composition `3642:2`): `dialog-fill` + `border`
-   + `shadow-elevation` (Effect Style) + `corner-lg`; **Slot** für Items (variabel viele) + optional Label/Separator.
-4. **Usage-Examples-Gruppe** (Done-Test) — gelabelte vertikale AL-Gruppe unter den Sets, reine Instanzen:
-   Basic · Groups (Label + nested `.Separator` `3676:1018`) · Scrollable · Invalid (nested `.Field`-Instanz).
+1. **Trigger set** — `size [sm, default]` × `state [default, focus, disabled, invalid]` (8 members).
+   Input clone: nest/mirror `.Input` (set `3177:302`, default member `3176:303`, focus `3176:305`, invalid `3176:311`).
+   Value = TEXT slot/prop (placeholder default greyed, convention `{Value}`); chevron-down = fixed vector (RiArrowDownSLine, muted-ink).
+   Focus/invalid glow = literal-alpha DROP_SHADOW `showShadowBehindNode:false` **verbatim from the `.Input` focus** (finding #30).
+2. **Item set** — `state [default, focus, disabled]` + boolean `selected` (check visible). CommandItem pattern
+   (mirror `CommandItem` set `3559:2`: state default/selected/disabled/checked). Label = TEXT prop; optional
+   leading-icon slot; check on the right (RiCheckLine, visible when `selected`).
+3. **Content panel composition** — Command surface (mirror `Command` composition `3642:2`): `dialog-fill` + `border`
+   + `shadow-elevation` (effect style) + `corner-lg`; **slot** for items (variable count) + optional label/separator.
+4. **Usage-examples group** (done-test) — labelled vertical AL group below the sets, pure instances:
+   Basic · Groups (label + nested `.Separator` `3676:1018`) · Scrollable · Invalid (nested `.Field` instance).
 
-Bind **jede** Property per Variable-**ID**. Section-Kinder = section-relative Koords. Section via `/figma-create-section`.
+Bind **every** property by variable **ID**. Section children = section-relative coords. Section via `/figma-create-section`.
 
-## T3 — Mapping-Table (stock radix-nova → DS), per part
+## T3 — Mapping table (stock radix-nova → DS), per part
 
-**Geometrie bleibt numerisch** (h-8/h-7, size-4, min-w-36); nur Farbe/Typo/Spacing/Radius binden. `dark:*` überall gedroppt.
+**Geometry stays numeric** (h-8/h-7, size-4, min-w-36); bind only colour/typo/spacing/radius. `dark:*` dropped everywhere.
 
 ### SelectTrigger
 | stock | DS | why |
 |---|---|---|
 | `gap-1.5` (6) | `gap-sm` | §6 spacing by px |
-| `rounded-lg` | `corner-lg` | Feld-Radius (= Input) |
-| `data-[size=sm]:rounded-[min(--radius-md,10)]` | `data-[size=sm]:corner-md` | min() kollabiert auf radius-md=6 |
+| `rounded-lg` | `corner-lg` | field radius (= Input) |
+| `data-[size=sm]:rounded-[min(--radius-md,10)]` | `data-[size=sm]:corner-md` | min() collapses to radius-md=6 |
 | `border border-input` | `border border-input-border` | §6 color-rename |
-| `bg-transparent` | **`bg-input-fill`** | **User-Decision** — Input-Parität (opake Feld-Fläche ink/25) |
-| `py-2` (8) | `py-md` | unter fixed h-8/h-7 nur Zentrierung |
-| `pr-2`/`pl-2.5` (8/10) | `px-md` (8/8) | symmetrisch = Input-Parität; pl-2.5(10)→md(8)-Snap (kein 10er-Rung) |
-| `text-sm` | `text-format-label` | Form-Control-Text (14/500, = Input-Value) |
-| `data-placeholder:text-muted-foreground` | `data-placeholder:text-input-ink-placeholder` | Placeholder-Rolle (= Input), NICHT muted-ink |
-| `focus-visible:border-ring` | (behalten) | ring-Token-Name unverändert |
-| `focus-visible:ring-3` / `aria-invalid:ring-3` | `ring-[3px]` | Sibling-Konvention (Finding #31) |
-| `focus-visible:ring-ring/50` | (behalten) | |
-| `aria-invalid:border-destructive` / `aria-invalid:ring-destructive/20` | (behalten) | destructive = ⚠-Platzhalter, gebunden aber nicht final |
-| `disabled:cursor-not-allowed disabled:opacity-50` | (behalten) | numerisch |
-| `data-[size=default]:h-8` / `data-[size=sm]:h-7` | (numerisch) | Control-Geometrie |
-| chevron `text-muted-foreground` `size-4` | `text-muted-ink` + `size-4` | Icon currentColor-Rolle |
-| `*:data-[slot=select-value]:…gap-1.5` | `gap-sm` | Value-Row-Gap |
+| `bg-transparent` | **`bg-input-fill`** | **User decision** — Input parity (opaque field surface ink/25) |
+| `py-2` (8) | `py-md` | under fixed h-8/h-7 only centring |
+| `pr-2`/`pl-2.5` (8/10) | `px-md` (8/8) | symmetric = Input parity; pl-2.5(10)→md(8) snap (no 10 rung) |
+| `text-sm` | `text-format-label` | form-control text (14/500, = Input value) |
+| `data-placeholder:text-muted-foreground` | `data-placeholder:text-input-ink-placeholder` | placeholder role (= Input), NOT muted-ink |
+| `focus-visible:border-ring` | (keep) | ring token name unchanged |
+| `focus-visible:ring-3` / `aria-invalid:ring-3` | `ring-[3px]` | sibling convention (finding #31) |
+| `focus-visible:ring-ring/50` | (keep) | |
+| `aria-invalid:border-destructive` / `aria-invalid:ring-destructive/20` | (keep) | destructive = ⚠ placeholder, bound but not final |
+| `disabled:cursor-not-allowed disabled:opacity-50` | (keep) | numeric |
+| `data-[size=default]:h-8` / `data-[size=sm]:h-7` | (numeric) | control geometry |
+| chevron `text-muted-foreground` `size-4` | `text-muted-ink` + `size-4` | icon currentColor role |
+| `*:data-[slot=select-value]:…gap-1.5` | `gap-sm` | value-row gap |
 
 ### SelectContent
 | stock | DS | why |
 |---|---|---|
-| `rounded-lg` | `corner-lg` | Panel-Radius (= Command default) |
-| `bg-popover` | `bg-dialog-fill` | popover→dialog konsolidiert (2026-06-18) |
-| `text-popover-foreground` | `text-dialog-ink` | dito |
-| `shadow-md` | `shadow-elevation` | erhabenes Menü → Tiefe trägt Bedeutung (= Command/Dialog) |
-| `ring-1 ring-foreground/10` | `border border-border` | Command-Idiom: ring durch border ersetzt (Raised-Surface-Tiefe) |
-| `min-w-36`, `z-50`, `overflow-*`, animations | (behalten) | Sizing/Plumbing; data-state-Animations sind stock |
+| `rounded-lg` | `corner-lg` | panel radius (= Command default) |
+| `bg-popover` | `bg-dialog-fill` | popover→dialog consolidated (2026-06-18) |
+| `text-popover-foreground` | `text-dialog-ink` | ditto |
+| `shadow-md` | `shadow-elevation` | raised menu → depth carries meaning (= Command/Dialog) |
+| `ring-1 ring-foreground/10` | `border border-border` | Command idiom: ring replaced by border (raised-surface depth) |
+| `min-w-36`, `z-50`, `overflow-*`, animations | (keep) | sizing/plumbing; data-state animations are stock |
 
 ### SelectItem
 | stock | DS | why |
@@ -99,125 +99,125 @@ Bind **jede** Property per Variable-**ID**. Section-Kinder = section-relative Ko
 | `gap-1.5` (6) | `gap-sm` | |
 | `rounded-md` | `corner-md` | |
 | `py-1` (4) | `py-xs` | |
-| `pr-8` (32) | `pr-3xl` | Check-Indikator-Clearance (absolute right) |
+| `pr-8` (32) | `pr-3xl` | check-indicator clearance (absolute right) |
 | `pl-1.5` (6) | `pl-sm` | |
-| `text-sm` | `text-format-label` | Menü-Text (= Trigger-Value) |
-| `focus:bg-accent` | `focus:bg-accent-fill` | Highlight = accent-Tint (= Command-Selektion) |
+| `text-sm` | `text-format-label` | menu text (= trigger value) |
+| `focus:bg-accent` | `focus:bg-accent-fill` | highlight = accent tint (= Command selection) |
 | `focus:text-accent-foreground` | `focus:text-accent-ink` | |
-| `data-disabled:opacity-50` + `pointer-events-none` | (behalten) | |
-| Check-span `absolute right-2` `size-4` | `right-md` + `size-4` | inset-Familie §3; Icon numerisch |
-| `not-data-[variant=destructive]:…` | **droppen** | Nova-SelectItem hat KEIN `variant`-Prop → Selektor inert |
+| `data-disabled:opacity-50` + `pointer-events-none` | (keep) | |
+| check span `absolute right-2` `size-4` | `right-md` + `size-4` | inset family §3; icon numeric |
+| `not-data-[variant=destructive]:…` | **drop** | Nova SelectItem has NO `variant` prop → selector inert |
 
 ### SelectLabel
 | stock | DS | why |
 |---|---|---|
 | `px-1.5` (6) / `py-1` (4) | `px-sm` / `py-xs` | |
-| `text-xs` (12) | `text-format-label` | **kein 12px-Sans** → Rolle-Snap auf 14 (Findings #20/#28); Hierarchie trägt die Farbe |
+| `text-xs` (12) | `text-format-label` | **no 12px sans** → role snap to 14 (findings #20/#28); hierarchy carried by colour |
 | `text-muted-foreground` | `text-muted-ink` | quiet caption |
 
 ### SelectSeparator
 | stock | DS | why |
 |---|---|---|
 | `-mx-1` (-4) / `my-1` (4) | `-mx-xs` / `my-xs` | |
-| `h-px` | (numerisch) | 1px-Linie |
-| `bg-border` | `bg-border` | Name behalten (nur Wert neu, wie Separator-Port) |
-| **Figma:** nest `.Separator` (horizontal, `3676:1018`) | | FieldSeparator-Idiom |
+| `h-px` | (numeric) | 1px line |
+| `bg-border` | `bg-border` | name kept (only the value is new, as in the Separator port) |
+| **Figma:** nest `.Separator` (horizontal, `3676:1018`) | | FieldSeparator idiom |
 
 ### SelectScrollUp/DownButton
 | stock | DS |
 |---|---|
 | `bg-popover` | `bg-dialog-fill` |
 | `py-1` (4) | `py-xs` |
-| chevron `size-4` | (numerisch, currentColor) |
+| chevron `size-4` | (numeric, currentColor) |
 
 ### SelectGroup
 | stock | DS |
 |---|---|
 | `p-1` (4) | `p-xs` |
-| `scroll-my-1` | (numerisch — keine benannte scroll-margin-Familie) |
+| `scroll-my-1` | (numeric — no named scroll-margin family) |
 
-## T2.5 — Example-Inventory (Stories)
+## T2.5 — Example inventory (stories)
 
-Quelle: `ui.shadcn.com/docs/components/select`. Strukturell-distinkt, dedupliziert:
+Source: `ui.shadcn.com/docs/components/select`. Structurally distinct, deduplicated:
 
-| Example | kept/skip | Komposition |
+| Example | kept/skip | Composition |
 |---|---|---|
-| Basic | kept (Default playground+play) | Trigger + Content + 1 Gruppe Items, Placeholder |
-| Groups | kept | SelectGroup + SelectLabel + SelectSeparator + Items |
-| Scrollable | kept | lange Liste (Timezones) → Scroll-Buttons erscheinen |
-| Disabled | kept (States) | disabled Item + disabled Trigger |
-| Sizes | kept (States) | sm + default Trigger |
-| Invalid / mit Field | kept | `.Field` + `FieldLabel` + `FieldError` um Trigger (`aria-invalid`) — Field ✓ portiert |
-| „Align item with trigger" (position) | dedupe → Default-Control | position popper/item-aligned = Prop, kein eigenes Struktur-Story |
-| Form (react-hook-form) | **skip + log** | un-ported Dep (react-hook-form) |
-| RTL | **skip + log** | Direктionality, kein DS-Struktur-Belang |
+| Basic | kept (Default playground+play) | trigger + content + 1 group of items, placeholder |
+| Groups | kept | SelectGroup + SelectLabel + SelectSeparator + items |
+| Scrollable | kept | long list (timezones) → scroll buttons appear |
+| Disabled | kept (States) | disabled item + disabled trigger |
+| Sizes | kept (States) | sm + default trigger |
+| Invalid / with Field | kept | `.Field` + `FieldLabel` + `FieldError` around the trigger (`aria-invalid`) — Field ✓ ported |
+| "Align item with trigger" (position) | dedupe → Default control | position popper/item-aligned = prop, no structural story of its own |
+| Form (react-hook-form) | **skip + log** | un-ported dep (react-hook-form) |
+| RTL | **skip + log** | directionality, no DS structural concern |
 
 ## T6 — Code status (DONE)
 
-- `select.tsx` re-clothed per T3 → `libs/ui/src/components/ui/select/` (folder + barrel `index.ts` + root-Barrel re-export).
+- `select.tsx` re-clothed per T3 → `libs/ui/src/components/ui/select/` (folder + barrel `index.ts` + root-barrel re-export).
 - Icons: lucide → `@remixicon/react` (RiArrowDownSLine/RiArrowUpSLine/RiCheckLine, verified present). `radix-ui` umbrella import KEPT (= Dialog convention; declared dep). Inert `not-data-[variant=destructive]` selector dropped (no `variant` prop in nova SelectItem).
-- docgen: `SelectProps` (Omit+re-declare value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) + `SelectTriggerProps` (`size` named-alias union + disabled). `/docgen-props`-konform.
-- Stories: Default (playground + play: open→select Blueberry→assert value→blur) · Groups · Scrollable · Disabled · WithField (Field-Komposition, invalid) · TriggerStates (size×state gallery, pseudo-focus). **Skip-log:** RTL (locale), Form/react-hook-form (un-ported dep).
+- docgen: `SelectProps` (Omit+re-declare value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) + `SelectTriggerProps` (`size` named-alias union + disabled). `/docgen-props` conformant.
+- Stories: Default (playground + play: open→select Blueberry→assert value→blur) · Groups · Scrollable · Disabled · WithField (Field composition, invalid) · TriggerStates (size×state gallery, pseudo-focus). **Skip-log:** RTL (locale), Form/react-hook-form (un-ported dep).
 - Spec: 6 jsdom tests (data-slot, combobox role, size default/sm, disabled, corner-lg + text-format-label survival). **No jsdom polyfill needed** — closed render only; the open-dropdown path runs in the Chromium storybook project.
 - **GATE GREEN** (2026-06-19): `typecheck` ✓ · `test` ✓ (236 total: select.spec 6 + select.stories 6 incl. play + axe) · `lint` ✓ (0 errors; 46 pre-existing warnings, none in select/*).
 - **Visual eyeball (shoot):** TriggerStates → input-fill + 3px focus ring-ring/50 + destructive invalid ring + sm<default height confirmed; WithField → real Field composition (label/desc/error + invalid ring). Open-dropdown visual = play-test render + token-parity with validated Command surface + Figma agent verify.
 
-## T4+T5 — Figma build (DONE, Background-Agent `figma-select-build`)
+## T4+T5 — Figma build (DONE, background agent `figma-select-build`)
 
 File `ejFKo4MNuvC9TSDKOCUvyq`, page Shadcn Components `3126:2`. **Section `Select` `4307:1997`**. `/figma-verify`
-CLEAN über alle 3 Sets + Composition + 4 Examples (0 text-as-icon, 0 clip, 0 overlap); controls-live ALL PASS;
-keine orphan slot-props. IDs vollständig im Katalog-Eintrag (`components-reference.md`).
+CLEAN across all 3 sets + composition + 4 examples (0 text-as-icon, 0 clip, 0 overlap); controls-live ALL PASS;
+no orphan slot props. IDs complete in the catalog entry (`components-reference.md`).
 
-- **Trigger-Set `4308:2029`** — `size [default, sm] × state [default, focus, disabled, invalid]` (8 Member).
-  value-TEXT-Prop `{Value}` + Chevron-Vektor. Focus-Glow = `.Input`-DROP_SHADOW VERBATIM (finding #30c);
-  invalid-Glow synthetisiert (`.Input`-invalid-Member `3176:311` trägt `effects:[]` → nichts zu kopieren — bestätigt #30c).
-- **Item-Set `4313:2046`** — `state [default, focus, disabled] × selected [false, true]` (6 Member). leadingIcon-SLOT
-  (default RiUserLine) + label-TEXT + Check-Vektor (visible↔selected). focus = accent-fill + accent-ink.
-- **Content-Composition `4314:1997`** — items-SLOT + `showScrollUp`/`showScrollDown`-Bools; Command-Surface
-  (dialog-fill + border + Elevation-Effect-Style + corner-lg).
-- **Usage-Examples `4315:2106`** — Basic/Groups/Scrollable/Invalid (Invalid nestet echte `.Field`-Instanz `3713:1017`).
-- Icons = Remix-Vektoren via `createNodeFromSvg` (RiArrowDownSLine/-UpSLine/RiCheckLine/RiUserLine, 24-viewBox-Pfad
-  aus dem React-Export gezogen — MCP listet die `*-s-line`-Chevrons nicht).
+- **Trigger set `4308:2029`** — `size [default, sm] × state [default, focus, disabled, invalid]` (8 members).
+  value TEXT prop `{Value}` + chevron vector. Focus glow = `.Input` DROP_SHADOW VERBATIM (finding #30c);
+  invalid glow synthesised (`.Input` invalid member `3176:311` carries `effects:[]` → nothing to copy — confirms #30c).
+- **Item set `4313:2046`** — `state [default, focus, disabled] × selected [false, true]` (6 members). leadingIcon SLOT
+  (default RiUserLine) + label TEXT + check vector (visible↔selected). focus = accent-fill + accent-ink.
+- **Content composition `4314:1997`** — items SLOT + `showScrollUp`/`showScrollDown` bools; Command surface
+  (dialog-fill + border + Elevation effect style + corner-lg).
+- **Usage examples `4315:2106`** — Basic/Groups/Scrollable/Invalid (Invalid nests a real `.Field` instance `3713:1017`).
+- Icons = Remix vectors via `createNodeFromSvg` (RiArrowDownSLine/-UpSLine/RiCheckLine/RiUserLine, 24-viewBox path
+  pulled from the React export — the MCP does not list the `*-s-line` chevrons).
 
-## Code↔Figma-Divergenzen (für künftigen `/component-sync` — NICHT als Token-Delta lesen)
+## Code↔Figma divergences (for a future `/component-sync` — do NOT read as a token delta)
 
-- **D1 — SelectItem-Check-Positionierung:** Figma = trailing Layout-Vektor bei `pr-md`(8)/`right-2`; Code = `absolute right-md`
-  + `pr-3xl`(32) Clearance (shadcn-Idiom). Visuell äquivalent, strukturell verschieden. **Kein Code-Edit** — Code ist
-  faithful zum shadcn-Idiom.
-- **SelectLabel** = Figma inline-Text in der Content-Slot (kein eigenes Set); Code = `SelectLabel`-Component.
-- **`size`-Achse** mappt aufs echte Code-Prop `SelectTrigger.size` (KEIN Fork).
-- **`selected`-Boolean** (Figma) = Radix `data-state=checked` (kein Code-Prop; reines Styling).
-- **Docs-Layout (Option 2, User):** `meta.component=Select` + `subcomponents:{SelectTrigger}` → Root-Props in der
-  Haupt-ArgsTable, `size` in der SelectTrigger-Sub-Tabelle. Playground behält den `size`-Control (Story-lokal).
+- **D1 — SelectItem check positioning:** Figma = trailing layout vector at `pr-md`(8)/`right-2`; code = `absolute right-md`
+  + `pr-3xl`(32) clearance (shadcn idiom). Visually equivalent, structurally different. **No code edit** — the code is
+  faithful to the shadcn idiom.
+- **SelectLabel** = Figma inline text in the content slot (no set of its own); code = `SelectLabel` component.
+- **`size` axis** maps to the real code prop `SelectTrigger.size` (NO fork).
+- **`selected` boolean** (Figma) = Radix `data-state=checked` (no code prop; pure styling).
+- **Docs layout (option 2, user):** `meta.component=Select` + `subcomponents:{SelectTrigger}` → root props in the
+  main ArgsTable, `size` in the SelectTrigger sub-table. The playground keeps the `size` control (story-local).
 
-## Fix-Round 2026-06-20 (User-Review)
+## Fix round 2026-06-20 (user review)
 
-Code (main, Commit `6867878`) + Figma (Background-Agent `figma-select-fix`) parallel. Findings → Handoff #59–61 (+#57)
-+ 4 geschärfte (#46/#54/#55/#60). Gate grün (236), figma-verify CLEAN über alle 5 berührten Knoten.
+Code (main, commit `6867878`) + Figma (background agent `figma-select-fix`) in parallel. Findings → handoff #59–61 (+#57)
++ 4 sharpened (#46/#54/#55/#60). Gate green (236), figma-verify CLEAN across all 5 touched nodes.
 
 **Code (main):**
-- **Ring focus-gated** — `aria-invalid:ring-[3px]` raus → invalid-resting = nur Border, Ring nur aus `focus-visible:`
-  (= Input/Checkbox/Switch/Radio). Visuell bestätigt (TriggerStates: Invalid = Border, Invalid+focus = Border+Ring).
-- **subcomponents** = alle exportierten Parts (volle Composite-API in den Docs, je Part eine Sub-ArgsTable).
-- **Invalid-Story** (war `WithField`) — Sibling-Muster. **docgen** `SelectContentProps` (position/align).
+- **Ring focus-gated** — `aria-invalid:ring-[3px]` removed → invalid-resting = border only, ring only from `focus-visible:`
+  (= Input/Checkbox/Switch/Radio). Visually confirmed (TriggerStates: Invalid = border, Invalid+focus = border+ring).
+- **subcomponents** = all exported parts (full composite API in the docs, one sub-ArgsTable per part).
+- **Invalid story** (was `WithField`) — sibling pattern. **docgen** `SelectContentProps` (position/align).
 
-**Figma (Agent, IDs):**
-- **FIX1** Trigger `focus-invalid`-Member je Größe → Set `4308:2029` jetzt 10 Member (default `4326:2363`, sm `4326:2367`);
-  invalid-Member-Ring gestrippt (border-only), focus-invalid = Border + destructive/20-Ring (mirror Input focus-invalid
-  `3692:1249`). **Code-treu** gebaut (ein Ring, kein zweiter Glow) — bewusste Abweichung vom Brief-Wortlaut „both rings".
-  Section auf w=1560 verbreitert (5-State-Raster überlief → finding #54-Breite).
-- **FIX2** Item `showIcon#4326:0` (BOOLEAN, def false; mirror CommandItem `showIcon#3559:5`); iconWrap-FRAME gated den
-  leadingIcon-SLOT (finding #8 — nie `visible` direkt am SLOT). Wrapper `4326:2317/2318/2319/2352/2353/2354`.
-- **FIX3** `SelectGroup` eigenes Set `4326:2371` (label `4326:8` + items-SLOT `4326:7`, p-xs).
-- **FIX4** Top-level `Select`-Composition `4326:2477` (anchored open-state: Trigger `4326:2478` + ABSOLUTE-Content
-  `4326:2482`, y=36 an Trigger-Bottom-Left; finding #59).
-- **FIX5** Example-Headlines auf Sibling-Kanon (Regular 13 muted-ink, war ExtraBold 18 black); Groups neu aus 2
-  SelectGroup-Instanzen + `.Separator` (Content `4326:2749`); neuer Open-Block `4327:2225`. Gruppe `4315:2106` Kinder:
-  [Open, Basic, Groups, Scrollable, Invalid]. Screenshot-Eyeball bestätigt (Headlines, focus-invalid-Distinktion, Anchor).
+**Figma (agent, IDs):**
+- **FIX1** Trigger `focus-invalid` member per size → set `4308:2029` now 10 members (default `4326:2363`, sm `4326:2367`);
+  invalid member ring stripped (border-only), focus-invalid = border + destructive/20 ring (mirror Input focus-invalid
+  `3692:1249`). Built **code-faithful** (one ring, no second glow) — deliberate deviation from the brief's wording "both rings".
+  Section widened to w=1560 (5-state grid overflowed → finding #54 width).
+- **FIX2** Item `showIcon#4326:0` (BOOLEAN, def false; mirror CommandItem `showIcon#3559:5`); iconWrap FRAME gates the
+  leadingIcon SLOT (finding #8 — never `visible` directly on the SLOT). Wrappers `4326:2317/2318/2319/2352/2353/2354`.
+- **FIX3** `SelectGroup` own set `4326:2371` (label `4326:8` + items SLOT `4326:7`, p-xs).
+- **FIX4** Top-level `Select` composition `4326:2477` (anchored open state: trigger `4326:2478` + ABSOLUTE content
+  `4326:2482`, y=36 at trigger bottom-left; finding #59).
+- **FIX5** Example headlines to the sibling canon (Regular 13 muted-ink, was ExtraBold 18 black); Groups rebuilt from 2
+  SelectGroup instances + `.Separator` (content `4326:2749`); new Open block `4327:2225`. Group `4315:2106` children:
+  [Open, Basic, Groups, Scrollable, Invalid]. Screenshot eyeball confirmed (headlines, focus-invalid distinction, anchor).
 
 ## Open items
 
-- `destructive` (invalid-Ring/Border) = ⚠-Platzhalter-Token — gebunden, nicht final (geteilt mit Input/Field/Checkbox…).
-- **Code↔Figma-Achsen-Lücke:** Figma hat jetzt `focus-invalid`-Trigger-Member + `showIcon`-Item-Bool; Code drückt beide
-  implizit aus (focus-gated Ring via CSS; `showIcon` = einfach Icon weglassen/setzen, kein Prop). Kein `/component-sync`
-  nötig — reines Figma-Modeling. SelectGroup-Set = Figma-Pendant zur bestehenden `SelectGroup`-Code-Component.
+- `destructive` (invalid ring/border) = ⚠ placeholder token — bound, not final (shared with Input/Field/Checkbox…).
+- **Code↔Figma axis gap:** Figma now has a `focus-invalid` trigger member + `showIcon` item bool; the code expresses both
+  implicitly (focus-gated ring via CSS; `showIcon` = simply omit/set the icon, no prop). No `/component-sync`
+  needed — pure Figma modelling. SelectGroup set = Figma counterpart of the existing `SelectGroup` code component.

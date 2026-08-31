@@ -56,9 +56,9 @@ Stock item class (dark: variants stripped):
 | `rounded-full` (ring) | `corner-full` | DS radius vocabulary = `corner-*`; all `rounded-*` are dead under the theme reset (§2/§6). |
 | `rounded-full` (inner dot) | `corner-full` | same — both circle radii. |
 | `border border-input` | `border border-input` | the form-control border token (`use`: "Form-Control-Border; Fokus → ring"). Same role as Input/Checkbox. |
-| `data-checked:bg-primary` | `data-checked:bg-primary` | `primary` `use`: "Brand-Akzent für Selektion … Als Fläche … wenn die Fläche selektiert bedeutet" — a checked radio fill = exactly that. |
+| `data-checked:bg-primary` | `data-checked:bg-primary` | `primary` `use`: "Brand accent for selection … As a surface … when the surface means selected" — a checked radio fill = exactly that. |
 | `data-checked:border-primary` | `data-checked:border-primary` | selection border = primary (pairs with the fill). |
-| `data-checked:text-primary-foreground` | `data-checked:text-primary-foreground` | `primary-foreground` `use`: "Text/Icon auf primary-Fläche" — sets the on-primary colour the dot inherits. |
+| `data-checked:text-primary-foreground` | `data-checked:text-primary-foreground` | `primary-foreground` `use`: "Text/icon on a primary surface" — sets the on-primary colour the dot inherits. |
 | inner dot `bg-primary-foreground` | `bg-primary-foreground` | the dot must read on the filled (primary) circle → the on-primary token, not `background`/`card`. Chosen by role over same-value `#ffffff` lookalikes (background/overlay/primary-foreground all = white; only primary-foreground means "mark on primary"). |
 | `focus-visible:border-ring` | `focus-visible:border-ring` | `ring` `use`: "Fokus-Indikator". |
 | `focus-visible:ring-ring/50` | `focus-visible:ring-ring/50` | DS focus-ring convention (50% ring), mirrors Input. |

@@ -88,9 +88,9 @@ white, `sectionSpill=[]`, build frame `4390:2364` 1558×2288 (unchanged).
 
 ## Catalog delta — applied to `components-reference.md` Popover `root:` block (this session)
 
-- `figma_synced` comment: + `A9-Anchor-Umbau 2026-06-24 (Figma-only)`.
-- `props`: dropped the obsolete caveat ("absolute Content-Offsets für Default-Button-Größe gerechnet …
-  Swap-Trigger bräuchte Offset-Anpassung") — A9 resolves exactly this.
+- `figma_synced` comment: + `A9 anchor rebuild 2026-06-24 (Figma-only)`.
+- `props`: dropped the obsolete caveat ("absolute content offsets calculated for the default button size …
+  a swapped trigger would need an offset adjustment") — A9 resolves exactly this.
 - `structure`: rewritten to the two-stage anchor (Panel Position tracking + Panel Content grow-away),
   incl. the constraint tables and the empirical "constraints govern both" rationale.
 - `note`: + Figma-model-fidelity (no code change) + the 06-24 verification numbers.

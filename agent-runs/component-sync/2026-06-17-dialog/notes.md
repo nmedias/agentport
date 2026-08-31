@@ -62,7 +62,7 @@ their values changed) → no class edit.
 ## Footer /50 note
 
 Figma binds the footer band to `muted-fill` at full paint opacity; the code keeps the
-`/50` opacity modifier (the original "getöntes nova-Band" intent — a code-level tint
+`/50` opacity modifier (the original "tinted nova band" intent — a code-level tint
 the Figma var name can't carry). Per "no opportunistic rewrites" the `/50` is preserved;
 only the token base `muted`→`muted-fill` is renamed. Spec asserts `bg-muted-fill/50`,
 confirming the target.

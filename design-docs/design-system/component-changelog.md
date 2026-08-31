@@ -22,8 +22,8 @@ components — Toggle had had no code counterpart since 2026-06-24). Page `Color
 colours) removed, frame `Colors` `4197:9989` relabelled to the variable / CSS names. Collection
 `reference`: 33 ramp variables `Color/os-{signal,still,deep}/*` → `Color/{signal,still,deep}/*`; grey ramp
 `Color/ink/*` → `Color/neutral/*`. Four `semantic` descriptions neutralised. Collection `showcase` (6 vars,
-0 bindings) deleted. Command section: separator labels "Springe zu / Suche / Führe aus" → "Jump to /
-Search / Run" (= stories).
+0 bindings) deleted. Command section: separator labels "Springe zu / Suche / Führe aus" (German for
+"Jump to / Search / Run") → "Jump to / Search / Run" (= stories).
 
 **Descriptions audit.** One English role sentence per token across Figma variable / style descriptions,
 `tokens-reference.md` and the Storybook foundations (52 `semantic` + 15 `semantic-dimension` + 14 text

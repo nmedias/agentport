@@ -1,66 +1,66 @@
-# Token-Analyse — Kategorie Effekte (Schatten / Glow)
+# Token analysis — Category Effects (shadow / glow)
 
-Screen: Referenz-Screen „Quiet", node `1099:9710` (Figma „Agentport DS", fileKey
-`ejFKo4MNuvC9TSDKOCUvyq`). Schwester zu `token-analysis-color/-radius/-spacing/-typography.md`.
-Ziel: keine rohen Effekt-Werte mehr — Schatten/Glow hängen an **Effect Styles**, deren Teile
-über Variablen tokenisiert sind.
+Screen: reference screen "Quiet", node `1099:9710` (Figma "Agentport DS", fileKey
+`ejFKo4MNuvC9TSDKOCUvyq`). Sibling of `token-analysis-color/-radius/-spacing/-typography.md`.
+Goal: no more raw effect values — shadows/glow hang off **effect styles** whose parts
+are tokenized via variables.
 
-> **Status:** Entschieden (**A-lean · B-token · glow/elevation**), gebaut + am Screen angewandt.
-> Kategorie komplett.
+> **Status:** Decided (**A-lean · B-token · glow/elevation**), built + applied to the screen.
+> Category complete.
 >
-> **Update 2026-06-11 — erster Code-Konsument für Glow:** Die Command-palette-Variante (libs/ui)
-> nutzt `shadow-glow` auf der Prompt-Caret-Bar — erster `--ap-sys-shadow-glow`-Konsument im Code
-> (Figma-Pendant: Effect Style `Glow` auf `palette-caret` im `.Command/Input`-palette-Member 3638:8).
-> `shadow-elevation` war bereits seit dem Command-Erstport am Command-Root im Einsatz.
+> **Update 2026-06-11 — first code consumer for glow:** the Command palette variant (libs/ui)
+> uses `shadow-glow` on the prompt caret bar — the first `--ap-sys-shadow-glow` consumer in code
+> (Figma counterpart: effect style `Glow` on `palette-caret` in the `.Command/Input` palette member 3638:8).
+> `shadow-elevation` had already been in use on the Command root since the initial Command port.
 
-## Befund (Screen-Scan, read-only)
+## Findings (screen scan, read-only)
 
-Nur **2 Effekte** (beide Drop-Shadows; keine Blurs; keine vorhandenen Effect Styles):
+Only **2 effects** (both drop shadows; no blurs; no existing effect styles):
 
-| Effekt | Werte | auf (Nodes) | Bedeutung |
+| Effect | Values | on (nodes) | Meaning |
 |---|---|---|---|
-| **Cyan-Glow** | `0/0 · blur 4 · spread 0 · rgba(0,159,227,.5)` ×4 | palette-caret ×2, cmd-blau-tick, blau-tick | Leuchten an den Cyan-Marken |
-| **Palette-Elevation** | `0/14 · blur 36 · spread −6 · rgba(26,34,48,.18)` ×2 | palette-panel ×2 | Schlagschatten der Command-Palette |
+| **Cyan glow** | `0/0 · blur 4 · spread 0 · rgba(0,159,227,.5)` ×4 | palette-caret ×2, cmd-blau-tick, blau-tick | Glow on the cyan marks |
+| **Palette elevation** | `0/14 · blur 36 · spread −6 · rgba(26,34,48,.18)` ×2 | palette-panel ×2 | Drop shadow of the command palette |
 
-**Farb-Bezug:** Glow = `cyan/500` @ 50% · Elevation = `neutral/900` @ 18%.
+**Color reference:** glow = `cyan/500` @ 50% · elevation = `neutral/900` @ 18%.
 
-## Architektur-Entscheidungen
+## Architecture decisions
 
-- **Effekte sind kein Variable-Typ** (ein Schatten ist immer Composite) → Anwendungs-Ebene ist
-  zwingend ein **Effect Style** (analog Text Style). Variablen tragen nur die *Teile*.
-- **A-lean** — `reference-effect` (die Teile) + 2 Effect Styles, die sie binden. Kein semantic-Tier
-  (bei 2 Effekten Overkill).
-- **B-token** — Schatten-Farbe als **Alpha-Color-Token** (Color-Binding ersetzt die ganze RGBA;
-  `cyan/500` ist opak, also eigene Tokens mit Alpha). Liegen in `reference-effect`. *Limitation:*
-  kein Live-Alias auf `cyan/500`/`neutral/900` möglich (Alpha) → RGB-Werte gespiegelt, nicht verlinkt.
+- **Effects are not a variable type** (a shadow is always a composite) → the application level is
+  necessarily an **effect style** (analogous to a text style). Variables carry only the *parts*.
+- **A-lean** — `reference-effect` (the parts) + 2 effect styles that bind them. No semantic tier
+  (overkill for 2 effects).
+- **B-token** — shadow color as an **alpha color token** (color binding replaces the whole RGBA;
+  `cyan/500` is opaque, hence separate tokens with alpha). They live in `reference-effect`. *Limitation:*
+  no live alias to `cyan/500`/`neutral/900` possible (alpha) → RGB values mirrored, not linked.
 - **Naming:** `glow` / `elevation`.
 
-## Umsetzungsstand (Figma)
+## Implementation status (Figma)
 
-### `reference-effect` — `VariableCollectionId:3088:2`, Mode `value` (`3088:0`)
+### `reference-effect` — `VariableCollectionId:3088:2`, mode `value` (`3088:0`)
 
-> **Update 2026-06-11 — reference-Konsolidierung:** `reference-effect` ist aufgelöst — die 10
-> Primitives leben jetzt in der **einen** `reference`-Collection als Gruppe **`Effect/*`**
-> (`Effect/glow/…`, `Effect/elevation/…`; Scopes unverändert EFFECT_COLOR/EFFECT_FLOAT). Neue
-> Variable-IDs (`3623:30…39`); beide Effect Styles (Glow, Elevation) auf die neuen Vars umgebunden.
+> **Update 2026-06-11 — reference consolidation:** `reference-effect` is dissolved — the 10
+> primitives now live in the **single** `reference` collection as group **`Effect/*`**
+> (`Effect/glow/…`, `Effect/elevation/…`; scopes unchanged EFFECT_COLOR/EFFECT_FLOAT). New
+> variable IDs (`3623:30…39`); both effect styles (Glow, Elevation) rebound to the new vars.
 
-10 Variablen, gruppiert nach Effekt; Scopes `EFFECT_COLOR` / `EFFECT_FLOAT`:
+10 variables, grouped by effect; scopes `EFFECT_COLOR` / `EFFECT_FLOAT`:
 - `glow/` — `color` rgba(0,159,227,.5) · `blur 4` · `spread 0` · `x 0` · `y 0`
 - `elevation/` — `color` rgba(26,34,48,.18) · `blur 36` · `spread −6` · `x 0` · `y 14`
 
-### Effect Styles (Anwendungs-Ebene)
-- **`Glow`** — DropShadow, alle 5 Teile (`color/radius/spread/offsetX/offsetY`) an `glow/*` gebunden.
-- **`Elevation`** — DropShadow, alle 5 Teile an `elevation/*` gebunden.
+### Effect styles (application level)
+- **`Glow`** — DropShadow, all 5 parts (`color/radius/spread/offsetX/offsetY`) bound to `glow/*`.
+- **`Elevation`** — DropShadow, all 5 parts bound to `elevation/*`.
 
-**Screen-Anwendung** (`1099:9710`): **fertig** — `Glow` auf 4 Nodes, `Elevation` auf 2 Nodes
-(rohe Effekte ersetzt), 0 Fehler, Screenshot visuell unverändert.
+**Screen application** (`1099:9710`): **done** — `Glow` on 4 nodes, `Elevation` on 2 nodes
+(raw effects replaced), 0 errors, screenshot visually unchanged.
 
-## Entscheidungs-Log
+## Decision log
 
-| Schritt | Entscheidung | Ergebnis in Figma |
+| Step | Decision | Result in Figma |
 |---|---|---|
-| Tiefe | **A-lean** | `reference-effect` (Teile) + 2 Effect Styles, kein semantic-Tier |
-| Schatten-Farbe | **B-token** (Alpha-Tokens) | `glow/color`, `elevation/color` als COLOR mit Alpha |
-| Naming | `glow` / `elevation` | 2 Effect Styles |
-| Bauen | reference-effect + Styles | 10 Vars, 2 Styles, je 5 Teile gebunden |
-| Screen-Anwendung | Styles zuweisen | Glow ×4, Elevation ×2, 0 Fehler; visuell unverändert |
+| Depth | **A-lean** | `reference-effect` (parts) + 2 effect styles, no semantic tier |
+| Shadow color | **B-token** (alpha tokens) | `glow/color`, `elevation/color` as COLOR with alpha |
+| Naming | `glow` / `elevation` | 2 effect styles |
+| Build | reference-effect + styles | 10 vars, 2 styles, 5 parts bound each |
+| Screen application | assign styles | Glow ×4, Elevation ×2, 0 errors; visually unchanged |

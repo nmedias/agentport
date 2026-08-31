@@ -254,7 +254,7 @@ function PaletteDialogDemo() {
         open={open}
         onOpenChange={setOpen}
         title="Agentport Command Palette"
-        description="Befehl, Sprung oder Suche eingeben…"
+        description="Type a command, jump or search…"
         className="sm:max-w-[720px]"
       >
         <CommandInput placeholder="type a command, jump or search" />
@@ -299,7 +299,7 @@ export const Palette: Story = {
                   open={open}
                   onOpenChange={setOpen}
                   title="Agentport Command Palette"
-                  description="Befehl, Sprung oder Suche eingeben…"
+                  description="Type a command, jump or search…"
                   className="sm:max-w-[720px]"
                 >
                   <CommandInput placeholder="type a command, jump or search" />
@@ -376,7 +376,7 @@ function PaletteFlatDialogDemo() {
         open={open}
         onOpenChange={setOpen}
         title="Agentport Command Palette"
-        description="Befehl, Sprung oder Suche eingeben…"
+        description="Type a command, jump or search…"
         className="sm:max-w-[720px]"
         // Flat = STATIC list: cmdk would otherwise re-sort items by match score on typing/clearing,
         // but the labeled separators have no item scope and stay fixed → items drift across them.
