@@ -35,7 +35,7 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   > **Update 2026-06-17 (Schritt 2):** Semantic-Rework in Code abgebildet — neues
   > **`-fill`/`-ink`/`-border`-System** (`background`→`surface`, `foreground`→`ink`, alle
   > `-foreground`→`-ink`; neu `primary-fill`/`accent-border`/`input-fill-high`). Vollständige
-  > Token→Rampe-Crosswalk + Alt→Neu-Migration in `design-docs/design-system/tokens-reference.md` §1.
+  > Token→Rampe-Crosswalk in `design-docs/design-system/tokens-reference.md` §1; Alt→Neu-Migration in `design-docs/design-system/token-changelog.md`.
   > Die Screen-Tabellen unten bleiben der alte Ableitungsstand (nicht nachgezogen).
 - **Collection `semantic`** · Mode `light` · **44 Variablen** (Stand 2026-06-18):
   - Voll auf dem `-fill`/`-ink`/`-border`-System (2026-06-17). Die erhabene Raised-Surface-Fläche heißt

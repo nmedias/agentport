@@ -53,7 +53,8 @@ libs/ui/            @agentport/ui — shadcn primitives + DS token layer (global
   src/styles/                 tokens.css (Figma export) + tw-theme / tw-utilities / tw-variants
 agent-runs/         component-port / component-sync run notes (one dated folder per run)
 design-docs/        Machine-readable DS data: design-system/tokens-reference.md,
-                    design-system/components-reference.md, token-analysis-*.md
+                    design-system/components-reference.md, token-analysis-*.md;
+                    design-system/token-changelog.md = token history (human-readable, not a data source)
 tools/              shoot-stories.mjs — Playwright screenshots of a running Storybook (visual verify)
 ```
 
@@ -68,8 +69,9 @@ tools/              shoot-stories.mjs — Playwright screenshots of a running St
 - `handoff-component-port-open.md` — **resume doc** for the port strand: open items + the
   consolidated skill findings from the port runs. Component locations/status live in the
   components-reference catalog below.
-- `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk; data source
-  for `/shadcn-component-port` + `/component-sync`.
+- `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk (current
+  state only); data source for `/shadcn-component-port` + `/component-sync`. Renames, reworks and old
+  values live in `token-changelog.md` next to it — never in the reference.
 - `design-docs/design-system/components-reference.md` — the machine-readable **component catalog**:
   which components are ported + their status, and where each lives in Figma (set/node IDs) and code
   (folder/exports/barrel). Read first to locate an existing component before a port/sync.

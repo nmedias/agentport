@@ -21,7 +21,8 @@ libs/ui/                     @agentport/ui — the library
 agent-runs/component-port/   run notes per first-time port (date-component)
 agent-runs/component-sync/   run notes per Figma → code reconciliation
 design-docs/            design-system/tokens-reference.md (token crosswalk), design-system/components-reference.md
-                             (component catalog with Figma node IDs), token-analysis-*.md (token system derivation)
+                             (component catalog with Figma node IDs), design-system/token-changelog.md (token
+                             history), token-analysis-*.md (token system derivation)
 .claude/skills/              the pipeline skills (see below)
 tools/shoot-stories.mjs      Playwright screenshots of a running Storybook, for visual checks
 ```
