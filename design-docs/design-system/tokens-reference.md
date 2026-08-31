@@ -1,9 +1,9 @@
 # Agentport DS — Token / Format Reference (machine-readable)
 
-One data source for component work (Figma build + code wiring). Prose = rules / architecture;
-**YAML = token data** (crosswalk Figma → CSS → utility → value + `use` / `avoid` semantics).
-This file describes the **current** state only — how the tokens got here (renames, reworks, dropped
-tokens, old values) lives in [`token-changelog.md`](token-changelog.md).
+One data source for component work (Figma build + code wiring): the crosswalk Figma → CSS → utility →
+value + `use` / `avoid` semantics, plus the rules around it. **Everything an implementer needs is in
+the YAML blocks** — prose is a one-line intro per section. Current state only; how the tokens got
+here (renames, reworks, dropped tokens, old values) lives in [`token-changelog.md`](token-changelog.md).
 
 Sources: `token-analysis-{color,radius,spacing,typography,effects}.md`, `libs/ui/src/styles/`
 (`tokens.css` + Tailwind config `tw-theme.css` / `tw-utilities.css` / `tw-variants.css`, entry
@@ -18,11 +18,15 @@ utilities, `token-analysis-*` for semantics.
   names — roles are phrased semantically (components change, roles don't).
 - **Descriptions are unambiguous.** Group words (`primary`, `secondary`, `accent`, `brand`, `muted`,
   `inverse`) are never used as adjectives in another token's description — only as explicit
-  references ("use accent-fill"). `-fill` / `-ink` always describe a text-on-surface pair; standalone
-  colours (`ink`, `primary`, `muted`) have no surface partner and are shape/text only.
-- **`use` is the canonical sentence** — the same text sits on the Figma variable description and in
-  the Storybook foundations (`Colors.tsx`, `SpacingRadius.tsx`, `Typography.tsx`, `Effects.tsx`).
-  Change it here, then push to both.
+  references ("use accent-fill").
+- **Naming = role suffix.** Surface token = bare name or `-fill`; `-ink` = text / icon on exactly one
+  `-fill`; `-border` = edge of that area. Standalone colours (`ink`, `primary`, `muted`, `brand-ink`)
+  have no surface partner: scope `SHAPE_FILL` + text, **no** `FRAME_FILL` — `bg-ink` / `bg-primary` /
+  `bg-muted` are valid for shape / marker fills only, never as a container surface. Their `use`
+  sentence repeats this as a ¹ footnote because the sentence is pushed to Figma and Storybook.
+- **`use` is the canonical sentence** — the same text sits on the Figma variable / style description
+  and in the Storybook foundations (`Colors.tsx`, `SpacingRadius.tsx`, `Typography.tsx`,
+  `Effects.tsx`). Change it here, then push to both.
 - **`note`** = a present-day remark an implementer needs (Figma representability, scope, composition) —
   never history. Old names / values belong in the changelog.
 - **`status: placeholder`** = stock shadcn default, not yet designed → never treat as final.
@@ -39,25 +43,23 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 
 ## Architecture
 
-```
-Figma "Agentport DS" (fileKey ejFKo4MNuvC9TSDKOCUvyq)
-  reference = primitives, ONE collection with groups Color/ Dimension/ Font/ Effect (scopes: []
-              alias-only; exception Effect/* = EFFECT_* scopes, bound directly by the Effect Styles)
-  semantic* = semantics (alias → primitive); four collections: semantic (colour), semantic-dimension
-              (space + corner), semantic-typo (14 formats × 5 parts), plus reference
-  CSS naming: primitives = --ap-<figma-path-with-dashes> (Color/signal/600 → --ap-color-signal-600,
-              Font/family/sans → --ap-font-family-sans). Semantics = --ap-sys-<token-leaf> —
-              Figma groups are organisational only (Dialog/dialog-fill → --ap-sys-dialog-fill,
-              Input/input-ink-placeholder → --ap-sys-input-ink-placeholder; colour groups: Base/
-              Primary/ Secondary/ Muted/ Accent/ Brand/ Destructive/ Cards/ Focus/ Border/ Sidebar/
-              Charts/ Dialog/ Scrim/ Input/ Inverse/).
-              semantic-typo: organisational group on top, token = format/part
-              (Heading/heading-sm/family → --ap-sys-heading-sm-family; leading is called line-height).
-              Shadows: --ap-sys-shadow-glow / -elevation — sys tier exists in CSS only (no Figma
-              counterpart; the Effect Styles bind the Effect/* parts directly). Figma has no prefix.
-        │ Export → libs/ui/src/styles/tokens.css   (:root: PRIMITIVES, then SEMANTICS via var())
-        │ Bridge → libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) +
-        │          tw-variants.css (@custom-variant) — entry / seam: globals.css (imports all)
+```yaml
+figma_file: ejFKo4MNuvC9TSDKOCUvyq   # "Agentport DS"
+collections:
+  reference:          { role: primitives, groups: [Color, Dimension, Font, Effect], scopes: "[] (alias-only) — exception Effect/*: EFFECT_* scopes, bound directly by the Effect Styles (§5)" }
+  semantic:           { role: colour semantics, alias_to: reference, groups: [Base, Primary, Secondary, Muted, Accent, Brand, Destructive, Cards, Focus, Border, Sidebar, Charts, Dialog, Scrim, Input, Inverse] }
+  semantic-dimension: { role: "space + corner", alias_to: reference }
+  semantic-typo:      { role: "14 formats × 5 parts (70 vars)", alias_to: reference, path: "<OrgGroup>/<format>/<part>" }
+css_naming:
+  figma_prefix: none
+  primitive: "--ap-<figma-path-with-dashes>"    # Color/signal/600 → --ap-color-signal-600 · Font/family/sans → --ap-font-family-sans
+  semantic:  "--ap-sys-<leaf>"                  # Figma groups are organisational only: Dialog/dialog-fill → --ap-sys-dialog-fill · Input/input-ink-placeholder → --ap-sys-input-ink-placeholder
+  typo:      "--ap-sys-<format>-<part>"         # Heading/heading-sm/family → --ap-sys-heading-sm-family; the part "leading" is called line-height
+  shadow:    "--ap-sys-shadow-<glow|elevation>" # CSS only, no Figma counterpart (§5)
+pipeline:
+  export: "libs/ui/src/styles/tokens.css"       # :root — PRIMITIVES, then SEMANTICS via var()
+  bridge: "libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) + tw-variants.css (@custom-variant)"
+  entry:  "libs/ui/src/styles/globals.css"      # imports all — the single seam
 ```
 
 ---
@@ -65,34 +67,24 @@ Figma "Agentport DS" (fileKey ejFKo4MNuvC9TSDKOCUvyq)
 ## 1 · Colour
 
 Primitives (internal; Figma group `Color/`, CSS = `--ap-color-…` — the YAML uses the short paths).
-Seven OKLCH ramps: `signal / still / deep` = the three brand-blue ramps; `neutral` = de-tinted greys
-(blue cast removed) incl. the extra steps `25` + `75`; `success / warning / error` = status family.
-The primitive ramp `neutral` and the semantic suffix `-ink` (text role) are unrelated.
 
 ```yaml
 base/white: "#ffffff"   # --ap-color-base-white
+# brand-blue ramps — signal / still / deep
 signal: { 50: "#c4feff", 100: "#a4e5ff", 200: "#7cceff", 300: "#51b6f3", 400: "#009fe3", 500: "#0081d2", 600: "#0063bb", 700: "#00459c", 800: "#002779", 900: "#000854", 950: "#010034" }   # brand = signal/400 #009FE3; AA text on white from 600 (#0063BB ≥ 4.5:1)
 still:  { 50: "#d8fbff", 100: "#bde4fd", 200: "#9fcdeb", 300: "#80b7d9", 400: "#61a1c8", 500: "#3a8cba", 600: "#0077a8", 700: "#005685", 800: "#003761", 900: "#00193d", 950: "#00001e" }
 deep:   { 50: "#eaf8ff", 100: "#cfdde6", 200: "#b2c4cf", 300: "#97abb7", 400: "#7c93a0", 500: "#617c8b", 600: "#476575", 700: "#314f5e", 800: "#1e3947", 900: "#0d2531", 950: "#00121c" }
+# greys — de-tinted (blue cast removed), extra steps 25 + 75; unrelated to the semantic text suffix -ink
 neutral:       { 25: "#f9fcfd", 50: "#f3f5fa", 75: "#e4e6eb", 100: "#d5d8dd", 200: "#b8bbc0", 300: "#9b9fa5", 400: "#7f848b", 500: "#656971", 600: "#4b5059", 700: "#343840", 800: "#1e2229", 900: "#0d1016", 950: "#020306" }   # neutral/800 = #1E2229 (brand text)
+# status family — semantic tokens exist for error only (destructive); success / warning are ramps only (charts), semantic status tokens tbd
 success:   { 50: "#defeec", 100: "#c6ead6", 200: "#abd7bf", 300: "#91c4a8", 400: "#76b192", 500: "#57a07a", 600: "#298058", 700: "#005f3a", 800: "#00401f", 900: "#002207", 950: "#000700" }
 warning:   { 50: "#fff0c8", 100: "#fbd9ac", 200: "#eac18a", 300: "#d9a967", 400: "#c8923f", 500: "#af7000", 600: "#944f00", 700: "#753100", 800: "#541500", 900: "#340000", 950: "#160000" }
 error:     { 50: "#ffe3d9", 100: "#ffc6bb", 200: "#fca69a", 300: "#e98779", 400: "#d66859", 500: "#c54235", 600: "#b01207", 700: "#8e0000", 800: "#6a0000", 900: "#440000", 950: "#220000" }
 opacity:   { 10: "10% — Figma value 10 (opacity variables use the 0–100 scale), CSS --ap-color-opacity-10: 10%" }
 ```
 
-> **Effect colours** `glow` / `elevation` are bound to the ramps in CSS: `glow → signal/400 @ 50%`,
-> `elevation → neutral/900 @ 18%` (via `color-mix`). **Not representable 1:1 in Figma:** an effect
-> colour there is a raw RGBA in the `Effect/*` primitive — a colour binding replaces the whole RGBA,
-> a live alias onto a ramp is impossible. Figma's `Effect/*` therefore hold raw values on purpose
-> (#0098da / #1a2230); **code is the source** for the effect colours, the divergence is accepted.
-
-**Naming system:** surface token = bare name or `-fill`, text / icon = `-ink`, edges = `-border`.
-Utilities from `--color-{name}`: `bg-{name}`, `text-{name}`, `border-{name}`, `ring-{name}` (the
-border utility doubles up: `border-border`, `border-accent-border`, `border-input-border`). The
-utility names diverge from stock shadcn — translate per component via §6.
-
-Values = light mode.
+Semantics (Figma collection `semantic`; utilities derive from `--color-{name}`: `bg-` / `text-` /
+`border-` / `ring-{name}` — the `utilities` column lists the ones in use).
 
 ```yaml
 # Core surface + ink (Figma: Base/ · Cards/ · Muted/)
@@ -122,7 +114,7 @@ Values = light mode.
 - { token: destructive,     css_var: --ap-sys-destructive,     primitive: error/600, value: "#b01207", utilities: [bg-destructive, text-destructive, border-destructive, ring-destructive], use: "Colour of irreversible actions and errors — delete buttons, invalid-field borders, error text, its focus ring. One token for fill, text and stroke. Not for warnings (no token yet). Pairs with destructive-ink when used as a surface.", note: "Scope includes STROKE_COLOR → also ring-destructive (focus)." }
 - { token: destructive-ink, css_var: --ap-sys-destructive-ink, primitive: error/50,  value: "#ffe3d9", utilities: [text-destructive-ink, border-destructive-ink], use: "Text / icon / edge on a destructive surface only." }
 
-# Ring + borders (Figma: Focus/ · Border/)
+# Ring + borders (Figma: Focus/ · Border/) — line ladder ascending: border < border-emphasis < border-strong
 - { token: ring,            css_var: --ap-sys-ring,            primitive: neutral/800, value: "#1e2229", utilities: [ring-ring, outline-ring],   use: "Keyboard-focus indicator on light surfaces. Not a border and not a selection edge (use accent-border)." }
 - { token: border,          css_var: --ap-sys-border,          primitive: neutral/75,  value: "#e4e6eb", utilities: [border-border],              use: "Default edge — dividers, card and field outlines on light surfaces. Start here; step up only when a line must read stronger." }
 - { token: border-emphasis, css_var: --ap-sys-border-emphasis, primitive: neutral/200, value: "#b8bbc0", utilities: [border-border-emphasis],     use: "Second step of the line ladder — table header rules, group separators that must stand out from border." }
@@ -167,20 +159,11 @@ Values = light mode.
 - { token: inverse-container-hover, css_var: --ap-sys-inverse-container-hover, primitive: "deep/900 @70%", value: "#0d2531b2", utilities: [bg-inverse-container-hover], use: "Hovered / active inner panel on inverse-fill — deep/900 at 70 %.", note: "Raw RGBA in Figma; color-mix in CSS." }
 ```
 
-**Line ladder (ascending):** `border` (neutral/75) < `border-emphasis` (neutral/200) < `border-strong` (neutral/300).
-**Primary model:** `primary` = emphasis tone (signal/600, AA text / stroke) · `primary-fill` = dark surface (deep/900) + `primary-ink` (signal/100) as text on it.
-**Standalone colours vs pairs:** `ink`, `primary`, `muted` (and `brand-ink`) carry `SHAPE_FILL` but **no** `FRAME_FILL`. So `bg-ink` / `bg-primary` / `bg-muted` (or `fill-*`) are **valid for shape / marker fills** (a rectangle / vector in Figma — e.g. the command caret), but **not** as a container / frame surface. Container surfaces = the `-fill` tokens (`primary-fill`, `muted-fill`, `inverse-fill`). Every `-ink` belongs to exactly one `-fill`.
-**Accent trio:** `accent-fill` (tint) · `accent-ink` (text on it) · `accent-border` (edge).
-**Status family:** `destructive` (error) exists. `success` / `warning` exist as ramps (charts); dedicated semantic tokens for them are still tbd.
-
 ---
 
 ## 2 · Corner (radius)
 
-Primitives (`reference`, group `Dimension/radius`, internal): `4 · 6 · 8 · 16 · full (9999)`. Semantics
-(Figma group `Corner/`) alias them, scope `CORNER_RADIUS`. Utilities = **custom utilities
-`corner-*`** via a `--corner-step-*` lookup (same pattern as the space steps);
-sides / corners: `corner-t/r/b/l-*` + `corner-tl/tr/br/bl-*`, plus the static `corner-none`.
+Primitives `Dimension/radius/*` (`reference`, internal); semantics in Figma group `Corner/`.
 
 ```yaml
 - { token: corner-sm,   css_var: --ap-sys-corner-sm,   primitive: radius/4,    value: 4px,    utilities: [corner-sm],   use: "Smallest radius — tick boxes, keycaps, markers and rows nested inside a panel." }
@@ -190,33 +173,25 @@ sides / corners: `corner-t/r/b/l-*` + `corner-tl/tr/br/bl-*`, plus the static `c
 - { token: corner-full, css_var: --ap-sys-corner-full, primitive: radius/full, value: 9999px, utilities: [corner-full], use: "Pills and circles — toggles, radio dots, slider parts, badges. Only for shapes meant to read as round." }
 ```
 
-**Dead:** ALL `rounded-*` (`--radius-*: initial`, no re-mapping) — the DS radius vocabulary is
-exclusively `corner-*`. twMerge knows the corner groups incl. side / corner conflicts
-(cn() extension in `libs/ui/src/lib/utils.ts`).
+```yaml
+corner_utilities:
+  figma_scope: CORNER_RADIUS
+  lookup:  "--corner-step-* (@utility, same pattern as the space steps)"
+  all:     "corner-<sm|md|lg|xl|full>"
+  sides:   "corner-<t|r|b|l>-<step>"
+  corners: "corner-<tl|tr|br|bl>-<step>"
+  static:  [corner-none]
+  stock:   "ALL rounded-* are dead (§6 geometry_vs_token.radius)"
+  tw_merge: "cn() in libs/ui/src/lib/utils.ts knows the corner groups incl. side / corner conflicts"
+```
 
 ---
 
 ## 3 · Spacing (gap + padding, one system)
 
-One system for gap **and** padding (Figma scope `GAP`); `m-*` as a code idiom (§7). The only
-primitive is the base unit `Dimension/space/base` → `--ap-dimension-space-base` (4px); the steps are
-**direct values** in Figma (only `space-xs` aliases the base unit), `calc(base × n)` in CSS. Pick the
-step by the distance needed. Utilities are **named** — via `@utility` on `--space-step-*`, for the
-families `gap/gap-x/gap-y`, `p/px/py/pt/pr/pb/pl`, `m/mx/my/mt/mr/mb/ml` and the inset family
-`top/right/bottom/left` + `inset/inset-x/inset-y` (position offsets ride the same rhythm; **no**
-`--container` collision as with sizing, because inset has no container scale), each incl. negatives
-`-m…` / `-top…` (the YAML lists `p-` / `gap-` as representatives) — **plus numeric** (`p-4` / `gap-2` /
-`top-6` / `h-9` via the `--spacing` base), fractions (`left-1/2`) and keywords (`inset-auto`) through
-the core utilities; all valid, do not remove. The `use` per step is a role hint, not a rule — the
-choice runs over the px value (§6).
-
-**Collision rule:** the steps deliberately do **not** live on Tailwind's `--spacing-*` — that
-namespace feeds every sizing utility and resolves **before** `--container` (`max-w-md` would be 8px
-instead of 28rem). T-shirt names on `w-*` / `max-w-*` / `min-w-*` / `basis-*` = **container scale**
-(stock); `h-*` / `size-*` have no named steps (geometry is numeric, §6).
+One scale for gap, padding, margin and inset; the step is picked by the px distance needed.
 
 ```yaml
-# use suffix on every step: "One scale for gap, padding and margin — pick the step by the distance needed."
 - { token: space-2xs, css_var: --ap-sys-space-2xs, primitive: "— (direct)", value: 2px,  utilities: [p-2xs, gap-2xs], use: "Hairline — vertical padding of the smallest pill, gap between stacked micro-elements." }
 - { token: space-xs,  css_var: --ap-sys-space-xs,  primitive: space/base,   value: 4px,  utilities: [p-xs,  gap-xs],  use: "Gap inside a control (icon to label); tightest inner padding." }
 - { token: space-sm,  css_var: --ap-sys-space-sm,  primitive: "— (direct)", value: 6px,  utilities: [p-sm,  gap-sm],  use: "Inner padding of small controls; gap in inline text runs." }
@@ -229,18 +204,41 @@ instead of 28rem). T-shirt names on `w-*` / `max-w-*` / `min-w-*` / `basis-*` = 
 - { token: space-5xl, css_var: --ap-sys-space-5xl, primitive: "— (direct)", value: 80px, utilities: [p-5xl, gap-5xl], use: "Editorial / hero spacing only." }
 ```
 
+```yaml
+space_utilities:
+  figma_scope: GAP
+  primitive: "Dimension/space/base → --ap-dimension-space-base (4px); steps are direct values in Figma (only space-xs aliases base), calc(base × n) in CSS"
+  group_note: "One scale for gap, padding and margin — pick the step by the distance needed."   # Storybook group text (SpacingRadius.tsx), not a per-token suffix
+  pick_by: "px value (§6 geometry_vs_token.spacing) — the use per step is a role hint, not a rule"
+  lookup:  "--space-step-* (@utility) — deliberately NOT Tailwind's --spacing-* (§6 keep_valid: that namespace feeds every sizing utility and resolves before --container)"
+  step:    "<2xs|xs|sm|md|lg|xl|2xl|3xl|4xl|5xl>"
+  families:                                        # the YAML above lists p- / gap- as representatives
+    gap:     [gap, gap-x, gap-y]
+    padding: [p, px, py, pt, pr, pb, pl]
+    margin:  [m, mx, my, mt, mr, mb, ml]           # code idiom only — §7 margin
+    inset:   [top, right, bottom, left, inset, inset-x, inset-y]   # no --container collision: inset has no container scale
+  negatives: "-m<side>-<step> / -<inset>-<step> on margin + inset"
+  numeric_still_valid: "p-4 / gap-2 / top-6 / h-9 (via the --spacing base), fractions left-1/2, keywords inset-auto — core utilities, do not remove (§6 keep_valid)"
+  sizing: "w-* / max-w-* / min-w-* / basis-* t-shirt names = stock --container scale, not steps; h-* / size-* have no named steps (§6 geometry_vs_token.control_geometry)"
+```
+
 ---
 
 ## 4 · Typography — 14 formats
 
-Composition utilities (`@utility text-format-<format>` in tw-utilities.css, multi-value:
-family + size + weight + line-height + tracking) → **one class** instead of individual `text-` / `font-`
-utilities (the latter are dead through the theme reset, §6). The utility is named `text-format-*`, not
-`text-<format>` — that namespace belongs to Tailwind's generated colour utilities (`text-input` would
-be a format class and the `--color-input` colour at once). Every format consists of **5 part tokens**:
-Figma `<OrgGroup>/<format>/<part>` (semantic-typo; the text styles bind family / size / weight /
-tracking) ↔ CSS `--ap-sys-<format>-<part>`. Org groups: Display · Heading (heading, heading-sm) · Title ·
-Lead · Body (body, body-strong) · Label (label-md, label-sm) · Eyebrow · Data (data-sm, data-md, data-lg) · Kbd.
+Every format = one composition utility over five part tokens.
+
+```yaml
+typo_format:
+  utility:    "text-format-<format>"      # one class = family + size + weight + line-height + tracking
+  not:        "text-<format>"             # that namespace = Tailwind colour utilities (text-input would also be the --color-input colour)
+  parts:      [family, size, weight, line-height, tracking]
+  figma_path: "<OrgGroup>/<format>/<part>"   # collection semantic-typo, 70 vars
+  org_groups: { Display: [display], Heading: [heading, heading-sm], Title: [title], Lead: [lead], Body: [body, body-strong], Label: [label-md, label-sm], Eyebrow: [eyebrow], Data: [data-sm, data-md, data-lg], Kbd: [kbd] }
+  text_styles: "Display … Kbd bind family / size / weight / tracking. Line height cannot be bound by a text style → every <format>/line-height var is a value store for export only; the style carries the raw auto / % value"
+  line_height_normal: "resolves to the STRING primitive Font/line-height/normal"
+  single_utilities: "text-* / font-* / tracking-* / leading-* are dead (§6 dead_utilities)"
+```
 
 Primitives (internal; Figma group `Font/` — the YAML uses the short paths, CSS = `--ap-font-…`):
 
@@ -253,12 +251,7 @@ line-height: { tight: 1.0, snug: 1.2, relaxed: 1.5, normal: "CSS keyword (STRING
 tracking:    { tight: "-0.5px", normal: "0", wide: "0.5px" }                # --ap-font-tracking-*
 ```
 
-Formats (`primitive` = short paths under `Font/`). **Line height in Figma:** a text style cannot bind
-line height, so every `<format>/line-height` variable is a **value store for export only** — all 14
-formats have 5 Figma vars (70 in `semantic-typo`); the style itself carries the raw auto/% value.
-`line-height: normal` resolves to the `Font/line-height/normal` STRING primitive.
-
-The `use` sentence per format is the same text that sits on the Figma text style.
+Formats (`primitive` = short paths under `Font/`):
 
 ```yaml
 - token: display
@@ -366,16 +359,21 @@ The `use` sentence per format is the same text that sits on the Figma text style
 
 ## 5 · Effects
 
-In Figma the **Effect Styles** "Glow" / "Elevation" bind the `Effect/*` primitives directly — the
-sys tier (`--ap-sys-shadow-*`) exists **only in CSS** (architecture block). Colour follows the colour
-primitives via `color-mix`. The `use` sentence is the same text that sits on the Figma effect style.
-
-Primitives (internal; Figma group `Effect/`, scopes EFFECT_COLOR / EFFECT_FLOAT — the YAML uses the
-short paths, CSS = `--ap-effect-…`):
+Two shadows; everything else stays flat.
 
 ```yaml
-glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma style holds raw #0098da
-elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }  # --ap-effect-elevation-* · Figma style holds raw #1a2230
+effects_model:
+  figma: "Effect Styles \"Glow\" / \"Elevation\" bind the Effect/* primitives directly (scopes EFFECT_COLOR / EFFECT_FLOAT) — no semantic variable in Figma"
+  css:   "--ap-sys-shadow-* exists in CSS only; the colour part is composed from the colour ramps via color-mix"
+  colour_divergence: "Figma cannot alias an effect colour onto a ramp (a colour binding replaces the whole RGBA) → Effect/*/color holds raw values on purpose; code is the source for the effect colours, the divergence is accepted (no Figma to-do)"
+  flat_otherwise: "depth is implied, not stacked — shadow-elevation is the only depth cue; stock shadow-* are dead (§6 dead_utilities)"
+```
+
+Primitives (internal; Figma group `Effect/` — the YAML uses the short paths, CSS = `--ap-effect-…`):
+
+```yaml
+glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma holds raw #0098da
+elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }  # --ap-effect-elevation-* · Figma holds raw #1a2230
 ```
 
 ```yaml
@@ -385,7 +383,7 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color
   value: "0 0 4px 0 · signal/400 @ 50%"
   utilities: [shadow-glow]
   use: "Halo on an emphasised marker — focus / active halo on small shapes. Not a depth cue."
-  note: "Figma: Effect Style \"Glow\" binds the parts directly — no semantic var. Colour is raw there; CSS composes signal/400 at 50 % via color-mix."
+  note: "Figma: Effect Style \"Glow\" (effects_model)."
 
 - token: shadow-elevation
   css_var: --ap-sys-shadow-elevation
@@ -393,17 +391,15 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color
   value: "0 14px 36px -6px · neutral/900 @ 18%"
   utilities: [shadow-elevation]
   use: "Drop shadow of surfaces floating above the layout (dialog-fill). The only depth cue in the system — everything else stays flat."
-  note: "Figma: Effect Style \"Elevation\" binds the parts directly — no semantic var. Colour is raw there; CSS composes neutral/900 at 18 % via color-mix."
+  note: "Figma: Effect Style \"Elevation\" (effects_model)."
 ```
-
-**Otherwise flat:** depth is implied, not stacked. Stock `shadow-xs/sm/md/lg` are dead (§6).
 
 ---
 
 ## 6 · Stock shadcn → Agentport vocabulary
 
-The theme reset in `globals.css` sets several Tailwind default namespaces to `initial`. Stock classes
-built on them are **dead** → translate when porting each component.
+The theme reset in `globals.css` sets several Tailwind default namespaces to `initial`; stock classes
+built on them are dead → translate when porting each component.
 
 ```yaml
 dead_utilities:   # removed by the reset → replacement
@@ -449,7 +445,7 @@ geometry_vs_token:
   radius: "radius vocabulary = corner-sm/md/lg/xl/full (+ corner-none, sides corner-b-* etc.); ALL rounded-* are DEAD (--radius-*: initial, no re-mapping)."
 
 keep_valid:
-  - "container t-shirt names on sizing utilities: max-w-sm/md/…, w-lg, basis-md = --container scale (24rem/28rem/…), NOT spacing steps (§3 collision rule)"
+  - "container t-shirt names on sizing utilities: max-w-sm/md/…, w-lg, basis-md = --container scale (24rem/28rem/…), NOT spacing steps (§3 space_utilities.lookup)"
   - "opacity modifiers on DS tokens: bg-primary-fill/90, ring-ring/50, outline-ring/50"
   - "arbitrary values: ring-[3px], size-[18px]"
   - "numeric spacing utilities: p-4, gap-2, h-9, size-4"
@@ -462,45 +458,51 @@ border_width_vs_color: "border = 1px width, separate from the colour. The base l
 
 ## 7 · Auto-layout → utilities (Figma → Tailwind)
 
-Figma auto-layout properties → className utilities.
-Display = `flex` / `inline-flex` (the component chooses); the properties below set direction, spacing,
-alignment, sizing. **Gap and padding run over the spacing scale (§3) — mapped by px value.**
+Figma auto-layout properties → className utilities; display (`flex` / `inline-flex`) is the component's
+choice. Gap and padding run over the spacing scale (§3), mapped by px value.
 
 ```yaml
-layoutMode:                # layout mode
+layoutMode:                          # display (flex / inline-flex) is the component's choice
   HORIZONTAL: flex-row
   VERTICAL:   flex-col
-  GRID:       "grid        # own properties → grid block below"
+  GRID:       grid                   # own properties → grid block below
   NONE:       "no auto-layout (block / absolute)"
-itemSpacing: "gap-<step>           # §3, by px value (8 → gap-md …)"
-padding:     "p-/px-/py-<step>     # §3, by px value; single sides pl-/pr-/pt-/pb-"
-primaryAxisAlignItems:     # main axis → justify-*
-  MIN: justify-start · CENTER: justify-center · MAX: justify-end · SPACE_BETWEEN: justify-between
-counterAxisAlignItems:     # cross axis → items-*
-  MIN: items-start · CENTER: items-center · MAX: items-end · BASELINE: items-baseline
-layoutSizingHorizontal:    # member width
-  FIXED: "w-<n> (numeric, control geometry)" · HUG: w-fit · FILL: "w-full / flex-1 (flex child)"
-layoutSizingVertical:      # member height
-  FIXED: "h-<n> (numeric)" · HUG: h-fit · FILL: "h-full / flex-1"
-layoutWrap:                # flex only
-  NO_WRAP: "(default)" · WRAP: flex-wrap
-grid:                      # layoutMode GRID only — own props (NOT itemSpacing / primary / counter)
-  gridRowCount/gridColumnCount: "grid-rows-<n> / grid-cols-<n>"
-  gridRowGap/gridColumnGap:     "gap-y-<step> / gap-x-<step>   # §3, by px value"
-  gridRow/ColumnSizes:          "FLEX → fr · FIXED → px (arbitrary grid-cols-[…])"
-  per-child:                    "gridRow/ColumnSpan → row-/col-span-<n> · anchor (0-based) → row-/col-start-<n+1> · gridChildH/V-Align MIN/CENTER/MAX/AUTO → justify-self-*/self-*"
+itemSpacing: "gap-<step>"            # §3, by px value (8 → gap-md …)
+padding:     "p-/px-/py-<step>"      # §3, by px value; single sides pl-/pr-/pt-/pb-
+primaryAxisAlignItems:               # main axis → justify-* (direction-independent, like Tailwind's justify)
+  MIN:           justify-start
+  CENTER:        justify-center
+  MAX:           justify-end
+  SPACE_BETWEEN: justify-between
+counterAxisAlignItems:               # cross axis → items-* (direction-independent, like Tailwind's items)
+  MIN:      items-start
+  CENTER:   items-center
+  MAX:      items-end
+  BASELINE: items-baseline
+layoutSizingHorizontal:              # member width — FIXED stays numeric (§6 geometry_vs_token.control_geometry)
+  FIXED: "w-<n> (numeric, control geometry)"
+  HUG:   w-fit
+  FILL:  "w-full / flex-1 (flex child)"
+layoutSizingVertical:                # member height
+  FIXED: "h-<n> (numeric)"
+  HUG:   h-fit
+  FILL:  "h-full / flex-1"
+layoutWrap:                          # flex only
+  NO_WRAP: "(default)"
+  WRAP:    flex-wrap
+grid:                                # layoutMode GRID only — own props (NOT itemSpacing / primary / counter)
+  gridRowCount / gridColumnCount: "grid-rows-<n> / grid-cols-<n>"
+  gridRowGap / gridColumnGap:     "gap-y-<step> / gap-x-<step>"    # §3, by px value
+  gridRowSizes / gridColumnSizes: "FLEX → fr · FIXED → px (arbitrary grid-cols-[…])"
+  per_child:
+    gridRowSpan / gridColumnSpan:     "row-span-<n> / col-span-<n>"
+    gridRowAnchor / gridColumnAnchor: "row-start-<n+1> / col-start-<n+1>   (anchor is 0-based)"
+    gridChildHorizontalAlign / gridChildVerticalAlign: "MIN / CENTER / MAX / AUTO → justify-self-* / self-*"
+
+margin:                              # code idiom only — Figma auto-layout has gap + padding, never margin
+  default: "Figma gap / padding → gap-* / p-* (§3). NEVER convert a Figma gap or padding into m-*"
+  intents:                           # the only cases where m-* is the right translation — each has its own Figma signal
+    - { intent: "push-to-end / distribute",                             figma: "primaryAxisAlignItems = SPACE_BETWEEN | MAX",          utility: "justify-* (or ml-auto for a single trailing element) — not derived from a gap" }
+    - { intent: "overlap / single offset a uniform gap cannot express", figma: "spacer child or ABSOLUTE child (layoutPositioning)", utility: "mirror the structure — do not paper over with margin" }
+  existing_in_code: "an m-* already in code is code-only (no Figma source → not diffable from Figma)"
 ```
-
-**`primaryAxis*` = main axis = `justify-*`, `counterAxis*` = cross axis = `items-*`** — direction-independent
-(Tailwind `justify` / `items` are main / cross axis too). FIXED sizes stay **numeric** (geometry ≠ spacing token, cf. §6).
-
-**`margin` — when instead of gap / padding:** Figma auto-layout only provides **gap** (between children) +
-**padding** (container inset) — that is the **default translation** for distances. `margin` (§3 `m-*`) is not a
-substitute but a code idiom for intents gap / padding cannot carry — each with its own Figma signal:
-- **Push-to-end / distribute** → Figma `primaryAxisAlignItems = SPACE_BETWEEN/MAX` → `justify-*` (or `ml-auto`
-  for a single trailing element), **not** derived from a gap.
-- **Overlap / single offset** a *uniform* gap cannot express → a spacer or `ABSOLUTE` child
-  (`layoutPositioning`) in Figma → mirror structurally, don't paper over with margin.
-
-**Never** convert a Figma gap / padding into margin; default = gap / padding. An existing `m-*` in code is
-code-only (no Figma source → not diffable from Figma).
