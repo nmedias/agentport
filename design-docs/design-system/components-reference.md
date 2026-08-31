@@ -22,7 +22,8 @@ Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 > Führe aus" → „Jump to / Search / Run" (= Stories) · Page „Color" → Frame „Colors" `4197:9989`: Rampen-Titel
 > „OS Signal / OS Still / Os Deep" → „Signal / Still / Deep", Swatch-Labels `brand-*`/`os calm-*`/`os navy-*` →
 > `signal-*`/`still-*`/`deep-*` (= Variablen + `--ap-color-*`), Füll-Beschreibungen → Token-Rollen aus der
-> tokens-reference (40 Text-Nodes). **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
+> tokens-reference (40 Text-Nodes) · Primitive-Rampe `Color/ink/*` → **`Color/neutral/*`** (13 Vars; Code `--ap-color-neutral-*`,
+> Storybook Primitives/Colors/Effects, tokens-reference; Colors-Frame „Neutral"). Semantisches Suffix `-ink` unverändert. **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
 > `1099:9710`, Section „Final") trägt noch Inhalt aus dem Ursprungsprojekt — wird in einem eigenen Abschnitt
 > aufgeräumt; bis dahin den fileKey nicht pushen.
 
@@ -417,7 +418,7 @@ status_note: >
     Statisches, non-interaktives Element (Radix Separator.Root, decorative=true → role=none;
     decorative=false → role=separator + aria-orientation). Content-Achse = orientation, 2 Member.
     Beide Member: 1px-Linie, SOLID-Fill an `Border/border` gebunden — `border` ist ein im Colour-Rework
-    BEHALTENER Name (nur Wert neu = ink/75 #e4e6eb), NICHT border-emphasis/-strong. Klassenstring
+    BEHALTENER Name (nur Wert neu = neutral/75 #e4e6eb), NICHT border-emphasis/-strong. Klassenstring
     unverändert (bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch): bg-border
     mappt 1:1 auf die Live-Bindung, Rest = Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
     Linie im Flex-Row. Colour-Sync 2026-06-17: KEIN Delta — kein Code-Edit.
@@ -972,7 +973,7 @@ status_note: >
     axis: { orientation: [horizontal, vertical], thumbs: [single, range], state: [default, focus, disabled] }   # thumbs = Figma-only Fork (Code leitet Thumb-Zahl aus value.length ab, KEIN Prop — wie Field.controlPosition; NICHT als CVA zurücksyncen). KEIN invalid-State (stock-Slider hat keinen).
     examples: { group: "Usage Examples 4354:2225", Default: "4354:2228", Range: "4354:2234", Vertical: "4354:2244", Disabled: "4354:2253", FieldSlider: "Field-Instanz 4355:2238 (control-Slot = Range-Slider-Instanz 4356:2249, label 'Price Range', description gewrappt)" }
     vars: { input-fill-high: "4197:9645", primary-fill: "3037:8", input-border: "4197:9644", surface: "3037:2", corner-full: "3073:6" }
-    focus_glow: "literal DROP_SHADOW radius:0 spread:3 ring(ink/800)@50% sbn:false — verbatim von .Input focus 3176:305 (Glow-Rezept: NIE binden, sonst droppt die /50). Pro Thumb auf den focus-Membern; Member clip=false."
+    focus_glow: "literal DROP_SHADOW radius:0 spread:3 ring(neutral/800)@50% sbn:false — verbatim von .Input focus 3176:305 (Glow-Rezept: NIE binden, sonst droppt die /50). Pro Thumb auf den focus-Membern; Member clip=false."
   skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
   notes: >
     Radix Slider (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Switch-Konvention),

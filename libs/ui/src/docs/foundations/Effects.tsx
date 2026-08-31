@@ -3,7 +3,7 @@ import { FoundationsPage, Group } from './foundations-kit';
 /*
   Foundations / Effects — the two DS shadows (tokens-reference §5). Glow is the
   brand focus/active accent (signal/400 @ 50%); elevation is the raised-overlay
-  drop shadow (ink/900 @ 18%). The system is otherwise flat: depth is implied,
+  drop shadow (neutral/900 @ 18%). The system is otherwise flat: depth is implied,
   not stacked — all stock shadow-xs/sm/md/lg are dead.
 */
 
@@ -44,7 +44,7 @@ export function Effects() {
             <div className="flex flex-col gap-2xs">
               <span className="text-format-data-sm text-ink">shadow-elevation</span>
               <span className="text-format-data-sm text-muted-ink">
-                0 14px 36px -6px · ink/900 @ 18%
+                0 14px 36px -6px · neutral/900 @ 18%
               </span>
               <span className="mt-2xs text-format-body text-ink text-pretty">
                 Drop shadow for raised overlays / menus.

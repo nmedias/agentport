@@ -25,7 +25,7 @@
 /* ===========================================================================
    1 · PRIMITIVES  (Figma-Collection: reference — Gruppen Color / Dimension /
                     Font / Effect; konsolidiert 2026-06-11)
-   Color palettes replaced 2026-06-17: neutral+cyan → 7 OKLCH ramps
+   Color palettes replaced 2026-06-17: old neutral+cyan → 7 OKLCH ramps (ink ramp renamed neutral 2026-08-31)
    (signal/still/deep/ink/success/warning/error). base/white + opacity
    stay. Dimension/Font/Effect unchanged.
    Color primitives are oklch() literals (converted from the Figma hex export
@@ -78,21 +78,21 @@
   --ap-color-deep-900: oklch(0.2515 0.0375 232.72);
   --ap-color-deep-950: oklch(0.171 0.0347 231.65);
 
-  /* --- Color · ink ramp (neutralized greys; 25+75 added) -------------------
-     C ×0.5 (blue cast removed); ink/800 = #1E2229 (brand text, was #1A2230). */
-  --ap-color-ink-25: oklch(0.9891 0.0035 219.53);
-  --ap-color-ink-50: oklch(0.9701 0.007 268.55);
-  --ap-color-ink-75: oklch(0.9248 0.0071 268.54);
-  --ap-color-ink-100: oklch(0.8814 0.0076 260.73);
-  --ap-color-ink-200: oklch(0.7912 0.0078 260.73);
-  --ap-color-ink-300: oklch(0.7011 0.0099 258.34);
-  --ap-color-ink-400: oklch(0.6114 0.0121 256.72);
-  --ap-color-ink-500: oklch(0.5201 0.0135 264.45);
-  --ap-color-ink-600: oklch(0.4301 0.0162 262.31);
-  --ap-color-ink-700: oklch(0.34 0.0151 264.35);
-  --ap-color-ink-800: oklch(0.251 0.0145 261.66);
-  --ap-color-ink-900: oklch(0.1727 0.0134 264.13);
-  --ap-color-ink-950: oklch(0.0972 0.0125 264.98);
+  /* --- Color · neutral ramp (de-tinted greys; 25+75 added) -------------------
+     C ×0.5 (blue cast removed); neutral/800 = #1E2229 (brand text, was #1A2230). */
+  --ap-color-neutral-25: oklch(0.9891 0.0035 219.53);
+  --ap-color-neutral-50: oklch(0.9701 0.007 268.55);
+  --ap-color-neutral-75: oklch(0.9248 0.0071 268.54);
+  --ap-color-neutral-100: oklch(0.8814 0.0076 260.73);
+  --ap-color-neutral-200: oklch(0.7912 0.0078 260.73);
+  --ap-color-neutral-300: oklch(0.7011 0.0099 258.34);
+  --ap-color-neutral-400: oklch(0.6114 0.0121 256.72);
+  --ap-color-neutral-500: oklch(0.5201 0.0135 264.45);
+  --ap-color-neutral-600: oklch(0.4301 0.0162 262.31);
+  --ap-color-neutral-700: oklch(0.34 0.0151 264.35);
+  --ap-color-neutral-800: oklch(0.251 0.0145 261.66);
+  --ap-color-neutral-900: oklch(0.1727 0.0134 264.13);
+  --ap-color-neutral-950: oklch(0.0972 0.0125 264.98);
 
   /* --- Color · success ramp (green) ---------------------------------------- */
   --ap-color-success-50: oklch(0.9692 0.0409 160.94);
@@ -204,7 +204,7 @@
   --ap-effect-elevation-y: 14px;
   --ap-effect-elevation-blur: 36px;
   --ap-effect-elevation-spread: -6px;
-  --ap-effect-elevation-color: color-mix(in srgb, var(--ap-color-ink-900) 18%, transparent);
+  --ap-effect-elevation-color: color-mix(in srgb, var(--ap-color-neutral-900) 18%, transparent);
 }
 
 :root{
@@ -216,7 +216,7 @@
   /* Naming 2026-06-17: Figma reworked the color semantics to a -fill/-ink/-border
      system (surface/ink instead of background/foreground; every -foreground → -ink;
      new primary-fill/primary-ink/accent-border/input-fill-high). Old names in
-     trailing comments. Aliases now point at the 7 ramps (no more neutral/cyan).
+     trailing comments. Aliases now point at the 7 ramps (no more old neutral/cyan).
      2026-06-18: Figma dissolved the shadcn-compat layer (moving further off the
      shadcn default). The `shadcn Default/` group is gone — tokens regrouped into
      Base/ · Primary/ · Secondary/ · Muted/ · Accent/ · Destructive/ · Cards/ ·
@@ -226,11 +226,11 @@
 
   /* --- Core surface + ink (Figma: Base/ · Cards/ · Muted/) --------------- */
   --ap-sys-surface:        var(--ap-color-base-white);   /* was: background */
-  --ap-sys-ink:            var(--ap-color-ink-900);      /* was: foreground */
-  --ap-sys-card-fill:      var(--ap-color-ink-50);       /* was: card */
-  --ap-sys-card-ink:       var(--ap-color-ink-900);      /* was: card-foreground */
-  --ap-sys-muted-fill:     var(--ap-color-ink-25);       /* was: muted */
-  --ap-sys-muted-ink:      var(--ap-color-ink-500);      /* was: muted-foreground */
+  --ap-sys-ink:            var(--ap-color-neutral-900);      /* was: foreground */
+  --ap-sys-card-fill:      var(--ap-color-neutral-50);       /* was: card */
+  --ap-sys-card-ink:       var(--ap-color-neutral-900);      /* was: card-foreground */
+  --ap-sys-muted-fill:     var(--ap-color-neutral-25);       /* was: muted */
+  --ap-sys-muted-ink:      var(--ap-color-neutral-500);      /* was: muted-foreground */
 
   /* --- Primary / secondary / accent (Figma: Primary/ · Secondary/ · Accent/) - */
   --ap-sys-primary:        var(--ap-color-signal-600);   /* brand accent, AA on white; was cyan/500 */
@@ -251,20 +251,20 @@
   --ap-sys-destructive-ink: var(--ap-color-error-50);       /* was: destructive-foreground */
 
   /* --- Ring + borders (Figma: Focus/ · Border/) -------------------------- */
-  --ap-sys-ring:            var(--ap-color-ink-800);   /* focus; was neutral/700 */
-  --ap-sys-border:          var(--ap-color-ink-75);    /* default edge; was neutral/200 */
-  --ap-sys-border-emphasis: var(--ap-color-ink-200);   /* was neutral/300 */
-  --ap-sys-border-strong:   var(--ap-color-ink-300);   /* was neutral/700 (now lighter) */
+  --ap-sys-ring:            var(--ap-color-neutral-800);   /* focus; was old neutral/700 */
+  --ap-sys-border:          var(--ap-color-neutral-75);    /* default edge; was old neutral/200 */
+  --ap-sys-border-emphasis: var(--ap-color-neutral-200);   /* was old neutral/300 */
+  --ap-sys-border-strong:   var(--ap-color-neutral-300);   /* was old neutral/700 (now lighter) */
 
   /* --- Sidebar (Figma: Sidebar/) ----------------------------------------- */
-  --ap-sys-sidebar-fill:          var(--ap-color-ink-25);        /* was: sidebar */
-  --ap-sys-sidebar-ink:           var(--ap-color-ink-900);       /* was: sidebar-foreground */
+  --ap-sys-sidebar-fill:          var(--ap-color-neutral-25);        /* was: sidebar */
+  --ap-sys-sidebar-ink:           var(--ap-color-neutral-900);       /* was: sidebar-foreground */
   --ap-sys-sidebar-primary-fill:  var(--ap-color-deep-900);   /* was: sidebar-primary */
   --ap-sys-sidebar-primary-ink:   var(--ap-color-signal-200); /* was: sidebar-primary-foreground */
   --ap-sys-sidebar-accent-fill:   var(--ap-color-deep-50);    /* was: sidebar-accent */
   --ap-sys-sidebar-accent-ink:    var(--ap-color-signal-600); /* was: sidebar-accent-foreground */
-  --ap-sys-sidebar-border:        var(--ap-color-ink-50);        /* was neutral/200 */
-  --ap-sys-sidebar-ring:          var(--ap-color-ink-800);       /* was neutral/700 */
+  --ap-sys-sidebar-border:        var(--ap-color-neutral-50);        /* was old neutral/200 */
+  --ap-sys-sidebar-ring:          var(--ap-color-neutral-800);       /* was old neutral/700 */
 
   /* --- Charts — now ramp-bound (Figma: Charts/) -------------------------- */
   --ap-sys-chart-1: var(--ap-color-warning-700);
@@ -277,23 +277,23 @@
   /* 2026-06-18: overlay + the shadcn-compat popover aliases consolidated into one
      raised-surface token `dialog` (Popover/Command/Menu/Dialog all use it). */
   --ap-sys-dialog-fill:         var(--ap-color-base-white);  /* was: overlay-fill / popover */
-  --ap-sys-dialog-ink:          var(--ap-color-ink-900);     /* was: overlay-ink / popover-foreground */
-  /* modal backdrop dimmer — colour (alias ink/900) × strength (scrim-opacity,
+  --ap-sys-dialog-ink:          var(--ap-color-neutral-900);     /* was: overlay-ink / popover-foreground */
+  /* modal backdrop dimmer — colour (alias neutral/900) × strength (scrim-opacity,
      alias opacity/10) composed via color-mix. Figma composes the same pair on
      .Dialog/Overlay: fill → scrim + layer opacity → scrim-opacity. */
   --ap-sys-scrim-opacity:       var(--ap-color-opacity-10);
-  --ap-sys-scrim:               color-mix(in srgb, var(--ap-color-ink-900) var(--ap-sys-scrim-opacity), transparent);
+  --ap-sys-scrim:               color-mix(in srgb, var(--ap-color-neutral-900) var(--ap-sys-scrim-opacity), transparent);
 
   /* --- Input (Figma: Input/) --------------------------------------------- */
-  --ap-sys-input-ink-placeholder: var(--ap-color-ink-500);  /* was: input-placeholder */
-  --ap-sys-input-fill:            var(--ap-color-ink-25);    /* field fill; was: input-background */
-  --ap-sys-input-fill-high:       var(--ap-color-ink-400);   /* emphasised field fill (new) */
-  --ap-sys-input-border:          var(--ap-color-ink-400);   /* field border (AA); was: input */
+  --ap-sys-input-ink-placeholder: var(--ap-color-neutral-500);  /* was: input-placeholder */
+  --ap-sys-input-fill:            var(--ap-color-neutral-25);    /* field fill; was: input-background */
+  --ap-sys-input-fill-high:       var(--ap-color-neutral-400);   /* emphasised field fill (new) */
+  --ap-sys-input-border:          var(--ap-color-neutral-400);   /* field border (AA); was: input */
 
   /* --- Inverse (Figma: Inverse/) — dark-surface family (rail, kbd badges) - */
   --ap-sys-inverse-fill:            var(--ap-color-deep-950);  /* #00121C — dark surface */
-  --ap-sys-inverse-ink:             var(--ap-color-ink-75);       /* #E4E6EB — text on inverse (2026-07-01: was ink-50) */
-  --ap-sys-inverse-ink-muted:       var(--ap-color-ink-400);      /* #7F848B — muted text/icon on inverse (new 2026-07-01) */
+  --ap-sys-inverse-ink:             var(--ap-color-neutral-75);       /* #E4E6EB — text on inverse (2026-07-01: was neutral-50) */
+  --ap-sys-inverse-ink-muted:       var(--ap-color-neutral-400);      /* #7F848B — muted text/icon on inverse (new 2026-07-01) */
   --ap-sys-inverse-border:          var(--ap-color-deep-900);  /* #0D2531 — edge on inverse (new 2026-07-01) */
   /* container tints = deep/900 at alpha (Figma stores raw RGBA) → color-mix on the primitive, like scrim */
   --ap-sys-inverse-container:       color-mix(in srgb, var(--ap-color-deep-900) 30%, transparent);  /* #0D25314D (new 2026-07-01) */

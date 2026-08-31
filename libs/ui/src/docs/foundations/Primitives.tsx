@@ -65,8 +65,8 @@ const RAMPS: Ramp[] = [
     ],
   },
   {
-    name: 'ink',
-    ref: 'neutral greys',
+    name: 'neutral',
+    ref: 'de-tinted greys',
     steps: [
       { step: '25', hex: '#f9fcfd' },
       { step: '50', hex: '#f3f5fa' },

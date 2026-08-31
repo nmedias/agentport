@@ -49,16 +49,18 @@ Figma „Agentport DS" (fileKey ejFKo4MNuvC9TSDKOCUvyq)
 ## 1 · Farbe
 
 Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`).
-**2026-06-17:** `neutral`+`cyan` ersetzt durch 7 OKLCH-Rampen (pencilcolor). `signal/still/deep`
-= die drei Brand-Blau-Rampen (Naming-Entscheid „Signal/Still/Deep"); `ink` = neutralisierte
+**2026-06-17:** alt-`neutral`+`cyan` ersetzt durch 7 OKLCH-Rampen (pencilcolor). `signal/still/deep`
+= die drei Brand-Blau-Rampen (Naming-Entscheid „Signal/Still/Deep"); `neutral` = neutralisierte
 Graustufen (Blaustich raus, C ×0.5) inkl. Sonderstufen `25`+`75`; `success/warning/error` = Status-Familie.
+**2026-08-31:** Rampe `ink` → **`neutral`** umbenannt (Figma `Color/neutral/*`, CSS `--ap-color-neutral-*`); „alt-neutral/…"
+in den Notizen = die Vor-Rework-Palette. Das semantische Suffix `-ink` (Text-Rolle) bleibt.
 
 ```yaml
 base/white: "#ffffff"   # --ap-color-base-white
 signal: { 50: "#c4feff", 100: "#a4e5ff", 200: "#7cceff", 300: "#51b6f3", 400: "#009fe3", 500: "#0081d2", 600: "#0063bb", 700: "#00459c", 800: "#002779", 900: "#000854", 950: "#010034" }   # Brand = signal/400 #009FE3; AA-Primary auf Weiß ab 600 (#0063BB ≥4.5:1)
 still:  { 50: "#d8fbff", 100: "#bde4fd", 200: "#9fcdeb", 300: "#80b7d9", 400: "#61a1c8", 500: "#3a8cba", 600: "#0077a8", 700: "#005685", 800: "#003761", 900: "#00193d", 950: "#00001e" }
 deep:   { 50: "#eaf8ff", 100: "#cfdde6", 200: "#b2c4cf", 300: "#97abb7", 400: "#7c93a0", 500: "#617c8b", 600: "#476575", 700: "#314f5e", 800: "#1e3947", 900: "#0d2531", 950: "#00121c" }
-ink:       { 25: "#f9fcfd", 50: "#f3f5fa", 75: "#e4e6eb", 100: "#d5d8dd", 200: "#b8bbc0", 300: "#9b9fa5", 400: "#7f848b", 500: "#656971", 600: "#4b5059", 700: "#343840", 800: "#1e2229", 900: "#0d1016", 950: "#020306" }   # ink/800 = #1E2229 (Brand-Text, war #1A2230)
+neutral:       { 25: "#f9fcfd", 50: "#f3f5fa", 75: "#e4e6eb", 100: "#d5d8dd", 200: "#b8bbc0", 300: "#9b9fa5", 400: "#7f848b", 500: "#656971", 600: "#4b5059", 700: "#343840", 800: "#1e2229", 900: "#0d1016", 950: "#020306" }   # neutral/800 = #1E2229 (Brand-Text, war #1A2230)
 success:   { 50: "#defeec", 100: "#c6ead6", 200: "#abd7bf", 300: "#91c4a8", 400: "#76b192", 500: "#57a07a", 600: "#298058", 700: "#005f3a", 800: "#00401f", 900: "#002207", 950: "#000700" }
 warning:   { 50: "#fff0c8", 100: "#fbd9ac", 200: "#eac18a", 300: "#d9a967", 400: "#c8923f", 500: "#af7000", 600: "#944f00", 700: "#753100", 800: "#541500", 900: "#340000", 950: "#160000" }
 error:     { 50: "#ffe3d9", 100: "#ffc6bb", 200: "#fca69a", 300: "#e98779", 400: "#d66859", 500: "#c54235", 600: "#b01207", 700: "#8e0000", 800: "#6a0000", 900: "#440000", 950: "#220000" }
@@ -66,7 +68,7 @@ opacity:   { 10: "10% — Figma-Wert 10 (Opacity-Variablen = 0–100-Skala), CSS
 ```
 
 > **Effect-Farben** `glow`/`elevation` im CSS an die Rampen gebunden (User-Entscheid):
-> `glow → signal/400 @50%`, `elevation → ink/900 @18%` (via `color-mix`). **In Figma nicht 1:1
+> `glow → signal/400 @50%`, `elevation → neutral/900 @18%` (via `color-mix`). **In Figma nicht 1:1
 > abbildbar:** eine Effekt-Farbe ist dort eine rohe RGBA im `Effect/*`-Primitive — das Color-Binding
 > ersetzt die ganze RGBA, ein Live-Alias auf eine Rampe ist nicht möglich. Figmas `Effect/*` halten
 > daher bewusst Roh-Werte (#0098da / #1a2230); **Code ist hier die Quelle** für die Effekt-Farben,
@@ -99,11 +101,11 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 ```yaml
 # Core surface + ink (Figma: shadcn Default/)
 - { token: surface,     css_var: --ap-sys-surface,     primitive: base/white,     value: "#ffffff", utilities: [bg-surface],          use: "App-Grundfläche.", note: "war: background" }
-- { token: ink,         css_var: --ap-sys-ink,         primitive: ink/900,        value: "#0d1016", utilities: [text-ink, "bg-ink¹/fill-ink¹"],  use: "Primärtext/-Icon. ¹SHAPE_FILL erlaubt → bg-ink/fill-ink NUR für Shape-/Marker-Fills, NICHT als Container-/Frame-Fläche (kein FRAME_FILL → dunkle Fläche = inverse-fill).", note: "war: foreground" }
-- { token: card-fill,   css_var: --ap-sys-card-fill,   primitive: ink/50,         value: "#f3f5fa", utilities: [bg-card-fill],        use: "Erhabene/sekundäre Panel-Fläche.", note: "war: card" }
-- { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: ink/900,        value: "#0d1016", utilities: [text-card-ink],       use: "Text auf card.", note: "war: card-foreground" }
-- { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: ink/25,         value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Ruhige Chrome-Fläche.", note: "war: muted" }
-- { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: ink/500,        value: "#656971", utilities: [text-muted-ink],      use: "Sekundärtext.", note: "war: muted-foreground (neutral/600)" }
+- { token: ink,         css_var: --ap-sys-ink,         primitive: neutral/900,        value: "#0d1016", utilities: [text-ink, "bg-ink¹/fill-ink¹"],  use: "Primärtext/-Icon. ¹SHAPE_FILL erlaubt → bg-ink/fill-ink NUR für Shape-/Marker-Fills, NICHT als Container-/Frame-Fläche (kein FRAME_FILL → dunkle Fläche = inverse-fill).", note: "war: foreground" }
+- { token: card-fill,   css_var: --ap-sys-card-fill,   primitive: neutral/50,         value: "#f3f5fa", utilities: [bg-card-fill],        use: "Erhabene/sekundäre Panel-Fläche.", note: "war: card" }
+- { token: card-ink,    css_var: --ap-sys-card-ink,    primitive: neutral/900,        value: "#0d1016", utilities: [text-card-ink],       use: "Text auf card.", note: "war: card-foreground" }
+- { token: muted-fill,  css_var: --ap-sys-muted-fill,  primitive: neutral/25,         value: "#f9fcfd", utilities: [bg-muted-fill],       use: "Ruhige Chrome-Fläche.", note: "war: muted" }
+- { token: muted-ink,   css_var: --ap-sys-muted-ink,   primitive: neutral/500,        value: "#656971", utilities: [text-muted-ink],      use: "Sekundärtext.", note: "war: muted-foreground (alt-neutral/600)" }
 
 # Primary / secondary / accent (Figma: shadcn Default/)
 - { token: primary,        css_var: --ap-sys-primary,        primitive: signal/600, value: "#0063bb", utilities: [text-primary, border-primary, ring-primary, "bg-primary¹/fill-primary¹"], use: "Marken-Akzent (AA auf Weiß) als Text/Icon/Stroke. ¹SHAPE_FILL erlaubt → bg-primary/fill-primary NUR für Shape-/Marker-Fills (in Figma ein Rechteck/Vektor, z. B. Command-Caret), NICHT als Container-/Frame-Fläche (kein FRAME_FILL → Fläche = primary-fill).", note: "war: cyan/500 #0098da" }
@@ -124,20 +126,20 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 - { token: destructive-ink, css_var: --ap-sys-destructive-ink, primitive: error/50,  value: "#ffe3d9", utilities: [text-destructive-ink, border-destructive-ink], use: "Text/Kante auf destructive.", note: "war: destructive-foreground" }
 
 # Ring + borders
-- { token: ring,            css_var: --ap-sys-ring,            primitive: ink/800, value: "#1e2229", utilities: [ring-ring, outline-ring],   use: "Fokus-Indikator.", note: "war neutral/700" }
-- { token: border,          css_var: --ap-sys-border,          primitive: ink/75,  value: "#e4e6eb", utilities: [border-border],              use: "Standard-Kante (Base-Layer).", note: "war neutral/200" }
-- { token: border-emphasis, css_var: --ap-sys-border-emphasis, primitive: ink/200, value: "#b8bbc0", utilities: [border-border-emphasis],     use: "Betonte Linie." }
-- { token: border-strong,   css_var: --ap-sys-border-strong,   primitive: ink/300, value: "#9b9fa5", utilities: [border-border-strong],       use: "Schwerste Linie.", note: "war neutral/700 — jetzt heller" }
+- { token: ring,            css_var: --ap-sys-ring,            primitive: neutral/800, value: "#1e2229", utilities: [ring-ring, outline-ring],   use: "Fokus-Indikator.", note: "war alt-neutral/700" }
+- { token: border,          css_var: --ap-sys-border,          primitive: neutral/75,  value: "#e4e6eb", utilities: [border-border],              use: "Standard-Kante (Base-Layer).", note: "war alt-neutral/200" }
+- { token: border-emphasis, css_var: --ap-sys-border-emphasis, primitive: neutral/200, value: "#b8bbc0", utilities: [border-border-emphasis],     use: "Betonte Linie." }
+- { token: border-strong,   css_var: --ap-sys-border-strong,   primitive: neutral/300, value: "#9b9fa5", utilities: [border-border-strong],       use: "Schwerste Linie.", note: "war alt-neutral/700 — jetzt heller" }
 
 # Sidebar (Figma: shadcn Default/)
-- { token: sidebar-fill,         css_var: --ap-sys-sidebar-fill,         primitive: ink/25,        value: "#f9fcfd", utilities: [bg-sidebar-fill],          use: "Sidebar-/Rail-Fläche.", note: "war: sidebar" }
-- { token: sidebar-ink,          css_var: --ap-sys-sidebar-ink,          primitive: ink/900,       value: "#0d1016", utilities: [text-sidebar-ink],         use: "Text in Sidebar." }
+- { token: sidebar-fill,         css_var: --ap-sys-sidebar-fill,         primitive: neutral/25,        value: "#f9fcfd", utilities: [bg-sidebar-fill],          use: "Sidebar-/Rail-Fläche.", note: "war: sidebar" }
+- { token: sidebar-ink,          css_var: --ap-sys-sidebar-ink,          primitive: neutral/900,       value: "#0d1016", utilities: [text-sidebar-ink],         use: "Text in Sidebar." }
 - { token: sidebar-primary-fill, css_var: --ap-sys-sidebar-primary-fill, primitive: deep/900,   value: "#0d2531", utilities: [bg-sidebar-primary-fill, text-sidebar-primary-fill],  use: "Sidebar-Akzent-Fläche (auch als Text/Icon).", note: "war: sidebar-primary" }
 - { token: sidebar-primary-ink,  css_var: --ap-sys-sidebar-primary-ink,  primitive: signal/200, value: "#7cceff", utilities: [text-sidebar-primary-ink], use: "Text auf sidebar-primary-fill." }
 - { token: sidebar-accent-fill,  css_var: --ap-sys-sidebar-accent-fill,  primitive: deep/50,    value: "#eaf8ff", utilities: [bg-sidebar-accent-fill],   use: "Aktiv-Tint in der Sidebar.", note: "war: sidebar-accent" }
 - { token: sidebar-accent-ink,   css_var: --ap-sys-sidebar-accent-ink,   primitive: signal/600, value: "#0063bb", utilities: [text-sidebar-accent-ink],  use: "Text auf sidebar-accent-fill." }
-- { token: sidebar-border,       css_var: --ap-sys-sidebar-border,       primitive: ink/50,        value: "#f3f5fa", utilities: [border-sidebar-border],    use: "Sidebar-Trenner." }
-- { token: sidebar-ring,         css_var: --ap-sys-sidebar-ring,         primitive: ink/800,       value: "#1e2229", utilities: [ring-sidebar-ring],        use: "Fokus in der Sidebar." }
+- { token: sidebar-border,       css_var: --ap-sys-sidebar-border,       primitive: neutral/50,        value: "#f3f5fa", utilities: [border-sidebar-border],    use: "Sidebar-Trenner." }
+- { token: sidebar-ring,         css_var: --ap-sys-sidebar-ring,         primitive: neutral/800,       value: "#1e2229", utilities: [ring-sidebar-ring],        use: "Fokus in der Sidebar." }
 
 # Charts — jetzt rampen-gebunden (Figma: shadcn Default/)
 - { token: chart-1, css_var: --ap-sys-chart-1, primitive: warning/700, value: "#753100", utilities: [bg-chart-1, border-chart-1] }
@@ -148,20 +150,20 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 
 # Dialog + scrim (Figma: Dialog/ · Scrim/) — overlay+popover 2026-06-18 zu `dialog` konsolidiert
 - { token: dialog-fill,         css_var: --ap-sys-dialog-fill,         primitive: base/white, value: "#ffffff", utilities: [bg-dialog-fill],        use: "Erhabene Raised-Surface-Fläche (Dialog/Popover/Command/Menu).", note: "war: overlay-fill / popover" }
-- { token: dialog-ink,          css_var: --ap-sys-dialog-ink,          primitive: ink/900,    value: "#0d1016", utilities: [text-dialog-ink],        use: "Text auf dialog.", note: "war: overlay-ink / popover-foreground" }
-- { token: scrim,               css_var: --ap-sys-scrim,               primitive: "ink/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Modal-Backdrop-Dimmer — ohne Opacity-Modifier.", note: "war neutral/900" }
+- { token: dialog-ink,          css_var: --ap-sys-dialog-ink,          primitive: neutral/900,    value: "#0d1016", utilities: [text-dialog-ink],        use: "Text auf dialog.", note: "war: overlay-ink / popover-foreground" }
+- { token: scrim,               css_var: --ap-sys-scrim,               primitive: "neutral/900 × scrim-opacity", value: "color-mix(in srgb, #0d1016 10%, transparent)", utilities: [bg-scrim], use: "Modal-Backdrop-Dimmer — ohne Opacity-Modifier.", note: "war alt-neutral/900" }
 - { token: scrim-opacity,       css_var: --ap-sys-scrim-opacity,       primitive: opacity/10, value: "10%", utilities: [], use: "FLOAT, Scope OPACITY — komponiert scrim." }
 
 # Input (Figma: Input/)
-- { token: input-ink-placeholder, css_var: --ap-sys-input-ink-placeholder, primitive: ink/500, value: "#656971", utilities: [text-input-ink-placeholder], use: "Platzhaltertext.", note: "war: input-placeholder (neutral/400)" }
-- { token: input-fill,            css_var: --ap-sys-input-fill,            primitive: ink/25,  value: "#f9fcfd", utilities: [bg-input-fill],               use: "Feld-Fill (opak).", note: "war: input-background" }
-- { token: input-fill-high,       css_var: --ap-sys-input-fill-high,       primitive: ink/400, value: "#7f848b", utilities: [bg-input-fill-high],          use: "Betonter Feld-Fill.", note: "neu" }
-- { token: input-border,          css_var: --ap-sys-input-border,          primitive: ink/400, value: "#7f848b", utilities: [border-input-border],         use: "Feld-Border.", note: "war: input (neutral/450)" }
+- { token: input-ink-placeholder, css_var: --ap-sys-input-ink-placeholder, primitive: neutral/500, value: "#656971", utilities: [text-input-ink-placeholder], use: "Platzhaltertext.", note: "war: input-placeholder (neutral/400)" }
+- { token: input-fill,            css_var: --ap-sys-input-fill,            primitive: neutral/25,  value: "#f9fcfd", utilities: [bg-input-fill],               use: "Feld-Fill (opak).", note: "war: input-background" }
+- { token: input-fill-high,       css_var: --ap-sys-input-fill-high,       primitive: neutral/400, value: "#7f848b", utilities: [bg-input-fill-high],          use: "Betonter Feld-Fill.", note: "neu" }
+- { token: input-border,          css_var: --ap-sys-input-border,          primitive: neutral/400, value: "#7f848b", utilities: [border-input-border],         use: "Feld-Border.", note: "war: input (neutral/450)" }
 
-# Inverse (Figma: Inverse/) — dark-surface family (Rail, kbd-Badges). 2026-07-01: +ink-muted/border/container-Trio; inverse-ink ink/50→ink/75.
+# Inverse (Figma: Inverse/) — dark-surface family (Rail, kbd-Badges). 2026-07-01: +ink-muted/border/container-Trio; inverse-ink neutral/50→neutral/75.
 - { token: inverse-fill,            css_var: --ap-sys-inverse-fill,            primitive: deep/950, value: "#00121c",   utilities: [bg-inverse-fill],            use: "Dunkle Fläche (Rail, invertierte Chips/Pillen).", note: "war: inverse (neutral/900)" }
-- { token: inverse-ink,             css_var: --ap-sys-inverse-ink,             primitive: ink/75,      value: "#e4e6eb",   utilities: [text-inverse-ink],           use: "Text auf inverse-fill.", note: "2026-07-01: war ink/50" }
-- { token: inverse-ink-muted,       css_var: --ap-sys-inverse-ink-muted,       primitive: ink/400,     value: "#7f848b",   utilities: [text-inverse-ink-muted],     use: "Gedämpfter Text/Icon auf inverse-fill.", note: "neu 2026-07-01" }
+- { token: inverse-ink,             css_var: --ap-sys-inverse-ink,             primitive: neutral/75,      value: "#e4e6eb",   utilities: [text-inverse-ink],           use: "Text auf inverse-fill.", note: "2026-07-01: war neutral/50" }
+- { token: inverse-ink-muted,       css_var: --ap-sys-inverse-ink-muted,       primitive: neutral/400,     value: "#7f848b",   utilities: [text-inverse-ink-muted],     use: "Gedämpfter Text/Icon auf inverse-fill.", note: "neu 2026-07-01" }
 - { token: inverse-border,          css_var: --ap-sys-inverse-border,          primitive: deep/900, value: "#0d2531",   utilities: [border-inverse-border],      use: "Kante auf inverse-fill.", note: "neu 2026-07-01" }
 - { token: inverse-container,       css_var: --ap-sys-inverse-container,       primitive: "deep/900 @30%", value: "#0d25314d", utilities: [bg-inverse-container],       use: "Container-Tint auf inverse-fill (Card in der Rail).", note: "neu 2026-07-01; color-mix (Alpha) wie scrim" }
 - { token: inverse-container-low,   css_var: --ap-sys-inverse-container-low,   primitive: "deep/900 @20%", value: "#0d253133", utilities: [bg-inverse-container-low],   use: "Leiser Container-Tint (Idle/inaktiv).", note: "neu 2026-07-01; color-mix" }
@@ -171,7 +173,7 @@ AA-Belege werden in **Schritt 3** (per Component) verfeinert — hier zunächst 
 - { token: background-fixed, css_var: --ap-sys-background-fixed, primitive: base/white, value: "#ffffff", utilities: [bg-background-fixed], use: "Theme-invariante weiße Fläche (Toggle-Knob).", avoid: "Im künftigen .dark NICHT überschreiben." }
 ```
 
-**Linien-Leiter (aufsteigend):** `border` (ink/75) < `border-emphasis` (ink/200) < `border-strong` (ink/300).
+**Linien-Leiter (aufsteigend):** `border` (neutral/75) < `border-emphasis` (neutral/200) < `border-strong` (neutral/300).
 **Primary-Modell (neu):** `primary` = Akzent-Ton (signal/600, AA-Text/Stroke) · `primary-fill` = dunkle Fläche (deep/900) + `primary-ink` (signal/100) als Text darauf.
 **SHAPE_FILL vs FRAME_FILL (`primary`, `ink`):** beide haben `SHAPE_FILL` aber **kein** `FRAME_FILL`. Heißt: `bg-primary`/`bg-ink` (bzw. `fill-*`) sind **gültig für Shape-/Marker-Fills** (in Figma ein Rechteck/Vektor — z. B. der Command-Caret `command.tsx`), aber **nicht** als Container-/Frame-Fläche. Container-Flächen = `primary-fill` bzw. `inverse-fill`.
 **Accent-Trio:** `accent-fill` (Tint) · `accent-ink` (Text darauf) · `accent-border` (Kante).
@@ -382,7 +384,7 @@ Kurz-Pfade, CSS = `--ap-effect-…`):
 
 ```yaml
 glow:      { x: 0, y: 0, blur: 4, spread: 0, color: "signal/400 @ 50% (color-mix)" }    # --ap-effect-glow-* · Figma-Style hält Roh-#0098da
-elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "ink/900 @ 18% (color-mix)" }       # --ap-effect-elevation-* · Figma-Style hält Roh-#1a2230
+elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "neutral/900 @ 18% (color-mix)" }       # --ap-effect-elevation-* · Figma-Style hält Roh-#1a2230
 ```
 
 ```yaml
@@ -397,7 +399,7 @@ elevation: { x: 0, y: 14, blur: 36, spread: -6, color: "ink/900 @ 18% (color-mix
 - token: shadow-elevation
   css_var: --ap-sys-shadow-elevation
   primitive: "elevation/* (5 Teile: x y blur spread color)"
-  value: "0 14px 36px -6px · ink/900 @ 18%"
+  value: "0 14px 36px -6px · neutral/900 @ 18%"
   utilities: [shadow-elevation]
   use: "Schlagschatten erhabener Overlays/Menüs."
   note: "Figma: Effect Style „Elevation" bindet die Teile direkt — kein semantic-Var."

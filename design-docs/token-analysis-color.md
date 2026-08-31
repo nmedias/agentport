@@ -22,10 +22,12 @@ Zweistufige Architektur in „Agentport DS": **`reference`** (Primitives, raw) �
   - `neutral/` `50 #FAFBFC · 100 #F4F6F8 · 200 #E6EAEE · 300 #C4CCD4 · 400 #979FA8 · 450 #79828F · 500 #6B7585 · 600 #636C7B · 700 #4A5562 · 900 #1A2230` *(Lücken: 800, 950; `450` für AA-Input-Border, `600` für `muted-foreground` ergänzt)*
   - `cyan/` `50 #E9F6FC · 500 #0098DA · 700 #0077A8` *(Lücken: 100–400, 600, 800–950)* — `500` von
     Brand-`#009FE3` auf **`#0098DA`** abgedunkelt, damit `primary`-Marken **≥3:1** auf Weiß erreichen (WCAG 1.4.11).
+  > **2026-08-31:** Rampe `ink` → **`neutral`** umbenannt. Achtung Namenskollision: die `neutral/`-Werte im Bestand oben
+  > (`50 #FAFBFC …`) sind die **alte** Vor-Rework-Palette, nicht diese Rampe.
   > **Update 2026-06-17 — Paletten-Swap (pencilcolor OKLCH):** `neutral`+`cyan` als Reference-Primitives
-  > **ersetzt** durch **7 volle Rampen** (je 11 Stufen, `ink` 13 inkl. `25`/`75`):
+  > **ersetzt** durch **7 volle Rampen** (je 11 Stufen, `neutral` — bis 2026-08-31 `ink` — 13 inkl. `25`/`75`):
   > **`signal`** (Brand-Cyan, `400 #009FE3`, AA-Primary ab `600 #0063BB`), **`still`** (gedämpft,
-  > `600 #0077A8` = altes accent-foreground), **`deep`** (Navy-Cyan), **`ink`** (neutralisierte Graustufe,
+  > `600 #0077A8` = altes accent-foreground), **`deep`** (Navy-Cyan), **`neutral`** (neutralisierte Graustufe,
   > Blaustich raus C ×0.5; `800 #1E2229` ≈ alter Brand-Text `#1A2230`), **`success`/`warning`/`error`**
   > (Status-Familie — füllt die in §8 offene Lücke). `base/white` + `opacity/10` bleiben. CSS-Pfade
   > `--ap-color-<ramp>-<step>`. **Semantic-Rewire (welcher Step welche Rampe) = Schritt 2**, hier noch
@@ -174,7 +176,7 @@ Bewusst niedrig (kein Fail-Ziel): Placeholder (dezent), Input-Fill-Lift (Border 
   Raised-Surface-Token **`dialog`** konsolidiert (Gruppe `Dialog/`): `overlay-fill`→`dialog-fill`,
   `overlay-ink`→`dialog-ink`; die Compat-Aliase `popover*` **ersatzlos gestrichen**. (3) `card` → **`card-fill`**
   (Gruppe `Cards/`, Konsistenz mit dem `-fill`-System). Werte/Aliase aller drei **unverändert**
-  (base/white · ink/900 · ink/50). Code nachgezogen: `tokens.css` + `tw-theme.css` (Token-Seam), Consumer
+  (base/white · neutral/900 · neutral/50). Code nachgezogen: `tokens.css` + `tw-theme.css` (Token-Seam), Consumer
   `dialog.tsx`/`command.tsx` (+ Specs): `bg-overlay-fill`→`bg-dialog-fill`, `text-overlay-ink`→`text-dialog-ink`,
   `bg-card`→`bg-card-fill`. Crosswalk `tokens-reference.md` §1/§6 aktualisiert. Kein `--popover` mehr im Code.
 
