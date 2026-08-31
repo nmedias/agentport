@@ -78,8 +78,9 @@ tools/              shoot-stories.mjs — Playwright screenshots of a running St
 
 - **File:** "Agentport DS", fileKey `ejFKo4MNuvC9TSDKOCUvyq`, configured in
   `.claude/skills/{shadcn-component-port,component-sync}/config.json` (`figma.fileKey`, `figma.pageId`).
-  Components page: `Shadcn Components` (`3126:2`); variable collections `semantic` (color) +
-  `semantic-dimension` (dimension). The file is view-shared via link — nothing product- or
+  Components page: `Shadcn Components` (`3126:2`); variable collections `reference` (primitives),
+  `semantic` (color), `semantic-dimension`, `semantic-typo` — components bind color/dimension directly,
+  typography via text styles. The file is view-shared via link — nothing product- or
   customer-specific belongs in it (layer names, text content, variable descriptions included).
 - **Figma Plugin MCP only.** Use Figma Console MCP only when explicitly requested.
 - **Never detach** instances without an explicit user request.

@@ -227,9 +227,12 @@ restart Claude Code or run `/mcp` to reconnect.
 ## Figma
 
 The design system lives in the Figma file **[Agentport DS](https://www.figma.com/design/ejFKo4MNuvC9TSDKOCUvyq/Agentport-DS?node-id=3126-2)**
-(view access via link). Component sets live on the page `Shadcn Components` (`3126:2`); the token
-layer (`libs/ui/src/styles/tokens.css`) is exported from its variable collections `semantic` (color)
-and `semantic-dimension` (dimension). Names and node IDs are documented in
+(view access via link). Component sets live on the page `Shadcn Components` (`3126:2`). The token
+layer (`libs/ui/src/styles/tokens.css`) is exported from its four variable collections: `reference`
+(primitives → `--ap-color-*`, `--ap-font-*`, `--ap-effect-*`, `--ap-dimension-*`), `semantic` (color),
+`semantic-dimension` (radius/spacing) and `semantic-typo` (typography) → `--ap-sys-*`. Components bind
+color and dimension variables directly and typography through the text styles (`Display` … `Kbd`), which
+mirror `semantic-typo`. Names and node IDs are documented in
 `design-docs/design-system/tokens-reference.md` and `components-reference.md`.
 
 The skills read the file through `.claude/skills/shadcn-component-port/config.json` and
