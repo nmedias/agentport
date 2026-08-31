@@ -35,6 +35,8 @@ reads are read-only (pipeline rule).
   `open` = known gaps. Dates, old names and old values belong in the changelog.
 - IDs are **Figma node IDs** in file `ejFKo4MNuvC9TSDKOCUvyq` (configured in
   `.claude/skills/{shadcn-component-port,component-sync}/config.json`). They are stable (not session IDs).
+- `code.stories` / `specs` / `cva` are read from the source (story file → Storybook title → story names; cva
+  axes + defaults, `none` when the component has no cva) — the code side of the axis ↔ prop diff.
 - `vars` / `styles` per entry = the semantic variables and styles **actually bound inside the component's
   Section** (incl. usage examples), read from the live file; typography part variables are represented by
   their text style.
@@ -43,7 +45,7 @@ reads are read-only (pipeline rule).
 
 ```
 name · status · figma_synced · source{registry,item,style} ·
-code{dir, exports[], barrel, types?, variants?, internal?, code_only_parts?} ·
+code{dir, exports[], barrel, types?, stories[], specs[], cva, variants?, internal?, code_only_parts?} ·
 figma{section, set|component|composition…, members?, slots?, props?, axis, examples?, vars, styles} ·
 skill · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
 ```
@@ -127,6 +129,11 @@ open:
     exports: [Badge, badgeVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/badge'"
     types: [BadgeProps]
+    stories:
+      - "badge.stories.tsx → UI/Badge (Default, Variants, WithIcon, Count, AsChild)"
+    specs: [badge.spec.tsx]
+    cva:
+      badgeVariants: { variant: [default, secondary, destructive, outline, ghost, link], defaults: {variant: default} }
   figma:
     section: { name: "Badge", id: "3687:1016" }
     set: { name: "Badge", id: "3697:1016" }
@@ -155,6 +162,11 @@ open:
     exports: [Button, buttonVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/button'"
     types: [ButtonProps]
+    stories:
+      - "button.stories.tsx → UI/Button (Default, Icon, AllVariants, AllStates, AsChild, AllSizes, AllIconSizes)"
+    specs: [button.spec.tsx]
+    cva:
+      buttonVariants: { variant: [default, destructive, outline, secondary, ghost, link], size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg], defaults: {variant: default, size: default} }
   figma:
     section: { name: "Button", id: "3126:3" }
     base_section: { name: "Button · Base", id: "3145:2" }
@@ -192,6 +204,10 @@ open:
     exports: [Input]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input'"
     types: [InputProps]
+    stories:
+      - "input.stories.tsx → UI/Input (Default, WithLabel, WithDescription, WithError, Form, File, AllStates)"
+    specs: [input.spec.tsx]
+    cva: none
   figma:
     section: { name: "Input", id: "3176:302" }
     set: { name: "Input", id: "3177:302" }
@@ -220,6 +236,10 @@ open:
     exports: [Textarea]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/textarea'"
     types: [TextareaProps]
+    stories:
+      - "textarea.stories.tsx → UI/Textarea (Default, WithLabel, WithDescription, WithError, AllStates)"
+    specs: [textarea.spec.tsx]
+    cva: none
   figma:
     section: { name: "Textarea", id: "3487:674" }
     set: { name: "Textarea", id: "3488:684" }
@@ -247,6 +267,14 @@ open:
     exports: [InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input-group'"
     types: [InputGroupAddonProps, InputGroupButtonProps]
+    stories:
+      - "input-group-addon.stories.tsx → UI/InputGroup/InputGroupAddon (Default)"
+      - "input-group-button.stories.tsx → UI/InputGroup/InputGroupButton (Default)"
+      - "input-group.stories.tsx → UI/InputGroup (Default, Icons, Text, WithLabel, Kbd_, Buttons, Textarea, States)"
+    specs: [input-group.spec.tsx]
+    cva:
+      inputGroupAddonVariants: { align: [inline-start, inline-end, block-start, block-end], defaults: {align: inline-start} }
+      inputGroupButtonVariants: { size: [xs, sm, icon-xs, icon-sm], defaults: {size: xs} }
   figma:
     section: { name: "Input Group", id: "3519:590" }
     addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start, inline-end, block-start, block-end]", slot: content }
@@ -286,6 +314,11 @@ open:
     exports: [Kbd, KbdGroup, kbdVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/kbd'"
     types: [KbdProps]
+    stories:
+      - "kbd.stories.tsx → UI/Kbd (Default, Emphasis, SingleKeys, WithIcon, Group, Combo, InText)"
+    specs: [kbd.spec.tsx]
+    cva:
+      kbdVariants: { emphasis: [high, low], defaults: {emphasis: high} }
   figma:
     section: { name: "Kbd", id: "3215:302" }
     set: { name: "Kbd", id: "3217:308" }             # 2 axes content × emphasis = 4 members
@@ -316,6 +349,10 @@ open:
     exports: [Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/breadcrumb'"
     types: [BreadcrumbLinkProps]
+    stories:
+      - "breadcrumb.stories.tsx → UI/Breadcrumb (Default, TwoLevels, WithEllipsis, CustomSeparator, AsRouterLink)"
+    specs: [breadcrumb.spec.tsx]
+    cva: none
   figma:
     section: { name: "Breadcrumb", id: "3249:302" }
     composition: { name: "Breadcrumb", id: "3254:302" }        # items gap Space/space-sm (6px)
@@ -346,6 +383,13 @@ open:
     exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, commandVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
     types: [CommandDialogProps, CommandProps, CommandSeparatorProps]
+    stories:
+      - "command-dialog.stories.tsx → UI/Command/CommandDialog (Default, Palette, PaletteFlat)"
+      - "command-separator.stories.tsx → UI/Command/CommandSeparator (Default)"
+      - "command.stories.tsx → UI/Command (Default, Palette, PaletteFlat, Empty)"
+    specs: [command.spec.tsx]
+    cva:
+      commandVariants: { variant: [default, palette], defaults: {variant: default} }
     variants: "variant: default | palette — ONLY on the Command root / CommandDialog (cva); Input / List / Group / Separator inherit via the module-internal CommandVariantContext (ToggleGroup idiom); data-variant on the root. CommandSeparator additionally takes a label prop (labeled rule, role=presentation div; same hide-on-search contract as the line form via useCommandState + alwaysRender)."
   figma:
     section: { name: "Command", id: "3555:679" }
@@ -417,6 +461,12 @@ open:
     exports: [Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/dialog'"
     types: [DialogContentProps, DialogFooterProps, DialogProps]
+    stories:
+      - "dialog-content.stories.tsx → UI/Dialog/DialogContent (Default)"
+      - "dialog-footer.stories.tsx → UI/Dialog/DialogFooter (Default)"
+      - "dialog.stories.tsx → UI/Dialog (Default, BasicConfirm, DestructiveConfirm, ScrollableContent, StickyFooter, NoCloseButton)"
+    specs: [dialog.spec.tsx]
+    cva: none
   figma:
     section: { name: "Dialog", id: "3589:788" }
     composition:
@@ -461,6 +511,10 @@ open:
     exports: [Separator]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/separator'"
     types: [SeparatorProps]
+    stories:
+      - "separator.stories.tsx → UI/Separator (Default, HorizontalBetweenBlocks, VerticalInRow, Orientations)"
+    specs: [separator.spec.tsx]
+    cva: none
   figma:
     section: { name: "Separator", id: "3675:1016" }
     set: { name: "Separator", id: "3676:1018" }
@@ -485,6 +539,10 @@ open:
     exports: [Label]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/label'"
     types: [LabelProps]
+    stories:
+      - "label.stories.tsx → UI/Label (Default, WithInput, WithCheckbox, DisabledPeer)"
+    specs: [label.spec.tsx]
+    cva: none
   figma:
     section: { name: "Label", id: "3733:1022" }
     set: { name: "Label", id: "3735:1024" }
@@ -511,6 +569,12 @@ open:
     exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
     types: [FieldErrorProps, FieldProps]
+    stories:
+      - "field-error.stories.tsx → UI/Field/FieldError (Default)"
+      - "field.stories.tsx → UI/Field (Default, InputField, TextareaField, Fieldset, Responsive, Invalid, Disabled, Horizontal)"
+    specs: [field.spec.tsx]
+    cva:
+      fieldVariants: { orientation: [vertical, horizontal, responsive], defaults: {orientation: vertical} }
     code_only_parts: [FieldTitle, "orientation=responsive"]   # responsive = container query only (a wrap proxy is not a faithful Figma model)
   figma:
     section: { name: "Field", id: "3710:1016" }
@@ -556,6 +620,10 @@ open:
     exports: [FieldLegend]
     barrel: "via the field barrel"
     types: [FieldLegendProps]
+    stories:
+      - "field-legend.stories.tsx → UI/Field/FieldLegend (Default)"
+    specs: [field.spec.tsx]
+    cva: none
   figma:
     section: { name: "Field Legend", id: "3904:1246" }
     set: { name: "FieldLegend", id: "3909:1246" }
@@ -578,6 +646,10 @@ open:
     dir: libs/ui/src/components/ui/field/        # exported from field/, no own folder
     exports: [FieldSet]
     barrel: "via the field barrel"
+    stories:
+      - "field.stories.tsx → UI/Field (Default, InputField, TextareaField, Fieldset, Responsive, Invalid, Disabled, Horizontal)"
+    specs: [field.spec.tsx]
+    cva: none
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
     component: { name: "FieldSet", id: "3739:1026" }   # single component (no variant axis)
@@ -600,6 +672,11 @@ open:
     exports: [FieldGroup]
     barrel: "via the field barrel"
     types: [FieldGroupProps]
+    stories:
+      - "field-group.stories.tsx → UI/Field/FieldGroup (Default)"
+    specs: [field.spec.tsx]
+    cva:
+      fieldGroupVariants: { orientation: [vertical, horizontal], defaults: {orientation: vertical} }
     props: { orientation: [vertical, horizontal] }   # fieldGroupVariants — DS extension over stock shadcn (which only knows Field orientation)
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
@@ -627,6 +704,10 @@ open:
     exports: [Checkbox]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
     types: [CheckboxProps]
+    stories:
+      - "checkbox.stories.tsx → UI/Checkbox (Default, Basic, Description, Indeterminate, GroupHorizontal, Disabled, Invalid, AllStates)"
+    specs: [checkbox.spec.tsx]
+    cva: none
   figma:
     section: { name: "Checkbox", id: "3791:1184" }
     set: { name: "Checkbox", id: "3795:1184" }   # 15 members, 5×3 WRAP grid
@@ -678,6 +759,10 @@ open:
     exports: [Switch]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/switch'"
     types: [SwitchProps]
+    stories:
+      - "switch.stories.tsx → UI/Switch (Default, AirplaneMode, Description, Sizes, Disabled, Invalid, AllStates)"
+    specs: [switch.spec.tsx]
+    cva: none
   figma:
     section: { name: "Switch", id: "3835:1193" }
     set: { name: "Switch", id: "3839:2" }                 # 3 axes size × checked × state, 20 members, 5×4 WRAP grid
@@ -730,6 +815,11 @@ open:
     exports: [RadioGroup, RadioGroupItem]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/radio-group'"
     types: [RadioGroupItemProps, RadioGroupProps]
+    stories:
+      - "radio-group-item.stories.tsx → UI/RadioGroup/Item (Default)"
+      - "radio-group.stories.tsx → UI/RadioGroup (Default, Horizontal, Description, Fieldset, Disabled, Invalid, AllStates)"
+    specs: [radio-group.spec.tsx]
+    cva: none
   figma:
     section: { name: "RadioGroup", id: "3849:1206" }
     set: { name: "RadioGroupItem", id: "3852:1206" }       # only the item is a set; 2 axes checked × state, 10 members, 5×2 WRAP
@@ -778,6 +868,12 @@ open:
     exports: [ChoiceCardCheckbox, ChoiceCardSwitch, ChoiceCardRadio]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/choice-card'"
     types: [ChoiceCardCheckboxProps, ChoiceCardRadioProps, ChoiceCardShellProps, ChoiceCardSwitchProps]
+    stories:
+      - "choice-card-checkbox/choice-card-checkbox.stories.tsx → UI/ChoiceCards/ChoiceCardCheckbox (ChoiceCardStates)"
+      - "choice-card-radio/choice-card-radio.stories.tsx → UI/ChoiceCards/ChoiceCardRadio (Group, ChoiceCardStates)"
+      - "choice-card-switch/choice-card-switch.stories.tsx → UI/ChoiceCards/ChoiceCardSwitch (ChoiceCardStates)"
+    specs: [choice-card-checkbox/choice-card-checkbox.spec.tsx, choice-card-radio/choice-card-radio.spec.tsx, choice-card-shell/choice-card-shell.spec.tsx, choice-card-switch/choice-card-switch.spec.tsx]
+    cva: none
     internal: "ChoiceCardShell (presentational, NOT exported) + useFieldId (hook). Nested subfolders per wrapper + choice-card-shell/ + use-field-id.ts, each with its own index.ts barrel"
   figma:
     section: { name: "Choice Card", id: "4107:1526" }
@@ -825,8 +921,15 @@ open:
     dir: libs/ui/src/components/ui/select/
     exports: [Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/select'"
-    stories: "select.stories.tsx (UI/Select) + select-{trigger,content,item,value}.stories.tsx (per-API-part pages, title UI/Select/Select*); prop-less pass-throughs (Group / Label / Separator / ScrollButtons) have no page"
     types: [SelectContentProps, SelectItemProps, SelectProps, SelectTriggerProps, SelectValueProps]
+    stories:
+      - "select-content.stories.tsx → UI/Select/SelectContent (Default)"
+      - "select-item.stories.tsx → UI/Select/SelectItem (Default, Typeahead)"
+      - "select-trigger.stories.tsx → UI/Select/SelectTrigger (Default)"
+      - "select-value.stories.tsx → UI/Select/SelectValue (Default)"
+      - "select.stories.tsx → UI/Select (Default, Groups, Scrollable, Disabled, Invalid, TriggerStates)"
+    specs: [select.spec.tsx]
+    cva: none
   figma:
     section: { name: "Select", id: "4307:1997" }
     trigger:
@@ -902,6 +1005,10 @@ open:
     exports: [Slider]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/slider'"
     types: [SliderProps]
+    stories:
+      - "slider.stories.tsx → UI/Slider (Default, Range, FieldSlider, Vertical, Disabled, AllStates)"
+    specs: [slider.spec.tsx]
+    cva: none
   figma:
     section: { name: "Slider", id: "4348:2225" }
     set: { name: "Slider", id: "4351:2225" }       # 12 members, 3 axes, 4×3 manual grid (mixed member sizes → no WRAP)
@@ -947,6 +1054,11 @@ open:
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
     types: [PopoverContentProps, PopoverProps]
+    stories:
+      - "popover-content.stories.tsx → UI/Popover/PopoverContent (Default)"
+      - "popover.stories.tsx → UI/Popover (Default, SimpleContent, Anchored, Placements, Sides)"
+    specs: [popover.spec.tsx]
+    cva: none
   figma:
     section: { name: "Popover", id: "4365:2253" }   # 2278×2585 — encloses the floating panels (see root.structure)
     build_frame: { name: "Build", id: "4390:2364" } # white vertical auto-layout frame (HUG, itemSpacing space-2xl, padding space-xl) INSIDE the section — holds the masters + root set + usage examples (a Section is not an auto-layout container)
@@ -989,6 +1101,11 @@ open:
     exports: [Tooltip, TooltipContent, TooltipProvider, TooltipTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
     types: [TooltipContentProps, TooltipProps]
+    stories:
+      - "tooltip-content.stories.tsx → UI/Tooltip/TooltipContent (Default)"
+      - "tooltip.stories.tsx → UI/Tooltip (Default, Placement, WithKbd, IconTrigger)"
+    specs: [tooltip.spec.tsx]
+    cva: none
   figma:
     section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
     component: { name: "Tooltip", id: "4382:2356" }      # the content-chip component (no variant set — single member)
@@ -1032,7 +1149,13 @@ open:
     exports: [Item, ItemMedia, ItemContent, ItemActions, ItemGroup, ItemSeparator, ItemTitle, ItemDescription, ItemHeader, ItemFooter, itemVariants, itemMediaVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/item'"
     types: [ItemMediaProps, ItemProps]
-    stories: "item.stories.tsx (UI/Item) + item-media.stories.tsx (UI/Item/ItemMedia — per-API-part page; only Item + ItemMedia have curated props, the 8 prop-less pass-throughs appear in usage stories)"
+    stories:
+      - "item-media.stories.tsx → UI/Item/ItemMedia (Default, Kinds)"
+      - "item.stories.tsx → UI/Item (Default, Variants, Sizes, WithActions, WithImage, Group, WithHeaderFooter, Link, AllStates)"
+    specs: [item.spec.tsx]
+    cva:
+      itemVariants: { variant: [default, outline, muted], size: [default, sm, xs], defaults: {variant: default, size: default} }
+      itemMediaVariants: { variant: [default, icon, image], defaults: {variant: default} }
   figma:
     section: { name: "Item", id: "4494:2471" }          # headline 4494:2472
     set: { name: "Item", id: "4498:2551" }              # 9 members (variant × size); master = outline/default 4495:2471
@@ -1074,6 +1197,10 @@ open:
     dir: libs/ui/src/components/ui/table/
     exports: [Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/table'"
+    stories:
+      - "table.stories.tsx → UI/Table (Default, Selectable, EmptyState, Alignment, ComponentCells, RowStates)"
+    specs: [table.spec.tsx]
+    cva: none
   figma:
     section: { name: "Table", id: "4514:2597" }
     head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }

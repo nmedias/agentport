@@ -193,7 +193,7 @@ Two artifacts — a port is **not done** until both exist:
    mapping-table row record the **why** — the `use`/`avoid` reasoning that picked that token over a
    same-value lookalike (T3), so the decision is auditable and the next port reuses it.
 2. **Component catalog** — `design-docs/design-system/components-reference.md`: add/refresh this
-   component's entry — `status`, `source`, `code` (dir / exports / barrel), `figma` (set + node ids +
+   component's entry — `status`, `source`, `code` (dir / exports / types / stories / specs / cva), `figma` (set + node ids +
    axes/slots + bound `vars`/`styles`), `skill`, `anatomy`, and only the structured current-state fields
    that apply: `deps`, `deviations` (stock → DS with the why), `forks` (Figma-only axes / code-only parts
    — never synced back), `figma_mechanics`, `divergences`, `a11y`, `open`, `run_notes`. No dates, no
