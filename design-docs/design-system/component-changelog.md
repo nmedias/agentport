@@ -36,7 +36,9 @@ rebound to `Muted/muted` (64 main nodes + 56 instance overrides) and 62 code cal
 **Catalog restructure.** `components-reference.md` rewritten in English: history moved into this file,
 free-text `notes` replaced by structured fields (`anatomy`, `deps`, `deviations`, `forks`,
 `figma_mechanics`, `divergences`, `a11y`, `open`, `run_notes`), `vars` maps re-verified against the live
-file (dead binding `3038:5` found in Checkbox / Switch / RadioGroup — recorded as open).
+file. The scan found 15 usage-example instance overrides in Checkbox / Switch / RadioGroup still bound to the
+deleted variable `3038:5` (old `shadcn Default/input`); rebound to what the main components bind (`input-border`
+for the Checkbox / Radio stroke, `input-fill-high` for the Switch track) — page scan afterwards: 0 dead bindings.
 
 ---
 

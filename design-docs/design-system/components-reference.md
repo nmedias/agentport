@@ -109,7 +109,7 @@ variable_ids:   # VariableID:<id> of the semantic variables the components bind 
   corner-md: "3073:3"
   corner-lg: "3073:4"
   corner-full: "3073:6"
-  deleted: { "3038:5": "old shadcn Default/input — still bound in the Checkbox / Switch / RadioGroup sections (see their open items)", "3116:2": "background-fixed — removed, no bindings" }
+  deleted: ["3038:5 (old shadcn Default/input)", "3116:2 (background-fixed)"]   # still resolvable by id, no bindings left — a hit on either is a regression
 open:
   - "Page Artboards (1099:8958): reference screen 'Quiet' 1099:9710 (section 'Final') still carries content from the origin project — neutralise or remove before the file key is published."
   - "Figma debt across the input family: focus / invalid DROP_SHADOW effect colours are raw hex (unbound) instead of the ring / destructive variables; the code uses the role-correct tokens."
@@ -143,6 +143,7 @@ open:
     - "Focus: border-ring + ring-ring/50 ring-[3px]; dark: dropped."
   divergences:
     - "asChild and the count-pill (font-mono tabular min-w-5) are code-level overrides, not Figma variants."
+  run_notes: [agent-runs/component-port/2026-06-12-badge/, agent-runs/component-sync/2026-06-17-badge/]
 
 - name: Button
   status: nova-aligned
@@ -176,6 +177,7 @@ open:
   open:
     - "Figma focus effect colour is raw #4a5562 @ 50 % (unbound) — should bind ring."
     - "size=icon binds .Button/Base to corner-lg but the state-layer to corner-md — align to corner-lg (= code)."
+  run_notes: [agent-runs/component-sync/2026-06-17-button/]
 
 - name: Input
   status: nova-aligned
@@ -200,6 +202,7 @@ open:
     - "Focus border-ring + ring-ring/50 ring-[3px]; invalid border-destructive + ring-destructive/20 (focus-gated: ring width only from focus-visible). dark: removed."
   forks:
     - "focus-invalid is a Figma member only — code composes it from focus-visible: + aria-invalid:."
+  run_notes: [agent-runs/component-sync/2026-06-17-input/]
 
 - name: Textarea
   status: nova-aligned
@@ -223,6 +226,7 @@ open:
     - "focus-invalid is a Figma member only (see Input)."
   figma_mechanics:
     - "Text top-aligned (counterAxis MIN), no truncation."
+  run_notes: [agent-runs/component-port/2026-06-09-textarea/]
 
 - name: InputGroup
   status: nova-aligned
@@ -257,6 +261,7 @@ open:
     - "Three layers: container composition (state × layout) with a children slot, addon with a content slot, Input / Textarea / Text as text props."
     - "Button nests a real ghost .Button instance (not a standalone re-clothe) → token + component propagation; geometry delta via Base override, icon content via swapComponent (the DS Button exposes no free icon slot)."
     - "Kbd ⌘ is a vector (RiCommandLine), not a text glyph."
+  run_notes: [agent-runs/component-port/2026-06-09-input-group/, agent-runs/component-port/2026-06-10-input-group/, agent-runs/component-sync/2026-06-17-input-group/]
 
 - name: Kbd
   status: nova-aligned
@@ -285,6 +290,7 @@ open:
     - "Nova Kbd is metrically identical to new-york (no density change)."
   divergences:
     - "Tooltip-context overrides (in-data-[slot=tooltip-content]: bg-muted-fill / text-ink) are code-only stock carry-over with no Figma binding."
+  run_notes: [agent-runs/component-sync/2026-06-09-kbd/, agent-runs/component-sync/2026-06-17-kbd/]
 
 - name: Breadcrumb
   status: nova-aligned
@@ -309,6 +315,7 @@ open:
   deviations:
     - "Colour: link rest text-muted, link-hover + page text-ink; separator / ellipsis icons inherit currentColor (no explicit class). Body → text-format-body."
     - "Gaps: item gap-xs (4px), list gap-sm (6px); ellipsis size-5; break-words → v4 wrap-break-word. Nova density decided in code and pushed to Figma."
+  run_notes: [agent-runs/component-port/2026-06-08-breadcrumb/, agent-runs/component-sync/2026-06-17-breadcrumb/]
 
 - name: Command
   status: nova-aligned
@@ -377,7 +384,7 @@ open:
     - "Prompt divider: code border-b on the wrapper, Figma a Separator instance — structural, not a delta."
   a11y:
     - "CommandList renders role=listbox → only option / group children allowed: CommandSeparator renders its own role=presentation div (cmdk sets role after the prop spread), CommandEmpty renders a disabled role=option so the empty listbox has an allowed child and screen readers announce the no-results message."
-  run_notes: [agent-runs/component-sync/2026-06-11-command/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-10-command/, agent-runs/component-port/2026-06-11-command-dialog/, agent-runs/component-sync/2026-06-10-command/, agent-runs/component-sync/2026-06-11-command/, agent-runs/component-sync/2026-06-17-command/]
 
 - name: Dialog
   status: nova-aligned
@@ -416,6 +423,7 @@ open:
     - "Scrim is its own DialogOverlay component; the panel composition stays scrim-free."
   divergences:
     - "CommandDialog reuses this Dialog (see Command)."
+  run_notes: [agent-runs/component-port/2026-06-10-dialog/, agent-runs/component-sync/2026-06-17-dialog/]
 
 - name: Separator
   status: nova-aligned
@@ -436,6 +444,7 @@ open:
   anatomy: "Static, non-interactive element (Radix Separator.Root; decorative=true → role=none, decorative=false → role=separator + aria-orientation)."
   deviations:
     - "1px line, fill bound to border (the default edge — NOT border-emphasis / -strong). Class string bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch; shrink-0 keeps the line in a flex row."
+  run_notes: [agent-runs/component-port/2026-06-12-separator/, agent-runs/component-sync/2026-06-17-separator/, agent-runs/component-sync/2026-08-31-separator/]
 
 - name: Label
   status: nova-aligned
@@ -460,6 +469,7 @@ open:
     - "text-format-label-md (14/500, fill ink); gap-md; select-none + group/peer-disabled opacity unchanged."
   forks:
     - "The state axis [default, disabled] is a Figma convenience so a real set exists — code has no label-state prop (disabled is group/peer-disabled-driven). Never sync back as a CVA."
+  run_notes: [agent-runs/component-port/2026-06-12-field/, agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-label/]
 
 - name: Field
   status: nova-aligned
@@ -503,6 +513,7 @@ open:
     - "Field renders role=group; a <label for> cannot name a control through it (see ChoiceCard aria-labelledby)."
   divergences:
     - "Radio invalid = group error (FieldSet level → separate destructive text, no per-field slot); Checkbox + Switch invalid examples reuse the .Field error slot."
+  run_notes: [agent-runs/component-port/2026-06-12-field/, agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-12-field-text-properties/, agent-runs/component-sync/2026-06-17-field/]
 
 - name: FieldLegend
   status: nova-aligned
@@ -524,6 +535,7 @@ open:
   anatomy: "Text component; variant maps onto the code prop FieldLegend.variant (NOT a fork — unlike Field.controlPosition)."
   deviations:
     - "variant=legend → text-format-title (section-caption role); variant=label → text-format-label-md; fill ink."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
 
 - name: FieldSet
   status: nova-aligned
@@ -542,6 +554,7 @@ open:
     styles: [text:Body, text:Label/md, text:Title]
   skill: Figma revision (/figma-use)
   anatomy: "Surface-less composite: VERTICAL auto-layout gap-xl (bound), w FIXED / h HUG, NO fill / stroke; legend = slot with a title-text default. Code counterpart = <fieldset> flex-col gap-xl + FieldLegend."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
 
 - name: FieldGroup
   status: nova-aligned
@@ -566,6 +579,7 @@ open:
   anatomy: "Surface-less container: VERTICAL auto-layout gap-xl (bound), w-full, NO fill / stroke; groups several Fields with a divider (FieldSeparator = nested real .Separator instance, no own set). Code = <div> @container/field-group flex-col gap-xl; horizontal = flex-row flex-wrap + [&>[data-slot=field]]:w-auto."
   deviations:
     - "orientation prop is a DS extension (counterpart of the RadioGroup container orientation → checkbox / radio groups get the same row capability)."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-field/]
 
 - name: Checkbox
   status: nova-aligned
@@ -610,8 +624,8 @@ open:
     - "Focus / invalid glow = literal-alpha DROP_SHADOW with showShadowBehindNode:false, copied VERBATIM from the Input focus member 3176:305 (a bound effect colour clobbers the /opacity → never bind it)."
     - "Usage-examples group = permanent real .Checkbox + .Label / .Field instances."
   open:
-    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
+  run_notes: [agent-runs/component-port/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-17-checkbox/]
 
 - name: Switch
   status: nova-aligned
@@ -658,8 +672,7 @@ open:
     - "invalid: unchecked = border-destructive only (track stays grey), checked = bg-destructive track; focus-invalid adds ring-destructive/20 (focus-gated ring, deviates from stock ring-3). Focus = border-ring + ring-ring/50 ring-[3px]. dark: removed."
   figma_mechanics:
     - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false)."
-  open:
-    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
+  run_notes: [agent-runs/component-port/2026-06-12-switch/, agent-runs/component-sync/2026-06-12-switch/, agent-runs/component-sync/2026-06-16-switch/, agent-runs/component-sync/2026-06-17-switch/]
 
 - name: RadioGroup
   status: nova-aligned
@@ -701,8 +714,8 @@ open:
   divergences:
     - "Radio invalid is a group error at FieldSet level (separate destructive text), not a per-field error slot."
   open:
-    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
+  run_notes: [agent-runs/component-port/2026-06-12-radio-group/, agent-runs/component-sync/2026-06-12-radio-group/]
 
 - name: ChoiceCard
   status: nova-aligned
@@ -748,6 +761,7 @@ open:
     - "Type trap: ComponentProps<Control> brings the HTML title attribute → Omit<…, 'title'>, otherwise ReactNode narrows to string."
   a11y:
     - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
+  run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/]
 
 - name: Select
   status: nova-aligned
@@ -820,7 +834,7 @@ open:
     - "SelectItem check: Figma = trailing layout vector (pr-md / right-2), code = absolute right-md + pr-3xl clearance (shadcn idiom) — visually equivalent, NOT a delta."
   figma_mechanics:
     - "Example headlines follow the sibling canon (Hanken Grotesk Regular 13, muted-ink)."
-  run_notes: [agent-runs/component-port/2026-06-19-select/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-19-select/]
 
 - name: Slider
   status: nova-aligned
@@ -864,6 +878,7 @@ open:
     - "role=slider sits on the thumb → the component FORWARDS aria-label / aria-labelledby to every thumb (otherwise axe aria-input-field-name fails; a root label names nothing)."
   figma_mechanics:
     - "figma-verify reports 18 thumb ↔ track overlaps — intended handle-on-rail geometry (CLEAN by design)."
+  run_notes: [agent-runs/component-port/2026-06-22-slider/]
 
 - name: Popover
   status: nova-aligned
@@ -903,7 +918,7 @@ open:
     - "Radix gives the content role=dialog → axe aria-dialog-name requires an accessible name; Popover does NOT wire the title automatically (unlike the modal Dialog) → an open panel needs an explicit aria-label / aria-labelledby (documented in JSDoc + stories)."
   divergences:
     - "jsdom spec covers the closed path + defaultOpen only; the click-driven open → Escape flow lives in the Chromium play test (portal content mounts on open — no extra polyfill)."
-  run_notes: [agent-runs/component-port/2026-06-22-popover/notes.md, agent-runs/component-port/2026-06-23-popover-figma/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-22-popover/, agent-runs/component-port/2026-06-23-popover-figma/, agent-runs/component-port/2026-06-24-popover-a9-anchor/]
 
 - name: Tooltip
   status: nova-aligned
@@ -944,7 +959,7 @@ open:
     - "TooltipContent role=tooltip; Radix wires aria-describedby trigger → content in the open state. An icon-only trigger needs its OWN accessible name (a tooltip is a description, not a name) → IconTrigger story uses the DS Button icon boolean + mandatory aria-label."
   divergences:
     - "jsdom spec covers the closed / trigger path only; the open path runs in the Chromium Storybook play test."
-  run_notes: [agent-runs/component-port/2026-06-22-tooltip/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-22-tooltip/, agent-runs/component-port/2026-06-23-tooltip-figma/, agent-runs/component-port/2026-06-23-tooltip-root-mirror/]
 
 - name: Item
   status: nova-aligned
@@ -984,7 +999,7 @@ open:
     - "ItemGroup role=list → role=listitem on the children at the call site (axe aria-required-children)."
   open:
     - "No sub-14 sans format for the xs size (stock xs:text-xs)."
-  run_notes: [agent-runs/component-port/2026-06-26-item/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-26-item/]
 
 - name: Table
   status: nova-aligned
@@ -1013,5 +1028,5 @@ open:
     - "Granularity Cell + Row + Table with align l / c / r: TableHead / TableCell sets (align axis, TEXT prop + content SLOT), TableRow set (state axis, cells slot built EMPTY + minHeight), Table composition (content slot holds header + body + footer rows). For a component cell: clear the text, put the component into the slot. Slot strategy: build empty, bake the demo, examples append-only."
   divergences:
     - "Footer cells stay Body in Figma; the code tfoot label weight is code-only (minor)."
-  run_notes: [agent-runs/component-port/2026-06-26-table/notes.md]
+  run_notes: [agent-runs/component-port/2026-06-26-table/]
 ```
