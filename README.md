@@ -98,6 +98,89 @@ Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
 
 Writing rules for skills live in `.claude/skills/CLAUDE.md`.
 
+## Working with the agent
+
+The pipeline is driven from a **Claude Code** session opened at the repo root. Setup (plugins, MCP servers,
+Figma file) is described under *Agent tooling* and *Figma* below; this section is about the day-to-day loop.
+
+### Before a run
+
+```bash
+npm run storybook            # :6006 — the storybook MCP (addon-mcp) serves story docs + test runs to the agent
+```
+
+- Open the DS file in **Figma Desktop** with the MCP plugin enabled; `/figma-status` in Claude Code
+  must report the Plugin MCP connected. Without it a port stops before the Figma build.
+- Optionally `/skill-feedback on` — the agent then records skill gaps it hits during the run into a
+  `skill-feedback.md` next to the run notes (see *What a run leaves behind*).
+
+### A first-time port, end to end
+
+```
+/shadcn-component-port popover
+```
+
+What happens, from your side of the screen:
+
+1. **Anatomy** — the agent pulls the stock source (`ui:add`) and the doc examples through the shadcn MCP,
+   lists variant axes, slots and every stock class string.
+2. **Stories first** — the shadcn usage examples become Storybook stories on the house pattern
+   (`/storybook-rules`) *before* anything touches Figma. You see them in the running Storybook.
+3. **Translate** — stock classes → DS utilities via `design-docs/design-system/tokens-reference.md` §6,
+   written down as one mapping table. This is where the agent **asks you** when the token name match
+   would be visually wrong (e.g. a near-white `muted` tint for a *selected* row) or when a composite
+   needs a decision: part split, Slot vs. Swap for open content, variant granularity.
+4. **Figma build + verify** — a token-bound component set (full variant matrix, sorted grid) inside a
+   Section on the components page, plus a permanent usage-examples group mirroring the stories;
+   `/figma-verify` must come back `CLEAN`.
+5. **Code** — the component is rewritten on the DS vocabulary, the prop API annotated for Autodocs
+   (`/docgen-props`), `.spec.tsx` added, folder + barrel wired. Gate: `npx nx test|typecheck|lint
+   @agentport/ui` green, every story renders in Chromium, axe clean.
+6. **Notes + catalog** — run notes and the component catalog are updated (below).
+
+The agent works on a branch (`feat/shadcn-popover-port`) and commits locally; it does **not** push or
+merge into `master` unless you say so (`CLAUDE.md` → *Branch Workflow*).
+
+### Prompt examples
+
+Skills are slash commands; the argument is the shadcn item name (`argument-hint` in each `SKILL.md`).
+Plain-language requests trigger the same skills when they match the skill description.
+
+| You want to …                                              | Type                                                                                              |
+|------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| Port a component that does not exist in the DS yet         | `/shadcn-component-port tabs`                                                                     |
+| Same, in prose                                             | `Port the shadcn tabs component into the DS — Figma set and code.`                                |
+| Port a multi-part composite (agent asks about part split)  | `/shadcn-component-port dialog`                                                                   |
+| Capture skill-improvement findings during the run          | `/skill-feedback on` → run the port → `/skill-feedback off`                                       |
+| Pull a Figma change into an existing component             | `/component-sync badge`                                                                           |
+| Same, with context                                         | `The Badge set in Figma got a new outline variant and a smaller radius — sync the code to it.`    |
+| Rework stories after an API change (no Figma involved)     | `Reconcile switch.stories.tsx with the new size prop — follow /storybook-rules.`                  |
+| Surface a component's props in Autodocs                    | `Annotate the Select prop API per /docgen-props so it shows up in the ArgsTable.`                 |
+| Check a render visually                                    | `Shoot ui-table--row-states and compare the selected-row tint with the Figma set.`                |
+| Check the Figma link                                       | `/figma-status`                                                                                   |
+| Freeze the session for later                               | `/handoff popover-port en`                                                                        |
+
+Decisions the agent will hand back to you instead of guessing: token choices that would be visually
+wrong under a name-faithful mapping, composite granularity (which parts become their own set), Slot vs.
+Swap for content-bearing parts, and anything that would require detaching a Figma instance (it never does).
+
+### What a run leaves behind
+
+```
+agent-runs/component-port/<YYYY-MM-DD>-<component>/notes.md      mapping table, Figma node + variable IDs,
+                                                                  example inventory, gate state, preview URLs
+agent-runs/component-port/<YYYY-MM-DD>-<component>/skill-feedback.md   only if /skill-feedback was on
+agent-runs/component-sync/<YYYY-MM-DD>-<component>/notes.md      delta list + DEVIATIONS (code ≠ Figma binding)
+design-docs/design-system/components-reference.md                 catalog entry updated (status, node IDs, axes)
+libs/ui/src/components/ui/<component>/                            <component>.tsx + .stories.tsx + .spec.tsx + index.ts
+```
+
+Read `agent-runs/component-port/2026-06-26-table/` for a complete example: notes with a user decision
+(row-tint tone) recorded as such, and a `skill-feedback.md` listing the skill gaps that surfaced in that run.
+
+The rules the agent follows — commit style, branch workflow, Figma dos and don'ts, "docs describe only
+what ships" — are in `CLAUDE.md`; the skills themselves in `.claude/skills/`.
+
 ## Agent tooling
 
 The pipeline runs in **Claude Code**. It needs two kinds of tooling: plugins (installed once per
@@ -164,7 +247,8 @@ npm run ui:add -- popover
 
 `ui:add` writes the shadcn source *flat* (`libs/ui/src/components/ui/popover.tsx`). Move it into its
 folder, add the barrel, re-export the folder in `libs/ui/src/index.ts`, then re-clothe it in the DS
-tokens — or run `/shadcn-component-port popover` and let the skill do all of that against Figma.
+tokens — or run `/shadcn-component-port popover` and let the skill do all of that against Figma
+(see *Working with the agent*).
 
 ## Tech stack
 
