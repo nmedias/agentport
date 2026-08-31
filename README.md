@@ -21,8 +21,8 @@ libs/ui/                     @agentport/ui — the library
 agent-runs/component-port/   run notes per first-time port (date-component)
 agent-runs/component-sync/   run notes per Figma → code reconciliation
 design-docs/            design-system/tokens-reference.md (token crosswalk), design-system/components-reference.md
-                             (component catalog with Figma node IDs), design-system/token-changelog.md (token
-                             history), token-analysis-*.md (token system derivation)
+                             (component catalog with Figma node IDs), design-system/{token,component}-changelog.md
+                             (history, human-readable), token-analysis-*.md (token system derivation)
 .claude/skills/              the pipeline skills (see below)
 tools/shoot-stories.mjs      Playwright screenshots of a running Storybook, for visual checks
 ```
@@ -173,6 +173,7 @@ agent-runs/component-port/<YYYY-MM-DD>-<component>/notes.md      mapping table, 
 agent-runs/component-port/<YYYY-MM-DD>-<component>/skill-feedback.md   only if /skill-feedback was on
 agent-runs/component-sync/<YYYY-MM-DD>-<component>/notes.md      delta list + DEVIATIONS (code ≠ Figma binding)
 design-docs/design-system/components-reference.md                 catalog entry updated (status, node IDs, axes)
+design-docs/design-system/component-changelog.md                  dated entry for the run
 libs/ui/src/components/ui/<component>/                            <component>.tsx + .stories.tsx + .spec.tsx + index.ts
 ```
 

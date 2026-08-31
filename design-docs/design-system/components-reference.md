@@ -1,118 +1,118 @@
-# Agentport DS — Component-Referenz (maschinenlesbar)
+# Agentport DS — Component Reference (machine-readable)
 
-Eine Datenquelle für Component-Arbeit: **wo liegt was** — in Figma (Set/Node-IDs) und im Code
-(Ordner/Exporte/Barrel) — plus Status, Quelle und die wichtigsten DS-Abweichungen pro Component.
-Prosa = Regeln/Architektur; **YAML = Component-Daten**. Schwester-Doc: `tokens-reference.md`
-(Token-Crosswalk) — die hier referenzierten Utilities/Werte dort nachschlagen.
+One data source for component work: **where everything lives** — in Figma (section / set / node IDs)
+and in code (folder / exports / barrel) — plus status, source, the deliberate DS deviations and the
+Figma-only forks per component. **Everything an implementer needs is in the YAML blocks**; prose is a
+one-line intro per section. Current state only — ports, revisions, sync rounds and removed artefacts
+live in [`component-changelog.md`](component-changelog.md). Sister doc:
+[`tokens-reference.md`](tokens-reference.md) — look up utilities / values referenced here there.
 
-Quelle: `libs/ui/src/components/ui/*`, `libs/ui/src/index.ts`, `libs/ui/{components.json,package.json}`,
-Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
-(dieses Doc nachziehen, nicht umgekehrt). Figma-Lesen ist read-only (Pipeline-Regel).
+Sources: `libs/ui/src/components/ui/*`, `libs/ui/src/index.ts`, `libs/ui/{components.json,package.json}`,
+Figma "Agentport DS". On drift: **code + Figma win** (update this doc, never the other way round). Figma
+reads are read-only (pipeline rule).
 
-> **Datei-Wechsel 2026-08-31:** Die Figma-Datei ist jetzt `ejFKo4MNuvC9TSDKOCUvyq` („Agentport DS", view-shared via
-> Link) — ein **Duplikat** der vorherigen Datei, daher sind alle Node-IDs unten unverändert gültig (Page
-> `Shadcn Components` behält `3126:2`). Verifiziert per Plugin-MCP (26 Sections, Probe-IDs Table/Checkbox/Select
-> gefunden). Gleichzeitig entfernt: die verwaiste Section **Toggle** `4802:2819` (Set + Usage Examples, 61
-> Components) — Toggle war seit 2026-06-24 ohne Code-Gegenstück (`handoff-component-port-open.md`).
-> Weitere Bereinigung am selben Tag (Plugin-MCP): Page „Color" → Frame `4178:2` (Markenfarben) gelöscht, Frame
-> „Colors" bleibt · Collection `reference`: 33 Rampen-Variablen `Color/os-{signal,still,deep}/*` →
-> `Color/{signal,still,deep}/*` (entspricht `tokens.css` `--ap-color-signal-*` …) · 4 `semantic`-Beschreibungen
-> neutralisiert (`Primary/primary`, `Primary/primary-fill`, `Secondary/secondary-fill`, `Destructive/destructive-ink`) ·
-> Collection `showcase` (6 Vars, 0 Bindings) gelöscht · Command-Section: Separator-Labels „Springe zu / Suche /
-> Führe aus" → „Jump to / Search / Run" (= Stories) · Page „Color" → Frame „Colors" `4197:9989`: Rampen-Titel
-> „OS Signal / OS Still / Os Deep" → „Signal / Still / Deep", Swatch-Labels `brand-*`/`os calm-*`/`os navy-*` →
-> `signal-*`/`still-*`/`deep-*` (= Variablen + `--ap-color-*`), Füll-Beschreibungen → Token-Rollen aus der
-> tokens-reference (40 Text-Nodes) · Primitive-Rampe `Color/ink/*` → **`Color/neutral/*`** (13 Vars; Code `--ap-color-neutral-*`,
-> Storybook Primitives/Colors/Effects, tokens-reference; Colors-Frame „Neutral"). Semantisches Suffix `-ink` unverändert. **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
-> `1099:9710`, Section „Final") trägt noch Inhalt aus dem Ursprungsprojekt — wird in einem eigenen Abschnitt
-> aufgeräumt; bis dahin den fileKey nicht pushen.
+## Rules
 
-> **Token-Beschreibungs-Audit 2026-08-31 (Figma ↔ tokens-reference ↔ Storybook, Plugin-MCP):** alle Beschreibungen
-> auf **eine englische Rollen-Formulierung** je Token gebracht (Figma-Variable = `tokens-reference.md` `use` =
-> Foundations-Rolle in `Colors.tsx`/`SpacingRadius.tsx`/`Typography.tsx`/`Effects.tsx`); Qualitätsregel: eindeutig,
-> gegen Nachbar-Tokens abgegrenzt, semantisch statt Komponentennamen, Gruppenwörter (primary/secondary/accent/brand/
-> muted/inverse) nie als Adjektiv. Gesetzt: 52 `semantic` + 15 `semantic-dimension` + 14 Text-Styles + 2 Effect-Styles
-> (vorher 42 DE/EN gemischt, 10 + 15 + 16 leer); `reference` unverändert bis auf `Color/opacity/10` (CSS-Name
-> `--ap-color-opacity-10`). Strukturell: `Muted/muted` (VariableID:4492:2666, bisher Figma-only) ist jetzt der
-> **Standalone**-Token `--ap-sys-muted` / `text-muted` (Paar-Regel: `muted-ink` nur auf `muted-fill`) — 120 Bindings
-> auf `Muted/muted-ink` außerhalb von `muted-fill` auf `Muted/muted` umgehängt (64 Main-Nodes + 56 Instanz-Overrides),
-> 62 Code-Call-Sites `text-muted-ink` → `text-muted` · `Inverse/inverse-ink/muted` → **`Inverse/inverse-ink-muted`**
-> (ID `4663:4413` bleibt) · Variable `background-fixed` (`3116:2`) **gelöscht** (0 Bindings, 0 Call-Sites; Code +
-> Docs bereinigt) · `Inverse/inverse-container-hover`: Code/Docs von 55 % auf den Figma-Wert **70 %** (`#0d2531b2`).
-> Nebenbefund (offen): Button `size=icon` bindet `.Button/Base` an `corner-lg`, den `state-layer` aber an `corner-md`.
+- **Baseline = `radix-nova`** (`components.json` `style`). `ui:add` pulls the denser Nova source; re-clothe
+  it in DS tokens **by name**, not by Nova's raw scale. Never `shadcn init` under radix-nova. Details +
+  globals plumbing (data-state custom variants): `handoff-component-port-open.md` §Nova baseline.
+- **One folder per component:** `components/ui/<name>/` = `<name>.tsx` + `.stories.tsx` + `.spec.tsx` +
+  `index.ts` (barrel `export * from './<name>'`), re-exported from the root barrel `libs/ui/src/index.ts`
+  (otherwise unreachable via `@agentport/ui`).
+- **Figma is the source of truth for values / density.** A bound variable is authoritative
+  (tokens-reference §6 / §7 crosswalk). First port via `/shadcn-component-port`, Figma → code upkeep via
+  `/component-sync` (read-only Figma). A code → Figma push is the exception, not the default (manual
+  `use_figma`).
+- **Status vocabulary** (`status`): `nova-aligned` = ported **and** aligned to the radix-nova density ·
+  `ported` = ported, still new-york density · `pending` = not (yet / again) in code · `removed` =
+  deliberately removed. `figma_synced: true` = at least one `/component-sync` or push round happened.
+- **Geometry stays numeric** (`h-8`, `size-3`, `min-w-5`); only colour / typography / spacing / radius
+  bind to tokens. No dark mode (light is the only mode).
+- **Entry fields are current facts, never history.** `deviations` = deliberate departures from stock
+  shadcn with the reason; `forks` = Figma-only axes / props and code-only parts — **never sync a fork
+  back** as a CVA / prop; `figma_mechanics` = what an editor must know to change the set safely;
+  `divergences` = code ↔ Figma structural differences that are **not** a delta for `/component-sync`;
+  `open` = known gaps. Dates, old names and old values belong in the changelog.
+- IDs are **Figma node IDs** in file `ejFKo4MNuvC9TSDKOCUvyq` (configured in
+  `.claude/skills/{shadcn-component-port,component-sync}/config.json`). They are stable (not session IDs).
+- `vars` / `styles` per entry = the semantic variables and styles **actually bound inside the component's
+  Section** (incl. usage examples), read from the live file; typography part variables are represented by
+  their text style.
 
-> **Colour-Rework 2026-06-17 (`-fill`/`-ink`/`-border`-Token-System):** alle Components unten via
-> `/component-sync` (Figma → Code) auf die neuen DS-Color-Utilities umgekleidet. Live-Figma-Set-Namen
-> aktualisiert (Top-Level-Sets ohne führenden `.`; Composites flachgezogen, z. B. `.Command/Item`→`CommandItem`,
-> `.Dialog/Footer`→`DialogFooter`, `.ChoiceCard/Checkbox`→`ChoiceCardCheckbox`; `.Button/Base` behält den Punkt).
-> Per-Component Color-Deltas + Deviations: `agent-runs/component-sync/2026-06-17-<component>/notes.md`.
-> Offene Figma-Schuld (mehrere Components): die Focus/Invalid-DROP_SHADOW-Effektfarben binden rohes Hex
-> (unbound) statt der `ring`/`destructive`-Variablen — der Code nutzt die rollen-korrekten Tokens.
-
-## Regeln
-
-- **Baseline = `radix-nova`** (`components.json` `style`). `ui:add` zieht dichtere Nova-Source; im Code
-  in DS-Tokens re-clothen (per NAME, nicht Novas Rohskala). Nie `shadcn init` unter radix-nova. Details
-  + globals-Plumbing (data-state Custom-Variants): siehe `handoff-component-port-open.md` §Nova-Baseline.
-- **Ein Ordner pro Component:** `components/ui/<name>/` = `<name>.tsx` + `.stories.tsx` + `.spec.tsx` +
-  `index.ts` (Barrel `export * from './<name>'`). Re-Export der Component im Wurzel-Barrel
-  `libs/ui/src/index.ts` (sonst nicht über `@agentport/ui` erreichbar).
-- **Figma-Quelle der Wahrheit für Werte/Dichte.** Bound Variable = autoritativ (§6/§7-Crosswalk der
-  tokens-reference). Erstport via `/shadcn-component-port`, Figma→Code-Pflege via `/component-sync`
-  (read-only Figma). Ein Code→Figma-Push ist die Ausnahme, nicht der Default (manuell via `use_figma`).
-- **Status-Vokabular** (Feld `status`): `nova-aligned` = portiert **und** auf die radix-nova-Dichte
-  angeglichen · `ported` = portiert, noch new-york-Dichte · `pending` = noch nicht (wieder) im Code ·
-  `removed` = bewusst entfernt. `figma-synced: true` = mind. ein `/component-sync`- oder Push-Durchlauf.
-- **Geometrie bleibt numerisch** (`h-8`, `size-3`, `min-w-5`); nur Farbe/Typo/Spacing/Radius binden an
-  Tokens. Kein Dark-Mode (Light = einziger Mode).
-- IDs sind **Figma-Node-IDs** in der Datei `ejFKo4MNuvC9TSDKOCUvyq` („Agentport DS", konfiguriert in
-  `.claude/skills/{shadcn-component-port,component-sync}/config.json`). Sie sind stabil (keine Session-IDs).
-
-## Schema (pro Component)
+## Schema (per component)
 
 ```
-name · status · figma_synced? · source{registry,item,style} ·
-code{dir, exports[], barrel} ·
-figma{page, section?, set_or_component, members?/slots?, axis} ·
-skill · notes
+name · status · figma_synced · source{registry,item,style} ·
+code{dir, exports[], barrel, types?, variants?, internal?, code_only_parts?} ·
+figma{section, set|component|composition…, members?, slots?, props?, axis, examples?, vars, styles} ·
+skill · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
 ```
 
-## Architektur / Pipeline
-
-```
-shadcn (@shadcn/<item>, style radix-nova)
-   → /shadcn-component-port: Anatomie lesen → Figma token-gebundenes Set bauen → Code auf DS-Utilities
-   → /component-sync: Figma-Änderung → Code-Delta (read-only Figma)
-
-Figma „Agentport DS"  fileKey ejFKo4MNuvC9TSDKOCUvyq
-   Page „Shadcn Components"  3126:2   ← alle UI-Component-Sets liegen hier
-Code  libs/ui/src/components/ui/<name>/   →  Barrel libs/ui/src/index.ts  →  @agentport/ui
-Blocks (Organismen)  libs/ui/src/blocks/<screen>/<name>/  →  @agentport/ui/blocks[/<screen>]
-```
-
-## Meta
+## Architecture
 
 ```yaml
 figma:
   file_key: ejFKo4MNuvC9TSDKOCUvyq
   file_name: "Agentport DS"
-  components_page: { name: "Shadcn Components", id: "3126:2" }
+  components_page: { name: "Shadcn Components", id: "3126:2" }   # every UI component set lives here
+  other_pages: [Color, "----", Artboards]
 baseline:
-  shadcn_style: radix-nova          # components.json (war new-york bis 2026-06-09)
+  shadcn_style: radix-nova            # components.json
   registry: "@shadcn"
-modes: [light]                       # kein Dark-Mode
-package: "@agentport/ui"              # Components über Wurzel-Barrel; Blocks via ./blocks-Subpath
-status_note: >
-  Form-Toggle-Batch 2026-06-12 (Branch feat/form-toggles-port): Checkbox · Switch · RadioGroup
-  parallel portiert (Code-Seite 3 Agents parallel, Figma seriell wg. einer Plugin-Verbindung; Gate
-  grün 92 Specs). Alle drei = State-Achse (kein CVA, Sibling von Input); Switch zusätzlich size-Achse.
-  Standard etabliert: Focus-/Invalid-Glow = literal-alpha DROP_SHADOW mit showShadowBehindNode:false
-  (verbatim von .Input-Focus 3176:305) + permanente Usage-Examples-Group mit echten .Label-Instanzen.
-  Davor 2026-06-12: Field-Familie (+ Label/FieldSet/FieldGroup), Separator.
-  Dialog portiert (Composite-Verfahren, Figma+Code, Gate grün, Done-Test) inkl. Semantic-Token
-  `scrim`; CommandDialog 2026-06-11 nachgerüstet (code-only, Branch feat/command-dialog-readd).
-  Davor: Command (cmdk) + InputGroup-Re-Port nach dem überarbeiteten Composite-Verfahren,
-  radix-nova-Angleichung der Altkomponenten, Textarea.
+modes: [light]
+package: "@agentport/ui"              # components via the root barrel; blocks via the ./blocks subpath
+pipeline:
+  port: "shadcn (@shadcn/<item>, style radix-nova) → /shadcn-component-port: read anatomy → build token-bound Figma set → code on DS utilities"
+  sync: "/component-sync: Figma change → code delta (read-only Figma)"
+code_layout:
+  components: "libs/ui/src/components/ui/<name>/  →  barrel libs/ui/src/index.ts  →  @agentport/ui"
+  blocks:     "libs/ui/src/blocks/<screen>/<name>/  →  @agentport/ui/blocks[/<screen>]"
+blocks:
+  role: "presentational organisms composed from the primitives, one folder per screen"
+  status: "layer exists (libs/ui/src/blocks/index.ts, export ./blocks); no organism ported"
+commands:
+  port:  "/shadcn-component-port <name>"
+  sync:  "/component-sync <name>"
+  skill_feedback: "/skill-feedback kind=component-port subject=<name>   # before a port / sync"
+  gate:  "npx nx test|typecheck|lint @agentport/ui"
+  nova_source: "https://ui.shadcn.com/r/styles/radix-nova/<component>.json   # inspect before ui:add"
+variable_ids:   # VariableID:<id> of the semantic variables the components bind (resolved from the live file); names = tokens-reference
+  surface: "3037:2"
+  ink: "3037:3"
+  dialog-fill: "3037:6"
+  dialog-ink: "3037:7"
+  primary-fill: "3037:8"
+  primary-ink: "3037:9"
+  muted-fill: "3037:12"
+  muted-ink: "3037:13"
+  muted: "4492:2666"
+  accent-fill: "3037:14"
+  accent-ink: "3038:2"
+  destructive: "3038:3"
+  destructive-ink: "3052:2"
+  border: "3038:4"
+  ring: "3038:6"
+  input-fill: "3108:2"
+  input-fill-high: "4197:9645"
+  input-border: "4197:9644"
+  input-ink-placeholder: "3043:3"
+  inverse-ink-muted: "4663:4413"
+  scrim: "3588:2"
+  scrim-opacity: "3618:3"
+  space-2xs: "3070:3"
+  space-xs: "3070:4"
+  space-sm: "3070:5"
+  space-md: "3070:6"
+  space-lg: "3070:8"
+  space-xl: "3070:9"
+  corner-sm: "3073:2"
+  corner-md: "3073:3"
+  corner-lg: "3073:4"
+  corner-full: "3073:6"
+  deleted: { "3038:5": "old shadcn Default/input — still bound in the Checkbox / Switch / RadioGroup sections (see their open items)", "3116:2": "background-fixed — removed, no bindings" }
+open:
+  - "Page Artboards (1099:8958): reference screen 'Quiet' 1099:9710 (section 'Final') still carries content from the origin project — neutralise or remove before the file key is published."
+  - "Figma debt across the input family: focus / invalid DROP_SHADOW effect colours are raw hex (unbound) instead of the ring / destructive variables; the code uses the role-correct tokens."
 ```
 
 ## Components
@@ -120,7 +120,7 @@ status_note: >
 ```yaml
 - name: Badge
   status: nova-aligned
-  figma_synced: true                            # colour sync 2026-06-17 (/component-sync) → -fill/-ink
+  figma_synced: true
   source: { registry: "@shadcn", item: badge, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/badge/
@@ -128,26 +128,25 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/badge'"
   figma:
     section: { name: "Badge", id: "3687:1016" }
-    set: { name: "Badge", id: "3697:1016" }         # Live-Name ohne führenden Punkt
+    set: { name: "Badge", id: "3697:1016" }
     members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
-    slots: { icon: "icon#3697:0" }                  # leading-icon SLOT; default 12px check vector, empty→text-only
+    slots: { icon: "icon#3697:0" }                  # leading-icon slot; default 12px check vector, empty → text only
     axis: { variant: [default, secondary, destructive, outline, ghost, link] }
-  skill: /shadcn-component-port (2026-06-12); /component-sync (2026-06-17)
-  notes: >
-    Single-element CVA span (asChild via Radix Slot, data-slot/data-variant, [&>svg]:size-3 icon).
-    radix-nova source = 6 variants (ghost/link are Nova extras over the doc's 4) — all kept in code
-    AND the full Figma matrix. Geometry: rounded-4xl→corner-full (full pill); text-format-label-md
-    (no 12px sans → role-picked, 14px); px-2→px-md, py-0.5→py-2xs, gap-1→gap-xs; h-5/size-3 numeric;
-    focus border-ring + ring/50 ring-[3px]; dark: dropped. Colour clothing (Figma Badge bindings,
-    2026-06-17 -fill/-ink): default bg-primary-fill + text-primary-ink · secondary bg-secondary +
-    text-secondary-ink · destructive NOW SOLID bg-destructive + text-destructive-ink (was /10 tint,
-    hover→/80) · outline border + text-ink · ghost text-ink + muted-fill/-ink hover · link text-primary.
-    Prior secondary/destructive ⚠ placeholder RESOLVED — both bind real DS semantics. asChild +
-    count-pill (font-mono tabular min-w-5) are code-level overrides, not Figma variants.
+    vars: [ink, border, corner-full, destructive, destructive-ink, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xs]
+    styles: [text:Label/md]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Single-element CVA span (asChild via Radix Slot, data-slot / data-variant, [&>svg]:size-3 icon)."
+  deviations:
+    - "All 6 Nova variants kept (ghost / link are Nova extras over the doc's 4) — in code and in the full Figma matrix."
+    - "Shape: corner-full pill; text-format-label-md (no 12px sans format → role-picked 14px); px-md / py-2xs / gap-xs; h-5 / size-3 numeric."
+    - "Colour: default bg-primary-fill + text-primary-ink · secondary bg-secondary-fill + text-secondary-ink · destructive SOLID bg-destructive + text-destructive-ink (stock is a /10 tint) · outline border + text-ink · ghost text-ink with muted-fill / muted-ink hover · link text-primary."
+    - "Focus: border-ring + ring-ring/50 ring-[3px]; dark: dropped."
+  divergences:
+    - "asChild and the count-pill (font-mono tabular min-w-5) are code-level overrides, not Figma variants."
 
 - name: Button
   status: nova-aligned
-  figma_synced: true   # 2026-06-17 colour sync (Step 3, /component-sync) → -fill/-ink token rework
+  figma_synced: true
   source: { registry: "@shadcn", item: button, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/button/
@@ -155,25 +154,32 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/button'"
   figma:
     section: { name: "Button", id: "3126:3" }
-    set: { name: "Button", id: "3164:312" }       # 220er-Matrix variant × size × state (Live-Name ohne führenden Punkt)
-    base: { name: ".Button/Base", id: "3159:12" } # ausgekoppeltes Basis-Set (Fläche/Radius/Padding + state-layer RECTANGLE)
+    base_section: { name: "Button · Base", id: "3145:2" }
+    set: { name: "Button", id: "3164:312" }       # 220-member matrix variant × size × state
+    base: { name: ".Button/Base", id: "3159:12" } # decoupled base set (surface / radius / padding + state-layer RECTANGLE)
     axis: { variant: [default, destructive, outline, secondary, ghost, link],
             size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg],
             state: [default, hover, active, focus, disabled] }
-  skill: /shadcn-component-port   # colour re-clothed via /component-sync
-  notes: >
-    Nova-Size-Ladder (h-8 default + xs und icon-xs/sm/lg, per-Size-Icon-Sizing, aria-expanded).
-    Colour-Clothing (Figma .Button-Bindings, 2026-06-17): default = bg-primary-fill + text-primary-ink ·
-    secondary = bg-secondary + text-secondary-ink · destructive = bg-destructive + text-destructive-ink ·
-    outline = bg-surface + border + hover bg-accent-fill/text-accent-ink · ghost = hover accent-fill/-ink ·
-    link = text-primary. Radius per NAME (corner-lg/-md), text-format-label-md. Figma treibt hover/active
-    über ein state-layer-Overlay → Code nutzt das /opacity-Idiom. Focus-Ring = ring-ring/50 (Figma-Effekt
-    ist rohes #4a5562@50%, unbound → sollte an ring gebunden werden). Icon-only (size=icon*) verlangt
-    aria-label/-labelledby auf Typ-Ebene. dark: entfernt.
+    vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-md, destructive, destructive-ink, muted-fill, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-md, space-sm, space-xs]
+    styles: [text:Label/md]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "CVA button; public API = variant + size (the geometry scale) + icon boolean — the square icon* cva keys are mapped in render, not public sizes."
+  deviations:
+    - "Nova size ladder (h-8 default, xs, per-size icon sizing, aria-expanded)."
+    - "Colour: default bg-primary-fill + text-primary-ink · secondary bg-secondary-fill + text-secondary-ink · destructive bg-destructive + text-destructive-ink · outline bg-surface + border, hover bg-accent-fill / text-accent-ink · ghost hover accent-fill / accent-ink · link text-primary."
+    - "Radius by name: corner-lg default, corner-md for xs / sm / icon-xs / icon-sm; text-format-label-md; dark: removed."
+    - "Focus ring = ring-ring/50 ring-[3px]."
+  figma_mechanics:
+    - "hover / active are driven by a state-layer overlay on .Button/Base → code uses the /opacity idiom (bg-primary-fill/90 etc.)."
+  a11y:
+    - "Icon-only (icon boolean) requires aria-label / aria-labelledby at the type level."
+  open:
+    - "Figma focus effect colour is raw #4a5562 @ 50 % (unbound) — should bind ring."
+    - "size=icon binds .Button/Base to corner-lg but the state-layer to corner-md — align to corner-lg (= code)."
 
 - name: Input
   status: nova-aligned
-  figma_synced: true                            # colour sync 2026-06-17 (/component-sync) → input-fill/-border/-ink-placeholder
+  figma_synced: true
   source: { registry: "@shadcn", item: input, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/input/
@@ -182,16 +188,22 @@ status_note: >
   figma:
     section: { name: "Input", id: "3176:302" }
     set: { name: "Input", id: "3177:302" }
-    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # focus-invalid = focus+invalid kombiniert (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid: zusammen, kein Sync). kein CVA im Code
+    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # no CVA in code
+    focus_member: "3176:305"   # the canonical focus-glow recipe other sets copy verbatim
+    focus_invalid_member: "3692:1249"   # the canonical focus-invalid recipe (destructive border + destructive/20 glow)
+    vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md, space-xs]
+    styles: [text:Label/md]
   skill: /shadcn-component-port
-  notes: >
-    h-8 / corner-lg / px-md / py-xs / file:h-6. bg-transparent → bg-input-background;
-    text → text-format-label-md; placeholder:text-input-placeholder; focus border-ring + ring/50 ring-[3px];
-    invalid destructive (⚠ Platzhalter-Token). dark: entfernt.
+  anatomy: "Single element, no CVA; state axis only."
+  deviations:
+    - "h-8 / corner-lg / px-md / py-xs / file:h-6; bg-input-fill (opaque, stock is transparent); text-format-label-md; placeholder text-input-ink-placeholder; selection bg-primary-fill / text-primary-ink."
+    - "Focus border-ring + ring-ring/50 ring-[3px]; invalid border-destructive + ring-destructive/20 (focus-gated: ring width only from focus-visible). dark: removed."
+  forks:
+    - "focus-invalid is a Figma member only — code composes it from focus-visible: + aria-invalid:."
 
 - name: Textarea
   status: nova-aligned
-  figma_synced: true                            # Code→Figma Werte-Audit 2026-06-09 (Textarea stimmte bereits)
+  figma_synced: true
   source: { registry: "@shadcn", item: textarea, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/textarea/
@@ -200,44 +212,51 @@ status_note: >
   figma:
     section: { name: "Textarea", id: "3487:674" }
     set: { name: "Textarea", id: "3488:684" }
-    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # kein CVA; Sibling von Input; focus-invalid wie Input (Figma-Member 2026-06-12; Code via focus-visible:+aria-invalid:)
-  skill: /shadcn-component-port (2026-06-09, Port #1 der Command-Kette)
-  notes: >
-    Feld-Zwilling von Input, höher. min-h-16 / corner-lg / px-md / py-md; field-sizing-content (auto-grow).
-    bg-transparent → bg-input-background; text → text-format-label-md; placeholder:text-input-placeholder;
-    focus border-ring + ring/50 ring-[3px]; invalid destructive (⚠). Figma: Text top-aligned
-    (counter=MIN), keine Truncation. dark: + disabled:bg-input/50 entfernt.
+    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # no CVA; sibling of Input
+    vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md]
+    styles: [text:Label/md]
+  skill: /shadcn-component-port
+  anatomy: "Field twin of Input, taller; field-sizing-content (auto-grow)."
+  deviations:
+    - "min-h-16 / corner-lg / px-md / py-md; same colour clothing as Input. dark + disabled:bg-input/50 removed."
+  forks:
+    - "focus-invalid is a Figma member only (see Input)."
+  figma_mechanics:
+    - "Text top-aligned (counterAxis MIN), no truncation."
 
 - name: InputGroup
   status: nova-aligned
-  figma_synced: true                            # Re-port 2026-06-10: Figma komplett neu gebaut (Composition + Slots + Examples)
+  figma_synced: true
   source: { registry: "@shadcn", item: input-group, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/input-group/
     exports: [InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input-group'"
   figma:
-    section: { name: "Input Group", id: "3519:590" }                 # alt 3491:674 gelöscht (rebuild fresh)
-    addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start,inline-end,block-start,block-end]", slot: content }
-    button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs,sm,icon-xs,icon-sm]",
-              nests: "ghost .Button instance per size (xs→xs, sm→default, icon-xs→icon-xs, icon-sm→icon); Base radius→corner-sm on xs+icon-xs",
-              content: "label = deep text override; icon = swapComponent .Button Icon → swap-target (.InputGroup/Button Icon · copy 3546:677)" }
+    section: { name: "Input Group", id: "3519:590" }
+    addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start, inline-end, block-start, block-end]", slot: content }
+    button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs, sm, icon-xs, icon-sm]",
+              nests: "ghost .Button instance per size (xs → xs, sm → default, icon-xs → icon-xs, icon-sm → icon); Base radius → corner-sm on xs + icon-xs",
+              content: "label = deep text override; icon = swapComponent .Button Icon → swap target (.InputGroup/Button Icon · copy 3546:677)" }
     input: { name: "InputGroupInput", id: "3522:590", prop: text }
     textarea: { name: "InputGroupTextarea", id: "3522:592", prop: text }
     text: { name: "InputGroupText", id: "3522:594", prop: text }
-    composition: { name: "InputGroup", id: "3525:622", axes: "state [default,focus,disabled,invalid,focus-invalid] x layout [horizontal,vertical]", slot: content }   # +focus-invalid 2026-06-12 (Figma-Member; Code via has-[control:focus-visible]+has-[aria-invalid], kein Sync)
+    composition: { name: "InputGroup", id: "3525:622", axes: "state [default, focus, disabled, invalid, focus-invalid] × layout [horizontal, vertical]", slot: content }
     examples: { Icons: "3527:613", Text: "3527:650", Buttons: "3546:697", States: "3528:662/681/700", Textarea: "3547:711", Kbd: "3531:676" }
-  skill: /shadcn-component-port (2026-06-10, Re-port; GREEN-Test des überarbeiteten Composite-Verfahrens)
-  notes: >
-    6-teiliges Composite, RE-PORT nach Skill-Rework. Deps: Button ✓, Input ✓, Textarea ✓, Kbd ✓. Die GRUPPE
-    besitzt Fläche+Border+Focus/Invalid/Disabled (has-[control:focus-visible]/has-[aria-invalid]/has-disabled);
-    Controls randlos (border-0 bg-transparent, data-slot=input-group-control). DS: Gruppe trägt bg-input-background
-    (opak); Addon text-format-label-md muted; Text text-format-body muted; Button ghost. Figma neu = 3-Schichten + reproduzierte
-    Beispiel-Instanzen (Done-Test): Container-Komposition (state×layout) mit Children-Slot, Addon mit content-Slot,
-    Input/Textarea/Text als Text-Prop. **Button nestet eine echte ghost .Button-Instanz** (nicht standalone re-clothed)
-    → Token+Component-Propagation; Geometrie-Delta via Base-Override, Icon-Content via swapComponent (DS-Button
-    exponiert keinen freien Icon-Slot). FIX ggü. Vor-Port: invalid trägt jetzt ring-[3px] (Breite, vorher gedroppt)
-    + ring-destructive/20. Kbd-⌘ als Vektor (RiCommandLine), nicht Text-Glyph.
+    vars: [ink, corner-lg, corner-md, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-ink-placeholder, muted, muted-fill, muted-ink, space-md, space-sm, space-xs]
+    styles: [text:Body, text:Label/md]
+  skill: /shadcn-component-port
+  anatomy: "6-part composite: the GROUP owns surface + border + focus / invalid / disabled (has-[control:focus-visible] / has-[aria-invalid] / has-disabled); controls are borderless (border-0 bg-transparent, data-slot=input-group-control)."
+  deps: [Button, Input, Textarea, Kbd]
+  deviations:
+    - "Group carries bg-input-fill (opaque); Addon text-format-label-md + text-muted; Text text-format-body + text-muted; Button = ghost variant."
+    - "invalid carries ring-[3px] + ring-destructive/20 (stock dropped the width)."
+  forks:
+    - "focus-invalid is a Figma member only — code composes it from has-[control:focus-visible] + has-[aria-invalid]."
+  figma_mechanics:
+    - "Three layers: container composition (state × layout) with a children slot, addon with a content slot, Input / Textarea / Text as text props."
+    - "Button nests a real ghost .Button instance (not a standalone re-clothe) → token + component propagation; geometry delta via Base override, icon content via swapComponent (the DS Button exposes no free icon slot)."
+    - "Kbd ⌘ is a vector (RiCommandLine), not a text glyph."
 
 - name: Kbd
   status: nova-aligned
@@ -249,25 +268,27 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/kbd'"
   figma:
     section: { name: "Kbd", id: "3215:302" }
-    set: { name: "Kbd", id: "3217:308" }             # 2 Achsen: content × emphasis = 4 Member (Live-Name ohne Punkt)
+    set: { name: "Kbd", id: "3217:308" }             # 2 axes content × emphasis = 4 members
     members:
       "content=text, emphasis=high": "3217:302"      # defaultVariant
       "content=icon, emphasis=high": "3217:304"
       "content=text, emphasis=low":  "3428:1385"
       "content=icon, emphasis=low":  "3428:1387"
-    slots: { property: "icon#3217:1", nodes: { high: "3217:305", low: "3428:1388" } }  # 12px Vektor
-    axis: { content: [text, icon], emphasis: [high, low] }   # content children-getrieben; emphasis = Code-Prop (default high)
-  skill: /shadcn-component-port (+ /component-sync 2026-06-09 emphasis-Achse, 2026-06-17 colour-rework)
-  notes: >
-    Nova-Kbd metrisch identisch zu new-york (keine Dichte-Änderung). emphasis=high (default) =
-    invertierte dunkle Keycap (bg-inverse-fill + text-inverse-ink); emphasis=low = muted Keycap
-    (bg-muted-fill + text-muted-ink). text-format-kbd (Geist Mono); gap-xs/px-xs (Space/space-xs);
-    corner-sm. Tooltip-Kontext-Overrides (in-data-[slot=tooltip-content]:) sind code-only Stock-Carryover
-    (keine Figma-Bindung) → §6-umgekleidet auf bg-surface/text-ink. content (text|icon) children-getrieben.
+    slots: { property: "icon#3217:1", nodes: { high: "3217:305", low: "3428:1388" } }  # 12px vector
+    axis: { content: [text, icon], emphasis: [high, low] }   # content is children-driven; emphasis = code prop (default high)
+    vars: [corner-sm, inverse-fill, inverse-ink, muted-fill, muted-ink, space-xs]
+    styles: [text:Kbd]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Keycap span with an emphasis prop; KbdGroup = inline row."
+  deviations:
+    - "emphasis=high (default) = inverted dark keycap (bg-inverse-fill + text-inverse-ink); emphasis=low = quiet keycap (bg-muted-fill + text-muted-ink). text-format-kbd (Geist Mono); gap-xs / px-xs; corner-sm."
+    - "Nova Kbd is metrically identical to new-york (no density change)."
+  divergences:
+    - "Tooltip-context overrides (in-data-[slot=tooltip-content]: bg-muted-fill / text-ink) are code-only stock carry-over with no Figma binding."
 
 - name: Breadcrumb
   status: nova-aligned
-  figma_synced: true                            # Code→Figma-Push der Nova-Dichte (2026-06-09); colour-rework re-synced 2026-06-17
+  figma_synced: true
   source: { registry: "@shadcn", item: breadcrumb, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/breadcrumb/
@@ -275,50 +296,50 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/breadcrumb'"
   figma:
     section: { name: "Breadcrumb", id: "3249:302" }
-    composition: { name: "Breadcrumb", id: "3254:302" }        # items-Gap Space/space-sm (6px); Live-Name ohne Punkt
-    segment_set: { name: "Segment", id: "3250:308" }           # Live-Name (war .Breadcrumb/Segment)
+    composition: { name: "Breadcrumb", id: "3254:302" }        # items gap Space/space-sm (6px)
+    segment_set: { name: "Segment", id: "3250:308" }
     segment_members: { "state=link": "3250:302", "state=link-hover": "3250:304", "state=page": "3250:306" }
-    separator: { name: ".Separator", id: "3251:302" }            # Icon 14px → size-3.5 (Live-Name .Separator)
-    ellipsis: { name: "Ellipsis", id: "3251:305" }              # 20×20, Icon 16px → size-4 (Live-Name ohne Punkt)
+    separator: { name: ".Separator", id: "3251:302" }            # icon 14px → size-3.5
+    ellipsis: { name: "Ellipsis", id: "3251:305" }              # 20×20, icon 16px → size-4
     axis: { segment_state: [link, link-hover, page] }
-  skill: /shadcn-component-port (+ Code→Figma-Push via use_figma; /component-sync 2026-06-17 colour)
-  notes: >
-    Multipart. Colour (Figma Segment-Set, 2026-06-17 -fill/-ink): link rest = text-muted-ink,
-    link-hover + page = text-ink; Separator/Ellipsis-Icons erben currentColor (= muted-ink, kein
-    expliziter Class). Body→text-format-body. List- + Segment-Gap → Space/space-xs (4px) Item /
-    Space/space-sm (6px) List; Ellipsis size-5; break-words → v4 wrap-break-word. Nova-Dichte im Code
-    entschieden und nach Figma gepusht.
+    vars: [ink, muted, space-sm, space-xs]
+    styles: [text:Body]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Multipart: list + segments + separator / ellipsis glyphs."
+  deviations:
+    - "Colour: link rest text-muted, link-hover + page text-ink; separator / ellipsis icons inherit currentColor (no explicit class). Body → text-format-body."
+    - "Gaps: item gap-xs (4px), list gap-sm (6px); ellipsis size-5; break-words → v4 wrap-break-word. Nova density decided in code and pushed to Figma."
 
 - name: Command
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-10; palette/labeled-Varianten 2026-06-11 via /component-sync nachgezogen
+  figma_synced: true
   source: { registry: "@shadcn", item: command, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/command/
     exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, commandVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
-    variants: "variant: default | palette — NUR auf Command-Root/CommandDialog (cva); Input/List/Group/Separator erben via modul-internem CommandVariantContext (ToggleGroup-Idiom); data-variant am Root. CommandSeparator zusätzlich label-Prop (Labeled Rule, role=separator-div; gleicher hide-on-search-Vertrag wie die Linien-Form via useCommandState + alwaysRender)"
+    variants: "variant: default | palette — ONLY on the Command root / CommandDialog (cva); Input / List / Group / Separator inherit via the module-internal CommandVariantContext (ToggleGroup idiom); data-variant on the root. CommandSeparator additionally takes a label prop (labeled rule, role=presentation div; same hide-on-search contract as the line form via useCommandState + alwaysRender)."
   figma:
     section: { name: "Command", id: "3555:679" }
     item:
       set: { name: "CommandItem", id: "3559:2" }
       axis: { state: [default, selected, disabled, checked] }
-      props: "icon#3559:0 (INSTANCE_SWAP→Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
+      props: "icon#3559:0 (INSTANCE_SWAP → Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
       members: { default: "3558:2", selected: "3558:7", disabled: "3558:12", checked: "3558:17" }
     input:
       set: { name: "CommandInput", id: "3639:2" }
       axis: { variant: [default, palette] }
-      props: "value#3639:0 (text) · placeholder#3639:1 (text) — nur palette-Member gebunden"
+      props: "value#3639:0 (text) · placeholder#3639:1 (text) — bound on the palette member only"
       members: { default: "3561:2", palette: "3638:8" }
-      default: "nests .InputGroup-Instanz 3561:3 (opake DS-Fläche) + Such-Vektor + text-format-data-lg Placeholder"
-      palette: "Prompt-Zeile: bg-card-fill + p-xl + gap-lg · Caret-Bar 2.5×18 (primary + Effect-Style Glow) · value/placeholder text-format-data-lg (Mono 18) · echte .Kbd-Instanz (content=text, emphasis=high) 'Esc'"
+      default: "nests an .InputGroup instance 3561:3 (opaque DS surface) + search vector + text-format-label-md placeholder"
+      palette: "prompt row: bg-card-fill + p-xl + gap-lg · caret bar 2.5×18 (primary shape fill + Glow effect style) · value / placeholder text-format-data-lg (mono 18) · real .Kbd instance (content=text, emphasis=high) 'Esc'"
     separator:
       set: { name: "CommandSeparator", id: "3653:6" }
       axis: { variant: [default, labeled] }
-      props: "label#3653:1 (text) — nur labeled-Member gebunden"
+      props: "label#3653:1 (text) — bound on the labeled member only"
       members: { default: "3564:2", labeled: "3653:5" }
-      default: "1px-Linie (border), full-bleed ergibt sich aus p-0-Panel der palette-Composition"
-      labeled: "Labeled Rule: Eyebrow-Label (textCase UPPER, muted-foreground) + nachlaufende Linie (h1 fill, border) · gap-md px-xl pt-lg pb-sm — für freie/flache Kompositionen; CommandGroup[palette] zeichnet sein Heading weiterhin selbst (cmdk-Auto-Hide bleibt beim Gruppen-Weg)"
+      default: "1px line (border); full-bleed comes from the p-0 panel of the palette composition"
+      labeled: "labeled rule: eyebrow label (textCase UPPER, muted) + trailing line (h1 fill, border) · gap-md px-xl pt-lg pb-sm — for free / flat compositions; CommandGroup[palette] still draws its own heading (cmdk auto-hide stays with the group route)"
     empty: { name: "CommandGroup/CommandEmpty", id: "3564:3", prop: "message (text)" }
     group:
       set: { name: "CommandGroup", id: "3640:9" }
@@ -326,97 +347,79 @@ status_note: >
       props: "heading#3640:1 (text, eyebrow UPPER)"
       slot: "items#3640:0"
       members: { default: "3565:2", palette: "3640:2" }
-      palette: "Heading = genestete .Command/Separator[labeled]-Instanz (px auf space-md overridet → Label-Einzug 16px wie Item-Icons) · Container px-md py-0. ACHTUNG: heading-Prop ist im palette-Member inert — Gruppen-Titel via label-Prop der genesteten Separator-Instanz setzen"
+      palette: "heading = nested CommandSeparator[labeled] instance (px overridden to space-md → 16px label inset like the item icons) · container px-md py-0. The heading prop is INERT on the palette member — set group titles via the label prop of the nested separator instance."
     composition:
       set: { name: "Command", id: "3642:2" }
       axis: { variant: [default, palette] }
       slot: "list#3642:0"
       members: { default: "3566:2", palette: "3641:2" }
       default: "bg-dialog-fill + border + shadow-elevation + corner-xl + p-xs"
-      palette: "bg-dialog-fill + border 1.5px + shadow-elevation + corner-md + p-0 · Prompt-Divider + Footer-Divider (.Command/Separator-Instanzen, fill) · list-Slot py-md · Default-Slot-Content = C2-Demo (SPRINGE ZU / SUCHE / FÜHRE AUS)"
+      palette: "bg-dialog-fill + border 1.5px + shadow-elevation + corner-md + p-0 · prompt divider + footer divider (CommandSeparator instances, fill) · list slot py-md · default slot content = demo (JUMP TO / SEARCH / RUN)"
     examples: { command-demo: "3573:2", palette-demo: "3650:63" }
     icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19", ArrowRight: "3644:4", Swap: "3644:7", Search: "3644:10", Play: "3644:13", Download: "3644:16" }
-  skill: /shadcn-component-port (2026-06-10, Composite-Port nach Skill-Rework; baut auf InputGroup)
-  notes: >
-    Multi-Composite (cmdk). Deps: InputGroup ✓ (als echte Instanz in .Command/Input genestet), Button/Input/
-    Textarea ✓ (transitiv via InputGroup, flache ui:add-Schatten gelöscht), Dialog ✓ (CommandDialog nachgerüstet
-    2026-06-11, code-only — KEIN Figma-Artefakt, .Command-Composition bleibt ohne Dialog-Achse; Panel mittig
-    zentriert (top-1/2 -translate-y-1/2, seit 2026-06-11 — vorher top-1/3) + p-0 + overflow-clip, inneres
-    Command border-0/shadow-none, Item in-data-[slot=dialog-content]:corner-lg!;
-    Children = Palette-Teile, Wrapper liefert das Command-Root wie new-york-v4 — novas bare-children-Quelle
-    bricht den Doc-Usage-Contract; Story InDialog = Doc-Demo inkl. ⌘J/Ctrl+J-Listener — DOM-lib dafür
-    in tsconfig.storybook.json nachgerüstet — plus Button+Kbd-Trigger als Klick-Affordance). DS-Abweichungen:
-    Palette = overlay-Fläche (overlay.use nennt Command) + border + shadow-elevation (Overlay-Tiefe); Such-Feld =
-    text-format-label-md (Sans 14; in Figma vom Mono-text-input-Command-Format angepasst → /component-sync 2026-06-10)
-    auf opaker InputGroup (novas border-input/30 bg-input/30 gedroppt);
-    Selektion = accent-Cyan-Tint (data-selected bg-accent + text-accent-foreground), NICHT Stock-Neutralgrau;
-    Group-Heading = text-format-eyebrow + uppercase (Mono-Micro-Label, text-xs/font-medium tot); Shortcut = text-format-kbd
-    (tracking-* tot). IconPlaceholder→lucide bei ui:add → @remixicon/react (RiSearchLine/RiCheckLine). Figma:
-    3 Schichten (Item-Set, genestete InputGroup, Composition mit list/items-Slots) + reproduzierte Beispiel-
-    Instanz (Done-Test). Slots LEER gebaut (Default-Slot-Content in Instanzen virtuell/nicht entfernbar). Gate
-    grün (32 Tests inkl. Typo-Survival text-format-data-lg/text-format-body). jsdom-Polyfill lag bereits in test-setup.ts.
-    PALETTE-VARIANTE (2026-06-11): variant-Achse [default, palette] auf Input/Group/Composition, Quelle =
-    C2-Explorations-Frame 3554:859 (Page "Shadcn Components"); Figma-Member per Clone aus dem Frame gebaut
-    → Token-Bindings (space/corner/shadcn-default/overlay/inverse, Effect-Styles Glow+Elevation, Text-Styles
-    Input/Eyebrow/Kbd) mitgereist. Item-Set UNVERÄNDERT (User-Entscheid „items sind gleich"); 16px-Flucht via
-    Group px-md statt Item-Padding. Demo-Inhalt lebt im palette-Member (DS-Konvention: Examples = pure
-    Instanzen, Instanz-Slot-Content nicht editierbar). .Command/Separator als Set mit variant=labeled
-    (Labeled Rule aus dem C2-grp-Row, label-Prop) — bewusst NEBEN dem Group[palette]-Heading (Gruppen-Weg
-    behält cmdk-Auto-Hide, labeled-Separator für flache Kompositionen). CODE (via /component-sync, Stories
-    Palette/PaletteInDialog/PaletteFlat, 50 Tests grün): palette-Input = Prompt-Zeile bg-card-fill/p-xl/gap-lg mit
-    statischer Glow-Caret-Bar + text-format-data-lg + Kbd-Esc (caret-primary wieder entfernt — Standard-Caret,
-    User-Refinement 2026-06-11, ebenso Liste max-h-96 statt max-h-72 + Such-Icon text-foreground statt
-    opacity-50); Prompt-Divider = border-b am Wrapper
-    (Figma: Separator-Instanz — strukturelle Abweichung); Group-Heading-Inset px-md (16px-Flucht) — Figma
-    war kurz auf 24px (px-xl-Default der genesteten labeled-Separator-Instanz), Instanz-Padding-Override
-    auf space-md hat das aufgelöst, Figma = Code = C2-Raster; Deviations komplett in
-    agent-runs/component-sync/2026-06-11-command/notes.md.
-    A11Y 2026-06-16 (axe aria-required-children): CommandList rendert role="listbox" → erlaubt nur
-    option/group-Kinder. Fix code-only: (1) CommandSeparator (beide Formen — labeled + line) rendert jetzt
-    ein eigenes role="presentation"-div statt cmdks role="separator" (cmdk setzt role NACH dem Prop-Spread →
-    per Prop nicht überschreibbar; Line-Form baut cmdks hide-on-search via useCommandState(search) nach).
-    (2) CommandEmpty rendert ein eigenes div (Bedingung useCommandState(filtered.count===0) wie cmdk) als
-    role="option" aria-disabled aria-selected=false → die sonst options-lose Listbox hat ein erlaubtes Kind +
-    SR liest die No-Results-Meldung; kein cmdk-Item → außerhalb der Tastatur-Navigation. Spec auf
-    role=presentation nachgezogen; Gate grün (205). Verbleibend bei a11y='error' nur noch color-contrast (Token).
+    vars: [accent-fill, accent-ink, ink, surface, border, card-fill, corner-lg, corner-md, corner-sm, corner-xl, dialog-fill, input-border, input-fill, input-ink-placeholder, inverse-fill, inverse-ink, muted, primary, space-2xl, space-lg, space-md, space-sm, space-xl, space-xs]
+    styles: [effect:Elevation, effect:Glow, text:Body, text:Data/lg, text:Kbd, text:Label/md, text:Eyebrow]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Multi-composite on cmdk (Command root, Dialog wrapper, Input, List, Empty, Group, Item, Shortcut, Separator) with a variant axis default | palette."
+  deps: [InputGroup, Button, Input, Textarea, Dialog, Kbd]
+  deviations:
+    - "Surface: panel = dialog-fill + border + shadow-elevation (overlay depth); search field = text-format-label-md (sans 14) on the opaque InputGroup (Nova's border-input/30 bg-input/30 dropped)."
+    - "Selection = accent tint (data-selected bg-accent-fill + text-accent-ink), NOT the stock neutral grey."
+    - "Group heading = text-format-eyebrow + uppercase (mono micro-label); shortcut = text-format-kbd; secondary text text-muted."
+    - "Palette variant: prompt row bg-card-fill / p-xl / gap-lg with a static caret bar (bg-primary shape fill + shadow-glow), text-format-data-lg, Kbd Esc; list max-h-96; group-heading inset px-md."
+    - "Icons: lucide → @remixicon/react (RiSearchLine / RiCheckLine)."
+    - "CommandDialog wraps children as the Command root (new-york-v4 contract; Nova's bare-children source breaks the doc usage) — panel centred (top-1/2 -translate-y-1/2), p-0 + overflow-clip, inner Command border-0 / shadow-none, Item in-data-[slot=dialog-content]:corner-lg."
+  forks:
+    - "CommandDialog has no Figma artefact — the Command composition carries no dialog axis."
+  figma_mechanics:
+    - "Three layers: Item set, nested InputGroup, composition with list / items slots + reproduced example instance. Slots are built EMPTY (default slot content in instances is virtual / not removable); demo content lives in the palette member."
+  divergences:
+    - "Prompt divider: code border-b on the wrapper, Figma a Separator instance — structural, not a delta."
+  a11y:
+    - "CommandList renders role=listbox → only option / group children allowed: CommandSeparator renders its own role=presentation div (cmdk sets role after the prop spread), CommandEmpty renders a disabled role=option so the empty listbox has an allowed child and screen readers announce the no-results message."
+  run_notes: [agent-runs/component-sync/2026-06-11-command/notes.md]
 
 - name: Dialog
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-10 (Figma + Code zusammen gebaut)
+  figma_synced: true
   source: { registry: "@shadcn", item: dialog, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/dialog/
     exports: [Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/dialog'"
+    types: [DialogProps, DialogContentProps, DialogFooterProps]
   figma:
     section: { name: "Dialog", id: "3589:788" }
     composition:
       name: "Dialog"
       id: "3592:794"
       props: "title#3593:2 (text) · description#3593:3 (text) · showCloseButton#3593:4 · showFooter#3593:5 · showBody#3606:0 (bools)"
-      slots: { body: "3609:890 (leer; Wrapper body-region visible↔showBody)", footer: "3593:795 (Default = .Dialog/Footer-Instanz 3593:796)" }
-      nests: "ghost icon-sm .Button-Instanz 3593:806 als Close (ABSOLUTE top-right, Icon via swapComponent→.Dialog/Icon/Close)"
-    footer: { name: "DialogFooter", id: "3591:788", slot: "actions#3591:789 (Default: Cancel outline + Save default .Button-Instanzen)" }
-    overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, Alias→neutral/900) × Layer-Opacity scrim-opacity (3618:3, Alias→opacity/10) + BACKGROUND_BLUR 4" }
+      slots: { body: "3609:890 (empty; wrapper body-region visible ↔ showBody)", footer: "3593:795 (default = DialogFooter instance 3593:796)" }
+      nests: "ghost icon-sm .Button instance 3593:806 as Close (ABSOLUTE top-right, icon via swapComponent → .Dialog/Icon/Close)"
+    footer: { name: "DialogFooter", id: "3591:788", slot: "actions#3591:789 (default: Cancel outline + Save default .Button instances)" }
+    overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, alias → neutral/900) × layer opacity scrim-opacity (3618:3, alias → opacity/10) + BACKGROUND_BLUR 4" }
     icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
     examples: { dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
-  skill: /shadcn-component-port (2026-06-10, Composite-Port; nestet Button)
-  notes: >
-    Radix-Composite (radix-ui Dialog). Deps: Button ✓ (genestete ghost-Instanz als X-Close; flacher
-    ui:add-Schatten gelöscht), radix-ui ✓. DS-Abweichungen: Panel = bg-dialog-fill + border + shadow-elevation
-    (2026-06-18: bg-overlay-fill→bg-dialog-fill, s. Batch 7; novas ring-1 ring-foreground/10 ersetzt —
-    Raised-Surface-Tiefe wie Command); Scrim = NEUER Token `scrim`
-    (neutral/900 @10%, bg-black/10 tot) + backdrop-blur-xs; Titel = text-format-title (18/600; nova 16/500 ohne
-    DS-Stufe); Body/Description = text-format-body. Footer = getöntes nova-Band (bg-muted/50, border-t, Bleed
-    -mx-xl/-mb-xl) als EIGENE Komponente, default-instanziiert im footer-Slot (User-Entscheidung).
-    Scrim als eigene .Dialog/Overlay-Komponente, Panel-Komposition bleibt scrim-frei. Figma-Mechanik:
-    SLOT nie direkt visibility-binden (degradiert zu FRAME) → Wrapper-Frame trägt showBody-Boolean.
-    Geometrie numerisch (top-2/right-2, max-w-*). Gate grün (39 Tests inkl. Token-Survival).
-    CommandDialog nutzt diesen Dialog seit 2026-06-11 (Command-Katalog-Eintrag).
+    vars: [ink, surface, border, corner-lg, corner-md, corner-xl, dialog-fill, dialog-ink, muted, muted-fill, primary-fill, primary-ink, scrim, scrim-opacity, secondary-fill, secondary-ink, space-lg, space-md, space-sm, space-xl]
+    styles: [effect:Elevation, text:Body, text:Label/md, text:Title]
+  skill: /shadcn-component-port
+  anatomy: "Radix composite (radix-ui Dialog); panel composition + footer + overlay as separate Figma components."
+  deps: [Button]
+  deviations:
+    - "Panel = bg-dialog-fill + border + shadow-elevation + corner-xl (Nova's ring-1 ring-foreground/10 replaced — raised-surface depth like Command)."
+    - "Scrim = the scrim token (neutral/900 @ 10 %, stock bg-black/10 dead) + backdrop-blur-xs."
+    - "Title text-format-title (18/800; Nova 16/500 has no DS rung); body / description text-format-body, description text-muted."
+    - "Footer = tinted Nova band (bg-muted-fill/50, border-t, bleed -mx-xl / -mb-xl, corner-b-xl) as its OWN component, default-instantiated in the footer slot."
+    - "Geometry numeric (top-2 / right-2, max-w-*)."
+  figma_mechanics:
+    - "Never bind visibility on a SLOT directly (it degrades to a FRAME) → a wrapper frame carries the showBody boolean."
+    - "Scrim is its own DialogOverlay component; the panel composition stays scrim-free."
+  divergences:
+    - "CommandDialog reuses this Dialog (see Command)."
 
 - name: Separator
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12; colour-rework re-synced 2026-06-17 (no delta)
+  figma_synced: true
   source: { registry: "@shadcn", item: separator, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/separator/
@@ -424,23 +427,20 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/separator'"
   figma:
     section: { name: "Separator", id: "3675:1016" }
-    set: { name: "Separator", id: "3676:1018" }     # Live-Name ohne führenden Punkt
+    set: { name: "Separator", id: "3676:1018" }
     members: { "orientation=horizontal": "3676:1016", "orientation=vertical": "3676:1017" }
-    axis: { orientation: [horizontal, vertical] }   # statisch/non-interaktiv → Content-Achse, KEIN CVA
-  skill: /shadcn-component-port (2026-06-12); /component-sync (2026-06-17, no delta)
-  notes: >
-    Statisches, non-interaktives Element (Radix Separator.Root, decorative=true → role=none;
-    decorative=false → role=separator + aria-orientation). Content-Achse = orientation, 2 Member.
-    Beide Member: 1px-Linie, SOLID-Fill an `Border/border` gebunden — `border` ist ein im Colour-Rework
-    BEHALTENER Name (nur Wert neu = neutral/75 #e4e6eb), NICHT border-emphasis/-strong. Klassenstring
-    unverändert (bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch): bg-border
-    mappt 1:1 auf die Live-Bindung, Rest = Geometrie (h-px/w-px numerisch) + Layout. shrink-0 hält die
-    Linie im Flex-Row. Colour-Sync 2026-06-17: KEIN Delta — kein Code-Edit.
+    axis: { orientation: [horizontal, vertical] }   # static / non-interactive → content axis, NO CVA
+    vars: [border]
+    styles: []
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Static, non-interactive element (Radix Separator.Root; decorative=true → role=none, decorative=false → role=separator + aria-orientation)."
+  deviations:
+    - "1px line, fill bound to border (the default edge — NOT border-emphasis / -strong). Class string bg-border + data-horizontal:h-px/w-full + data-vertical:w-px/self-stretch; shrink-0 keeps the line in a flex row."
 
 - name: Label
   status: nova-aligned
-  figma_synced: true                            # eigenes .Label-Set gebaut 2026-06-12 (Figma-Revision)
-  source: { registry: "@shadcn", item: label, style: radix-nova }   # co-portiert via `ui:add field`
+  figma_synced: true
+  source: { registry: "@shadcn", item: label, style: radix-nova }   # co-ported via `ui:add field`
   code:
     dir: libs/ui/src/components/ui/label/
     exports: [Label]
@@ -449,32 +449,27 @@ status_note: >
     section: { name: "Label", id: "3733:1022" }
     set: { name: "Label", id: "3735:1024" }
     members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
-    props: "label (children)#3735:0 (TEXT, default '{Label}' — Text-Property-Konvention 2026-06-12: children-getrieben → (children)-Suffix + {…}-Default) · state (VARIANT [default, disabled])"
+    props: "label (children)#3735:0 (TEXT, default '{Label}' — children-driven text props use the (children) suffix + {…} default) · state (VARIANT [default, disabled])"
     axis: { state: [default, disabled] }
-    nests_into: ".Field label-Slot (alle 4 Member: 3737:1022/1024/1026/1028) — bare TEXT-Default 2026-06-12 durch echte .Label-Instanz ersetzt"
-  skill: /shadcn-component-port (2026-06-12, Co-Dep von Field) + Figma-Revision (2026-06-12)
-  notes: >
-    Radix Label (LabelPrimitive.Root), als HARTE Field-Dependency mitportiert (FieldLabel wrappt Label;
-    delete/defer würde Field brechen). Single-Element, kein CVA im Code. DS: text-sm leading-none font-medium →
-    text-format-label-md (14/500, Rolle Form-/Toggle-Labels, fill=foreground); gap-2→gap-md (itemSpacing bound).
-    select-none + group/peer-disabled Opacity unverändert. Eigene Stories (Default/WithControl/Disabled) + Spec
-    (3 Tests inkl. text-format-label-md-Survival). FIGMA-REVISION 2026-06-12: eigenes .Label-Set gebaut (HORIZONTAL
-    auto-layout gap-md, Title→nein, Label-Style + foreground; text-Prop). Achse state=[default,disabled] —
-    disabled = opacity 0.5 (das einzige reale Label-State; im Code group/peer-disabled-getrieben, kein CVA → in
-    Figma als state-Achse modelliert, damit ein echtes Set statt Einzel-Component). Als label-Slot-Default in
-    allen 4 .Field-Membern genestet (finding #26: lokale Component via getNodeByIdAsync+createInstance). figma-verify CLEAN.
-    DESIGN-FORK: state-Achse ist eine Figma-Konvenienz (Code hat kein label-state-Prop) — beim Code-Sync NICHT
-    als CVA zurückspielen. OFFENER PUNKT bleibt: falls dedizierter Label-Port geplant war, hier vorweggenommen.
+    nests_into: ".Field label slot (all Field members) as a real .Label instance"
+    vars: [ink, space-md]
+    styles: [text:Label/md]
+  skill: /shadcn-component-port
+  anatomy: "Radix Label (LabelPrimitive.Root); single element, no CVA. Hard Field dependency (FieldLabel wraps Label)."
+  deviations:
+    - "text-format-label-md (14/500, fill ink); gap-md; select-none + group/peer-disabled opacity unchanged."
+  forks:
+    - "The state axis [default, disabled] is a Figma convenience so a real set exists — code has no label-state prop (disabled is group/peer-disabled-driven). Never sync back as a CVA."
 
 - name: Field
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12 (Composite, Variant A; Figma + Code)
+  figma_synced: true
   source: { registry: "@shadcn", item: field, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/field/
     exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
-    code_only_parts: [FieldTitle, "orientation=responsive"]   # FieldSet/FieldGroup/FieldLegend jetzt MIT Figma; responsive bleibt Container-Query-only (Wrap kein faithful Proxy)
+    code_only_parts: [FieldTitle, "orientation=responsive"]   # responsive = container query only (a wrap proxy is not a faithful Figma model)
   figma:
     section: { name: "Field", id: "3710:1016" }
     set: { name: "Field", id: "3716:1020" }
@@ -483,129 +478,98 @@ status_note: >
       "orientation=vertical, invalid=true, controlPosition=trailing":    "3713:1017"
       "orientation=horizontal, invalid=false, controlPosition=trailing": "3714:1018"
       "orientation=horizontal, invalid=true, controlPosition=trailing":  "3715:1019"
-      "orientation=horizontal, invalid=false, controlPosition=leading":  "3897:1240"   # NEU 06-12 control-leading
-      "orientation=horizontal, invalid=true, controlPosition=leading":   "3897:1249"   # NEU 06-12 control-leading
+      "orientation=horizontal, invalid=false, controlPosition=leading":  "3897:1240"
+      "orientation=horizontal, invalid=true, controlPosition=leading":   "3897:1249"
     slots: { label: "label#3716:0", control: "control#3716:1", description: "description#3716:2", error: "error#3716:3" }
-    bool_props: { "Show description": "Show description#3692:15 (default true)", "Show error": "Show error#3692:20 (default true)" }   # NEU: Sichtbarkeit description-/error-Slot
-    nests: ".Input (state=default 3176:303 / state=invalid 3176:311) als control-Slot-Default; label-Slot nestet jetzt echte .Label-Instanz (3737:1022/1024/1026/1028); FieldSeparator-Idiom = .Separator 3676:1018 (nicht nachgebaut)"
-    horizontal_structure: "shadcn-canonical (field.tsx:79 + Responsive-Story): FieldContent-Spalte LINKS (label + description + [error], VERTICAL gap-2xs) · control-Slot als SIBLING rechts daneben · Field-Row flex-row items-start (counterAxis MIN) · FieldContent FILL/flex-1, control FIXED 160 · Member HUG-Höhe (damit die Bool-Toggles die Spalte reflowen). FieldContent-FRAMEs: 3714:1021 (horiz/false), 3715:1022 (horiz/true). error-Slot sitzt IN der FieldContent-Spalte UNTER description. Vertikale Member: label→control→description→[error] gestapelt (unverändert)."
-    axis: { orientation: [vertical, horizontal], invalid: [false, true], controlPosition: [trailing, leading] }   # controlPosition nur für horizontal real; vertical = trailing-Default (Figma-only Fork, kein Code-Prop)
-  skill: /shadcn-component-port (+ references/composites.md, 2026-06-12) + Figma-Revision (2026-06-12) + control-leading-Revision (2026-06-12)
-  notes: >
-    Multi-Part-Composite OHNE Root-Element (~10 reine Layout/Typo/Spacing/a11y-Parts, KEINE eigene
-    Fläche/Border/Schatten). VARIANT A: Figma = nur die Field-ROW (orientation×invalid, 4 Slots, genestete
-    .Input-Instanzen, kein Fill/Stroke/Shadow); Code = VOLLE Familie (10 Exporte, known-trap #19 — Code↔Figma-
-    Kardinalitätslücke bewusst). Code-only (kein Figma-Set): FieldLegend (lebt als Slot in .FieldSet),
-    FieldTitle + orientation=responsive (Container-Query @md → Figma kann das nicht; Wrap-Proxy verworfen, s.
-    Revision-Note). Deps: Input ✓, Textarea ✓, Separator ✓, Button ✓; Label NEU co-portiert (harte Field-Dep).
-    DS: gap-2→gap-md, gap-0.5→gap-2xs, gap-5(20, kein Rung)→gap-xl(16, dichter); Typo text-sm→text-format-label-md/
-    -body, legend text-base(16, kein Rung)→text-format-title (Rolle Section-Caption); FieldError = ⚠
-    destructive-PLATZHALTER (VariableID:3038:3, bound aber NICHT final). dark: entfernt.
-    4 Slots mergen set-level (konsistente Namen). figma-verify CLEAN.
-    FIGMA-REVISION 2026-06-12: (1a) FieldDescription-Fill war fälschlich solid-black/unbound → an
-    muted-foreground (VariableID:3037:13) gebunden über alle 4 Member; FieldError bleibt destructive ⚠.
-    (1b) Horizontale Member umgebaut auf die shadcn-canonical Struktur: FieldContent-Spalte (label +
-    description + [error]) LINKS, control-Slot als SIBLING rechts daneben (vorher invers: label führend,
-    FieldContent=control+desc+error). Quelle = Responsive-Story (field.stories.tsx:111–117) +
-    horizontal-Variante (field.tsx:79 flex-row items-start has-[field-content]). Member auf HUG-Höhe gesetzt,
-    damit die Bool-Toggles die Spalte reflowen (verifiziert 64→41→32px). error im horiz Member sitzt in der
-    FieldContent-Spalte unter description. (3) label-Slot-Default = echte .Label-Instanz statt bare TEXT.
-    (5) zwei Bool-Props Show description / Show error toggeln description-/error-Slot-Sichtbarkeit — über
-    WRAPPER-FRAME gebunden (finding #8: visible NIE direkt am SLOT; finding #9: Wrapper kollabiert Resthöhe
-    sauber). Controls-live (orientation/invalid + 2 Bools + 4 Slots; control nimmt Swap an; Label-Instanz
-    tauscht Caption). Stories: InputField/TextareaField/Fieldset/Responsive (Doc-Beispiele, nur portierte Deps)
-    + Invalid/Horizontal (DS-authored). Skip-Log: Select/Checkbox/Radio/Switch/Slider/Choice-Card-Beispiele
-    (un-ported Deps). Gate grün (6 Field-Specs). Kein jsdom-Polyfill nötig.
-    FIGMA-REVISION 2026-06-12 (control-leading): additive controlPosition-Achse [trailing, leading] —
-    bestehende 4 Member = trailing (IDs erhalten, nur umbenannt), 2 neue horizontale leading-Member (3897:1240
-    h/f, 3897:1249 h/t): control LINKS + FieldContent RECHTS, top-aligned (= Code [role=checkbox]:mt-px).
-    Schließt die Lücke (Code komponiert control-leading für Checkbox/Radio via child-order, Figma modellierte
-    nur control-trailing). DESIGN-FORK: controlPosition ist Figma-Konvenienz (Code hat KEIN solches Prop) —
-    beim /component-sync NICHT als CVA zurückspielen. Nestings (.FieldSet/.FieldGroup/Checkbox-Examples)
-    verifiziert intakt. FieldLabel = .Label-Reuse (kein Duplikat); Choice-Card = Folge-Komposition (braucht Card).
-    FIX 2026-06-12 (invalid error-slot): auf den 2 HORIZONTALEN invalid-Membern (3715:1019 trailing, 3897:1249
-    leading) saß der error-Slot fälschlich IN der control-Spalte → Control-Befüllen sprengte das Layout. Ursache:
-    clone() degradiert einen SLOT still zu FRAME (drop slotContentId) — die horizontalen Member waren clone-
-    derived. Echten error#3716:3-SLOT in die FieldContent-Spalte (unter description) restauriert, an Show error
-    gebunden; verifiziert (Control-Fill → error unter Label, kein Clip; Nestings intakt; figma-verify CLEAN).
-    Damit reusen Checkbox+Switch-Invalid-Examples den .Field-error-Slot; Radio-Invalid = Gruppen-Error
-    (FieldSet-Ebene → separater destructive-Text, kein per-field-Slot).
+    bool_props: { "Show description": "Show description#3692:15 (default true)", "Show error": "Show error#3692:20 (default true)" }   # visibility of the description / error slot
+    nests: ".Input (state=default 3176:303 / state=invalid 3176:311) as control-slot default; label slot nests a real .Label instance (3737:1022/1024/1026/1028); FieldSeparator idiom = .Separator 3676:1018 (not rebuilt)"
+    horizontal_structure: "shadcn-canonical (field.tsx horizontal variant + Responsive story): FieldContent column LEFT (label + description + [error], VERTICAL gap-2xs) · control slot as SIBLING to the right · row flex-row items-start (counterAxis MIN) · FieldContent FILL / flex-1, control FIXED 160 · members HUG height (so the bool toggles reflow the column). FieldContent frames: 3714:1021 (horiz/false), 3715:1022 (horiz/true). Error slot sits IN the FieldContent column under description. Vertical members stack label → control → description → [error]."
+    axis: { orientation: [vertical, horizontal], invalid: [false, true], controlPosition: [trailing, leading] }
+    vars: [ink, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xs]
+    styles: [text:Body, text:Label/md]
+  skill: /shadcn-component-port (+ references/composites.md)
+  anatomy: "Multi-part composite WITHOUT a root element (~10 pure layout / typography / spacing / a11y parts, no own surface / border / shadow). Variant A: Figma = the Field ROW only; code = the full family (10 exports) — the code ↔ Figma cardinality gap is deliberate."
+  deps: [Input, Textarea, Separator, Button, Label]
+  deviations:
+    - "gap-2 → gap-md, gap-0.5 → gap-2xs, gap-5 (20, no rung) → gap-xl (16, denser); text-sm → text-format-label-md / -body; legend text-base (16, no rung) → text-format-title (section-caption role); description text-muted; error text-destructive. dark: removed."
+    - "Choice-card tint (shared by the FieldLabel choice-card family): FieldLabel has-data-checked:bg-accent-fill + has-data-checked:border-accent-border; FieldTitle group-has-data-checked/field-label:text-accent-ink — scoped to the card group so plain field rows are unaffected."
+  forks:
+    - "controlPosition [trailing, leading] is a Figma-only axis (real for horizontal only; vertical = trailing default) — code composes control-leading via child order. Never sync back as a prop."
+    - "FieldLegend lives as a slot in .FieldSet and as its own set (see FieldLegend); FieldTitle and orientation=responsive are code-only."
+  figma_mechanics:
+    - "The four slots merge set-level (consistent names). Show description / Show error are bound on WRAPPER frames — visible is never bound on a slot directly (it degrades to a frame); a wrapper collapses the remaining height cleanly."
+    - "clone() silently degrades a SLOT to a FRAME (drops slotContentId) — clone-derived members need their slots restored."
+  a11y:
+    - "Field renders role=group; a <label for> cannot name a control through it (see ChoiceCard aria-labelledby)."
+  divergences:
+    - "Radio invalid = group error (FieldSet level → separate destructive text, no per-field slot); Checkbox + Switch invalid examples reuse the .Field error slot."
 
 - name: FieldLegend
   status: nova-aligned
-  figma_synced: true                            # Figma-Set 2026-06-12 (control-leading-Revision; vorher code-only)
-  source: { registry: "@shadcn", item: field, style: radix-nova }   # Teil der Field-Familie (field.tsx)
+  figma_synced: true
+  source: { registry: "@shadcn", item: field, style: radix-nova }   # part of the Field family (field.tsx)
   code:
     dir: libs/ui/src/components/ui/field/
     exports: [FieldLegend]
-    barrel: "via field-Barrel"
+    barrel: "via the field barrel"
   figma:
     section: { name: "Field Legend", id: "3904:1246" }
     set: { name: "FieldLegend", id: "3909:1246" }
     members: { "variant=legend": "3908:1246", "variant=label": "3908:1248" }
     props: "legend (children)#3909:2 (TEXT, default '{Legend}'); variant (VARIANT [legend, label])"
     axis: { variant: [legend, label] }
-  skill: Figma-Revision (2026-06-12)
-  notes: >
-    Text-Component (war .Field code_only_part, jetzt eigenes Set — aus code_only_parts entfernt). variant=legend
-    → text-format-title (18/600, Section-Caption-Rolle); variant=label → text-format-label-md (14/500); fill
-    foreground (VariableID:3037:3). variant MAPPT aufs Code-Prop FieldLegend.variant (KEIN Fork — anders als
-    Field.controlPosition). Text-Property-Konvention: legend (children)/{Legend}. figma-verify CLEAN.
+    vars: [ink]
+    styles: [text:Label/md, text:Title]
+  skill: Figma revision (/figma-use)
+  anatomy: "Text component; variant maps onto the code prop FieldLegend.variant (NOT a fork — unlike Field.controlPosition)."
+  deviations:
+    - "variant=legend → text-format-title (section-caption role); variant=label → text-format-label-md; fill ink."
 
 - name: FieldSet
   status: nova-aligned
-  figma_synced: true                            # Figma-Set 2026-06-12 gebaut (Revision; vorher code-only)
-  source: { registry: "@shadcn", item: field, style: radix-nova }   # Teil der Field-Familie (field.tsx)
+  figma_synced: true
+  source: { registry: "@shadcn", item: field, style: radix-nova }   # part of the Field family (field.tsx)
   code:
-    dir: libs/ui/src/components/ui/field/        # Export aus field/, kein eigener Ordner
+    dir: libs/ui/src/components/ui/field/        # exported from field/, no own folder
     exports: [FieldSet]
-    barrel: "via field-Barrel"
+    barrel: "via the field barrel"
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
-    component: { name: "FieldSet", id: "3739:1026" }   # Einzel-Component (keine Variant-Achse)
-    slots: { legend: "legend#3741:0 (Title-Text-Default 'Address', finding #25)" }
-    nests: "2× echte .Field-Instanz (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL-Breite)"
-  skill: Figma-Revision (2026-06-12)
-  notes: >
-    Surface-less Composite (finding #24): VERTICAL auto-layout gap-xl (space-xl/16, bound), w-FIXED/h-HUG,
-    KEIN Fill/Stroke. legend = SLOT mit Title-Text-Default (text-format-title 18/600 by role, finding #28).
-    Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<fieldset>` flex-col gap-xl + FieldLegend.
-    figma-verify CLEAN, instanziierbar (h≈229). Build: redundante TEXT-Legend-Prop entfernt → nur legend-SLOT.
+    component: { name: "FieldSet", id: "3739:1026" }   # single component (no variant axis)
+    slots: { legend: "legend#3741:0 (Title-text default 'Address')" }
+    nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width)"
+    vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md, text:Title]
+  skill: Figma revision (/figma-use)
+  anatomy: "Surface-less composite: VERTICAL auto-layout gap-xl (bound), w FIXED / h HUG, NO fill / stroke; legend = slot with a title-text default. Code counterpart = <fieldset> flex-col gap-xl + FieldLegend."
 
 - name: FieldGroup
   status: nova-aligned
-  figma_synced: true                            # Figma-Component 2026-06-12; orientation-Achse 2026-06-17 (Einzel-Component → Set)
+  figma_synced: true
   source: { registry: "@shadcn", item: field, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/field/
     exports: [FieldGroup]
-    barrel: "via field-Barrel"
-    props: { orientation: [vertical, horizontal] }   # NEU 2026-06-17: fieldGroupVariants (DS-Erweiterung über stock-shadcn, das nur Field orientation kennt)
+    barrel: "via the field barrel"
+    props: { orientation: [vertical, horizontal] }   # fieldGroupVariants — DS extension over stock shadcn (which only knows Field orientation)
   figma:
     section: { name: "Field Set & Group", id: "3738:1026" }
-    set: { name: "FieldGroup", id: "4285:1997" }     # NEU 2026-06-17: combineAsVariants (vorher Einzel-Component 3742:1044)
+    set: { name: "FieldGroup", id: "4285:1997" }
     members:
-      "orientation=vertical":   "3742:1044"          # = der frühere Einzel-Component (ID erhalten, Default-Variante)
-      "orientation=horizontal": "4280:73"            # NEU 2026-06-17
+      "orientation=vertical":   "3742:1044"          # default variant
+      "orientation=horizontal": "4280:73"
     axis: { orientation: [vertical, horizontal] }
-    nests: "Slot (VERTICAL gap-16) → Field → .Separator → Field. vertical: Separator orientation=horizontal (3742:1055), Fields FILL-Breite. horizontal: Slot HORIZONTAL, Fields HUG nebeneinander, Separator orientation=vertical + lV=FILL (vertikaler Divider, volle Reihenhöhe)."
-  skill: Figma-Revision (2026-06-12) + orientation-Achse (2026-06-17, /figma-use)
-  notes: >
-    Surface-less Container (finding #24): VERTICAL auto-layout gap-xl (space-xl/16, bound), w-full, KEIN
-    Fill/Stroke. Gruppiert mehrere Fields mit Divider — FieldSeparator = genestete echte .Separator-Instanz
-    (kein eigenes Set, task 4). Nestet echte .Field-Instanzen (finding #26). Code-Pendant = `<div>` @container/
-    field-group flex-col gap-xl. figma-verify CLEAN, instanziierbar (h≈207).
-    ORIENTATION-ACHSE 2026-06-17: Einzel-Component → Set (combineAsVariants), Achse `orientation`
-    (lowercase, wie Field/Separator). vertical = unverändert (gestapelt, horizontaler Divider). horizontal =
-    Slot HORIZONTAL, Fields HUG nebeneinander, der Separator switcht auf die vorhandene vertical-Variante
-    (3676:1016-Set) + lV=FILL → vertikaler Divider zwischen den Spalten. Set vertikal arrangiert (passt in die
-    840er-Section, kein Überlauf). Code: fieldGroupVariants (vertical=flex-col / horizontal=flex-row flex-wrap +
-    [&>[data-slot=field]]:w-auto). DS-Erweiterung über stock-shadcn (dort nur Field orientation). Pendant zur
-    RadioGroup-Container-orientation → Checkbox-/Radio-Gruppen bekommen die gleiche Reihen-Fähigkeit.
+    nests: "slot (VERTICAL gap-16) → Field → .Separator → Field. vertical: Separator orientation=horizontal (3742:1055), Fields FILL width. horizontal: slot HORIZONTAL, Fields HUG side by side, Separator orientation=vertical + layoutSizingVertical FILL (vertical divider, full row height)."
+    vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md, text:Title]
+  skill: Figma revision (/figma-use)
+  anatomy: "Surface-less container: VERTICAL auto-layout gap-xl (bound), w-full, NO fill / stroke; groups several Fields with a divider (FieldSeparator = nested real .Separator instance, no own set). Code = <div> @container/field-group flex-col gap-xl; horizontal = flex-row flex-wrap + [&>[data-slot=field]]:w-auto."
+  deviations:
+    - "orientation prop is a DS extension (counterpart of the RadioGroup container orientation → checkbox / radio groups get the same row capability)."
 
 - name: Checkbox
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code; Focus-/Examples-Fix nachgezogen)
+  figma_synced: true
   source: { registry: "@shadcn", item: checkbox, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/checkbox/
@@ -613,77 +577,45 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
   figma:
     section: { name: "Checkbox", id: "3791:1184" }
-    set: { name: "Checkbox", id: "3795:1184" }   # 2026-06-19: checked-Achse um indeterminate erweitert → 15 Member, 5×3 WRAP-Grid (war 2026-06-15: 2 Achsen, 10 Member, 5×2)
-    members:   # Reihe checked=off, dann checked=on, dann checked=indeterminate
+    set: { name: "Checkbox", id: "3795:1184" }   # 15 members, 5×3 WRAP grid
+    members:   # row checked=off, then checked=on, then checked=indeterminate
       "checked=off, state=default":          "3792:1184"
       "checked=off, state=focus":            "3794:1184"
       "checked=off, state=disabled":         "3794:1185"
-      "checked=off, state=invalid":          "3794:1186"   # Glow gestrippt (border-only)
-      "checked=off, state=focus-invalid":    "4063:2"       # NEU (Border + destructive@20% Glow)
+      "checked=off, state=invalid":          "3794:1186"   # border only, no glow
+      "checked=off, state=focus-invalid":    "4063:2"       # border + destructive @20 % glow
       "checked=on, state=default":           "3792:1185"
-      "checked=on, state=focus":             "4063:6"       # NEU (primary-Border + ring@50% Halo)
-      "checked=on, state=disabled":          "4063:9"       # NEU (opacity 0.5)
-      "checked=on, state=invalid":           "3794:1187"    # war checked-invalid; Glow gestrippt
-      "checked=on, state=focus-invalid":     "4063:3"       # NEU (destructive Fill+Border + Glow)
-      "checked=indeterminate, state=default":       "4303:73"  # 2026-06-19 (Klon on/default, Glyph→Dash)
-      "checked=indeterminate, state=focus":         "4304:73"  # 2026-06-19 (Klon on/focus)
-      "checked=indeterminate, state=disabled":      "4304:76"  # 2026-06-19 (Klon on/disabled)
-      "checked=indeterminate, state=invalid":       "4304:79"  # 2026-06-19 (Klon on/invalid, Dash destructive-ink)
-      "checked=indeterminate, state=focus-invalid": "4304:82"  # 2026-06-19 (Klon on/focus-invalid)
-    indicator: { glyph: "checked=on → RiCheckLine VECTOR (primary-foreground 3037:9); checked=indeterminate → RiSubtractLine-Dash VECTOR (M5 11H19V13H5z ×14/24, zentriert; primary-foreground bzw. destructive-ink 3052:2 auf invalid)" }
-    axis: { checked: [off, on, indeterminate], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-19: indeterminate als 3. checked-Wert (Box = on-Treatment, Glyph = Dash). 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
-    examples: { group: "Usage Examples 3822:2 (REBUILT 06-12 = Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-TRAILING per family, checked .Checkbox; 2026-06-13)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error-slot)", AllStates: "3826:2" }   # alle via echte .Field-Instanzen
-    vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", ring: "3038:6", destructive⚠: "3038:3", corner-sm: "3073:2" }
-  skill: /shadcn-component-port (2026-06-12) + Figma-Fix (Focus + Usage-Examples) + /component-sync (2026-06-12)
-  notes: >
-    Single-Element + Indicator (radix-ui Checkbox.Root/Indicator), kein CVA → State-Achse wie Input.
-    box 16×16 numerisch, corner-sm (4px). DS: border-input; checked = primary Fill+Border + primary-foreground
-    Glyph; Glyph = RiCheckLine VEKTOR (lucide CheckIcon → @remixicon/react, [&>svg]:size-3.5 numerisch).
-    focus = border-ring + ring@50% 3px DROP_SHADOW (literal-alpha, showShadowBehindNode:false — gebundene
-    Effekt-Farbe clobbert die /opacity, daher Effekt-Objekt VERBATIM von .Input-Focus 3176:305 kopiert);
-    invalid + checked-invalid = destructive ⚠ PLATZHALTER (raw hex, NICHT final) Border + destructive@20%
-    Glow (sbn:false über alle 3 Glow-Member). dark: entfernt; group-has-disabled/field:opacity-50 behalten.
-    Usage-Examples-Group = permanente echte .Checkbox- + .Label-Instanzen (WithLabel/WithDescription/Disabled/
-    AllStates). figma-verify CLEAN, Gate grün (6 Specs inkl. corner-sm-Survival).
-    SYNC 2026-06-12 (/component-sync): unchecked/focus/disabled/invalid-Box = bg-input-background
-    (vorher transparent); checked-invalid = solides destructive Fill+Border
-    (aria-invalid:aria-checked:bg/border-destructive, überschreibt data-checked:primary), Glyph
-    bleibt primary-foreground (reitet auf der roten Fläche).
-    CHOICE-CARD 2026-06-13 (Code→Figma-Push, Branch feat/checkbox-choice-card): DS-authored Story
-    (radix-Checkbox-Docs haben KEINE Choice-Card; Parität zu Switch/Radio) — FieldLabel wrappt ein
-    horizontales control-TRAILING Field (FieldContent: FieldTitle + FieldDescription, checked Checkbox
-    rechts), Tint (has-data-checked:bg-primary/5 border-primary/30) ist Code-only Interaktions-State.
-    Figma-Example 4044:1515 aus der Switch-ChoiceCard 3979:2 geklont (Card + .Field trailing geerbt),
-    .Switch→.Checkbox checked via swapComponent (16×16, kein Stretch), 2 Texte gesetzt; zwischen
-    Description und Group eingehängt. Card un-getinted = bewusst (Familien-Konsistenz; Switch/Radio-
-    Cards ebenso). figma-verify CLEAN, Gate grün (92 Specs).
-    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
-    destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
-    destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn-checkbox
-    ab (ring-3).
-    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 2 Achsen umgebaut (checked × state). Resting invalid
-    (checked=off/on, state=invalid) = Glow gestrippt (effects:[], border-only wie .Input); NEU focus-invalid je checked
-    = destructive Border + destructive@20% Glow (sbn:false, verbatim vom .Input-Recipe). Matrix-Vollständigkeit:
-    checked=on × {focus, disabled} ergänzt — checked=on,focus = primary-Border + ring@50% Halo (bei focus+checked
-    bewusst primary-Border behalten; FLAG, falls kompilierter Code dort ring-Border zeigt). Instanzen folgen per
-    Node-Identität (kein Remap, verifiziert). Galerie 3826:2 zeigt weiter die kuratierten 6 (neue 4 optional). Stories: Default
-    (Playground, aria-label) + Basic (play) + Description/Group/Disabled/Invalid + AllStates-Galerie. Die klickbare Choice-Card
-    ist eine eigene DS-Komponente (ChoiceCardCheckbox, choice-card/) — die früheren Inline-ChoiceCard/ChoiceCardStates-Stories
-    sind migriert/entfernt. Gate grün. Selbe Behandlung 2026-06-15 auf Switch + Radio gespiegelt.
-    INDETERMINATE 2026-06-19 (Code→Figma-Push): Code stylt jetzt den Tri-State — data-[state=indeterminate]
-    = primary Fill (bzw. aria-invalid:data-[state=indeterminate] = destructive Fill), Indicator-Glyph via CSS
-    data-state auf RiSubtractLine (Dash) statt RiCheckLine; checked-Story-Control = inline-radio false|true|
-    indeterminate; neue Indeterminate-Story (defaultChecked, toBePartiallyChecked-play) + AllStates-Zeile.
-    Figma gespiegelt: checked-Achse um indeterminate erweitert (5 Member als Klone der checked=on-Reihe,
-    Glyph→Dash; invalid-Glyph erbt destructive-ink 3052:2). 15 Member, 5×3 WRAP. figma-verify CLEAN, Gate grün
-    (typecheck + 11 Checkbox-Story-Tests). ChoiceCardCheckbox: NICHT gespiegelt — bewusst. indeterminate ist
-    für eine Blatt-Karte (binäre Einzelauswahl) semantisch n/a (Tri-State = Gruppen-/Eltern-Konzept). Statt einen
-    Phantom-State zu modellieren, wurde ChoiceCardCheckbox.checked/defaultChecked/onCheckedChange auf `boolean`
-    verengt (2026-06-19) — schließt die alte „Typ behauptet indeterminate, kein Render/Test"-Lücke richtungsrichtig.
+      "checked=on, state=focus":             "4063:6"       # primary border + ring @50 % halo
+      "checked=on, state=disabled":          "4063:9"       # opacity 0.5
+      "checked=on, state=invalid":           "3794:1187"    # border only, no glow
+      "checked=on, state=focus-invalid":     "4063:3"       # destructive fill + border + glow
+      "checked=indeterminate, state=default":       "4303:73"
+      "checked=indeterminate, state=focus":         "4304:73"
+      "checked=indeterminate, state=disabled":      "4304:76"
+      "checked=indeterminate, state=invalid":       "4304:79"   # dash destructive-ink
+      "checked=indeterminate, state=focus-invalid": "4304:82"
+    indicator: { glyph: "checked=on → RiCheckLine VECTOR (primary-ink); checked=indeterminate → RiSubtractLine dash VECTOR (M5 11H19V13H5z ×14/24, centred; primary-ink, destructive-ink on invalid)" }
+    axis: { checked: [off, on, indeterminate], state: [default, focus, disabled, invalid, focus-invalid] }
+    examples: { group: "Usage Examples 3822:2 (Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-trailing, checked .Checkbox)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "4036:2 (.Field error slot)", AllStates: "3826:2" }   # all via real .Field instances
+    vars: [ink, border, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Single element + indicator (radix-ui Checkbox.Root / Indicator), no CVA → state axis like Input; box 16×16 numeric, corner-sm."
+  deps: [Field, Label]
+  deviations:
+    - "Resting box bg-input-fill + border-input-border; checked = primary-fill fill + border with a primary-ink glyph (RiCheckLine vector, [&>svg]:size-3.5); indeterminate = primary-fill + dash glyph."
+    - "invalid = border-destructive only; focus-invalid adds ring-destructive/20 (focus-gated ring — width only from focus-visible:ring-[3px]; deviates from stock ring-3); checked-invalid = solid bg-destructive + border-destructive with the glyph in destructive-ink."
+    - "Focus = border-ring + ring-ring/50 ring-[3px]. dark: removed; group-has-disabled/field:opacity-50 kept."
+  figma_mechanics:
+    - "Focus / invalid glow = literal-alpha DROP_SHADOW with showShadowBehindNode:false, copied VERBATIM from the Input focus member 3176:305 (a bound effect colour clobbers the /opacity → never bind it)."
+    - "Usage-examples group = permanent real .Checkbox + .Label / .Field instances."
+  open:
+    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
+    - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
 
 - name: Switch
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code)
+  figma_synced: true
   source: { registry: "@shadcn", item: switch, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/switch/
@@ -691,64 +623,47 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/switch'"
   figma:
     section: { name: "Switch", id: "3835:1193" }
-    set: { name: "Switch", id: "3839:2" }                 # 2026-06-15 umgebaut → 3 Achsen (size × checked × state), 20 Member, 5×4 WRAP-Grid
-    members:   # je size: Reihe checked=off, dann checked=on
+    set: { name: "Switch", id: "3839:2" }                 # 3 axes size × checked × state, 20 members, 5×4 WRAP grid
+    members:   # per size: row checked=off, then checked=on
       "size=default, checked=off, state=default":       "3837:2"
       "size=default, checked=off, state=focus":         "3837:6"
       "size=default, checked=off, state=disabled":      "3837:8"
-      "size=default, checked=off, state=invalid":       "3837:10"   # Glow gestrippt (border-only, Track destructive)
-      "size=default, checked=off, state=focus-invalid": "4069:2"     # NEU
+      "size=default, checked=off, state=invalid":       "3837:10"   # border only, track destructive
+      "size=default, checked=off, state=focus-invalid": "4069:2"
       "size=default, checked=on, state=default":        "3837:4"
-      "size=default, checked=on, state=focus":          "4069:4"     # NEU (primary Track + ring@50% Halo)
-      "size=default, checked=on, state=disabled":       "4069:6"     # NEU (opacity 0.5)
-      "size=default, checked=on, state=invalid":        "4069:8"     # NEU synthetisiert (destructive Track, Thumb rechts)
-      "size=default, checked=on, state=focus-invalid":  "4069:10"    # NEU
+      "size=default, checked=on, state=focus":          "4069:4"     # primary track + ring @50 % halo
+      "size=default, checked=on, state=disabled":       "4069:6"     # opacity 0.5
+      "size=default, checked=on, state=invalid":        "4069:8"     # destructive track, thumb right
+      "size=default, checked=on, state=focus-invalid":  "4069:10"
       "size=sm, checked=off, state=default":            "3838:2"
       "size=sm, checked=off, state=focus":              "3838:6"
       "size=sm, checked=off, state=disabled":           "3838:8"
-      "size=sm, checked=off, state=invalid":            "3838:10"    # Glow gestrippt
-      "size=sm, checked=off, state=focus-invalid":      "4070:2"     # NEU
+      "size=sm, checked=off, state=invalid":            "3838:10"
+      "size=sm, checked=off, state=focus-invalid":      "4070:2"
       "size=sm, checked=on, state=default":             "3838:4"
-      "size=sm, checked=on, state=focus":               "4070:4"     # NEU
-      "size=sm, checked=on, state=disabled":            "4070:6"     # NEU
-      "size=sm, checked=on, state=invalid":             "4070:8"     # NEU synthetisiert
-      "size=sm, checked=on, state=focus-invalid":       "4070:10"    # NEU
-    axis: { size: [default, sm], checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked aus state herausgezogen (war unchecked/checked Sammelwerte)
-    examples: { group: "Usage Examples 3840:2 (REBUILT 06-12 = Field-composed, control-trailing)", AirplaneMode: "3948:2", Description: "3952:2", ChoiceCard: "3979:2 (Card + .Field)", Sizes: "3959:2", Disabled: "3961:2", Invalid: "3966:2 (.Field error-slot)", AllStates: "3842:15" }   # alle via echte .Field-Instanzen
-    vars: { primary: "3037:8", input: "3038:5", background: "3037:2", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6" }
-  skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
-  notes: >
-    Track (Root) + Thumb (radix-ui Switch). 2 Achsen: size [default,sm] (manuelle Prop, kein CVA) × state.
-    Geometrie numerisch: Track default 32×18.4 / sm 24×14, Thumb 16/12, corner-full, Thumb-Offset =
-    trackW−thumbW−2px (default x≈14, sm x≈10). DS: checked Track = primary, unchecked Track = input (als
-    FILL — muted #f4f6f8 wäre auf Weiß unsichtbar, input neutral/450 hält ≥3:1; Rolle≠Name, s. skill-feedback);
-    Thumb = background (weiß). focus = border-ring + ring@50% 3px Glow (VERBATIM von .Input 3176:305,
-    showShadowBehindNode:false); invalid = destructive ⚠ + destructive@20% (sbn:false). dark: entfernt.
-    Usage-Examples-Group = echte .Switch- + .Label-Instanzen (WithLabel/Disabled/Sizes/AllStates).
-    figma-verify CLEAN (Thumb clippt Track am Offset nicht), Gate grün (6 Specs).
-    SYNC 2026-06-12 (/component-sync): invalid = destructive TRACK FILL in BEIDEN Positionen
-    (aria-invalid:data-checked:bg-destructive + aria-invalid:data-unchecked:bg-destructive — 2-Attr-Selektoren
-    überschreiben primary/input) — der Figma-Invalid-Member bindet die ganze Track-Fläche an destructive.
-    Korrigiert eine Sync-Agent-Deviation (vorher nur Border+Ring, checked-invalid blieb cyan → User-Report).
-    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
-    destructive-Ring (ring/20) ist jetzt focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting
-    = destructive Track+Border ohne Ring, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von
-    default-shadcn-switch ab (ring-3).
-    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 3 Achsen umgebaut (size × checked × state). Resting
-    invalid = Glow gestrippt (border-only); NEU focus-invalid je size×checked = + destructive@20% Glow. checked=on
-    hatte KEINEN invalid-Member → synthetisiert: Checked-Member (Thumb rechts, primary Track) geklont, Track-Fill +
-    Border auf destructive (Paints von off-invalid kopiert), kein/mit Glow. Außerdem checked=on × {focus, disabled}
-    ergänzt. Instanzen (unchecked/checked) folgen per Node-Identität → checked=off/on, state=default (verifiziert).
-    Galerie 3842:15 zeigt weiter die kuratierten States. Stories: Default (Playground, aria-label) + AirplaneMode (play) +
-    Description/Sizes/Disabled/Invalid + AllStates-Galerie (bare Controls mit aria-label). Inline-ChoiceCard/ChoiceCardStates
-    2026-06-16 ENTFERNT (a11y-Harness-Cleanup; kanonisch jetzt ChoiceCardSwitch in choice-card/). Gate grün.
-    SYNC 2026-06-16 (/component-sync, Figma→Code): unchecked-invalid Track auf `input` (grau) zurückgesetzt — nur
-    Border destructive; checked-invalid bleibt destructive Track. `aria-invalid:data-unchecked:bg-destructive` ENTFERNT
-    (hebt den 06-12-„beide-Positionen-rot"-Sync auf → wieder border-only wie .Input/.Checkbox). Per shoot verifiziert.
+      "size=sm, checked=on, state=focus":               "4070:4"
+      "size=sm, checked=on, state=disabled":            "4070:6"
+      "size=sm, checked=on, state=invalid":             "4070:8"
+      "size=sm, checked=on, state=focus-invalid":       "4070:10"
+    axis: { size: [default, sm], checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }
+    examples: { group: "Usage Examples 3840:2 (Field-composed, control-trailing)", AirplaneMode: "3948:2", Description: "3952:2", ChoiceCard: "3979:2 (Card + .Field)", Sizes: "3959:2", Disabled: "3961:2", Invalid: "3966:2 (.Field error slot)", AllStates: "3842:15" }   # all via real .Field instances
+    vars: [ink, surface, border, corner-full, corner-lg, destructive, ring, input-fill-high, primary-fill, space-2xs, space-3xl, space-lg, space-md]
+    styles: [text:Body, text:Label/md]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Track (Root) + Thumb (radix-ui Switch); size [default, sm] is a manual prop (no CVA) × state."
+  deps: [Field, Label]
+  deviations:
+    - "Geometry numeric: track default 32×18.4 / sm 24×14, thumb 16 / 12, corner-full; thumb offset = trackW − thumbW − 2px."
+    - "Checked track bg-primary-fill; unchecked track bg-input-fill-high (an off track must read on white — muted-fill would be invisible; role over name); thumb bg-surface."
+    - "invalid: unchecked = border-destructive only (track stays grey), checked = bg-destructive track; focus-invalid adds ring-destructive/20 (focus-gated ring, deviates from stock ring-3). Focus = border-ring + ring-ring/50 ring-[3px]. dark: removed."
+  figma_mechanics:
+    - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false)."
+  open:
+    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
 
 - name: RadioGroup
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-12 (Figma + Code) — "RadioItem" = RadioGroupItem
+  figma_synced: true
   source: { registry: "@shadcn", item: radio-group, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/radio-group/
@@ -756,57 +671,50 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/radio-group'"
   figma:
     section: { name: "RadioGroup", id: "3849:1206" }
-    set: { name: "RadioGroupItem", id: "3852:1206" }       # nur das Item ist das Set; 2026-06-15 umgebaut → 2 Achsen (checked × state), 10 Member, 5×2 WRAP
-    members:   # Reihe checked=off, dann checked=on
+    set: { name: "RadioGroupItem", id: "3852:1206" }       # only the item is a set; 2 axes checked × state, 10 members, 5×2 WRAP
+    members:   # row checked=off, then checked=on
       "checked=off, state=default":       "3850:1206"
       "checked=off, state=focus":         "3850:1210"
       "checked=off, state=disabled":      "3851:1206"
-      "checked=off, state=invalid":       "3851:1207"   # Glow gestrippt (border-only)
-      "checked=off, state=focus-invalid": "4066:2"       # NEU
+      "checked=off, state=invalid":       "3851:1207"   # border only, no glow
+      "checked=off, state=focus-invalid": "4066:2"
       "checked=on, state=default":        "3850:1207"
-      "checked=on, state=focus":          "4066:6"       # NEU (primary-Border + ring@50% Halo)
-      "checked=on, state=disabled":       "4066:9"       # NEU (opacity 0.5)
-      "checked=on, state=invalid":        "3851:1208"    # war checked-invalid; Glow gestrippt
-      "checked=on, state=focus-invalid":  "4066:3"       # NEU (destructive Fill+Border + Dot destructive-fg + Glow)
-    dot: { shape: "ELLIPSE 8px (size-2), fill primary-foreground; sichtbar auf allen checked=on Membern (checked-invalid: destructive-foreground)" }
-    group_container: "Layout-only (grid w-full gap-md) → KEIN Variant-Set; in den Examples als VERTICAL auto-layout itemSpacing=space-md repräsentiert"
-    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # 2026-06-15: checked eigene Achse (war State-Achse mit checked/checked-invalid Sammelwerten)
-    examples: { group: "Usage Examples 3854:1206 (REBUILT 06-12 = Field-composed)", Default: "3992:1324 (bare, per Doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + Gruppen-Error)", AllStates: "3857:1218" }
-    vars: { input: "3038:5", input-background: "3108:2", primary: "3037:8", primary-foreground: "3037:9", destructive-foreground⚠: "bound (checked-invalid Dot)", ring: "3038:6", destructive⚠: "3038:3", corner-full: "3073:6", space-md: "3070:6", muted-foreground: "3037:13" }
-  skill: /shadcn-component-port (2026-06-12) + /component-sync (2026-06-12)
-  notes: >
-    Zwei Teile: RadioGroup (Layout-Container, grid w-full gap-2→gap-md) + RadioGroupItem (interaktiv, State-Achse
-    wie Checkbox, aber corner-full Kreis + Innen-Dot statt Glyph). Item 16×16 Kreis numerisch; Dot = ELLIPSE 8px
-    (size-2), bg-primary-foreground. DS: border-input; checked = primary Border+Fill + primary-foreground Dot;
-    focus = border-ring + ring@50% 3px Glow (VERBATIM von .Input 3176:305, showShadowBehindNode:false — kritisch,
-    Item ist fill-less); invalid + checked-invalid = destructive ⚠ PLATZHALTER + destructive@20% (sbn:false).
-    dark: entfernt. Gruppe = Layout-only (kein Set), als VERTICAL AL repräsentiert. Usage-Examples-Group =
-    echte .RadioGroupItem- + .Label-Instanzen (Default/Disabled/WithDescription/AllStates). figma-verify CLEAN
-    (Dot = Vektor), Gate grün (6 Specs).
-    SYNC 2026-06-12 (/component-sync): unchecked-Kreis = bg-input-background (vorher transparent); checked-invalid
-    voll destructive-getönt — Border+Fill (aria-invalid:aria-checked:bg/border-destructive) + Dot
-    bg-destructive-foreground (group-aria-invalid/radio-group-item:), kehrt den vorherigen primary-Border-Override um.
-    FOCUS-GATED RING 2026-06-15 (Branch feat/checkbox-choice-card): aria-invalid:ring-[3px] ENTFERNT → der
-    destructive-Ring (ring/20) ist focus-gated (Breite nur aus focus-visible:ring-[3px]) — invalid-resting = nur
-    destructive-Border, invalid+focus = + roter Ring. Konsistent mit .Input; weicht von default-shadcn ab (ring-3).
-    FIGMA-RE-SYNC 2026-06-15 (Divergenz GESCHLOSSEN): Set auf 2 Achsen umgebaut (checked × state). Resting invalid
-    (checked=off/on) = Glow gestrippt (border-only); NEU focus-invalid je checked = + destructive@20% Glow. checked=on
-    × {focus, disabled} ergänzt (Matrix-Vollständigkeit). checked=on,focus = primary-Border + ring@50% Halo (FLAG s. Checkbox).
-    Instanzen folgen per Node-Identität (kein Remap). Galerie 3857:1218 zeigt weiter die kuratierten 6. Stories: Default
-    (Playground) + Description + Fieldset (play) + Disabled + Invalid + AllStates. Inline-ChoiceCard/ChoiceCardGroup/
-    ChoiceCardStates 2026-06-16 ENTFERNT (a11y-Harness-Cleanup; kanonisch jetzt ChoiceCardRadio in choice-card/). Gate grün.
+      "checked=on, state=focus":          "4066:6"       # primary border + ring @50 % halo
+      "checked=on, state=disabled":       "4066:9"       # opacity 0.5
+      "checked=on, state=invalid":        "3851:1208"    # border only, no glow
+      "checked=on, state=focus-invalid":  "4066:3"       # destructive fill + border + dot destructive-ink + glow
+    dot: { shape: "ELLIPSE 8px (size-2), fill primary-ink; visible on all checked=on members (checked-invalid: destructive-ink)" }
+    group_container: "layout only (grid w-full gap-md) → NO variant set; represented in the examples as VERTICAL auto-layout itemSpacing=space-md"
+    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }
+    examples: { group: "Usage Examples 3854:1206 (Field-composed)", Default: "3992:1324 (bare, per doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + group error)", AllStates: "3857:1218" }
+    vars: [ink, border, corner-full, corner-lg, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md, text:Title]
+  skill: /shadcn-component-port; /component-sync
+  anatomy: "Two parts: RadioGroup (layout container, grid w-full gap-md) + RadioGroupItem (interactive, state axis like Checkbox, corner-full circle with an inner dot instead of a glyph); item 16×16 numeric."
+  deps: [Field, Label, FieldLegend]
+  deviations:
+    - "Resting circle bg-input-fill + border-input-border; checked = primary-fill fill + border with a primary-ink dot (ELLIPSE 8px / size-2)."
+    - "invalid = border-destructive only; focus-invalid adds ring-destructive/20 (focus-gated, deviates from stock ring-3); checked-invalid = bg-destructive + border-destructive with the dot in destructive-ink (group-aria-invalid/radio-group-item:). Focus = border-ring + ring-ring/50 ring-[3px]. dark: removed."
+  figma_mechanics:
+    - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false — critical, the item is fill-less)."
+    - "The group is layout only (no set)."
+  divergences:
+    - "Radio invalid is a group error at FieldSet level (separate destructive text), not a per-field error slot."
+  open:
+    - "Section still carries bindings to the deleted variable 3038:5 (old shadcn Default/input) — rebind to input-border 4197:9644."
+    - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
 
 - name: ChoiceCard
   status: nova-aligned
-  figma_synced: true                            # Figma-Sets 2026-06-16 gebaut (Background-Agent, Port-Skill-Regeln); checked-Tint Figma→Code-synced
-  source: { registry: "DS-authored", item: choice-card, style: radix-nova }   # KEIN Stock-shadcn-Item; komponiert Field + Checkbox/Switch/RadioGroupItem + Label
+  figma_synced: true
+  source: { registry: "DS-authored", item: choice-card, style: radix-nova }   # NO stock shadcn item; composes Field + Checkbox / Switch / RadioGroupItem + Label
   code:
     dir: libs/ui/src/components/ui/choice-card/
     exports: [ChoiceCardCheckbox, ChoiceCardSwitch, ChoiceCardRadio]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/choice-card'"
-    internal: "ChoiceCardShell (presentational, NICHT exportiert) + useFieldId (Hook). Verschachtelte Subfolder je Wrapper + choice-card-shell/ + use-field-id.ts; je eigener index.ts-Barrel"
+    internal: "ChoiceCardShell (presentational, NOT exported) + useFieldId (hook). Nested subfolders per wrapper + choice-card-shell/ + use-field-id.ts, each with its own index.ts barrel"
   figma:
-    section: { name: "Choice Card", id: "4107:1526" }   # Page "Shadcn Components" 3126:2
+    section: { name: "Choice Card", id: "4107:1526" }
     checkbox:
       set: { name: "ChoiceCardCheckbox", id: "4112:1638" }
       members:
@@ -814,7 +722,7 @@ status_note: >
         "checked=on":  { default: "4111:1577", focus: "4111:1602", disabled: "4111:1627", invalid: "4111:1652", focus-invalid: "4111:1682" }
       usage_example: "4128:1862 (selected single card)"
     switch:
-      set: { name: "ChoiceCardSwitch", id: "4119:1750" }   # control size=default, KEINE size-Achse
+      set: { name: "ChoiceCardSwitch", id: "4119:1750" }   # control size=default, NO size axis
       members:
         "checked=off": { default: "4117:1638", focus: "4117:1661", disabled: "4117:1684", invalid: "4117:1707", focus-invalid: "4117:1735" }
         "checked=on":  { default: "4118:1694", focus: "4118:1717", disabled: "4118:1740", invalid: "4118:1763", focus-invalid: "4118:1791" }
@@ -824,43 +732,26 @@ status_note: >
       members:
         "checked=off": { default: "4122:1750", focus: "4122:1771", disabled: "4122:1792", invalid: "4122:1813", focus-invalid: "4122:1839" }
         "checked=on":  { default: "4123:1801", focus: "4123:1826", disabled: "4123:1851", invalid: "4123:1876", focus-invalid: "4123:1906" }
-      usage_example: "4129:1886 (single-selection group: Standard/Express/Overnight)"
-    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # kein hover; Set-Props = checked + state
-    nests: "echte .Field-Instanz im FieldLabel-Card (horizontal control-trailing: 3714:1018 invalid=false / 3715:1019 invalid=true); control-Slot = echte Instanz des passenden Control-Members (.Checkbox 3795:1184 / .Switch 3839:2 / .RadioGroupItem 3852:1206 je checked×state); Titel = genestete .Label. Controls WIEDERVERWENDET, nichts detacht."
-    tint: "checked-Tint = Zwei-Cyan-Token-Modell, voll variabel-gebunden: Card-Fill accent (3037:14, cyan/50) · Stroke primary (3037:8, cyan/500) · Titel accent-foreground (3038:2, cyan/700). Ersetzt das frühere primary/5+/30 (gebundene Alpha-Paints überleben Instanziierung nicht → re-resolven zu opacity 1). Ersetzt auch die alten statischen ChoiceCard-Examples (4044:1515/3979:2/3997:1358) als kanonische Quelle."
-    placeholders: "Card-semantische Default-Texte (2026-06-16): Titel {Title} · Description {Description} · Error {Error} (72 Nodes über alle 3 Sets: 30 Titel + 30 Description + 12 Error, Error nur invalid/focus-invalid). Mechanik: Titel an .Label-TEXT-Prop (label (children)#3735:0) → setProperties; Description/Error rohe Slot-Texte → .characters-Override. BEWUSST NICHT name=value: Layer-Namen bleiben {Label}/{Field Description}/{Error Message} (von .Field/.Label-Mains vererbt + in Instanzen gesperrt — kein Detach); Card-Semantik der {Semantic}-Konvention vorgezogen."
-  skill: Background-Figma-Agent (2026-06-16) + Figma→Code-Sync des checked-Tints (2026-06-16)
-  notes: >
-    DS-authored Composite (kein Stock-shadcn-Item): die klickbare Choice-Card (Titel + Beschreibung +
-    Form-Control). Code = 3 dünne Wrapper über eine geteilte interne ChoiceCardShell (FieldLabel > Field);
-    stateless pass-through (checked/defaultChecked/onCheckedChange bzw. Radios value durchgereicht →
-    controlled/uncontrolled entscheidet der Consumer, kein eigener State/„double source of truth").
-    title/description/error = ReactNode-Props (kein Compound/Slot-Pattern; Escape = rohe Field-Primitives);
-    invalid = !!error (EINE Regel für data-invalid + FieldError-Render + aria-invalid; leerer String = valide).
-    Typ-Falle: ComponentProps<Control> bringt HTML-`title` mit → Omit<…,'title'>, sonst verengt es ReactNode→string.
-    a11y-BEFUND + FIX: das `.Field` rendert role="group", und ein <label for> kann seinen Namen NICHT durch ein
-    role="group" hindurch an den Button vergeben → axe button-name VIOLATION (dom-accessibility-api war großzügig
-    → Story-Test falsch-grün). Fix: jeder Wrapper setzt aria-labelledby auf die FieldTitle-id (`${id}-title`,
-    geteilt via useFieldId-Hook); per axe gegen die echte Komponente verifiziert. Radio: value REQUIRED, lebt in
-    <RadioGroup> (Auswahl + onValueChange auf der Gruppe).
-    CHECKED-TINT 2026-06-16 (Figma→Code): User-Entscheid Zwei-Cyan-Modell (accent/primary/accent-foreground,
-    voll token-gebunden — löst das Alpha-in-Instanzen-Problem des primary/5-Ansatzes). Code nachgezogen in
-    field.tsx (geteilt, betrifft die ganze FieldLabel-Choice-Card-Familie): FieldLabel
-    has-data-checked:bg-accent + has-data-checked:border-primary; FieldTitle
-    group-has-data-checked/field-label:text-accent-foreground (scoped auf die Card-Gruppe → plain Field-Rows
-    unberührt). Per `npm run shoot` visuell bestätigt (Cyan-Tint + Cyan-Titel; invalid = Card-Tint bleibt,
-    Signal über roten Control + roten FieldError). Stories je Wrapper: Default (Playground + State-Preview +
-    play-Smoke-Test) + ChoiceCardStates-Galerie; Radio zusätzlich Group (Exklusivitäts-play). Gate grün
-    (210 Tests: 124 jsdom-Specs + 84 Story-Tests). Branch feat/choice-card.
-    BINARY-BY-DESIGN 2026-06-19: ChoiceCardCheckbox.checked/defaultChecked/onCheckedChange = `boolean`
-    (von `boolean | 'indeterminate'` verengt). Eine Blatt-Karte ist eine binäre Einzelauswahl — der
-    indeterminate-Tri-State ist ein Gruppen-/Eltern-Konzept und auf einer Karte semantisch n/a; daher
-    KEINE indeterminate-Story/-Figma-Variante (kein Phantom-State in DS-Artefakten). Basis-Checkbox behält
-    indeterminate (dort echt). Switch/Radio sind ohnehin binär bzw. single-select.
+      usage_example: "4129:1886 (single-selection group: Standard / Express / Overnight)"
+    axis: { checked: [off, on], state: [default, focus, disabled, invalid, focus-invalid] }   # no hover; set props = checked + state
+    nests: "real .Field instance in the FieldLabel card (horizontal control-trailing: 3714:1018 invalid=false / 3715:1019 invalid=true); control slot = real instance of the matching control member (.Checkbox 3795:1184 / .Switch 3839:2 / .RadioGroupItem 3852:1206 per checked × state); title = nested .Label. Controls REUSED, nothing detached."
+    tint: "checked tint = the accent selection model, fully variable-bound: card fill accent-fill · stroke accent-border · title accent-ink (bound alpha paints do not survive instantiation → no /opacity paints)"
+    placeholders: "card-semantic default texts: title {Title} · description {Description} · error {Error} (72 nodes over the 3 sets: 30 title + 30 description + 12 error, error on invalid / focus-invalid only). Mechanics: title via the .Label TEXT prop (label (children)#3735:0) → setProperties; description / error are raw slot texts → .characters override. Layer names stay {Label} / {Field Description} / {Error Message} (inherited from the .Field / .Label mains, locked in instances — no detach)."
+    vars: [accent-border, accent-fill, accent-ink, ink, surface, border, corner-full, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-fill-high, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-md]
+    styles: [text:Body, text:Label/md]
+  skill: Figma build agent (/figma-build-rules) + /component-sync (checked tint)
+  anatomy: "DS-authored composite: the clickable choice card (title + description + form control). Code = 3 thin wrappers over a shared internal ChoiceCardShell (FieldLabel > Field); stateless pass-through (checked / defaultChecked / onCheckedChange, or the radio value) → the consumer decides controlled / uncontrolled."
+  deps: [Field, Checkbox, Switch, RadioGroup, Label]
+  deviations:
+    - "title / description / error = ReactNode props (no compound / slot pattern; escape hatch = the raw Field primitives); invalid = !!error (ONE rule for data-invalid + FieldError render + aria-invalid; empty string = valid)."
+    - "ChoiceCardCheckbox.checked / defaultChecked / onCheckedChange are boolean (indeterminate narrowed away): a leaf card is a binary single choice, the tri-state is a group / parent concept — no indeterminate story or Figma variant. Base Checkbox keeps indeterminate."
+    - "Type trap: ComponentProps<Control> brings the HTML title attribute → Omit<…, 'title'>, otherwise ReactNode narrows to string."
+  a11y:
+    - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
 
 - name: Select
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-19; FIX-ROUND 2026-06-20 (Figma-Background-Agent): focus-invalid-Member + showIcon-Bool + SelectGroup-Set + anchored Select-Composition + Example-Headlines/Groups-Rebuild; figma-verify CLEAN
+  figma_synced: true
   source: { registry: "@shadcn", item: select, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/select/
@@ -871,23 +762,22 @@ status_note: >
     section: { name: "Select", id: "4307:1997" }
     trigger:
       set: { name: "SelectTrigger", id: "4308:2029" }
-      axis: { size: [default, sm], state: [default, focus, disabled, invalid, focus-invalid] }    # 10 Member (focus-invalid 2026-06-20)
+      axis: { size: [default, sm], state: [default, focus, disabled, invalid, focus-invalid] }    # 10 members
       members:
         "size=default, state=default":       "4308:1997"
         "size=default, state=focus":         "4308:2001"
         "size=default, state=disabled":      "4308:2005"
-        "size=default, state=invalid":       "4308:2009"   # border-only (ring stripped 06-20 → focus-gated)
-        "size=default, state=focus-invalid": "4326:2363"   # NEW: destructive border + destructive/20 ring (DROP_SHADOW spread3 a0.2, sbn:false)
+        "size=default, state=invalid":       "4308:2009"   # border only (ring focus-gated)
+        "size=default, state=focus-invalid": "4326:2363"   # destructive border + destructive/20 ring (DROP_SHADOW spread 3 a0.2, sbn:false)
         "size=sm, state=default":            "4308:2013"
         "size=sm, state=focus":              "4308:2017"
         "size=sm, state=disabled":           "4308:2021"
-        "size=sm, state=invalid":            "4308:2025"   # border-only (ring stripped 06-20)
-        "size=sm, state=focus-invalid":      "4326:2367"   # NEW
-      props: "value#4310:0 (TEXT '{Value}') + trailing chevron VECTOR (RiArrowDownSLine, muted-ink). w=240 FIXED, h=32/28."
-      focus_invalid: "06-20 FIX1: invalid-Ring focus-gated (Input-Familien-Kanon, finding #61a). invalid = nur destructive border (DROP_SHADOW von den invalid-Membern entfernt); focus-invalid = destructive border + destructive/20 ring (mirror Input focus-invalid 3692:1249 verbatim). Code rendert in focus-invalid genau EINEN destructive/20-Ring (kein zweiter Glow) — Brief-Wortlaut 'both rings' = lose; faithful to code. Grid size-major neu sortiert, Set w=1360, Section auf w=1560 verbreitert (sonst überlief das 5-State-Raster)."
+        "size=sm, state=invalid":            "4308:2025"
+        "size=sm, state=focus-invalid":      "4326:2367"
+      props: "value#4310:0 (TEXT '{Value}') + trailing chevron VECTOR (RiArrowDownSLine, muted). w=240 FIXED, h=32 / 28."
     item:
       set: { name: "SelectItem", id: "4313:2046" }
-      axis: { state: [default, focus, disabled], selected: [false, true] }          # 6 Member
+      axis: { state: [default, focus, disabled], selected: [false, true] }          # 6 members
       members:
         "state=default, selected=false":  "4313:2004"
         "state=default, selected=true":   "4313:2011"
@@ -895,73 +785,46 @@ status_note: >
         "state=focus, selected=true":     "4313:2025"
         "state=disabled, selected=false": "4313:2032"
         "state=disabled, selected=true":  "4313:2039"
-      props: "showIcon#4326:0 (BOOLEAN, def FALSE — 06-20 FIX2) gated leadingIcon · leadingIcon#4313:6 (SLOT, default 16px RiUserLine) · label#4313:7 (TEXT '{Label}') · trailing check VECTOR (RiCheckLine, visible↔selected). focus = accent-fill + accent-ink."
-      show_icon: "06-20 FIX2: showIcon#4326:0 Boolean (default false), mirror CommandItem showIcon#3559:5. Mechanik (finding #8): visible NICHT direkt auf den SLOT gebunden → je Member ein FRAME-Wrapper 'iconWrap' um den leadingIcon-SLOT, wrapper.visible an showIcon#4326:0 gebunden. Default-Item hat KEIN Icon; Toggle-on zeigt RiUserLine. Wrapper-IDs: 4326:2317/2318/2319/2352/2353/2354."
+      props: "showIcon#4326:0 (BOOLEAN, default false) gates leadingIcon · leadingIcon#4313:6 (SLOT, default 16px RiUserLine) · label#4313:7 (TEXT '{Label}') · trailing check VECTOR (RiCheckLine, visible ↔ selected). focus = accent-fill + accent-ink."
+      show_icon: "showIcon is bound on a FRAME wrapper 'iconWrap' around the leadingIcon slot per member (visible is never bound on the slot itself). Wrapper IDs: 4326:2317/2318/2319/2352/2353/2354."
     content:
-      composition: { name: "SelectContent", id: "4314:1997" }                       # single recompose-able component (mirror Command surface 3642:2)
-      slots: { items: "items#4314:0 (default 3 SelectItem-Instanzen)" }
-      bool_props: { showScrollUp: "showScrollUp#4315:0 (def false)", showScrollDown: "showScrollDown#4315:1 (def false)" }
+      composition: { name: "SelectContent", id: "4314:1997" }                       # single recompose-able component (mirrors the Command surface 3642:2)
+      slots: { items: "items#4314:0 (default 3 SelectItem instances)" }
+      bool_props: { showScrollUp: "showScrollUp#4315:0 (default false)", showScrollDown: "showScrollDown#4315:1 (default false)" }
       scroll_buttons: { up: "4314:1998 (RiArrowUpSLine)", down: "4314:2023 (RiArrowDownSLine)" }
-    group_set:                                                                      # NEW 06-20 FIX3 — SelectGroup als eigenes Set
+    group_set:
       component: { name: "SelectGroup", id: "4326:2371" }
-      props: { label: "label#4326:8 (TEXT '{Label}', SelectLabel-Region px-sm/py-xs, text-format-label-md, muted-ink)", items: "items#4326:7 (SLOT, default 2 SelectItem-Instanzen)" }
-      note: "labeled group container = SelectLabel-Text + items-SLOT, container p-xs. Reusable; nistet in den SelectContent items-Slot. Ersetzt das frühere inline-SelectLabel (kein eigenes Set davor)."
-    composition_set:                                                                # NEW 06-20 FIX4 — Top-level Select (open-state, anchored)
+      props: { label: "label#4326:8 (TEXT '{Label}', SelectLabel region px-sm / py-xs, text-format-label-md, muted)", items: "items#4326:7 (SLOT, default 2 SelectItem instances)" }
+      note: "labeled group container = SelectLabel text + items slot, container p-xs; reusable, nests into the SelectContent items slot"
+    composition_set:
       component: { name: "Select", id: "4326:2477" }
       nests: { trigger: "4326:2478 (SelectTrigger size=default, value='Banana')", content: "4326:2482 (SelectContent, layoutPositioning=ABSOLUTE)" }
-      anchor: "Composition = HORIZONTAL hug auto-layout (bounds=256×32 = nur Trigger). Content = ABSOLUTE-Child, y=36 (Trigger-h 32 + 4 Gap), constraints MIN/MIN → an Trigger-Bottom-Left verankert. Content zeigt Apple/Banana✓/Blueberry. composites.md T4 layer-3 anchored case (finding #59); Figma kann nicht 'öffnen' → diese statische Composition IST das Open-State-Modell."
-    label: "06-20: SelectLabel jetzt als SelectGroup-Set modelliert (group_set oben). Code = eigene SelectLabel-Component (kein Figma-Set-Pendant für das bare Label)."
-    separator: "genestete echte .Separator-Instanz (main 3676:1016 horizontal) — in Groups-Example zwischen den 2 SelectGroups"
+      anchor: "composition = HORIZONTAL hug auto-layout (bounds 256×32 = trigger only). Content = ABSOLUTE child, y=36 (trigger h 32 + 4 gap), constraints MIN/MIN → anchored to the trigger's bottom-left. Figma cannot 'open' → this static composition IS the open-state model."
+    separator: "nested real .Separator instance (main 3676:1016 horizontal) — between the two SelectGroups in the Groups example"
     group: { name: "Usage Examples", id: "4315:2106" }
-    examples: { Open: "4327:2225 (NEW 06-20: Select-Composition 4326:2477, anchored)", Basic: "4315:2107", Groups: "4315:2324 (REBUILT 06-20: 2× SelectGroup-Instanz North America/Europe + .Separator dazwischen, neue SelectContent-Instanz 4326:2749)", Scrollable: "4315:2468", Invalid: "4316:2109 (nestet .Field 3713:1017 vertical/invalid)" }
-    example_headlines: "06-20 FIX5a: alle Block-Headlines auf Sibling-Kanon umgestellt (Hanken Grotesk Regular 13px, muted-ink — vorher ExtraBold 18px black). 5 Blocks (Open/Basic/Groups/Scrollable/Invalid), je Headline gerendert."
-    vars: { input-fill: "3108:2", input-border: "4197:9644", ring: "3038:6", "destructive⚠": "3038:3", input-ink-placeholder: "3043:3", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", ink: "3037:3", dialog-fill: "3037:6", border: "3038:4", corner-lg: "3073:4", corner-md: "3073:3", space-2xs: "3070:3", space-xs: "3070:4", space-sm: "3070:5" }
-  skill: /shadcn-component-port (+ references/composites.md, 2026-06-19; Figma = Background-Agent figma-select-build)
-  notes: >
-    Popover-Composite (radix-ui Select), 10 Exporte. Deps: radix-ui ✓ (Umbrella-Import behalten = Dialog-Konvention,
-    deklarierte Dep), Field/Separator ✓ (in Examples genestet), Label ✓. lucide → @remixicon/react (RiArrowDownSLine/
-    -UpSLine/RiCheckLine). ui:add schrieb nur select.tsx (keine Foreign-Component-Files). Figma kann nicht „öffnen" →
-    offener Zustand als statische Composition (wie Command/Dialog). 3 Sets + Examples-Gruppe.
-    USER-DECISIONS (T2.7): (1) Trigger-Fill = bg-input-fill (Input-Parität, bewusste Abweichung vom Nova-bg-transparent;
-    der geschlossene Trigger liest identisch zu Input/Textarea/InputGroup). (2) Scope = volles Composite.
-    DS-Clothing: Trigger = Input-Klon (corner-lg/sm corner-md, border-input-border, focus border-ring + ring/50
-    ring-[3px], invalid destructive ⚠ + ring/20, placeholder→input-ink-placeholder, text-format-label-md, h-8/h-7 numerisch,
-    Chevron muted-ink); Content = Command-Surface (dialog-fill + border + shadow-elevation + corner-lg, popover→dialog
-    konsolidiert); Item = accent-fill/accent-ink-Highlight (= Command-Selektion) + Check, corner-md; Label text-format-label-md
-    muted-ink (12px-Sans→14 Rolle-Snap, findings #20/#28); Separator -mx-xs/my-xs bg-border. dark: + inerter
-    not-data-[variant=destructive]-Selektor (Nova-Item hat kein variant-Prop) gedroppt.
-    DESIGN-FORKS / CODE↔FIGMA (für /component-sync): D1 SelectItem-Check = Figma trailing Layout-Vektor (pr-md/right-2),
-    Code = absolute right-md + pr-3xl-Clearance (shadcn-Idiom, visuell äquivalent — NICHT als Delta lesen). SelectLabel =
-    Figma inline (kein Set). `size`-Achse = echtes Code-Prop SelectTrigger.size (kein Fork). `selected`-Bool (Figma) =
-    Radix data-state=checked (kein Code-Prop). Docs (06-20, finaler Stand): KEIN `meta.subcomponents` — jeder API-Part hat
-    ein EIGENES Story-File (RadioGroupItem-Muster, findings #57/#61c): `select-{trigger,content,item,value}.stories.tsx`,
-    je `meta.component=Select*` + `title 'UI/Select/Select*'` + in `<Select>` gewrappt → eigene Autodocs-Seite
-    (ui-select-select*) mit echter ArgsTable UND Live-Controls. Prop-lose Pass-throughs (Group/Label/Separator/ScrollButtons)
-    = keine Seite. Hauptseite UI/Select = Root + Usage + verlinkt die Part-Seiten.
-    docgen: SelectProps (value/defaultValue/onValueChange/open/defaultOpen/onOpenChange/disabled/required/name) +
-    SelectTriggerProps (size) + SelectContentProps (position/align) + SelectItemProps (value/disabled/textValue) +
-    SelectValueProps (placeholder) [alle 06-20]. Stories — select.stories (UI/Select): Default (voller Root-Playground;
-    play: open→Blueberry→assert→blur) · Groups · Scrollable · Disabled · Invalid (Field-Komposition; 06-20: war WithField) ·
-    TriggerStates (size×state, pseudo-focus). Part-Files (je Default-Playground + play): SelectTrigger (size/disabled) ·
-    SelectContent (position/align) · SelectItem (value/disabled; textValue = ArgsTable, control:false — unsichtbarer
-    Typeahead-Effekt) **+ Typeahead-Sub-Story** (Emoji-Flaggen → Text-Content startet mit Emoji, ohne textValue kein Match;
-    play tippt „portugal" auf closed Trigger → selektiert) · SelectValue (placeholder). Skip-Log: RTL (locale),
-    Form/react-hook-form (un-ported Dep). KEIN jsdom-Polyfill (closed render im Spec; open-Pfad im Chromium-Storybook-
-    Projekt). figma-verify CLEAN; Gate grün (typecheck + test 241: 6 Select-Specs + Story-Tests über select.stories (6) +
-    select-trigger/content/value (je 1) + select-item (2: Default + Typeahead), axe + lint).
-    FIX-ROUND 2026-06-20 (Figma-only, Background-Agent; Code parallel in main): (1) Trigger focus-invalid-Member
-    je Größe (10 statt 8) + invalid-Ring focus-gated (invalid = border-only, focus-invalid = border + destructive/20-Ring;
-    Input-Familien-Kanon, finding #61a). (2) Item showIcon-Boolean (def false, finding #61b/#8 — iconWrap-FRAME gated den
-    leadingIcon-SLOT, NICHT der Slot direkt). (3) SelectGroup als eigenes Set 4326:2371 (label-TEXT + items-SLOT, finding #61c).
-    (4) Top-level Select-Composition 4326:2477 (anchored open-state: Trigger + ABSOLUTE-Content, finding #59). (5) Example-
-    Headlines auf Sibling-Kanon (Regular 13 muted-ink) + Groups korrekt aus 2 SelectGroup-Instanzen + Separator neu gebaut +
-    Open-Example-Block ergänzt. figma-verify CLEAN über alle 5 berührten Knoten; controls-live PASS (showIcon-Toggle,
-    SelectGroup items-Slot, Select-Composition-Instanz, focus-invalid beide Größen). Code-Seite (subcomponents-Vollständigkeit,
-    focus-gated ring, Invalid-Story, docgen SelectContent) lief parallel in main (Task #7).
+    examples: { Open: "4327:2225 (Select composition 4326:2477, anchored)", Basic: "4315:2107", Groups: "4315:2324 (2× SelectGroup instance North America / Europe + .Separator, SelectContent instance 4326:2749)", Scrollable: "4315:2468", Invalid: "4316:2109 (nests .Field 3713:1017 vertical/invalid)" }
+    vars: [accent-fill, accent-ink, ink, border, corner-lg, corner-md, destructive, dialog-fill, ring, input-border, input-fill, muted, space-md, space-sm, space-xs]
+    styles: [effect:Elevation, text:Body, text:Label/md]
+  skill: /shadcn-component-port (+ references/composites.md; Figma via a background build agent)
+  anatomy: "Popover composite (radix-ui Select), 10 exports + 5 prop types; 3 sets + a top-level composition + an examples group in Figma. Figma cannot open → the open state is a static anchored composition (like Command / Dialog)."
+  deps: [Field, Separator, Label]
+  deviations:
+    - "Trigger fill = bg-input-fill (Input parity; deliberate departure from Nova's transparent trigger — the closed trigger reads identically to Input / Textarea / InputGroup). Trigger = Input clone: corner-lg (sm: corner-md), border-input-border, focus border-ring + ring-ring/50 ring-[3px], invalid border-destructive + ring-destructive/20 (focus-gated), placeholder text-input-ink-placeholder, text-format-label-md, h-8 / h-7 numeric, chevron text-muted."
+    - "Content = Command surface (bg-dialog-fill + border + shadow-elevation + corner-lg); Item = accent-fill / accent-ink highlight (= Command selection) + check, corner-md; Label text-format-label-md text-muted (12px sans → 14 role snap); Separator -mx-xs / my-xs bg-border."
+    - "Icons: lucide → @remixicon/react (RiArrowDownSLine / RiArrowUpSLine / RiCheckLine). dark + the inert not-data-[variant=destructive] selector (Nova item has no variant prop) dropped."
+    - "Docs: no meta.subcomponents — every API part with curated props has its own story file (select-{trigger,content,item,value}.stories.tsx, title UI/Select/Select*); prop-less pass-throughs have no page."
+  forks:
+    - "selected (Figma boolean) = Radix data-state=checked, not a code prop. size axis = the real code prop SelectTrigger.size (no fork)."
+    - "SelectLabel: code has its own component; Figma models it inside the SelectGroup component (no bare-label set)."
+  divergences:
+    - "SelectItem check: Figma = trailing layout vector (pr-md / right-2), code = absolute right-md + pr-3xl clearance (shadcn idiom) — visually equivalent, NOT a delta."
+  figma_mechanics:
+    - "Example headlines follow the sibling canon (Hanken Grotesk Regular 13, muted-ink)."
+  run_notes: [agent-runs/component-port/2026-06-19-select/notes.md]
 
 - name: Slider
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  figma_synced: true
   source: { registry: "@shadcn", item: slider, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/slider/
@@ -969,7 +832,7 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/slider'"
   figma:
     section: { name: "Slider", id: "4348:2225" }
-    set: { name: "Slider", id: "4351:2225" }       # 12 Member, 3 Achsen, 4×3 manuelles Grid (gemischte Member-Größen → kein WRAP)
+    set: { name: "Slider", id: "4351:2225" }       # 12 members, 3 axes, 4×3 manual grid (mixed member sizes → no WRAP)
     members:
       "orientation=horizontal, thumbs=single, state=default":  "4350:2225"
       "orientation=horizontal, thumbs=single, state=focus":    "4350:2229"
@@ -983,200 +846,149 @@ status_note: >
       "orientation=vertical, thumbs=range, state=default":     "4350:2264"
       "orientation=vertical, thumbs=range, state=focus":       "4350:2269"
       "orientation=vertical, thumbs=range, state=disabled":    "4350:2274"
-    anatomy: "Root (NONE, clip=false) › Track (FRAME, clip=true, bg input-fill-high, corner-full) › Range (RECT, bg primary-fill, corner-full) + 1–2 Thumb (RECT 12×12, bg surface, border input-border 1px INSIDE, corner-full). horiz Track 200×4 / vert 4×160. Range: horiz 0→Thumb, vert bottom→Thumb, range zwischen Thumbs."
-    axis: { orientation: [horizontal, vertical], thumbs: [single, range], state: [default, focus, disabled] }   # thumbs = Figma-only Fork (Code leitet Thumb-Zahl aus value.length ab, KEIN Prop — wie Field.controlPosition; NICHT als CVA zurücksyncen). KEIN invalid-State (stock-Slider hat keinen).
-    examples: { group: "Usage Examples 4354:2225", Default: "4354:2228", Range: "4354:2234", Vertical: "4354:2244", Disabled: "4354:2253", FieldSlider: "Field-Instanz 4355:2238 (control-Slot = Range-Slider-Instanz 4356:2249, label 'Price Range', description gewrappt)" }
-    vars: { input-fill-high: "4197:9645", primary-fill: "3037:8", input-border: "4197:9644", surface: "3037:2", corner-full: "3073:6" }
-    focus_glow: "literal DROP_SHADOW radius:0 spread:3 ring(neutral/800)@50% sbn:false — verbatim von .Input focus 3176:305 (Glow-Rezept: NIE binden, sonst droppt die /50). Pro Thumb auf den focus-Membern; Member clip=false."
-  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
-  notes: >
-    Radix Slider (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Switch-Konvention),
-    kein CVA → Geometrie + State-Achsen wie Switch/Checkbox-Familie. Parts: Root › Track (rail) › Range (fill) +
-    N×Thumb (1 pro value; 2 = range). DS-Clothing: Track-rail = bg-input-fill-high (muted-fill #f9fcfd auf Weiß
-    unsichtbar → Switch-Präzedenz „off-track muss lesen"; Rolle>Name); Range = bg-primary-fill (DS „active/on surface"
-    = dunkles Navy deep/900, wie Switch-Track/Checkbox-Box/Radio-Dot — NICHT cyan primary); Thumb = bg-surface +
-    border-input-border (nova border-ring rollen-korrigiert → input-border, Sibling-Resting-Border) + focus-Ring
-    ring-ring/50 ring-[3px] (hover/focus-visible/active; ring-3→ring-[3px] B15). corner-full (rounded-full). Geometrie
-    numerisch: size-3 Thumb, h-1/w-1 Track (4px), min-h-40 vertical. dark: + inerte disabled:* am Thumb (span, kein
-    :disabled) belassen. A11Y: role="slider" sitzt am Thumb → Component FORWARDET aria-label/-labelledby an jeden Thumb
-    (sonst axe aria-input-field-name rot; Root-Label benennt nichts). thumbs-Achse = Figma-only Fork (range = 2 values).
-    Stories: Default (Playground + Keyboard-play) · Range · FieldSlider (Field-komponiert, schließt den 2026-06-12
-    Field-Skip field-slider) · Vertical · Disabled · AllStates-Galerie. KEIN jsdom-Polyfill nötig (ResizeObserver/
-    scrollIntoView lagen in test-setup.ts). figma-verify CLEAN-by-design (18 Thumb↔Track-Overlaps = beabsichtigte
-    Handle-auf-Rail-Geometrie). Gate grün (260 Tests: 5 Slider-Specs + 6 Slider-Stories + axe).
+    anatomy: "Root (NONE, clip=false) › Track (FRAME, clip=true, bg input-fill-high, corner-full) › Range (RECT, bg primary-fill, corner-full) + 1–2 Thumb (RECT 12×12, bg surface, border input-border 1px INSIDE, corner-full). horiz track 200×4 / vert 4×160. Range: horiz 0 → thumb, vert bottom → thumb, range between thumbs."
+    axis: { orientation: [horizontal, vertical], thumbs: [single, range], state: [default, focus, disabled] }   # NO invalid state (stock Slider has none)
+    examples: { group: "Usage Examples 4354:2225", Default: "4354:2228", Range: "4354:2234", Vertical: "4354:2244", Disabled: "4354:2253", FieldSlider: "Field instance 4355:2238 (control slot = range Slider instance 4356:2249, label 'Price Range', description wrapped)" }
+    vars: [ink, surface, corner-full, input-border, input-fill-high, muted, primary-fill, space-md]
+    styles: [text:Body, text:Label/md]
+    focus_glow: "literal DROP_SHADOW radius 0 spread 3 ring (neutral/800) @50 % sbn:false — copied verbatim from the Input focus member 3176:305 (never bind the colour, it drops the /50). Per thumb on the focus members; members clip=false."
+  skill: /shadcn-component-port (+ /figma-build-rules)
+  anatomy: "Radix Slider (radix-ui umbrella import = the full primitive, declared dep), no CVA → geometry + state axes like the Switch / Checkbox family. Parts: Root › Track (rail) › Range (fill) + N × Thumb (one per value; 2 = range)."
+  deps: [Field]
+  deviations:
+    - "Track rail bg-input-fill-high (muted-fill would be invisible on white → Switch precedent 'an off track must read'; role over name); Range bg-primary-fill (the DS 'active / on' surface, like the Switch track / Checkbox box / Radio dot — NOT the primary emphasis tone); Thumb bg-surface + border-input-border (Nova border-ring role-corrected to the sibling resting border) + focus ring-ring/50 ring-[3px]; corner-full."
+    - "Geometry numeric: size-3 thumb, h-1 / w-1 track (4px), min-h-40 vertical. dark + the inert disabled:* on the thumb (span, no :disabled) kept."
+  forks:
+    - "thumbs [single, range] is a Figma-only axis — code derives the thumb count from value.length (no prop). Never sync back."
+  a11y:
+    - "role=slider sits on the thumb → the component FORWARDS aria-label / aria-labelledby to every thumb (otherwise axe aria-input-field-name fails; a root label names nothing)."
+  figma_mechanics:
+    - "figma-verify reports 18 thumb ↔ track overlaps — intended handle-on-rail geometry (CLEAN by design)."
 
 - name: Popover
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-22; Figma-Rebuild 06-23; A9-Anchor-Umbau 2026-06-24 (Figma-only)
+  figma_synced: true
   source: { registry: "@shadcn", item: popover, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/popover/
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger, PopoverContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
   figma:
-    section: { name: "Popover", id: "4365:2253" }   # 06-23: 321×203→1312×1133 (A5-Fix) → 1718×2528 → 06-24 A9-Spill-Fix → 2278×2585. ECHTER Fix: der GRID-Set selbst bekommt Padding (s. root.structure), sodass seine EIGENE Frame die floatenden Overlay-Panels einschließt → kein Member/Set/Build/Section-Rand wird mehr von Panels gekreuzt. Build-Frame zentriert (counterAxisAlignItems CENTER, padding 16), Section umschließt mit 80px-Inset; Tooltip-Section nach rechts genudged für Platz. Spill-Check MUSS bis zu den sichtbaren PopoverContent-LEAVES rekursieren + absoluteBoundingBox nehmen (NICHT nur Direktkinder, NICHT absoluteRenderBounds — clippt unter set.clipsContent → falsches PASS)
-    build_frame: { name: "Build", id: "4390:2364" } # NEU 06-23: weißes vertikales AL-Frame (HUG, itemSpacing space-2xl, padding space-xl) IN der Section — hält masters + PopoverRoot + Usage Examples (Section ≠ AL-Container → A5-Fix)
-    content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, KEIN State-/Variant-Set (data-[side]=Motion, kein DS-State)
-    slot: { content: "content#4365:0" }                    # die offene Region; Default = genestete PopoverHeader-Instanz
-    header: { name: "PopoverHeader", id: "4367:2253", props: "title#4367:0 (TEXT, {Title}, Label-Style/dialog-ink) · description#4367:1 (TEXT, {Description}, Body-Style/muted-ink)" }
-    examples: { group: "Usage Examples 4368:2255", SimpleContent: "PopoverContent-Instanz 4368:2258 (Slot = konfig. PopoverHeader)", Dimensions: "PopoverContent-Instanz 4368:2274 (Slot = PopoverHeader + 4 Label/Input-Reihen, echte DS-Instanzen Label 3734:1022 / Input 3176:303)" }
-    vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", muted-ink: "3037:13", corner-lg: "3073:4", space-lg: "3070:8", space-md: "3070:6", space-2xs: "3070:3" }
-    effect: { Elevation: "S:92c2d7…" }
-    axis: { }   # Content-Fläche: KEINE Achse (erhabene Fläche, kein interaktiver State-Raum, Motion ≠ DS-State)
-    root:                                          # 06-23 Follow-up: Popover (umbenannt von PopoverRoot) = VOLLES interaktives Overlay; 06-24: A9-ZWEI-STUFEN-ANKER (constraint-getrieben, resize-fest)
-      set: { name: "Popover", id: "4402:2589" }    # Set-Name "Popover" (matcht Code-Root-Export); Member HUGgen den Trigger (50×32)
-      axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 Member; defaults open/bottom/center
-      props: "trigger#4408:0 (SLOT, HUG, default DS-Button — spiegelt asChild; Kind bestimmt Slot-W/H → Member huggt den Trigger; Reaction am Member-Frame → Slot-Swap stört Prototype nicht)"
-      structure: "je Member = Auto-Layout HUG → Footprint = nur Trigger (50×32), clipsContent=false; Trigger = einziges Flow-Kind. ZWEI-STUFEN-ANKER (A9, 06-24): (1) Panel Position = unsichtbares (fills[]) FIXED-50×32-Auto-Layout, ABSOLUTE Kind des Members, constraints=SIDE×ALIGN-TRACKING [top→vert MIN · bottom→vert MAX · left→horiz MIN · right→horiz MAX; align start/center/end → MIN/CENTER/MAX auf der Parallel-Achse] → trackt die Trigger-Kante, wenn der (geHUGgte) Trigger die Größe ändert → konstanter Gap, kein Überlapp. (2) PopoverContent = ABSOLUTE Kind der Panel Position, constraints=GROW-AWAY [Seitenachse INVERTIERT: bottom→MIN · top→MAX · left→MAX · right→MIN; Parallel-Achse = align] → HUG-Wachstum geht vom Trigger WEG (kein Überlapp). sideOffset 8, KEIN Reflow; closed = content visible=false. Set-Grid (layoutMode GRID) → 0 Panel-Kollisionen. (Grund für 2 Stufen: Figma-constraints steuern BEIDE — Parent-Resize-Tracking UND Selbst-Wachstums-Anker eines ABSOLUTE-Kinds — und die beiden brauchen je Seite die GEGENÜBERLIEGENDE Kante → eine Stufe kann nicht beides; empirisch belegt.) PANEL-CONTAINMENT (06-24): da Member den Trigger HUGgen, floaten die Panels per Design außerhalb der Member → ohne Gegenmaßnahme überstehen sie Set/Build/Section. Fix: der GRID-Set bekommt Padding ≈ Panel-Überstand+Marge (padL/R 328, padT 105, padB 48; Überstand = Panelbreite 288 + Gap 8 = 296 seitlich, 73 oben) UND die Set-Breite wächst um denselben Betrag (→ 2086), damit die Content-Area (1430) konstant bleibt und das GRID NICHT umbricht → die Set-Frame umschließt ihre eigenen Panels (verifiziert: panelsOutsideSet=0, 0 Kollisionen)."
-      prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside ist auf Variant-Membern nicht ausdrückbar"
-      members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total; je Member jetzt: Trigger-SLOT + Panel-Position-Anker (mit genestetem PopoverContent)
-      note: "state×side×align = Figma-only interaktives Modell; Code treibt side/align via PopoverContent-Props + open/closed via Radix-Runtime → KEIN CVA, NICHT als Code-Props zurücksyncen. A9-Anker = Figma-Modell-Treue (Radix-Popper macht das gleiche zur Laufzeit) → KEINE Code-Änderung. Verifiziert 06-24: Trigger-Resize (50×32→110×60) + Content-Wachstum (288×65→364×235) → Gap bleibt 8, 0 Überlapp, alle 24 Varianten."
-  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22; Figma-Rebuild 2026-06-23)
-  notes: >
-    Radix Popover (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-Konvention,
-    B13). Composite OHNE eigenen State — Content = einzige DS-Fläche (Trigger/Anchor = Pass-through, kein Class).
-    7 Exporte: Popover/Trigger/Content/Anchor (stock-4) + PopoverHeader/Title/Description (Nova-Typo-Helfer über
-    new-york). KEIN CVA, KEIN State-/Variant-Set in Figma — eine erhabene Raised-Surface (Schwester von Dialog/Command:
-    `overlay`+`popover` 2026-06-18 zu `dialog` konsolidiert → `bg-popover`/`text-popover-foreground` TOT). DS-Clothing
-    (T3): bg-popover→bg-dialog-fill · text-popover-foreground→text-dialog-ink · rounded-lg→corner-lg (radius/8, control-
-    attached, NICHT Dialogs corner-xl) · ring-1 ring-foreground/10→border (Nova-Raised-Ring → DS-border, verbatim
-    Dialog/Command) · shadow-md→shadow-elevation · gap-2.5/p-2.5 (10px, keine Rung)→gap-md(8)/p-lg(12) per ROLLE
-    (B22/B23) · text-sm→text-format-body. Header: gap-0.5→gap-2xs; Title text-sm/font-medium→text-format-label-md
-    (kompakte Caption 14/500, NICHT Dialogs title 18 — Popover ist kompakt); Description muted-foreground→muted-ink.
-    Geometrie numerisch (w-72, z-50, sideOffset/align). Motion-Klassen (data-[side]/data-open/data-closed) verbatim.
-    Docgen (06-23-Fix A4): PopoverProps am Root (Omit+Re-Declare open/defaultOpen/onOpenChange/modal → ArgsTable aus
-    react-docgen, hand-argTypes raus); PopoverContentProps auf den vollen kuratierten Satz erweitert (side/sideOffset/align/
-    alignOffset/avoidCollisions/collisionPadding/sticky/hideWhenDetached) statt nur align/sideOffset; Sides-Story ergänzt.
-    A11Y: Radix gibt dem Content role="dialog" → axe
-    aria-dialog-name verlangt einen Accessible Name; Popover wired den Title NICHT auto (anders als modaler Dialog) →
-    offenes Panel braucht explizites aria-label/-labelledby (in JSDoc + Stories dokumentiert; alle open-Stories benannt).
-    jsdom-Spec B20-scoped: closed-Pfad + defaultOpen (mountet OHNE Pointer-Capture-Flow → KEIN neuer Polyfill); der
-    klick-getriebene open→Escape-Flow lebt im Chromium-Play-Test. figma-verify CLEAN (0 text-icon/clipped/overlap/pad-
-    asym). Gate grün (3 Specs + 5 Stories + axe). DOWNSTREAM: Popover + Command komponieren den combobox-Connection-
-    Switcher (Explorer) — OUT OF SCOPE dieses Ports, nur als Consumer notiert.
-    FIGMA-REBUILD 06-23 (code→Figma, background agent): (A5-Fix) Section-Komposition repariert — die frei
-    positionierten Children (spillten auf den dunklen Canvas) in ein weißes vertikales AL-Build-Frame `4390:2364`
-    re-parented (kein Detach), Section 321×203→1312×1133 → sectionSpill []; Headline normalisiert. (#4) `align`
-    modelliert als Popover-Root-Set `4393:2391` (align-Achse start/center/end, echte genestete Button+PopoverContent).
-    figma-verify CLEAN + manueller Section-Check PASS. FOLLOW-UP 06-23: PopoverRoot von static align-only auf
-    VOLLES interaktives Overlay erweitert — Set `4402:2589`, 24 Member (state×side×align), HUG-SLOT-Trigger
-    (asChild-Proxy), absoluter Content (anchored, kein Reflow), on-click+Esc-Prototype (closed↔open); alt
-    `4393:2391` entfernt; Member HUGgen den Trigger (Footprint=Trigger, Content floatet absolut außerhalb), Set umbenannt „Popover"; Section → 1718×2528. figma-verify CLEAN + Section-Check PASS. Detail:
-    agent-runs/component-port/2026-06-23-popover-figma/.
+    section: { name: "Popover", id: "4365:2253" }   # 2278×2585 — encloses the floating panels (see root.structure)
+    build_frame: { name: "Build", id: "4390:2364" } # white vertical auto-layout frame (HUG, itemSpacing space-2xl, padding space-xl) INSIDE the section — holds the masters + root set + usage examples (a Section is not an auto-layout container)
+    content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, NO state / variant set (data-[side] = motion, not a DS state)
+    slot: { content: "content#4365:0" }                    # the open region; default = nested PopoverHeader instance
+    header: { name: "PopoverHeader", id: "4367:2253", props: "title#4367:0 (TEXT, {Title}, Label style / dialog-ink) · description#4367:1 (TEXT, {Description}, Body style / muted)" }
+    examples: { group: "Usage Examples 4368:2255", SimpleContent: "PopoverContent instance 4368:2258 (slot = configured PopoverHeader)", Dimensions: "PopoverContent instance 4368:2274 (slot = PopoverHeader + 4 Label / Input rows, real DS instances Label 3734:1022 / Input 3176:303)" }
+    axis: { }   # content surface: NO axis (raised surface, no interactive state space)
+    root:                                          # the FULL interactive overlay
+      set: { name: "Popover", id: "4402:2589" }    # matches the code root export; members HUG the trigger (50×32)
+      axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 members; defaults open / bottom / center
+      props: "trigger#4408:0 (SLOT, HUG, default DS Button — mirrors asChild; the child sets the slot W/H → the member hugs the trigger; the reaction sits on the member frame so a slot swap does not break the prototype)"
+      structure: "each member = auto-layout HUG → footprint = trigger only (50×32), clipsContent=false; the trigger is the only flow child. TWO-STAGE ANCHOR: (1) 'Panel Position' = invisible (fills []) FIXED 50×32 auto-layout, ABSOLUTE child of the member, constraints = SIDE × ALIGN tracking [top → vert MIN · bottom → vert MAX · left → horiz MIN · right → horiz MAX; align start / center / end → MIN / CENTER / MAX on the parallel axis] → tracks the trigger edge when the (hugged) trigger resizes → constant gap, no overlap. (2) PopoverContent = ABSOLUTE child of Panel Position, constraints = GROW-AWAY [side axis INVERTED: bottom → MIN · top → MAX · left → MAX · right → MIN; parallel axis = align] → HUG growth moves AWAY from the trigger. sideOffset 8, NO reflow; closed = content visible=false. Set uses layoutMode GRID → 0 panel collisions. (Two stages because Figma constraints drive BOTH parent-resize tracking AND the self-growth anchor of an ABSOLUTE child, and the two need the OPPOSITE edge per side.) PANEL CONTAINMENT: members hug the trigger, so the panels float outside the members by design → the GRID set carries padding ≈ panel overhang + margin (padL/R 328, padT 105, padB 48; overhang = panel width 288 + gap 8 = 296 sideways, 73 up) AND the set width grows by the same amount (→ 2086) so the content area (1430) stays constant and the GRID does not wrap → the set frame encloses its own panels (panelsOutsideSet=0)."
+      prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside cannot be expressed on variant members"
+      members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total; each member = trigger slot + Panel Position anchor (with the nested PopoverContent)
+    vars: [ink, border, corner-lg, dialog-fill, dialog-ink, input-border, input-fill, input-ink-placeholder, muted, muted-fill, primary-fill, primary-ink, space-2xs, space-lg, space-md, space-sm, space-xs]
+    styles: [effect:Elevation, text:Body, text:Label/md]
+  skill: /shadcn-component-port (+ /figma-build-rules; Figma rebuilds via a background agent)
+  anatomy: "Radix Popover (radix-ui umbrella import = the full primitive, declared dep). Composite WITHOUT own state — Content is the only DS surface (Trigger / Anchor = pass-through, no class). 7 exports: stock 4 + PopoverHeader / Title / Description (Nova typography helpers)."
+  deviations:
+    - "Raised surface (sibling of Dialog / Command): bg-dialog-fill + text-dialog-ink · corner-lg (control-attached, NOT Dialog's corner-xl) · ring-1 ring-foreground/10 → border (Nova raised ring → DS border, like Dialog / Command) · shadow-md → shadow-elevation · gap-2.5 / p-2.5 (10px, no rung) → gap-md (8) / p-lg (12) by role · text-sm → text-format-body."
+    - "Header: gap-0.5 → gap-2xs; Title text-sm / font-medium → text-format-label-md (compact caption, NOT Dialog's title 18 — a popover is compact); Description text-muted."
+    - "Geometry numeric (w-72, z-50, sideOffset / align). Motion classes (data-[side] / data-open / data-closed) verbatim."
+    - "Docgen: PopoverProps on the root (Omit + re-declare open / defaultOpen / onOpenChange / modal); PopoverContentProps = side / sideOffset / align / alignOffset / avoidCollisions / collisionPadding / sticky / hideWhenDetached."
+  forks:
+    - "state × side × align is a Figma-only interactive model — code drives side / align via PopoverContent props and open / closed via the Radix runtime → NO CVA, never sync back as props. The two-stage anchor mirrors what Radix Popper does at runtime → no code change."
+  a11y:
+    - "Radix gives the content role=dialog → axe aria-dialog-name requires an accessible name; Popover does NOT wire the title automatically (unlike the modal Dialog) → an open panel needs an explicit aria-label / aria-labelledby (documented in JSDoc + stories)."
+  divergences:
+    - "jsdom spec covers the closed path + defaultOpen only; the click-driven open → Escape flow lives in the Chromium play test (portal content mounts on open — no extra polyfill)."
+  run_notes: [agent-runs/component-port/2026-06-22-popover/notes.md, agent-runs/component-port/2026-06-23-popover-figma/notes.md]
+
 - name: Tooltip
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-22 (Figma + Code zusammen gebaut)
+  figma_synced: true
   source: { registry: "@shadcn", item: tooltip, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/tooltip/
     exports: [Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, TooltipProps, TooltipContentProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
   figma:
-    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357; 06-23 + Build-Frame 4420:2530 + Tooltip-Root-Set, resized 953×789→1368×909
-    component: { name: "Tooltip", id: "4382:2356" }      # die Content-Chip-Component (kein Variant-Set — Single-Member)
-    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label-Style, dialog-ink)" }
-    arrow: { name: "arrow", id: "4414:2493" }            # 06-23 A8-Fix: down-pointing TRIANGLE (war borderless rotated square 4382:2358 — entfernt). White fill (dialog-fill) + border-Stroke NUR auf den 2 SLANTED Edges (Base offen = joint die Chip); Base überlappt 1px in die Chip → connected Pointer, kein Gap/Seam. showArrow#4418:0 toggelt ihn (per-side Member-Arrow-Swap in Tooltip Root)
-    axis: { content: [slot] }                            # Content-Chip: KEINE Variant/State-Achse — nur der Open-Visual; Content = SLOT (offene children-Region)
-    root:                                                # NEU 06-23: Tooltip-Root = interaktives Overlay (schlank, A6)
+    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
+    component: { name: "Tooltip", id: "4382:2356" }      # the content-chip component (no variant set — single member)
+    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label style, dialog-ink)" }
+    arrow: { name: "arrow", id: "4414:2493" }            # down-pointing TRIANGLE: white fill (dialog-fill) + border stroke ONLY on the 2 slanted edges (base open = joins the chip); base overlaps 1px into the chip → connected pointer, no seam. showArrow#4418:0 toggles it (per-side member arrow swap in Tooltip Root)
+    axis: { content: [slot] }                            # content chip: NO variant / state axis — only the open visual; content = SLOT (open children region)
+    root:
       set: { name: "Tooltip Root", id: "4419:2781" }
-      axis: { state: [closed, open], side: [top, right, bottom, left] }   # 8 Member, SCHLANK (kein align — Tooltips zentrieren); defaults open/top
-      props: "trigger#4419:0 (SLOT, HUG, default DS-Button — tauschbarer Trigger; Reaction am Member-Frame → swap-safe)"
-      structure: "je Member HUGgt den Trigger (54×32); Trigger = HUG-SLOT mit DS-Button-Default; Content = Tooltip-Chip-Instanz 4382:2356 als layoutPositioning=ABSOLUTE + clipsContent=false, per side verankert, sideOffset 6, center; closed = Chip+Arrow visible=false. Per-side-Arrow: side=top nutzt den baked Down-Arrow (showArrow=true); bottom/left/right setzen showArrow=false + ein Member-Level oriented Triangle (Figma kann Arrow-Rotation in einer Instanz nicht overriden, und das Drehen der Instanz dreht das Label mit)"
-      prototype: "ON_HOVER ('While hovering') je closed-Member → CHANGE_TO matching open (DISSOLVE 0.15s); Figma auto-revertet bei Leave = open-on-hover/close-on-leave. Kein Click, kein Esc"
-      build_frame: { name: "Build", id: "4420:2530" }    # weißes vertikales AL in der Section (wie Popover)
-      note: "state×side = Figma-only interaktives Modell; Code treibt side via TooltipContent.side + open/close via Radix-Hover-Runtime → KEIN CVA, nicht zurücksyncen"
-    vars: { dialog-fill: "3037:6", dialog-ink: "3037:7", border: "3038:4", corner-md: "3073:3", space-lg: "3070:8", space-sm: "3070:5" }
-    styles: { text: "Label (S:4e034695…b266f0)", effect: "Elevation (S:92c2d7ac…66b42)" }
-    examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd-Instanz 4385:2390 ⌘S)" }
-  skill: /shadcn-component-port (+ /figma-build-rules, 2026-06-22)
-  notes: >
-    Radix Tooltip (radix-ui Umbrella-Import behalten = volles Primitive, deklarierte Dep, Dialog/Select-
-    Konvention; finding B13). Parts: Provider/Root/Trigger = verhaltens-Wrapper ohne Styling; nur
-    TooltipContent + sein Arrow tragen Klassen → KEIN CVA, Single-Surface (Sibling von Badge/Kbd, kein
-    surface-less Composite). DS-Abweichung (Kern-Entscheid): stock-Tooltip ist eine INVERTIERTE dunkle
-    Chip (bg-foreground + text-background) — DS hat keinen invertierten-Overlay-Token → an die
-    konsolidierte RAISED-OVERLAY-Fläche umgekleidet: bg-dialog-fill + text-dialog-ink + border (1px,
-    nova hatte keine) + shadow-elevation (Tiefe, stock ist flach) wie Dialog/Command. Tooltip wird damit
-    eine LIGHT raised Chip (recorded dark→light fork). Geometrie/Typo: rounded-md→corner-md, gap-1.5→gap-sm,
-    px-3→px-lg, py-1.5→py-sm, text-xs→text-format-label-md (kein 12px-Sans-Rung → Rolle „kurzes Label", +2px
-    Snap; B21/B23). Arrow erbt dialog-fill (bg+fill), rounded-[2px] als arbiträre Diamant-Geometrie verbatim,
-    rotate/translate numerisch. Animations-/Layout-/Radix-transform-origin-Utilities verbatim (§6 keep_valid).
-    FIGMA: Content-Region als SLOT modelliert (content#4384:0, {Label}-Default), NICHT TEXT-Prop — der Code
-    nutzt freie `children` (Text, oder Text + Kbd) → /figma-build-rules §Mechanism „open variably-many
-    children → Slot"; ein TEXT-Prop könnte die WithKbd-Komposition nicht reproduzieren (Done-Test). Arrow =
-    ABSOLUTE-Kind (layoutPositioning), bottom-center, halb über die Unterkante (Pointer; clipsContent=false
-    am Component, damit Arrow+Shadow nicht clippen). Usage-Examples-Group reproduziert Default + WithKbd aus
-    Controls (WithKbd nestet eine echte .Kbd-Instanz). figma-verify CLEAN (0 text-icon/clipped/overlap/
-    pad-asym; Arrow-auf-Chip-Overlap by-design = absolute Kind in AL-Frame, wie Slider Thumb-auf-Track C3).
-    A11Y: TooltipContent role=tooltip; Radix verdrahtet aria-describedby Trigger→Content im Open-State;
-    Icon-only-Trigger braucht EIGENEN accessible name (Tooltip = Beschreibung, kein Name) → IconTrigger-Story
-    nutzt DS-Button `icon`-Bool + Pflicht-aria-label. Docgen: TooltipProps (open/defaultOpen/onOpenChange/
-    delayDuration) + TooltipContentProps (side/sideOffset/align/alignOffset) via Omit+re-declare; Provider/
-    Trigger pass-through. Stories: Default (Playground + hover→open play gg. Portal via within(document.body))
-    · Placement (4 Seiten) · WithKbd (Kbd ported) · IconTrigger (a11y). jsdom .spec NUR closed/trigger-Pfad
-    (B20: portal-mounted Content mountet erst on-open → kein zusätzlicher Polyfill; Open-Pfad übers Chromium-
-    Storybook-play). Gate grün (tooltip-scoped): 4 jsdom-Specs + 4 Stories (Chromium + axe), typecheck + lint.
-    OFFENER PUNKT (Kbd): kbd.tsx trägt `in-data-[slot=tooltip-content]:bg-surface/20 text-ink` — getunt für
-    eine INVERTIERTE (dunkle) Tooltip; auf der gewählten LIGHT dialog-fill-Fläche liest das near-invisible.
-    Bewusst NICHT im Tooltip-Port editiert (Scope = ein Component) → als Open Item geflaggt; WithKbd rendert
-    die Kbd as-is. (Quelle: agent-runs/component-port/2026-06-22-tooltip/notes.md + skill-feedback.md.)
+      axis: { state: [closed, open], side: [top, right, bottom, left] }   # 8 members, lean (no align — tooltips centre); defaults open / top
+      props: "trigger#4419:0 (SLOT, HUG, default DS Button — swappable trigger; the reaction sits on the member frame → swap-safe)"
+      structure: "each member hugs the trigger (54×32); trigger = HUG slot with a DS Button default; content = Tooltip chip instance 4382:2356 as layoutPositioning=ABSOLUTE + clipsContent=false, anchored per side, sideOffset 6, centred; closed = chip + arrow visible=false. Per-side arrow: side=top uses the baked down arrow (showArrow=true); bottom / left / right set showArrow=false + a member-level oriented triangle (Figma cannot override arrow rotation in an instance, and rotating the instance rotates the label too)"
+      prototype: "ON_HOVER ('While hovering') per closed member → CHANGE_TO matching open (DISSOLVE 0.15s); Figma auto-reverts on leave = open-on-hover / close-on-leave. No click, no Esc"
+      build_frame: { name: "Build", id: "4420:2530" }    # white vertical auto-layout in the section (like Popover)
+    examples: { group: "Usage Examples 4385:2366", Default: "4385:2370 (slot 'Add to library')", WithKbd: "4385:2382 (slot 'Save changes' + nested .Kbd instance 4385:2390 ⌘S)" }
+    vars: [ink, border, corner-lg, corner-md, corner-sm, dialog-fill, dialog-ink, muted-fill, primary-fill, primary-ink, space-lg, space-md, space-sm, space-xs]
+    styles: [effect:Elevation, text:Kbd, text:Label/md]
+  skill: /shadcn-component-port (+ /figma-build-rules)
+  anatomy: "Radix Tooltip (radix-ui umbrella import = the full primitive, declared dep). Provider / Root / Trigger = behaviour wrappers without styling; only TooltipContent + its arrow carry classes → NO CVA, single surface (sibling of Badge / Kbd)."
+  deviations:
+    - "Core decision: stock Tooltip is an INVERTED dark chip (bg-foreground + text-background) — the DS has no inverted-overlay token → re-clothed on the consolidated raised overlay surface: bg-dialog-fill + text-dialog-ink + border (1px, Nova had none) + shadow-elevation (depth, stock is flat), like Dialog / Command. Tooltip is a LIGHT raised chip (recorded dark → light fork)."
+    - "Geometry / typography: rounded-md → corner-md, gap-1.5 → gap-sm, px-3 → px-lg, py-1.5 → py-sm, text-xs → text-format-label-md (no 12px sans rung → 'short label' role, +2px snap). Arrow inherits dialog-fill (bg + fill), rounded-[2px] as arbitrary diamond geometry verbatim, rotate / translate numeric. Animation / layout / Radix transform-origin utilities verbatim (tokens-reference §6 keep_valid)."
+    - "Docgen: TooltipProps (open / defaultOpen / onOpenChange / delayDuration) + TooltipContentProps (side / sideOffset / align / alignOffset) via Omit + re-declare; Provider / Trigger pass-through."
+  forks:
+    - "state × side is a Figma-only interactive model — code drives side via TooltipContent.side and open / close via the Radix hover runtime → NO CVA, never sync back."
+  figma_mechanics:
+    - "The content region is a SLOT (content#4384:0, {Label} default), NOT a text prop — code uses free children (text, or text + Kbd) → /figma-build-rules §Mechanism 'open, variably-many children → slot'; a text prop could not reproduce the WithKbd composition."
+    - "Arrow = ABSOLUTE child, bottom-centre, half over the bottom edge; clipsContent=false on the component so arrow + shadow do not clip. figma-verify: arrow-on-chip overlap is by design."
+  a11y:
+    - "TooltipContent role=tooltip; Radix wires aria-describedby trigger → content in the open state. An icon-only trigger needs its OWN accessible name (a tooltip is a description, not a name) → IconTrigger story uses the DS Button icon boolean + mandatory aria-label."
+  divergences:
+    - "jsdom spec covers the closed / trigger path only; the open path runs in the Chromium Storybook play test."
+  run_notes: [agent-runs/component-port/2026-06-22-tooltip/notes.md]
 
 - name: Item
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-26 (Figma + Code zusammen gebaut); figma-verify CLEAN
-  source: { registry: "@shadcn", item: item, style: radix-nova }   # registryDependencies: separator (flache Stock-Kopie gelöscht — shadowte den DS-Folder)
+  figma_synced: true
+  source: { registry: "@shadcn", item: item, style: radix-nova }   # registryDependencies: separator
   code:
     dir: libs/ui/src/components/ui/item/
     exports: [Item, ItemMedia, ItemContent, ItemActions, ItemGroup, ItemSeparator, ItemTitle, ItemDescription, ItemHeader, ItemFooter, itemVariants, itemMediaVariants, ItemProps, ItemMediaProps]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/item'"
-    stories: "item.stories.tsx (UI/Item) + item-media.stories.tsx (UI/Item/ItemMedia — Per-API-Part-Page; nur Item+ItemMedia haben kuratierte Props, die 8 prop-losen Pass-throughs via Usage-Stories)"
+    stories: "item.stories.tsx (UI/Item) + item-media.stories.tsx (UI/Item/ItemMedia — per-API-part page; only Item + ItemMedia have curated props, the 8 prop-less pass-throughs appear in usage stories)"
   figma:
     section: { name: "Item", id: "4494:2471" }          # headline 4494:2472
-    set: { name: "Item", id: "4498:2551" }              # 9 Member (variant × size); master = outline/default 4495:2471
+    set: { name: "Item", id: "4498:2551" }              # 9 members (variant × size); master = outline/default 4495:2471
     axis: { variant: [default, outline, muted], size: [default, sm, xs] }
-    props: "media#4498:0 (SLOT, default = nested .ItemMedia-Instanz variant=icon) · actions#4498:1 (SLOT, default chevron muted-ink) · title#4499:0 (TEXT {Title}, Label, ink-gebunden) · description#4499:10 (TEXT {Description}, Body/muted-ink)"
-    media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable Glyph/Image; icon-Default an ink gebunden)" }   # 3 Member: default 4508:2534 / icon 4508:2537 / image
-    group_component: { name: "ItemGroup", id: "4511:2575", slot: "items#4511:0", note: "vertikales AL, gap-xl; Layout-only (responsiver has-data-Gap nicht in Figma abbildbar)" }
+    props: "media#4498:0 (SLOT, default = nested .ItemMedia instance variant=icon) · actions#4498:1 (SLOT, default chevron muted) · title#4499:0 (TEXT {Title}, Label, bound to ink) · description#4499:10 (TEXT {Description}, Body / muted)"
+    media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable glyph / image; icon default bound to ink)" }   # 3 members: default 4508:2534 / icon 4508:2537 / image
+    group_component: { name: "ItemGroup", id: "4511:2575", slot: "items#4511:0", note: "vertical auto-layout, gap-xl; layout only (the responsive has-data gap cannot be modelled in Figma)" }
     examples:
       group: "Usage Examples 4501:2471"
-      typelist: "4501:2472 — 3 muted-Instanzen, TEXT-Props treiben invoice/contract/document (explorer NavListItem)"
-      states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring-ring/50 3px DROP_SHADOW, verbatim vom Select-Focus 4308:2001 kopiert — NICHT die generische Glow-Style) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, KEIN Set-Member)"
-    state_axis: "BEWUSST examples-only (NICHT als Set-Achse): hover/focus/selected-Delta ist uniform über variant×size → 18/27 Member wären redundant. Die States leben in der Usage-Examples-States-Gruppe (spiegelt die AllStates-Story). Extend zu variant×size×state (27) nur falls explizit gewünscht."
-    vars: { ink: "3037:3", muted-fill: "3037:12", muted-ink: "3037:13", accent-fill: "3037:14", accent-ink: "3038:2", border: "3038:4", ring: "3038:6", space-xs: "3070:4", space-md: "3070:6", space-lg: "3070:8", space-xl: "3070:9", corner-sm: "3073:2", corner-lg: "3073:4" }
-    styles: { text: "Label (S:4e034695…b266f0) + Body (S:7e1bf8f1…2911fb)", effect: "Glow (S:768ea662…1005fa7, focus)" }
-  skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props; 2026-06-26)
-  notes: >
-    10-teiliges Composite (Item/Media/Content/Title/Description/Actions/Group/Separator/Header/Footer),
-    volle Familie portiert. Generische Listenzeile → Root-Barrel-Primitiv (kein Block); Use-case =
-    explorer NavListItem. KERN-ENTSCHEIDE: (1) Selektion bleibt CALL-SITE/Block-Sache — Item ist
-    stock-treu (kein selected-Prop); der ListNavigator-Block setzt aria-current + DS-accent-Tint. Kontrast
-    zu SelectItem (selected-Axis nur, weil Radix dort intrinsischen Selected-State liefert). (2) hover
-    (`[a]:hover:bg-muted-fill`) + focus-ring sind LINK-ONLY by design — der [a]:-Selektor + ein bare-div
-    ist nicht fokussierbar → beide States nur an der asChild-Link-Form. DS-Mapping: rounded-lg→corner-lg,
-    text-sm→text-format-body (base) / text-format-label-md (title) / body+muted-ink (desc); 10px-Padding/Gap
-    (gap-2.5/py-2.5/px-2.5) ist OFF-GRID → auf benannte Steps gesnappt (default/sm = lg=12, xs = md=8); das
-    Haus snappt (kein 2.5/[10px] in der Lib). GEDROPPT: xs:text-xs (12px) — kein sub-14 Sans-Format (Open
-    Item). Focus-Klassen unverändert (schon DS = badge/button). DEPENDENCY-AUDIT: ui:add schrieb flache
-    separator.tsx (Stock) → shadowte den DS-Folder (file beats dir in resolution, typecheck grün auf einer
-    Lüge) → flache Kopie GELÖSCHT, Import löst auf den Barrel. FIGMA: .Item-Set = variant×size (9, die
-    echten Design-Achsen); media+actions als SLOTs (swappable content, §Mechanism), title/description als
-    TEXT-Props ({Semantic}-Defaults); .ItemMedia eigenes 3-Member-Set. State-Achse examples-only (s.
-    state_axis). figma-verify CLEAN (0 flags). STORIES: house-konform nach /storybook-rules (anfangs Badge
-    statt Composite-Muster gespiegelt → korrigiert): item-media.stories.tsx als Per-Part-Page, AllStates via
-    pseudo-states-Addon (hover/focusVisible) + Selected call-site, Cross-Links. a11y: ItemGroup role=list →
-    role=listitem an den Kindern am Call-Site (axe aria-required-children). Docgen: ItemProps (variant/size/
-    asChild) + ItemMediaProps (variant) via lokale Named-Aliase + Slot. Gate grün (300/300 inkl. Chromium+
-    axe, typecheck, lint). REVIEW-FIXES (User-Review, 2026-06-26): (1) Item media-Slot-Default = genested
-    .ItemMedia-Instanz statt Roh-Vektor; (2) Title + ItemMedia-Icon an `ink` gebunden (Recon hatte ink
-    vergessen → roher Hex); (3) Focus-Ring korrekt (ring-ring/50 3px DROP_SHADOW, verbatim vom Select-Focus
-    kopiert — vorher fälschlich die generische cyan Glow-Style); (4) ItemGroup als Component (4511:2575,
-    items-Slot); (5) ItemMedia content-Slot (swappable). figma-verify CLEAN nach Fixes; Skill-Findings →
-    skill-feedback.md (A1 Recon-ink-Tokens · A2 Composite-Part-Nesting+Slot). (Quelle:
-    agent-runs/component-port/2026-06-26-item/notes.md + skill-feedback.md.)
+      typelist: "4501:2472 — 3 muted instances, TEXT props drive invoice / contract / document (explorer NavListItem)"
+      states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring-ring/50 3px DROP_SHADOW, copied verbatim from the Select focus member 4308:2001 — NOT the generic Glow style) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, NO set member)"
+    state_axis: "DELIBERATELY examples-only (NOT a set axis): the hover / focus / selected delta is uniform over variant × size → 18 / 27 members would be redundant. The states live in the usage-examples States group (mirrors the AllStates story). Extend to variant × size × state (27) only if explicitly wanted."
+    vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-sm, ring, muted, muted-fill, muted-ink, secondary-fill, space-lg, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md]
+  skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props)
+  anatomy: "10-part composite (Item / Media / Content / Title / Description / Actions / Group / Separator / Header / Footer), full family ported. Generic list row → root-barrel primitive (not a block); use case = explorer NavListItem."
+  deps: [Separator]
+  deviations:
+    - "Selection stays a CALL-SITE / block concern — Item is stock-faithful (no selected prop); a list-navigator block sets aria-current + the DS accent tint. Contrast: SelectItem has a selected axis only because Radix delivers an intrinsic selected state there."
+    - "hover ([a]:hover:bg-muted-fill) + focus ring are LINK-ONLY by design — the [a]: selector; a bare div is not focusable → both states only on the asChild link form."
+    - "DS mapping: rounded-lg → corner-lg; text-sm → text-format-body (base) / text-format-label-md (title) / body + text-muted (description); 10px padding / gap (gap-2.5 / py-2.5 / px-2.5) is OFF-GRID → snapped to named steps (default / sm = lg = 12, xs = md = 8) — the house snaps, no 2.5 / [10px] in the lib. Variants: outline border-border, muted bg-muted-fill/50."
+    - "Dropped: xs:text-xs (12px) — no sub-14 sans format."
+    - "Dependency audit: ui:add wrote a flat stock separator.tsx that shadowed the DS folder (file beats dir in resolution) → deleted; the import resolves to the barrel."
+  figma_mechanics:
+    - ".Item set = variant × size (the real design axes); media + actions as SLOTS (swappable content), title / description as TEXT props ({Semantic} defaults); .ItemMedia = own 3-member set. State axis examples-only (see state_axis)."
+  a11y:
+    - "ItemGroup role=list → role=listitem on the children at the call site (axe aria-required-children)."
+  open:
+    - "No sub-14 sans format for the xs size (stock xs:text-xs)."
+  run_notes: [agent-runs/component-port/2026-06-26-item/notes.md]
 
 - name: Table
   status: nova-aligned
-  figma_synced: true                            # Erstport 2026-06-26 (Figma + Code zusammen gebaut)
+  figma_synced: true
   source: { registry: "@shadcn", item: table, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/table/
@@ -1184,51 +996,22 @@ status_note: >
     barrel: "libs/ui/src/index.ts → export * from './components/ui/table'"
   figma:
     section: { name: "Table", id: "4514:2597" }
-    head: { set: "TableHead", id: "4515:2603", axis: "align [left,center,right]", prop: "head (children)#4515:0 ({Head}); Label+ink, h-10, px-md" }
-    cell: { set: "TableCell", id: "4515:2610", axis: "align [left,center,right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — Zelle nimmt auch Components (Checkbox/Badge/Button …, Text-Default liegt IM Slot, swapbar); Body+ink, p-md" }
-    row: { set: "TableRow", id: "4520:2621", axis: "state [default,hover,selected]", slot: "cells#4520:3 (leer)", notes: "bottom-border→border; hover muted-fill/50; selected accent-fill; minHeight 37" }
-    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, Default = Invoice-Interieur) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: content-Slot hält Header+Body+Footer-Rows (Slot-Default = gebackenes Invoice); Caption boolean+text darunter. showFooter entfallen (Footer = Teil des Slot-Contents)" }
-    examples: { group: "4523:2635 (Usage Examples)", members: "ALLE = Table-Instanzen (content-Slot gefüllt): Default (4523:2638, Slot-Default Invoice + Caption) · Selection (4538:2802, Zeile 2 selected) · Empty (4538:2890, No results) · Component cells (4538:2963, Checkbox + Badge)" }
+    head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }
+    cell: { set: "TableCell", id: "4515:2610", axis: "align [left, center, right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — a cell also takes components (Checkbox / Badge / Button …); the text default sits IN the slot, swappable; Body + ink, p-md" }
+    row: { set: "TableRow", id: "4520:2621", axis: "state [default, hover, selected]", slot: "cells#4520:3 (empty)", notes: "bottom border → border; hover muted-fill/50; selected accent-fill; minHeight 37" }
+    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, default = invoice interior) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: the content slot holds header + body + footer rows (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
+    examples: { group: "4523:2635 (Usage Examples)", members: "ALL = Table instances (content slot filled): Default (4523:2638, slot default invoice + caption) · Selection (4538:2802, row 2 selected) · Empty (4538:2890, No results) · Component cells (4538:2963, Checkbox + Badge)" }
     axis: { head_align: [left, center, right], cell_align: [left, center, right], row_state: [default, hover, selected] }
-  skill: /shadcn-component-port (+ references/composites.md, 2026-06-26)
-  notes: >
-    Multi-Part-Composite OHNE Root-Element, 8 prop-lose Pass-Through-Parts (Table/Header/Body/Footer/Row/
-    Head/Cell/Caption), KEIN CVA. Einzige Interaktions-Achse = TableRow state. Deps: keine (ui:add schrieb
-    nur table.tsx, keine lucide-Icons). DS-Mapping: text-sm→text-format-body; head/footer font-medium→
-    text-format-label-md; text-foreground→text-ink; text-muted-foreground→text-muted-ink; px-2/p-2→px-md/p-md;
-    mt-4→mt-xl; border-b/-t/-0 = nur Breite, Farbe via Base-Layer (border-border), kein Class.
-    ROW-TINT (User-Entscheid 2026-06-26): hover NEUTRAL (bg-muted-fill/50, wie Item-Zeilen) ≠ selected
-    ACCENT (bg-accent-fill, wie Command-Selektion — muted-fill #f9fcfd wäre für eine selektierte Zeile
-    unsichtbar); Text bleibt ink (stock recolort selected nicht). dark: entfernt.
-    FIGMA (User-Granularität „Cell+Row+Table", align l/c/r): TableHead/TableCell-Sets (align-Achse, TEXT-
-    Prop), TableRow-Set (state-Achse, cells-SLOT LEER gebaut + minHeight), Table-Komposition (recompose-able:
-    content-SLOT hält Header+Body+Footer-Rows, Slot-Default = Invoice; showCaption+caption-Props). Usage-Examples
-    = 4 ECHTE Table-Instanzen (content-Slot gefüllt): Default/Selection/Empty/Component-cells.
-    Cells = TEXT-Prop ({Cell}) PLUS content-SLOT (2026-06-26 nachgerüstet, User-Wunsch): Zelle nimmt auch
-    Components (Checkbox/Badge/Button); Text-Default liegt IM Slot (swapbar), für eine Component-Zelle Text
-    leeren + Component in den Slot. Beispiel „Component cells" (4529:2758). Footer-Cells bleiben Body
-    (Code-tfoot label-weight = Code-only, minor Divergenz).
-    Slot-Strategie: leer bauen, Demo backen, Beispiele append-only (skill-feedback #3). Gate grün (9 Specs +
-    5 Stories Browser/axe/play). figma-verify CLEAN. Quelle:
-    agent-runs/component-port/2026-06-26-table/notes.md + skill-feedback.md.
-
-## Pending / Removed
-
-```yaml
-# Command: re-portiert 2026-06-10 (siehe Components-Liste oben).
-# CommandDialog: nachgerüstet 2026-06-11 (Funktion + Export + Story InDialog in command/, code-only — siehe Command-Eintrag).
+    vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Eyebrow, text:Label/md]
+  skill: /shadcn-component-port (+ references/composites.md)
+  anatomy: "Multi-part composite WITHOUT a root element, 8 prop-less pass-through parts (Table / Header / Body / Footer / Row / Head / Cell / Caption), NO CVA. The only interaction axis = TableRow state. No deps (ui:add wrote table.tsx only)."
+  deviations:
+    - "text-sm → text-format-body; head / footer font-medium → text-format-label-md; text-foreground → text-ink; caption text-muted; px-2 / p-2 → px-md / p-md; mt-4 → mt-xl; border-b / -t / -0 = width only, colour via the base layer (border-border), no class. dark: removed."
+    - "Row tint: hover NEUTRAL (bg-muted-fill/50, like Item rows) ≠ selected ACCENT (bg-accent-fill, like the Command selection — muted-fill would be invisible for a selected row); text stays ink (stock does not recolour selected)."
+  figma_mechanics:
+    - "Granularity Cell + Row + Table with align l / c / r: TableHead / TableCell sets (align axis, TEXT prop + content SLOT), TableRow set (state axis, cells slot built EMPTY + minHeight), Table composition (content slot holds header + body + footer rows). For a component cell: clear the text, put the component into the slot. Slot strategy: build empty, bake the demo, examples append-only."
+  divergences:
+    - "Footer cells stay Body in Figma; the code tfoot label weight is code-only (minor)."
+  run_notes: [agent-runs/component-port/2026-06-26-table/notes.md]
 ```
-
-## Blocks (Organismen)
-
-Präsentationale Organismen pro Screen unter `libs/ui/src/blocks/<screen>/<name>/`, ausgeliefert über
-Subpath (`@agentport/ui/blocks[/<screen>]`). Der Layer existiert (`libs/ui/src/blocks/index.ts`,
-Export `./blocks`); noch kein Organismus portiert.
-
-## Befehle / Skills
-
-- Neuer Erstport: `/shadcn-component-port <name>` · Figma→Code-Sync: `/component-sync <name>`
-- Vor Port/Sync Lücken-Logging: `/skill-feedback kind=component-port subject=<name>`
-- Gate (Lib): `npx nx test|typecheck|lint @agentport/ui`
-- Nova-Source vor `ui:add` ansehen: Registry-JSON `https://ui.shadcn.com/r/styles/radix-nova/<c>.json`
-- Token-Crosswalk: `design-docs/design-system/tokens-reference.md`

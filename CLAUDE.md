@@ -72,9 +72,11 @@ tools/              shoot-stories.mjs — Playwright screenshots of a running St
 - `design-docs/design-system/tokens-reference.md` — the machine-readable token crosswalk (current
   state only); data source for `/shadcn-component-port` + `/component-sync`. Renames, reworks and old
   values live in `token-changelog.md` next to it — never in the reference.
-- `design-docs/design-system/components-reference.md` — the machine-readable **component catalog**:
-  which components are ported + their status, and where each lives in Figma (set/node IDs) and code
-  (folder/exports/barrel). Read first to locate an existing component before a port/sync.
+- `design-docs/design-system/components-reference.md` — the machine-readable **component catalog**
+  (current state only): which components are ported + their status, where each lives in Figma (set/node
+  IDs, bound vars) and code (folder/exports/barrel), plus deviations, Figma-only forks and open items.
+  Read first to locate an existing component before a port/sync. Ports, revisions and sync rounds are
+  logged in `component-changelog.md` next to it — never in the catalog.
 
 ## Figma
 
