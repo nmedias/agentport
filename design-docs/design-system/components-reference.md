@@ -19,7 +19,10 @@ Figma „Agentport DS". Bei Drift: **Code + Figma sind führend**
 > `Color/{signal,still,deep}/*` (entspricht `tokens.css` `--ap-color-signal-*` …) · 4 `semantic`-Beschreibungen
 > neutralisiert (`Primary/primary`, `Primary/primary-fill`, `Secondary/secondary-fill`, `Destructive/destructive-ink`) ·
 > Collection `showcase` (6 Vars, 0 Bindings) gelöscht · Command-Section: Separator-Labels „Springe zu / Suche /
-> Führe aus" → „Jump to / Search / Run" (= Stories). **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
+> Führe aus" → „Jump to / Search / Run" (= Stories) · Page „Color" → Frame „Colors" `4197:9989`: Rampen-Titel
+> „OS Signal / OS Still / Os Deep" → „Signal / Still / Deep", Swatch-Labels `brand-*`/`os calm-*`/`os navy-*` →
+> `signal-*`/`still-*`/`deep-*` (= Variablen + `--ap-color-*`), Füll-Beschreibungen → Token-Rollen aus der
+> tokens-reference (40 Text-Nodes). **Offen:** Page „Artboards" (Referenz-Screen „Quiet"
 > `1099:9710`, Section „Final") trägt noch Inhalt aus dem Ursprungsprojekt — wird in einem eigenen Abschnitt
 > aufgeräumt; bis dahin den fileKey nicht pushen.
 

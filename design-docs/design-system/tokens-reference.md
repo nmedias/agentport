@@ -50,7 +50,7 @@ Figma „Agentport DS" (fileKey ejFKo4MNuvC9TSDKOCUvyq)
 
 Primitives (intern; Figma-Gruppe `Color/` — die YAML nutzt die Kurz-Pfade, CSS = `--ap-color-…`).
 **2026-06-17:** `neutral`+`cyan` ersetzt durch 7 OKLCH-Rampen (pencilcolor). `signal/still/deep`
-= die drei OS-Blau-Rampen (Naming-Entscheid „Signal/Still/Deep", OS bleibt); `ink` = neutralisierte
+= die drei Brand-Blau-Rampen (Naming-Entscheid „Signal/Still/Deep"); `ink` = neutralisierte
 Graustufen (Blaustich raus, C ×0.5) inkl. Sonderstufen `25`+`75`; `success/warning/error` = Status-Familie.
 
 ```yaml

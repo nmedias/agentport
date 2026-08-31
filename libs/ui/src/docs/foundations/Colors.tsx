@@ -25,7 +25,7 @@ export function Colors() {
     <FoundationsPage
       eyebrow="Foundations · Colour"
       title="Colour"
-      intro="The semantic colour layer — every token is an alias onto the OKLCH ramps (see the Primitives page for the raw ramps). Use them through their utility classes: bg-{name} for fills, text-{name} for ink, border-{name} for edges, ring-{name} for focus. The scope tells you how a token may be applied (fill = surface, text = ink, stroke = edge/ring, shape = icon/marker — note primary and ink have no fill). A neutral light base carries dense data; the OS-blue accent marks selection and focus; dark surfaces are reserved for brand and inverse moments. Light mode is the only mode for now."
+      intro="The semantic colour layer — every token is an alias onto the OKLCH ramps (see the Primitives page for the raw ramps). Use them through their utility classes: bg-{name} for fills, text-{name} for ink, border-{name} for edges, ring-{name} for focus. The scope tells you how a token may be applied (fill = surface, text = ink, stroke = edge/ring, shape = icon/marker — note primary and ink have no fill). A neutral light base carries dense data; the brand-blue accent marks selection and focus; dark surfaces are reserved for brand and inverse moments. Light mode is the only mode for now."
     >
       <Group name="Core · surface & ink">
         <Rows>
@@ -195,7 +195,7 @@ export function Colors() {
 
       <Group
         name="Brand"
-        note="On-dark brand accent — the OS-blue cyan (signal/400) on the deep navy surface. brand-ink finally gives the brand cyan its own semantic token (it had none before)."
+        note="On-dark brand accent — the brand cyan (signal/400) on the deep navy surface. brand-ink finally gives the brand cyan its own semantic token (it had none before)."
       >
         <Rows>
           <Row>
