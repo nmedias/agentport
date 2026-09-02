@@ -1,14 +1,14 @@
 # Netlify deploy: publish the @agentport/ui Storybook as the DS site.
 
 [build]
+  # Repo root, not libs/ui - npm workspaces need the root package.json,
+  # and `publish` below is resolved relative to this base.
+  base = "/"
   command = "npm run build-storybook"
   publish = "libs/ui/storybook-static"
 
 [build.environment]
   NODE_VERSION = "24"
-  # postinstall runs `playwright install chromium` for local story tests —
-  # the browser is not needed to build Storybook.
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
   # No Nx daemon in CI containers.
   NX_DAEMON = "false"
 

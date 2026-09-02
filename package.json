@@ -5,7 +5,7 @@
     "libs/*"
   ],
   "scripts": {
-    "postinstall": "playwright install chromium",
+    "postinstall": "if [ -n \"$NETLIFY\" ]; then echo 'Netlify build - skipping Playwright browser install'; else playwright install chromium; fi",
     "storybook": "nx storybook @agentport/ui --port 6006",
     "build-storybook": "nx build-storybook @agentport/ui",
     "test": "nx run-many -t test",
