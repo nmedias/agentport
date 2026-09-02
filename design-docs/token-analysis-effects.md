@@ -1,7 +1,7 @@
 # Token analysis — Category Effects (shadow / glow)
 
 Screen: reference screen "Quiet", node `1099:9710` (Figma "Agentport DS", fileKey
-`ejFKo4MNuvC9TSDKOCUvyq`). Sibling of `token-analysis-color/-radius/-spacing/-typography.md`.
+`nQSNLASjuLvgTh3we8Dp4s`). Sibling of `token-analysis-color/-radius/-spacing/-typography.md`.
 Goal: no more raw effect values — shadows/glow hang off **effect styles** whose parts
 are tokenized via variables.
 

@@ -2,7 +2,7 @@
 
 **Direction:** Figma → code (read-only Figma). Colour token rework `-fill`/`-ink`/`-border`.
 **Set:** `.Checkbox` `3795:1184` (Section "Checkbox" `3791:1184`), page "Shadcn Components" `3126:2`,
-file `ejFKo4MNuvC9TSDKOCUvyq`. Axes `checked[off,on]` × `state[default,focus,disabled,invalid,focus-invalid]`,
+file `nQSNLASjuLvgTh3we8Dp4s`. Axes `checked[off,on]` × `state[default,focus,disabled,invalid,focus-invalid]`,
 10 members. Confirmed COMPONENT_SET, props `checked` + `state`.
 
 ## S2 — Live bindings (read-only, all 10 members)

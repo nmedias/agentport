@@ -1,7 +1,7 @@
 # Token analysis — Category Typography
 
 Screen: reference screen "Quiet", node `1099:9710` (Figma "Agentport DS", fileKey
-`ejFKo4MNuvC9TSDKOCUvyq`). Sister to `token-analysis-color/-radius/-spacing.md`.
+`nQSNLASjuLvgTh3we8Dp4s`). Sister to `token-analysis-color/-radius/-spacing.md`.
 Goal: a typography token system following **Hybrid (III)** — reference parts as variables,
 bundled into **formats** (composition tokens), applied via **Figma text styles**.
 

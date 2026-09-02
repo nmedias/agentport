@@ -1,9 +1,9 @@
 {
   "_doc": "Fixed values for component-sync. Edit here only; the SKILL and snippets reference these.",
   "figma": {
-    "fileKey": "ejFKo4MNuvC9TSDKOCUvyq",
+    "fileKey": "nQSNLASjuLvgTh3we8Dp4s",
     "fileName": "Agentport DS",
-    "componentsPage": "Shadcn Components",
+    "componentsPage": "Components",
     "pageId": "3126-2",
     "comment": "Read-only. Resolve the page by pageId (robust to rename), then the set .<Component> by name on it; variables resolve by ID (names carry group paths, e.g. 'shadcn Default/primary'). Fill the snippet's PAGE_ID from pageId, SET_ID from S1."
   },

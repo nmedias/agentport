@@ -91,7 +91,7 @@ search field **opaque DS field** (nested InputGroup default look).
 
 Open T3 flags: ⚠ none placeholder-bound (accent/overlay/muted/border/eyebrow/kbd/input all designed). Verify in T6 that `text-eyebrow` applies uppercase (else add `uppercase`); confirm 18px `text-input` fits the h-8 InputGroup (bump if it clips).
 
-## T4 — Figma build (file ejFKo4MNuvC9TSDKOCUvyq, page "Shadcn Components" 3126:2)
+## T4 — Figma build (file nQSNLASjuLvgTh3we8Dp4s, page "Shadcn Components" 3126:2)
 
 Section **Command** `3555:679` (right of Input Group). 3-layer composite build:
 

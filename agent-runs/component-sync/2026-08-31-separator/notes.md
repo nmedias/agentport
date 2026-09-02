@@ -1,6 +1,6 @@
 # Component Sync — Separator (2026-08-31)
 
-**Purpose:** smoke test of the pipeline against the new Figma file `ejFKo4MNuvC9TSDKOCUvyq`
+**Purpose:** smoke test of the pipeline against the new Figma file `nQSNLASjuLvgTh3we8Dp4s`
 ("Agentport DS", a duplicate of the previous file — node IDs preserved). First `/component-sync` run
 with the new `config.json` `fileKey`; expected and delivered: no delta.
 

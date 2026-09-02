@@ -5,7 +5,7 @@ Read-only on Figma; delta applied to code only.
 
 ## Figma source
 
-- File `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" (`3126:2`).
+- File `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" (`3126:2`).
 - Set node `3697:1016` — metadata frame name **"Badge"**, symbol/internal name **".Badge"**.
   Section `3687:1016` name **"Badge"**. IDs unchanged from the catalog.
 - 6 variants (variant axis): default `3691:2` · secondary `3691:7` · destructive `3691:12` ·

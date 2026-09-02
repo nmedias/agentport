@@ -33,7 +33,7 @@ reads are read-only (pipeline rule).
   back** as a CVA / prop; `figma_mechanics` = what an editor must know to change the set safely;
   `divergences` = code ↔ Figma structural differences that are **not** a delta for `/component-sync`;
   `open` = known gaps. Dates, old names and old values belong in the changelog.
-- IDs are **Figma node IDs** in file `ejFKo4MNuvC9TSDKOCUvyq` (configured in
+- IDs are **Figma node IDs** in file `nQSNLASjuLvgTh3we8Dp4s` (configured in
   `.claude/skills/{shadcn-component-port,component-sync}/config.json`). They are stable (not session IDs).
 - `code.stories` / `specs` / `cva` are read from the source (story file → Storybook title → story names; cva
   axes + defaults, `none` when the component has no cva) — the code side of the axis ↔ prop diff.
@@ -54,7 +54,7 @@ skill · description · anatomy · deps? · deviations? · forks? · figma_mecha
 
 ```yaml
 figma:
-  file_key: ejFKo4MNuvC9TSDKOCUvyq
+  file_key: nQSNLASjuLvgTh3we8Dp4s
   file_name: "Agentport DS"
   components_page: { name: "Shadcn Components", id: "3126:2" }   # every UI component set lives here
   other_pages: [Color, "----", Artboards]

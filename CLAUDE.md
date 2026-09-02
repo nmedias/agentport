@@ -80,7 +80,7 @@ tools/              shoot-stories.mjs — Playwright screenshots of a running St
 
 ## Figma
 
-- **File:** "Agentport DS", fileKey `ejFKo4MNuvC9TSDKOCUvyq`, configured in
+- **File:** "Agentport DS", fileKey `nQSNLASjuLvgTh3we8Dp4s`, configured in
   `.claude/skills/{shadcn-component-port,component-sync}/config.json` (`figma.fileKey`, `figma.pageId`).
   Components page: `Shadcn Components` (`3126:2`); variable collections `reference` (primitives),
   `semantic` (color), `semantic-dimension`, `semantic-typo` — components bind color/dimension directly,

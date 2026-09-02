@@ -10,7 +10,7 @@ InputGroup's OWN surfaces/text/addon only. The nested `.InputGroup/Button` (3545
 (Input/Textarea) carry their own `data-slot=input-group-control` borderless overrides and inherit
 the Input/Textarea components' own colour bindings — not part of this delta.
 
-## Figma nodes (file `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" 3126:2)
+## Figma nodes (file `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" 3126:2)
 
 - Section "Input Group" `3519:590`
 - Composition `.InputGroup` `3525:622` — COMPONENT_SET, 10 members

@@ -5,7 +5,7 @@
 and is the source of truth (`libs/ui/src/components/ui/choice-card/`), untouched here. No git, no
 code, no catalog edit (parent updates the catalog from this report).
 
-**File:** `ejFKo4MNuvC9TSDKOCUvyq` ("Agentport DS") · Page "Shadcn Components" `3126:2`
+**File:** `nQSNLASjuLvgTh3we8Dp4s` ("Agentport DS") · Page "Shadcn Components" `3126:2`
 **Section:** "Choice Card" `4107:1526` (created via `/figma-create-section`, auto-placed right of
 the rightmost existing node). Headline `4107:1527`.
 

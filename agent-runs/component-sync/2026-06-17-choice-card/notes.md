@@ -15,7 +15,7 @@ the SHELL's own card surface / border / title / description.
 
 ## S2 — Live Figma bindings (READ-ONLY)
 
-File `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" 3126:2, Section "Choice Card" 4107:1526.
+File `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" 3126:2, Section "Choice Card" 4107:1526.
 Sets: `.ChoiceCard/Checkbox` 4112:1638, `.ChoiceCard/Switch` 4119:1750, `.ChoiceCard/Radio` 4124:1862.
 Read `paint.boundVariables.color` → `getVariableByIdAsync().name` on each member's card-shell
 COMPONENT frame (surface fill + border stroke) and the title/description/error TEXT fills.

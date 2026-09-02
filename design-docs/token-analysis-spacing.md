@@ -1,7 +1,7 @@
 # Token analysis — Category Spacing (Gaps + Paddings)
 
 Screen: reference screen "Quiet", node `1099:9710` (Figma "Agentport DS", fileKey
-`ejFKo4MNuvC9TSDKOCUvyq`). Sister document to `token-analysis-color.md` / `…-radius.md`.
+`nQSNLASjuLvgTh3we8Dp4s`). Sister document to `token-analysis-color.md` / `…-radius.md`.
 Goal: no more raw spacing values — gaps (`itemSpacing`) and paddings hang off semantic
 spacing tokens. One spacing system serves **both** (gap + padding).
 

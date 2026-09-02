@@ -5,7 +5,7 @@ ONE component: `kbd`. Read-only on Figma; the delta was applied to code.
 
 ## Figma structure (live, read-only)
 
-- fileKey `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" `3126:2`.
+- fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" `3126:2`.
 - Section **"Kbd"** `3215:302` (LIVE name unchanged).
 - Set **"Kbd"** `3217:308` (LIVE name "Kbd", NOT ".Kbd" — see deviation D3).
 - Axes: `content` (text | icon) × `emphasis` (high | low) = 4 members.

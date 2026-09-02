@@ -4,7 +4,7 @@ Apply finding **A9** (`/figma-build-rules §Composites`, anchored overlay) to th
 `4402:2589`** (24 members, `state × side × align`) so the overlay positioning is **constraint-driven
 and resize-robust**, replacing the previous **hardcoded x/y offsets** with `constraints=MIN/MIN`.
 
-File "Agentport DS" `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" `3126:2`. Plugin MCP only (whoami =
+File "Agentport DS" `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" `3126:2`. Plugin MCP only (whoami =
 Manu). No detach. Figma-only model refinement — **no code change** (Radix Popper does the same at runtime).
 
 ## User goal + acceptance criteria

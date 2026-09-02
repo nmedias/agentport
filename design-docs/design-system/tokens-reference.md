@@ -46,7 +46,7 @@ token | css_var | primitive | value | utilities | use | avoid? | status? | note?
 ## Architecture
 
 ```yaml
-figma_file: ejFKo4MNuvC9TSDKOCUvyq   # "Agentport DS"
+figma_file: nQSNLASjuLvgTh3we8Dp4s   # "Agentport DS"
 collections:
   reference:          { role: primitives, groups: [Color, Dimension, Font, Effect], scopes: "[] (alias-only) — exception Effect/*: EFFECT_* scopes, bound directly by the Effect Styles (§5)" }
   semantic:           { role: colour semantics, alias_to: reference, groups: [Base, Primary, Secondary, Muted, Accent, Brand, Destructive, Cards, Focus, Border, Sidebar, Charts, Dialog, Scrim, Input, Inverse] }

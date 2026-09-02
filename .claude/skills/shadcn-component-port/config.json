@@ -1,9 +1,9 @@
 {
   "_doc": "Fixed values for shadcn-component-port. Edit here only; the SKILL and snippets reference these.",
   "figma": {
-    "fileKey": "ejFKo4MNuvC9TSDKOCUvyq",
+    "fileKey": "nQSNLASjuLvgTh3we8Dp4s",
     "fileName": "Agentport DS",
-    "componentsPage": "Shadcn Components",
+    "componentsPage": "Components",
     "pageId": "3126-2",
     "font": { "family": "Hanken Grotesk", "style": "Medium", "comment": "DS text-style font for the build snippet CFG; Medium for Label/Display, Regular for Body/Input — match the chosen textStyleId" },
     "comment": "Build component sets on the 'Components' page (create if absent). Token variables live in this file."

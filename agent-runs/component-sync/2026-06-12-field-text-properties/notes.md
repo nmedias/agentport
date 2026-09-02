@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-12
 **Branch:** `refine/text-property-convention` (Figma-only edit; repo edits left uncommitted for review)
-**File:** Agentport DS — `ejFKo4MNuvC9TSDKOCUvyq`
+**File:** Agentport DS — `nQSNLASjuLvgTh3we8Dp4s`
 **Access:** Figma Plugin MCP only (Console MCP was disconnected — not needed; task is Plugin-only).
 
 ## The convention (user directive — applies always; here to `.Field`)

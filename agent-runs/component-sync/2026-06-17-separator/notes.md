@@ -5,7 +5,7 @@ Scope: `separator` only. Figma is READ-ONLY.
 
 ## Live Figma structure (READ)
 
-- fileKey `ejFKo4MNuvC9TSDKOCUvyq`, page "Shadcn Components" `3126:2`.
+- fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" `3126:2`.
 - Section LIVE name: **"Separator"** id `3675:1016` (unchanged).
 - Set LIVE name: **"Separator"** id `3676:1018` — type COMPONENT_SET.
   (Brief noted the set might read `.Separator`; live name is plain "Separator". The

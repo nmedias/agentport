@@ -94,7 +94,7 @@ Helper parts:
 | PopoverTitle | `font-medium` | `text-format-label` (14/500 = label format carries the medium weight; title-role caption) |
 | PopoverDescription | `text-muted-foreground` | `text-format-body text-muted-ink` (muted-foreground→muted-ink; add body format since text-sm was on the header only — keep description legible) |
 
-## T4/T5 — Figma build (Plugin MCP, fileKey ejFKo4MNuvC9TSDKOCUvyq, page "Shadcn Components" 3126:2)
+## T4/T5 — Figma build (Plugin MCP, fileKey nQSNLASjuLvgTh3we8Dp4s, page "Shadcn Components" 3126:2)
 Mutex held over the whole Figma phase, released before code. Connected (whoami=Manu).
 - Section "Popover": **4365:2253** (x≈11687, auto-placed right of rightmost node)
 - `PopoverContent` component: **4365:2255** — single member (no variant axis; data-[side]=motion not a DS
