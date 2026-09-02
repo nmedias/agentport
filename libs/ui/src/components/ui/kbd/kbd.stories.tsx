@@ -40,7 +40,7 @@ const meta: Meta<typeof Kbd> = {
       source: { type: 'code' },
       description: {
         component:
-          'A DISPLAY-ONLY keyboard keycap — its one axis is `emphasis` (`high`/`low`), which sets the cap fill + ink. The cap is inert (`pointer-events-none`); compose **`KbdGroup`** to spell a chord (see the **Group** story).',
+          'A keycap for spelling keyboard shortcuts in the UI; `emphasis` switches between the loud inverted cap and a quiet one. Display-only — it never receives interaction; chords are several caps in a `KbdGroup`.',
       },
     },
   },

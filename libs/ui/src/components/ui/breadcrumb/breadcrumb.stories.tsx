@@ -48,7 +48,7 @@ const meta: Meta<typeof Breadcrumb> = {
       source: { type: 'code' },
       description: {
         component:
-          'A multi-part **navigation** composition: a `<nav>` landmark wrapping an ordered list of links, chevron separators, and the current-page leaf. It has no variant or state prop — you compose the parts. The key distinction is **link vs current page** (`BreadcrumbPage` carries `aria-current="page"`); see the **Default** trail.',
+          'The path trail: composed from links, separators and the current-page leaf — no props, you assemble the parts. The key distinction is link vs. current page: the leaf is its own part carrying `aria-current`, not a styled link; an ellipsis part collapses long trails.',
       },
     },
   },

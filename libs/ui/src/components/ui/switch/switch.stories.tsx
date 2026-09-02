@@ -46,7 +46,7 @@ const meta: Meta<typeof Switch> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS switch — a Radix `role="switch"` toggle whose track + thumb are pure CSS state (`data-checked` tints the track and slides the thumb, `aria-invalid` paints destructive, focus adds the ring). `size` (`sm` | `default`) sets the geometry. Compose with the **Field** family for a label (see **Airplane Mode**); the clickable card variant lives in **ChoiceCardSwitch**.',
+          'An on/off toggle — track tints and thumb slides when checked; `size` adds a compact variant. Same composition rule as its siblings: the label comes from Label/Field, invalid is a live state, not a prop.',
       },
     },
   },

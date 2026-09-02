@@ -62,7 +62,7 @@ const meta: Meta<typeof Command> = {
       source: { type: 'code' },
       description: {
         component:
-          'A command palette built on **cmdk** with **client-side filtering**: typing in the input filters and re-sorts the list, and **`CommandEmpty`** surfaces when nothing matches. Compose `CommandInput` + `CommandList` with `CommandGroup`/`CommandItem`/`CommandSeparator`/`CommandShortcut`; **`CommandDialog`** portals the same palette into a modal (the Agentport ⌘K). The **`variant="palette"`** axis re-shapes the surface — see the **Palette** and **PaletteInDialog** stories. Sub-parts with their own API have dedicated pages: [CommandDialog](?path=/docs/ui-command-commanddialog--docs) · [CommandSeparator](?path=/docs/ui-command-commandseparator--docs).',
+          'The command palette: typing filters and re-ranks the list, with a built-in empty state. Composed from input, list, groups, items, shortcuts and separators; the same palette runs inline or inside a modal as the app\'s ⌘K launcher, and `variant="palette"` reshapes it into that launcher form.',
       },
     },
   },

@@ -48,7 +48,7 @@ const meta: Meta<typeof Slider> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS slider — a Radix slider whose track (`bg-input-fill-high` rail), range (`bg-primary-fill` fill) and thumb(s) are pure CSS. Pass **two values** for a range (one thumb per value). `orientation` (`horizontal` | `vertical`) sets the track direction; the thumb shows the Input-family focus ring. Compose with the **Field** family for a label (see **Field Slider**).',
+          'Value selection on a track, horizontal or vertical. Pass two values and it becomes a range — one thumb per value. Its accessible name must reach the thumbs, not the container; the component forwards one label to all of them.',
       },
     },
   },

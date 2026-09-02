@@ -55,7 +55,7 @@ const meta: Meta<typeof Checkbox> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS checkbox — a Radix `role="checkbox"` whose box + check are pure CSS state (`data-state=checked` paints the primary fill + check icon, `aria-invalid` reddens, focus adds the ring). Accepts `"indeterminate"`. Compose with the **Field** family (`FieldLabel`/`FieldDescription`/`FieldError`) for labelled forms — see the **Basic** / **Group** stories.',
+          'The binary choice control, with an explicit `"indeterminate"` for parent/group states. Checked, invalid, disabled and focus combine freely as live states. A bare box has no accessible name — it needs a Label/Field or an `aria-label`.',
       },
     },
   },

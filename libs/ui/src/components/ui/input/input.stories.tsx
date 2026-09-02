@@ -64,7 +64,7 @@ const meta: Meta<typeof Input> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS text field — a native `<input>` whose states are real CSS/attributes, not props: focus (`:focus-visible` ring), `aria-invalid` (destructive ring), `disabled`. Pair it with the **Field** family (`FieldLabel`/`FieldDescription`/`FieldError`) for accessible, labelled forms — see the **WithLabel** / **WithError** stories.',
+          'The single-line text field. It has no variants — focus, invalid, disabled and filled are live states driven by the control itself, not props. On its own it is unlabeled: it becomes a real form field only composed with the Field family.',
       },
     },
   },

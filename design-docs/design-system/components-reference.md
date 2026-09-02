@@ -47,7 +47,7 @@ reads are read-only (pipeline rule).
 name · status · figma_synced · source{registry,item,style} ·
 code{dir, exports[], barrel, types?, stories[], specs[], cva, variants?, internal?, code_only_parts?} ·
 figma{section, set|component|composition…, members?, slots?, props?, axis, examples?, vars, styles} ·
-skill · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
+skill · description · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
 ```
 
 ## Architecture
@@ -143,6 +143,7 @@ open:
     vars: [ink, border, corner-full, destructive, destructive-ink, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xs]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "A compact status pill; variant carries the tone from solid emphasis to quiet outline/ghost. Informative by default — via asChild it wraps a real link or button and stays a pill."
   anatomy: "Single-element CVA span (asChild via Radix Slot, data-slot / data-variant, [&>svg]:size-3 icon)."
   deviations:
     - "All 6 Nova variants kept (ghost / link are Nova extras over the doc's 4) — in code and in the full Figma matrix."
@@ -178,6 +179,7 @@ open:
     vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-md, destructive, destructive-ink, muted-fill, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-md, space-sm, space-xs]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "The action trigger: variant sets the semantic weight (solid primary through quiet ghost and link), size the geometry scale. One component covers text, text-with-icon and square icon-only buttons — icon-only requires its own accessible name. Via asChild a link can wear the button look without losing its semantics."
   anatomy: "CVA button; public API = variant + size (the geometry scale) + icon boolean — the square icon* cva keys are mapped in render, not public sizes."
   deviations:
     - "Nova size ladder (h-8 default, xs, per-size icon sizing, aria-expanded)."
@@ -217,6 +219,7 @@ open:
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md, space-xs]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "The single-line text field. It has no variants — focus, invalid, disabled and filled are live states driven by the control itself, not props. On its own it is unlabeled: it becomes a real form field only composed with the Field family."
   anatomy: "Single element, no CVA; state axis only."
   deviations:
     - "h-8 / corner-lg / px-md / py-xs / file:h-6; bg-input-fill (opaque, stock is transparent); text-format-label-md; placeholder text-input-ink-placeholder; selection bg-primary-fill / text-primary-ink."
@@ -247,6 +250,7 @@ open:
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md]
     styles: [text:Label/md]
   skill: /shadcn-component-port
+  description: "The multiline sibling of Input — same state behaviour, a taller box that grows with its content. Like Input, label and error text come from composing it with the Field family."
   anatomy: "Field twin of Input, taller; field-sizing-content (auto-grow)."
   deviations:
     - "min-h-16 / corner-lg / px-md / py-md; same colour clothing as Input. dark + disabled:bg-input/50 removed."
@@ -290,6 +294,7 @@ open:
     vars: [ink, corner-lg, corner-md, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-ink-placeholder, muted, muted-fill, muted-ink, space-md, space-sm, space-xs]
     styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "Fuses a control and its adornments (icons, buttons, text) into one field: the group owns border, focus and invalid treatment, the control inside goes borderless. Addons sit beside the control or as a bar above/below it. State always originates from the inner control — the group has none of its own, it mirrors."
   anatomy: "6-part composite: the GROUP owns surface + border + focus / invalid / disabled (has-[control:focus-visible] / has-[aria-invalid] / has-disabled); controls are borderless (border-0 bg-transparent, data-slot=input-group-control)."
   deps: [Button, Input, Textarea, Kbd]
   deviations:
@@ -332,6 +337,7 @@ open:
     vars: [corner-sm, inverse-fill, inverse-ink, muted-fill, muted-ink, space-xs]
     styles: [text:Kbd]
   skill: /shadcn-component-port; /component-sync
+  description: "A keycap for spelling keyboard shortcuts in the UI; emphasis switches between the loud inverted cap and a quiet one. Display-only — it never receives interaction; chords are several caps in a KbdGroup."
   anatomy: "Keycap span with an emphasis prop; KbdGroup = inline row."
   deviations:
     - "emphasis=high (default) = inverted dark keycap (bg-inverse-fill + text-inverse-ink); emphasis=low = quiet keycap (bg-muted-fill + text-muted-ink). text-format-kbd (Geist Mono); gap-xs / px-xs; corner-sm."
@@ -364,6 +370,7 @@ open:
     vars: [ink, muted, space-sm, space-xs]
     styles: [text:Body]
   skill: /shadcn-component-port; /component-sync
+  description: "The path trail: composed from links, separators and the current-page leaf — no props, you assemble the parts. The key distinction is link vs. current page: the leaf is its own part carrying aria-current, not a styled link; an ellipsis part collapses long trails."
   anatomy: "Multipart: list + segments + separator / ellipsis glyphs."
   deviations:
     - "Colour: link rest text-muted, link-hover + page text-ink; separator / ellipsis icons inherit currentColor (no explicit class). Body → text-format-body."
@@ -433,6 +440,7 @@ open:
     vars: [accent-fill, accent-ink, ink, surface, border, card-fill, corner-lg, corner-md, corner-sm, corner-xl, dialog-fill, input-border, input-fill, input-ink-placeholder, inverse-fill, inverse-ink, muted, primary, space-2xl, space-lg, space-md, space-sm, space-xl, space-xs]
     styles: [effect:Elevation, effect:Glow, text:Body, text:Data/lg, text:Kbd, text:Label/md, text:Eyebrow]
   skill: /shadcn-component-port; /component-sync
+  description: "The command palette: typing filters and re-ranks the list, with a built-in empty state. Composed from input, list, groups, items, shortcuts and separators; the same palette runs inline or inside a modal as the app's ⌘K launcher, and variant=\"palette\" reshapes it into that launcher form."
   anatomy: "Multi-composite on cmdk (Command root, Dialog wrapper, Input, List, Empty, Group, Item, Shortcut, Separator) with a variant axis default | palette."
   deps: [InputGroup, Button, Input, Textarea, Dialog, Kbd]
   deviations:
@@ -483,6 +491,7 @@ open:
     vars: [ink, surface, border, corner-lg, corner-md, corner-xl, dialog-fill, dialog-ink, muted, muted-fill, primary-fill, primary-ink, scrim, scrim-opacity, secondary-fill, secondary-ink, space-lg, space-md, space-sm, space-xl]
     styles: [effect:Elevation, text:Body, text:Label/md, text:Title]
   skill: /shadcn-component-port; /component-sync
+  description: "The modal: scrim, focus trap, dismiss via corner close, footer close, Escape or overlay click. A DialogTitle is mandatory — it is the dialog's accessible name. The footer is its own part with an optional built-in close action."
   anatomy: "Radix composite (radix-ui Dialog); panel composition + footer + overlay as separate Figma components."
   deps: [Button]
   deviations:
@@ -523,6 +532,7 @@ open:
     vars: [border]
     styles: []
   skill: /shadcn-component-port; /component-sync
+  description: "A hairline divider, horizontal or vertical. decorative decides whether it is announced as a semantic separator or hidden from assistive tech — the line itself never changes."
   anatomy: "Static, non-interactive element (Radix Separator.Root)."
   a11y:
     - "decorative=true (default) → role=none / aria-hidden; decorative=false → role=separator + aria-orientation."
@@ -553,6 +563,7 @@ open:
     vars: [ink, space-md]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "The caption that names a control via the htmlFor↔id pairing: clicking it focuses or toggles the control, screen readers read it as the field name. It has no state of its own — it only dims in reaction to a disabled control."
   anatomy: "Radix Label (LabelPrimitive.Root); single element, no CVA. Hard Field dependency (FieldLabel wraps Label)."
   deviations:
     - "text-format-label-md (14/500, fill ink); gap-md; select-none + group/peer-disabled opacity unchanged."
@@ -594,6 +605,7 @@ open:
     vars: [ink, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xs]
     styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md); /component-sync
+  description: "The layout-and-semantics layer for form rows: label, description and error arranged around any control, vertically or horizontally. It draws no surface — the control keeps its own look. Caveat: the wrapper is a group, so a plain <label for> cannot name a control through it — use the label slot."
   anatomy: "Multi-part composite WITHOUT a root element (~10 pure layout / typography / spacing / a11y parts, no own surface / border / shadow). Variant A: Figma = the Field ROW only; code = the full family (10 exports) — the code ↔ Figma cardinality gap is deliberate."
   deps: [Input, Textarea, Separator, Button, Label]
   deviations:
@@ -633,6 +645,7 @@ open:
     vars: [ink]
     styles: [text:Label/md, text:Title]
   skill: Figma revision (/figma-use)
+  description: "The caption of a FieldSet: legend for a section title, label as the lighter form for nested sub-groups."
   anatomy: "Text component; variant maps onto the code prop FieldLegend.variant (NOT a fork — unlike Field.controlPosition)."
   deviations:
     - "variant=legend → text-format-title (section-caption role); variant=label → text-format-label-md; fill ink."
@@ -659,6 +672,7 @@ open:
     vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
   skill: Figma revision (/figma-use)
+  description: "Groups related Fields under a caption as a semantic <fieldset> — a pure structure part with no surface of its own."
   anatomy: "Surface-less composite: VERTICAL auto-layout gap-xl (bound), w FIXED / h HUG, NO fill / stroke; legend = slot with a title-text default. Code counterpart = <fieldset> flex-col gap-xl + FieldLegend."
   deps: [Field, FieldLegend]
   run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
@@ -689,6 +703,7 @@ open:
     vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
   skill: Figma revision (/figma-use); /component-sync
+  description: "Stacks several Fields with a consistent rhythm — vertically by default, or as a wrapping horizontal row: the layout that checkbox and radio groups build on."
   anatomy: "Surface-less container: VERTICAL auto-layout gap-xl (bound), w-full, NO fill / stroke; groups several Fields with a divider (FieldSeparator = nested real .Separator instance, no own set). Code = <div> @container/field-group flex-col gap-xl; horizontal = flex-row flex-wrap + [&>[data-slot=field]]:w-auto."
   deps: [Field, Separator]
   deviations:
@@ -733,6 +748,7 @@ open:
     vars: [ink, border, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "The binary choice control, with an explicit \"indeterminate\" for parent/group states. Checked, invalid, disabled and focus combine freely as live states. A bare box has no accessible name — it needs a Label/Field or an aria-label."
   anatomy: "Single element + indicator (radix-ui Checkbox.Root / Indicator), no CVA → state axis like Input; box 16×16 numeric, corner-sm."
   deps: [Field, Label]
   deviations:
@@ -792,6 +808,7 @@ open:
     vars: [ink, surface, border, corner-full, corner-lg, destructive, ring, input-fill-high, primary-fill, space-2xs, space-3xl, space-lg, space-md]
     styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port; /component-sync
+  description: "An on/off toggle — track tints and thumb slides when checked; size adds a compact variant. Same composition rule as its siblings: the label comes from Label/Field, invalid is a live state, not a prop."
   anatomy: "Track (Root) + Thumb (radix-ui Switch); size [default, sm] is a manual prop (no CVA) × state."
   deps: [Field, Label]
   deviations:
@@ -841,6 +858,7 @@ open:
     vars: [ink, border, corner-full, corner-lg, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
   skill: /shadcn-component-port; /component-sync
+  description: "Single choice out of a set: the group carries the value and the layout, each RadioGroupItem is one option. Items behave like Checkbox — state-driven, named only through composition; the selection itself always lives on the group."
   anatomy: "Two parts: RadioGroup (layout container, grid w-full gap-md) + RadioGroupItem (interactive, state axis like Checkbox, corner-full circle with an inner dot instead of a glyph); item 16×16 numeric."
   deps: [Field, Label, FieldLegend]
   deviations:
@@ -903,6 +921,7 @@ open:
     vars: [accent-border, accent-fill, accent-ink, ink, surface, border, corner-full, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-fill-high, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-md]
     styles: [text:Body, text:Label/md]
   skill: Figma build agent (/figma-build-rules) + /component-sync (checked tint)
+  description: "Makes the whole card the click target for one choice — title, description and a checkbox, switch or radio in a single labelled surface that tints when checked. Stateless pass-through: controlled vs. uncontrolled is the consumer's decision; the radio form additionally needs its surrounding RadioGroup."
   anatomy: "DS-authored composite: the clickable choice card (title + description + form control). Code = 3 thin wrappers over a shared internal ChoiceCardShell (FieldLabel > Field); stateless pass-through (checked / defaultChecked / onCheckedChange, or the radio value) → the consumer decides controlled / uncontrolled."
   deps: [Field, Checkbox, Switch, RadioGroup, Label]
   deviations:
@@ -979,6 +998,7 @@ open:
     vars: [accent-fill, accent-ink, ink, border, corner-lg, corner-md, destructive, dialog-fill, ring, input-border, input-fill, muted, space-md, space-sm, space-xs]
     styles: [effect:Elevation, text:Body, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md; Figma via a background build agent)
+  description: "A picker whose closed trigger reads exactly like the sibling text fields (two sizes, same invalid/disabled behaviour), and whose open list is a raised overlay with highlighted options and a check on the current value. Compose with the Field family for label and error."
   anatomy: "Popover composite (radix-ui Select), 10 exports + 5 prop types; 3 sets + a top-level composition + an examples group in Figma. Figma cannot open → the open state is a static anchored composition (like Command / Dialog)."
   deps: [Field, Separator, Label]
   deviations:
@@ -1032,6 +1052,7 @@ open:
     styles: [text:Body, text:Label/md]
     focus_glow: "literal DROP_SHADOW radius 0 spread 3 ring (neutral/800) @50 % sbn:false — copied verbatim from the Input focus member 3176:305 (never bind the colour, it drops the /50). Per thumb on the focus members; members clip=false."
   skill: /shadcn-component-port (+ /figma-build-rules)
+  description: "Value selection on a track, horizontal or vertical. Pass two values and it becomes a range — one thumb per value. Its accessible name must reach the thumbs, not the container; the component forwards one label to all of them."
   anatomy: "Radix Slider (radix-ui umbrella import = the full primitive, declared dep), no CVA → geometry + state axes like the Switch / Checkbox family. Parts: Root › Track (rail) › Range (fill) + N × Thumb (one per value; 2 = range)."
   deps: [Field]
   deviations:
@@ -1077,6 +1098,7 @@ open:
     vars: [ink, border, corner-lg, dialog-fill, dialog-ink, input-border, input-fill, input-ink-placeholder, muted, muted-fill, primary-fill, primary-ink, space-2xs, space-lg, space-md, space-sm, space-xs]
     styles: [effect:Elevation, text:Body, text:Label/md]
   skill: /shadcn-component-port (+ /figma-build-rules; Figma rebuilds via a background agent)
+  description: "A raised panel anchored to its trigger — no scrim, no focus trap unless modal; outside click or Escape dismisses. Unlike Dialog it does not name itself: an open panel needs an explicit accessible name."
   anatomy: "Radix Popover (radix-ui umbrella import = the full primitive, declared dep). Composite WITHOUT own state — Content is the only DS surface (Trigger / Anchor = pass-through, no class). 7 exports: stock 4 + PopoverHeader / Title / Description (Nova typography helpers)."
   deps: [Button, Label, Input]   # Figma only: Button = trigger-slot default, Label / Input in the Dimensions example
   deviations:
@@ -1123,6 +1145,7 @@ open:
     vars: [ink, border, corner-lg, corner-md, corner-sm, dialog-fill, dialog-ink, muted-fill, primary-fill, primary-ink, space-lg, space-md, space-sm, space-xs]
     styles: [effect:Elevation, text:Kbd, text:Label/md]
   skill: /shadcn-component-port (+ /figma-build-rules)
+  description: "A hover/focus hint chip with a pointer arrow, delayed by the shared provider. It describes its trigger, it does not name it — an icon-only trigger still needs its own label."
   anatomy: "Radix Tooltip (radix-ui umbrella import = the full primitive, declared dep). Provider / Root / Trigger = behaviour wrappers without styling; only TooltipContent + its arrow carry classes → NO CVA, single surface (sibling of Badge / Kbd)."
   deps: [Button, Kbd]   # Figma only: Button = trigger-slot default, Kbd in the WithKbd example
   deviations:
@@ -1171,6 +1194,7 @@ open:
     vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-sm, ring, muted, muted-fill, muted-ink, secondary-fill, space-lg, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props)
+  description: "The generic list row: leading media, title with description, trailing actions; variant and size scale it from a bordered card row to a dense line. It deliberately has no selected state — hover and focus exist only on its link form (asChild); selection stays a call-site concern."
   anatomy: "10-part composite (Item / Media / Content / Title / Description / Actions / Group / Separator / Header / Footer), full family ported. Generic list row → root-barrel primitive (not a block); use case = explorer NavListItem."
   deps: [Separator]
   deviations:
@@ -1212,6 +1236,7 @@ open:
     vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Eyebrow, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md)
+  description: "A data table whose API is pure composition: region, row and cell parts that pass everything through. Rows are the only interactive surface — neutral hover vs. accent-tinted selection, with selection set by the call site. Column alignment is applied per column on head and cells together."
   anatomy: "Multi-part composite WITHOUT a root element, 8 prop-less pass-through parts (Table / Header / Body / Footer / Row / Head / Cell / Caption), NO CVA. The only interaction axis = TableRow state. No code deps (ui:add wrote table.tsx only)."
   deps: [Checkbox, Badge]   # Figma only: the Component-cells example
   deviations:

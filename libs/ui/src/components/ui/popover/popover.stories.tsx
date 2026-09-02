@@ -46,7 +46,7 @@ const meta: Meta<typeof Popover> = {
       source: { type: 'code' },
       description: {
         component:
-          'A Radix Popover: the `PopoverContent` **portals to `document.body`** (so tests query it via `within(document.body)`, not the canvas) and floats a single raised panel anchored to its trigger. Unlike a dialog there is **no scrim** and no focus trap unless `modal`; an outside click or **Escape** dismisses it. The panel carries the DS raised surface (`dialog-fill` + `border` + `shadow-elevation`). See the **Default** story for the open→close flow. Sub-part with its own API: [PopoverContent](?path=/docs/ui-popover-popovercontent--docs).',
+          'A raised panel anchored to its trigger — no scrim, no focus trap unless `modal`; outside click or Escape dismisses. Unlike Dialog it does not name itself: an open panel needs an explicit accessible name.',
       },
     },
   },

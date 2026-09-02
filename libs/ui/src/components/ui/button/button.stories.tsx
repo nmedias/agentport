@@ -54,7 +54,7 @@ const meta: Meta<typeof Button> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS button — `variant` × `size` axes on a real CSS state layer (hover/active/focus/disabled/aria-invalid/aria-expanded). Set **`icon`** for a square icon-only button at the current `size` (requires an `aria-label`). Use **`asChild`** to render a link or other element as a button (see the **As Child** story).',
+          'The action trigger: `variant` sets the semantic weight (solid primary through quiet ghost and link), `size` the geometry scale. One component covers text, text-with-icon and square icon-only buttons — icon-only requires its own accessible name. Via `asChild` a link can wear the button look without losing its semantics.',
       },
     },
   },

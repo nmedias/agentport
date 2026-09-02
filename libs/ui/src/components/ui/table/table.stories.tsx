@@ -48,7 +48,7 @@ const meta: Meta<typeof Table> = {
       source: { type: 'code' },
       description: {
         component:
-          'A data table composed from **`Table`** + the region parts **`TableHeader`** / **`TableBody`** / **`TableFooter`**, **`TableRow`**, the cell parts **`TableHead`** (column header) / **`TableCell`** (data cell), and an optional **`TableCaption`**. Rows are the only interactive surface: hover tints neutral, a `data-state="selected"` row tints with the DS accent selection fill (see **Selectable** and **Row States**). Align a numeric column with `text-right` on its head + cells (see **Alignment**). The parts are prop-less pass-throughs (className/children) → documented here through usage stories, not separate pages.',
+          'A data table whose API is pure composition: region, row and cell parts that pass everything through. Rows are the only interactive surface — neutral hover vs. accent-tinted selection, with selection set by the call site. Column alignment is applied per column on head and cells together.',
       },
     },
   },

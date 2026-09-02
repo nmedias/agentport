@@ -47,7 +47,7 @@ const meta: Meta<typeof Badge> = {
       source: { type: 'code' },
       description: {
         component:
-          'A compact pill marker — its one axis is `variant` (default/secondary/destructive/outline/ghost/link). With **`asChild`** the badge renders as a real `<a>`/`<button>` while keeping the look (see the **As Child** story).',
+          'A compact status pill; `variant` carries the tone from solid emphasis to quiet outline/ghost. Informative by default — via `asChild` it wraps a real link or button and stays a pill.',
       },
     },
   },

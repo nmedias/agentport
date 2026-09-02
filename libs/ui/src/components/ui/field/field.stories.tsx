@@ -58,7 +58,7 @@ const meta: Meta<typeof Field> = {
       source: { type: 'code' },
       description: {
         component:
-          'The form-field PRIMITIVE family — **`Field`** + **`FieldLabel`** / **`FieldContent`** / **`FieldDescription`** / **`FieldError`** / **`FieldSet`** / **`FieldLegend`** / **`FieldGroup`** / **`FieldSeparator`**. A display-only layout + semantics layer (no surface of its own — the control inside carries it). Its axes are `orientation` and the `data-invalid` / `data-disabled` attributes on the wrapper, not pseudo-states. See the **Input Field** / **Fieldset** / **Responsive** stories for the real compositions. Sub-parts with their own API have dedicated pages: [FieldGroup](?path=/docs/ui-field-fieldgroup--docs) · [FieldLegend](?path=/docs/ui-field-fieldlegend--docs) · [FieldError](?path=/docs/ui-field-fielderror--docs).',
+          'The layout-and-semantics layer for form rows: label, description and error arranged around any control, vertically or horizontally. It draws no surface — the control keeps its own look. Caveat: the wrapper is a group, so a plain `<label for>` cannot name a control through it — use the label slot.',
       },
     },
   },

@@ -66,7 +66,7 @@ const meta: Meta<typeof InputGroup> = {
       source: { type: 'code' },
       description: {
         component:
-          'A composite input shell — the **group** owns the surface, border and focus/invalid/disabled treatment, the control inside goes **borderless**, and **`InputGroupAddon`** slots sit around it (`align`: inline-start/-end beside the control, or block-start/-end as a toolbar above/below a textarea). Focus bubbles up from the inner control (see **States**); compose adornments per the **Icons** / **Buttons** / **Text** stories. Sub-parts with their own API have dedicated pages: [InputGroupAddon](?path=/docs/ui-inputgroup-inputgroupaddon--docs) · [InputGroupButton](?path=/docs/ui-inputgroup-inputgroupbutton--docs).',
+          'Fuses a control and its adornments (icons, buttons, text) into one field: the group owns border, focus and invalid treatment, the control inside goes borderless. Addons sit beside the control or as a bar above/below it. State always originates from the inner control — the group has none of its own, it mirrors.',
       },
     },
   },

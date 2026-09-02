@@ -39,7 +39,7 @@ const meta: Meta<typeof RadioGroup> = {
       source: { type: 'code' },
       description: {
         component:
-          'The value-driven container documented below. Each option is a **`RadioGroupItem`** — its props get their own ArgsTable on the [`UI/RadioGroup/Item`](?path=/docs/ui-radiogroup-item--docs) page.',
+          'Single choice out of a set: the group carries the value and the layout, each `RadioGroupItem` is one option. Items behave like Checkbox — state-driven, named only through composition; the selection itself always lives on the group.',
       },
     },
   },

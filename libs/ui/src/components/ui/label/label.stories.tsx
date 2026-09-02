@@ -36,7 +36,7 @@ const meta: Meta<typeof Label> = {
       source: { type: 'code' },
       description: {
         component:
-          'A control caption — a Radix Label in DS tokens. Its whole job is the **`htmlFor`↔`id`** pairing: it names a control, so clicking the label focuses/toggles it and screen readers read the caption as the field name (see **With Input**). It has no state of its own — it only **dims** by reacting to a disabled control, via `group-data-[disabled=true]` or `peer-disabled` (see **Disabled Peer**).',
+          'The caption that names a control via the `htmlFor`↔`id` pairing: clicking it focuses or toggles the control, screen readers read it as the field name. It has no state of its own — it only dims in reaction to a disabled control.',
       },
     },
   },

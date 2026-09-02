@@ -44,7 +44,7 @@ const meta: Meta<typeof Select> = {
       source: { type: 'code' },
       description: {
         component:
-          'The DS select — a Radix Select whose **trigger** reads as a form field (`bg-input-fill`, `border-input-border`, focus ring, `aria-invalid` red) with a compact `sm` / `default` size, and whose **dropdown** is the raised dialog surface with accent-tinted highlighted items and a check on the selected one. Compose with the **Field** family (`FieldLabel`/`FieldError`) for labelled forms — see the **Invalid** story. Each sub-part with its own API has a dedicated page: [SelectTrigger](?path=/docs/ui-select-selecttrigger--docs) · [SelectContent](?path=/docs/ui-select-selectcontent--docs) · [SelectItem](?path=/docs/ui-select-selectitem--docs) · [SelectValue](?path=/docs/ui-select-selectvalue--docs).',
+          'A picker whose closed trigger reads exactly like the sibling text fields (two sizes, same invalid/disabled behaviour), and whose open list is a raised overlay with highlighted options and a check on the current value. Compose with the Field family for label and error.',
       },
     },
   },

@@ -50,7 +50,7 @@ const meta: Meta<typeof Dialog> = {
       source: { type: 'code' },
       description: {
         component:
-          'A Radix Dialog: the `DialogContent` **portals to `document.body`** (so tests query it via `within(document.body)`, not the canvas), draws an overlay scrim, and traps focus while open. Dismiss via the corner close, a footer `DialogClose`, **Escape**, or an overlay click. A `DialogTitle` is required for the accessible name — see the **Default** story for the canonical open→close flow. Sub-parts with their own API have dedicated pages: [DialogContent](?path=/docs/ui-dialog-dialogcontent--docs) · [DialogFooter](?path=/docs/ui-dialog-dialogfooter--docs).',
+          'The modal: scrim, focus trap, dismiss via corner close, footer close, Escape or overlay click. A `DialogTitle` is mandatory — it is the dialog\'s accessible name. The footer is its own part with an optional built-in close action.',
       },
     },
   },

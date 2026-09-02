@@ -23,7 +23,7 @@ const meta: Meta<typeof FieldLegend> = {
       source: { type: 'code' },
       description: {
         component:
-          'The caption of a **`FieldSet`** — `legend` (section title, `text-format-title` 18/600) or the lighter `label` (14/500), for nested sub-groups. The per-row Field API lives on the [`UI/Field`](?path=/docs/ui-field--docs) page.',
+          'The caption of a FieldSet: `legend` for a section title, `label` as the lighter form for nested sub-groups.',
       },
     },
   },

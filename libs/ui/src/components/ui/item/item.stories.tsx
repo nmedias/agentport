@@ -67,7 +67,7 @@ const meta: Meta<typeof Item> = {
       source: { type: 'code' },
       description: {
         component:
-          'A flexible list-row composite — a leading **`ItemMedia`** (icon/image), an **`ItemContent`** (title + description), and trailing **`ItemActions`**, composed inside an **`Item`** whose two axes are `variant` (default/outline/muted) and `size` (default/sm/xs). Stack rows in an **`ItemGroup`** with **`ItemSeparator`**, or wrap an `<a>` via **`asChild`** for a clickable link row — the interactive form that gains the `[a]:hover` tint and the focus ring (see the **Link** and **All States** stories). The leading media kinds are documented on the [`UI/Item/ItemMedia`](?path=/docs/ui-item-itemmedia--docs) page.',
+          'The generic list row: leading media, title with description, trailing actions; `variant` and `size` scale it from a bordered card row to a dense line. It deliberately has no selected state — hover and focus exist only on its link form (`asChild`); selection stays a call-site concern.',
       },
     },
   },

@@ -39,7 +39,7 @@ const meta: Meta<typeof Separator> = {
       source: { type: 'code' },
       description: {
         component:
-          'A hairline divider on the DS `border` token. Its one content axis is `orientation` (horizontal | vertical); `decorative` toggles the ARIA `separator` role without changing the line. See **Horizontal Between Blocks** and **Vertical In Row** for the two real usages.',
+          'A hairline divider, horizontal or vertical. `decorative` decides whether it is announced as a semantic separator or hidden from assistive tech — the line itself never changes.',
       },
     },
   },

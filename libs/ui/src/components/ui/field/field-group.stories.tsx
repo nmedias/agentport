@@ -26,7 +26,7 @@ const meta: Meta<typeof FieldGroup> = {
       source: { type: 'code' },
       description: {
         component:
-          'The group container of the **`Field`** family — stacks its Fields `vertical` (default) or lays them in a wrapping `horizontal` row (a DS extension over stock shadcn; the row axis the checkbox/radio groups build on). The per-row Field API lives on the [`UI/Field`](?path=/docs/ui-field--docs) page.',
+          'Stacks several Fields with a consistent rhythm — vertically by default, or as a wrapping horizontal row: the layout that checkbox and radio groups build on.',
       },
     },
   },

@@ -58,7 +58,7 @@ const meta: Meta<typeof Textarea> = {
       source: { type: 'code' },
       description: {
         component:
-          'A multiline text control — the Input sibling with a taller, auto-growing box. No variant axis; its axis is the live CSS **state** (default/focus/filled/disabled/invalid). A bare control needs a label — compose it with the **Field** family (see **WithLabel**).',
+          'The multiline sibling of Input — same state behaviour, a taller box that grows with its content. Like Input, label and error text come from composing it with the Field family.',
       },
     },
   },
