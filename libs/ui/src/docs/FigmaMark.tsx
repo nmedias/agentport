@@ -23,4 +23,4 @@ export function FigmaMark(props: React.SVGProps<SVGSVGElement>) {
 
 /** The DS Figma library — file "Agentport DS", page `Components` (`3126:2`). */
 export const FIGMA_LIBRARY_URL =
-  'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/Agentport-DS?node-id=3126-2';
+  'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/Agentport-DS';

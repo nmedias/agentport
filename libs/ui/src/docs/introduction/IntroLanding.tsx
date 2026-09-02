@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { RiArrowRightLine } from '@remixicon/react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 import { FIGMA_LIBRARY_URL, FigmaMark } from '../FigmaMark';
@@ -353,61 +352,6 @@ function ComponentsIndex() {
         ))}
       </div>
     </Section>
-  );
-}
-
-// ── Footer ───────────────────────────────────────────────────────────────────
-
-function Footer() {
-  return (
-    <footer className="bg-card-fill px-2xl py-3xl md:px-4xl">
-      <div className="mx-auto flex max-w-[68rem] flex-col gap-2xl">
-        <div className="grid gap-2xl sm:grid-cols-2 lg:grid-cols-3">
-          <div className="flex flex-col gap-md">
-            <Eyebrow>Getting started</Eyebrow>
-            <p className="text-format-body text-ink text-pretty">
-              Consume the library from{' '}
-              <code className="text-format-data-sm text-ink">@agentport/ui</code>. Run
-              the gate before you ship —{' '}
-              <code className="text-format-data-sm text-ink">npm run check</code>{' '}
-              (lint + test + typecheck).
-            </p>
-          </div>
-          <div className="flex flex-col gap-md">
-            <Eyebrow>Develop</Eyebrow>
-            <ul className="flex flex-col gap-xs text-format-body text-ink">
-              <li>
-                <code className="text-format-data-sm text-ink">npm run test:stories</code> —
-                every story in Chromium + axe
-              </li>
-              <li>
-                <code className="text-format-data-sm text-ink">
-                  npm run storybook
-                </code>{' '}
-                — components in isolation
-              </li>
-            </ul>
-          </div>
-          <div className="flex flex-col gap-md">
-            <Eyebrow>Reference</Eyebrow>
-            <div className="flex flex-wrap items-center gap-md">
-              <Badge variant="secondary">Light mode</Badge>
-              <Badge variant="outline">radix-nova</Badge>
-              <Button asChild size="xs" variant="link">
-                <a href={docHref('ui-button--docs')} target="_top">
-                  Browse components
-                </a>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="border-t border-border pt-xl">
-          <span className="text-format-eyebrow uppercase text-muted">
-            Agentport DS
-          </span>
-        </div>
-      </div>
-    </footer>
   );
 }
 
