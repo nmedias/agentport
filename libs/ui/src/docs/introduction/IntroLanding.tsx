@@ -178,9 +178,11 @@ function Hero() {
           AGENTPORT <span className="text-ink absolute pl-xl text-[clamp(1rem,2vw,1.5rem)]  top-0 [text-box:trim-both_cap_alphabetic] tracking-[0]">DS</span>
         </p>
 
-        {/* one small sentence */}
-        <p className="mt-2xl  text-format-title font-[500]">
-          shadcn/ui, re-clothed in its own token layer through an agent-driven Figma ↔ code pipeline.
+        {/* one small sentence — names the AI workflow that produced the DS */}
+        <p className="mt-2xl text-format-title font-[500] leading-6">
+          Claude Code skills set up the shadcn/ui components in React 19 and
+          Figma at once, reconciling token roles, assembling component sets,
+          and generating Storybook stories with a11y tests.
         </p>
 
         {/* the source of truth for the component sets — opens the Figma library */}
