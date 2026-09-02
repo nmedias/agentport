@@ -39,7 +39,7 @@ const meta: Meta<typeof PopoverContent> = {
       source: { type: 'code' },
       description: {
         component:
-          'The portalled raised panel. `align` (start/center/end) and the numeric `sideOffset` position it relative to the trigger; everything else inherits from `PopoverPrimitive.Content`. The root API lives on the parent page: [Popover](?path=/docs/ui-popover--docs).',
+          'The floating panel of a `Popover` — `align` and `sideOffset` position it relative to the trigger; the remaining placement and collision behaviour is inherited. The root API lives on the [`UI/Popover`](?path=/docs/ui-popover--docs) page.',
       },
     },
   },

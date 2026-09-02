@@ -25,7 +25,7 @@ const meta: Meta<typeof InputGroupButton> = {
       source: { type: 'code' },
       description: {
         component:
-          'An action button inside an **`InputGroup`** addon — `size` picks the InputGroup scale (`xs`/`sm` text, `icon-xs`/`icon-sm` icon-only), mapped onto the DS Button’s size + icon flag. The group-shell API lives on the [`UI/InputGroup`](?path=/docs/ui-inputgroup--docs) page.',
+          'An action button inside an `InputGroup` addon — a compact form of the DS Button: `size` offers text (`xs`/`sm`) and icon-only (`icon-xs`/`icon-sm`) scales that sit flush in the field. The group-shell API lives on the [`UI/InputGroup`](?path=/docs/ui-inputgroup--docs) page.',
       },
     },
   },

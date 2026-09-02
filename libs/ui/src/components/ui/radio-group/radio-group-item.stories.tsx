@@ -23,7 +23,7 @@ const meta: Meta<typeof RadioGroupItem> = {
       source: { type: 'code' },
       description: {
         component:
-          'A single option inside a **`RadioGroup`** — Radix requires the group ancestor, so every example wraps it. The value-driven container API lives on the [`UI/RadioGroup`](?path=/docs/ui-radiogroup--docs) page.',
+          'One option inside a `RadioGroup`: it renders the circle and its states, while name, value and selection live on the group — it cannot be used outside one. The group API lives on the [`UI/RadioGroup`](?path=/docs/ui-radiogroup--docs) page.',
       },
     },
   },

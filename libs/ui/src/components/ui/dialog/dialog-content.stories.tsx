@@ -31,7 +31,7 @@ const meta: Meta<typeof DialogContent> = {
       source: { type: 'code' },
       description: {
         component:
-          'The panel of a **`Dialog`** (portals to `document.body`, draws the overlay scrim, traps focus). `showCloseButton` toggles the corner × (a `DialogClose`); the other dismiss paths (footer close, Escape, overlay click) stay. The root open/modal API lives on the [`UI/Dialog`](?path=/docs/ui-dialog--docs) page.',
+          'The panel of a `Dialog`: it draws the scrim and traps focus while open. `showCloseButton` toggles the corner close — the other dismiss paths (footer close, Escape, overlay click) always stay. The open/modal API lives on the [`UI/Dialog`](?path=/docs/ui-dialog--docs) page.',
       },
     },
   },

@@ -24,7 +24,7 @@ const meta: Meta<typeof FieldError> = {
       source: { type: 'code' },
       description: {
         component:
-          'The error text of a **`Field`** (`text-destructive`, `role="alert"`) — pass a single message as children, or an `errors` array of `{ message }` (deduped; many render as a bullet list). Shows when the Field is `data-invalid`. The per-row Field API lives on the [`UI/Field`](?path=/docs/ui-field--docs) page.',
+          'The error line of a `Field` — announced immediately as an alert. Pass one message as children, or an `errors` array: duplicates collapse, several messages become a bullet list. It shows when its Field is invalid. The per-row Field API lives on the [`UI/Field`](?path=/docs/ui-field--docs) page.',
       },
     },
   },

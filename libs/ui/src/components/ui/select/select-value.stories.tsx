@@ -19,7 +19,7 @@ const meta: Meta<typeof SelectValue> = {
       source: { type: 'code' },
       description: {
         component:
-          'The selected-value display inside a **`Select`** trigger — shows the chosen item’s content, or the `placeholder` while empty (greyed via `data-placeholder`). Radix requires the Select ancestor, so every example wraps it. The value-driven container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
+          'The value display inside a `SelectTrigger` — shows the chosen option\'s content, or the dimmed `placeholder` while nothing is selected. Must live inside a Select. The container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
       },
     },
   },

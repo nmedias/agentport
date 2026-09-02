@@ -21,7 +21,7 @@ const meta: Meta<typeof SelectTrigger> = {
       source: { type: 'code' },
       description: {
         component:
-          'The closed combobox button of a **`Select`** — Radix requires the Select ancestor, so every example wraps it. The value-driven container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
+          'The closed combobox button of a `Select` — it reads like the sibling text fields and carries the field states; `size` (`sm`/`default`) matches the input scale. Must live inside a Select. The container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
       },
     },
   },

@@ -95,7 +95,7 @@ const meta: Meta<typeof CommandDialog> = {
       source: { type: 'code' },
       description: {
         component:
-          'The cmdk palette portalled into a modal **`Dialog`** (the Agentport ⌘K). `variant` re-shapes the panel (`palette` → terminal surface, flowing into the inner Command); `showCloseButton` toggles the corner ×; `title`/`description` are the visually-hidden a11y name. It has no trigger slot — drive it with controlled `open`. The inline cmdk root + filtering API lives on the [`UI/Command`](?path=/docs/ui-command--docs) page.',
+          'The palette in a modal — the app\'s ⌘K launcher. It has no trigger slot: drive it with a controlled `open`. `title`/`description` provide the visually hidden accessible name, `showCloseButton` toggles the corner close, and `variant="palette"` switches to the launcher surface. The filtering API lives on the [`UI/Command`](?path=/docs/ui-command--docs) page.',
       },
     },
   },

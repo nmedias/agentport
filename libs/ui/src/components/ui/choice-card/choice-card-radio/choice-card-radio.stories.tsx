@@ -45,7 +45,7 @@ const meta: Meta<typeof ChoiceCardRadio> = {
       source: { type: 'code' },
       description: {
         component:
-          'A radio choice card — a `RadioGroupItem` inside a `Field`; it does NOT own its state and must live in a `<RadioGroup>` (selection lives on the group; the card tints when the group value matches, via CSS `:has()`). The `error` prop drives invalid. See the **Group** story for the canonical multi-card single-select usage.',
+          'The radio form of the choice card — one option of a single-choice set. It does not own its state: it must live inside a `RadioGroup`, which carries the value; the card tints when the group value matches. The `error` prop renders the message and marks the card invalid.',
       },
     },
   },

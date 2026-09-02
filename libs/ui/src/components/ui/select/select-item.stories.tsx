@@ -24,7 +24,7 @@ const meta: Meta<typeof SelectItem> = {
       source: { type: 'code' },
       description: {
         component:
-          'A single option inside a **`Select`** — Radix requires the Select ancestor, so every example wraps it. `value` is the submitted value; `textValue` provides typeahead text when the children aren’t plain text (see **Typeahead**). The value-driven container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
+          'One option inside a `Select` — `value` is what the group reports; `textValue` supplies the typeahead text when the children are not plain text. Must live inside a Select. The container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
       },
     },
   },

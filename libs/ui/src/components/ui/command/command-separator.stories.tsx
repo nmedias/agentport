@@ -21,7 +21,7 @@ const meta: Meta<typeof CommandSeparator> = {
       source: { type: 'code' },
       description: {
         component:
-          'A divider inside a **`Command`** list — plain line by default, or a **labeled rule** (eyebrow caption + trailing hairline) when given a `label`, for flat/composed lists. Hides while searching like the line form (`alwaysRender` opts out). The cmdk root + filtering API lives on the [`UI/Command`](?path=/docs/ui-command--docs) page.',
+          'A divider inside a `Command` list — a plain line, or a labeled rule with an eyebrow caption when given a `label`. Like groups it hides while a search narrows the list; `alwaysRender` opts out. The filtering API lives on the [`UI/Command`](?path=/docs/ui-command--docs) page.',
       },
     },
   },

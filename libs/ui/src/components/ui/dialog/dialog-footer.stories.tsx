@@ -30,7 +30,7 @@ const meta: Meta<typeof DialogFooter> = {
       source: { type: 'code' },
       description: {
         component:
-          'The action bar of a **`Dialog`** (tinted band, reversed column → row at `sm`). `showCloseButton` appends a default "Close" button (a `DialogClose`) after your own actions. The root open/modal API lives on the [`UI/Dialog`](?path=/docs/ui-dialog--docs) page.',
+          'The action bar of a `Dialog` — a tinted band that stacks its buttons on small screens and rows them from `sm` up. `showCloseButton` appends a default Close after your own actions. The open/modal API lives on the [`UI/Dialog`](?path=/docs/ui-dialog--docs) page.',
       },
     },
   },

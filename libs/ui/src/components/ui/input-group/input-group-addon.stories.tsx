@@ -24,7 +24,7 @@ const meta: Meta<typeof InputGroupAddon> = {
       source: { type: 'code' },
       description: {
         component:
-          'An adornment slot of an **`InputGroup`** — `align` places it `inline-start`/`inline-end` beside the control, or `block-start`/`block-end` as a toolbar above/below (the group then stacks vertically). The group-shell API lives on the [`UI/InputGroup`](?path=/docs/ui-inputgroup--docs) page.',
+          'An adornment slot of an `InputGroup` — `align` places it beside the control (`inline-start`/`-end`) or as a toolbar above/below it (`block-start`/`-end`). The group-shell API lives on the [`UI/InputGroup`](?path=/docs/ui-inputgroup--docs) page.',
       },
     },
   },

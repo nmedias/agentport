@@ -28,7 +28,7 @@ const meta: Meta<typeof SelectContent> = {
       source: { type: 'code' },
       description: {
         component:
-          'The raised dropdown of a **`Select`** (Portal, mounts on open) — `position` `item-aligned` overlaps the selected item onto the trigger, `popper` anchors below/above; `align` applies to popper. Toggle and open to see the placement. The value-driven container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
+          'The dropdown of a `Select`, mounted only while open. `position` chooses the strategy: `item-aligned` overlays the selected option onto the trigger, `popper` anchors the list below/above (then `align` applies). The container API lives on the [`UI/Select`](?path=/docs/ui-select--docs) page.',
       },
     },
   },

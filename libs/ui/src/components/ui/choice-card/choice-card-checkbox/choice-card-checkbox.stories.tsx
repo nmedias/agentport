@@ -47,7 +47,7 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
       source: { type: 'code' },
       description: {
         component:
-          'A checkbox choice card — a `FieldLabel`-wrapped `Field` + `Checkbox`. The whole card tints on checked and dims on disabled via CSS `:has()`; the control carries focus + invalid (the `error` prop → `FieldError` + `data-invalid` + `aria-invalid`). See the **Default** story for the live playground + interaction test.',
+          'The checkbox form of the choice card: one binary option as a full clickable card. The card tints when checked and dims when disabled; focus and invalid stay on the control, and the `error` prop renders the message and marks the card invalid in one step.',
       },
     },
   },

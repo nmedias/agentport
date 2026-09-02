@@ -38,7 +38,7 @@ const meta: Meta<typeof TooltipContent> = {
       source: { type: 'code' },
       description: {
         component:
-          'The portalled raised chip with its diamond arrow. `side`/`sideOffset`/`align` position it relative to the trigger; the collision props (`avoidCollisions`, `collisionPadding`, `sticky`, `hideWhenDetached`) and `arrowPadding` are inherited from `TooltipPrimitive.Content`. The root API lives on the parent page: [Tooltip](?path=/docs/ui-tooltip--docs).',
+          'The chip of a `Tooltip`, with its arrow. `side`, `sideOffset` and `align` position it relative to the trigger; collision handling is inherited and keeps it on screen. The root API lives on the [`UI/Tooltip`](?path=/docs/ui-tooltip--docs) page.',
       },
     },
   },

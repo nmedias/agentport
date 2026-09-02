@@ -26,7 +26,7 @@ const meta: Meta<typeof ItemMedia> = {
       source: { type: 'code' },
       description: {
         component:
-          'The leading slot of an **`Item`** row. Its one axis is `variant`: **`icon`** auto-sizes a leading vector to 16px, **`image`** renders a fixed-size (`size-10`), cover-cropped thumbnail that shrinks with the item `size`, and **`default`** is a bare slot for anything else. Always lives inside an `Item` — the row API is documented on the [`UI/Item`](?path=/docs/ui-item--docs) page.',
+          'The leading slot of an `Item` row. `variant` sets the kind: `icon` auto-sizes a leading vector, `image` renders a fixed, cover-cropped thumbnail that scales with the item `size`, and `default` is a bare slot for anything else. The row API lives on the [`UI/Item`](?path=/docs/ui-item--docs) page.',
       },
     },
   },
