@@ -135,7 +135,7 @@ open:
     cva:
       badgeVariants: { variant: [default, secondary, destructive, outline, ghost, link], defaults: {variant: default} }
   figma:
-    section: { name: "Badge", id: "3687:1016" }
+    section: { name: "Badge", id: "8113:11356" }
     set: { name: "Badge", id: "3697:1016" }
     members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
     slots: { icon: "icon#3697:0" }                  # leading-icon slot; default 12px check vector, empty → text only
@@ -169,7 +169,7 @@ open:
     cva:
       buttonVariants: { variant: [default, destructive, outline, secondary, ghost, link], size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg], defaults: {variant: default, size: default} }
   figma:
-    section: { name: "Button", id: "3126:3" }
+    section: { name: "Button", id: "8109:2928" }
     base_section: { name: "Button · Base", id: "3145:2" }
     set: { name: "Button", id: "3164:312" }       # 220-member matrix variant × size × state
     base: { name: ".Button/Base", id: "3159:12" } # decoupled base set (surface / radius / padding + state-layer RECTANGLE)
@@ -211,9 +211,10 @@ open:
     specs: [input.spec.tsx]
     cva: none
   figma:
-    section: { name: "Input", id: "3176:302" }
+    section: { name: "Input", id: "8173:3304" }
     set: { name: "Input", id: "3177:302" }
     axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # no CVA in code
+    properties: "placeholder#3763:0 (text) · value#3763:7 (text) · filled#3763:14 (bool → value.visible)"
     focus_member: "3176:305"   # the canonical focus-glow recipe other sets copy verbatim
     focus_invalid_member: "3692:1249"   # the canonical focus-invalid recipe (destructive border + destructive/20 glow)
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md, space-xs]
@@ -226,6 +227,9 @@ open:
     - "Focus border-ring + ring-ring/50 ring-[3px]; invalid border-destructive + ring-destructive/20 (focus-gated: ring width only from focus-visible). dark: removed."
   forks:
     - "focus-invalid is a Figma member only — code composes it from focus-visible: + aria-invalid:."
+  figma_mechanics:
+    - "The member holds two absolutely coincident TEXT layers (placeholder, value) in the same box. `filled` binds value.visible ONLY — Figma cannot negate a boolean, so switching it on stacks the value ON TOP of the placeholder instead of replacing it."
+    - "`value` is hidden in ALL six variants, so state=filled currently renders identically to state=default. Reaching the filled look needs the boolean on an instance, not the variant."
   a11y:
     - "The invalid state is driven by aria-invalid on the element (no prop); Field / FieldError supply it in composition."
   run_notes: [agent-runs/component-sync/2026-06-17-input/]
@@ -244,7 +248,7 @@ open:
     specs: [textarea.spec.tsx]
     cva: none
   figma:
-    section: { name: "Textarea", id: "3487:674" }
+    section: { name: "Textarea", id: "8178:3404" }
     set: { name: "Textarea", id: "3488:684" }
     axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # no CVA; sibling of Input
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md]
@@ -280,7 +284,7 @@ open:
       inputGroupAddonVariants: { align: [inline-start, inline-end, block-start, block-end], defaults: {align: inline-start} }
       inputGroupButtonVariants: { size: [xs, sm, icon-xs, icon-sm], defaults: {size: xs} }
   figma:
-    section: { name: "Input Group", id: "3519:590" }
+    section: { name: "InputGroup", id: "8180:3500" }
     addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start, inline-end, block-start, block-end]", slot: content }
     button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs, sm, icon-xs, icon-sm]",
               nests: "ghost .Button instance per size (xs → xs, sm → default, icon-xs → icon-xs, icon-sm → icon); Base radius → corner-sm on xs + icon-xs",
@@ -325,7 +329,7 @@ open:
     cva:
       kbdVariants: { emphasis: [high, low], defaults: {emphasis: high} }
   figma:
-    section: { name: "Kbd", id: "3215:302" }
+    section: { name: "Kbd", id: "8115:11474" }
     set: { name: "Kbd", id: "3217:308" }             # 2 axes content × emphasis = 4 members
     members:
       "content=text, emphasis=high": "3217:302"      # defaultVariant
@@ -360,7 +364,7 @@ open:
     specs: [breadcrumb.spec.tsx]
     cva: none
   figma:
-    section: { name: "Breadcrumb", id: "3249:302" }
+    section: { name: "Breadcrumb", id: "8406:5650" }
     composition: { name: "Breadcrumb", id: "3254:302" }        # items gap Space/space-sm (6px)
     segment_set: { name: "Segment", id: "3250:308" }
     segment_members: { "state=link": "3250:302", "state=link-hover": "3250:304", "state=page": "3250:306" }
@@ -399,7 +403,7 @@ open:
       commandVariants: { variant: [default, palette], defaults: {variant: default} }
     variants: "variant: default | palette — ONLY on the Command root / CommandDialog (cva); Input / List / Group / Separator inherit via the module-internal CommandVariantContext (ToggleGroup idiom); data-variant on the root. CommandSeparator additionally takes a label prop (labeled rule, role=presentation div; same hide-on-search contract as the line form via useCommandState + alwaysRender)."
   figma:
-    section: { name: "Command", id: "3555:679" }
+    section: { name: "Command", id: "8373:5402" }
     item:
       set: { name: "CommandItem", id: "3559:2" }
       axis: { state: [default, selected, disabled, checked] }
@@ -476,7 +480,7 @@ open:
     specs: [dialog.spec.tsx]
     cva: none
   figma:
-    section: { name: "Dialog", id: "3589:788" }
+    section: { name: "Dialog", id: "8362:5227" }
     composition:
       name: "Dialog"
       id: "3592:794"
@@ -525,7 +529,7 @@ open:
     specs: [separator.spec.tsx]
     cva: none
   figma:
-    section: { name: "Separator", id: "3675:1016" }
+    section: { name: "Separator", id: "8417:5749" }
     set: { name: "Separator", id: "3676:1018" }
     members: { "orientation=horizontal": "3676:1016", "orientation=vertical": "3676:1017" }
     axis: { orientation: [horizontal, vertical] }   # static / non-interactive → content axis, NO CVA
@@ -554,7 +558,7 @@ open:
     specs: [label.spec.tsx]
     cva: none
   figma:
-    section: { name: "Label", id: "3733:1022" }
+    section: { name: "Label", id: "8205:3850" }
     set: { name: "Label", id: "3735:1024" }
     members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
     props: "label (children)#3735:0 (TEXT, default '{Label}' — children-driven text props use the (children) suffix + {…} default) · state (VARIANT [default, disabled])"
@@ -588,7 +592,7 @@ open:
       fieldVariants: { orientation: [vertical, horizontal, responsive], defaults: {orientation: vertical} }
     code_only_parts: [FieldTitle, "orientation=responsive"]   # responsive = container query only (a wrap proxy is not a faithful Figma model)
   figma:
-    section: { name: "Field", id: "3710:1016" }
+    section: { name: "Field", id: "8211:3909" }
     set: { name: "Field", id: "3716:1020" }
     members:
       "orientation=vertical, invalid=false, controlPosition=trailing":   "3712:1016"
@@ -637,7 +641,7 @@ open:
     specs: [field.spec.tsx]
     cva: none
   figma:
-    section: { name: "Field Legend", id: "3904:1246" }
+    section: { name: "FieldLegend", id: "8219:4046" }
     set: { name: "FieldLegend", id: "3909:1246" }
     members: { "variant=legend": "3908:1246", "variant=label": "3908:1248" }
     props: "legend (children)#3909:2 (TEXT, default '{Legend}'); variant (VARIANT [legend, label])"
@@ -664,7 +668,7 @@ open:
     specs: [field.spec.tsx]
     cva: none
   figma:
-    section: { name: "Field Set & Group", id: "3738:1026" }
+    section: { name: "FieldSet", id: "8235:4102" }
     component: { name: "FieldSet", id: "3739:1026" }   # single component (no variant axis)
     slots: { legend: "legend#3741:0 (Title-text default 'Address')" }
     nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width)"
@@ -693,7 +697,7 @@ open:
       fieldGroupVariants: { orientation: [vertical, horizontal], defaults: {orientation: vertical} }
     props: { orientation: [vertical, horizontal] }   # fieldGroupVariants — DS extension over stock shadcn (which only knows Field orientation)
   figma:
-    section: { name: "Field Set & Group", id: "3738:1026" }
+    section: { name: "FieldGroup", id: "8241:4228" }
     set: { name: "FieldGroup", id: "4285:1997" }
     members:
       "orientation=vertical":   "3742:1044"          # default variant
@@ -724,7 +728,7 @@ open:
     specs: [checkbox.spec.tsx]
     cva: none
   figma:
-    section: { name: "Checkbox", id: "3791:1184" }
+    section: { name: "Checkbox", id: "8079:2759" }
     set: { name: "Checkbox", id: "3795:1184" }   # 15 members, 5×3 WRAP grid
     members:   # row checked=off, then checked=on, then checked=indeterminate
       "checked=off, state=default":          "3792:1184"
@@ -780,7 +784,7 @@ open:
     specs: [switch.spec.tsx]
     cva: none
   figma:
-    section: { name: "Switch", id: "3835:1193" }
+    section: { name: "Switch", id: "8284:4385" }
     set: { name: "Switch", id: "3839:2" }                 # 3 axes size × checked × state, 20 members, 5×4 WRAP grid
     members:   # per size: row checked=off, then checked=on
       "size=default, checked=off, state=default":       "3837:2"
@@ -838,7 +842,7 @@ open:
     specs: [radio-group.spec.tsx]
     cva: none
   figma:
-    section: { name: "RadioGroup", id: "3849:1206" }
+    section: { name: "RadioGroup", id: "8298:4626" }
     set: { name: "RadioGroupItem", id: "3852:1206" }       # only the item is a set; 2 axes checked × state, 10 members, 5×2 WRAP
     members:   # row checked=off, then checked=on
       "checked=off, state=default":       "3850:1206"
@@ -894,7 +898,7 @@ open:
     cva: none
     internal: "ChoiceCardShell (presentational, NOT exported) + useFieldId (hook). Nested subfolders per wrapper + choice-card-shell/ + use-field-id.ts, each with its own index.ts barrel"
   figma:
-    section: { name: "Choice Card", id: "4107:1526" }
+    section: { name: "ChoiceCard", id: "8306:4777" }
     checkbox:
       set: { name: "ChoiceCardCheckbox", id: "4112:1638" }
       members:
@@ -950,7 +954,7 @@ open:
     specs: [select.spec.tsx]
     cva: none
   figma:
-    section: { name: "Select", id: "4307:1997" }
+    section: { name: "Select", id: "8189:3667" }
     trigger:
       set: { name: "SelectTrigger", id: "4308:2029" }
       axis: { size: [default, sm], state: [default, focus, disabled, invalid, focus-invalid] }    # 10 members
@@ -1030,7 +1034,7 @@ open:
     specs: [slider.spec.tsx]
     cva: none
   figma:
-    section: { name: "Slider", id: "4348:2225" }
+    section: { name: "Slider", id: "8291:4516" }
     set: { name: "Slider", id: "4351:2225" }       # 12 members, 3 axes, 4×3 manual grid (mixed member sizes → no WRAP)
     members:
       "orientation=horizontal, thumbs=single, state=default":  "4350:2225"
@@ -1081,7 +1085,7 @@ open:
     specs: [popover.spec.tsx]
     cva: none
   figma:
-    section: { name: "Popover", id: "4365:2253" }   # 2278×2585 — encloses the floating panels (see root.structure)
+    section: { name: "Popover", id: "8351:5085" }
     build_frame: { name: "Build", id: "4390:2364" } # white vertical auto-layout frame (HUG, itemSpacing space-2xl, padding space-xl) INSIDE the section — holds the masters + root set + usage examples (a Section is not an auto-layout container)
     content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, NO state / variant set (data-[side] = motion, not a DS state)
     slot: { content: "content#4365:0" }                    # the open region; default = nested PopoverHeader instance
@@ -1129,7 +1133,7 @@ open:
     specs: [tooltip.spec.tsx]
     cva: none
   figma:
-    section: { name: "Tooltip", id: "4381:2356" }       # headline 4381:2357
+    section: { name: "Tooltip", id: "8337:4947" }
     component: { name: "Tooltip", id: "4382:2356" }      # the content-chip component (no variant set — single member)
     slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label style, dialog-ink)" }
     arrow: { name: "arrow", id: "4414:2493" }            # down-pointing TRIANGLE: white fill (dialog-fill) + border stroke ONLY on the 2 slanted edges (base open = joins the chip); base overlaps 1px into the chip → connected pointer, no seam. showArrow#4418:0 toggles it (per-side member arrow swap in Tooltip Root)
@@ -1180,7 +1184,7 @@ open:
       itemVariants: { variant: [default, outline, muted], size: [default, sm, xs], defaults: {variant: default, size: default} }
       itemMediaVariants: { variant: [default, icon, image], defaults: {variant: default} }
   figma:
-    section: { name: "Item", id: "4494:2471" }          # headline 4494:2472
+    section: { name: "Item", id: "8439:6008" }
     set: { name: "Item", id: "4498:2551" }              # 9 members (variant × size); master = outline/default 4495:2471
     axis: { variant: [default, outline, muted], size: [default, sm, xs] }
     props: "media#4498:0 (SLOT, default = nested .ItemMedia instance variant=icon) · actions#4498:1 (SLOT, default chevron muted) · title#4499:0 (TEXT {Title}, Label, bound to ink) · description#4499:10 (TEXT {Description}, Body / muted)"
@@ -1226,7 +1230,7 @@ open:
     specs: [table.spec.tsx]
     cva: none
   figma:
-    section: { name: "Table", id: "4514:2597" }
+    section: { name: "Table", id: "8427:5788" }
     head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }
     cell: { set: "TableCell", id: "4515:2610", axis: "align [left, center, right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — a cell also takes components (Checkbox / Badge / Button …); the text default sits IN the slot, swappable; Body + ink, p-md" }
     row: { set: "TableRow", id: "4520:2621", axis: "state [default, hover, selected]", slot: "cells#4520:3 (empty)", notes: "bottom border → border; hover muted-fill/50; selected accent-fill; minHeight 37" }
