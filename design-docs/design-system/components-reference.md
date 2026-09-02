@@ -264,6 +264,7 @@ open:
     - "The invalid state is driven by aria-invalid on the element (no prop)."
   figma_mechanics:
     - "Text top-aligned (counterAxis MIN), no truncation."
+    - "Same double-text construction as Input: placeholder#3768:0 and value#3768:7 are coincident TEXT layers, filled#3768:14 binds value.visible only — it stacks instead of swapping, and value is off in all six variants."
   run_notes: [agent-runs/component-port/2026-06-09-textarea/]
 
 - name: InputGroup
@@ -969,7 +970,7 @@ open:
         "size=sm, state=disabled":           "4308:2021"
         "size=sm, state=invalid":            "4308:2025"
         "size=sm, state=focus-invalid":      "4326:2367"
-      props: "value#4310:0 (TEXT '{Value}') + trailing chevron VECTOR (RiArrowDownSLine, muted). w=240 FIXED, h=32 / 28."
+      props: "placeholder#4388:0 (TEXT '{Placeholder}') · value#4310:0 (TEXT '{Value}') · filles#4388:11 (bool → value.visible; NAME IS A TYPO for 'filled') + trailing chevron VECTOR (RiArrowDownSLine, muted). w=240 FIXED, h=32 / 28."
     item:
       set: { name: "SelectItem", id: "4313:2046" }
       axis: { state: [default, focus, disabled], selected: [false, true] }          # 6 members
@@ -1018,6 +1019,7 @@ open:
     - "SelectItem check: Figma = trailing layout vector (pr-md / right-2), code = absolute right-md + pr-3xl clearance (shadcn idiom) — visually equivalent, NOT a delta."
   figma_mechanics:
     - "Example headlines follow the sibling canon (Hanken Grotesk Regular 13, muted-ink)."
+    - "The trigger carries the Input double-text construction (two coincident TEXT layers named 'value', one bound to placeholder#4388:0, the other to value#4310:0 + filles#4388:11). The boolean name is misspelled — renaming it breaks every existing override, so it stands until a deliberate rename."
   run_notes: [agent-runs/component-port/2026-06-19-select/]
 
 - name: Slider
