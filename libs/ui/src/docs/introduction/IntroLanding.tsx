@@ -4,6 +4,8 @@ import { RiArrowRightLine } from '@remixicon/react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { FIGMA_LIBRARY_URL, FigmaMark } from '../FigmaMark';
+
 /*
   Agentport DS — Introduction landing (code-only, light-mode).
 
@@ -181,6 +183,14 @@ function Hero() {
         <p className="mt-2xl  text-format-title font-[500]">
           shadcn/ui, re-clothed in its own token layer through an agent-driven Figma ↔ code pipeline.
         </p>
+
+        {/* the source of truth for the component sets — opens the Figma library */}
+        <Button asChild variant="outline" className="mt-2xl">
+          <a href={FIGMA_LIBRARY_URL} target="_blank" rel="noreferrer">
+            <FigmaMark />
+            View Figma Library
+          </a>
+        </Button>
 
 
 
