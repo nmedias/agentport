@@ -44,6 +44,10 @@ const meta: Meta<typeof Breadcrumb> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8406-5650',
+    },
     docs: {
       source: { type: 'code' },
       description: {

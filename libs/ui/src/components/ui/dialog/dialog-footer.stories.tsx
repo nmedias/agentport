@@ -26,6 +26,10 @@ const meta: Meta<typeof DialogFooter> = {
     showCloseButton: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8362-5227',
+    },
     docs: {
       source: { type: 'code' },
       description: {

@@ -62,6 +62,10 @@ const meta: Meta<typeof InputGroup> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8180-3500',
+    },
     docs: {
       source: { type: 'code' },
       description: {

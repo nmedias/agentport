@@ -32,6 +32,10 @@ const meta: Meta<typeof Label> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8205-3850',
+    },
     docs: {
       source: { type: 'code' },
       description: {

@@ -43,6 +43,10 @@ const meta: Meta<typeof ChoiceCardCheckbox> = {
     id: { control: false },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8306-4777',
+    },
     docs: {
       source: { type: 'code' },
       description: {

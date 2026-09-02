@@ -15,6 +15,10 @@ const meta: Meta<typeof SelectValue> = {
     placeholder: { control: 'text', table: { defaultValue: { summary: '—' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8189-3667',
+    },
     docs: {
       source: { type: 'code' },
       description: {

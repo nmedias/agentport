@@ -63,6 +63,10 @@ const meta: Meta<typeof Item> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8439-6008',
+    },
     docs: {
       source: { type: 'code' },
       description: {

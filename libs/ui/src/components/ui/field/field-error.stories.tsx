@@ -20,6 +20,10 @@ const meta: Meta<typeof FieldError> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8211-3909',
+    },
     docs: {
       source: { type: 'code' },
       description: {

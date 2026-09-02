@@ -44,6 +44,10 @@ const meta: Meta<typeof Table> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8427-5788',
+    },
     docs: {
       source: { type: 'code' },
       description: {

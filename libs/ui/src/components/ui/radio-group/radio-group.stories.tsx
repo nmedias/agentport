@@ -35,6 +35,10 @@ const meta: Meta<typeof RadioGroup> = {
     required: { table: { defaultValue: { summary: 'false' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8298-4626',
+    },
     docs: {
       source: { type: 'code' },
       description: {

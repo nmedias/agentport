@@ -40,6 +40,10 @@ const meta: Meta<typeof Select> = {
     disabled: { table: { defaultValue: { summary: 'false' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8189-3667',
+    },
     docs: {
       source: { type: 'code' },
       description: {

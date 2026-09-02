@@ -1,4 +1,8 @@
+import React from 'react';
 import type { Preview } from '@storybook/react-vite';
+import { Controls, Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks';
+
+import { ViewInFigma } from './blocks/view-in-figma';
 import '../src/styles/globals.css';
 
 const preview: Preview = {
@@ -22,6 +26,21 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+    },
+    docs: {
+      // Default Autodocs template + ViewInFigma directly under the component
+      // description (reads `parameters.design.url` from the stories meta).
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description of="meta" />
+          <ViewInFigma />
+          <Primary />
+          <Controls />
+          <Stories />
+        </>
+      ),
     },
     // addon-a11y runs axe-core on every story. test mode drives the Vitest story tests:
     //   'todo'  → violations reported (UI panel + test annotation), but DON'T fail the run

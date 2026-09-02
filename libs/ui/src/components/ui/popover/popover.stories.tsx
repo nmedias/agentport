@@ -42,6 +42,10 @@ const meta: Meta<typeof Popover> = {
   // ArgsTable + controls from the component; no hand-authored argTypes. PopoverContent's own props
   // (side/align/sideOffset/avoidCollisions/…) are documented on its dedicated page, also via docgen.
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8351-5085',
+    },
     docs: {
       source: { type: 'code' },
       description: {

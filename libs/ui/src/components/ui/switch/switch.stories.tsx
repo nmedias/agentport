@@ -42,6 +42,10 @@ const meta: Meta<typeof Switch> = {
     value: { table: { defaultValue: { summary: '"on"' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8284-4385',
+    },
     docs: {
       source: { type: 'code' },
       description: {

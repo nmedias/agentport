@@ -60,6 +60,10 @@ const meta: Meta<typeof Input> = {
     onChange: { control: false },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8173-3304',
+    },
     docs: {
       source: { type: 'code' },
       description: {

@@ -19,6 +19,10 @@ const meta: Meta<typeof FieldLegend> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8219-4046',
+    },
     docs: {
       source: { type: 'code' },
       description: {

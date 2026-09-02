@@ -91,6 +91,10 @@ const meta: Meta<typeof CommandDialog> = {
     onOpenChange: { control: false },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8373-5402',
+    },
     docs: {
       source: { type: 'code' },
       description: {

@@ -50,6 +50,10 @@ const meta: Meta<typeof Button> = {
     },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8109-2928',
+    },
     docs: {
       source: { type: 'code' },
       description: {

@@ -46,6 +46,10 @@ const meta: Meta<typeof Dialog> = {
     modal: { table: { defaultValue: { summary: 'true' } } },
   },
   parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/?node-id=8362-5227',
+    },
     docs: {
       source: { type: 'code' },
       description: {
