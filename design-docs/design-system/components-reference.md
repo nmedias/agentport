@@ -139,6 +139,7 @@ open:
     set: { name: "Badge", id: "3697:1016" }
     members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
     slots: { icon: "icon#3697:0" }                  # leading-icon slot; default 12px check vector, empty → text only
+    text: { label: "label (children)#3692:28" }     # root TEXT property, default "{Label}"
     axis: { variant: [default, secondary, destructive, outline, ghost, link] }
     vars: [ink, border, corner-full, destructive, destructive-ink, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xs]
     styles: [text:Label/md]
@@ -173,6 +174,11 @@ open:
     base_section: { name: "Button · Base", id: "3145:2" }
     set: { name: "Button", id: "3164:312" }       # 220-member matrix variant × size × state
     base: { name: ".Button/Base", id: "3159:12" } # decoupled base set (surface / radius / padding + state-layer RECTANGLE)
+    base_props:                                   # the Button set exposes ONLY variant / size / state — text + icon live HERE
+      label: "label (children)#3692:35"           # TEXT, default "{Label}"
+      icon_slot: "Icon#3159:0"                    # SLOT
+      icon_only_swap: "Button Icon (Only)#3516:10"   # INSTANCE_SWAP, default .Button/Base/.Button Icon 3516:1146
+      size: "VARIANT [default, sm, lg, icon, xs, icon-xs, icon-sm, icon-lg] — defaultValue is `lg`, not `default`"
     axis: { variant: [default, destructive, outline, secondary, ghost, link],
             size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg],
             state: [default, hover, active, focus, disabled] }
@@ -190,6 +196,8 @@ open:
     - "The state axis [default, hover, active, focus, disabled] is a Figma model of CSS states — code has no state prop; the icon* size keys are internal cva keys behind the icon boolean."
   figma_mechanics:
     - "hover / active are driven by a state-layer overlay on .Button/Base → code uses the /opacity idiom (bg-primary-fill/90 etc.)."
+    - "The state-layer RECTANGLE exists in EVERY state member and stays visible:true — only its opacity carries the state (0 at rest), so it cannot be pinned in an anatomy diagram at state=default."
+    - "The icon* sizes of .Button/Base contain no {Label} TEXT node — the label is REPLACED by the `Button Icon (Only)` INSTANCE_SWAP, so switching an existing instance to size=icon silently drops its text."
   a11y:
     - "Icon-only (icon boolean) requires aria-label / aria-labelledby at the type level."
   open:
@@ -338,6 +346,7 @@ open:
       "content=text, emphasis=low":  "3428:1385"
       "content=icon, emphasis=low":  "3428:1387"
     slots: { property: "icon#3217:1", nodes: { high: "3217:305", low: "3428:1388" } }  # 12px vector
+    text: { label: "label (children)#3692:44" }   # root TEXT property, default "{Label}"
     axis: { content: [text, icon], emphasis: [high, low] }   # content is children-driven; emphasis = code prop (default high)
     vars: [corner-sm, inverse-fill, inverse-ink, muted-fill, muted-ink, space-xs]
     styles: [text:Kbd]
@@ -347,6 +356,8 @@ open:
   deviations:
     - "emphasis=high (default) = inverted dark keycap (bg-inverse-fill + text-inverse-ink); emphasis=low = quiet keycap (bg-muted-fill + text-muted-ink). text-format-kbd (Geist Mono); gap-xs / px-xs; corner-sm."
     - "Nova Kbd is metrically identical to new-york (no density change)."
+  figma_mechanics:
+    - "content is an EXCHANGE, not an addition: content=text members contain only the {Label} TEXT node, content=icon members only the `icon` SLOT. A cap never shows both, and content=icon renders empty until the slot is filled."
   divergences:
     - "Tooltip-context overrides (in-data-[slot=tooltip-content]: bg-muted-fill / text-ink) are code-only stock carry-over with no Figma binding."
   run_notes: [agent-runs/component-sync/2026-06-09-kbd/, agent-runs/component-sync/2026-06-17-kbd/]
@@ -366,8 +377,8 @@ open:
     cva: none
   figma:
     section: { name: "Breadcrumb", id: "8406:5650" }
-    composition: { name: "Breadcrumb", id: "3254:302" }        # items gap Space/space-sm (6px)
-    segment_set: { name: "Segment", id: "3250:308" }
+    composition: { name: "Breadcrumb", id: "3254:302" }        # plain COMPONENT; items gap Space/space-sm (6px); ONLY property = slot items#3254:0
+    segment_set: { name: "Segment", id: "3250:308" }           # text prop Item (children)#3253:0, default "{Item}"; .Separator + Ellipsis have no props
     segment_members: { "state=link": "3250:302", "state=link-hover": "3250:304", "state=page": "3250:306" }
     separator: { name: ".Separator", id: "3251:302" }            # icon 14px → size-3.5
     ellipsis: { name: "Ellipsis", id: "3251:305" }              # 20×20, icon 16px → size-4
@@ -380,6 +391,9 @@ open:
   deviations:
     - "Colour: link rest text-muted, link-hover + page text-ink; separator / ellipsis icons inherit currentColor (no explicit class). Body → text-format-body."
     - "Gaps: item gap-xs (4px), list gap-sm (6px); ellipsis size-5; break-words → v4 wrap-break-word. Nova density decided in code and pushed to Figma."
+  figma_mechanics:
+    - "In Figma the root has no list node — it is one items SLOT holding Segment instances (state link | link-hover | page) alternating with .Separator chevrons; Ellipsis is an optional extra part."
+    - "Doc hero (8407:5672 in section 8406:5650) fills the items slot with Segment[link] · .Separator · Segment[link] · .Separator · Segment[page] — no Ellipsis instance is present, although description + a11y mention it; the current page is the same Segment set on state=page, not a separate component."
   a11y:
     - "Breadcrumb = <nav aria-label='breadcrumb'>; BreadcrumbPage = role=link + aria-current=page + aria-disabled; separator / ellipsis are role=presentation + aria-hidden, the ellipsis carries a visually hidden 'More' label."
   forks:
@@ -408,7 +422,7 @@ open:
     item:
       set: { name: "CommandItem", id: "3559:2" }
       axis: { state: [default, selected, disabled, checked] }
-      props: "icon#3559:0 (INSTANCE_SWAP → Calendar) · showIcon#3559:5 (bool) · label#3559:10 (text) · shortcut#3559:15 (bool) · shortcutText#3559:20 (text)"
+      props: "icon#3559:0 (INSTANCE_SWAP → Calendar) · showIcon#3559:5 (bool) · label (children)#3559:10 (text) · shortcut#3559:15 (bool) · shortcut (children)#3559:20 (text)"   # the (children) suffix is part of the live key — setProperties needs the exact string
       members: { default: "3558:2", selected: "3558:7", disabled: "3558:12", checked: "3558:17" }
     input:
       set: { name: "CommandInput", id: "3639:2" }
@@ -424,7 +438,7 @@ open:
       members: { default: "3564:2", labeled: "3653:5" }
       default: "1px line (border); full-bleed comes from the p-0 panel of the palette composition"
       labeled: "labeled rule: eyebrow label (textCase UPPER, muted) + trailing line (h1 fill, border) · gap-md px-xl pt-lg pb-sm — for free / flat compositions; CommandGroup[palette] still draws its own heading (cmdk auto-hide stays with the group route)"
-    empty: { name: "CommandGroup/CommandEmpty", id: "3564:3", prop: "message (text)" }
+    empty: { name: "CommandGroup/CommandEmpty", id: "3564:3", prop: "message (text)" }   # 3564:3 itself has NO component properties — the message TEXT prop is declared on the CommandGroup set 3640:9 as message#3875:0 (default "No results found.")
     group:
       set: { name: "CommandGroup", id: "3640:9" }
       axis: { variant: [default, palette] }
@@ -485,8 +499,9 @@ open:
     composition:
       name: "Dialog"
       id: "3592:794"
-      props: "title#3593:2 (text) · description#3593:3 (text) · showCloseButton#3593:4 · showFooter#3593:5 · showBody#3606:0 (bools)"
-      slots: { body: "3609:890 (empty; wrapper body-region visible ↔ showBody)", footer: "3593:795 (default = DialogFooter instance 3593:796)" }
+      props: "title (children)#3593:2 (text) · description (children)#3593:3 (text) · showCloseButton#3593:4 · showFooter#3593:5 · showBody#3606:0 (bools)"   # the (children) suffix is part of the live key — setProperties needs the exact string
+      slots: { body: "body#3609:0 (node 3609:890, empty; wrapper body-region visible ↔ showBody#3606:0)" }
+      dangling: "footer#3593:1 is a declared SLOT property with NO layer bound to it — the footer is a plain FRAME 3593:795 (visible ↔ showFooter#3593:5) holding a plain DialogFooter instance 3593:796; the real slot is DialogFooter's actions#3591:0. Delete the property or bind it."
       nests: "ghost icon-sm .Button instance 3593:806 as Close (ABSOLUTE top-right, icon via swapComponent → .Dialog/Icon/Close)"
     footer: { name: "DialogFooter", id: "3591:788", slot: "actions#3591:789 (default: Cancel outline + Save default .Button instances)" }
     overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, alias → neutral/900) × layer opacity scrim-opacity (3618:3, alias → opacity/10) + BACKGROUND_BLUR 4" }
@@ -510,6 +525,7 @@ open:
   figma_mechanics:
     - "Never bind visibility on a SLOT directly (it degrades to a FRAME) → a wrapper frame carries the showBody boolean."
     - "Scrim is its own DialogOverlay component; the panel composition stays scrim-free."
+    - "The Dialog composition declares a footer#3593:1 SLOT that is bound to nothing — do not try to fill it; footer content goes into the nested DialogFooter's actions#3591:0."
   a11y:
     - "Radix wires aria-labelledby / aria-describedby to DialogTitle / DialogDescription — every dialog needs a DialogTitle; the close button carries a visually hidden 'Close' label."
   divergences:
@@ -539,6 +555,8 @@ open:
   skill: /shadcn-component-port; /component-sync
   description: "A hairline divider, horizontal or vertical. decorative decides whether it is announced as a semantic separator or hidden from assistive tech — the line itself never changes."
   anatomy: "Static, non-interactive element (Radix Separator.Root)."
+  figma_mechanics:
+    - "Both members are leaf nodes — the component IS the 1px rule, there is no child line node to restyle."
   a11y:
     - "decorative=true (default) → role=none / aria-hidden; decorative=false → role=separator + aria-orientation."
   deviations:
@@ -622,6 +640,7 @@ open:
   figma_mechanics:
     - "The four slots merge set-level (consistent names). Show description / Show error are bound on WRAPPER frames — visible is never bound on a slot directly (it degrades to a frame); a wrapper collapses the remaining height cleanly."
     - "clone() silently degrades a SLOT to a FRAME (drops slotContentId) — clone-derived members need their slots restored."
+    - "The error slot + Show error#3692:20 are live only on the three invalid=true members (3713:1017, 3715:1019, 3897:1249); on invalid=false the error-wrapper frame does not exist at all, so Show error is a no-op there. An invalid=false member has Root + 3 slots, not 4."
   a11y:
     - "Field renders role=group; a <label for> cannot name a control through it (see ChoiceCard aria-labelledby)."
   divergences:
@@ -671,7 +690,8 @@ open:
   figma:
     section: { name: "FieldSet", id: "8235:4102" }
     component: { name: "FieldSet", id: "3739:1026" }   # single component (no variant axis)
-    slots: { legend: "legend#3741:0 (Title-text default 'Address')" }
+    slots: { Slot: "Slot#3692:26 (node 3692:1435)" }   # the ONLY property of the component
+    legend: "nested real .FieldLegend instance 3917:1254 — NOT a slot and not a text property (default 'Address')"
     nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width)"
     axis: { }   # single component, no variant axis
     vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
@@ -680,6 +700,8 @@ open:
   description: "Groups related Fields under a caption as a semantic <fieldset> — a pure structure part with no surface of its own."
   anatomy: "Surface-less composite: VERTICAL auto-layout gap-xl (bound), w FIXED / h HUG, NO fill / stroke; legend = slot with a title-text default. Code counterpart = <fieldset> flex-col gap-xl + FieldLegend."
   deps: [Field, FieldLegend]
+  figma_mechanics:
+    - "3739:1026 is a plain COMPONENT whose parent frame is named `variants plate (shelf)` — the shelf is the doc container, not a component set; do not look for a variant picker on it."
   run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
 
 - name: FieldGroup
@@ -704,6 +726,7 @@ open:
       "orientation=vertical":   "3742:1044"          # default variant
       "orientation=horizontal": "4280:73"
     axis: { orientation: [vertical, horizontal] }
+    slots: { Slot: "Slot#4285:0" }
     nests: "slot (VERTICAL gap-16) → Field → .Separator → Field. vertical: Separator orientation=horizontal (3742:1055), Fields FILL width. horizontal: slot HORIZONTAL, Fields HUG side by side, Separator orientation=vertical + layoutSizingVertical FILL (vertical divider, full row height)."
     vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
@@ -747,7 +770,7 @@ open:
       "checked=indeterminate, state=disabled":      "4304:76"
       "checked=indeterminate, state=invalid":       "4304:79"   # dash destructive-ink
       "checked=indeterminate, state=focus-invalid": "4304:82"
-    indicator: { glyph: "checked=on → RiCheckLine VECTOR (primary-ink); checked=indeterminate → RiSubtractLine dash VECTOR (M5 11H19V13H5z ×14/24, centred; primary-ink, destructive-ink on invalid)" }
+    indicator: { glyph: "checked=on → indicator FRAME 14×14 › RiCheckLine VECTOR 10×7 (primary-ink); checked=indeterminate → indicator FRAME › RiSubtractLine dash VECTOR 8×1 (M5 11H19V13H5z ×14/24, centred; primary-ink, destructive-ink on invalid); checked=off → NO children at all — the indicator frame is absent, not hidden" }
     axis: { checked: [off, on, indeterminate], state: [default, focus, disabled, invalid, focus-invalid] }
     examples: { group: "Usage Examples 3822:2 (Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-trailing, checked .Checkbox)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "3932:29 (Field 4036:2, error slot)", AllStates: "3826:2" }   # all via real .Field instances
     vars: [ink, border, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
@@ -875,7 +898,8 @@ open:
     - "A bare control has no accessible name — compose it with Label / Field or pass aria-label (the stories do); invalid is driven by aria-invalid (no prop)."
   figma_mechanics:
     - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false — critical, the item is fill-less)."
-    - "The group is layout only (no set)."
+    - "The group is layout only (no set) — the doc section hero is a single RadioGroupItem, so anything describing \"the group\" describes a node that does not exist in Figma."
+    - "RadioGroupItem members are indicator FRAME 16×16 › dot ELLIPSE 8×8; the indicator wrapper is coincident with the root and is deliberately NOT a documented anatomy part."
   divergences:
     - "Radio invalid is a group error at FieldSet level (separate destructive text), not a per-field error slot."
   open:
@@ -933,6 +957,8 @@ open:
     - "title / description / error = ReactNode props (no compound / slot pattern; escape hatch = the raw Field primitives); invalid = !!error (ONE rule for data-invalid + FieldError render + aria-invalid; empty string = valid)."
     - "ChoiceCardCheckbox.checked / defaultChecked / onCheckedChange are boolean (indeterminate narrowed away): a leaf card is a binary single choice, the tri-state is a group / parent concept — no indeterminate story or Figma variant. Base Checkbox keeps indeterminate."
     - "Type trap: ComponentProps<Control> brings the HTML title attribute → Omit<…, 'title'>, otherwise ReactNode narrows to string."
+  figma_mechanics:
+    - "The card sets expose ONLY checked + state — they have no slots of their own. The label / description / control / error slots visible in the hero belong to the NESTED .Field instance, so the composition is fixed: a consumer cannot swap card content through the card's Figma properties, only by editing the nested Field instance."
   a11y:
     - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
   run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/]
@@ -1136,10 +1162,11 @@ open:
     cva: none
   figma:
     section: { name: "Tooltip", id: "8337:4947" }
-    component: { name: "Tooltip", id: "4382:2356" }      # the content-chip component (no variant set — single member)
-    slot: { name: "content", id: "4384:2356", prop: "content#4384:0", default: "{Label} TEXT (Label style, dialog-ink)" }
+    set: { name: "Tooltip", id: "4441:73" }              # the content-chip SET
+    members: { "side=top": "4382:2356", "side=bottom": "4438:73", "side=left": "4439:73", "side=right": "4439:82" }
+    slot: { name: "content", prop: "content#4441:0", default: "{Label} TEXT (Label style, dialog-ink)" }   # root-level SLOT on the set 4441:73
     arrow: { name: "arrow", id: "4414:2493" }            # down-pointing TRIANGLE: white fill (dialog-fill) + border stroke ONLY on the 2 slanted edges (base open = joins the chip); base overlaps 1px into the chip → connected pointer, no seam. showArrow#4418:0 toggles it (per-side member arrow swap in Tooltip Root)
-    axis: { content: [slot] }                            # content chip: NO variant / state axis — only the open visual; content = SLOT (open children region)
+    axis: { side: [top, bottom, left, right] }           # content chip: side axis only (no state axis); content = root SLOT (open children region)
     root:
       set: { name: "Tooltip Root", id: "4419:2781" }
       axis: { state: [closed, open], side: [top, right, bottom, left] }   # 8 members, lean (no align — tooltips centre); defaults open / top
@@ -1236,7 +1263,7 @@ open:
     head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }
     cell: { set: "TableCell", id: "4515:2610", axis: "align [left, center, right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — a cell also takes components (Checkbox / Badge / Button …); the text default sits IN the slot, swappable; Body + ink, p-md" }
     row: { set: "TableRow", id: "4520:2621", axis: "state [default, hover, selected]", slot: "cells#4520:3 (empty)", notes: "bottom border → border; hover muted-fill/50; selected accent-fill; minHeight 37" }
-    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, default = invoice interior) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: the content slot holds header + body + footer rows (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
+    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, default = invoice interior) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: the content slot holds a table frame with a header TableRow, body TableRows and a plain footer FRAME of TableCells (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
     examples: { group: "Usage Examples 4523:2635", Default: "4523:2636 (instance 4523:2638, slot default invoice + caption)", Selection: "4524:2682 (instance 4538:2802, row 2 selected)", Empty: "4524:2730 (instance 4538:2890, No results)", ComponentCells: "4529:2758 (instance 4538:2963, Checkbox + Badge)" }   # frame (instance); all = Table instances with the content slot filled
     axis: { head_align: [left, center, right], cell_align: [left, center, right], row_state: [default, hover, selected] }
     vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
@@ -1251,7 +1278,8 @@ open:
   forks:
     - "TableRow state hover is a Figma member for the CSS hover; selected = data-state=selected set by the call site — neither is a code prop."
   figma_mechanics:
-    - "Granularity Cell + Row + Table with align l / c / r: TableHead / TableCell sets (align axis, TEXT prop + content SLOT), TableRow set (state axis, cells slot built EMPTY + minHeight), Table composition (content slot holds header + body + footer rows). For a component cell: clear the text, put the component into the slot. Slot strategy: build empty, bake the demo, examples append-only."
+    - "Granularity Cell + Row + Table with align l / c / r: TableHead / TableCell sets (align axis, TEXT prop + content SLOT), TableRow set (state axis, cells slot built EMPTY + minHeight), Table composition (content slot holds a table frame: header TableRow + body TableRows + a plain footer FRAME of TableCells). For a component cell: clear the text, put the component into the slot. Slot strategy: build empty, bake the demo, examples append-only."
+    - "Table 4521:2597 is a plain COMPONENT, not a component set — it has no variant axis, only showCaption#4522:1 / caption#4522:2 / content#4537:0. Do not look for a variant picker on the Table itself; the axes live on TableHead / TableCell / TableRow."
   divergences:
     - "Footer cells stay Body in Figma; the code tfoot label weight is code-only (minor)."
   run_notes: [agent-runs/component-port/2026-06-26-table/]
