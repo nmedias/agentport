@@ -5,7 +5,7 @@ documented exception to the read-only pipeline), governed by `/figma-build-rules
 Two deliverables: **A** fix the broken section composition (finding A5), **B** model the `align`
 prop the code has but Figma didn't (finding ④). Background agent, Plugin MCP only, no detach.
 
-- File "Agentport DS" `nQSNLASjuLvgTh3we8Dp4s` · Page "Shadcn Components" `3126:2`.
+- File "Agentport DS" `nQSNLASjuLvgTh3we8Dp4s` · Page "Components" `3126:2`.
 - Figma connection: **Plugin MCP connected** (whoami = Manu, pro/expert). Figma-Console MCP (Desktop
   Bridge) was NOT connected, but the pipeline exception runs entirely on the Plugin MCP — proceeded.
 

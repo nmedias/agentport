@@ -164,7 +164,7 @@ Source: `ui.shadcn.com/docs/components/select`. Structurally distinct, deduplica
 
 ## T4+T5 — Figma build (DONE, background agent `figma-select-build`)
 
-File `nQSNLASjuLvgTh3we8Dp4s`, page Shadcn Components `3126:2`. **Section `Select` `4307:1997`**. `/figma-verify`
+File `nQSNLASjuLvgTh3we8Dp4s`, page Components `3126:2`. **Section `Select` `4307:1997`**. `/figma-verify`
 CLEAN across all 3 sets + composition + 4 examples (0 text-as-icon, 0 clip, 0 overlap); controls-live ALL PASS;
 no orphan slot props. IDs complete in the catalog entry (`components-reference.md`).
 

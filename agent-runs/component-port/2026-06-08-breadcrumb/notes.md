@@ -50,7 +50,7 @@ Initial shadcn → Figma → Code port. Multi-part composition.
 
 ## T4 — Figma build (DONE)
 
-File `nQSNLASjuLvgTh3we8Dp4s`, page `Shadcn Components` (3126:2).
+File `nQSNLASjuLvgTh3we8Dp4s`, page `Components` (3126:2).
 Section **Breadcrumb** `3249:302` (headline `3249:303`), placed right of the Kbd section.
 
 | Node | id | notes |

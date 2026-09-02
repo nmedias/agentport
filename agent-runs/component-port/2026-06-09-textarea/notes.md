@@ -4,7 +4,7 @@ shadcn `textarea` (radix-nova) → Agentport DS. Port #1 of 3 in the Command cha
 (Textarea → InputGroup → Command). Sibling of the already-ported Input — same
 field tokens + state language, taller box. Initial port (Figma + code).
 
-## Figma IDs (DS file nQSNLASjuLvgTh3we8Dp4s · page "Shadcn Components" 3126:2)
+## Figma IDs (DS file nQSNLASjuLvgTh3we8Dp4s · page "Components" 3126:2)
 
 | node | id |
 |---|---|

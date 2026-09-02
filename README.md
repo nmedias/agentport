@@ -229,7 +229,7 @@ restart Claude Code or run `/mcp` to reconnect.
 ## Figma
 
 The design system lives in the Figma file **[Agentport DS](https://www.figma.com/design/nQSNLASjuLvgTh3we8Dp4s/Agentport-DS?node-id=3126-2)**
-(view access via link). Component sets live on the page `Shadcn Components` (`3126:2`). The token
+(view access via link). Component sets live on the page `Components` (`3126:2`). The token
 layer (`libs/ui/src/styles/tokens.css`) is exported from its four variable collections: `reference`
 (primitives → `--ap-color-*`, `--ap-font-*`, `--ap-effect-*`, `--ap-dimension-*`), `semantic` (color),
 `semantic-dimension` (radius/spacing) and `semantic-typo` (typography) → `--ap-sys-*`. Components bind

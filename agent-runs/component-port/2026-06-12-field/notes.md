@@ -59,7 +59,7 @@ Geometry kept numeric (§6): `h-5` (FieldSeparator track), `mt-px`, `top-1/2`, `
 
 ## Figma build (Variant A)
 
-- **Page:** Shadcn Components (`3126:2`). **Section:** `Field` `3710:1016` (headline `3710:1017`).
+- **Page:** Components (`3126:2`). **Section:** `Field` `3710:1016` (headline `3710:1017`).
 - **Set:** `.Field` `3716:1020` — 4 members, sorted grid (orientation-major), bound spacing + typo, no fills/strokes/shadows.
   | member | id |
   |---|---|

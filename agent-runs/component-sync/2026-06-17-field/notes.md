@@ -7,7 +7,7 @@ crosswalk = `tokens-reference.md` §6.
 Scope = ALL field-family parts in one file: Field, FieldLabel, FieldDescription, FieldError,
 FieldGroup, FieldSet, FieldLegend, FieldTitle, FieldContent, FieldSeparator.
 
-Figma (read-only): fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" `3126:2`.
+Figma (read-only): fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Components" `3126:2`.
 - `.Field` set `3716:1020`
 - `.FieldLegend` set `3909:1246`
 - `.FieldSet` component `3739:1026`

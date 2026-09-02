@@ -56,7 +56,7 @@ skill · description · anatomy · deps? · deviations? · forks? · figma_mecha
 figma:
   file_key: nQSNLASjuLvgTh3we8Dp4s
   file_name: "Agentport DS"
-  components_page: { name: "Shadcn Components", id: "3126:2" }   # every UI component set lives here
+  components_page: { name: "Components", id: "3126:2" }   # every UI component set lives here
   other_pages: [Color, "----", Artboards]
 baseline:
   shadcn_style: radix-nova            # components.json

@@ -1,6 +1,6 @@
 # Component-Sync — Kbd (Figma → Code, 2026-06-09)
 
-Set `.Kbd` `3217:308` (page "Shadcn Components" `3126:2`) → `libs/ui/src/components/ui/kbd/kbd.tsx`.
+Set `.Kbd` `3217:308` (page "Components" `3126:2`) → `libs/ui/src/components/ui/kbd/kbd.tsx`.
 
 ## Delta (applied)
 

@@ -14,7 +14,7 @@ Token-level history (renames, palette rework, dropped tokens) is in
 ## 2026-08-31 — Figma file switch, file cleanup, descriptions audit, catalog restructure
 
 **Figma file.** The DS moved to its own file `nQSNLASjuLvgTh3we8Dp4s` ("Agentport DS"), a duplicate of the
-previous file — every node ID in the catalog stayed valid (page `Shadcn Components` keeps `3126:2`;
+previous file — every node ID in the catalog stayed valid (page `Components` keeps `3126:2`;
 verified via Plugin MCP: 26 sections, probe IDs Table / Checkbox / Select found).
 
 **File cleanup (Plugin MCP).** Orphaned section **Toggle** `4802:2819` removed (set + usage examples, 61

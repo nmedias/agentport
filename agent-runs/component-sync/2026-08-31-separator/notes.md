@@ -6,7 +6,7 @@ with the new `config.json` `fileKey`; expected and delivered: no delta.
 
 ## S1 — Locate
 
-- Figma: page `Shadcn Components` `3126:2` → set `Separator` `3676:1018` (resolved by id from the catalog,
+- Figma: page `Components` `3126:2` → set `Separator` `3676:1018` (resolved by id from the catalog,
   name confirmed live). Members `orientation=horizontal` `3676:1016`, `orientation=vertical` `3676:1017`.
 - Code: `libs/ui/src/components/ui/separator/separator.tsx`.
 

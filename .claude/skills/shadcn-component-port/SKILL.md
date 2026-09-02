@@ -33,7 +33,7 @@ token values into this skill** — it is the procedure, the reference is the dat
 variant-set assembly, interaction-state axis, usage-examples group, the controls→clean→faithful verify
 triad, composites). This skill supplies the **project values** that build consumes (`config.json`):
 - `fileKey` (`config.figma.fileKey`) → the `use_figma` `fileKey` arg.
-- page `Shadcn Components` (`config.figma.pageId`) — build sets here; Section via `/figma-create-section`.
+- page `Components` (`config.figma.pageId`) — build sets here; Section via `/figma-create-section`.
 - token source `tokens-reference.md` §6 → the DS variable IDs the snippet CFG binds (collections
   `semantic` / `semantic-dimension`).
 - icons `@remixicon/react` (vectors) · structural check `/figma-verify` · the text-style font from the format.
@@ -145,7 +145,7 @@ Apply `tokens-reference.md` §6 into one explicit mapping table (drives T4 + T6)
 Build the token-bound set per **`/figma-build-rules`** (recon via `/figma-build-rules/snippets/recon.js`,
 then build from the recipes with the T3 variable IDs + `config.json` page/collections/font): full matrix,
 sorted grid, bound by variable ID, slots, interaction-state axis. **Project specifics:** place it in a `/figma-create-section` Section on
-the `Shadcn Components` page; reuse already-built DS components as nested **instances** (never re-clothe a
+the `Components` page; reuse already-built DS components as nested **instances** (never re-clothe a
 copy). Multi-part composite → the 3-layer build + Slot≠Slot (`/figma-build-rules §Composites`) + the
 port-process delta in `references/composites.md`.
 

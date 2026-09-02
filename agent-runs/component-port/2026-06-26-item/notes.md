@@ -55,7 +55,7 @@ now resolves to the folder barrel. `radix-ui` (Slot) already installed. No lucid
 cn() T1: no new at-risk utility family introduced (corner/text-format/named-spacing/shadow already
 registered in `utils.ts`).
 
-## Figma build (T4/T5) — `Shadcn Components` page (3126:2)
+## Figma build (T4/T5) — `Components` page (3126:2)
 
 Section **Item** `4494:2471` (headline `4494:2472`).
 

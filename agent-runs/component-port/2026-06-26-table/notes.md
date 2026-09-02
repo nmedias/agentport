@@ -53,7 +53,7 @@ Selectable) — row tints + footer band + caption faithful.
 - Alignment — http://localhost:6006/?path=/story/ui-table--alignment
 - Row States — http://localhost:6006/?path=/story/ui-table--row-states
 
-## Figma (file nQSNLASjuLvgTh3we8Dp4s, page "Shadcn Components" 3126:2)
+## Figma (file nQSNLASjuLvgTh3we8Dp4s, page "Components" 3126:2)
 
 Section **Table** `4514:2597`. User chose granularity **Cell + Row + Table** + align axis **left/center/right**.
 

@@ -9,7 +9,7 @@ Deps: Button ✓, Input ✓, Textarea (#1, this chain).
 - **Own Figma sets for all 6 parts** (not code-only re-clothes) — incl. the 3 control wrappers.
 - **All 4 addon aligns** (inline-start/-end, block-start/-end) — full nova API.
 
-## Figma IDs (DS file nQSNLASjuLvgTh3we8Dp4s · page "Shadcn Components" 3126:2 · Section "Input Group" 3491:674)
+## Figma IDs (DS file nQSNLASjuLvgTh3we8Dp4s · page "Components" 3126:2 · Section "Input Group" 3491:674)
 
 | node | id |
 |---|---|

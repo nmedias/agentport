@@ -1,6 +1,6 @@
 # component-sync — switch (2026-06-17)
 
-**Figma:** set `.Switch` `3839:2` (Section `Switch` `3835:1193`, page `Shadcn Components`
+**Figma:** set `.Switch` `3839:2` (Section `Switch` `3835:1193`, page `Components`
 `3126:2`). 20 members, axes `size[default,sm] × checked[off,on] × state[default,focus,disabled,
 invalid,focus-invalid]`. Colour depends on checked×state (not size) → sampled all 10 size=default
 members READ-ONLY.

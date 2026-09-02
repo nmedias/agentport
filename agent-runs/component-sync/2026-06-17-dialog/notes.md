@@ -10,7 +10,7 @@ Dialog is a composite. Synced surfaces = the Dialog's OWN panel/header/footer/ov
 + title/description text. The nested ghost icon-sm `.Button` close instance draws its
 colours from the already-synced Button — NOT re-synced here.
 
-## Figma nodes (file nQSNLASjuLvgTh3we8Dp4s, page "Shadcn Components" 3126:2)
+## Figma nodes (file nQSNLASjuLvgTh3we8Dp4s, page "Components" 3126:2)
 
 - Section "Dialog" `3589:788`
 - Composition `.Dialog` `3592:794`

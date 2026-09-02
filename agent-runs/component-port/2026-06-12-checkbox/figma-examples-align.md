@@ -1,7 +1,7 @@
 # Checkbox — Figma Usage-Examples alignment to the Field-composed stories
 
 Date: 2026-06-12 · Scope: **Figma only** (Plugin MCP, file `nQSNLASjuLvgTh3we8Dp4s`,
-page `3126:2` "Shadcn Components"). Read-only on code/catalog/other components.
+page `3126:2` "Components"). Read-only on code/catalog/other components.
 
 ## Goal
 

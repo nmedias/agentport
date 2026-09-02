@@ -83,7 +83,7 @@ DS Kbd default is `high` (inverted), too heavy inside a field.
 
 ## T4 — Figma build (REBUILT fresh; old Section 3491:674 deleted)
 
-DS file nQSNLASjuLvgTh3we8Dp4s · page "Shadcn Components" 3126:2 · **Section "Input Group" `3519:590`** (headline `3519:591`).
+DS file nQSNLASjuLvgTh3we8Dp4s · page "Components" 3126:2 · **Section "Input Group" `3519:590`** (headline `3519:591`).
 3-layer composite build + reproduced examples:
 
 | node | id | axes / props |

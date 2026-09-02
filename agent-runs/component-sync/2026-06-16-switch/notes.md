@@ -1,6 +1,6 @@
 # component-sync — Switch (Figma → code), 2026-06-16
 
-Scope: **invalid + focus-invalid** states. Set `.Switch` `3839:2` (page "Shadcn Components" `3126:2`),
+Scope: **invalid + focus-invalid** states. Set `.Switch` `3839:2` (page "Components" `3126:2`),
 file `nQSNLASjuLvgTh3we8Dp4s`. Read-only on Figma.
 
 ## Delta (applied) — one change

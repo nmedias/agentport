@@ -1,6 +1,6 @@
 # component-sync — button (2026-06-17)
 
-**Figma:** set `Button` `3164:312` (Section `Button` `3126:3`, page `Shadcn Components` `3126:2`),
+**Figma:** set `Button` `3164:312` (Section `Button` `3126:3`, page `Components` `3126:2`),
 base set `.Button/Base` `3159:12`. 220 members (variant 6 × size 8 × state 5).
 **Code:** `libs/ui/src/components/ui/button/button.tsx`.
 **Trigger:** Step-3 colour re-clothing after the Figma `-fill`/`-ink`/`-border` token rework (Step 2).

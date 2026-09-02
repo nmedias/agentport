@@ -48,7 +48,7 @@ No icons (no lucide→remix swap). No `dark:` in nova source. No invalid/aria-in
 
 Focus glow = verbatim from `.Input` focus member `3176:305`: `DROP_SHADOW radius:0 spread:3 offset 0,0 color{r:.29,g:.333,b:.384,a:.5} sbn:false` (ring=ink/800 @50%). Applied to each thumb on the focus members; member `clipsContent=false` so the ring shows.
 
-## Figma build (Page "Shadcn Components" 3126:2)
+## Figma build (Page "Components" 3126:2)
 
 - **Section:** `Slider` `4348:2225` (headline `4348:2226`).
 - **Set:** `Slider` `4351:2225` — **12 members**, 3 axes `orientation [horizontal, vertical] × thumbs [single, range] × state [default, focus, disabled]`. Laid out as a 4-row (orientation×thumbs) × 3-col (state) manual grid (mixed member sizes — horizontal 200×12, vertical 12×160 — don't wrap cleanly, so positioned explicitly; set `layoutMode=NONE`).

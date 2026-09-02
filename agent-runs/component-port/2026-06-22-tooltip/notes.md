@@ -69,7 +69,7 @@ Recon IDs (collections `semantic` / `semantic-dimension`):
 - dialog-fill `VariableID:3037:6` · dialog-ink `VariableID:3037:7` · border `VariableID:3038:4`
 - corner-md `VariableID:3073:3` · space-lg `VariableID:3070:8` · space-sm `VariableID:3070:5`
 - text style Label `S:4e034695df7aacfcebc7042471b1b11284b266f0,` · effect Elevation `S:92c2d7acdbd9a927e19bec091e19cef343c66b42,`
-- page Shadcn Components `3126:2`.
+- page Components `3126:2`.
 
 Built nodes:
 - Section "Tooltip" `4381:2356` (headline `4381:2357`) via /figma-create-section, auto-placed x=14704.

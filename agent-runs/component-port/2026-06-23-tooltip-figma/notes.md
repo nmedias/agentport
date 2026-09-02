@@ -2,7 +2,7 @@
 
 Tooltip's **A6 interactive-overlay model** (lean) + the **A8 arrow fix**, reusing the popover
 overlay+slot recipe adapted for a tooltip. A code→Figma build (pipeline exception), Plugin MCP only,
-no detach. File "Agentport DS" `nQSNLASjuLvgTh3we8Dp4s` · Page "Shadcn Components" `3126:2` ·
+no detach. File "Agentport DS" `nQSNLASjuLvgTh3we8Dp4s` · Page "Components" `3126:2` ·
 Tooltip section `4381:2356`.
 
 ---

@@ -32,7 +32,7 @@ and every other class is pure geometry/layout with no token equivalent. So the c
 **unchanged** — but the T3 verdict is that it was *checked* against §6 by role (`use`/`avoid`), not
 left by accident: `border` is the divider token, the 1px is geometry, the fills are layout.
 
-## Figma (T4) — file `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" (3126:2)
+## Figma (T4) — file `nQSNLASjuLvgTh3we8Dp4s`, page "Components" (3126:2)
 
 - Section **"Separator"** = `3675:1016` (headline `3675:1017`), placed 80px right of Dialog
   (3589:788), section-relative origin; tight fit 545×378.

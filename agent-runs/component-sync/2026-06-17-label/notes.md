@@ -5,7 +5,7 @@ Scope: `label` only. Figma is READ-ONLY.
 
 ## Live Figma structure (READ)
 
-- fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Shadcn Components" `3126:2`.
+- fileKey `nQSNLASjuLvgTh3we8Dp4s`, page "Components" `3126:2`.
 - Section LIVE name: **"Label"** id `3733:1022` (unchanged).
 - Set LIVE name: **"Label"** id `3735:1024` — type COMPONENT_SET.
   (Brief / catalog noted the set as `.Label`; live name is plain "Label", same as the
