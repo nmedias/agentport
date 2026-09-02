@@ -1,0 +1,25 @@
+# Netlify deploy: publish the @agentport/ui Storybook as the DS site.
+
+[build]
+  command = "npm run build-storybook"
+  publish = "libs/ui/storybook-static"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # postinstall runs `playwright install chromium` for local story tests —
+  # the browser is not needed to build Storybook.
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
+  # No Nx daemon in CI containers.
+  NX_DAEMON = "false"
+
+# Storybook is a static SPA-ish site with real files; only the
+# hashed assets are safe to cache forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
