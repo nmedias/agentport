@@ -1402,10 +1402,10 @@ open:
     api:   # every Figma control of the Item set; code = prop name | live-state | none (see Rules)
       - { name: variant, kind: variant, values: [default, outline, muted], code: variant }
       - { name: size, kind: variant, values: [default, sm, xs], code: size }
-      - { name: media, kind: slot, id: "4498:0", code: none, note: "composed via a nested ItemMedia child, not a prop of Item itself" }
-      - { name: actions, kind: slot, id: "4498:1", code: none, note: "composed via a nested ItemActions child, not a prop of Item itself" }
-      - { name: title, kind: text, id: "4499:0", code: none, note: "composed via a nested ItemTitle child, not a prop of Item itself" }
-      - { name: description, kind: text, id: "4499:10", code: none, note: "composed via a nested ItemDescription child, not a prop of Item itself" }
+      - { name: media, kind: slot, id: "4498:0", code: children, note: "rendered via a nested <ItemMedia> child inside the item" }
+      - { name: actions, kind: slot, id: "4498:1", code: children, note: "rendered via a nested <ItemActions> child inside the item" }
+      - { name: title, kind: text, id: "4499:0", code: children, note: "rendered via a nested <ItemTitle> child inside the item" }
+      - { name: description, kind: text, id: "4499:10", code: children, note: "rendered via a nested <ItemDescription> child inside the item" }
     media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable glyph / image; icon default bound to ink)" }   # 3 members: default 4508:2534 / icon 4508:2537 / image; member component, out of the API-block scope (main component only)
     group_component: { name: "ItemGroup", id: "4511:2575", slot: "items#4511:0", note: "vertical auto-layout, gap-xl; layout only (the responsive has-data gap cannot be modelled in Figma)" }
     examples:
@@ -1456,9 +1456,9 @@ open:
     composition: { name: "Table", id: "4521:2597", notes: "recompose-able: the content slot holds a table frame with a header TableRow, body TableRows and a plain footer FRAME of TableCells (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
     examples: { group: "Usage Examples 4523:2635", Default: "4523:2636 (instance 4523:2638, slot default invoice + caption)", Selection: "4524:2682 (instance 4538:2802, row 2 selected)", Empty: "4524:2730 (instance 4538:2890, No results)", ComponentCells: "4529:2758 (instance 4538:2963, Checkbox + Badge)" }   # frame (instance); all = Table instances with the content slot filled
     api:   # every Figma control of the Table composition; code = prop name | live-state | none (see Rules)
-      - { name: showCaption, kind: boolean, id: "4522:1", code: none, note: "demo toggle for whether the caption instance shows; in code, include or omit a TableCaption child" }
-      - { name: caption, kind: text, id: "4522:2", code: none, note: "demo caption text; in code, this is a TableCaption's children" }
-      - { name: content, kind: slot, id: "4537:0", code: none, note: "demo slot holding a baked example table interior (header + body + footer rows); in code, this is ordinary JSX composition of TableHeader/TableBody/TableFooter/TableRow/TableHead/TableCell as Table's children" }
+      - { name: showCaption, kind: boolean, id: "4522:1", code: children, note: "toggles whether a <TableCaption> child is rendered or not" }
+      - { name: caption, kind: text, id: "4522:2", code: children, note: "text becomes the <TableCaption> child's content" }
+      - { name: content, kind: slot, id: "4537:0", code: children, note: "the table interior (TableHeader/TableBody/TableFooter rows) passed as Table's children" }
     vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Eyebrow, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md)
