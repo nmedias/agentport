@@ -325,30 +325,15 @@ open:
     cva:
       inputGroupAddonVariants: { align: [inline-start, inline-end, block-start, block-end], defaults: {align: inline-start} }
       inputGroupButtonVariants: { size: [xs, sm, icon-xs, icon-sm], defaults: {size: xs} }
-    props:   # only the two curated CVA props are re-declared for docgen (see input-group.tsx header comment) — the rest are plain passthroughs, figma: none
-      - { name: align, of: InputGroupAddon, type: "'inline-start' | 'inline-end' | 'block-start' | 'block-end'", default: "inline-start", figma: "InputGroupAddon.align" }
-      - { name: size, of: InputGroupButton, type: "'xs' | 'sm' | 'icon-xs' | 'icon-sm'", default: xs, figma: "InputGroupButton.size" }
+    props: []   # InputGroup itself is a plain React.ComponentProps<'div'> passthrough with no own JSDoc'd prop — align/size belong to InputGroupAddon/InputGroupButton, other exports, out of scope here (main-only rule)
   figma:
     section: { name: "InputGroup", id: "8180:3500" }
-    api:   # every Figma control of every non-dot component in the section; code = prop name | live-state | none (see Rules)
+    api:   # every Figma control of the MAIN component (InputGroup composition) only — member sets (Addon/Button/Input/Textarea/Text) are out of scope
       - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
       - { name: layout, kind: variant, values: [horizontal, vertical], code: none,
           note: "presentation-only in Figma — in code the block/inline layout follows automatically from whichever addon align is used (has-[>[data-align=block-start]]:flex-col etc.), not a separate prop" }
       - { name: content, kind: slot, id: "3525:8", code: none, note: "the group's content region — control + addons passed as JSX children, not a named prop" }
-      - { name: content, of: InputGroupAddon, kind: slot, id: "3520:4", code: none, note: "the addon's content — icon, text or a button passed as JSX children" }
-      - { name: align, of: InputGroupAddon, kind: variant, values: [inline-start, inline-end, block-start, block-end], code: align }
-      - { name: size, of: InputGroupButton, kind: variant, values: [xs, sm, icon-xs, icon-sm], code: size }
-      - { name: placeholder, of: InputGroupInput, kind: text, id: "3777:0", code: none,
-          note: "plain native passthrough — InputGroupInput forwards to Input but doesn't re-declare placeholder as its own prop (see input-group.tsx header comment)" }
-      - { name: value, of: InputGroupInput, kind: text, id: "3777:1", code: none,
-          note: "plain native passthrough — value/defaultValue pass through untyped to the underlying Input" }
-      - { name: filled, of: InputGroupInput, kind: boolean, id: "3777:2", code: none,
-          note: "shows the value layer in Figma; in code the filled look follows a native value/defaultValue being set on the underlying Input, same mechanic as Input itself" }
-      - { name: placeholder, of: InputGroupTextarea, kind: text, id: "3778:0", code: none, note: "plain native passthrough — see InputGroupInput.placeholder" }
-      - { name: value, of: InputGroupTextarea, kind: text, id: "3778:1", code: none, note: "plain native passthrough — see InputGroupInput.value" }
-      - { name: filled, of: InputGroupTextarea, kind: boolean, id: "3778:2", code: none, note: "same mechanic as InputGroupInput.filled, on the Textarea control" }
-      - { name: text, of: InputGroupText, kind: text, id: "3522:2", code: none, note: "the caption content — passed as JSX children, not a named prop" }
     addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start, inline-end, block-start, block-end]", slot: content }
     button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs, sm, icon-xs, icon-sm]",
               nests: "ghost .Button instance per size (xs → xs, sm → default, icon-xs → icon-xs, icon-sm → icon); Base radius → corner-sm on xs + icon-xs",
@@ -658,13 +643,11 @@ open:
   source: { registry: "@shadcn", item: field, style: radix-nova }
   code:
     dir: libs/ui/src/components/ui/field/
-    exports: [Field, FieldContent, FieldLabel, FieldTitle, FieldDescription, FieldSeparator, FieldError]   # trimmed from the full field.tsx export list — FieldGroup, FieldLegend, FieldSet are documented in their own entries; listing them here would also demand their props in THIS entry
+    exports: [Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/field'"
     types: [FieldErrorProps, FieldProps]
-    props:   # public API from field.tsx JSDoc + the fieldVariants cva axis; figma = counterpart control in figma.api
+    props:   # public API from field.tsx JSDoc + the fieldVariants cva axis, MAIN export (Field) only — FieldError/FieldLabel/etc. are other exports, out of scope here
       - { name: orientation, type: "'vertical' | 'horizontal' | 'responsive'", default: vertical, figma: orientation }
-      - { name: errors, of: FieldError, type: "Array<{ message?: string } | undefined>", figma: none,
-          note: "validation errors rendered inside the error slot; the slot's presence in Figma stands in for it, no 1:1 control" }
     stories:
       - "field-error.stories.tsx → UI/Field/FieldError (Default)"
       - "field.stories.tsx → UI/Field (Default, InputField, TextareaField, Fieldset, Responsive, Invalid, Disabled, Horizontal)"
@@ -712,7 +695,6 @@ open:
   forks:
     - "controlPosition [trailing, leading] is a Figma-only axis (real for horizontal only; vertical = trailing default) — code composes control-leading via child order. Never sync back as a prop."
     - "FieldLegend lives as a slot in .FieldSet and as its own set (see FieldLegend); FieldTitle and orientation=responsive are code-only."
-    - "code.exports is trimmed to the 7 parts this section documents (Field, FieldContent, FieldLabel, FieldTitle, FieldDescription, FieldSeparator, FieldError) — FieldGroup, FieldLegend and FieldSet are separate catalog entries with their own figma sections; keeping them in this list would also require their props here."
   figma_mechanics:
     - "The four slots merge set-level (consistent names). Show description / Show error are bound on WRAPPER frames — visible is never bound on a slot directly (it degrades to a frame); a wrapper collapses the remaining height cleanly."
     - "clone() silently degrades a SLOT to a FRAME (drops slotContentId) — clone-derived members need their slots restored."
@@ -1053,24 +1035,16 @@ open:
     exports: [Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/select'"
     types: [SelectContentProps, SelectItemProps, SelectProps, SelectTriggerProps, SelectValueProps]
-    props:   # public API from select.tsx JSDoc; figma = counterpart control in figma.api (see forks for the fully-qualified refs)
+    props:   # public API from select.tsx JSDoc, MAIN export (Select) only — SelectTrigger/SelectValue/SelectContent/SelectItem etc. are other exports, out of scope here
       - { name: value, type: string, figma: value }
       - { name: defaultValue, type: string, figma: value }
       - { name: onValueChange, type: "(value: string) => void", figma: none }
       - { name: open, type: boolean, figma: none, note: "Figma is a static composition and can't represent live open/close — see the Open example" }
       - { name: defaultOpen, type: boolean, default: false, figma: none }
       - { name: onOpenChange, type: "(open: boolean) => void", figma: none }
-      - { name: disabled, type: boolean, default: false, figma: "SelectTrigger.state=disabled" }
+      - { name: disabled, type: boolean, default: false, figma: "state=disabled" }
       - { name: required, type: boolean, default: false, figma: none, note: "native form-validation flag — no visual difference" }
       - { name: name, type: string, figma: none, note: "form field name submitted with the form — no visual representation" }
-      - { name: placeholder, of: SelectValue, type: ReactNode, figma: "SelectTrigger.placeholder" }
-      - { name: size, of: SelectTrigger, type: "'sm' | 'default'", default: default, figma: "SelectTrigger.size" }
-      - { name: disabled, of: SelectTrigger, type: boolean, default: false, figma: "SelectTrigger.state=disabled" }
-      - { name: position, of: SelectContent, type: "'item-aligned' | 'popper'", default: "item-aligned", figma: none, note: "dropdown positioning strategy — Figma's static composition can't distinguish it" }
-      - { name: align, of: SelectContent, type: "'start' | 'center' | 'end'", default: center, figma: none, note: "popper alignment against the trigger — no visual difference in the static mock" }
-      - { name: value, of: SelectItem, type: string, figma: none, note: "the value submitted when picked — Figma doesn't distinguish it from the visible label (mock content only)" }
-      - { name: disabled, of: SelectItem, type: boolean, default: false, figma: "SelectItem.state=disabled" }
-      - { name: textValue, of: SelectItem, type: string, figma: none, note: "typeahead-only override when children aren't plain text — no Figma equivalent" }
     stories:
       - "select-content.stories.tsx → UI/Select/SelectContent (Default)"
       - "select-item.stories.tsx → UI/Select/SelectItem (Default, Typeahead)"
@@ -1081,30 +1055,20 @@ open:
     cva: none
   figma:
     section: { name: "Select", id: "8189:3667" }
-    api:   # every Figma control of every non-dot component in the section; code = prop name | live-state | none (see Rules)
-      - { name: size, of: SelectTrigger, kind: variant, values: [default, sm], code: size }
-      - { name: state, of: SelectTrigger, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
+    api_component: SelectTrigger   # Select (the top-level composition 4326:2477) has zero controls of its own — documenting the SelectTrigger member instead per the main-only scope rule
+    note: "figma.api documents SelectTrigger (the closed-state anatomy) — the Select composition component itself carries no properties; SelectItem/SelectContent/SelectGroup member controls are out of scope under the main-only rule"
+    api:   # every Figma control of SelectTrigger (the api_component override) only
+      - { name: size, kind: variant, values: [default, sm], code: none,
+          note: "maps to the real prop SelectTrigger.size, but SelectTrigger is a separate export — out of scope for this entry's code.props (main-only rule)" }
+      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" },
           note: "no filled state, unlike Input/Textarea — the trigger's placeholder/value swap is modeled via the filles boolean instead" }
-      - { name: placeholder, of: SelectTrigger, kind: text, id: "4388:0", code: placeholder }
-      - { name: value, of: SelectTrigger, kind: text, id: "4310:0", code: "value / defaultValue",
+      - { name: placeholder, kind: text, id: "4388:0", code: none,
+          note: "maps to the real prop SelectValue.placeholder, a separate export — out of scope for this entry's code.props (main-only rule)" }
+      - { name: value, kind: text, id: "4310:0", code: "value / defaultValue",
           note: "shows the currently selected item's label; driven by Select's value (controlled) or defaultValue (uncontrolled) at the root" }
-      - { name: filles, of: SelectTrigger, kind: boolean, id: "4388:11", code: live-state, triggers: { on: "value / defaultValue set" },
+      - { name: filles, kind: boolean, id: "4388:11", code: live-state, triggers: { on: "value / defaultValue set" },
           note: "Figma property name typo for filled — not renamed here" }
-      - { name: leadingIcon, of: SelectItem, kind: slot, id: "4313:6", code: none,
-          note: "optional leading icon — added as JSX children before the label in real usage, no dedicated slot prop" }
-      - { name: label, of: SelectItem, kind: text, id: "4313:7", code: none, note: "the option's visible label — passed as JSX children, not a prop" }
-      - { name: showIcon, of: SelectItem, kind: boolean, id: "4326:0", code: none, note: "Figma-only drawing toggle for the leading-icon example — not a component prop" }
-      - { name: state, of: SelectItem, kind: variant, values: [default, focus, disabled], code: live-state,
-          triggers: { focus: "Radix highlighted on keyboard/pointer navigation", disabled: "disabled" } }
-      - { name: selected, of: SelectItem, kind: variant, values: ["false", "true"], code: live-state,
-          triggers: { "true": "data-state=checked (Radix, when its value matches the Select's current value)" } }
-      - { name: items, of: SelectContent, kind: slot, id: "4314:0", code: none, note: "the rendered SelectGroup / SelectItem list — passed as JSX children, not a named prop" }
-      - { name: showScrollUp, of: SelectContent, kind: boolean, id: "4315:0", code: none,
-          note: "Figma-only drawing toggle for the scroll-up chevron; in code it renders automatically via SelectScrollUpButton when content overflows, not a prop" }
-      - { name: showScrollDown, of: SelectContent, kind: boolean, id: "4315:1", code: none, note: "same as showScrollUp, for the scroll-down chevron" }
-      - { name: items, of: SelectGroup, kind: slot, id: "4326:7", code: none, note: "the group's SelectItem list — passed as JSX children" }
-      - { name: label, of: SelectGroup, kind: text, id: "4326:8", code: none, note: "renders as SelectLabel's children in code — SelectLabel has no own prop API (see forks)" }
     trigger:
       set: { name: "SelectTrigger", id: "4308:2029" }
       axis: { size: [default, sm], state: [default, focus, disabled, invalid, focus-invalid] }    # 10 members
