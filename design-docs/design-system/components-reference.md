@@ -487,7 +487,7 @@ open:
   figma:
     section: { name: "Command", id: "8373:5402" }
     api:   # every Figma control of Command (the main component, named like the section) — CommandInput/CommandGroup/CommandItem/CommandSeparator member controls are out of scope under the main-only rule
-      - { name: list, kind: slot, id: "3642:0", code: none, note: "the list content — composed as children of Command (CommandInput / CommandList / …); children isn't a tracked JSDoc'd prop under the main-only rule" }
+      - { name: list, kind: slot, id: "3642:0", code: children, note: "composed as children of Command (CommandInput / CommandList / …)" }
       - { name: variant, kind: variant, values: [default, palette], code: variant }
     item:
       set: { name: "CommandItem", id: "3559:2" }
@@ -571,13 +571,13 @@ open:
   figma:
     section: { name: "Dialog", id: "8362:5227" }
     api:   # every Figma control of Dialog (the main component, named like the section: the composition 3592:794) — DialogContent/DialogFooter/DialogTitle/DialogDescription member controls are out of scope under the main-only rule
-      - { name: footer, kind: slot, id: "3593:1", code: none, note: "declared as a SLOT property but not bound to any layer in Figma (a documented dangling property, see `dangling` below); the real footer content is DialogFooter's actions slot, a separate export" }
-      - { name: "title (children)", kind: text, id: "3593:2", code: none, note: "the dialog's accessible name — composed as children of DialogTitle, a separate export (mandatory on every dialog)" }
-      - { name: "description (children)", kind: text, id: "3593:3", code: none, note: "composed as children of DialogDescription, a separate export" }
+      - { name: footer, kind: slot, id: "3593:1", code: children, note: "declared as a SLOT property but not bound to any layer in Figma (a documented dangling property, see `dangling` below); in code the footer is simply composed as a DialogFooter child" }
+      - { name: "title (children)", kind: text, id: "3593:2", code: children, note: "the dialog's accessible name — composed as children of DialogTitle (mandatory on every dialog)" }
+      - { name: "description (children)", kind: text, id: "3593:3", code: children, note: "composed as children of DialogDescription" }
       - { name: showCloseButton, kind: boolean, id: "3593:4", code: "DialogContent.showCloseButton", note: "external prop — showCloseButton lives on the DialogContent export, not on Dialog itself" }
       - { name: showFooter, kind: boolean, id: "3593:5", code: none, note: "Figma-only demo toggle — in code the footer is simply included (or omitted) by composing a DialogFooter child" }
       - { name: showBody, kind: boolean, id: "3606:0", code: none, note: "Figma-only demo toggle — in code the body is whatever children are placed between the header and the footer" }
-      - { name: body, kind: slot, id: "3609:0", code: none, note: "the body content — composed as children of DialogContent, a separate export" }
+      - { name: body, kind: slot, id: "3609:0", code: children, note: "composed as children of DialogContent, between the header and the footer" }
     composition:
       name: "Dialog"
       id: "3592:794"
@@ -1322,8 +1322,9 @@ open:
   figma:
     section: { name: "Popover", id: "8351:5085" }
     api:   # every Figma control of Popover (the main component, named like the section: the root set 4402:2589) — PopoverContent/PopoverTrigger/PopoverHeader member controls are out of scope under the main-only rule
-      - { name: trigger, kind: slot, id: "4408:0", code: none, note: "the trigger element — composed as a child of Popover (PopoverTrigger, or any element via asChild); children isn't a tracked JSDoc'd prop under the main-only rule" }
-      - { name: state, kind: variant, values: [open, closed], code: "open / defaultOpen" }
+      - { name: trigger, kind: slot, id: "4408:0", code: children, note: "composed as a child of Popover (PopoverTrigger, or any element via asChild)" }
+      - { name: state, kind: variant, values: [open, closed], code: live-state,
+          triggers: { open: "the open prop (controlled) or defaultOpen (uncontrolled) is set, or data-state=\"open\" at runtime", closed: "default" } }
       - { name: side, kind: variant, values: [top, right, bottom, left], code: "PopoverContent.side", note: "external prop — side lives on the PopoverContent export, not on Popover itself" }
       - { name: align, kind: variant, values: [start, center, end], code: "PopoverContent.align", note: "external prop — align lives on the PopoverContent export, not on Popover itself" }
     build_frame: { name: "Build", id: "4390:2364" } # white vertical auto-layout frame (HUG, itemSpacing space-2xl, padding space-xl) INSIDE the section — holds the masters + root set + usage examples (a Section is not an auto-layout container)
@@ -1379,7 +1380,7 @@ open:
   figma:
     section: { name: "Tooltip", id: "8337:4947" }
     api:   # every Figma control of Tooltip (the main component, named like the section: the content-chip set 4441:73) — TooltipContent/TooltipTrigger/TooltipProvider member controls are out of scope under the main-only rule
-      - { name: content, kind: slot, id: "4441:0", code: none, note: "the message content — composed as children of TooltipContent, a separate export; children isn't a tracked JSDoc'd prop under the main-only rule" }
+      - { name: content, kind: slot, id: "4441:0", code: children, note: "composed as children of TooltipContent" }
       - { name: side, kind: variant, values: [top, bottom, left, right], code: "TooltipContent.side", note: "external prop — side lives on the TooltipContent export, not on Tooltip itself" }
     set: { name: "Tooltip", id: "4441:73" }              # the content-chip SET
     members: { "side=top": "4382:2356", "side=bottom": "4438:73", "side=left": "4439:73", "side=right": "4439:82" }
