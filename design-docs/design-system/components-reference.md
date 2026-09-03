@@ -467,6 +467,15 @@ open:
     exports: [Command, CommandDialog, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator, commandVariants]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/command'"
     types: [CommandDialogProps, CommandProps, CommandSeparatorProps]
+    props:   # public API from command.tsx JSDoc, MAIN export (Command) only — CommandInput/List/Group/Item/Separator/CommandDialog are other exports, out of scope here
+      - { name: variant, type: CommandVariant, default: "default", figma: variant }
+      - { name: label, type: string, figma: none, note: "accessible label for the command menu (cmdk renders it visually hidden) — no visual representation" }
+      - { name: shouldFilter, type: boolean, default: true, figma: none, note: "behavioral flag — no visual representation" }
+      - { name: loop, type: boolean, default: false, figma: none, note: "behavioral flag — no visual representation" }
+      - { name: value, type: string, figma: none, note: "maps conceptually to CommandItem's state=selected, a separate export — out of scope under the main-only rule" }
+      - { name: defaultValue, type: string, figma: none, note: "same scope note as value — CommandItem is a separate export" }
+      - { name: onValueChange, type: "(value: string) => void", figma: none }
+      - { name: filter, type: "(value: string, search: string, keywords?: string[]) => number", figma: none, note: "custom match function — no visual representation" }
     stories:
       - "command-dialog.stories.tsx → UI/Command/CommandDialog (Default, Palette, PaletteFlat)"
       - "command-separator.stories.tsx → UI/Command/CommandSeparator (Default)"
@@ -477,6 +486,9 @@ open:
     variants: "variant: default | palette — ONLY on the Command root / CommandDialog (cva); Input / List / Group / Separator inherit via the module-internal CommandVariantContext (ToggleGroup idiom); data-variant on the root. CommandSeparator additionally takes a label prop (labeled rule, role=presentation div; same hide-on-search contract as the line form via useCommandState + alwaysRender)."
   figma:
     section: { name: "Command", id: "8373:5402" }
+    api:   # every Figma control of Command (the main component, named like the section) — CommandInput/CommandGroup/CommandItem/CommandSeparator member controls are out of scope under the main-only rule
+      - { name: list, kind: slot, id: "3642:0", code: none, note: "the list content — composed as children of Command (CommandInput / CommandList / …); children isn't a tracked JSDoc'd prop under the main-only rule" }
+      - { name: variant, kind: variant, values: [default, palette], code: variant }
     item:
       set: { name: "CommandItem", id: "3559:2" }
       axis: { state: [default, selected, disabled, checked] }
@@ -512,7 +524,6 @@ open:
       default: "bg-dialog-fill + border + shadow-elevation + corner-xl + p-xs"
       palette: "bg-dialog-fill + border 1.5px + shadow-elevation + corner-md + p-0 · prompt divider + footer divider (CommandSeparator instances, fill) · list slot py-md · default slot content = demo (JUMP TO / SEARCH / RUN)"
     examples: { group: "Usage Examples 3875:1394", command-demo: "3573:2", palette-demo: "3650:63" }
-    axis: { variant: [default, palette], item_state: [default, selected, disabled, checked], separator_variant: [default, labeled] }
     icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19", ArrowRight: "3644:4", Swap: "3644:7", Search: "3644:10", Play: "3644:13", Download: "3644:16" }
     vars: [accent-fill, accent-ink, ink, surface, border, card-fill, corner-lg, corner-md, corner-sm, corner-xl, dialog-fill, input-border, input-fill, input-ink-placeholder, inverse-fill, inverse-ink, muted, primary, space-2xl, space-lg, space-md, space-sm, space-xl, space-xs]
     styles: [effect:Elevation, effect:Glow, text:Body, text:Data/lg, text:Kbd, text:Label/md, text:Eyebrow]
@@ -546,6 +557,11 @@ open:
     exports: [Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/dialog'"
     types: [DialogContentProps, DialogFooterProps, DialogProps]
+    props:   # public API from dialog.tsx JSDoc, MAIN export (Dialog) only — DialogContent/DialogFooter/DialogTitle/DialogDescription are other exports, out of scope here
+      - { name: open, type: boolean, figma: none, note: "no static Figma representation of live open/close — the composition IS the open state" }
+      - { name: defaultOpen, type: boolean, default: false, figma: none }
+      - { name: onOpenChange, type: "(open: boolean) => void", figma: none }
+      - { name: modal, type: boolean, default: true, figma: none, note: "no visual difference; toggles focus-trap / outside-interaction blocking" }
     stories:
       - "dialog-content.stories.tsx → UI/Dialog/DialogContent (Default)"
       - "dialog-footer.stories.tsx → UI/Dialog/DialogFooter (Default)"
@@ -554,6 +570,14 @@ open:
     cva: none
   figma:
     section: { name: "Dialog", id: "8362:5227" }
+    api:   # every Figma control of Dialog (the main component, named like the section: the composition 3592:794) — DialogContent/DialogFooter/DialogTitle/DialogDescription member controls are out of scope under the main-only rule
+      - { name: footer, kind: slot, id: "3593:1", code: none, note: "declared as a SLOT property but not bound to any layer in Figma (a documented dangling property, see `dangling` below); the real footer content is DialogFooter's actions slot, a separate export" }
+      - { name: "title (children)", kind: text, id: "3593:2", code: none, note: "the dialog's accessible name — composed as children of DialogTitle, a separate export (mandatory on every dialog)" }
+      - { name: "description (children)", kind: text, id: "3593:3", code: none, note: "composed as children of DialogDescription, a separate export" }
+      - { name: showCloseButton, kind: boolean, id: "3593:4", code: "DialogContent.showCloseButton", note: "external prop — showCloseButton lives on the DialogContent export, not on Dialog itself" }
+      - { name: showFooter, kind: boolean, id: "3593:5", code: none, note: "Figma-only demo toggle — in code the footer is simply included (or omitted) by composing a DialogFooter child" }
+      - { name: showBody, kind: boolean, id: "3606:0", code: none, note: "Figma-only demo toggle — in code the body is whatever children are placed between the header and the footer" }
+      - { name: body, kind: slot, id: "3609:0", code: none, note: "the body content — composed as children of DialogContent, a separate export" }
     composition:
       name: "Dialog"
       id: "3592:794"
@@ -565,7 +589,6 @@ open:
     overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, alias → neutral/900) × layer opacity scrim-opacity (3618:3, alias → opacity/10) + BACKGROUND_BLUR 4" }
     icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
     examples: { group: "Usage Examples 3875:1296", dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
-    axis: { }   # composition with boolean props (showCloseButton / showFooter / showBody), no variant axis
     vars: [ink, surface, border, corner-lg, corner-md, corner-xl, dialog-fill, dialog-ink, muted, muted-fill, primary-fill, primary-ink, scrim, scrim-opacity, secondary-fill, secondary-ink, space-lg, space-md, space-sm, space-xl]
     styles: [effect:Elevation, text:Body, text:Label/md, text:Title]
   skill: /shadcn-component-port; /component-sync
@@ -1286,6 +1309,11 @@ open:
     exports: [Popover, PopoverAnchor, PopoverContent, PopoverDescription, PopoverHeader, PopoverTitle, PopoverTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/popover'"
     types: [PopoverContentProps, PopoverProps]
+    props:   # public API from popover.tsx JSDoc, MAIN export (Popover) only — PopoverContent/PopoverTrigger/PopoverHeader/PopoverTitle/PopoverDescription are other exports, out of scope here
+      - { name: open, type: boolean, figma: "state=open", note: "pair with onOpenChange; drives the Figma state=open/closed axis together with defaultOpen" }
+      - { name: defaultOpen, type: boolean, default: false, figma: "state=open", note: "sets the initial state when uncontrolled — same Figma axis as open" }
+      - { name: onOpenChange, type: "(open: boolean) => void", figma: none }
+      - { name: modal, type: boolean, default: false, figma: none, note: "no visual difference; blocks outside interaction and traps focus (content gets role=\"dialog\")" }
     stories:
       - "popover-content.stories.tsx → UI/Popover/PopoverContent (Default)"
       - "popover.stories.tsx → UI/Popover (Default, SimpleContent, Anchored, Placements, Sides)"
@@ -1293,12 +1321,16 @@ open:
     cva: none
   figma:
     section: { name: "Popover", id: "8351:5085" }
+    api:   # every Figma control of Popover (the main component, named like the section: the root set 4402:2589) — PopoverContent/PopoverTrigger/PopoverHeader member controls are out of scope under the main-only rule
+      - { name: trigger, kind: slot, id: "4408:0", code: none, note: "the trigger element — composed as a child of Popover (PopoverTrigger, or any element via asChild); children isn't a tracked JSDoc'd prop under the main-only rule" }
+      - { name: state, kind: variant, values: [open, closed], code: "open / defaultOpen" }
+      - { name: side, kind: variant, values: [top, right, bottom, left], code: "PopoverContent.side", note: "external prop — side lives on the PopoverContent export, not on Popover itself" }
+      - { name: align, kind: variant, values: [start, center, end], code: "PopoverContent.align", note: "external prop — align lives on the PopoverContent export, not on Popover itself" }
     build_frame: { name: "Build", id: "4390:2364" } # white vertical auto-layout frame (HUG, itemSpacing space-2xl, padding space-xl) INSIDE the section — holds the masters + root set + usage examples (a Section is not an auto-layout container)
     content: { name: "PopoverContent", id: "4365:2255" }   # SINGLE member, NO state / variant set (data-[side] = motion, not a DS state)
     slot: { content: "content#4365:0" }                    # the open region; default = nested PopoverHeader instance
     header: { name: "PopoverHeader", id: "4367:2253", props: "title#4367:0 (TEXT, {Title}, Label style / dialog-ink) · description#4367:1 (TEXT, {Description}, Body style / muted)" }
     examples: { group: "Usage Examples 4368:2255", SimpleContent: "4368:2256 (PopoverContent instance 4368:2258, slot = configured PopoverHeader)", Dimensions: "4368:2272 (PopoverContent instance 4368:2274, slot = PopoverHeader + 4 Label / Input rows, real DS instances Label 3734:1022 / Input 3176:303)" }   # frame (instance)
-    axis: { }   # content surface: NO axis (raised surface, no interactive state space)
     root:                                          # the FULL interactive overlay
       set: { name: "Popover", id: "4402:2589" }    # matches the code root export; members HUG the trigger (50×32)
       axis: { state: [closed, open], side: [top, right, bottom, left], align: [start, center, end] }  # 24 members; defaults open / bottom / center
@@ -1334,6 +1366,11 @@ open:
     exports: [Tooltip, TooltipContent, TooltipProvider, TooltipTrigger]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/tooltip'"
     types: [TooltipContentProps, TooltipProps]
+    props:   # public API from tooltip.tsx JSDoc, MAIN export (Tooltip) only — TooltipContent/TooltipTrigger/TooltipProvider are other exports, out of scope here
+      - { name: open, type: boolean, figma: none, note: "the Tooltip Root composition (a separate Figma component) carries a state=open/closed axis for the hover prototype — out of scope under the main-only rule" }
+      - { name: defaultOpen, type: boolean, default: false, figma: none }
+      - { name: onOpenChange, type: "(open: boolean) => void", figma: none }
+      - { name: delayDuration, type: number, figma: none, note: "hover-delay timing value — no visual representation" }
     stories:
       - "tooltip-content.stories.tsx → UI/Tooltip/TooltipContent (Default)"
       - "tooltip.stories.tsx → UI/Tooltip (Default, Placement, WithKbd, IconTrigger)"
@@ -1341,11 +1378,13 @@ open:
     cva: none
   figma:
     section: { name: "Tooltip", id: "8337:4947" }
+    api:   # every Figma control of Tooltip (the main component, named like the section: the content-chip set 4441:73) — TooltipContent/TooltipTrigger/TooltipProvider member controls are out of scope under the main-only rule
+      - { name: content, kind: slot, id: "4441:0", code: none, note: "the message content — composed as children of TooltipContent, a separate export; children isn't a tracked JSDoc'd prop under the main-only rule" }
+      - { name: side, kind: variant, values: [top, bottom, left, right], code: "TooltipContent.side", note: "external prop — side lives on the TooltipContent export, not on Tooltip itself" }
     set: { name: "Tooltip", id: "4441:73" }              # the content-chip SET
     members: { "side=top": "4382:2356", "side=bottom": "4438:73", "side=left": "4439:73", "side=right": "4439:82" }
     slot: { name: "content", prop: "content#4441:0", default: "{Label} TEXT (Label style, dialog-ink)" }   # root-level SLOT on the set 4441:73
     arrow: { name: "arrow", id: "4414:2493" }            # down-pointing TRIANGLE: white fill (dialog-fill) + border stroke ONLY on the 2 slanted edges (base open = joins the chip); base overlaps 1px into the chip → connected pointer, no seam. showArrow#4418:0 toggles it (per-side member arrow swap in Tooltip Root)
-    axis: { side: [top, bottom, left, right] }           # content chip: side axis only (no state axis); content = root SLOT (open children region)
     root:
       set: { name: "Tooltip Root", id: "4419:2781" }
       axis: { state: [closed, open], side: [top, right, bottom, left] }   # 8 members, lean (no align — tooltips centre); defaults open / top
