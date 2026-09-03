@@ -954,20 +954,17 @@ open:
       - "radio-group.stories.tsx → UI/RadioGroup (Default, Horizontal, Description, Fieldset, Disabled, Invalid, AllStates)"
     specs: [radio-group.spec.tsx]
     cva: none
-    props:   # public API from radio-group.tsx JSDoc; figma = counterpart control in figma.api ('of' marks which export the control sits on)
+    props:   # public API from RadioGroup's JSDoc (main export, per Scope rule); figma = counterpart control in figma.api
       - { name: value, type: string, figma: none, note: "controlled — pair with onValueChange" }
       - { name: defaultValue, type: string, figma: none }
       - { name: onValueChange, type: "(value: string) => void", figma: none }
-      - { name: disabled, type: boolean, default: "false", figma: "state=disabled", note: "disables every RadioGroupItem in the group" }
+      - { name: disabled, type: boolean, default: "false", figma: none, note: "disables every RadioGroupItem in the group; no Figma counterpart — the RadioGroup component is layout-only (Slot only, see figma.api)" }
       - { name: required, type: boolean, default: "false", figma: none }
       - { name: name, type: string, figma: none }
       - { name: orientation, type: "'horizontal' | 'vertical'", default: "\"vertical\"", figma: none, note: "arrow-key navigation direction — the RadioGroup Figma component has no orientation axis (layout-only, Slot control)" }
-      - { name: value, of: RadioGroupItem, type: string, figma: none, note: "the value this item selects; matched against the group's value to derive checked (see figma.api checked row)" }
-      - { name: disabled, of: RadioGroupItem, type: boolean, default: "false", figma: "state=disabled", note: "disables just this item" }
-      - { name: id, of: RadioGroupItem, type: string, figma: none }
   figma:
     section: { name: "RadioGroup", id: "8298:4626" }
-    container: { name: "RadioGroup", id: "4006:1499" }     # layout-only container component, Slot property only — no variant axes
+    container: { name: "RadioGroup", id: "4006:1499" }     # the section-named component — layout-only, Slot property only, no variant axes
     set: { name: "RadioGroupItem", id: "3852:1206" }       # only the item is a set; 2 axes checked × state, 10 members, 5×2 WRAP
     members:   # row checked=off, then checked=on
       "checked=off, state=default":       "3850:1206"
@@ -982,12 +979,8 @@ open:
       "checked=on, state=focus-invalid":  "4066:3"       # destructive fill + border + dot destructive-ink + glow
     dot: { shape: "ELLIPSE 8px (size-2), fill primary-ink; visible on all checked=on members (checked-invalid: destructive-ink)" }
     group_container: "layout only (grid w-full gap-md), a single standalone component (Slot property only, no variant axes) — represented in the examples as VERTICAL auto-layout itemSpacing=space-md"
-    api:   # every Figma control; code = prop name | live-state | none (see Rules). checked/state sit on RadioGroupItem, Slot on RadioGroup
-      - { name: checked, kind: variant, values: ["off", "on"], of: RadioGroupItem, code: live-state,
-          triggers: { on: "RadioGroup value / defaultValue matches this item's value" } }
-      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], of: RadioGroupItem, code: live-state,
-          triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
-      - { name: Slot, kind: slot, id: "4006:0", of: RadioGroup, code: children, note: "the group's item children — RadioGroup is layout-only" }
+    api:   # the section-named RadioGroup component's only control — a layout Slot (see Scope rule; RadioGroupItem's own checked/state axes are out of scope)
+      - { name: Slot, kind: slot, id: "4006:0", code: children, note: "items are RadioGroupItem children" }
     examples: { group: "Usage Examples 3854:1206 (Field-composed)", Default: "3992:1324 (bare, per doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + group error)", AllStates: "3857:1218" }
     vars: [ink, border, corner-full, corner-lg, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
@@ -1028,31 +1021,18 @@ open:
     specs: [choice-card-checkbox/choice-card-checkbox.spec.tsx, choice-card-radio/choice-card-radio.spec.tsx, choice-card-shell/choice-card-shell.spec.tsx, choice-card-switch/choice-card-switch.spec.tsx]
     cva: none
     internal: "ChoiceCardShell (presentational, NOT exported) + useFieldId (hook). Nested subfolders per wrapper + choice-card-shell/ + use-field-id.ts, each with its own index.ts barrel"
-    props:   # public API from the three wrappers' JSDoc; figma = counterpart control in figma.api ('of' marks the export)
-      - { name: title, of: ChoiceCardCheckbox, type: React.ReactNode, figma: none, note: "rendered as FieldTitle — the card's own Figma controls are checked + state only; title/description/error are fixed placeholder texts on the nested .Field instance (see figma_mechanics), not swappable card properties" }
-      - { name: description, of: ChoiceCardCheckbox, type: React.ReactNode, figma: none }
-      - { name: error, of: ChoiceCardCheckbox, type: React.ReactNode, figma: "state=invalid + state=focus-invalid", note: "truthy marks the card invalid — drives FieldError render + aria-invalid on the control; empty/undefined = valid" }
-      - { name: checked, of: ChoiceCardCheckbox, type: boolean, figma: checked, note: "controlled — pair with onCheckedChange; binary, no indeterminate tri-state" }
-      - { name: defaultChecked, of: ChoiceCardCheckbox, type: boolean, default: "false", figma: checked }
-      - { name: onCheckedChange, of: ChoiceCardCheckbox, type: "(checked: boolean) => void", figma: none }
-      - { name: disabled, of: ChoiceCardCheckbox, type: boolean, default: "false", figma: "state=disabled" }
-      - { name: id, of: ChoiceCardCheckbox, type: string, figma: none }
-      - { name: title, of: ChoiceCardSwitch, type: React.ReactNode, figma: none }
-      - { name: description, of: ChoiceCardSwitch, type: React.ReactNode, figma: none }
-      - { name: error, of: ChoiceCardSwitch, type: React.ReactNode, figma: "state=invalid + state=focus-invalid" }
-      - { name: checked, of: ChoiceCardSwitch, type: boolean, figma: checked }
-      - { name: defaultChecked, of: ChoiceCardSwitch, type: boolean, default: "false", figma: checked }
-      - { name: onCheckedChange, of: ChoiceCardSwitch, type: "(checked: boolean) => void", figma: none }
-      - { name: size, of: ChoiceCardSwitch, type: "'sm' | 'default'", default: "\"default\"", figma: none, note: "the Figma ChoiceCardSwitch set only models size=default — no sm variant drawn" }
-      - { name: disabled, of: ChoiceCardSwitch, type: boolean, default: "false", figma: "state=disabled" }
-      - { name: id, of: ChoiceCardSwitch, type: string, figma: none }
-      - { name: title, of: ChoiceCardRadio, type: React.ReactNode, figma: none }
-      - { name: description, of: ChoiceCardRadio, type: React.ReactNode, figma: none }
-      - { name: error, of: ChoiceCardRadio, type: React.ReactNode, figma: "state=invalid + state=focus-invalid" }
-      - { name: value, of: ChoiceCardRadio, type: string, figma: none, note: "the value this card selects in its parent RadioGroup; matched to derive checked (see figma.api checked row)" }
-      - { name: disabled, of: ChoiceCardRadio, type: boolean, default: "false", figma: "state=disabled" }
-      - { name: id, of: ChoiceCardRadio, type: string, figma: none }
+    api_export: ChoiceCardCheckbox   # no export is named "ChoiceCard" — Checkbox stands in for the family (see Scope rule); Switch/Radio share the same checked+state controls (size differs on Switch, value replaces checked on Radio — see deviations)
+    props:   # public API of ChoiceCardCheckbox's JSDoc (main export per api_export above); figma = counterpart control in figma.api
+      - { name: title, type: React.ReactNode, figma: none, note: "rendered as FieldTitle — the card's own Figma controls are checked + state only; title/description/error are fixed placeholder texts on the nested .Field instance (see figma_mechanics), not swappable card properties" }
+      - { name: description, type: React.ReactNode, figma: none }
+      - { name: error, type: React.ReactNode, figma: "state=invalid + state=focus-invalid", note: "truthy marks the card invalid — drives FieldError render + aria-invalid on the control; empty/undefined = valid" }
+      - { name: checked, type: boolean, figma: checked, note: "controlled — pair with onCheckedChange; binary, no indeterminate tri-state" }
+      - { name: defaultChecked, type: boolean, default: "false", figma: checked }
+      - { name: onCheckedChange, type: "(checked: boolean) => void", figma: none }
+      - { name: disabled, type: boolean, default: "false", figma: "state=disabled" }
+      - { name: id, type: string, figma: none }
   figma:
+    api_component: ChoiceCardCheckbox   # no component is named "ChoiceCard" — Checkbox stands in for the family (see Scope rule); ChoiceCardSwitch/ChoiceCardRadio are separate sets with the same checked+state axes (not documented here)
     section: { name: "ChoiceCard", id: "8306:4777" }
     checkbox:
       set: { name: "ChoiceCardCheckbox", id: "4112:1638" }
@@ -1072,16 +1052,9 @@ open:
         "checked=off": { default: "4122:1750", focus: "4122:1771", disabled: "4122:1792", invalid: "4122:1813", focus-invalid: "4122:1839" }
         "checked=on":  { default: "4123:1801", focus: "4123:1826", disabled: "4123:1851", invalid: "4123:1876", focus-invalid: "4123:1906" }
       usage_example: "4129:1886 (single-selection group: Standard / Express / Overnight)"
-    api:   # every Figma control of the 3 sets — each exposes only checked + state (see figma_mechanics); code = prop name | live-state | none
-      - { name: checked, kind: variant, values: ["off", "on"], of: ChoiceCardCheckbox, code: "checked / defaultChecked" }
-      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], of: ChoiceCardCheckbox, code: live-state,
-          triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "error prop truthy", focus-invalid: "focus + error truthy" } }
-      - { name: checked, kind: variant, values: ["off", "on"], of: ChoiceCardSwitch, code: "checked / defaultChecked" }
-      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], of: ChoiceCardSwitch, code: live-state,
-          triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "error prop truthy", focus-invalid: "focus + error truthy" } }
-      - { name: checked, kind: variant, values: ["off", "on"], of: ChoiceCardRadio, code: live-state,
-          triggers: { on: "RadioGroup value / defaultValue matches this card's value" } }
-      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], of: ChoiceCardRadio, code: live-state,
+    api:   # every Figma control of ChoiceCardCheckbox (api_component override above) — code = prop name | live-state | none
+      - { name: checked, kind: variant, values: ["off", "on"], code: "checked / defaultChecked" }
+      - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "error prop truthy", focus-invalid: "focus + error truthy" } }
     examples: { group: "Usage Examples 4146:2080", checkbox: "4128:1862", switch: "4128:1877", radio: "4129:1886" }
     nests: "real .Field instance in the FieldLabel card (horizontal control-trailing: 3714:1018 invalid=false / 3715:1019 invalid=true); control slot = real instance of the matching control member (.Checkbox 3795:1184 / .Switch 3839:2 / .RadioGroupItem 3852:1206 per checked × state); title = nested .Label. Controls REUSED, nothing detached."
@@ -1097,6 +1070,7 @@ open:
     - "title / description / error = ReactNode props (no compound / slot pattern; escape hatch = the raw Field primitives); invalid = !!error (ONE rule for data-invalid + FieldError render + aria-invalid; empty string = valid)."
     - "ChoiceCardCheckbox.checked / defaultChecked / onCheckedChange are boolean (indeterminate narrowed away): a leaf card is a binary single choice, the tri-state is a group / parent concept — no indeterminate story or Figma variant. Base Checkbox keeps indeterminate."
     - "Type trap: ComponentProps<Control> brings the HTML title attribute → Omit<…, 'title'>, otherwise ReactNode narrows to string."
+    - "The API block documents ChoiceCardCheckbox only (api_component/api_export override, no export/component is named \"ChoiceCard\"). ChoiceCardSwitch and ChoiceCardRadio are separate Figma sets and code exports with the same title/description/error/disabled/id shape and the same checked+state axes; ChoiceCardSwitch additionally has a size prop (code-only, the Figma set only models size=default) and ChoiceCardRadio replaces checked/defaultChecked/onCheckedChange with a required value (its checked is derived from the surrounding RadioGroup's value, like RadioGroupItem)."
   figma_mechanics:
     - "The card sets expose ONLY checked + state — they have no slots of their own. The label / description / control / error slots visible in the hero belong to the NESTED .Field instance, so the composition is fixed: a consumer cannot swap card content through the card's Figma properties, only by editing the nested Field instance."
   a11y:
@@ -1256,8 +1230,9 @@ open:
     anatomy: "Root (NONE, clip=false) › Track (FRAME, clip=true, bg input-fill-high, corner-full) › Range (RECT, bg primary-fill, corner-full) + 1–2 Thumb (RECT 12×12, bg surface, border input-border 1px INSIDE, corner-full). horiz track 200×4 / vert 4×160. Range: horiz 0 → thumb, vert bottom → thumb, range between thumbs."
     api:   # every Figma control of the set; code = prop name | live-state | none (see Rules). NO invalid state (stock Slider has none)
       - { name: orientation, kind: variant, values: [horizontal, vertical], code: orientation }
-      - { name: thumbs, kind: variant, values: [single, range], code: none,
-          note: "Figma-only axis for drawing the range look — code derives thumb count from value.length (no prop); never sync back" }
+      - { name: thumbs, kind: variant, values: [single, range], code: live-state,
+          triggers: { single: "value / defaultValue with one entry", range: "value / defaultValue with two entries" },
+          note: "no prop — thumb count follows value.length" }
       - { name: state, kind: variant, values: [default, focus, disabled], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled" } }
     examples: { group: "Usage Examples 4354:2225", Default: "4354:2226 (instance 4354:2228)", Range: "4354:2232 (instance 4354:2234)", Vertical: "4354:2242 (instance 4354:2244)", Disabled: "4354:2251 (instance 4354:2253)", FieldSlider: "4357:2254 (Field instance 4355:2238, control slot = range Slider instance 4356:2249, label 'Price Range', description wrapped)" }   # frame (instance)
