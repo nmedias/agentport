@@ -331,9 +331,9 @@ open:
     api:   # every Figma control of the MAIN component (InputGroup composition) only — member sets (Addon/Button/Input/Textarea/Text) are out of scope
       - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
-      - { name: layout, kind: variant, values: [horizontal, vertical], code: none,
-          note: "presentation-only in Figma — in code the block/inline layout follows automatically from whichever addon align is used (has-[>[data-align=block-start]]:flex-col etc.), not a separate prop" }
-      - { name: content, kind: slot, id: "3525:8", code: none, note: "the group's content region — control + addons passed as JSX children, not a named prop" }
+      - { name: layout, kind: variant, values: [horizontal, vertical], code: live-state,
+          triggers: { horizontal: "default", vertical: "an InputGroupAddon with align=block-start / block-end, or a textarea control, as child" } }
+      - { name: content, kind: slot, id: "3525:8", code: children, note: "the group's content region — the control + addons" }
     addon: { name: "InputGroupAddon", id: "3520:606", axis: "align [inline-start, inline-end, block-start, block-end]", slot: content }
     button: { name: "InputGroupButton", id: "3545:694", axis: "size [xs, sm, icon-xs, icon-sm]",
               nests: "ghost .Button instance per size (xs → xs, sm → default, icon-xs → icon-xs, icon-sm → icon); Base radius → corner-sm on xs + icon-xs",
@@ -622,7 +622,7 @@ open:
     set: { name: "Label", id: "3735:1024" }
     members: { "state=default": "3734:1022", "state=disabled": "3735:1022" }   # disabled = opacity 0.5
     api:   # every Figma control of the set; code = prop name | live-state | none (see Rules)
-      - { name: label (children), kind: text, id: "3735:0", code: none, note: "the caption text — passed as JSX children, not a prop" }
+      - { name: label (children), kind: text, id: "3735:0", code: children, note: "the caption text" }
       - { name: state, kind: variant, values: [default, disabled], code: live-state,
           triggers: { disabled: "peer-disabled / group-data-[disabled=true] set by the paired control, not Label's own prop (see forks)" } }
     nests_into: ".Field label slot (all Field members) as a real .Label instance"
@@ -671,10 +671,10 @@ open:
           triggers: { "true": "aria-invalid set on the control — Field itself carries no invalid prop (see a11y)" } }
       - { name: controlPosition, kind: variant, values: [trailing, leading], code: none,
           note: "Figma-only axis, real only for horizontal orientation — code composes control-leading via child order (see forks)" }
-      - { name: label, kind: slot, id: "3716:0", code: none, note: "the label slot nests a FieldLabel/Label instance — passed as JSX children in that position" }
-      - { name: control, kind: slot, id: "3716:1", code: none, note: "the field's control (Input, Textarea, Select …) — arbitrary JSX in that position" }
-      - { name: description, kind: slot, id: "3716:2", code: none, note: "FieldDescription content — passed as JSX children" }
-      - { name: error, kind: slot, id: "3716:3", code: none, note: "FieldError content — passed as JSX children, only rendered when present" }
+      - { name: label, kind: slot, id: "3716:0", code: children, note: "the child here is a FieldLabel (usually wrapping a Label)" }
+      - { name: control, kind: slot, id: "3716:1", code: children, note: "the child here is the control — Input, Textarea, Select …" }
+      - { name: description, kind: slot, id: "3716:2", code: children, note: "the child here is a FieldDescription" }
+      - { name: error, kind: slot, id: "3716:3", code: children, note: "the child here is a FieldError, only rendered when present" }
       - { name: Show description, kind: boolean, id: "3692:15", code: none,
           note: "Figma-only visibility toggle for the description slot — in code FieldDescription is simply omitted when not needed, not a boolean prop" }
       - { name: Show error, kind: boolean, id: "3692:20", code: none,
@@ -725,7 +725,7 @@ open:
     set: { name: "FieldLegend", id: "3909:1246" }
     members: { "variant=legend": "3908:1246", "variant=label": "3908:1248" }
     api:   # every Figma control of the set; code = prop name | live-state | none (see Rules)
-      - { name: legend (children), kind: text, id: "3909:2", code: none, note: "the caption text — passed as JSX children, not a prop" }
+      - { name: legend (children), kind: text, id: "3909:2", code: children, note: "the caption text" }
       - { name: variant, kind: variant, values: [legend, label], code: variant }
     vars: [ink]
     styles: [text:Label/md, text:Title]
@@ -754,7 +754,7 @@ open:
     component: { name: "FieldSet", id: "3739:1026" }   # single component (no variant axis)
     slots: { Slot: "Slot#3692:26 (node 3692:1435)" }   # the ONLY property of the component
     api:   # every Figma control of the component; code = prop name | live-state | none (see Rules)
-      - { name: Slot, kind: slot, id: "3692:26", code: none, note: "the fieldset's content — nested Field / FieldGroup instances passed as JSX children, not a named prop" }
+      - { name: Slot, kind: slot, id: "3692:26", code: children, note: "the fieldset's content — nested Field / FieldGroup instances" }
     legend: "nested real .FieldLegend instance 3917:1254 — NOT a slot and not a text property (default 'Address')"
     nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width)"
     vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
