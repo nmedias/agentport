@@ -141,13 +141,18 @@ open:
     specs: [badge.spec.tsx]
     cva:
       badgeVariants: { variant: [default, secondary, destructive, outline, ghost, link], defaults: {variant: default} }
+    props:   # public API from badge.tsx JSDoc + curated children passthrough in the story; figma = counterpart control in figma.api
+      - { name: variant, type: BadgeVariant, default: "default", figma: variant }
+      - { name: asChild, type: boolean, default: false, figma: none, note: "Radix Slot merge onto a single child (e.g. wrap an <a> for a real link badge) — not represented in Figma" }
+      - { name: children, type: React.ReactNode, figma: "label (children) + icon", curated: true, note: "curated passthrough (story argTypes) — badge content: label text, a leading icon, or both" }
   figma:
     section: { name: "Badge", id: "8113:11356" }
     set: { name: "Badge", id: "3697:1016" }
     members: { default: "3691:2", secondary: "3691:7", destructive: "3691:12", outline: "3693:2", ghost: "3693:7", link: "3693:12" }
-    slots: { icon: "icon#3697:0" }                  # leading-icon slot; default 12px check vector, empty → text only
-    text: { label: "label (children)#3692:28" }     # root TEXT property, default "{Label}"
-    axis: { variant: [default, secondary, destructive, outline, ghost, link] }
+    api:   # every Figma control of the Badge set; code = prop name | live-state | none (see Rules)
+      - { name: variant, kind: variant, values: [default, secondary, destructive, outline, ghost, link], code: variant }
+      - { name: "label (children)", kind: text, id: "3692:28", code: children }
+      - { name: icon, kind: slot, id: "3697:0", code: children, note: "shares the children region with the label — a leading icon child, not a separate prop" }
     vars: [ink, border, corner-full, destructive, destructive-ink, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xs]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
@@ -176,19 +181,25 @@ open:
     specs: [button.spec.tsx]
     cva:
       buttonVariants: { variant: [default, destructive, outline, secondary, ghost, link], size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg], defaults: {variant: default, size: default} }
+    props:   # public API from button.tsx JSDoc + cva axes; figma = counterpart control in figma.api
+      - { name: variant, type: ButtonVariant, default: "default", figma: variant }
+      - { name: size, type: ButtonSize, default: "default", figma: size, note: "paired with the icon boolean (no Figma control — private .Button/Base only) it maps to the square icon-* cva key in render" }
+      - { name: asChild, type: boolean, default: false, figma: none, note: "Radix Slot merge onto a single child (e.g. wrap an <a>) — not represented in Figma" }
   figma:
     section: { name: "Button", id: "8109:2928" }
     base_section: { name: "Button · Base", id: "3145:2" }
     set: { name: "Button", id: "3164:312" }       # 220-member matrix variant × size × state
-    base: { name: ".Button/Base", id: "3159:12" } # decoupled base set (surface / radius / padding + state-layer RECTANGLE)
-    base_props:                                   # the Button set exposes ONLY variant / size / state — text + icon live HERE
+    base: { name: ".Button/Base", id: "3159:12" } # decoupled base set (surface / radius / padding + state-layer RECTANGLE) — private, not in scope of the API block
+    base_props:                                   # the Button set exposes ONLY variant / size / state — text + icon live on the private base, out of the API-block scope
       label: "label (children)#3692:35"           # TEXT, default "{Label}"
       icon_slot: "Icon#3159:0"                    # SLOT
       icon_only_swap: "Button Icon (Only)#3516:10"   # INSTANCE_SWAP, default .Button/Base/.Button Icon 3516:1146
       size: "VARIANT [default, sm, lg, icon, xs, icon-xs, icon-sm, icon-lg] — defaultValue is `lg`, not `default`"
-    axis: { variant: [default, destructive, outline, secondary, ghost, link],
-            size: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg],
-            state: [default, hover, active, focus, disabled] }
+    api:   # every Figma control of the Button set; code = prop name | live-state | none (see Rules)
+      - { name: variant, kind: variant, values: [default, destructive, outline, secondary, ghost, link], code: variant }
+      - { name: size, kind: variant, values: [default, xs, sm, lg, icon, icon-xs, icon-sm, icon-lg], code: size }
+      - { name: state, kind: variant, values: [default, hover, active, focus, disabled], code: live-state,
+          triggers: { hover: ":hover", active: ":active", focus: ":focus-visible", disabled: "disabled" } }
     vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-md, destructive, destructive-ink, muted-fill, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-md, space-sm, space-xs]
     styles: [text:Label/md]
   skill: /shadcn-component-port; /component-sync
@@ -376,6 +387,9 @@ open:
     specs: [kbd.spec.tsx]
     cva:
       kbdVariants: { emphasis: [high, low], defaults: {emphasis: high} }
+    props:   # public API from kbd.tsx JSDoc + cva axis + curated children passthrough in the story; figma = counterpart control in figma.api
+      - { name: emphasis, type: KbdEmphasis, default: "high", figma: emphasis }
+      - { name: children, type: React.ReactNode, figma: "content + label (children) + icon", curated: true, note: "curated passthrough (story argTypes) — keycap content: a text glyph, or a modifier symbol passed as an icon" }
   figma:
     section: { name: "Kbd", id: "8115:11474" }
     set: { name: "Kbd", id: "3217:308" }             # 2 axes content × emphasis = 4 members
@@ -384,9 +398,11 @@ open:
       "content=icon, emphasis=high": "3217:304"
       "content=text, emphasis=low":  "3428:1385"
       "content=icon, emphasis=low":  "3428:1387"
-    slots: { property: "icon#3217:1", nodes: { high: "3217:305", low: "3428:1388" } }  # 12px vector
-    text: { label: "label (children)#3692:44" }   # root TEXT property, default "{Label}"
-    axis: { content: [text, icon], emphasis: [high, low] }   # content is children-driven; emphasis = code prop (default high)
+    api:   # every Figma control of the Kbd set; code = prop name | live-state | none (see Rules)
+      - { name: content, kind: variant, values: [text, icon], code: children, note: "exchanges which sub-node is visible (label text vs icon slot), not an addition" }
+      - { name: emphasis, kind: variant, values: [high, low], code: emphasis }
+      - { name: "label (children)", kind: text, id: "3692:44", code: children }
+      - { name: icon, kind: slot, id: "3217:1", code: children }
     vars: [corner-sm, inverse-fill, inverse-ink, muted-fill, muted-ink, space-xs]
     styles: [text:Kbd]
   skill: /shadcn-component-port; /component-sync
@@ -414,14 +430,17 @@ open:
       - "breadcrumb.stories.tsx → UI/Breadcrumb (Default, TwoLevels, WithEllipsis, CustomSeparator, AsRouterLink)"
     specs: [breadcrumb.spec.tsx]
     cva: none
+    props:   # public API of the Breadcrumb export = the curated children passthrough in the story; figma = counterpart control in figma.api
+      - { name: children, type: React.ReactNode, figma: items, curated: true, note: "curated passthrough (story argTypes) — the trail: a single BreadcrumbList holding BreadcrumbItems, closing with one BreadcrumbPage" }
   figma:
     section: { name: "Breadcrumb", id: "8406:5650" }
     composition: { name: "Breadcrumb", id: "3254:302" }        # plain COMPONENT; items gap Space/space-sm (6px); ONLY property = slot items#3254:0
-    segment_set: { name: "Segment", id: "3250:308" }           # text prop Item (children)#3253:0, default "{Item}"; .Separator + Ellipsis have no props
+    segment_set: { name: "Segment", id: "3250:308" }           # text prop Item (children)#3253:0, default "{Item}"; .Separator + Ellipsis have no props — member component, out of the API-block scope (main component only)
     segment_members: { "state=link": "3250:302", "state=link-hover": "3250:304", "state=page": "3250:306" }
     separator: { name: ".Separator", id: "3251:302" }            # icon 14px → size-3.5
     ellipsis: { name: "Ellipsis", id: "3251:305" }              # 20×20, icon 16px → size-4
-    axis: { segment_state: [link, link-hover, page] }
+    api:   # every Figma control of the Breadcrumb composition; code = prop name | live-state | none (see Rules)
+      - { name: items, kind: slot, id: "3254:0", code: children }
     vars: [ink, muted, space-sm, space-xs]
     styles: [text:Body]
   skill: /shadcn-component-port; /component-sync
@@ -584,11 +603,15 @@ open:
       - "separator.stories.tsx → UI/Separator (Default, HorizontalBetweenBlocks, VerticalInRow, Orientations)"
     specs: [separator.spec.tsx]
     cva: none
+    props:   # public API from separator.tsx JSDoc (curated Radix passthrough); figma = counterpart control in figma.api
+      - { name: orientation, type: "'horizontal' | 'vertical'", default: "horizontal", figma: orientation }
+      - { name: decorative, type: boolean, default: true, figma: none, note: "toggles the ARIA role only (role=\"none\" vs role=\"separator\") — the pixel line is identical either way, not represented in Figma" }
   figma:
     section: { name: "Separator", id: "8417:5749" }
     set: { name: "Separator", id: "3676:1018" }
     members: { "orientation=horizontal": "3676:1016", "orientation=vertical": "3676:1017" }
-    axis: { orientation: [horizontal, vertical] }   # static / non-interactive → content axis, NO CVA
+    api:   # every Figma control of the Separator set; code = prop name | live-state | none (see Rules)
+      - { name: orientation, kind: variant, values: [horizontal, vertical], code: orientation }
     vars: [border]
     styles: []
   skill: /shadcn-component-port; /component-sync
@@ -1368,12 +1391,22 @@ open:
     cva:
       itemVariants: { variant: [default, outline, muted], size: [default, sm, xs], defaults: {variant: default, size: default} }
       itemMediaVariants: { variant: [default, icon, image], defaults: {variant: default} }
+    props:   # public API from item.tsx JSDoc (ItemProps) + cva axes; figma = counterpart control in figma.api. Media/title/description/actions
+             # are composed via nested ItemMedia/ItemTitle/ItemDescription/ItemActions children, not props of Item — see the api rows below.
+      - { name: variant, type: ItemVariant, default: "default", figma: variant }
+      - { name: size, type: ItemSize, default: "default", figma: size }
+      - { name: asChild, type: boolean, default: false, figma: none, note: "Radix Slot merge onto a single child (e.g. wrap an <a> for a fully clickable link row) — not represented in Figma" }
   figma:
     section: { name: "Item", id: "8439:6008" }
     set: { name: "Item", id: "4498:2551" }              # 9 members (variant × size); master = outline/default 4495:2471
-    axis: { variant: [default, outline, muted], size: [default, sm, xs] }
-    props: "media#4498:0 (SLOT, default = nested .ItemMedia instance variant=icon) · actions#4498:1 (SLOT, default chevron muted) · title#4499:0 (TEXT {Title}, Label, bound to ink) · description#4499:10 (TEXT {Description}, Body / muted)"
-    media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable glyph / image; icon default bound to ink)" }   # 3 members: default 4508:2534 / icon 4508:2537 / image
+    api:   # every Figma control of the Item set; code = prop name | live-state | none (see Rules)
+      - { name: variant, kind: variant, values: [default, outline, muted], code: variant }
+      - { name: size, kind: variant, values: [default, sm, xs], code: size }
+      - { name: media, kind: slot, id: "4498:0", code: none, note: "composed via a nested ItemMedia child, not a prop of Item itself" }
+      - { name: actions, kind: slot, id: "4498:1", code: none, note: "composed via a nested ItemActions child, not a prop of Item itself" }
+      - { name: title, kind: text, id: "4499:0", code: none, note: "composed via a nested ItemTitle child, not a prop of Item itself" }
+      - { name: description, kind: text, id: "4499:10", code: none, note: "composed via a nested ItemDescription child, not a prop of Item itself" }
+    media_set: { name: "ItemMedia", id: "4508:2544", axis: { variant: [default, icon, image] }, slot: "content#4508:3 (swappable glyph / image; icon default bound to ink)" }   # 3 members: default 4508:2534 / icon 4508:2537 / image; member component, out of the API-block scope (main component only)
     group_component: { name: "ItemGroup", id: "4511:2575", slot: "items#4511:0", note: "vertical auto-layout, gap-xl; layout only (the responsive has-data gap cannot be modelled in Figma)" }
     examples:
       group: "Usage Examples 4501:2471"
@@ -1414,14 +1447,18 @@ open:
       - "table.stories.tsx → UI/Table (Default, Selectable, EmptyState, Alignment, ComponentCells, RowStates)"
     specs: [table.spec.tsx]
     cva: none
+    props: []   # Table is a passthrough root (React.ComponentProps<'table'> only, no JSDoc'd own prop, no cva) — no public DS API to document
   figma:
     section: { name: "Table", id: "8427:5788" }
-    head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }
-    cell: { set: "TableCell", id: "4515:2610", axis: "align [left, center, right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — a cell also takes components (Checkbox / Badge / Button …); the text default sits IN the slot, swappable; Body + ink, p-md" }
-    row: { set: "TableRow", id: "4520:2621", axis: "state [default, hover, selected]", slot: "cells#4520:3 (empty)", notes: "bottom border → border; hover muted-fill/50; selected accent-fill; minHeight 37" }
-    composition: { name: "Table", id: "4521:2597", props: "content#4537:0 (SLOT, default = invoice interior) · showCaption#4522:1 (bool) · caption#4522:2 (text)", notes: "recompose-able: the content slot holds a table frame with a header TableRow, body TableRows and a plain footer FRAME of TableCells (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
+    head: { set: "TableHead", id: "4515:2603", axis: "align [left, center, right]", prop: "head (children)#4515:0 ({Head}); Label + ink, h-10, px-md" }   # member component, out of the API-block scope (main component only)
+    cell: { set: "TableCell", id: "4515:2610", axis: "align [left, center, right]", prop: "cell (children)#4515:4 ({Cell}) TEXT + content#4527:0 SLOT — a cell also takes components (Checkbox / Badge / Button …); the text default sits IN the slot, swappable; Body + ink, p-md" }   # member component, out of scope
+    row: { set: "TableRow", id: "4520:2621", axis: "state [default, hover, selected]", slot: "cells#4520:3 (empty)", notes: "bottom border → border; hover muted-fill/50; selected accent-fill; minHeight 37" }   # member component, out of scope
+    composition: { name: "Table", id: "4521:2597", notes: "recompose-able: the content slot holds a table frame with a header TableRow, body TableRows and a plain footer FRAME of TableCells (slot default = baked invoice); caption boolean + text below. No showFooter (the footer is part of the slot content)" }
     examples: { group: "Usage Examples 4523:2635", Default: "4523:2636 (instance 4523:2638, slot default invoice + caption)", Selection: "4524:2682 (instance 4538:2802, row 2 selected)", Empty: "4524:2730 (instance 4538:2890, No results)", ComponentCells: "4529:2758 (instance 4538:2963, Checkbox + Badge)" }   # frame (instance); all = Table instances with the content slot filled
-    axis: { head_align: [left, center, right], cell_align: [left, center, right], row_state: [default, hover, selected] }
+    api:   # every Figma control of the Table composition; code = prop name | live-state | none (see Rules)
+      - { name: showCaption, kind: boolean, id: "4522:1", code: none, note: "demo toggle for whether the caption instance shows; in code, include or omit a TableCaption child" }
+      - { name: caption, kind: text, id: "4522:2", code: none, note: "demo caption text; in code, this is a TableCaption's children" }
+      - { name: content, kind: slot, id: "4537:0", code: none, note: "demo slot holding a baked example table interior (header + body + footer rows); in code, this is ordinary JSX composition of TableHeader/TableBody/TableFooter/TableRow/TableHead/TableCell as Table's children" }
     vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
     styles: [text:Body, text:Eyebrow, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md)
