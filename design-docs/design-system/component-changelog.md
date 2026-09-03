@@ -11,6 +11,25 @@ Token-level history (renames, palette rework, dropped tokens) is in
 
 ---
 
+## 2026-09-03 — Doc-section API block: Input migrated to `figma.api` + `code.props`
+
+**Why.** The API block of each doc section was generated from `figma.axis` alone. For Input that produced a
+single `state` row with a generic "pseudo-state" formula and showed neither the Figma properties
+(`placeholder`, `value`, `filled`) nor any documented code prop. The block promised "Figma property ↔ code
+prop" and delivered neither half.
+
+**Catalog.** Input: `figma.axis` + `figma.properties` replaced by the structured `figma.api` list (one row
+per Figma control, `code` = prop name | `live-state` + `triggers` | `none`), new `code.props` (public props
+from `input.tsx` JSDoc + the two curated a11y passthroughs, each with its Figma counterpart or `none`).
+Rules + Schema document the fields. First entry migrated — the other 21 follow the same pattern.
+
+**Figma.** `Doc/API-Row` `8059:2771` gained the boolean `codeOnly#8582:0` with a `code-only` badge (default
+off — existing rows unchanged). Input section `8173:3304`: the one `state` row became six (`state`,
+`placeholder`, `value + filled`, `type`, `onChange`, `aria-label`; rows `8175:3369`, `8582:6787` … `8582:6831`),
+the `· FIGMA-ONLY` text suffix dropped in favour of the badge, eyebrow now counts controls.
+
+---
+
 ## 2026-08-31 — Figma file switch, file cleanup, descriptions audit, catalog restructure
 
 **Figma file.** The DS moved to its own file `nQSNLASjuLvgTh3we8Dp4s` ("Agentport DS"), a duplicate of the

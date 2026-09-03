@@ -37,6 +37,13 @@ reads are read-only (pipeline rule).
   `.claude/skills/{shadcn-component-port,component-sync}/config.json`). They are stable (not session IDs).
 - `code.stories` / `specs` / `cva` are read from the source (story file → Storybook title → story names; cva
   axes + defaults, `none` when the component has no cva) — the code side of the axis ↔ prop diff.
+- **`figma.api`** (where present) supersedes `axis` + `props`/`properties`: one row per Figma control (`kind` =
+  variant | text | boolean | slot; variants carry no `id` — Figma ids only text/boolean/swap properties). `code`
+  names the counterpart: a **prop name** (mapped), `live-state` (no prop — a runtime state of the element;
+  `triggers` lists what produces each value) or `none` (Figma-only drawing aid). **`code.props`** lists the
+  documented public props with their Figma counterpart (`figma`) or `none` (code-only). Together they are the
+  source of the doc section's API block: prop name ⇒ mapped · live-state / none ⇒ figma-only · only in
+  `code.props` ⇒ code-only.
 - `vars` / `styles` per entry = the semantic variables and styles **actually bound inside the component's
   Section** (incl. usage examples), read from the live file; typography part variables are represented by
   their text style.
@@ -45,8 +52,8 @@ reads are read-only (pipeline rule).
 
 ```
 name · status · figma_synced · source{registry,item,style} ·
-code{dir, exports[], barrel, types?, stories[], specs[], cva, variants?, internal?, code_only_parts?} ·
-figma{section, set|component|composition…, members?, slots?, props?, axis, examples?, vars, styles} ·
+code{dir, exports[], barrel, types?, props?, stories[], specs[], cva, variants?, internal?, code_only_parts?} ·
+figma{section, set|component|composition…, members?, slots?, props?, axis | api, examples?, vars, styles} ·
 skill · description · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
 ```
 
@@ -214,6 +221,15 @@ open:
     exports: [Input]
     barrel: "libs/ui/src/index.ts → export * from './components/ui/input'"
     types: [InputProps]
+    props:   # public API from input.tsx JSDoc + curated a11y passthroughs in the story; figma = counterpart control in figma.api
+      - { name: type, type: HTMLInputTypeAttribute, default: "text", figma: none, note: "file switches to the picker anatomy — not drawn in Figma" }
+      - { name: placeholder, type: string, figma: placeholder }
+      - { name: defaultValue, type: "string | number | readonly string[]", figma: "value + filled" }
+      - { name: value, type: "string | number | readonly string[]", figma: "value + filled", note: "controlled — pair with onChange" }
+      - { name: disabled, type: boolean, default: false, figma: "state=disabled" }
+      - { name: onChange, type: ChangeEventHandler<HTMLInputElement>, figma: none }
+      - { name: aria-invalid, type: boolean, default: false, figma: "state=invalid", curated: true, note: "curated passthrough (story argTypes) — drives the destructive border + ring" }
+      - { name: aria-label, type: string, figma: none, curated: true, note: "curated passthrough — accessible name for a bare input; prefer FieldLabel" }
     stories:
       - "input.stories.tsx → UI/Input (Default, WithLabel, WithDescription, WithError, Form, File, AllStates)"
     specs: [input.spec.tsx]
@@ -221,8 +237,13 @@ open:
   figma:
     section: { name: "Input", id: "8173:3304" }
     set: { name: "Input", id: "3177:302" }
-    axis: { state: [default, focus, filled, disabled, invalid, focus-invalid] }   # no CVA in code
-    properties: "placeholder#3763:0 (text) · value#3763:7 (text) · filled#3763:14 (bool → value.visible)"
+    api:   # every Figma control of the set; code = prop name | live-state | none (see Rules)
+      - { name: state, kind: variant, values: [default, focus, filled, disabled, invalid, focus-invalid], code: live-state,
+          triggers: { focus: ":focus-visible", filled: "value / defaultValue set", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
+      - { name: placeholder, kind: text, id: "3763:0", code: placeholder }
+      - { name: value, kind: text, id: "3763:7", code: "value / defaultValue" }
+      - { name: filled, kind: boolean, id: "3763:14", code: live-state, triggers: { on: "value / defaultValue set" },
+          note: "second Figma control for state=filled — shows the value layer on an instance because Figma cannot derive layer visibility from a text property" }
     focus_member: "3176:305"   # the canonical focus-glow recipe other sets copy verbatim
     focus_invalid_member: "3692:1249"   # the canonical focus-invalid recipe (destructive border + destructive/20 glow)
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md, space-xs]
