@@ -21,7 +21,27 @@ prop" and delivered neither half.
 **Catalog.** Input: `figma.axis` + `figma.properties` replaced by the structured `figma.api` list (one row
 per Figma control, `code` = prop name | `live-state` + `triggers` | `none`), new `code.props` (public props
 from `input.tsx` JSDoc + the two curated a11y passthroughs, each with its Figma counterpart or `none`).
-Rules + Schema document the fields. First entry migrated — the other 21 follow the same pattern.
+Rules + Schema document the fields. Input was the reference; the other 24 entries followed the same day (four
+family batches, each built by one agent and reviewed by an independent one against a fresh Figma dump, a fresh
+TypeScript extract of the component sources and the deterministic gate `tools/api-audit/check.py` kept in the
+origin workspace — 1755 checks, all green on the merged catalog).
+
+**Scope decision (user, same day).** The API block documents the **main component only**: the Figma component named
+like the section and the export named like the entry. Member components (SelectItem, InputGroupAddon, CommandItem,
+TableRow, RadioGroupItem, DialogContent …) are out of the block — `api_component` / `api_export` overrides exist
+only where nothing carries the section / entry name (Select → SelectTrigger; ChoiceCard → ChoiceCardCheckbox). A
+Figma control whose prop lives on another export is written `<Export>.<prop>` (Popover `side` → `PopoverContent.side`);
+controls composed through JSX children are `children` with the child named in `note`; derived runtime states (Input
+`filled`, InputGroup `layout`, Slider `thumbs`, every `state` axis) are `live-state` with `triggers`; `none` is
+reserved for controls with no code counterpart at all (Dialog `showFooter` / `showBody`, Field `controlPosition`).
+
+**Figma.** `Doc/API-Row` `8059:2771`: `{Values}` / `{Code}` text now fill the row width (was fixed 300 px). Popover,
+Dialog and FieldSet sections received an `api` frame in their meta well (cloned from Input's). Every section's
+rows rebuilt: the `· FIGMA-ONLY` text suffix and the generic `pseudo-state (…)` template are gone file-wide; chips
+follow the catalog (`figmaOnly` ⇔ live-state / none, `codeOnly` ⇔ prop without a Figma control).
+
+**Open (found, not changed).** Button `size`: Figma variant default `xs`, code default `default`. SelectTrigger
+boolean is named `filles` in Figma (typo for `filled`, catalogued as-is).
 
 **Figma.** `Doc/API-Row` `8059:2771` gained the boolean `codeOnly#8582:0` with a `code-only` badge (default
 off — existing rows unchanged). Input section `8173:3304`: the one `state` row became six (`state`,

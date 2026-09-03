@@ -39,8 +39,13 @@ reads are read-only (pipeline rule).
   axes + defaults, `none` when the component has no cva) — the code side of the axis ↔ prop diff.
 - **`figma.api`** (where present) supersedes `axis` + `props`/`properties`: one row per Figma control (`kind` =
   variant | text | boolean | slot; variants carry no `id` — Figma ids only text/boolean/swap properties). `code`
-  names the counterpart: a **prop name** (mapped), `live-state` (no prop — a runtime state of the element;
-  `triggers` lists what produces each value) or `none` (Figma-only drawing aid). **`code.props`** lists the
+  names the counterpart: a **prop name** (mapped), **`<Export>.<prop>`** (mapped to a prop on another export of the
+  same module, e.g. `PopoverContent.side`), **`children`** (composed through JSX children / a child component named in
+  `note`), `live-state` (no prop — a runtime state of the element; `triggers` lists what produces each value) or
+  `none` (nothing in code at all — a Figma drawing aid). **Main component only:** `api` = the Figma component named
+  like the section (`api_component` override only when that one has zero controls), `props` = the export named like
+  the entry (`api_export` override only when that export has no documented props); member components are out of the
+  API block. **`code.props`** lists the
   documented public props with their Figma counterpart (`figma`) or `none` (code-only). Together they are the
   source of the doc section's API block: prop name ⇒ mapped · live-state / none ⇒ figma-only · only in
   `code.props` ⇒ code-only.
