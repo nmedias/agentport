@@ -1058,13 +1058,13 @@ open:
     api_component: SelectTrigger   # Select (the top-level composition 4326:2477) has zero controls of its own — documenting the SelectTrigger member instead per the main-only scope rule
     note: "figma.api documents SelectTrigger (the closed-state anatomy) — the Select composition component itself carries no properties; SelectItem/SelectContent/SelectGroup member controls are out of scope under the main-only rule"
     api:   # every Figma control of SelectTrigger (the api_component override) only
-      - { name: size, kind: variant, values: [default, sm], code: none,
-          note: "maps to the real prop SelectTrigger.size, but SelectTrigger is a separate export — out of scope for this entry's code.props (main-only rule)" }
+      - { name: size, kind: variant, values: [default, sm], code: "SelectTrigger.size",
+          note: "external prop — size lives on the SelectTrigger export, not on Select itself" }
       - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" },
           note: "no filled state, unlike Input/Textarea — the trigger's placeholder/value swap is modeled via the filles boolean instead" }
-      - { name: placeholder, kind: text, id: "4388:0", code: none,
-          note: "maps to the real prop SelectValue.placeholder, a separate export — out of scope for this entry's code.props (main-only rule)" }
+      - { name: placeholder, kind: text, id: "4388:0", code: "SelectValue.placeholder",
+          note: "external prop — placeholder lives on the SelectValue export, not on Select itself" }
       - { name: value, kind: text, id: "4310:0", code: "value / defaultValue",
           note: "shows the currently selected item's label; driven by Select's value (controlled) or defaultValue (uncontrolled) at the root" }
       - { name: filles, kind: boolean, id: "4388:11", code: live-state, triggers: { on: "value / defaultValue set" },
