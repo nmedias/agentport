@@ -33,6 +33,15 @@ reads are read-only (pipeline rule).
   back** as a CVA / prop; `figma_mechanics` = what an editor must know to change the set safely;
   `divergences` = code ↔ Figma structural differences that are **not** a delta for `/component-sync`;
   `open` = known gaps. Dates, old names and old values belong in the changelog.
+- **`figma.code_only_tokens`** = tokens the code paints via a DS utility that the Figma set does **not** bind
+  (a hover / selection / focus state Figma does not draw, or a raw value the set still carries). One row
+  `{ token, code: "<utility>", why }` each; such a token is deliberately **no chip** in the doc section's
+  token column. The token-column gate (`tools/token-audit/check.py`, ytoolbox) accepts a listed token and
+  fails a stale row (code no longer uses it, or the set now binds it). A set defect stays in `open` as well.
+- **`figma.vars` / `figma.styles`** = what the section's **component set** binds (own bindings; tokens that
+  reach the set only through a nested member instance of another DS component are the member's, not
+  listed here; tokens that live only in usage examples are not listed either). They feed the doc section's
+  token column.
 - IDs are **Figma node IDs** in file `nQSNLASjuLvgTh3we8Dp4s` (configured in
   `.claude/skills/{shadcn-component-port,component-sync}/config.json`). They are stable (not session IDs).
 - `code.stories` / `specs` / `cva` are read from the source (story file → Storybook title → story names; cva
@@ -58,7 +67,7 @@ reads are read-only (pipeline rule).
 ```
 name · status · figma_synced · source{registry,item,style} ·
 code{dir, exports[], barrel, types?, props?, stories[], specs[], cva, variants?, internal?, code_only_parts?} ·
-figma{section, set|component|composition…, members?, slots?, props?, axis | api, examples?, vars, styles} ·
+figma{section, set|component|composition…, members?, slots?, props?, axis | api, examples?, vars, styles, code_only_tokens?} ·
 skill · description · anatomy · deps? · deviations? · forks? · figma_mechanics? · divergences? · a11y? · open? · run_notes?
 ```
 
