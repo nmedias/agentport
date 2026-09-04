@@ -548,8 +548,12 @@ open:
       palette: "bg-dialog-fill + border 1.5px + shadow-elevation + corner-md + p-0 · prompt divider + footer divider (CommandSeparator instances, fill) · list slot py-md · default slot content = demo (JUMP TO / SEARCH / RUN)"
     examples: { group: "Usage Examples 3875:1394", command-demo: "3573:2", palette-demo: "3650:63" }
     icons: { Calendar: "3557:4", Emotion: "3557:7", Calculator: "3557:10", User: "3557:13", Card: "3557:16", Settings: "3557:19", ArrowRight: "3644:4", Swap: "3644:7", Search: "3644:10", Play: "3644:13", Download: "3644:16" }
-    vars: [accent-fill, accent-ink, ink, surface, border, card-fill, corner-lg, corner-md, corner-sm, corner-xl, dialog-fill, input-border, input-fill, input-ink-placeholder, inverse-fill, inverse-ink, muted, primary, space-2xl, space-lg, space-md, space-sm, space-xl, space-xs]
-    styles: [effect:Elevation, effect:Glow, text:Body, text:Data/lg, text:Kbd, text:Label/md, text:Eyebrow]
+    vars: [accent-fill, accent-ink, ink, surface, border, card-fill, corner-lg, corner-md, corner-sm, corner-xl, dialog-fill, input-border, input-fill, input-ink-placeholder, inverse-fill, muted, primary, space-2xl, space-lg, space-md, space-sm, space-xl, space-xs]
+    styles: [effect:Elevation, effect:Glow, text:Body, text:Data/lg, text:Kbd]
+    code_only_tokens:
+      - { token: dialog-ink, code: "text-dialog-ink", why: "commandVariants sets a default text-dialog-ink colour on the Command root wrapper, but every text/icon node inside binds its own token directly (ink, muted, accent-ink, primary …) — no node in the Figma set binds dialog-ink itself." }
+      - { token: "text:Eyebrow", code: "text-format-eyebrow", why: "CommandGroup's [cmdk-group-heading] is styled text-format-eyebrow uppercase text-muted in both variants (command.tsx), but the Figma set's group-heading text node uses a different bound text style, not the Eyebrow style — so the set does not bind text:Eyebrow." }
+      - { token: "text:Label/md", code: "text-format-label-md", why: "CommandInput's default-variant CommandPrimitive.Input (command.tsx) sets text-format-label-md directly on its own element, but in Figma that text node sits inside the nested InputGroup instance's own subtree — the provenance boundary (2026-09-04, second round) credits it to InputGroup, not to Command's own set." }
   skill: /shadcn-component-port; /component-sync
   description: "The command palette: typing filters and re-ranks the list, with a built-in empty state. Composed from input, list, groups, items, shortcuts and separators; the same palette runs inline or inside a modal as the app's ⌘K launcher, and variant=\"palette\" reshapes it into that launcher form."
   anatomy: "Multi-composite on cmdk (Command root, Dialog wrapper, Input, List, Empty, Group, Item, Shortcut, Separator) with a variant axis default | palette."
@@ -612,8 +616,8 @@ open:
     overlay: { name: "DialogOverlay", id: "3590:791", fill: "scrim (3588:2, alias → neutral/900) × layer opacity scrim-opacity (3618:3, alias → opacity/10) + BACKGROUND_BLUR 4" }
     icon: { name: ".Dialog/Icon/Close", id: "3590:790" }
     examples: { group: "Usage Examples 3875:1296", dialog-demo: "3595:807", scrollable-content: "3595:829", sticky-footer: "3598:840", no-close-button: "3603:858", dialog-on-overlay: "3604:888" }
-    vars: [ink, surface, border, corner-lg, corner-md, corner-xl, dialog-fill, dialog-ink, muted, muted-fill, primary-fill, primary-ink, scrim, scrim-opacity, secondary-fill, secondary-ink, space-lg, space-md, space-sm, space-xl]
-    styles: [effect:Elevation, text:Body, text:Label/md, text:Title]
+    vars: [border, corner-xl, dialog-fill, dialog-ink, ink, muted, muted-fill, scrim, scrim-opacity, space-md, space-xl]
+    styles: [effect:Elevation, text:Body, text:Title]
   skill: /shadcn-component-port; /component-sync
   description: "The modal: scrim, focus trap, dismiss via corner close, footer close, Escape or overlay click. A DialogTitle is mandatory — it is the dialog's accessible name. The footer is its own part with an optional built-in close action."
   anatomy: "Radix composite (radix-ui Dialog); panel composition + footer + overlay as separate Figma components."
@@ -1362,7 +1366,7 @@ open:
       structure: "each member = auto-layout HUG → footprint = trigger only (50×32), clipsContent=false; the trigger is the only flow child. TWO-STAGE ANCHOR: (1) 'Panel Position' = invisible (fills []) FIXED 50×32 auto-layout, ABSOLUTE child of the member, constraints = SIDE × ALIGN tracking [top → vert MIN · bottom → vert MAX · left → horiz MIN · right → horiz MAX; align start / center / end → MIN / CENTER / MAX on the parallel axis] → tracks the trigger edge when the (hugged) trigger resizes → constant gap, no overlap. (2) PopoverContent = ABSOLUTE child of Panel Position, constraints = GROW-AWAY [side axis INVERTED: bottom → MIN · top → MAX · left → MAX · right → MIN; parallel axis = align] → HUG growth moves AWAY from the trigger. sideOffset 8, NO reflow; closed = content visible=false. Set uses layoutMode GRID → 0 panel collisions. (Two stages because Figma constraints drive BOTH parent-resize tracking AND the self-growth anchor of an ABSOLUTE child, and the two need the OPPOSITE edge per side.) PANEL CONTAINMENT: members hug the trigger, so the panels float outside the members by design → the GRID set carries padding ≈ panel overhang + margin (padL/R 328, padT 105, padB 48; overhang = panel width 288 + gap 8 = 296 sideways, 73 up) AND the set width grows by the same amount (→ 2086) so the content area (1430) stays constant and the GRID does not wrap → the set frame encloses its own panels (panelsOutsideSet=0)."
       prototype: "closed → ON_CLICK CHANGE_TO matching open; open → ON_CLICK + ON_KEY_DOWN(Esc) CHANGE_TO matching closed (DISSOLVE 0.2s) — click-outside cannot be expressed on variant members"
       members_sample: { "open/bottom/center": "4399:2385", "closed/bottom/center": "4402:2469" }   # 24 total; each member = trigger slot + Panel Position anchor (with the nested PopoverContent)
-    vars: [ink, border, corner-lg, dialog-fill, dialog-ink, input-border, input-fill, input-ink-placeholder, muted, muted-fill, primary-fill, primary-ink, space-2xs, space-lg, space-md, space-sm, space-xs]
+    vars: [border, corner-lg, dialog-fill, dialog-ink, muted, space-2xs, space-lg, space-md]
     styles: [effect:Elevation, text:Body, text:Label/md]
   skill: /shadcn-component-port (+ /figma-build-rules; Figma rebuilds via a background agent)
   description: "A raised panel anchored to its trigger — no scrim, no focus trap unless modal; outside click or Escape dismisses. Unlike Dialog it does not name itself: an open panel needs an explicit accessible name."
@@ -1417,8 +1421,8 @@ open:
       prototype: "ON_HOVER ('While hovering') per closed member → CHANGE_TO matching open (DISSOLVE 0.15s); Figma auto-reverts on leave = open-on-hover / close-on-leave. No click, no Esc"
       build_frame: { name: "Build", id: "4420:2530" }    # white vertical auto-layout in the section (like Popover)
     examples: { group: "Usage Examples 4385:2366", Default: "4385:2368 (instance 4385:2370, slot 'Add to library')", WithKbd: "4385:2380 (instance 4385:2382, slot 'Save changes' + nested .Kbd instance 4385:2390 ⌘S)" }   # frame (instance)
-    vars: [ink, border, corner-lg, corner-md, corner-sm, dialog-fill, dialog-ink, muted-fill, primary-fill, primary-ink, space-lg, space-md, space-sm, space-xs]
-    styles: [effect:Elevation, text:Kbd, text:Label/md]
+    vars: [border, corner-md, dialog-fill, dialog-ink, space-lg, space-sm]
+    styles: [effect:Elevation, text:Label/md]
   skill: /shadcn-component-port (+ /figma-build-rules)
   description: "A hover/focus hint chip with a pointer arrow, delayed by the shared provider. It describes its trigger, it does not name it — an icon-only trigger still needs its own label."
   anatomy: "Radix Tooltip (radix-ui umbrella import = the full primitive, declared dep). Provider / Root / Trigger = behaviour wrappers without styling; only TooltipContent + its arrow carry classes → NO CVA, single surface (sibling of Badge / Kbd)."
