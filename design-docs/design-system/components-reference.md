@@ -1167,6 +1167,11 @@ open:
     tint: "checked tint = the accent selection model, fully variable-bound: card fill accent-fill · stroke accent-border · title accent-ink (bound alpha paints do not survive instantiation → no /opacity paints)"
     placeholders: "card-semantic default texts: title {Title} · description {Description} · error {Error} (72 nodes over the 3 sets: 30 title + 30 description + 12 error, error on invalid / focus-invalid only). Mechanics: title via the .Label TEXT prop (label (children)#3735:0) → setProperties; description / error are raw slot texts → .characters override. Layer names stay {Label} / {Field Description} / {Error Message} (inherited from the .Field / .Label mains, locked in instances — no detach)."
     vars: [accent-border, accent-fill, accent-ink, border, corner-full, corner-lg, corner-sm, destructive, destructive-ink, input-border, input-fill, input-fill-high, primary-fill, primary-ink, ring, space-md, surface]
+      # six of these — corner-full, corner-sm, destructive-ink, input-border, input-fill-high, primary-ink —
+      # are not bound by ChoiceCard's own frames; they are adopted from the nested Checkbox / Switch /
+      # RadioGroupItem controls via doc-overrides `ChoiceCard.ownMembers: [Checkbox, Switch, RadioGroupItem]`
+      # (token-column audit 2026-09-04). The rest are genuinely own (direct bindings or placement overrides
+      # on the checked-state members, see the run-note block below).
     styles: []
   skill: Figma build agent (/figma-build-rules) + /component-sync (checked tint)
   description: "Makes the whole card the click target for one choice — title, description and a checkbox, switch or radio in a single labelled surface that tints when checked. Stateless pass-through: controlled vs. uncontrolled is the consumer's decision; the radio form additionally needs its surrounding RadioGroup."
@@ -1378,7 +1383,7 @@ open:
     styles: []
     focus_glow: "literal DROP_SHADOW radius 0 spread 3 ring (neutral/800) @50 % sbn:false — copied verbatim from the Input focus member 3176:305 (never bind the colour, it drops the /50). Per thumb on the focus members; members clip=false."
     code_only_tokens:
-      - { token: ring, code: "focus-visible:ring-ring/50", why: "the focus halo is a literal DROP_SHADOW copied verbatim from the Input focus member (radius 0, spread 3, neutral/800 @50%, showShadowBehindNode:false) — binding the colour drops the /50 alpha (see focus_glow above), so the set deliberately keeps it raw while the code utility genuinely uses ring-ring/50." }
+      - { token: ring, code: "ring-ring/50 (+ hover / focus-visible / active:ring-[3px])", why: "the thumb's ring-ring/50 colour is a base class (always present, not focus-gated) and the ring-[3px] width applies on hover, focus-visible AND active alike — not a focus-only affordance; the Figma set only draws it on the `state=focus` members as a literal DROP_SHADOW copied verbatim from the Input focus member (radius 0, spread 3, neutral/800 @50%, showShadowBehindNode:false) — binding the colour drops the /50 alpha (see focus_glow above), so the set deliberately keeps it raw while the code utility genuinely uses ring-ring/50 across all three states." }
   skill: /shadcn-component-port (+ /figma-build-rules)
   description: "Value selection on a track, horizontal or vertical. Pass two values and it becomes a range — one thumb per value. Its accessible name must reach the thumbs, not the container; the component forwards one label to all of them."
   anatomy: "Radix Slider (radix-ui umbrella import = the full primitive, declared dep), no CVA → geometry + state axes like the Switch / Checkbox family. Parts: Root › Track (rail) › Range (fill) + N × Thumb (one per value; 2 = range)."
