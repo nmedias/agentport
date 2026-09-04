@@ -11,6 +11,19 @@ until 2026-08-31).
 
 ---
 
+## 2026-09-04 — `ring` describes the focus border
+
+The `use` sentence of `ring` said "Not a border and not a selection edge". Figma draws the focused
+state of every field and control as a **border bound to `ring`** plus the ring/50 outline, so the
+sentence contradicted the file it was supposed to describe — the token-column audit surfaced it as
+seven identical role texts ("focus border + ring/50") failing the description rule. Resolved in favour
+of the Figma reality: the focus border is now named as the legitimate use, and the boundary is drawn
+against the *resting* edge (`border` / `input-border`) and the selection edge (`accent-border`) instead
+of against the word "border". Pulled through all three places per the "Figma description = `use`" rule
+(reference, Figma variable `Focus/ring`, `Colors.tsx`). Value, scopes and utilities are unchanged.
+
+---
+
 ## 2026-08-31 — Descriptions audit, grey ramp rename, standalone `muted`
 
 **Descriptions.** Every semantic token, dimension token, text style and effect style now carries

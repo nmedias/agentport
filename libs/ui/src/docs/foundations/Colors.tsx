@@ -289,7 +289,7 @@ export function Colors() {
               primitive="neutral/800"
               scope="stroke"
               value="#1e2229"
-              role="Keyboard-focus indicator on light surfaces. Not a border and not a selection edge (use accent-border)."
+              role="Keyboard-focus indicator on light surfaces — drawn as the focus border of the control plus its ring/50 outline, and it replaces the resting edge for as long as focus lasts. Only for focus: the resting edge stays border or input-border, the selected / active edge is accent-border."
             />
           </Row>
         </Rows>
