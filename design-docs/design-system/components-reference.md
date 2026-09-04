@@ -849,8 +849,8 @@ open:
     api:   # every Figma control of the component; code = prop name | live-state | none (see Rules)
       - { name: Slot, kind: slot, id: "3692:26", code: children, note: "the fieldset's content — nested Field / FieldGroup instances" }
     legend: "nested real .FieldLegend instance 3917:1254 — NOT a slot and not a text property (default 'Address')"
-    nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width); one of the two sits inside a real .FieldGroup instance (Field → .Separator → Field)."
-    vars: [space-md, space-xl]
+    nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width); one of the two sits inside a real .FieldGroup instance (Field → .Separator → Field), whose own .Separator override is what keeps `border` in FieldSet's own bindings (see open below)."
+    vars: [border, space-md, space-xl]
     styles: []
     code_only_tokens:
       - { token: space-lg, code: "has-[>[data-slot=checkbox-group]]:gap-lg", why: "FieldSet tightens its gap-xl rhythm to gap-lg only when a direct child carries data-slot=checkbox-group or radio-group (a grouped Checkbox/Radio row reads denser than a plain Field row); the Figma composition nests plain Field / FieldGroup instances, never a grouped-control container, so the set has no member to bind gap-lg on." }
@@ -861,7 +861,7 @@ open:
   figma_mechanics:
     - "3739:1026 is a plain COMPONENT whose parent frame is named `variants plate (shelf)` — the shelf is the doc container, not a component set; do not look for a variant picker on it."
   open:
-    - "After the provenance-boundary rewrite (2026-09-04, second round): the dump walk stops at the nested .Field / .FieldGroup instances, so EVERY colour/text token (ink, border, muted, input-fill, input-border, input-ink-placeholder, destructive, ring, text:Body/Label/md/Title) is now member-only, reached only via Field / FieldGroup / FieldLegend's own foreign sets — none is in FieldSet's `ownMembers` (this round adds no such list). All are documented in Field's / FieldGroup's / FieldLegend's own sections. FieldSet's own binding is now just the two layout gaps (space-md legend↔content, space-xl between rows)."
+    - "After the provenance-boundary rewrite (2026-09-04, second round, dump commit f4d4dc3): the dump walk stops at the nested .Field / .FieldGroup instances, so ink / muted / input-fill / input-border / input-ink-placeholder / destructive / ring / text:Body/Label-md/Title are member-only, reached only via Field / FieldGroup / FieldLegend's own foreign sets — none is in FieldSet's `ownMembers` (this round adds no such list); documented in Field's / FieldGroup's / FieldLegend's own sections. `border` is the one exception: it is a placement OVERRIDE the section itself applies on the nested real .Separator instance (harvested as own by the override-harvesting fix in dump commit 0f8aba3), so it keeps its roled chip \"nested separator line\". FieldSet's own binding is therefore the separator border plus the two layout gaps (space-md legend↔content, space-xl between rows)."
   run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/token-column-audit/2026-09-04-forms-b/]
 
 - name: FieldGroup
@@ -1181,15 +1181,27 @@ open:
     - "The card sets expose ONLY checked + state — they have no slots of their own. The label / description / control / error slots visible in the hero belong to the NESTED .Field instance, so the composition is fixed: a consumer cannot swap card content through the card's Figma properties, only by editing the nested Field instance."
   a11y:
     - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
-  open:
-    - "Provenance-boundary dump (2026-09-04, second round) cannot see `accent-ink`: it is a paint override on the nested .Label TEXT node, applied only inside ChoiceCard's own checked-state placement of the foreign .Field instance — invisible under `own` (the walk stops at the .Field boundary) and under `member` (Field's/Label's SET template does not carry this override, only the specific instance ChoiceCard placed does). The token is genuinely bound in Figma (confirmed by direct node trace on the `checked=on, state=focus-invalid` member, `FieldContent > label > Label > {Label}` → `Accent/accent-ink`) and is part of the documented `tint` model above, so the chip and role stay; `check.py --only ChoiceCard` reports one `T1-dead` FAIL for `accent-ink` that is a dump gap, not a catalog error — flagged to the controller, not worked around."
   run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/, agent-runs/token-column-audit/2026-09-04-forms-b/]
-  # token-column audit 2026-09-04, first round (own-binding tie-break, SUPERSEDED): the checked=off
-  # members of all three sets bind Base/surface + Border/border on the outer card frame (own — still
-  # true after the rewrite). ring / destructive-ink / input-fill-high / corner-sm / corner-full /
-  # destructive / primary-fill / primary-ink / input-fill / input-border were credited as own via the
-  # first tie-break; ink / muted were also credited as own then.
-  # Second round (provenance-boundary rewrite, current): the dump walk stops at the nested .Field /
+  # token-column audit 2026-09-04, three rounds:
+  # Round 1 (own-binding tie-break, SUPERSEDED): `findAll` descended into every nested instance, so
+  # ChoiceCard "owned" its nested Checkbox/Switch/RadioGroupItem's colours (destructive, primary-fill,
+  # primary-ink, input-fill, input-border, ring, destructive-ink, input-fill-high, corner-sm,
+  # corner-full) directly, plus ink/muted from the nested Field's Label/Description.
+  # Round 2 (provenance-boundary rewrite, dump commit f4d4dc3): the walk stops at the nested .Field /
+  # .Checkbox / .Switch / .RadioGroupItem instances, so all of the above became structurally
+  # member-only. Re-adopted via `ownMembers: [Checkbox, Switch, RadioGroupItem]` in doc-overrides.json
+  # (their provenance chains touch one of those three) — same chips, same roles. `ink`/`muted` reach
+  # the card only via `Field` (never Checkbox/Switch/RadioGroupItem) — not adopted, dropped as chips;
+  # documented in Field's own section instead. `accent-ink` briefly showed a `T1-dead` FAIL: it is a
+  # paint override on the nested .Label TEXT node inside ChoiceCard's own checked-state placement of
+  # the foreign .Field instance, invisible to both the `own` walk (stops at the boundary) and the
+  # `member` walk (reads Field's/Label's generic template, not this placement's override).
+  # Round 3 (override-harvesting fix, dump commit 0f8aba3): the dump now reads `overrides` of a
+  # boundary instance and everything nested in it, harvesting the overridden paint/style fields as
+  # own. `accent-ink` is own again (confirmed by direct node trace, `checked=on, state=focus-invalid`
+  # → `FieldContent > label > Label > {Label}` → `Accent/accent-ink`), alongside destructive / input-
+  # fill / primary-fill / ring, which the checked-state placement also overrides directly. Gate: ALL
+  # PASS, no open items left for this section.
   # .Checkbox / .Switch / .RadioGroupItem instances, so all of the above except accent-*/border/
   # surface/corner-lg/space-md are now structurally member-only — RE-ADOPTED as own via `ownMembers:
   # [Checkbox, Switch, RadioGroupItem]` in doc-overrides.json (their provenance chains touch one of
