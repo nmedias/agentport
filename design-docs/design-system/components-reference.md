@@ -280,6 +280,9 @@ open:
     focus_invalid_member: "3692:1249"   # the canonical focus-invalid recipe (destructive border + destructive/20 glow)
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md, space-xs]
     styles: [text:Label/md]
+    code_only_tokens:
+      - { token: primary-fill, code: "selection:bg-primary-fill", why: "the ::selection highlight painted when the field's text is selected; Figma has no representation of the browser text-selection pseudo-state, so there is no node to bind primary-fill to." }
+      - { token: primary-ink, code: "selection:text-primary-ink", why: "same ::selection highlight — the selected text's colour, paired with primary-fill." }
   skill: /shadcn-component-port; /component-sync
   description: "The single-line text field. It has no variants — focus, invalid, disabled and filled are live states driven by the control itself, not props. On its own it is unlabeled: it becomes a real form field only composed with the Field family."
   anatomy: "Single element, no CVA; state axis only."
@@ -326,6 +329,9 @@ open:
           note: "second Figma control for state=filled — shows the value layer on an instance because Figma cannot derive layer visibility from a text property (same mechanic as Input)" }
     vars: [ink, corner-lg, destructive, ring, input-border, input-fill, input-ink-placeholder, space-md]
     styles: [text:Label/md]
+    code_only_tokens:
+      - { token: primary-fill, code: "selection:bg-primary-fill", why: "the ::selection highlight painted when the field's text is selected; Figma has no representation of the browser text-selection pseudo-state, so there is no node to bind primary-fill to." }
+      - { token: primary-ink, code: "selection:text-primary-ink", why: "same ::selection highlight — the selected text's colour, paired with primary-fill." }
   skill: /shadcn-component-port
   description: "The multiline sibling of Input — same state behaviour, a taller box that grows with its content. Like Input, label and error text come from composing it with the Field family."
   anatomy: "Field twin of Input, taller; field-sizing-content (auto-grow)."
@@ -375,8 +381,10 @@ open:
     text: { name: "InputGroupText", id: "3522:594", prop: text }
     composition: { name: "InputGroup", id: "3525:622", axes: "state [default, focus, disabled, invalid, focus-invalid] × layout [horizontal, vertical]", slot: content }
     examples: { headline: "3533:672", Icons: "3527:613", Text: "3527:650", Buttons: "3546:697", States: "3528:662 / 3528:681 / 3528:700", Textarea: "3547:711", Kbd: "3531:676" }   # example instances sit directly in the section
-    vars: [ink, corner-lg, corner-md, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-ink-placeholder, muted, muted-fill, muted-ink, space-md, space-sm, space-xs]
+    vars: [ink, corner-lg, corner-sm, destructive, ring, input-border, input-fill, input-ink-placeholder, muted, space-md, space-sm, space-xs]
     styles: [text:Body, text:Label/md]
+    code_only_tokens:
+      - { token: space-lg, code: "has-[>[data-align=block-end]]:[&>input]:pt-lg, has-[>[data-align=block-start]]:[&>input]:pb-lg", why: "when a toolbar addon stacks block-start/block-end, the group pushes matching padding onto the nested input/textarea so its text clears the toolbar; the Figma set draws block-start/block-end as separate static frames and doesn't model this compensating push, so there is no binding to point to." }
   skill: /shadcn-component-port; /component-sync
   description: "Fuses a control and its adornments (icons, buttons, text) into one field: the group owns border, focus and invalid treatment, the control inside goes borderless. Addons sit beside the control or as a bar above/below it. State always originates from the inner control — the group has none of its own, it mirrors."
   anatomy: "6-part composite: the GROUP owns surface + border + focus / invalid / disabled (has-[control:focus-visible] / has-[aria-invalid] / has-disabled); controls are borderless (border-0 bg-transparent, data-slot=input-group-control)."
@@ -756,8 +764,18 @@ open:
     bool_props: { "Show description": "Show description#3692:15 (default true)", "Show error": "Show error#3692:20 (default true)" }   # visibility of the description / error slot
     nests: ".Input (state=default 3176:303 / state=invalid 3176:311) as control-slot default; label slot nests a real .Label instance (3737:1022/1024/1026/1028); FieldSeparator idiom = .Separator 3676:1018 (not rebuilt)"
     horizontal_structure: "shadcn-canonical (field.tsx horizontal variant + Responsive story): FieldContent column LEFT (label + description + [error], VERTICAL gap-2xs) · control slot as SIBLING to the right · row flex-row items-start (counterAxis MIN) · FieldContent FILL / flex-1, control FIXED 160 · members HUG height (so the bool toggles reflow the column). FieldContent frames: 3714:1021 (horiz/false), 3715:1022 (horiz/true). Error slot sits IN the FieldContent column under description. Vertical members stack label → control → description → [error]."
-    vars: [ink, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xs]
-    styles: [text:Body, text:Label/md]
+    vars: [corner-lg, destructive, input-border, input-fill, muted, space-2xs, space-md, space-xs]
+    styles: [text:Body]
+    code_only_tokens:
+      - { token: accent-border, code: "has-data-checked:border-accent-border (FieldLabel)", why: "the checked-as-choice-card border tint, borrowed from the ChoiceCard checked model (see deviations); Field's own set draws only the plain row, not a checked-choice-card variant — that look lives in the ChoiceCard section." }
+      - { token: accent-fill, code: "has-data-checked:bg-accent-fill (FieldLabel)", why: "same checked-choice-card tint, the fill half of the accent-border pair — not drawn by Field's own set for the same reason." }
+      - { token: accent-ink, code: "group-has-data-checked/field-label:text-accent-ink (FieldTitle)", why: "the title recolours to accent-ink when its FieldLabel ancestor is checked; again the checked-choice-card look is ChoiceCard's, not Field's own row." }
+      - { token: space-lg, code: "has-[>[data-slot=checkbox-group]]:gap-lg, has-[>[data-slot=radio-group]]:gap-lg (FieldSet)", why: "FieldSet's wider gap around a nested checkbox-group/radio-group toolbar; FieldSet is bundled into Field's code union only because both live in field.tsx — it is documented in its own FieldSet section (forms-b package)." }
+      - { token: space-sm, code: "mb-sm (FieldLegend)", why: "FieldLegend's caption-to-content margin; FieldLegend is a single text layer in its own section with no sibling to bind a gap token against — same why noted there." }
+      - { token: space-xl, code: "gap-xl (FieldGroup fieldGroupVariants, field.tsx:57), ml-xl (FieldError bullet list)", why: "FieldGroup's row gap and FieldError's bullet-list indent are both bundled via the shared field.tsx export list; neither lives on Field's own row." }
+      - { token: surface, code: "bg-surface (FieldSeparator)", why: "the separator's inline label chip needs an opaque backdrop over the line; Field's own set draws only the row, not a separator-with-label state." }
+      - { token: "text:Title", code: "data-[variant=legend]:text-format-title (FieldLegend)", why: "FieldLegend's legend-variant caption style; FieldLegend is documented as its own section with its own text:Title chip — bundled into Field's code union only because both declarations share field.tsx." }
+      - { token: "text:Label/md", code: "text-format-label-md (FieldTitle)", why: "FieldTitle's own label text uses this style directly; under the new provenance boundary text:Label/md now reaches Field's set only through the nested Input/Label member (it stopped being an own binding when the walk was tightened to stop at foreign instances), so there is no own node left to point it at." }
   skill: /shadcn-component-port (+ references/composites.md); /component-sync
   description: "The layout-and-semantics layer for form rows: label, description and error arranged around any control, vertically or horizontally. It draws no surface — the control keeps its own look. Caveat: the wrapper is a group, so a plain <label for> cannot name a control through it — use the label slot."
   anatomy: "Multi-part composite WITHOUT a root element (~10 pure layout / typography / spacing / a11y parts, no own surface / border / shadow). Variant A: Figma = the Field ROW only; code = the full family (10 exports) — the code ↔ Figma cardinality gap is deliberate."
@@ -802,6 +820,8 @@ open:
       - { name: variant, kind: variant, values: [legend, label], code: variant }
     vars: [ink]
     styles: [text:Label/md, text:Title]
+    code_only_tokens:
+      - { token: space-sm, code: "mb-sm", why: "the legend's bottom margin separating it from the fieldset content below; the Figma component is a single text layer with no sibling to bind a gap token against." }
   skill: Figma revision (/figma-use)
   description: "The caption of a FieldSet: legend for a section title, label as the lighter form for nested sub-groups."
   anatomy: "Text component; variant maps onto the code prop FieldLegend.variant (NOT a fork — unlike Field.controlPosition)."
@@ -1237,7 +1257,11 @@ open:
     group: { name: "Usage Examples", id: "4315:2106" }
     examples: { Open: "4327:2225 (Select composition 4326:2477, anchored)", Basic: "4315:2107", Groups: "4315:2324 (2× SelectGroup instance North America / Europe + .Separator, SelectContent instance 4326:2749)", Scrollable: "4315:2468", Invalid: "4316:2109 (nests .Field 3713:1017 vertical/invalid)" }
     vars: [accent-fill, accent-ink, ink, border, corner-lg, corner-md, destructive, dialog-fill, ring, input-border, input-fill, muted, space-md, space-sm, space-xs]
-    styles: [effect:Elevation, text:Body, text:Label/md]
+    styles: [effect:Elevation, text:Label/md]
+    code_only_tokens:
+      - { token: dialog-ink, code: "text-dialog-ink", why: "set once on the SelectContent wrapper as the default text colour for any un-styled descendant; each row instance (SelectItem, SelectLabel) binds its own ink / accent-ink directly, so there is no single content-level node in Figma to point dialog-ink at." }
+      - { token: input-ink-placeholder, code: "data-placeholder:text-input-ink-placeholder", why: "the trigger's placeholder (no value selected) text colour, by convention the same token Input/Textarea use; the trigger member's placeholder/value swap is modelled with the `filles` boolean only (figma_mechanics), not a bound colour state, so there is nothing to bind it to." }
+      - { token: space-3xl, code: "pr-3xl", why: "SelectItem's right padding clears the absolutely-positioned check indicator (shadcn idiom); Figma draws the check as a trailing layout vector that doesn't consume auto-layout space (documented as a NOT-a-delta divergence), so there is no equivalent padding value bound." }
   skill: /shadcn-component-port (+ references/composites.md; Figma via a background build agent)
   description: "A picker whose closed trigger reads exactly like the sibling text fields (two sizes, same invalid/disabled behaviour), and whose open list is a raised overlay with highlighted options and a check on the current value. Compose with the Field family for label and error."
   anatomy: "Popover composite (radix-ui Select), 10 exports + 5 prop types; 3 sets + a top-level composition + an examples group in Figma. Figma cannot open → the open state is a static anchored composition (like Command / Dialog)."
@@ -1256,6 +1280,8 @@ open:
   figma_mechanics:
     - "Example headlines follow the sibling canon (Hanken Grotesk Regular 13, muted-ink)."
     - "The trigger carries the Input double-text construction (two coincident TEXT layers named 'value', one bound to placeholder#4388:0, the other to value#4310:0 + filles#4388:11). The boolean name is misspelled — renaming it breaks every existing override, so it stands until a deliberate rename."
+  open:
+    - "SelectTrigger's placeholder TEXT layer binds ink, not input-ink-placeholder — contradicts the trigger's Input-parity deviation; rebind when the set is next touched."
   run_notes: [agent-runs/component-port/2026-06-19-select/]
 
 - name: Slider
