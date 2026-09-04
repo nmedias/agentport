@@ -36,7 +36,7 @@ reads are read-only (pipeline rule).
 - **`figma.code_only_tokens`** = tokens the code paints via a DS utility that the Figma set does **not** bind
   (a hover / selection / focus state Figma does not draw, or a raw value the set still carries). One row
   `{ token, code: "<utility>", why }` each; such a token is deliberately **no chip** in the doc section's
-  token column. The token-column gate (`tools/token-audit/check.py`, ytoolbox) accepts a listed token and
+  token column. The token-column gate (in the private authoring repo) accepts a listed token and
   fails a stale row (code no longer uses it, or the set now binds it). A set defect stays in `open` as well.
 - **`figma.vars` / `figma.styles`** = what the section's **component set** binds (own bindings; tokens that
   reach the set only through a nested member instance of another DS component are the member's, not
