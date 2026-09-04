@@ -849,16 +849,20 @@ open:
     api:   # every Figma control of the component; code = prop name | live-state | none (see Rules)
       - { name: Slot, kind: slot, id: "3692:26", code: children, note: "the fieldset's content — nested Field / FieldGroup instances" }
     legend: "nested real .FieldLegend instance 3917:1254 — NOT a slot and not a text property (default 'Address')"
-    nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width)"
-    vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
+    nests: "2× real .Field instance (vert/false 3712:1016): 3741:1028 + 3741:1038 (FILL width); one of the two sits inside a real .FieldGroup instance (Field → .Separator → Field), which is why the token column also carries the separator border."
+    vars: [border, corner-lg, ink, input-border, input-fill, input-ink-placeholder, muted, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md, text:Title]
+    code_only_tokens:
+      - { token: space-lg, code: "has-[>[data-slot=checkbox-group]]:gap-lg", why: "FieldSet tightens its gap-xl rhythm to gap-lg only when a direct child carries data-slot=checkbox-group or radio-group (a grouped Checkbox/Radio row reads denser than a plain Field row); the Figma composition nests plain Field / FieldGroup instances, never a grouped-control container, so the set has no member to bind gap-lg on." }
   skill: Figma revision (/figma-use)
   description: "Groups related Fields under a caption as a semantic <fieldset> — a pure structure part with no surface of its own."
   anatomy: "Surface-less composite: VERTICAL auto-layout gap-xl (bound), w FIXED / h HUG, NO fill / stroke; legend = slot with a title-text default. Code counterpart = <fieldset> flex-col gap-xl + FieldLegend."
   deps: [Field, FieldLegend]
   figma_mechanics:
     - "3739:1026 is a plain COMPONENT whose parent frame is named `variants plate (shelf)` — the shelf is the doc container, not a component set; do not look for a variant picker on it."
-  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
+  open:
+    - "destructive / ring / space-2xs reach this component only through the nested Field instances' foreign .Field SET (its invalid=true members), not through the two visible members placed here — token-column audit 2026-09-04 dropped them as chips per the unroled criterion rule 3 (member-only, own-binding tie-break does not apply); documented in Field's own section."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/token-column-audit/2026-09-04-forms-b/]
 
 - name: FieldGroup
   status: nova-aligned
@@ -886,15 +890,19 @@ open:
       - { name: orientation, kind: variant, values: [vertical, horizontal], code: orientation }
       - { name: Slot, kind: slot, id: "4285:0", code: children }
     nests: "slot (VERTICAL gap-16) → Field → .Separator → Field. vertical: Separator orientation=horizontal (3742:1055), Fields FILL width. horizontal: slot HORIZONTAL, Fields HUG side by side, Separator orientation=vertical + layoutSizingVertical FILL (vertical divider, full row height)."
-    vars: [ink, border, corner-lg, destructive, input-border, input-fill, input-ink-placeholder, muted, space-2xs, space-md, space-xl, space-xs]
-    styles: [text:Body, text:Label/md, text:Title]
+    vars: [border, corner-lg, ink, input-border, input-fill, input-ink-placeholder, muted, space-md, space-xl, space-xs]
+    styles: [text:Body, text:Label/md]
+    code_only_tokens:
+      - { token: space-lg, code: "data-[slot=checkbox-group]:gap-lg", why: "FieldGroup tightens gap-xl to gap-lg when it is itself the checkbox-group container; the set's two members (vertical / horizontal) nest plain Field rows, never a checkbox-group instance, so gap-lg never shows up as a live binding." }
   skill: Figma revision (/figma-use); /component-sync
   description: "Stacks several Fields with a consistent rhythm — vertically by default, or as a wrapping horizontal row: the layout that checkbox and radio groups build on."
   anatomy: "Surface-less container: VERTICAL auto-layout gap-xl (bound), w-full, NO fill / stroke; groups several Fields with a divider (FieldSeparator = nested real .Separator instance, no own set). Code = <div> @container/field-group flex-col gap-xl; horizontal = flex-row flex-wrap + [&>[data-slot=field]]:w-auto."
   deps: [Field, Separator]
   deviations:
     - "orientation prop is a DS extension (counterpart of the RadioGroup container orientation → checkbox / radio groups get the same row capability)."
-  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-field/]
+  open:
+    - "destructive / ring / space-2xs reach this set only through the nested Field instances' foreign .Field SET (its invalid=true members), not through the visible vertical/horizontal members — token-column audit 2026-09-04 dropped them as chips per the unroled criterion rule 3; documented in Field's own section. text:Title likewise dropped as T1-dead (this section's own members never render a Title style)."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-field/, agent-runs/token-column-audit/2026-09-04-forms-b/]
 
 - name: Checkbox
   status: nova-aligned
@@ -942,8 +950,8 @@ open:
       - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
     examples: { group: "Usage Examples 3822:2 (Field-composed, control-leading)", Basic: "3923:13", Description: "3926:38", ChoiceCard: "4044:1515 (Card + .Field control-trailing, checked .Checkbox)", Group: "3934:55 (.FieldLegend label)", Disabled: "3927:46", Invalid: "3932:29 (Field 4036:2, error slot)", AllStates: "3826:2" }   # all via real .Field instances
-    vars: [ink, border, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
-    styles: [text:Body, text:Label/md]
+    vars: [corner-sm, destructive, destructive-ink, input-border, input-fill, primary-fill, primary-ink, ring]
+    styles: []
   skill: /shadcn-component-port; /component-sync
   description: "The binary choice control, with an explicit \"indeterminate\" for parent/group states. Checked, invalid, disabled and focus combine freely as live states. A bare box has no accessible name — it needs a Label/Field or an aria-label."
   anatomy: "Single element + indicator (radix-ui Checkbox.Root / Indicator), no CVA → state axis like Input; box 16×16 numeric, corner-sm."
@@ -961,7 +969,9 @@ open:
     - "Usage-examples group = permanent real .Checkbox + .Label / .Field instances."
   open:
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
-  run_notes: [agent-runs/component-port/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-17-checkbox/]
+  run_notes: [agent-runs/component-port/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-17-checkbox/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 15-member box set's own bindings
+  # (border, ink, muted, corner-lg, space-*, text:* were the section's Usage-Examples group, not the set).
 
 - name: Switch
   status: nova-aligned
@@ -1015,8 +1025,8 @@ open:
       - { name: state, kind: variant, values: [default, focus, disabled, invalid, focus-invalid], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled", invalid: "aria-invalid", focus-invalid: "focus + invalid" } }
     examples: { group: "Usage Examples 3840:2 (Field-composed, control-trailing)", AirplaneMode: "3948:2", Description: "3952:2", ChoiceCard: "3979:2 (Card + .Field)", Sizes: "3959:2", Disabled: "3961:2", Invalid: "3966:2 (.Field error slot)", AllStates: "3842:15" }   # all via real .Field instances
-    vars: [ink, surface, border, corner-full, corner-lg, destructive, ring, input-fill-high, primary-fill, space-2xs, space-3xl, space-lg, space-md]
-    styles: [text:Body, text:Label/md]
+    vars: [corner-full, destructive, input-fill-high, primary-fill, ring, surface]
+    styles: []
   skill: /shadcn-component-port; /component-sync
   description: "An on/off toggle — track tints and thumb slides when checked; size adds a compact variant. Same composition rule as its siblings: the label comes from Label/Field, invalid is a live state, not a prop."
   anatomy: "Track (Root) + Thumb (radix-ui Switch); size [default, sm] is a manual prop (no CVA) × state."
@@ -1031,7 +1041,9 @@ open:
     - "A bare control has no accessible name — compose it with Label / Field or pass aria-label (the stories do); invalid is driven by aria-invalid (no prop)."
   figma_mechanics:
     - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false)."
-  run_notes: [agent-runs/component-port/2026-06-12-switch/, agent-runs/component-sync/2026-06-12-switch/, agent-runs/component-sync/2026-06-16-switch/, agent-runs/component-sync/2026-06-17-switch/]
+  run_notes: [agent-runs/component-port/2026-06-12-switch/, agent-runs/component-sync/2026-06-12-switch/, agent-runs/component-sync/2026-06-16-switch/, agent-runs/component-sync/2026-06-17-switch/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 20-member track+thumb set's own
+  # bindings (ink, border, corner-lg, space-*, text:* were the section's Usage-Examples group, not the set).
 
 - name: RadioGroup
   status: nova-aligned
@@ -1075,8 +1087,8 @@ open:
     api:   # the section-named RadioGroup component's only control — a layout Slot (see Scope rule; RadioGroupItem's own checked/state axes are out of scope)
       - { name: Slot, kind: slot, id: "4006:0", code: children, note: "items are RadioGroupItem children" }
     examples: { group: "Usage Examples 3854:1206 (Field-composed)", Default: "3992:1324 (bare, per doc)", Description: "3996:1340 (.Field leading)", ChoiceCard: "3997:1358 (Card + .Field trailing)", Fieldset: "3998:1378 (.FieldLegend)", Disabled: "3999:1383 (bare)", Invalid: "4000:1385 (.Field rows + group error)", AllStates: "3857:1218" }
-    vars: [ink, border, corner-full, corner-lg, destructive, destructive-ink, ring, input-border, input-fill, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-lg, space-md, space-xl, space-xs]
-    styles: [text:Body, text:Label/md, text:Title]
+    vars: [corner-full, destructive, destructive-ink, ink, input-border, input-fill, muted, primary-fill, primary-ink, ring, space-2xs, space-md]
+    styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port; /component-sync
   description: "Single choice out of a set: the group carries the value and the layout, each RadioGroupItem is one option. Items behave like Checkbox — state-driven, named only through composition; the selection itself always lives on the group."
   anatomy: "Two parts: RadioGroup (layout container, grid w-full gap-md) + RadioGroupItem (interactive, state axis like Checkbox, corner-full circle with an inner dot instead of a glyph); item 16×16 numeric."
@@ -1096,7 +1108,8 @@ open:
     - "Radio invalid is a group error at FieldSet level (separate destructive text), not a per-field error slot."
   open:
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
-  run_notes: [agent-runs/component-port/2026-06-12-radio-group/, agent-runs/component-sync/2026-06-12-radio-group/]
+    - "corner-lg / input-ink-placeholder / space-xs reach this section only through the nested Field / Label instances' foreign SETs, not through the container's own visible members — token-column audit 2026-09-04 dropped border / space-3xl / space-lg / space-xl / text:Title as T1-dead (not bound anywhere) and corner-lg / space-xs as member-only chips."
+  run_notes: [agent-runs/component-port/2026-06-12-radio-group/, agent-runs/component-sync/2026-06-12-radio-group/, agent-runs/token-column-audit/2026-09-04-forms-b/]
 
 - name: ChoiceCard
   status: nova-aligned
@@ -1153,7 +1166,7 @@ open:
     nests: "real .Field instance in the FieldLabel card (horizontal control-trailing: 3714:1018 invalid=false / 3715:1019 invalid=true); control slot = real instance of the matching control member (.Checkbox 3795:1184 / .Switch 3839:2 / .RadioGroupItem 3852:1206 per checked × state); title = nested .Label. Controls REUSED, nothing detached."
     tint: "checked tint = the accent selection model, fully variable-bound: card fill accent-fill · stroke accent-border · title accent-ink (bound alpha paints do not survive instantiation → no /opacity paints)"
     placeholders: "card-semantic default texts: title {Title} · description {Description} · error {Error} (72 nodes over the 3 sets: 30 title + 30 description + 12 error, error on invalid / focus-invalid only). Mechanics: title via the .Label TEXT prop (label (children)#3735:0) → setProperties; description / error are raw slot texts → .characters override. Layer names stay {Label} / {Field Description} / {Error Message} (inherited from the .Field / .Label mains, locked in instances — no detach)."
-    vars: [accent-border, accent-fill, accent-ink, ink, surface, border, corner-full, corner-lg, corner-sm, destructive, destructive-ink, ring, input-border, input-fill, input-fill-high, muted, primary-fill, primary-ink, space-2xs, space-3xl, space-md]
+    vars: [accent-border, accent-fill, accent-ink, border, corner-full, corner-lg, corner-sm, destructive, destructive-ink, ink, input-border, input-fill, input-fill-high, muted, primary-fill, primary-ink, ring, space-2xs, space-md, surface]
     styles: [text:Body, text:Label/md]
   skill: Figma build agent (/figma-build-rules) + /component-sync (checked tint)
   description: "Makes the whole card the click target for one choice — title, description and a checkbox, switch or radio in a single labelled surface that tints when checked. Stateless pass-through: controlled vs. uncontrolled is the consumer's decision; the radio form additionally needs its surrounding RadioGroup."
@@ -1168,7 +1181,13 @@ open:
     - "The card sets expose ONLY checked + state — they have no slots of their own. The label / description / control / error slots visible in the hero belong to the NESTED .Field instance, so the composition is fixed: a consumer cannot swap card content through the card's Figma properties, only by editing the nested Field instance."
   a11y:
     - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
-  run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/]
+  run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  # token-column audit 2026-09-04: the checked=off members of all three sets bind Base/surface +
+  # Border/border on the outer card frame itself (the resting-card counterpart of accent-fill/
+  # accent-border when checked) — new roled chips "resting card fill" / "resting card border".
+  # ring / destructive-ink / input-fill-high / ink / muted come from the nested Checkbox/Switch/
+  # RadioGroupItem/Label controls, all own bindings by the tie-break (own physically nested in the
+  # card's render tree, not reached only by hopping into a foreign main). space-3xl dropped as T1-dead.
 
 - name: Select
   status: nova-aligned
@@ -1335,9 +1354,11 @@ open:
       - { name: state, kind: variant, values: [default, focus, disabled], code: live-state,
           triggers: { focus: ":focus-visible", disabled: "disabled" } }
     examples: { group: "Usage Examples 4354:2225", Default: "4354:2226 (instance 4354:2228)", Range: "4354:2232 (instance 4354:2234)", Vertical: "4354:2242 (instance 4354:2244)", Disabled: "4354:2251 (instance 4354:2253)", FieldSlider: "4357:2254 (Field instance 4355:2238, control slot = range Slider instance 4356:2249, label 'Price Range', description wrapped)" }   # frame (instance)
-    vars: [ink, surface, corner-full, input-border, input-fill-high, muted, primary-fill, space-md]
-    styles: [text:Body, text:Label/md]
+    vars: [corner-full, input-border, input-fill-high, primary-fill, surface]
+    styles: []
     focus_glow: "literal DROP_SHADOW radius 0 spread 3 ring (neutral/800) @50 % sbn:false — copied verbatim from the Input focus member 3176:305 (never bind the colour, it drops the /50). Per thumb on the focus members; members clip=false."
+    code_only_tokens:
+      - { token: ring, code: "focus-visible:ring-ring/50", why: "the focus halo is a literal DROP_SHADOW copied verbatim from the Input focus member (radius 0, spread 3, neutral/800 @50%, showShadowBehindNode:false) — binding the colour drops the /50 alpha (see focus_glow above), so the set deliberately keeps it raw while the code utility genuinely uses ring-ring/50." }
   skill: /shadcn-component-port (+ /figma-build-rules)
   description: "Value selection on a track, horizontal or vertical. Pass two values and it becomes a range — one thumb per value. Its accessible name must reach the thumbs, not the container; the component forwards one label to all of them."
   anatomy: "Radix Slider (radix-ui umbrella import = the full primitive, declared dep), no CVA → geometry + state axes like the Switch / Checkbox family. Parts: Root › Track (rail) › Range (fill) + N × Thumb (one per value; 2 = range)."
@@ -1351,7 +1372,9 @@ open:
     - "role=slider sits on the thumb → the component FORWARDS aria-label / aria-labelledby to every thumb (otherwise axe aria-input-field-name fails; a root label names nothing)."
   figma_mechanics:
     - "figma-verify reports 18 thumb ↔ track overlaps — intended handle-on-rail geometry (CLEAN by design)."
-  run_notes: [agent-runs/component-port/2026-06-22-slider/]
+  run_notes: [agent-runs/component-port/2026-06-22-slider/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 12-member set's own bindings
+  # (ink, muted, space-md, text:* were the section's Usage-Examples group, not the set).
 
 - name: Popover
   status: nova-aligned
