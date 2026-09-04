@@ -11,6 +11,41 @@ Token-level history (renames, palette rework, dropped tokens) is in
 
 ---
 
+## 2026-09-04 — Doc-section token column: chips = the set's own bindings, every colour with a role
+
+**Why.** The token column of each doc section was generated from `figma.vars` / `figma.styles` captured
+section-wide, so it listed tokens that only usage examples or a nested Button bound (Checkbox showed
+label text and group gaps its set never paints; Tooltip showed its trigger Button's `primary-fill`), and
+colour tokens without a hand-written role sat as bare chips. The gate of the round
+(`tools/token-audit/check.py` in the origin workspace) started at 146 failures over 22 of 25 sections.
+
+**Catalog.** `figma.vars` / `figma.styles` of all 25 entries now list exactly what the section's
+**component set** binds — own bindings plus placement overrides the set applies inside a nested foreign
+instance (ChoiceCard's checked title on the label inside its Field; InputGroup's xs-button corner on the
+nested Button), never tokens that reach the set only through a nested member (documented in the member's
+own entry) and never usage-example tokens. New schema field `figma.code_only_tokens: [{ token, code, why }]`
+(31 rows over 15 entries) documents a token the code paints via a DS utility that the set does not bind —
+a hover / selection / focus state Figma does not draw, or a raw value the set still carries (Button focus)
+— so the code counter-check stays honest without inventing chips; the gate fails a stale row. New `open`
+items from the round: Item `muted` variant binds `.Description` to `muted-ink` while code paints
+`text-muted`; SelectTrigger's placeholder layer binds `ink` instead of `input-ink-placeholder`.
+
+**Decisions (user, same day).** (1) Truth set = the component set, not the section. (2) `unroled` may
+hold only scale tokens (`space-*`, `corner-*`, `text:*`); every colour / effect / opacity token the set
+binds gets a role or is no chip. (3) Provenance boundary: the dump walk stops at a nested instance of a
+foreign component; the editorial exception is a per-section `ownMembers` list in the doc overrides —
+ChoiceCard names its controls (Checkbox, Switch, RadioGroupItem) and keeps its "nested control" roles,
+FieldSet / FieldGroup / RadioGroup / the overlays list nothing. (4) Role vocabulary: "fill" for `-fill`
+tokens, the word "surface" only for the token `surface`; `ring` is a focus border in Figma (use sentence
+adjusted the day before).
+
+**Figma.** Token columns of all 25 sections rewritten in place (rows removed / added / re-worded, `unroled`
+re-sorted, eyebrow counts refreshed); component sets untouched. Chips 368 → 246; roled rows 139 → 151.
+Gate on the merged catalog with a fresh dump: 3047 checks, ALL PASS (77 reviewer-only warnings:
+Effect primitives behind an effect style, chips without a 1:1 utility). Five family packages, each built
+by one agent and reviewed by an independent one (`agent-runs/token-column-audit/2026-09-04/` in the
+origin workspace: brief, notes, reviews, screenshots).
+
 ## 2026-09-03 — Doc-section API block: Input migrated to `figma.api` + `code.props`
 
 **Why.** The API block of each doc section was generated from `figma.axis` alone. For Input that produced a
