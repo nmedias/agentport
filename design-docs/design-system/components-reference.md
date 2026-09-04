@@ -1476,8 +1476,10 @@ open:
       typelist: "4501:2472 — 3 muted instances, TEXT props drive invoice / contract / document (explorer NavListItem)"
       states: "4502:2498 — Base 4502:2502 · Hover 4502:2523 (muted-fill override) · Focus 4502:2544 (ring-ring/50 3px DROP_SHADOW, copied verbatim from the Select focus member 4308:2001 — NOT the generic Glow style) · Selected 4502:2565 (accent-fill + accent-ink title = call-site contract, NO set member)"
     state_axis: "DELIBERATELY examples-only (NOT a set axis): the hover / focus / selected delta is uniform over variant × size → 18 / 27 members would be redundant. The states live in the usage-examples States group (mirrors the AllStates story). Extend to variant × size × state (27) only if explicitly wanted."
-    vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-sm, ring, muted, muted-fill, muted-ink, secondary-fill, space-lg, space-md, space-xl, space-xs]
+    vars: [border, corner-lg, corner-sm, ink, muted, muted-fill, muted-ink, secondary-fill, space-lg, space-md, space-xl, space-xs]
     styles: [text:Body, text:Label/md]
+    code_only_tokens:
+      - { token: ring, code: "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50", why: "the focus classes sit unconditionally in the itemVariants base string (every Item, not just the asChild link form) — a bare div never receives focus-visible, so the state only fires on the focusable asChild render, but the utility itself is set regardless of variant/asChild; the Item set has no focus member, the ring only appears in the states usage-example group (Figma instance, not a set binding)." }
   skill: /shadcn-component-port (+ /figma-build-rules, composites.md, /storybook-rules, /docgen-props)
   description: "The generic list row: leading media, title with description, trailing actions; variant and size scale it from a bordered card row to a dense line. It deliberately has no selected state — hover and focus exist only on its link form (asChild); selection stays a call-site concern."
   anatomy: "10-part composite (Item / Media / Content / Title / Description / Actions / Group / Separator / Header / Footer), full family ported. Generic list row → root-barrel primitive (not a block); use case = explorer NavListItem."
@@ -1496,6 +1498,7 @@ open:
     - "ItemGroup role=list → role=listitem on the children at the call site (axe aria-required-children)."
   open:
     - "No sub-14 sans format for the xs size (stock xs:text-xs)."
+    - "muted variant binds .Description to muted-ink; code paints text-muted regardless of variant — bind muted (standalone) or drop the per-variant binding."
   run_notes: [agent-runs/component-port/2026-06-26-item/]
 
 - name: Table
@@ -1522,8 +1525,8 @@ open:
       - { name: showCaption, kind: boolean, id: "4522:1", code: children, note: "toggles whether a <TableCaption> child is rendered or not" }
       - { name: caption, kind: text, id: "4522:2", code: children, note: "text becomes the <TableCaption> child's content" }
       - { name: content, kind: slot, id: "4537:0", code: children, note: "the table interior (TableHeader/TableBody/TableFooter rows) passed as Table's children" }
-    vars: [accent-fill, ink, border, corner-full, corner-sm, input-border, input-fill, muted, muted-fill, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xl, space-xs]
-    styles: [text:Body, text:Eyebrow, text:Label/md]
+    vars: [accent-fill, border, ink, muted, muted-fill, space-md, space-xl]
+    styles: [text:Body, text:Label/md]
   skill: /shadcn-component-port (+ references/composites.md)
   description: "A data table whose API is pure composition: region, row and cell parts that pass everything through. Rows are the only interactive surface — neutral hover vs. accent-tinted selection, with selection set by the call site. Column alignment is applied per column on head and cells together."
   anatomy: "Multi-part composite WITHOUT a root element, 8 prop-less pass-through parts (Table / Header / Body / Footer / Row / Head / Cell / Caption), NO CVA. The only interaction axis = TableRow state. No code deps (ui:add wrote table.tsx only)."
