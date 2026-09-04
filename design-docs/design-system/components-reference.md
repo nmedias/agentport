@@ -169,6 +169,11 @@ open:
       - { name: icon, kind: slot, id: "3697:0", code: children, note: "shares the children region with the label — a leading icon child, not a separate prop" }
     vars: [ink, border, corner-full, destructive, destructive-ink, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-2xs, space-md, space-xs]
     styles: [text:Label/md]
+    code_only_tokens:
+      - { token: muted-fill, code: "hover:bg-muted-fill", why: "Outline (anchor) / ghost hover fill — outline is gated to `[a]:hover:` (only when rendered as a link via asChild), ghost applies on plain hover; the Figma Badge set has no state axis (a static pill, unlike Button), so neither hover tint is drawn." }
+      - { token: muted-ink, code: "hover:text-muted-ink", why: "Outline (anchor) / ghost hover label colour — same gating as muted-fill (outline needs `[a]:hover:`, ghost is plain hover); no hover-state member in the static Badge set." }
+      - { token: ring, code: "focus-visible:border-ring, focus-visible:ring-ring/50", why: "Keyboard-focus border and ring — the static Badge set has no focus-state member, so the ring isn't drawn." }
+      - { token: space-sm, code: "has-data-[icon=inline-end]:pr-sm, has-data-[icon=inline-start]:pl-sm", why: "Extra edge padding when a leading/trailing icon is present — the Figma icon slot doesn't model a per-position padding swap." }
   skill: /shadcn-component-port; /component-sync
   description: "A compact status pill; variant carries the tone from solid emphasis to quiet outline/ghost. Informative by default — via asChild it wraps a real link or button and stays a pill."
   anatomy: "Single-element CVA span (asChild via Radix Slot, data-slot / data-variant, [&>svg]:size-3 icon)."
@@ -216,6 +221,8 @@ open:
           triggers: { hover: ":hover", active: ":active", focus: ":focus-visible", disabled: "disabled" } }
     vars: [accent-fill, accent-ink, ink, surface, border, corner-lg, corner-md, destructive, destructive-ink, muted-fill, primary, primary-fill, primary-ink, secondary-fill, secondary-ink, space-md, space-sm, space-xs]
     styles: [text:Label/md]
+    code_only_tokens:
+      - { token: ring, code: "focus-visible:border-ring, focus-visible:ring-ring/50", why: "Keyboard-focus border and ring — the Figma focus-state member draws a raw #4a5562 stroke @ 50% instead of binding ring — see `open` (set defect, not a code deviation)." }
   skill: /shadcn-component-port; /component-sync
   description: "The action trigger: variant sets the semantic weight (solid primary through quiet ghost and link), size the geometry scale. One component covers text, text-with-icon and square icon-only buttons — icon-only requires its own accessible name. Via asChild a link can wear the button look without losing its semantics."
   anatomy: "CVA button; public API = variant + size (the geometry scale) + icon boolean — the square icon* cva keys are mapped in render, not public sizes."
@@ -419,6 +426,8 @@ open:
       - { name: icon, kind: slot, id: "3217:1", code: children }
     vars: [corner-sm, inverse-fill, inverse-ink, muted-fill, muted-ink, space-xs]
     styles: [text:Kbd]
+    code_only_tokens:
+      - { token: ink, code: "in-data-[slot=tooltip-content]:text-ink", why: "Kbd rendered inside a Tooltip's content overrides its label colour to ink via a contextual selector; the Figma Kbd set has no tooltip-context member (see `divergences`)." }
   skill: /shadcn-component-port; /component-sync
   description: "A keycap for spelling keyboard shortcuts in the UI; emphasis switches between the loud inverted cap and a quiet one. Display-only — it never receives interaction; chords are several caps in a KbdGroup."
   anatomy: "Keycap span with an emphasis prop; KbdGroup = inline row."
