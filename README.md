@@ -7,7 +7,8 @@ the React code on the DS utility vocabulary, and prove it in Storybook (browser 
 
 The repo is the *result* of that pipeline plus the tooling to keep running it: 22 ported primitives
 in Storybook, the run notes of every port and sync, the token/component reference the skills read,
-and the skills themselves.
+and the skills themselves — including the pair that spends the system rather than filling it, auditing
+any UI artifact for what the DS already covers and composing the screen out of it.
 
 ## What is in here
 
@@ -20,6 +21,7 @@ libs/ui/                     @agentport/ui — the library
   .storybook/                Storybook 10 (react-vite) + addon-vitest + addon-a11y + addon-mcp
 agent-runs/component-port/   run notes per first-time port (date-component)
 agent-runs/component-sync/   run notes per Figma → code reconciliation
+agent-runs/figma-coverage/   coverage reports per audited UI artifact
 design-docs/            design-system/tokens-reference.md (token crosswalk), design-system/components-reference.md
                              (component catalog with Figma node IDs), design-system/{token,component}-changelog.md
                              (history, human-readable), token-analysis-*.md (token system derivation)
@@ -78,6 +80,30 @@ libs/ui/src/components/ui/<name>/          ←→   Figma component set
    │                    diff against the code, apply the delta (Figma → code, read-only on Figma)
 ```
 
+### Screens from the system
+
+The port pipeline fills the system. A second pair of skills spends it — taking any UI artifact and
+answering what the system already covers, then building the screen out of what it does:
+
+```
+any UI artifact  (a design-tool node, a mockup, a code file, a screenshot)
+   │  /figma-coverage — read-only audit: inventory every part before mapping any of it, resolve each
+   │                    to a component and to tokens by identity, classify it (mapped · mapped but the
+   │                    component needs an update · no component · missing primitive · missing
+   │                    composition), and decompose the artifact into the subtrees a build would replace
+   ▼
+one report                                 agent-runs/figma-coverage/<date>-<subject>/report.md
+   │  /figma-compose — build from that mapping: mapped parts as real instances driven through their
+   │                   declared controls, everything else authored from bound tokens. No new
+   │                   components, no new tokens, no overrides on an instance.
+   ▼
+artboard in the Figma file, plus run notes
+```
+
+The split is the read-only boundary: coverage never writes, compose never decides coverage. What the
+audit cannot map becomes a named gap in the report rather than something quietly hand-drawn in the
+file — so a screen built this way doubles as a measurement of the system.
+
 Each run leaves a `notes.md` (and often a `skill-feedback.md`) under `agent-runs/`; the catalog
 `design-docs/design-system/components-reference.md` records where every component lives in
 Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
@@ -92,6 +118,8 @@ Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
 | `/storybook-rules`        | The house story pattern: Default playground + play, Usage, States gallery, a11y      |
 | `/figma-build-rules`      | Build craft for token-bound Figma component sets via the Plugin MCP                  |
 | `/figma-create-section`   | Canonical Section wrapper on a Figma page (used by the port skill)                   |
+| `/figma-coverage`         | Audit any UI artifact against the DS: part inventory, mapping, gaps → one report     |
+| `/figma-compose`          | Build a screen from that mapping — existing instances and bound tokens only          |
 | `/figma-verify`           | Deterministic pre-handoff check (icons are vectors, no clipping/overlap)             |
 | `/figma-status`           | Check Figma Desktop + Plugin MCP connection                                          |
 | `/skill-feedback`         | Toggle before a run to capture skill-improvement findings into the run notes         |
@@ -158,6 +186,9 @@ Plain-language requests trigger the same skills when they match the skill descri
 | Rework stories after an API change (no Figma involved)     | `Reconcile switch.stories.tsx with the new size prop — follow /storybook-rules.`                  |
 | Surface a component's props in Autodocs                    | `Annotate the Select prop API per /docgen-props so it shows up in the ArgsTable.`                 |
 | Check a render visually                                    | `Shoot ui-table--row-states and compare the selected-row tint with the Figma set.`                |
+| Find out what of a screen the DS already covers            | `/figma-coverage <figma-url-or-file>`                                                             |
+| Same, in prose                                             | `Audit this mockup against the DS — what exists, what is missing, what needs extending?`          |
+| Rebuild an audited screen in Figma from the system         | `/figma-compose` with the coverage report as the mapping                                          |
 | Check the Figma link                                       | `/figma-status`                                                                                   |
 | Freeze the session for later                               | `/handoff popover-port en`                                                                        |
 
@@ -172,6 +203,8 @@ agent-runs/component-port/<YYYY-MM-DD>-<component>/notes.md      mapping table, 
                                                                   example inventory, gate state, preview URLs
 agent-runs/component-port/<YYYY-MM-DD>-<component>/skill-feedback.md   only if /skill-feedback was on
 agent-runs/component-sync/<YYYY-MM-DD>-<component>/notes.md      delta list + DEVIATIONS (code ≠ Figma binding)
+agent-runs/figma-coverage/<YYYY-MM-DD>-<subject>/report.md       part inventory, mapping with component + token
+                                                                  IDs, the five gap categories, checks
 design-docs/design-system/components-reference.md                 catalog entry updated (status, node IDs, axes)
 design-docs/design-system/component-changelog.md                  dated entry for the run
 libs/ui/src/components/ui/<component>/                            <component>.tsx + .stories.tsx + .spec.tsx + index.ts
