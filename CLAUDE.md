@@ -84,8 +84,7 @@ tools/              shoot-stories.mjs — Playwright screenshots of a running St
   `.claude/skills/{shadcn-component-port,component-sync}/config.json` (`figma.fileKey`, `figma.pageId`).
   Components page `Components` (`3126:2`); variable collections `reference` (primitives),
   `semantic` (color), `semantic-dimension`, `semantic-typo` — components bind color/dimension directly,
-  typography via text styles. The file is view-shared via link — nothing product- or
-  customer-specific belongs in it (layer names, text content, variable descriptions included).
+  typography via text styles.
 - **Figma Plugin MCP only.** Use Figma Console MCP only when explicitly requested.
 - **Never detach** instances without an explicit user request.
 - Use components through their intended APIs: **Slots**, **Properties** (text/variant/boolean),
