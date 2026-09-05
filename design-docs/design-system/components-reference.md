@@ -184,6 +184,8 @@ open:
     - "Focus: border-ring + ring-ring/50 ring-[3px]; dark: dropped."
   divergences:
     - "asChild and the count-pill (font-mono tabular min-w-5) are code-level overrides, not Figma variants."
+  a11y:
+    - "Non-interactive by default: a plain <span> with no role — the pill is not announced as a status (add role / aria-live at the call site if it must be). asChild hands the semantics to the child (<a> / <button>), the only way it becomes focusable; aria-invalid is styled but never set by the component."
   run_notes: [agent-runs/component-port/2026-06-12-badge/, agent-runs/component-sync/2026-06-17-badge/]
 
 - name: Button
@@ -446,6 +448,8 @@ open:
     - "content is an EXCHANGE, not an addition: content=text members contain only the {Label} TEXT node, content=icon members only the `icon` SLOT. A cap never shows both, and content=icon renders empty until the slot is filled."
   divergences:
     - "Tooltip-context overrides (in-data-[slot=tooltip-content]: bg-muted-fill / text-ink) are code-only stock carry-over with no Figma binding."
+  a11y:
+    - "Native <kbd> (KbdGroup = a wrapping <kbd>), pointer-events-none — typographic markup for a key name, never focusable and with no semantics beyond its text."
   run_notes: [agent-runs/component-sync/2026-06-09-kbd/, agent-runs/component-sync/2026-06-17-kbd/]
 
 - name: Breadcrumb
@@ -716,6 +720,8 @@ open:
     - "text-format-label-md (14/500, fill ink); gap-md; select-none + group/peer-disabled opacity unchanged."
   forks:
     - "The state axis [default, disabled] is a Figma convenience so a real set exists — code has no label-state prop (disabled is group/peer-disabled-driven). Never sync back as a CVA."
+  a11y:
+    - "The htmlFor↔id pairing is the whole a11y surface — without htmlFor (or wrapping the control) the label names nothing; the disabled dimming is peer- / group-data-driven styling and sets no aria state."
   run_notes: [agent-runs/component-port/2026-06-12-field/, agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-label/]
 
 - name: Field
@@ -827,6 +833,8 @@ open:
   anatomy: "Text component; variant maps onto the code prop FieldLegend.variant (NOT a fork — unlike Field.controlPosition)."
   deviations:
     - "variant=legend → text-format-title (section-caption role); variant=label → text-format-label-md; fill ink."
+  a11y:
+    - "Native <legend>; it names the surrounding <fieldset> only as its first child — nested deeper or used outside FieldSet it is a plain caption without group semantics. variant is visual only."
   run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
 
 - name: FieldSet
@@ -860,9 +868,11 @@ open:
   deps: [Field, FieldLegend]
   figma_mechanics:
     - "3739:1026 is a plain COMPONENT whose parent frame is named `variants plate (shelf)` — the shelf is the doc container, not a component set; do not look for a variant picker on it."
+  a11y:
+    - "Native <fieldset> — the group name comes from a FieldLegend child, nothing is set via aria; the native disabled attribute passes through and cascades to the contained controls (no disabled prop of its own)."
   open:
     - "After the provenance-boundary rewrite (2026-09-04, second round, dump commit f4d4dc3): the dump walk stops at the nested .Field / .FieldGroup instances, so ink / muted / input-fill / input-border / input-ink-placeholder / destructive / ring / text:Body/Label-md/Title are member-only, reached only via Field / FieldGroup / FieldLegend's own foreign sets — none is in FieldSet's `ownMembers` (this round adds no such list); documented in Field's / FieldGroup's / FieldLegend's own sections. `border` is the one exception: it is a placement OVERRIDE the section itself applies on the nested real .Separator instance (harvested as own by the override-harvesting fix in dump commit 0f8aba3), so it keeps its roled chip \"nested separator line\". FieldSet's own binding is therefore the separator border plus the two layout gaps (space-md legend↔content, space-xl between rows)."
-  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/]
 
 - name: FieldGroup
   status: nova-aligned
@@ -902,7 +912,9 @@ open:
     - "orientation prop is a DS extension (counterpart of the RadioGroup container orientation → checkbox / radio groups get the same row capability)."
   open:
     - "After the provenance-boundary rewrite (2026-09-04, second round): the dump walk stops at the nested .Field instance, so ink / input-fill / input-border / input-ink-placeholder / muted / destructive / ring / corner-lg / space-xs / space-2xs / text:Body / text:Label/md are now member-only (chain Field / Field>Input / Field>Label), not in FieldGroup's `ownMembers` (this round adds no such list) — documented in Field's own section. FieldGroup's own binding is the divider `border` (a real .Separator instance, own because it sits directly inside FieldGroup's tree, not behind a foreign instance) plus the two layout gaps."
-  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-field/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  a11y:
+    - "Layout only: a plain <div> with no role — grouping semantics come from an enclosing FieldSet / RadioGroup; orientation is reflected as data-orientation for styling, not as aria-orientation."
+  run_notes: [agent-runs/component-sync/2026-06-12-field-figma-revision/, agent-runs/component-sync/2026-06-17-field/]
 
 - name: Checkbox
   status: nova-aligned
@@ -914,7 +926,7 @@ open:
     barrel: "libs/ui/src/index.ts → export * from './components/ui/checkbox'"
     types: [CheckboxProps]
     stories:
-      - "checkbox.stories.tsx → UI/Checkbox (Default, Basic, Description, Indeterminate, GroupHorizontal, Disabled, Invalid, AllStates)"
+      - "checkbox.stories.tsx → UI/Checkbox (Default, Basic, Description, Indeterminate, Group, GroupHorizontal, Disabled, Invalid, AllStates)"
     specs: [checkbox.spec.tsx]
     cva: none
     props:   # public API from checkbox.tsx JSDoc; figma = counterpart control in figma.api
@@ -969,7 +981,7 @@ open:
     - "Usage-examples group = permanent real .Checkbox + .Label / .Field instances."
   open:
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
-  run_notes: [agent-runs/component-port/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-17-checkbox/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-port/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-12-checkbox/, agent-runs/component-sync/2026-06-17-checkbox/]
   # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 15-member box set's own bindings
   # (border, ink, muted, corner-lg, space-*, text:* were the section's Usage-Examples group, not the set).
 
@@ -1041,7 +1053,7 @@ open:
     - "A bare control has no accessible name — compose it with Label / Field or pass aria-label (the stories do); invalid is driven by aria-invalid (no prop)."
   figma_mechanics:
     - "Focus glow copied verbatim from the Input focus member 3176:305 (showShadowBehindNode:false)."
-  run_notes: [agent-runs/component-port/2026-06-12-switch/, agent-runs/component-sync/2026-06-12-switch/, agent-runs/component-sync/2026-06-16-switch/, agent-runs/component-sync/2026-06-17-switch/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-port/2026-06-12-switch/, agent-runs/component-sync/2026-06-12-switch/, agent-runs/component-sync/2026-06-16-switch/, agent-runs/component-sync/2026-06-17-switch/]
   # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 20-member track+thumb set's own
   # bindings (ink, border, corner-lg, space-*, text:* were the section's Usage-Examples group, not the set).
 
@@ -1109,7 +1121,7 @@ open:
   open:
     - "checked=on, focus keeps a primary border in Figma — flag if compiled code shows a ring border there."
     - "First round (own-binding tie-break): dropped border / space-3xl / space-lg / space-xl / text:Title as T1-dead (not bound anywhere) and corner-lg / space-xs as member-only chips. Second round (provenance-boundary rewrite, supersedes the first): the dump walk now stops at the nested .Field instance in the container's own Slot content, so ink / muted (which had been adopted as own under the old tie-break) are member-only too (chain Field / Field>Input / Field>Label) — RadioGroup has no `ownMembers` list this round, so they are documented in Field's own section instead. RadioGroup's own binding is now just the item set's colours + geometry plus the container's row gap (space-md)."
-  run_notes: [agent-runs/component-port/2026-06-12-radio-group/, agent-runs/component-sync/2026-06-12-radio-group/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-port/2026-06-12-radio-group/, agent-runs/component-sync/2026-06-12-radio-group/]
 
 - name: ChoiceCard
   status: nova-aligned
@@ -1121,9 +1133,9 @@ open:
     barrel: "libs/ui/src/index.ts → export * from './components/ui/choice-card'"
     types: [ChoiceCardCheckboxProps, ChoiceCardRadioProps, ChoiceCardShellProps, ChoiceCardSwitchProps]
     stories:
-      - "choice-card-checkbox/choice-card-checkbox.stories.tsx → UI/ChoiceCards/ChoiceCardCheckbox (ChoiceCardStates)"
-      - "choice-card-radio/choice-card-radio.stories.tsx → UI/ChoiceCards/ChoiceCardRadio (Group, ChoiceCardStates)"
-      - "choice-card-switch/choice-card-switch.stories.tsx → UI/ChoiceCards/ChoiceCardSwitch (ChoiceCardStates)"
+      - "choice-card-checkbox/choice-card-checkbox.stories.tsx → UI/ChoiceCards/ChoiceCardCheckbox (Default, ChoiceCardStates)"
+      - "choice-card-radio/choice-card-radio.stories.tsx → UI/ChoiceCards/ChoiceCardRadio (Default, Group, ChoiceCardStates)"
+      - "choice-card-switch/choice-card-switch.stories.tsx → UI/ChoiceCards/ChoiceCardSwitch (Default, ChoiceCardStates)"
     specs: [choice-card-checkbox/choice-card-checkbox.spec.tsx, choice-card-radio/choice-card-radio.spec.tsx, choice-card-shell/choice-card-shell.spec.tsx, choice-card-switch/choice-card-switch.spec.tsx]
     cva: none
     internal: "ChoiceCardShell (presentational, NOT exported) + useFieldId (hook). Nested subfolders per wrapper + choice-card-shell/ + use-field-id.ts, each with its own index.ts barrel"
@@ -1186,7 +1198,7 @@ open:
     - "The card sets expose ONLY checked + state — they have no slots of their own. The label / description / control / error slots visible in the hero belong to the NESTED .Field instance, so the composition is fixed: a consumer cannot swap card content through the card's Figma properties, only by editing the nested Field instance."
   a11y:
     - "The .Field renders role=group and a <label for> cannot name the button through it (axe button-name) → every wrapper sets aria-labelledby on the FieldTitle id (`${id}-title`, shared via useFieldId), verified with axe against the real component. Radio: value REQUIRED, lives in <RadioGroup> (selection + onValueChange on the group)."
-  run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-port/2026-06-16-choice-card/, agent-runs/component-sync/2026-06-17-choice-card/]
   # token-column audit 2026-09-04, three rounds:
   # Round 1 (own-binding tie-break, SUPERSEDED): `findAll` descended into every nested instance, so
   # ChoiceCard "owned" its nested Checkbox/Switch/RadioGroupItem's colours (destructive, primary-fill,
@@ -1397,7 +1409,7 @@ open:
     - "role=slider sits on the thumb → the component FORWARDS aria-label / aria-labelledby to every thumb (otherwise axe aria-input-field-name fails; a root label names nothing)."
   figma_mechanics:
     - "figma-verify reports 18 thumb ↔ track overlaps — intended handle-on-rail geometry (CLEAN by design)."
-  run_notes: [agent-runs/component-port/2026-06-22-slider/, agent-runs/token-column-audit/2026-09-04-forms-b/]
+  run_notes: [agent-runs/component-port/2026-06-22-slider/]
   # token-column audit 2026-09-04: figma.vars/.styles narrowed to the 12-member set's own bindings
   # (ink, muted, space-md, text:* were the section's Usage-Examples group, not the set).
 
@@ -1619,5 +1631,7 @@ open:
     - "Table 4521:2597 is a plain COMPONENT, not a component set — it has no variant axis, only showCaption#4522:1 / caption#4522:2 / content#4537:0. Do not look for a variant picker on the Table itself; the axes live on TableHead / TableCell / TableRow."
   divergences:
     - "Footer cells stay Body in Figma; the code tfoot label weight is code-only (minor)."
+  a11y:
+    - "Native table semantics throughout (<table>/<thead>/<tbody>/<tfoot>/<tr>/<th>/<td>) — no roles are added. TableHead renders a bare <th> without scope, so row-header columns need scope from the call site; TableCaption is a real <caption> (caption-bottom) and names the table."
   run_notes: [agent-runs/component-port/2026-06-26-table/]
 ```
