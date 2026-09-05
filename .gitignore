@@ -15,3 +15,6 @@ vitest.config.*.timestamp*
 
 storybook-static
 tools/screenshots/
+# design-canvas working files (drafts + build scripts for published canvas artifacts)
+design-docs/canvas/
+__pycache__/
