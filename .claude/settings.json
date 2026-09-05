@@ -4,6 +4,15 @@
     "claude-md-management@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "figma@claude-plugins-official": true,
-    "remix-icon-mcp@remix-icon-mcp": true
+    "remix-icon-mcp@remix-icon-mcp": true,
+    "design@knowledge-work-plugins": true
+  },
+  "extraKnownMarketplaces": {
+    "knowledge-work-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/knowledge-work-plugins"
+      }
+    }
   }
 }
