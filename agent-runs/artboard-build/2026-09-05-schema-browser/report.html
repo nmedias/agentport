@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artboard Build — Schema Browser</title>
+<style>
+  :root{
+    --ink:#0d1016; --muted:#656971; --border:#e4e6eb; --border-strong:#c9ced8;
+    --surface:#ffffff; --surface-sub:#f9fcfd; --card:#f3f5fa; --primary:#0d2531; --deep:#00121c;
+    --accent:#e8eef2;
+    --a:#2f6f4f; --a-bg:#eaf4ee;
+    --b:#8a5a12; --b-bg:#fbf1e0;
+    --c:#3a5b8c; --c-bg:#e9eff8;
+    --d:#8c3a52; --d-bg:#fae9ee;
+    --e:#5a3a8c; --e-bg:#f0eafa;
+    --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,-apple-system,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    --maxw:1180px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#eef1f5; --muted:#9aa1ac; --border:#262b33; --border-strong:#3a414c;
+      --surface:#0d1016; --surface-sub:#11151b; --card:#151a21; --primary:#9fc7dc; --deep:#c8dbe6;
+      --a:#7fc79f; --a-bg:#16241c;
+      --b:#dcb371; --b-bg:#2a2015;
+      --c:#8fb2e0; --c-bg:#161d2a;
+      --d:#e08fa6; --d-bg:#2a161d;
+      --e:#b79ae0; --e-bg:#201628;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#eef1f5; --muted:#9aa1ac; --border:#262b33; --border-strong:#3a414c;
+    --surface:#0d1016; --surface-sub:#11151b; --card:#151a21; --primary:#9fc7dc; --deep:#c8dbe6;
+    --a:#7fc79f; --a-bg:#16241c;
+    --b:#dcb371; --b-bg:#2a2015;
+    --c:#8fb2e0; --c-bg:#161d2a;
+    --d:#e08fa6; --d-bg:#2a161d;
+    --e:#b79ae0; --e-bg:#201628;
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface);color:var(--ink);font-family:var(--sans);
+       font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:0;max-width:1520px;margin:0 auto}
+
+  /* ── nav ─────────────────────────────────────────────── */
+  nav{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+      border-right:1px solid var(--border);padding:32px 20px 48px;background:var(--surface-sub)}
+  nav .brandtick{width:3px;height:21px;background:var(--primary);margin-bottom:16px}
+  nav .eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+       color:var(--muted);margin:0 0 14px}
+  nav a{display:block;padding:5px 0;color:var(--muted);text-decoration:none;font-size:13.5px;
+        border-left:2px solid transparent;padding-left:10px;margin-left:-12px}
+  nav a:hover{color:var(--ink)}
+  nav a.sub{font-size:12.5px;padding-left:22px}
+  nav a.active{color:var(--ink);border-left-color:var(--primary);font-weight:500}
+
+  main{padding:56px 48px 120px;max-width:var(--maxw);min-width:0}
+
+  /* ── type ────────────────────────────────────────────── */
+  .eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:6px 0 18px;font-weight:600}
+  h2{font-size:22px;letter-spacing:-.01em;margin:64px 0 16px;font-weight:600;
+     padding-top:22px;border-top:2px solid var(--border-strong);scroll-margin-top:24px}
+  h2 .num{font-family:var(--mono);font-size:13px;color:var(--muted);margin-right:10px;font-weight:400}
+  h3{font-size:16px;margin:36px 0 12px;font-weight:600;scroll-margin-top:24px}
+  h4{font-size:13.5px;margin:26px 0 8px;font-weight:600;color:var(--muted);
+     font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em}
+  p{margin:0 0 14px}
+  a{color:inherit}
+  code{font-family:var(--mono);font-size:.86em;background:var(--card);
+       border:1px solid var(--border);border-radius:4px;padding:1px 5px;white-space:nowrap}
+  td code, li code{white-space:normal}
+  strong{font-weight:600}
+  ul,ol{margin:0 0 14px;padding-left:22px}
+  li{margin:0 0 6px}
+
+  /* ── meta head ───────────────────────────────────────── */
+  .meta{display:flex;flex-wrap:wrap;gap:8px 10px;margin:0 0 28px;align-items:center}
+  .chip{font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:999px;
+        padding:3px 10px;color:var(--muted);background:var(--surface-sub)}
+  .chip b{color:var(--ink);font-weight:500}
+  .dot{width:6px;height:6px;border-radius:999px;background:var(--primary);display:inline-block;
+       margin-right:6px;vertical-align:1px}
+
+  /* ── tables ──────────────────────────────────────────── */
+  .tw{overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:0 0 22px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+  th{text-align:left;font-weight:600;font-size:11px;font-family:var(--mono);letter-spacing:.08em;
+     text-transform:uppercase;color:var(--muted);padding:11px 14px;background:var(--surface-sub);
+     border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0}
+  td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--surface-sub)}
+  td.id{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+  td.p{font-family:var(--mono);font-size:12px;white-space:nowrap}
+
+  /* ── category badges ─────────────────────────────────── */
+  .cat{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:600;
+       width:20px;height:20px;line-height:20px;text-align:center;border-radius:5px}
+  .cat-A{color:var(--a);background:var(--a-bg)}
+  .cat-B{color:var(--b);background:var(--b-bg)}
+  .cat-C{color:var(--c);background:var(--c-bg)}
+  .cat-D{color:var(--d);background:var(--d-bg)}
+  .cat-E{color:var(--e);background:var(--e-bg)}
+  .cat.flag{outline:1.5px solid currentColor;outline-offset:-1.5px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+  .legend span{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);
+       border:1px solid var(--border);border-radius:8px;padding:5px 10px 5px 6px;background:var(--surface-sub)}
+
+  /* ── callouts / cards ────────────────────────────────── */
+  .note{border:1px solid var(--border);border-left:2px solid var(--border-strong);
+        background:var(--surface-sub);border-radius:0 10px 10px 0;padding:14px 18px;margin:0 0 22px}
+  .note p:last-child{margin-bottom:0}
+  .zone{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+        color:var(--muted);margin:32px 0 10px;display:flex;align-items:center;gap:10px}
+  .zone::after{content:"";flex:1;height:1px;background:var(--border)}
+  .zone b{color:var(--ink);font-weight:600;letter-spacing:.04em}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;margin:0 0 24px}
+  .stat{border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--surface-sub)}
+  .stat .v{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+  .stat .l{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+           color:var(--muted);margin-top:4px}
+
+  .pass{color:var(--a);font-weight:600}
+  .flagw{color:var(--b);font-weight:600}
+
+  pre{font-family:var(--mono);font-size:12.5px;line-height:1.65;background:var(--surface-sub);
+      border:1px solid var(--border);border-radius:10px;padding:18px;overflow-x:auto;margin:0 0 22px}
+  pre code{background:none;border:none;padding:0;font-size:inherit;white-space:pre}
+
+  .quote{border-left:2px solid var(--border-strong);padding:2px 0 2px 18px;color:var(--muted);
+         margin:22px 0 0;font-size:14px}
+
+  /* ── status bar footer ───────────────────────────────── */
+  footer{margin-top:72px;border-top:2px solid var(--border-strong);padding-top:16px;
+         display:flex;flex-wrap:wrap;gap:10px 26px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  footer b{color:var(--ink);font-weight:500}
+
+  @media (max-width:1000px){
+    .layout{grid-template-columns:1fr}
+    nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border);
+        padding:20px 24px}
+    nav a{display:inline-block;margin:0 12px 0 0;padding-left:0;border-left:none;border-bottom:2px solid transparent}
+    nav a.sub{display:none}
+    nav a.active{border-left-color:transparent;border-bottom-color:var(--primary)}
+    main{padding:32px 24px 80px}
+    h1{font-size:26px}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav>
+  <div class="brandtick"></div>
+  <p class="eyebrow">Agent run · 2026-09-05</p>
+  <a href="#top">Schema Browser</a>
+  <a href="#s1">1 · Sources read</a>
+  <a href="#s2">2 · Part index</a>
+  <a href="#s3">3 · Categorisation</a>
+  <a href="#s31" class="sub">3.1 · A — mapped</a>
+  <a href="#s32" class="sub">3.2 · B — needs update</a>
+  <a href="#s33" class="sub">3.3 · C — drawn</a>
+  <a href="#s34" class="sub">3.4 · D — new primitive</a>
+  <a href="#s35" class="sub">3.5 · E — composition</a>
+  <a href="#s4">4 · Token evidence</a>
+  <a href="#s5">5 · Layer structure</a>
+  <a href="#s6">6 · Checks</a>
+  <a href="#s7">7 · Follow-ups</a>
+</nav>
+
+<main id="top">
+  <p class="eyebrow">Agent run — artboard build</p>
+  <h1>Schema Browser — 2 screens</h1>
+
+  <div class="meta">
+    <span class="chip"><b>2026-09-05</b></span>
+    <span class="chip">artboard build · code/design draft → Figma, <b>DS read-only</b></span>
+    <span class="chip">File <b>nQSNLASjuLvgTh3we8Dp4s</b> “Agentport DS”</span>
+    <span class="chip">Page <b>Artboards</b> 8704:7644</span>
+    <span class="chip">Section <b>Schema Browser · Artboards</b> 8707:2 — 3200 × 1714</span>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Artboard</th><th>Node</th><th>Size</th></tr></thead>
+      <tbody>
+        <tr><td><code>AppShell · Schema Browser / Resting</code></td><td class="id">8707:4</td><td class="id">1480 × 1434</td></tr>
+        <tr><td><code>AppShell · Schema Browser / Command Open</code></td><td class="id">8719:485</td><td class="id">1480 × 1434</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Source of the two screens</h4>
+  <p>The corrected design-canvas artboards built earlier this session
+  (<code>design-docs/canvas/schema-browser/Main.dc.html</code>, <code>Overlay.dc.html</code>), themselves a
+  correction of the “Quiet” reference screen in the Toolbox DS file
+  (<code>xWC3VEdPxfwnMXwUI555Ra</code>, node <code>1099:9710</code>).</p>
+
+  <h4>Constraints honoured</h4>
+  <ul>
+    <li>No new Figma components, no new variables — the DS was read-only.</li>
+    <li>No token overrides on any component instance (verified, §6).</li>
+    <li>Every token-backed value on authored (non-instance) nodes is bound by variable id (verified: 0 unbound).</li>
+    <li>Layer names English, speaking, named after the <em>future composition</em> they would become (§5).</li>
+  </ul>
+
+  <!-- ══ 1 ══════════════════════════════════════════════ -->
+  <h2 id="s1"><span class="num">01</span>Sources read before building</h2>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th style="width:42%">Source</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><code>design-docs/design-system/components-reference.md</code></td><td>component inventory, set/member node ids, live API per set, documented forks + <code>code_only_tokens</code></td></tr>
+        <tr><td><code>design-docs/design-system/tokens-reference.md</code></td><td>token roles (<code>use</code> / <code>avoid</code>), the 14 text formats, effect model</td></tr>
+        <tr><td><code>libs/ui/src/styles/tokens.css</code></td><td>resolved values, used to confirm the Toolbox screen’s palette is the Agentport palette</td></tr>
+        <tr><td><code>.claude/skills/figma-build-rules</code></td><td>binding recipes, slot mechanics, one-structural-mutation-per-call rule</td></tr>
+        <tr><td><code>.claude/skills/figma-create-section</code> <code>config.json</code></td><td>canonical Section wrapper (white, corner 12, headline Display @ inset 80)</td></tr>
+        <tr><td><code>.claude/skills/figma-verify</code></td><td>the pre-handoff check in §6</td></tr>
+        <tr><td><code>@remixicon/react@4.1.0</code></td><td>exact vector paths for glyphs the DS icon set does not carry</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p><strong>Palette cross-check (evidence the Toolbox screen is Agentport DS):</strong> the Figma variables
+    bound on <code>1099:9710</code> resolve exactly onto <code>tokens.css</code> —
+    <code>Base/ink #0d1016</code> = <code>neutral-900</code>,
+    <code>Muted/muted-ink #656971</code> = <code>neutral-500</code>,
+    <code>Border/border #e4e6eb</code> = <code>neutral-75</code>,
+    <code>Primary/primary-fill #0d2531</code> = <code>deep-900</code>,
+    <code>Inverse/inverse-fill #00121c</code> = <code>deep-950</code>,
+    <code>Muted/muted-fill #f9fcfd</code> = <code>neutral-25</code>,
+    <code>Cards/card-fill #f3f5fa</code> = <code>neutral-50</code>.</p>
+  </div>
+
+  <!-- ══ 2 ══════════════════════════════════════════════ -->
+  <h2 id="s2"><span class="num">02</span>Index of identified UI parts</h2>
+
+  <p>72 parts identified before building. <code>Cat</code> = category (§3–§4):</p>
+
+  <div class="legend">
+    <span><i class="cat cat-A">A</i> mapped to an existing component</span>
+    <span><i class="cat cat-B">B</i> mapped but needs a component update</span>
+    <span><i class="cat cat-C">C</i> no component (drawn from tokens)</span>
+    <span><i class="cat cat-D">D</i> missing primitive</span>
+    <span><i class="cat cat-E">E</i> composition candidate</span>
+  </div>
+
+  <p class="zone"><b>Zone · TopBar</b> <code>8708:2</code> — full width, y 0–84</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning on screen</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P01</td><td>TopBar</td><td>app-level chrome bar</td><td>y 0–84, full width</td><td><i class="cat cat-E">E</i></td><td>frame <code>8708:2</code></td></tr>
+      <tr><td class="p">P02</td><td>ContextSwitcher</td><td>which backend + tenant the session is on</td><td>left, x 24</td><td><i class="cat cat-B">B</i></td><td>frame <code>8708:4</code></td></tr>
+      <tr><td class="p">P03</td><td>ConnectionSegment / StatusDot</td><td>connection is live</td><td>inside P02</td><td><i class="cat cat-D">D</i></td><td>ellipse <code>8708:6</code>, fill <code>primary</code></td></tr>
+      <tr><td class="p">P04</td><td>ContextSwitcher / SegmentDivider</td><td>splits host from tenant</td><td>inside P02</td><td><i class="cat cat-A">A</i></td><td><code>Separator[vertical]</code> <code>8708:8</code></td></tr>
+      <tr><td class="p">P05</td><td>CommandLauncher / Trigger</td><td>opens the command palette</td><td>centred, 480 wide</td><td><i class="cat cat-A">A</i></td><td><code>InputGroup[default,horizontal]</code> <code>8709:2</code></td></tr>
+      <tr><td class="p">P06</td><td>Trigger / LeadingAddon</td><td>search affordance</td><td>inside P05</td><td><i class="cat cat-A">A</i></td><td><code>InputGroupAddon[inline-start]</code></td></tr>
+      <tr><td class="p">P07</td><td>Trigger input</td><td>the query field</td><td>inside P05</td><td><i class="cat cat-A">A</i></td><td><code>InputGroupInput</code></td></tr>
+      <tr><td class="p">P08</td><td>Trigger / TrailingAddon</td><td>holds the keycap</td><td>inside P05</td><td><i class="cat cat-A">A</i></td><td><code>InputGroupAddon[inline-end]</code></td></tr>
+      <tr><td class="p">P09</td><td>Trigger / Shortcut</td><td>the ⌘K key hint</td><td>inside P08</td><td><i class="cat cat-A">A</i></td><td><code>Kbd[content=text, emphasis=high]</code></td></tr>
+      <tr><td class="p">P10</td><td>LocaleSwitch</td><td>UI language</td><td>right, x ~1370</td><td><i class="cat cat-D">D</i></td><td>frame <code>8709:10</code></td></tr>
+      <tr><td class="p">P11</td><td>LocaleSwitch / GlobeIcon</td><td>language affordance</td><td>inside P10</td><td><i class="cat cat-C">C</i></td><td>vector <code>8709:15</code> (RiGlobalLine)</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · NavRail</b> <code>8711:15</code> — x 0–56</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P12</td><td>NavRail</td><td>tool switch column</td><td>x 0–56, full height</td><td><i class="cat cat-E">E</i></td><td>frame <code>8711:15</code></td></tr>
+      <tr><td class="p">P13</td><td>Tool · Schema (active)</td><td>current tool</td><td>rail, 1st</td><td><i class="cat cat-B">B</i></td><td><code>Button[default, icon]</code> <code>8711:16</code></td></tr>
+      <tr><td class="p">P14</td><td>Tool · Search / Relations / Settings</td><td>other tools</td><td>rail, 2–4</td><td><i class="cat cat-A">A</i></td><td><code>Button[ghost, icon]</code> <code>8711:25</code> <code>8711:33</code> <code>8711:38</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · FilterPanel</b> <code>8712:37</code> — x 56–340</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P15</td><td>FilterPanel</td><td>source filters + entity navigation</td><td>x 56–340</td><td><i class="cat cat-E">E</i></td><td>frame <code>8712:37</code></td></tr>
+      <tr><td class="p">P16</td><td>SourceFilters / SectionLabel</td><td>names the filter block</td><td>top of P15</td><td><i class="cat cat-C">C</i></td><td>text, style <code>Eyebrow</code> <code>8712:39</code></td></tr>
+      <tr><td class="p">P17</td><td>SourceToggle ×2</td><td>turn a data source on/off</td><td>under P16</td><td><i class="cat cat-E">E</i></td><td>frames <code>8712:41</code> <code>8712:51</code></td></tr>
+      <tr><td class="p">P18</td><td>SourceToggle / Switch</td><td>the on/off control</td><td>inside P17</td><td><i class="cat cat-A">A</i></td><td><code>Switch[sm, on, default]</code> <code>8712:42</code> <code>8712:52</code></td></tr>
+      <tr><td class="p">P19</td><td>SourceToggle / Label</td><td>names the source</td><td>inside P17</td><td><i class="cat cat-A">A</i></td><td><code>Label[default]</code> <code>8712:44</code> <code>8712:54</code></td></tr>
+      <tr><td class="p">P20</td><td>SourceToggle / Count</td><td>how many types the source contributes</td><td>inside P17</td><td><i class="cat cat-B">B</i></td><td><code>Badge[outline]</code> <code>8712:46</code> <code>8712:56</code></td></tr>
+      <tr><td class="p">P21</td><td>SourceMeter / Bar</td><td>share of types per source</td><td>under P17</td><td><i class="cat cat-D">D</i></td><td>frame <code>8713:50</code>, rects <code>8713:51</code> <code>8713:52</code></td></tr>
+      <tr><td class="p">P22</td><td>SourceMeter / Legend ×2</td><td>reads the bar</td><td>under P21</td><td><i class="cat cat-D">D</i></td><td>frames <code>8713:54</code> <code>8713:57</code></td></tr>
+      <tr><td class="p">P23</td><td>SourceMeter / Summary</td><td>how many types are active</td><td>under P22</td><td><i class="cat cat-C">C</i></td><td>text, style <code>Body</code> <code>8713:60</code></td></tr>
+      <tr><td class="p">P24</td><td>FilterPanel / Divider</td><td>separates filters from the list</td><td>mid panel</td><td><i class="cat cat-A">A</i></td><td><code>Separator[horizontal]</code> <code>8713:61</code></td></tr>
+      <tr><td class="p">P25</td><td>EntityList / GroupHeading ×2</td><td>groups the list by source</td><td>above each group</td><td><i class="cat cat-C">C</i></td><td>text, style <code>Eyebrow</code> <code>8713:7135</code> <code>8713:7173</code></td></tr>
+      <tr><td class="p">P26</td><td>EntityList / Entry ×4</td><td>pick an object type</td><td>list body</td><td><i class="cat cat-A">A</i></td><td><code>Item[default, xs]</code> <code>8713:7136</code> <code>8713:7160</code> <code>8713:7174</code> <code>8713:7186</code></td></tr>
+      <tr><td class="p">P27</td><td>EntityList / Entry (current)</td><td>the type currently open</td><td>list body, 2nd</td><td><i class="cat cat-B flag">B</i></td><td><code>Item[muted, xs]</code> <code>8713:7148</code></td></tr>
+      <tr><td class="p">P28</td><td>EntityList / OverflowLink ×2</td><td>reveal the truncated rest</td><td>end of each group</td><td><i class="cat cat-A">A</i></td><td><code>Button[link, xs]</code> <code>8713:7198</code> <code>8713:7202</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · WorkspaceColumn</b> <code>8714:88</code> — x 340–1140</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P29</td><td>WorkspaceColumn</td><td>the open record</td><td>x 340–1140</td><td><i class="cat cat-E">E</i></td><td>frame <code>8714:88</code></td></tr>
+      <tr><td class="p">P30</td><td>EntityHeader / Kind</td><td>what kind of thing is open</td><td>top</td><td><i class="cat cat-C">C</i></td><td>text, <code>Eyebrow</code> <code>8714:90</code></td></tr>
+      <tr><td class="p">P31</td><td>EntityHeader / Name</td><td>which one</td><td>under P30</td><td><i class="cat cat-C">C</i></td><td>text, <code>Display</code> <code>8714:91</code></td></tr>
+      <tr><td class="p">P32</td><td>EntityHeader / Meta</td><td>counts at a glance</td><td>under P31</td><td><i class="cat cat-C">C</i></td><td>text, <code>Eyebrow</code> <code>8714:92</code></td></tr>
+      <tr><td class="p">P33</td><td>PropertySearch</td><td>filter the attribute list</td><td>under P32, 374 wide</td><td><i class="cat cat-A">A</i></td><td><code>InputGroup[default,horizontal]</code> <code>8714:94</code></td></tr>
+      <tr><td class="p">P34</td><td>PropertySearch / LeadingAddon</td><td>search affordance</td><td>inside P33</td><td><i class="cat cat-A">A</i></td><td><code>InputGroupAddon[inline-start]</code></td></tr>
+      <tr><td class="p">P35</td><td>SchemaTable</td><td>the record’s attribute list</td><td>below the header</td><td><i class="cat cat-A">A</i></td><td><code>Table</code> <code>8716:7684</code></td></tr>
+      <tr><td class="p">P36</td><td>SchemaTable / HeaderRow</td><td>column names</td><td>table top</td><td><i class="cat cat-A">A</i></td><td><code>TableRow[default]</code> <code>8715:97</code></td></tr>
+      <tr><td class="p">P37</td><td>HeaderCell ×5</td><td>one column name each</td><td>header row</td><td><i class="cat cat-A">A</i></td><td><code>TableHead[left]</code> ×5</td></tr>
+      <tr><td class="p">P38</td><td>GroupDivider ×3</td><td>groups attributes by origin</td><td>between blocks</td><td><i class="cat cat-B flag">B</i></td><td><code>CommandSeparator[labeled]</code> <code>8716:107</code> <code>8716:7384</code> <code>8716:7571</code></td></tr>
+      <tr><td class="p">P39</td><td>Row ×21</td><td>one attribute</td><td>table body</td><td><i class="cat cat-A">A</i></td><td><code>TableRow[default]</code> ×21</td></tr>
+      <tr><td class="p">P40</td><td>Cell · Property</td><td>the attribute’s name</td><td>col 1, 264</td><td><i class="cat cat-A">A</i></td><td><code>TableCell[left]</code></td></tr>
+      <tr><td class="p">P41</td><td>Cell · Type</td><td>its data type</td><td>col 2, 126</td><td><i class="cat cat-B flag">B</i></td><td><code>TableCell[left]</code></td></tr>
+      <tr><td class="p">P42</td><td>Cell · Cardinality</td><td>single or multi</td><td>col 3, 112</td><td><i class="cat cat-B flag">B</i></td><td><code>TableCell[left]</code></td></tr>
+      <tr><td class="p">P43</td><td>Cell · Required (positive)</td><td>attribute is mandatory</td><td>col 4, 96</td><td><i class="cat cat-B flag">B</i></td><td><code>TableCell[left]</code> + vector <code>RequiredMark</code></td></tr>
+      <tr><td class="p">P44</td><td>Cell · Required (negative)</td><td>attribute is optional</td><td>col 4, 96</td><td><i class="cat cat-A">A</i></td><td><code>TableCell[left]</code>, text <code>—</code></td></tr>
+      <tr><td class="p">P45</td><td>Cell · Origin</td><td>which system owns it</td><td>col 5, 170</td><td><i class="cat cat-B flag">B</i></td><td><code>TableCell[left]</code></td></tr>
+      <tr><td class="p">P46</td><td>Row rule / column rules</td><td>reading aids</td><td>table</td><td><i class="cat cat-B">B</i></td><td><code>TableRow</code> bottom border (columns: none)</td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · DetailPanel</b> <code>8717:483</code> — x 1140–1480</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P47</td><td>DetailPanel</td><td>context for the open record</td><td>x 1140–1480</td><td><i class="cat cat-E">E</i></td><td>frame <code>8717:483</code></td></tr>
+      <tr><td class="p">P48</td><td>Header / Kind</td><td>eyebrow</td><td>panel top</td><td><i class="cat cat-C">C</i></td><td>text, <code>Eyebrow</code> <code>8717:485</code></td></tr>
+      <tr><td class="p">P49</td><td>DetailPanel / HeaderText</td><td>name + one-line summary</td><td>under P48</td><td><i class="cat cat-B flag">B</i></td><td><code>PopoverHeader</code> <code>8717:486</code></td></tr>
+      <tr><td class="p">P50</td><td>DetailPanel / Divider</td><td>section break</td><td>mid panel</td><td><i class="cat cat-A">A</i></td><td><code>Separator[horizontal]</code> <code>8717:489</code></td></tr>
+      <tr><td class="p">P51</td><td>RelationSection / Label</td><td>names the section</td><td>under P50</td><td><i class="cat cat-C">C</i></td><td>text, <code>Eyebrow</code> <code>8717:491</code></td></tr>
+      <tr><td class="p">P52</td><td>RelationGraph</td><td>how the record connects</td><td>panel body</td><td><i class="cat cat-E">E</i></td><td>frame <code>8718:485</code></td></tr>
+      <tr><td class="p">P53</td><td>RootNode / Marker</td><td>the record itself</td><td>graph root</td><td><i class="cat cat-C">C</i></td><td>ellipse <code>8718:487</code>, fill <code>ink</code></td></tr>
+      <tr><td class="p">P54</td><td>RootNode / Text</td><td>its kind + name</td><td>beside P53</td><td><i class="cat cat-C">C</i></td><td><code>Eyebrow</code> + <code>Title</code> <code>8718:488</code></td></tr>
+      <tr><td class="p">P55</td><td>Branches / spine + connectors</td><td>the link lines</td><td>graph body</td><td><i class="cat cat-C">C</i></td><td>2px left stroke <code>8718:491</code> + rects, <code>border</code></td></tr>
+      <tr><td class="p">P56</td><td>Branch / Node ×3</td><td>a related thing</td><td>on each connector</td><td><i class="cat cat-C">C</i></td><td>ellipses, fill <code>muted</code></td></tr>
+      <tr><td class="p">P57</td><td>Branch / Text ×3</td><td>relation kind + target</td><td>beside each node</td><td><i class="cat cat-E">E</i></td><td><code>Eyebrow</code> + <code>Label/md</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · StatusBar</b> <code>8718:510</code> — y 1358–1434</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P58</td><td>StatusBar</td><td>ambient session context</td><td>bottom, full width</td><td><i class="cat cat-E">E</i></td><td>frame <code>8718:510</code></td></tr>
+      <tr><td class="p">P59</td><td>Measurement axis</td><td>the hard cut above the bar</td><td>bar top edge</td><td><i class="cat cat-C">C</i></td><td>2px top stroke, <code>border-strong</code></td></tr>
+      <tr><td class="p">P60</td><td>StatusBar / BrandTick</td><td>brand device</td><td>x 26, on the axis</td><td><i class="cat cat-C">C</i></td><td>rect <code>8718:531</code>, fill <code>primary</code></td></tr>
+      <tr><td class="p">P61</td><td>Field ×4</td><td>one context fact each</td><td>left to right</td><td><i class="cat cat-E">E</i></td><td><code>8718:511</code> <code>8718:517</code> <code>8718:522</code> <code>8718:527</code></td></tr>
+      <tr><td class="p">P62</td><td>Field / StatusDot</td><td>connection is live</td><td>field 1</td><td><i class="cat cat-D">D</i></td><td>ellipse <code>8718:513</code>, fill <code>primary</code></td></tr>
+      <tr><td class="p">P63</td><td>Field / Label + Value</td><td>the fact</td><td>inside each field</td><td><i class="cat cat-E">E</i></td><td><code>Eyebrow</code> + <code>Body</code></td></tr>
+      <tr><td class="p">P64</td><td>StatusBar / FieldDivider ×3</td><td>separates the fields</td><td>between fields</td><td><i class="cat cat-A">A</i></td><td><code>Separator[vertical]</code> <code>8718:516</code> <code>8718:521</code> <code>8718:526</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <p class="zone"><b>Zone · Command-open screen only</b> <code>8719:485</code></p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Meaning</th><th>Position</th><th>Cat</th><th>Built as</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P65</td><td>CommandLauncher / Scrim</td><td>the page behind is inert</td><td>full bleed, absolute</td><td><i class="cat cat-A">A</i></td><td><code>DialogOverlay</code> <code>8719:8400</code></td></tr>
+      <tr><td class="p">P66</td><td>CommandLauncher / Palette</td><td>the command surface</td><td>x 380, y 130, 720 wide</td><td><i class="cat cat-A">A</i></td><td><code>Command[palette]</code> <code>8719:8401</code></td></tr>
+      <tr><td class="p">P67</td><td>Palette prompt row</td><td>what you type</td><td>palette top</td><td><i class="cat cat-A">A</i></td><td><code>CommandInput[palette]</code> (nested)</td></tr>
+      <tr><td class="p">P68</td><td>Palette / Esc keycap</td><td>how to dismiss</td><td>prompt row, right</td><td><i class="cat cat-A">A</i></td><td><code>Kbd</code> (nested in <code>CommandInput[palette]</code>)</td></tr>
+      <tr><td class="p">P69</td><td>Palette group heading ×3</td><td>groups the commands</td><td>list</td><td><i class="cat cat-A">A</i></td><td><code>CommandSeparator[labeled]</code> (nested in <code>CommandGroup[palette]</code>)</td></tr>
+      <tr><td class="p">P70</td><td>Palette command item ×7</td><td>one command</td><td>list</td><td><i class="cat cat-A">A</i></td><td><code>CommandItem[default | selected]</code> (nested)</td></tr>
+      <tr><td class="p">P71</td><td>Palette item icon ×7</td><td>what kind of command</td><td>item, leading</td><td><i class="cat cat-A">A</i></td><td><code>.Command/Icon/*</code> via <code>icon#3559:0</code> swap</td></tr>
+      <tr><td class="p">P72</td><td>Palette item shortcut ×7</td><td>the key that runs it</td><td>item, trailing</td><td><i class="cat cat-A">A</i></td><td><code>shortcut#3559:15</code> + <code>shortcut (children)#3559:20</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ══ 3 ══════════════════════════════════════════════ -->
+  <h2 id="s3"><span class="num">03</span>Categorisation</h2>
+
+  <h3 id="s31"><i class="cat cat-A">A</i> &nbsp;Mapped to an existing Figma component, used as an instance (no change needed)</h3>
+  <p>27 top-level instances in the resting screen (178 counting nested ones). Distinct components used:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Component</th><th>Set / node</th><th>Where</th><th>Controls driven</th></tr></thead>
+    <tbody>
+      <tr><td><code>Separator</code></td><td class="id">3676:1018</td><td class="p">P04, P24, P50, P64</td><td><code>orientation</code></td></tr>
+      <tr><td><code>InputGroup</code></td><td class="id">3525:622</td><td class="p">P05, P33</td><td><code>state</code>, <code>layout</code>, <code>content</code> slot</td></tr>
+      <tr><td><code>InputGroupAddon</code></td><td class="id">3520:606</td><td class="p">P06, P08, P34</td><td><code>align</code>, <code>content</code> slot</td></tr>
+      <tr><td><code>InputGroupInput</code></td><td class="id">3522:590</td><td class="p">P07</td><td><code>placeholder#3777:0</code></td></tr>
+      <tr><td><code>Kbd</code></td><td class="id">3217:308</td><td class="p">P09</td><td><code>content</code>, <code>emphasis</code>, <code>label (children)#3692:44</code></td></tr>
+      <tr><td><code>Button</code></td><td class="id">3164:312</td><td class="p">P14, P28</td><td><code>variant</code>, <code>size</code>, <code>state</code>, nested base <code>label (children)#3692:35</code>, <code>Button Icon (Only)#3516:10</code></td></tr>
+      <tr><td><code>Switch</code></td><td class="id">3839:2</td><td class="p">P18</td><td><code>size</code>, <code>checked</code>, <code>state</code></td></tr>
+      <tr><td><code>Label</code></td><td class="id">3735:1024</td><td class="p">P19</td><td><code>label (children)#3735:0</code></td></tr>
+      <tr><td><code>Item</code></td><td class="id">4498:2551</td><td class="p">P26</td><td><code>variant</code>, <code>size</code>, <code>title#4499:0</code>, <code>description#4499:10</code>, <code>media</code> slot</td></tr>
+      <tr><td><code>Table</code></td><td class="id">4521:2597</td><td class="p">P35</td><td><code>showCaption#4522:1</code>, <code>content#4537:0</code> slot</td></tr>
+      <tr><td><code>TableRow</code></td><td class="id">4520:2621</td><td class="p">P36, P39</td><td><code>state</code>, <code>cells#4520:3</code> slot</td></tr>
+      <tr><td><code>TableHead</code></td><td class="id">4515:2603</td><td class="p">P37</td><td><code>align</code>, <code>head (children)#4515:0</code></td></tr>
+      <tr><td><code>TableCell</code></td><td class="id">4515:2610</td><td class="p">P40, P44</td><td><code>align</code>, <code>cell (children)#4515:4</code>, <code>content#4527:0</code> slot</td></tr>
+      <tr><td><code>DialogOverlay</code></td><td class="id">3590:791</td><td class="p">P65</td><td>— (scrim + <code>scrim</code> × <code>scrim-opacity</code>)</td></tr>
+      <tr><td><code>Command</code></td><td class="id">3642:2</td><td class="p">P66</td><td><code>variant=palette</code>, <code>list#3642:0</code> slot</td></tr>
+      <tr><td><code>CommandInput</code></td><td class="id">3639:2</td><td class="p">P67</td><td><code>placeholder#3639:1</code></td></tr>
+      <tr><td><code>CommandGroup</code></td><td class="id">3640:9</td><td class="p">P69</td><td><code>variant=palette</code>, <code>items#3640:0</code> slot</td></tr>
+      <tr><td><code>CommandSeparator</code></td><td class="id">3653:6</td><td class="p">P38, P69</td><td><code>variant</code>, <code>label#3653:1</code></td></tr>
+      <tr><td><code>CommandItem</code></td><td class="id">3559:2</td><td class="p">P70–P72</td><td><code>state</code>, <code>icon#3559:0</code>, <code>label (children)#3559:10</code>, <code>shortcut#3559:15</code>, <code>shortcut (children)#3559:20</code></td></tr>
+      <tr><td><code>PopoverHeader</code></td><td class="id">4367:2253</td><td class="p">P49</td><td><code>title#4367:0</code>, <code>description#4367:1</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s32"><i class="cat cat-B">B</i> &nbsp;Mapped, but the screen needs something the component does not have</h3>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Mapped to</th><th>What is missing</th><th>Proposed change</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="p">P27</td><td>current object type in the nav</td><td><code>Item</code> <code>4498:2551</code></td>
+        <td>no <code>selected</code> state. The catalog records this deliberately: <code>state_axis</code> is examples-only, selection is “a call-site contract, NO set member” (<code>components-reference.md</code> § Item). With the no-override rule the accent tint cannot be applied at all — the build had to fall back to <code>variant=muted</code>, which reads far weaker than intended.</td>
+        <td>add a <code>selected</code> boolean (not a full state axis) to the <code>Item</code> set, bound to <code>accent-fill</code> + <code>accent-ink</code> + <code>accent-border</code> — the tokens already exist and already carry exactly this role (<code>accent-fill</code>: “tint that marks state — selected rows, active items”).</td>
+      </tr>
+      <tr>
+        <td class="p">P26/P27</td><td>nav rows generally</td><td><code>Item</code></td>
+        <td>no way to suppress the description. <code>description#4499:10 = ""</code> still reserves its line box → every row is 59 px tall where a nav list wants ~32.</td>
+        <td><code>showDescription</code> boolean on the <code>Item</code> set (mirrors <code>showIcon</code> on <code>SelectItem</code>), or turn description into a slot.</td>
+      </tr>
+      <tr>
+        <td class="p">P38</td><td>attribute group divider inside the table</td><td><code>CommandSeparator[labeled]</code> <code>3653:6</code></td>
+        <td><code>TableRow.state</code> has only <code>default / hover / selected</code> — no section-header row; and the only labelled-rule component in the DS is namespaced to <code>Command</code>.</td>
+        <td>promote <code>CommandSeparator[labeled]</code> to a DS-level <code>LabeledSeparator</code>, <strong>or</strong> add a <code>group</code> value to <code>TableRow.state</code>. The former is the better abstraction (§5).</td>
+      </tr>
+      <tr>
+        <td class="p">P41/P42/P45</td><td>type · cardinality · origin cells</td><td><code>TableCell</code> <code>4515:2610</code></td>
+        <td>the cell binds <code>text:Body</code> (14 sans). Tabular machine values want <code>text-format-data-md</code> (Geist Mono 11) — the format exists, the cell cannot reach it.</td>
+        <td><code>format</code> axis on <code>TableCell</code> (<code>text | data</code>), binding <code>Body</code> vs <code>Data/md</code>.</td>
+      </tr>
+      <tr>
+        <td class="p">P43</td><td>required marker</td><td><code>TableCell</code> content slot</td>
+        <td>the DS icon set has no check component (the only glyph components are the 11 <code>.Command/Icon/*</code>). Had to be drawn as a raw vector from <code>RiCheckLine</code>.</td>
+        <td>add <code>.Icon/Check</code> to the DS icon set — <code>RiCheckLine</code> is already used in code (<code>command.tsx</code>, <code>select.tsx</code>).</td>
+      </tr>
+      <tr>
+        <td class="p">P46</td><td>column rules</td><td><code>Table</code> <code>4521:2597</code></td>
+        <td>the Table composition draws row borders only; vertical column rules are not modelled.</td>
+        <td>optional <code>showColumnRules</code> boolean on <code>Table</code>, or a <code>divider</code> boolean on <code>TableCell</code>.</td>
+      </tr>
+      <tr>
+        <td class="p">P02</td><td>connection / tenant switcher</td><td><code>SelectTrigger</code> <code>4308:2029</code> is the nearest (value + trailing chevron)</td>
+        <td>no leading-indicator slot and no second segment; a tenant switcher needs host + tenant + live-state dot.</td>
+        <td>a <code>leading</code> slot on <code>SelectTrigger</code> would cover the dot; the two-segment form is a composition (§5, <code>ContextSwitcher</code>).</td>
+      </tr>
+      <tr>
+        <td class="p">P13</td><td>active rail tool</td><td><code>Button</code> <code>3164:312</code></td>
+        <td><code>variant=default</code> is used to mean “selected”, but <code>default</code> semantically means “primary action”, not “current”. Also: no node-tree glyph exists, so the button keeps the base <code>.Button Icon</code> default.</td>
+        <td>selection in a nav rail is the same gap as P27 — one shared <code>selected</code> treatment for <code>Item</code> + <code>Button</code>; plus the icon-set gap below.</td>
+      </tr>
+      <tr>
+        <td class="p">P20</td><td>source count</td><td><code>Badge[outline]</code> <code>3697:1016</code></td>
+        <td>Badge binds <code>text:Label/md</code> (sans 14); a tabular counter wants mono. The code already diverges here — <code>components-reference.md</code> § Badge <code>divergences</code>: “the count-pill (font-mono tabular min-w-5) [is a] code-level override, not [a] Figma variant”.</td>
+        <td>give <code>Badge</code> a <code>count</code> variant bound to <code>Data/md</code>, closing a divergence that already exists in code.</td>
+      </tr>
+      <tr>
+        <td class="p">P05</td><td>command launcher trigger</td><td><code>InputGroup</code></td>
+        <td>no “palette is open” state — on the second screen the trigger should read as inert. <code>InputGroup.state</code> has <code>default / focus / disabled / invalid / focus-invalid</code>. Dimming it would have been an ad-hoc opacity override, so it was left untouched.</td>
+        <td>reuse <code>state=disabled</code>, or accept that the scrim carries it (documented decision).</td>
+      </tr>
+      <tr>
+        <td class="p">P49</td><td>detail-panel header</td><td><code>PopoverHeader</code> <code>4367:2253</code></td>
+        <td>the only title+description pair in the DS, but its title binds <code>Label/md</code> (14/500) — visibly too small as a panel headline, and it is Popover-namespaced.</td>
+        <td>promote to <code>PanelHeader</code> with a <code>size</code> axis (<code>compact</code> = today’s <code>Label/md</code>, <code>panel</code> = <code>Heading-sm</code>).</td>
+      </tr>
+      <tr>
+        <td class="p">P71</td><td>palette item icons</td><td><code>CommandItem.icon</code> swap</td>
+        <td>works for all 7 items because the needed glyphs happen to exist. Not a defect — recorded so the dependency on an 11-glyph icon set is visible.</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s33"><i class="cat cat-C">C</i> &nbsp;No component; drawn from frames/shapes/text bound to tokens</h3>
+  <p>These are legitimate as raw nodes today — they are either pure typography (a text style, not a component)
+  or layout containers. Every one is fully token-bound (§6).</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>UI part</th><th>Why no component</th><th>Tokens bound</th></tr></thead>
+    <tbody>
+      <tr><td class="p">P11</td><td>globe glyph</td><td>icon, not a component (see 3.2/P43 — the DS icon set is 11 glyphs)</td><td><code>muted</code></td></tr>
+      <tr><td class="p">P16, P25, P30, P32, P48, P51</td><td>eyebrows / micro-labels</td><td>typography role; <code>text:Eyebrow</code> is a style, correctly not a component</td><td><code>muted</code> + style <code>Eyebrow</code></td></tr>
+      <tr><td class="p">P23</td><td>meter summary</td><td>plain body copy</td><td><code>muted</code> + style <code>Body</code></td></tr>
+      <tr><td class="p">P31</td><td>record name</td><td>plain display heading</td><td><code>ink</code> + style <code>Display</code></td></tr>
+      <tr><td class="p">P53–P56</td><td>relation graph marker, spine, connectors, nodes</td><td>diagram primitives; nothing comparable exists (see 3.5, <code>RelationGraph</code>)</td><td><code>ink</code>, <code>border</code>, <code>muted</code></td></tr>
+      <tr><td class="p">P59, P60</td><td>measurement axis + brand tick</td><td>brand device, deliberately not systematised</td><td><code>border-strong</code>, <code>primary</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s34"><i class="cat cat-D">D</i> &nbsp;Would be a new primitive component that does not exist yet</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Proposed primitive</th><th>Covers</th><th>Registry equivalent</th><th>Why it is a primitive, not a composition</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>Meter</code></td><td class="p">P21 source-share bar</td><td>shadcn <code>progress</code> (not ported)</td>
+        <td>one non-interactive value-over-total bar; no children, no composition. Today it is 2 rects. It also has <strong>no token pair of its own</strong>: the build used <code>primary-fill</code> (documented as “the filled part of a range control”) + <code>input-fill-high</code> (“resting track of a range or toggle control”) — the range-control roles are the closest correct fit, and the <code>chart-*</code> series were rejected because the bar is a track, not a data series.</td>
+      </tr>
+      <tr>
+        <td><code>StatusDot</code></td><td class="p">P03, P62</td><td>none</td>
+        <td>a 6–8 px state marker with a semantic tone. Recurs twice on this screen alone. Blocked on a second gap: <strong>the DS has no <code>success</code> / <code>warning</code> semantic colour</strong> — <code>tokens.reference</code> §1 records “semantic tokens exist for error only (destructive); success / warning are ramps only”. The build used <code>primary</code> (documented for “caret / marker shapes”), which says “brand”, not “healthy”.</td>
+      </tr>
+      <tr>
+        <td><code>SegmentedControl</code> (or <code>ToggleGroup</code>)</td><td class="p">P10 locale switch</td><td>shadcn <code>toggle-group</code> (not ported)</td>
+        <td>a 2–3 option exclusive choice rendered inline. Today three text nodes.</td>
+      </tr>
+      <tr>
+        <td><code>Legend</code></td><td class="p">P22 meter legend</td><td>none</td>
+        <td>a swatch + label pair; the counterpart to <code>Meter</code>. Could equally be a <code>Badge</code> variant with a leading colour slot.</td>
+      </tr>
+      <tr>
+        <td><code>.Icon/Check</code> (+ <code>.Icon/NodeTree</code>, <code>.Icon/Links</code>)</td><td class="p">P43, P13, P14</td><td><code>@remixicon/react</code></td>
+        <td>the DS icon set is 11 glyphs, all <code>.Command/Icon/*</code>. Three glyphs this screen needs are absent; <code>RiCheckLine</code> is already used in <em>code</em>.</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="s35"><i class="cat cat-E">E</i> &nbsp;Would be a composition (blocks layer, <code>libs/ui/src/blocks/</code>)</h3>
+  <p>Named for the DMS domain in general, not for this one screen — the question asked of each was
+  <em>what is it / what does it do / is there a generic equivalent</em>.</p>
+  <p>A composition earns its place when the <em>arrangement</em> carries a rule that would otherwise be
+  re-invented (and got wrong) on every screen — not when it is merely a box around some primitives.
+  The <em>Why a composition</em> column names that rule.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Composition</th><th>Covers</th><th>What it is (generic)</th><th>Why a composition</th><th>Rough API</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>AppShell</code></td><td class="p">P01, P12, P15, P29, P47, P58</td>
+        <td>the frame every tool screen sits in: top bar, rail, side panel, content, detail panel, status bar</td>
+        <td>The rule is <em>which region owns what</em> — tool switching left, filtering next, the record in the middle, its context right, session facts at the foot. Every tool screen repeats it, and a screen that shuffles it breaks the user’s spatial model. Holds no content of its own, so it can never be a primitive: it is pure region assignment.</td>
+        <td>slots <code>topBar</code>, <code>rail</code>, <code>sidebar</code>, <code>content</code>, <code>detail</code>, <code>statusBar</code>; <code>detail</code> collapsible</td>
+      </tr>
+      <tr>
+        <td><code>NavRail</code></td><td class="p">P12–P14</td>
+        <td>vertical icon navigation with exactly one current item</td>
+        <td>Single-selection across N <code>Button</code>s. No primitive owns “exactly one of these is current” — leave it to the call site and two rails end up marking the current tool differently (this build already had to use <code>variant=default</code> to mean “current”, §3.2/P13).</td>
+        <td><code>items[]</code>, <code>value</code>, <code>onValueChange</code></td>
+      </tr>
+      <tr>
+        <td><code>ContextSwitcher</code></td><td class="p">P02–P04</td>
+        <td>switch the active workspace / tenant / connection, with its live state</td>
+        <td>Binds two facts (host, tenant) to one live status and one switch action. The composition exists so the indicator and the thing it indicates cannot drift — a green dot beside a stale tenant is worse than no dot.</td>
+        <td><code>status</code>, <code>primary</code>, <code>secondary</code>, <code>onOpenChange</code> — the trigger half of a <code>Popover</code></td>
+      </tr>
+      <tr>
+        <td><code>FilterPanel</code></td><td class="p">P15–P24</td>
+        <td>toggle a set of sources on/off and show their share</td>
+        <td>The meter is <em>derived</em> from the toggles; that derivation is the whole job. Leaving it to the call site is exactly how the source screen ended up claiming “23 von 23 Typen aktiv” beside toggles summing to 22.</td>
+        <td><code>sources[]</code> (label, count, enabled), <code>onToggle</code> — composes <code>Switch</code>, <code>Label</code>, <code>Badge</code>, <code>Meter</code></td>
+      </tr>
+      <tr>
+        <td><code>EntityList</code></td><td class="p">P25–P28</td>
+        <td>a grouped, selectable, truncating list of records</td>
+        <td>Three rules that only hold together: grouping, truncation, and selection. A truncated group still counts in its heading, and the current item may be inside the hidden remainder — a plain list of <code>Item</code>s cannot know that.</td>
+        <td><code>groups[]</code>, <code>value</code>, <code>onSelect</code>, <code>overflowLabel</code> — composes <code>Item</code></td>
+      </tr>
+      <tr>
+        <td><code>DataGrid</code></td><td class="p">P35–P46</td>
+        <td>a grouped attribute table with a column contract</td>
+        <td><code>Table</code> ships the parts but nothing enforces that head and cells share widths and alignment — this build set five column widths by hand on 26 rows. The column contract is the composition.</td>
+        <td><code>columns[]</code>, <code>groups[]</code>, <code>rows[]</code> — composes <code>Table</code>, <code>TableRow</code>, <code>TableHead</code>, <code>TableCell</code>, <code>LabeledSeparator</code></td>
+      </tr>
+      <tr>
+        <td><code>DetailPanel</code></td><td class="p">P47–P51</td>
+        <td>context for whatever is currently selected</td>
+        <td>Owns the states no primitive owns: nothing selected, one thing selected, selection gone stale. A panel without a defined empty state is the most common half-built side panel.</td>
+        <td>slots <code>header</code>, <code>sections[]</code> — composes <code>PanelHeader</code>, <code>Separator</code></td>
+      </tr>
+      <tr>
+        <td><code>RelationGraph</code></td><td class="p">P52–P57</td>
+        <td>a record’s relations as a small node-link view</td>
+        <td>A layout algorithm (spine, branch anchoring, growth as branches are added), not a styling problem. This build placed it with a 2 px stroke and a hand-set 5 px inset — that arithmetic belongs in code, not in every screen.</td>
+        <td><code>root</code>, <code>branches[]</code> (kind, target)</td>
+      </tr>
+      <tr>
+        <td><code>StatusBar</code></td><td class="p">P58–P64</td>
+        <td>ambient session facts, always visible</td>
+        <td>The set of facts <em>is</em> the contract — which four things an operator can always see without moving. That vocabulary is app-wide and belongs in one place, not re-chosen per screen.</td>
+        <td><code>fields[]</code> (label, value, status?) — composes <code>MetaRow</code>, <code>Separator</code></td>
+      </tr>
+      <tr>
+        <td><code>CommandLauncher</code></td><td class="p">P05–P09, P65–P72</td>
+        <td>the trigger and its palette as one pair</td>
+        <td>One feature living in two places plus a keyboard shortcut. Neither half makes sense alone: the trigger must reflect that the palette is open (§3.2/P05), the palette must know what the trigger showed. Splitting them is what leaves a lit-up trigger under an open overlay.</td>
+        <td><code>commands[]</code>, <code>open</code>, <code>onOpenChange</code> — composes <code>InputGroup</code>, <code>Kbd</code>, <code>Dialog</code>, <code>Command</code></td>
+      </tr>
+      <tr>
+        <td><code>PanelHeader</code></td><td class="p">P30–P32, P48–P49, P54</td>
+        <td>eyebrow + name + meta/summary — the standing header of any record surface</td>
+        <td>Listed here only because it currently spans four zones — <strong>it is a primitive</strong> (see the note below). Its rule is a fixed three-role hierarchy: what kind of thing, which one, what about it.</td>
+        <td><code>kind</code>, <code>name</code>, <code>meta?</code>, <code>description?</code></td>
+      </tr>
+      <tr>
+        <td><code>MetaRow</code></td><td class="p">P57, P61–P63</td>
+        <td>a labelled fact: micro-label above a value</td>
+        <td>Same — <strong>a primitive</strong>, listed here for its spread. Its rule is that the label is always subordinate to the value, in both size and colour; hand-built it drifts every time. 7 instances on one screen.</td>
+        <td><code>label</code>, <code>value</code>, <code>status?</code></td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <div class="note">
+    <p><strong>Two of these are primitives in disguise and should be pulled out first:</strong>
+    <code>PanelHeader</code> (generalise <code>PopoverHeader</code>) and <code>MetaRow</code> — they carry no
+    domain logic and are used across every zone.</p>
+  </div>
+
+  <!-- ══ 4 ══════════════════════════════════════════════ -->
+  <h2 id="s4"><span class="num">04</span>Token evidence</h2>
+  <p>Every authored value is bound by variable id. Full list of what the two screens bind:</p>
+  <div class="tw"><table>
+    <thead><tr><th>Group</th><th>Tokens bound</th><th>Bound on</th></tr></thead>
+    <tbody>
+      <tr><td>surface</td><td><code>surface</code> <code>3037:2</code> · <code>sidebar-fill</code> <code>3038:7</code></td><td>AppShell, WorkspaceColumn, DetailPanel, StatusBar, ContextSwitcher / NavRail, FilterPanel</td></tr>
+      <tr><td>ink</td><td><code>ink</code> <code>3037:3</code> · <code>muted</code> <code>4492:2666</code></td><td>all body/label text, relation root marker, required marks</td></tr>
+      <tr><td>accent / brand</td><td><code>primary</code> <code>4197:9643</code></td><td>status dots (P03, P62), brand tick (P60)</td></tr>
+      <tr><td>control</td><td><code>primary-fill</code> <code>3037:8</code> · <code>input-fill-high</code> <code>4197:9645</code></td><td>meter segments + legend swatches</td></tr>
+      <tr><td>line</td><td><code>border</code> <code>3038:4</code> · <code>border-emphasis</code> <code>3045:3</code> · <code>border-strong</code> <code>3049:2</code></td><td>TopBar/rail/panel edges · locale divider · status-bar axis</td></tr>
+      <tr><td>corner</td><td><code>corner-lg</code> <code>3073:4</code> · <code>corner-full</code> <code>3073:6</code> · <code>corner-sm</code> <code>3073:2</code></td><td>ContextSwitcher · meter segments · legend swatches</td></tr>
+      <tr><td>space</td><td><code>space-2xs</code> <code>3070:3</code> · <code>space-xs</code> <code>3070:4</code> · <code>space-sm</code> <code>3070:5</code> · <code>space-md</code> <code>3070:6</code> · <code>space-lg</code> <code>3070:8</code> · <code>space-xl</code> <code>3070:9</code> · <code>space-2xl</code> <code>3070:10</code> · <code>space-3xl</code> <code>3070:11</code></td><td>every gap and padding on every authored frame</td></tr>
+      <tr><td>text styles</td><td><code>Display</code> · <code>Title</code> · <code>Label/md</code> · <code>Label/sm</code> · <code>Body</code> · <code>Eyebrow</code> · <code>Data/md</code></td><td>see per-part table §2</td></tr>
+    </tbody>
+  </table></div>
+
+  <h4>Tokens reached only through component instances</h4>
+  <p>(not bound by this build, listed for completeness)
+  <code>accent-fill</code> / <code>accent-ink</code> (CommandItem selected), <code>dialog-fill</code> +
+  <code>effect:Elevation</code> (Command palette), <code>scrim</code> × <code>scrim-opacity</code>
+  (DialogOverlay), <code>inverse-fill</code> / <code>inverse-ink</code> (Kbd), <code>input-fill</code> /
+  <code>input-border</code> / <code>input-ink-placeholder</code> (InputGroup), <code>muted-fill</code>
+  (Item muted), <code>card-fill</code> (CommandInput palette prompt), <code>effect:Glow</code> (palette caret).</p>
+
+  <h4>Deliberate token decisions worth a second opinion</h4>
+  <ol>
+    <li><strong>Meter colours</strong> — <code>primary-fill</code> + <code>input-fill-high</code>
+      (range-track roles) chosen over <code>chart-1</code> / <code>chart-2</code> (data-series roles). The
+      chart pair was built first and rejected: brown/green against this cool chrome, and the bar reads as a
+      track, not a series. Both readings are defensible.</li>
+    <li><strong>Status dot</strong> — <code>primary</code>. There is no <code>success</code> token (§3.4).
+      If a status family is ever added, P03 and P62 are its first two consumers.</li>
+    <li><strong>Status-bar axis</strong> — <code>border-strong</code>, whose documented use is exactly
+      “the one line that must dominate (axis, hard cut). Use sparingly.” Used once per screen.</li>
+  </ol>
+
+  <!-- ══ 5 ══════════════════════════════════════════════ -->
+  <h2 id="s5"><span class="num">05</span>Layer structure</h2>
+  <p>Layer names are English and named after the composition each subtree would become, so swapping a
+  subtree for a future component instance is a one-node replace:</p>
+<pre><code>AppShell · Schema Browser / Resting              8707:4
+├─ AppShell / TopBar                             8708:2      → AppShell slot: topBar
+│  ├─ TopBar / Start ▸ ContextSwitcher           8708:4      → ContextSwitcher
+│  ├─ CommandLauncher / Trigger                  8709:2      → CommandLauncher (trigger half)
+│  └─ TopBar / End ▸ LocaleSwitch                8709:10     → SegmentedControl
+├─ AppShell / Body                               8711:14
+│  ├─ NavRail                                    8711:15     → NavRail
+│  ├─ FilterPanel                                8712:37     → FilterPanel
+│  │  ├─ FilterPanel / SourceFilters             8712:38     →   ├ SourceToggle ×2 + SourceMeter
+│  │  └─ EntityList                              8713:7133   → EntityList
+│  ├─ WorkspaceColumn                            8714:88
+│  │  ├─ WorkspaceColumn / EntityHeader          8714:89     → PanelHeader
+│  │  └─ SchemaTable                             8716:7684   → DataGrid
+│  └─ DetailPanel                                8717:483    → DetailPanel
+│     ├─ DetailPanel / Header                    8717:484    →   ├ PanelHeader
+│     └─ DetailPanel / RelationSection           8717:490    →   └ RelationGraph
+└─ StatusBar                                     8718:510    → StatusBar (4 × MetaRow)
+
+AppShell · Schema Browser / Command Open         8719:485    (clone + 2 absolute children)
+├─ CommandLauncher / Scrim                       8719:8400
+└─ CommandLauncher / Palette                     8719:8401</code></pre>
+
+  <!-- ══ 6 ══════════════════════════════════════════════ -->
+  <h2 id="s6"><span class="num">06</span>Checks</h2>
+
+  <h3>6.1 · All identified parts are in the report and categorised — <span class="pass">PASS</span></h3>
+  <p>72 parts identified, 72 in §2, each with exactly one primary category. Distribution:</p>
+  <div class="stats">
+    <div class="stat"><div class="v">30</div><div class="l">A · mapped</div></div>
+    <div class="stat"><div class="v">11</div><div class="l">B · needs update</div></div>
+    <div class="stat"><div class="v">15</div><div class="l">C · drawn</div></div>
+    <div class="stat"><div class="v">5</div><div class="l">D · primitive</div></div>
+    <div class="stat"><div class="v">11</div><div class="l">E · composition</div></div>
+    <div class="stat"><div class="v">72</div><div class="l">total</div></div>
+  </div>
+  <p>Parts also referenced from a second category are cross-linked in §3 — e.g. P27 is primary
+  <i class="cat cat-B">B</i> (Item needs a selected state) and feeds <i class="cat cat-E">E</i>
+  (<code>EntityList</code>); P21 is primary <i class="cat cat-D">D</i> (<code>Meter</code>) and feeds
+  <i class="cat cat-E">E</i> (<code>FilterPanel</code>).</p>
+
+  <h3>6.2 · Components correctly set, artboard completely filled — <span class="pass">PASS</span></h3>
+  <ul>
+    <li>Resting screen: <strong>27 top-level instances, 178 instances in total</strong> (nested included).</li>
+    <li>Command-open screen: <strong>29 top-level, 204 total</strong> (the clone plus <code>DialogOverlay</code>
+      and the <code>Command</code> palette, whose nested <code>CommandInput</code> / <code>CommandGroup</code> /
+      <code>CommandItem</code> / <code>CommandSeparator</code> / <code>Kbd</code> instances account for the delta).</li>
+    <li>Every instance is a real DS main component (verified via <code>getMainComponentAsync</code>, §2 tables).</li>
+    <li>No instance was detached; every variation was driven through a declared control
+      (variant / text / boolean / instance-swap / slot).</li>
+    <li>Both screens render complete: all 21 attribute rows, 3 group dividers, 4 status fields,
+      7 command items with icons and shortcuts.</li>
+  </ul>
+
+  <h3>6.3 · No hard-coded colour / spacing / radius — <span class="pass">PASS (0 findings)</span></h3>
+  <p><code>figma-verify</code> step 7 walked all 1257 visible nodes under <code>8707:2</code> and checked every
+  fill, stroke, padding, item-spacing and corner radius on <strong>authored</strong> (non-instance-descendant)
+  nodes for an empty <code>boundVariables</code> entry: <strong>0 unbound token-backed values.</strong></p>
+  <p>The two intentional raw numbers, both geometry rather than token-backed properties (geometry stays
+  numeric per the DS rule “Geometry stays numeric (<code>h-8</code>, <code>size-3</code>); only colour /
+  typography / spacing / radius bind to tokens”):</p>
+  <ul>
+    <li><code>RelationGraph / Branches</code> <code>paddingLeft = 5</code> — half the 12 px root marker minus
+      the 2 px spine, so the spine passes through the marker’s centre. Not a spacing step by intent.</li>
+    <li>element sizes (<code>56</code> rail, <code>284</code> panel, <code>340</code> detail, <code>480</code>
+      trigger, <code>374</code> search, column widths <code>264/126/112/96/170</code>, dots
+      <code>6/7/10/12</code>, meter height <code>6</code>, brand tick <code>3×21</code>).</li>
+  </ul>
+
+  <h3>6.4 · Other <code>figma-verify</code> results</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Check</th><th>Result</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>text-as-icon</td><td class="pass">PASS</td><td>0 findings. Every glyph is a VECTOR: chevron, globe, required marks (RiArrowDownSLine / RiGlobalLine / RiCheckLine), rail glyphs via instance swap.</td></tr>
+      <tr><td>sibling overlap</td><td class="pass">PASS</td><td>0 findings (every authored container is auto-layout).</td></tr>
+      <tr><td>clipped child</td><td class="flagw">1 FLAG, fixed</td><td><code>SourceToggle / Label</code> overflowed its instance box by 12 px — the label text “APP · osbbusinesspartners” is wider than 284 px allows. Shortened to “APP · osbbusinessp.” on both screens (<code>8712:54</code>, <code>8719:522</code>); re-measured at −30 px, inside. Remaining 4 rows are 1 px vector-rounding <em>inside</em> <code>InputGroupAddon</code>’s own <code>icon</code> frame — component-internal, not this build’s.</td></tr>
+      <tr><td>padding asymmetry</td><td class="flagw">35 HINTS, acknowledged</td><td>all deliberate: panels pad top only (<code>NavRail</code> 16/0, <code>FilterPanel</code> 24/0, <code>DetailPanel / RelationSection</code> 24/0) because the column scrolls; <code>EntityHeader</code> 24/16; <code>RelationGraph / Branches</code> 16/0 and <code>Branch / Text</code> 12/0 (the connector supplies the left inset). The addon insets (8/0, 0/8) and the group-divider 12/6 are component-internal.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>6.5 · What is NOT faithful to the source draft, and why</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Draft intent</th><th>Built as</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>current nav row on <code>accent-fill</code></td><td><code>Item[muted]</code></td><td>§3.2 P27 — no selected state, and tinting the instance would be a token override</td></tr>
+      <tr><td>table values in mono 11 px</td><td><code>TableCell</code> <code>Body</code> 14 px</td><td>§3.2 P41 — no format axis on <code>TableCell</code></td></tr>
+      <tr><td>table column headers in <code>Eyebrow</code> 9 px</td><td><code>TableHead</code> <code>Label/md</code> 14 px</td><td>the component’s bound format; no override</td></tr>
+      <tr><td>detail-panel title at <code>Heading-sm</code> 22 px</td><td><code>PopoverHeader</code> title at <code>Label/md</code> 14 px</td><td>§3.2 P49</td></tr>
+      <tr><td>launcher trigger dimmed while the palette is open</td><td>untouched</td><td>§3.2 P05 — no such state; the scrim carries it</td></tr>
+      <tr><td>rail “schema” glyph</td><td>base <code>.Button Icon</code> default</td><td>§3.4 — no node-tree icon component</td></tr>
+      <tr><td>single-line nav rows</td><td>59 px rows</td><td>§3.2 — description cannot be suppressed</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ══ 7 ══════════════════════════════════════════════ -->
+  <h2 id="s7"><span class="num">07</span>Follow-ups, in the order they unblock the most</h2>
+  <ol>
+    <li><strong><code>Item</code> — <code>selected</code> boolean + <code>showDescription</code> boolean.</strong>
+      Unblocks P26/P27 and every future explorer list. Tokens already exist
+      (<code>accent-fill</code> / <code>accent-ink</code> / <code>accent-border</code>).</li>
+    <li><strong>Promote <code>CommandSeparator[labeled]</code> → <code>LabeledSeparator</code>.</strong>
+      Unblocks P38 and any grouped list.</li>
+    <li><strong><code>TableCell</code> — <code>format</code> axis (<code>text | data</code>).</strong>
+      Unblocks P41/P42/P45; <code>Data/md</code> already exists.</li>
+    <li><strong>Extend the DS icon set</strong> — <code>.Icon/Check</code> first (already used in code),
+      then <code>NodeTree</code>, <code>Links</code>.</li>
+    <li><strong><code>PanelHeader</code></strong> — generalise <code>PopoverHeader</code> with a
+      <code>size</code> axis. Unblocks P49 and P30–P32.</li>
+    <li><strong><code>Badge</code> — <code>count</code> variant on <code>Data/md</code>.</strong>
+      Closes an already-recorded code↔Figma divergence.</li>
+    <li><strong>New primitives, in dependency order:</strong> <code>Meter</code> (+ <code>Legend</code>),
+      <code>StatusDot</code> (blocked on a <code>success</code> / <code>warning</code> semantic colour family),
+      <code>SegmentedControl</code>.</li>
+    <li><strong><code>MetaRow</code></strong> — the smallest, most reused missing piece
+      (7 instances on one screen).</li>
+  </ol>
+
+  <p class="quote"><code>components-reference.md</code> and <code>component-changelog.md</code> are
+  <strong>not</strong> updated by this run: nothing in the DS changed (read-only), and no component was
+  ported or synced. If any follow-up above is executed, that is the run that updates the catalog.</p>
+
+  <footer>
+    <span><i class="dot"></i>DS read-only</span>
+    <span>72 parts · <b>A 30 · B 11 · C 15 · D 5 · E 11</b></span>
+    <span>1257 nodes checked · <b>0 unbound</b></span>
+    <span>Agentport DS · <b>nQSNLASjuLvgTh3we8Dp4s</b></span>
+    <span>2026-09-05</span>
+  </footer>
+</main>
+</div>
+
+<script>
+(function(){
+  var links = [].slice.call(document.querySelectorAll('nav a[href^="#"]'));
+  var targets = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  function sync(){
+    var y = window.scrollY + 120, current = 0;
+    targets.forEach(function(t,i){ if(t && t.offsetTop <= y) current = i; });
+    links.forEach(function(a,i){ a.classList.toggle('active', i === current); });
+  }
+  window.addEventListener('scroll', sync, {passive:true});
+  sync();
+})();
+</script>
+</body>
+</html>
