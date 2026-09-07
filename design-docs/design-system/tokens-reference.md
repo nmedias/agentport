@@ -25,10 +25,11 @@ utilities, `token-analysis-*` for semantics.
   `bg-muted` are valid for shape / marker fills only, never as a container surface. The scope
   consequence sits in `note`, the `use` sentence only says "shape fill only".
 - **`use` is the canonical sentence** — the same text sits on the Figma variable / style description
-  and in the Storybook foundations (`Colors.tsx`, `SpacingRadius.tsx`, `Typography.tsx`,
-  `Effects.tsx`). Change it here, then push to both. The Figma description = `use`, followed by the
+  and in the Storybook foundations (`Colour.tsx`, `SpacingRadius.tsx`, `Typography.tsx`,
+  `Shadows.tsx`). Change it here, then push to both. The Figma description = `use`, followed by the
   `note` only when the note concerns Figma itself (raw RGBA, raw effect colour) and, for `Space/*`,
-  the `figma_suffix`.
+  the `figma_suffix`. A foundations page may **omit** a `use` sentence where the naming rule already
+  carries it — omission is not drift, a differently worded sentence is.
 - **`note`** = a present-day remark an implementer needs (Figma representability, scope, composition) —
   never history. Old names / values belong in the changelog.
 - **`status: placeholder`** = stock shadcn default, not yet designed → never treat as final.
@@ -58,6 +59,13 @@ css_naming:
   semantic:  "--ap-sys-<leaf>"                  # Figma groups are organisational only: Dialog/dialog-fill → --ap-sys-dialog-fill · Input/input-ink-placeholder → --ap-sys-input-ink-placeholder
   typo:      "--ap-sys-<format>-<part>"         # Heading/heading-sm/family → --ap-sys-heading-sm-family; the part "leading" is called line-height
   shadow:    "--ap-sys-shadow-<glow|elevation>" # CSS only, no Figma counterpart (§5)
+storybook_pages:                                # Foundations page ← what it renders (audience names; the Figma names stay as above)
+  Architecture:        "the three levels + the naming rules — carried once, so the token pages stay specimens"
+  Colour:              semantic
+  Typography:          semantic-typo
+  "Spacing & Radius":  semantic-dimension
+  Shadows:             "Effect Styles Glow / Elevation (§5)"
+  Reference:           "reference — Color · Dimension · Font · Effect"
 pipeline:
   export: "libs/ui/src/styles/tokens.css"       # :root — PRIMITIVES, then SEMANTICS via var()
   bridge: "libs/ui/src/styles/tw-theme.css (@theme inline) + tw-utilities.css (@utility) + tw-variants.css (@custom-variant)"
