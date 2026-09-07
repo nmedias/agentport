@@ -9,7 +9,7 @@ const config: StorybookConfig = {
   stories: [
     '../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'
   ],
-  addons: ['@storybook/addon-mcp', '@storybook/addon-docs', 'storybook-addon-pseudo-states', '@storybook/addon-a11y', '@storybook/addon-vitest'],
+  addons: [getAbsolutePath("@storybook/addon-mcp"), getAbsolutePath("@storybook/addon-docs"), getAbsolutePath("storybook-addon-pseudo-states"), getAbsolutePath("@storybook/addon-a11y"), getAbsolutePath("@storybook/addon-vitest")],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {
@@ -18,7 +18,11 @@ const config: StorybookConfig = {
       },
     },
   },
-  
+  features: {
+    // Component manifest: the prop API + story snippets the MCP docs toolset
+    // (docs-list / docs-show) and the static build's /manifests/*.json read from.
+    componentsManifest: true,
+  },
 };
 
 

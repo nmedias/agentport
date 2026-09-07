@@ -200,7 +200,6 @@ export const WithLabel: Story = {
 
 // Usage — keyboard-shortcut hint: leading icon + a trailing Kbd group (quiet `low` emphasis).
 export const Kbd_: Story = {
-  name: 'Kbd',
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="w-80">
