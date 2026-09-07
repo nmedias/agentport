@@ -105,7 +105,7 @@ export function Band({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex flex-col gap-2xl border-t border-border-emphasis pt-2xl">
+    <section className="flex flex-col gap-2xl border-t border-border-emphasis pt-2xl first:border-t-0 first:pt-0">
       <div className="flex flex-col gap-sm">
         <h2 className="text-format-heading text-ink">{name}</h2>
         {note && (
@@ -131,11 +131,23 @@ export function Row({ children }: { children: React.ReactNode }) {
   );
 }
 
+// ── Token chip ───────────────────────────────────────────────────────────────
+
+// A token NAME reads as a name, not as a value: sans, chip-sized, one step up
+// from the mono meta lines under it.
+export function TokenChip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="w-fit corner-sm bg-card-fill px-sm py-2xs text-format-label-md text-card-ink">
+      {children}
+    </span>
+  );
+}
+
 // ── Token meta line ──────────────────────────────────────────────────────────
 
-// The shared label block under every specimen: the token NAME (mono, ink), the
-// possible utility CLASSES (mono, muted), the reference token it resolves to +
-// the raw value, then the role.
+// The shared label block under every specimen: the token NAME as a chip (sans —
+// it is a name, not a value), the possible utility CLASSES (mono, muted), the
+// reference token it resolves to + the raw value, then the role.
 function TokenMeta({
   token,
   utilities,
@@ -150,16 +162,16 @@ function TokenMeta({
   role?: string;
 }) {
   return (
-    <div className="flex flex-col gap-2xs">
-      <span className="text-format-data-sm text-ink">{token}</span>
-      <span className="text-format-data-sm text-muted">{utilities}</span>
-      <span className="text-format-data-sm text-muted/60">
-        {primitive} · {value}
-      </span>
-      {role && (
-        <span className="mt-2xs text-format-body text-ink text-pretty">
-          {role}
+    <div className="flex flex-col gap-sm">
+      <TokenChip>{token}</TokenChip>
+      <div className="flex flex-col gap-2xs">
+        <span className="text-format-data-sm text-muted">{utilities}</span>
+        <span className="text-format-data-sm text-muted/60">
+          {primitive} · {value}
         </span>
+      </div>
+      {role && (
+        <span className="text-format-body text-ink text-pretty">{role}</span>
       )}
     </div>
   );
@@ -352,6 +364,7 @@ export function TypeSpecimen({
   lineHeight,
   tracking,
   role,
+  ref,
 }: {
   format: string;
   sample: string;
@@ -361,32 +374,51 @@ export function TypeSpecimen({
   lineHeight: string;
   tracking: string;
   role: string;
+  // the reference token behind each part (tokens-reference §4 `primitive`)
+  ref: {
+    family: string;
+    size: string;
+    weight: string;
+    lineHeight: string;
+    tracking: string;
+  };
 }) {
   return (
     <div className="grid gap-lg border-t border-border py-2xl lg:grid-cols-[1fr_22rem]">
-      <div className="flex flex-col gap-sm">
+      <div className="flex flex-col gap-md">
         <span className={`${format} text-ink`}>{sample}</span>
-        <span className="text-format-data-sm text-muted">
-          text-format-{format.replace('text-format-', '')}
-        </span>
+        {/* the class may carry an extra utility (eyebrow adds uppercase) —
+            the chip names the format token only */}
+        <TokenChip>{format.split(' ')[0]}</TokenChip>
       </div>
-      <dl className="grid grid-cols-2 gap-x-lg gap-y-xs self-center text-format-data-sm">
-        <Part k="family" v={family} />
-        <Part k="size" v={size} />
-        <Part k="weight" v={weight} />
-        <Part k="line-height" v={lineHeight} />
-        <Part k="tracking" v={tracking} />
+      <dl className="grid grid-cols-2 gap-x-lg gap-y-md self-center text-format-data-sm">
+        <Part k="family" v={family} t={ref.family} />
+        <Part k="size" v={size} t={ref.size} />
+        <Part k="weight" v={weight} t={ref.weight} />
+        <Part k="line-height" v={lineHeight} t={ref.lineHeight} />
+        <Part k="tracking" v={tracking} t={ref.tracking} />
         <Part k="role" v={role} span />
       </dl>
     </div>
   );
 }
 
-function Part({ k, v, span = false }: { k: string; v: string; span?: boolean }) {
+function Part({
+  k,
+  v,
+  t,
+  span = false,
+}: {
+  k: string;
+  v: string;
+  t?: string;
+  span?: boolean;
+}) {
   return (
     <div className={`flex flex-col gap-2xs ${span ? 'col-span-2' : ''}`}>
       <dt className="text-muted">{k}</dt>
       <dd className="text-ink">{v}</dd>
+      {t && <dd className="text-muted/60">{t}</dd>}
     </div>
   );
 }

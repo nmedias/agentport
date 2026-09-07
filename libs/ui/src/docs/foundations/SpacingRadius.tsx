@@ -1,4 +1,4 @@
-import { FoundationsPage, Group } from './foundations-kit';
+import { FoundationsPage, Group, TokenChip } from './foundations-kit';
 
 /*
   Foundations / Spacing & Radius — the dimension scales (tokens-reference §2/§3).
@@ -44,8 +44,8 @@ export function SpacingRadius() {
         <div className="flex flex-col gap-lg">
           {SPACING.map(({ step, px, role }) => (
             <div key={step} className="flex items-center gap-xl">
-              <span className="w-12 shrink-0 text-format-data-sm text-ink">
-                {step}
+              <span className="w-16 shrink-0">
+                <TokenChip>{step}</TokenChip>
               </span>
               <div
                 className="h-4 shrink-0 corner-sm bg-inverse-fill"
@@ -71,8 +71,8 @@ export function SpacingRadius() {
               <div
                 className={`h-20 border border-border-strong bg-card-fill ${cls}`}
               />
-              <div className="flex flex-col gap-2xs">
-                <span className="text-format-data-sm text-ink">{cls}</span>
+              <div className="flex flex-col gap-sm">
+                <TokenChip>{cls}</TokenChip>
                 <span className="text-format-data-sm text-muted">{px}px</span>
                 <span className="mt-2xs text-format-body text-ink text-pretty">
                   {role}

@@ -35,7 +35,7 @@ const LAYERS: Layer[] = [
     written: '--ap-sys-primary-fill',
   },
   {
-    name: 'Utility',
+    name: 'Utility (Tailwind)',
     access: 'public',
     blurb: 'How a semantic token reaches the markup — one class per decision.',
     relation:
