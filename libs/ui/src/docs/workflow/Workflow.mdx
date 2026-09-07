@@ -1,0 +1,16 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+
+import { Workflow } from './Workflow';
+
+{/*
+  Thin mount point, same pattern as Introduction.mdx: the page is real TSX
+  (Workflow.tsx) so it lint- and typechecks; <Unstyled> escapes the default
+  docs chrome. Content is the AI-workflow report
+  (design-docs/ai-workflow-report-v2.md), rendered in the live DS tokens.
+*/}
+
+<Meta title="AI Workflow" />
+
+<Unstyled>
+  <Workflow />
+</Unstyled>

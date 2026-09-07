@@ -13,6 +13,7 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
+          'AI Workflow',
           'Foundations',
           [
             'Architecture',

@@ -1,3 +1,4 @@
+import { PROSE } from '../prose';
 import { FoundationsPage, Group } from './foundations-kit';
 
 /*
@@ -50,7 +51,7 @@ function LayerRow({ layer }: { layer: Layer }) {
       <div className="flex flex-col gap-sm">
         <span className="text-format-title text-ink">{layer.name}</span>
         <span
-          className={`w-fit corner-full px-md py-2xs text-format-data-sm ${
+          className={`w-fit corner-full px-md py-2xs text-format-data-md ${
             layer.access === 'public'
               ? 'bg-accent-fill text-accent-ink'
               : 'bg-muted-fill text-muted-ink'
@@ -60,20 +61,20 @@ function LayerRow({ layer }: { layer: Layer }) {
         </span>
       </div>
       <div className="flex flex-col gap-lg">
-        <p className="max-w-[42rem] text-format-body text-ink text-pretty">
+        <p className={`max-w-[42rem] ${PROSE} text-ink text-pretty`}>
           {layer.blurb}
         </p>
         <dl className="grid gap-x-2xl gap-y-md sm:grid-cols-[1fr_14rem]">
           <div className="flex flex-col gap-2xs">
-            <dt className="text-format-data-sm text-muted">
+            <dt className="text-format-data-md text-muted">
               in relation to the semantic level
             </dt>
-            <dd className="text-format-body text-ink text-pretty">
+            <dd className={`${PROSE} text-ink text-pretty`}>
               {layer.relation}
             </dd>
           </div>
           <div className="flex flex-col gap-2xs">
-            <dt className="text-format-data-sm text-muted">written as</dt>
+            <dt className="text-format-data-md text-muted">written as</dt>
             <dd className="text-format-data-md text-ink">{layer.written}</dd>
           </div>
         </dl>

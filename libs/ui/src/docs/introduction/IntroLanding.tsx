@@ -4,6 +4,7 @@ import { RiArrowRightLine } from '@remixicon/react';
 import { Button } from '@/components/ui/button';
 
 import { FIGMA_LIBRARY_URL, FigmaMark } from '../FigmaMark';
+import { PROSE } from '../prose';
 
 /*
   Agentport DS — Introduction landing (code-only, light-mode).
@@ -74,7 +75,7 @@ function Section({
             {title}
           </h2>
           {lead && (
-            <p className="mt-lg text-format-body text-ink text-pretty">
+            <p className={`mt-lg ${PROSE} text-ink text-pretty`}>
               {lead}
             </p>
           )}
@@ -199,7 +200,7 @@ function Hero() {
 
       {/* shortened, horizontal facts strip — faint, sits in the background at the
           hero's foot so it never disturbs the wordmark */}
-      <dl className="relative mx-auto flex w-full max-w-[68rem] flex-wrap items-center justify-center gap-x-2xl gap-y-xs px-2xl pb-3xl text-format-data-sm text-inverse-ink/35 md:px-4xl">
+      <dl className="relative mx-auto flex w-full max-w-[68rem] flex-wrap items-center justify-center gap-x-2xl gap-y-xs px-2xl pb-3xl text-format-data-md text-inverse-ink/35 md:px-4xl">
         {FACTS.map(({ k, v }) => (
           <div key={k} className="flex items-center gap-sm">
             <dt className="uppercase tracking-[0.2em]">{k}</dt>
@@ -261,7 +262,7 @@ function FoundationsPointer() {
                 className="size-4 text-muted transition-transform group-hover/link:translate-x-0.5 group-hover/link:text-primary"
               />
             </span>
-            <span className="text-format-data-sm text-muted">{f.note}</span>
+            <span className="text-format-data-md text-muted">{f.note}</span>
           </a>
         ))}
       </div>

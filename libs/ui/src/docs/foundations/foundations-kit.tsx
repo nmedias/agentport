@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { PROSE } from '../prose';
+
 /*
   Foundations — shared specimen kit.
 
@@ -31,7 +33,7 @@ export function FoundationsPage({
           <h1 className="mt-lg text-format-display text-ink text-[clamp(2.25rem,5vw,3.25rem)] leading-[0.95]">
             {title}
           </h1>
-          <p className="mt-xl max-w-[48rem] text-format-body text-ink text-pretty">
+          <p className={`mt-xl max-w-[48rem] ${PROSE} text-ink text-pretty`}>
             {intro}
           </p>
         </div>
@@ -82,7 +84,7 @@ export function Group({
           {name}
         </h3>
         {note && (
-          <p className="max-w-[48rem] text-format-body text-ink text-pretty">
+          <p className={`max-w-[48rem] ${PROSE} text-ink text-pretty`}>
             {note}
           </p>
         )}
@@ -109,7 +111,7 @@ export function Band({
       <div className="flex flex-col gap-sm">
         <h2 className="text-format-heading text-ink">{name}</h2>
         {note && (
-          <p className="max-w-[48rem] text-format-body text-ink text-pretty">
+          <p className={`max-w-[48rem] ${PROSE} text-ink text-pretty`}>
             {note}
           </p>
         )}
@@ -127,7 +129,7 @@ export function Rows({ children }: { children: React.ReactNode }) {
 
 export function Row({ children }: { children: React.ReactNode }) {
   return (
-    <div className="grid gap-xl sm:grid-cols-2 lg:grid-cols-3">{children}</div>
+    <div className="grid gap-2xl sm:grid-cols-2 lg:grid-cols-3">{children}</div>
   );
 }
 
@@ -169,14 +171,14 @@ function TokenMeta({
     <div className="flex flex-col gap-sm">
       <TokenChip>{token}</TokenChip>
       <div className="flex flex-col gap-2xs">
-        <span className="text-format-data-sm text-muted">{utilities}</span>
-        <span className="text-format-data-sm text-muted/60">
+        <span className="text-format-data-md text-muted">{utilities}</span>
+        <span className="text-format-data-md text-muted/60">
           {primitive} · {value}
         </span>
-        <span className="text-format-data-sm text-muted/60">{scopes}</span>
+        <span className="text-format-data-md text-muted/60">{scopes}</span>
       </div>
       {role && (
-        <span className="text-format-body text-ink text-pretty">{role}</span>
+        <span className="mt-md text-format-body text-ink text-pretty">{role}</span>
       )}
     </div>
   );
@@ -320,7 +322,7 @@ export function RingSwatch({
     <div className="flex flex-col gap-md">
       <div className="flex h-16 items-center justify-center corner-lg border border-border bg-surface px-lg">
         <span
-          className={`corner-md bg-card-fill px-lg py-md text-format-data-sm text-ink ring-2 ${ring}`}
+          className={`corner-md bg-card-fill px-lg py-md text-format-data-md text-ink ring-2 ${ring}`}
         >
           focus
         </span>
@@ -411,7 +413,7 @@ export function TypeSpecimen({
             the chip names the format token only */}
         <TokenChip>{format.split(' ')[0]}</TokenChip>
       </div>
-      <dl className="grid grid-cols-2 gap-x-lg gap-y-md self-center text-format-data-sm">
+      <dl className="grid grid-cols-2 gap-x-lg gap-y-md self-center text-format-data-md">
         <Part k="family" v={family} t={ref.family} />
         <Part k="size" v={size} t={ref.size} />
         <Part k="weight" v={weight} t={ref.weight} />

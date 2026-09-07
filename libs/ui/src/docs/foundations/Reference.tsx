@@ -143,7 +143,7 @@ function RampStep({ ramp, step }: { ramp: string; step: Step }) {
         style={{ backgroundColor: `var(--ap-color-${ramp}-${step.step})` }}
       />
       <div className="flex flex-col gap-2xs">
-        <span className="text-format-data-sm text-ink">
+        <span className="text-format-data-md text-ink">
           {step.step}
           {step.note && (
             <span className="text-[color:var(--ap-color-signal-600)]">
@@ -152,8 +152,8 @@ function RampStep({ ramp, step }: { ramp: string; step: Step }) {
             </span>
           )}
         </span>
-        <span className="text-format-data-sm text-muted">{step.hex}</span>
-        <span className="text-format-data-sm text-muted/60">
+        <span className="text-format-data-md text-muted">{step.hex}</span>
+        <span className="text-format-data-md text-muted/60">
           {ramp}/{step.step}
         </span>
       </div>
@@ -238,8 +238,8 @@ function RefList({ items }: { items: Ref[] }) {
     <dl className="grid gap-x-2xl gap-y-md sm:grid-cols-2 lg:grid-cols-3">
       {items.map((i) => (
         <div key={i.name} className="flex flex-col gap-2xs">
-          <dt className="text-format-data-sm text-ink">{i.name}</dt>
-          <dd className="text-format-data-sm text-muted">{i.value}</dd>
+          <dt className="text-format-data-md text-ink">{i.name}</dt>
+          <dd className="text-format-data-md text-muted">{i.value}</dd>
         </div>
       ))}
     </dl>
@@ -259,8 +259,8 @@ function RadiusSample() {
             }}
           />
           <div className="flex flex-col gap-2xs">
-            <span className="text-format-data-sm text-ink">{r.name}</span>
-            <span className="text-format-data-sm text-muted">{r.value}</span>
+            <span className="text-format-data-md text-ink">{r.name}</span>
+            <span className="text-format-data-md text-muted">{r.value}</span>
           </div>
         </div>
       ))}

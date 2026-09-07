@@ -51,8 +51,8 @@ export function SpacingRadius() {
                 className="h-4 shrink-0 corner-sm bg-inverse-fill"
                 style={{ width: `var(--ap-sys-space-${step})` }}
               />
-              <span className="text-format-data-sm text-muted">{px}px</span>
-              <span className="text-format-data-sm text-muted">
+              <span className="text-format-data-md text-muted">{px}px</span>
+              <span className="text-format-data-md text-muted">
                 gap-{step} · p-{step}
               </span>
               <span className="text-format-body text-ink text-pretty">{role}</span>
@@ -65,7 +65,7 @@ export function SpacingRadius() {
         name="Radius"
         note="corner-{step}, plus per-side corner-t/r/b/l-* and per-corner corner-tl/tr/br/bl-*."
       >
-        <div className="grid grid-cols-2 gap-xl sm:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-2xl sm:grid-cols-3 lg:grid-cols-6">
           {RADIUS.map(({ step, cls, px, role }) => (
             <div key={step} className="flex flex-col gap-md">
               <div
@@ -73,8 +73,8 @@ export function SpacingRadius() {
               />
               <div className="flex flex-col gap-sm">
                 <TokenChip>{cls}</TokenChip>
-                <span className="text-format-data-sm text-muted">{px}px</span>
-                <span className="mt-2xs text-format-body text-ink text-pretty">
+                <span className="text-format-data-md text-muted">{px}px</span>
+                <span className="mt-md text-format-body text-ink text-pretty">
                   {role}
                 </span>
               </div>
