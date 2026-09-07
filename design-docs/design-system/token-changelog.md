@@ -25,14 +25,16 @@ vocabulary, and it is **canonical**: Figma and the foundations pages follow it. 
 retired — it was the reason the drift stayed invisible.
 
 Adopted from Figma (the file was right): `brand-ink` +STROKE_COLOR +EFFECT_COLOR, `inverse-ink-muted`
-+STROKE_COLOR. Narrowed in Figma (the file was wrong): `primary-fill` −STROKE_COLOR, `inverse-border`
-−FRAME_FILL (SHAPE_FILL stays — that one was legitimate). `corner-none` is recorded as CORNER_RADIUS
-with no Figma variable; the block-level `figma_scope:` lines in the corner / space utility blocks were
-removed as duplicates of the new field.
++STROKE_COLOR. Narrowed in Figma (the file was wrong): `inverse-border` −FRAME_FILL (SHAPE_FILL stays —
+that one was legitimate). `corner-none` is recorded as CORNER_RADIUS with no Figma variable; the
+block-level `figma_scope:` lines in the corner / space utility blocks were removed as duplicates of the
+new field.
 
-Open: `primary-fill` no longer allows STROKE_COLOR, but `border-primary-fill` is listed as a utility
-and used by `checkbox.tsx` and `radio-group.tsx` for the checked state. Either the utility goes and the
-components find another edge token, or the scope comes back — undecided.
+`primary-fill` keeps STROKE_COLOR, now with the intent written down rather than left implicit. It was
+briefly narrowed in this pass, until the utilities/scopes cross-check showed `border-primary-fill` in
+use — the edge of a filled area taking the fill's own colour so the shape reads as one form, not as a
+fill sitting inside a lighter outline. That is a property of filled areas in general, not of check
+boxes: the `use` sentence now says so, and the scope is legitimate rather than tolerated.
 
 `tools/check-use-parity.mjs` now checks scopes alongside the sentences (50 rendered scope lines).
 The Figma leg was verified by reading all 66 variable scopes back: 66/66.

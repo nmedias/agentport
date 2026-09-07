@@ -121,9 +121,9 @@ export function Colour() {
               token="primary-fill"
               utilities="bg-primary-fill"
               primitive="deep/900"
-              scopes="FRAME_FILL · SHAPE_FILL"
+              scopes="FRAME_FILL · SHAPE_FILL · STROKE_COLOR"
               value="#0d2531"
-              role="Dark surface of the main action and of the checked / on state of a control (check box, radio dot, switch track, filled range). Pairs with primary-ink."
+              role="Dark surface of the main action and of the checked / on state of a control (check box, radio dot, switch track, filled range). Also the edge of that same area, so fill and edge read as one form. Pairs with primary-ink."
             />
             <TextSwatch
               text="text-primary-ink"
