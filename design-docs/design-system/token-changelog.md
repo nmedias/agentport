@@ -11,6 +11,34 @@ until 2026-08-31).
 
 ---
 
+## 2026-09-07 — `scopes` becomes a field, and the canonical one
+
+Where a token may be applied was never data. Figma held the real scopes, the reference mentioned some
+of them in prose inside `note` values, and the Storybook foundations carried a hand-maintained short
+form (`fill · text · stroke · shape`). Three unsynchronised representations, and predictably they had
+drifted: `primary-fill`, `brand-ink`, `inverse-ink-muted` and `inverse-border` each allowed more in
+Figma than any documentation claimed, and the short form had no word at all for `EFFECT_COLOR`, which
+`brand-fill` and `brand-ink` both carry.
+
+`scopes` is now a field on every semantic and dimension token in `tokens-reference.md`, in Figma
+vocabulary, and it is **canonical**: Figma and the foundations pages follow it. The short form is
+retired — it was the reason the drift stayed invisible.
+
+Adopted from Figma (the file was right): `brand-ink` +STROKE_COLOR +EFFECT_COLOR, `inverse-ink-muted`
++STROKE_COLOR. Narrowed in Figma (the file was wrong): `primary-fill` −STROKE_COLOR, `inverse-border`
+−FRAME_FILL (SHAPE_FILL stays — that one was legitimate). `corner-none` is recorded as CORNER_RADIUS
+with no Figma variable; the block-level `figma_scope:` lines in the corner / space utility blocks were
+removed as duplicates of the new field.
+
+Open: `primary-fill` no longer allows STROKE_COLOR, but `border-primary-fill` is listed as a utility
+and used by `checkbox.tsx` and `radio-group.tsx` for the checked state. Either the utility goes and the
+components find another edge token, or the scope comes back — undecided.
+
+`tools/check-use-parity.mjs` now checks scopes alongside the sentences (50 rendered scope lines).
+The Figma leg was verified by reading all 66 variable scopes back: 66/66.
+
+---
+
 ## 2026-09-07 — Descriptions carry what a user needs, notes what an implementer needs
 
 The foundations rework surfaced a split that had drifted: five tokens kept an actionable rule in

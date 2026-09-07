@@ -147,18 +147,22 @@ export function TokenChip({ children }: { children: React.ReactNode }) {
 
 // The shared label block under every specimen: the token NAME as a chip (sans —
 // it is a name, not a value), the possible utility CLASSES (mono, muted), the
-// reference token it resolves to + the raw value, then the role.
+// reference token it resolves to + the raw value, the SCOPES it may be applied
+// in, then the role. Scopes are the `scopes` field of tokens-reference.md in
+// Figma vocabulary — that field is canonical for this page and for Figma.
 function TokenMeta({
   token,
   utilities,
   primitive,
   value,
+  scopes,
   role,
 }: {
   token: string;
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role?: string;
 }) {
   return (
@@ -169,6 +173,7 @@ function TokenMeta({
         <span className="text-format-data-sm text-muted/60">
           {primitive} · {value}
         </span>
+        <span className="text-format-data-sm text-muted/60">{scopes}</span>
       </div>
       {role && (
         <span className="text-format-body text-ink text-pretty">{role}</span>
@@ -186,6 +191,7 @@ export function FillSwatch({
   utilities,
   primitive,
   value,
+  scopes,
   role,
   border = false,
 }: {
@@ -194,6 +200,7 @@ export function FillSwatch({
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role: string;
   border?: boolean;
 }) {
@@ -207,6 +214,7 @@ export function FillSwatch({
         utilities={utilities}
         primitive={primitive}
         value={value}
+        scopes={scopes}
         role={role}
       />
     </div>
@@ -220,6 +228,7 @@ export function TextSwatch({
   utilities,
   primitive,
   value,
+  scopes,
   role,
   onFill,
 }: {
@@ -228,6 +237,7 @@ export function TextSwatch({
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role: string;
   // when the ink belongs ON a dark fill, preview it on that fill
   onFill?: string;
@@ -246,6 +256,7 @@ export function TextSwatch({
         utilities={utilities}
         primitive={primitive}
         value={value}
+        scopes={scopes}
         role={role}
       />
     </div>
@@ -259,6 +270,7 @@ export function BorderSwatch({
   utilities,
   primitive,
   value,
+  scopes,
   role,
 }: {
   border: string;
@@ -266,6 +278,7 @@ export function BorderSwatch({
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role: string;
 }) {
   return (
@@ -278,6 +291,7 @@ export function BorderSwatch({
         utilities={utilities}
         primitive={primitive}
         value={value}
+        scopes={scopes}
         role={role}
       />
     </div>
@@ -291,6 +305,7 @@ export function RingSwatch({
   utilities,
   primitive,
   value,
+  scopes,
   role,
 }: {
   ring: string;
@@ -298,6 +313,7 @@ export function RingSwatch({
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role: string;
 }) {
   return (
@@ -314,6 +330,7 @@ export function RingSwatch({
         utilities={utilities}
         primitive={primitive}
         value={value}
+        scopes={scopes}
         role={role}
       />
     </div>
@@ -326,12 +343,14 @@ export function ScrimSwatch({
   utilities,
   primitive,
   value,
+  scopes,
   role,
 }: {
   token: string;
   utilities: string;
   primitive: string;
   value: string;
+  scopes: string;
   role: string;
 }) {
   return (
@@ -347,6 +366,7 @@ export function ScrimSwatch({
         utilities={utilities}
         primitive={primitive}
         value={value}
+        scopes={scopes}
         role={role}
       />
     </div>

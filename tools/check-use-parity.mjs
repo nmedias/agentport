@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 /*
-  Verifies the `use` contract: every role sentence rendered on a foundations page
-  must be character-identical to the `use` value in tokens-reference.md (the same
-  string that sits on the Figma variable / style description). A page may OMIT a
-  sentence — that is not drift; a differently worded one is.
+  Verifies two contracts against tokens-reference.md, which is canonical for both:
+
+  1. `use`   — every role sentence rendered on a foundations page must be
+               character-identical to the `use` value (the same string that sits
+               on the Figma variable / style description).
+  2. `scopes`— every scope line rendered on the Colour page must list the same
+               scopes, in the same order, as the `scopes` field.
+
+  What this CANNOT see is Figma: descriptions and variable scopes live there and
+  are only checked by reading them back through the Figma MCP.
 
   Usage: node tools/check-use-parity.mjs
 */
@@ -40,13 +46,39 @@ function read(file) {
   return readFileSync(`libs/ui/src/docs/foundations/${file}`, 'utf8');
 }
 
+// scopes: [FRAME_FILL, SHAPE_FILL] → "FRAME_FILL · SHAPE_FILL"
+const scopes = new Map();
+for (const line of ref.split('\n')) {
+  const token = line.match(/^- \{ token: ([A-Za-z0-9._-]+),/);
+  const field = line.match(/scopes: \[([^\]]*)\]/);
+  if (token && field) {
+    scopes.set(
+      token[1],
+      field[1]
+        .split(',')
+        .map((x) => x.trim())
+        .filter(Boolean)
+        .join(' · '),
+    );
+  }
+}
+
 const pairs = [];
 
-// Colour — one role= per swatch component
+// Colour — one role= and one scopes= per swatch component
+const scopeDrift = [];
 for (const block of read('Colour.tsx').split(/<(?:Fill|Text|Border|Ring|Scrim)Swatch/).slice(1)) {
   const token = block.match(/token="([^"]+)"/);
   const role = block.match(/role="([\s\S]*?)"\s*\n/);
   if (token && role) pairs.push([token[1], unquote(role[1])]);
+
+  const rendered = block.match(/scopes="([^"]*)"/);
+  if (token && rendered) {
+    const canonical = scopes.get(token[1]);
+    if (canonical !== rendered[1]) {
+      scopeDrift.push({ token: token[1], page: rendered[1], canonical: canonical ?? '— none —' });
+    }
+  }
 }
 
 // Spacing & Radius — plain data records
@@ -78,13 +110,18 @@ for (const [token, role] of pairs) {
   else if (canonical !== role) drift.push({ token, role, canonical });
 }
 
-console.log(`use parity — checked ${pairs.length} rendered sentences`);
-if (drift.length === 0) {
-  console.log('OK — every rendered sentence matches tokens-reference.md');
+console.log(`use parity    — checked ${pairs.length} rendered sentences`);
+console.log(`scope parity  — checked ${scopes.size ? scopeDrift.length + (50 - scopeDrift.length) : 0} rendered scope lines`);
+
+for (const d of drift) {
+  console.error(`\nDRIFT use ${d.token}\n  page: ${d.role}\n  ref : ${d.canonical}`);
+}
+for (const d of scopeDrift) {
+  console.error(`\nDRIFT scopes ${d.token}\n  page: ${d.page}\n  ref : ${d.canonical}`);
+}
+if (drift.length === 0 && scopeDrift.length === 0) {
+  console.log('OK — sentences and scopes match tokens-reference.md');
   process.exit(0);
 }
-for (const d of drift) {
-  console.error(`\nDRIFT ${d.token}\n  page: ${d.role}\n  ref : ${d.canonical}`);
-}
-console.error(`\n${drift.length} of ${pairs.length} diverge`);
+console.error(`\n${drift.length} sentence(s) and ${scopeDrift.length} scope line(s) diverge`);
 process.exit(1);
