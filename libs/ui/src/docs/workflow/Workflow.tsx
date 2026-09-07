@@ -922,7 +922,7 @@ export function Workflow() {
           id="rework"
           number="6 · Rework"
           title="What was reworked"
-          lead="Rework in numbers, from the Git log. A quarter of all commits is correction, fix and refine, a third is docs. The second is the price of the catalogs: the same truth lives in Figma, catalog and code and is kept in sync by hand."
+          lead="Rework in numbers, from the Git log. A quarter of all commits is correction, fix and refine. A third is docs, and most of that is follow-up too: the same truth lives in Figma, catalog and code, and after every change the catalog is brought back in line by hand."
         >
           <Bars caption="Commits by type" items={COMMIT_TYPES} max={35} />
           <div className="flex flex-col gap-3xl">
