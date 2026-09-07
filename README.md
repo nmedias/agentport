@@ -22,11 +22,17 @@ libs/ui/                     @agentport/ui — the library
 agent-runs/component-port/   run notes per first-time port (date-component)
 agent-runs/component-sync/   run notes per Figma → code reconciliation
 agent-runs/figma-coverage/   coverage reports per audited UI artifact
+agent-runs/api-block-audit/  run notes of the Figma-doc properties audit (brief, packages, reviews)
+agent-runs/token-column-audit/ run notes of the Figma-doc token-column audit
 design-docs/            design-system/tokens-reference.md (token crosswalk), design-system/components-reference.md
                              (component catalog with Figma node IDs), design-system/{token,component}-changelog.md
                              (history, human-readable), token-analysis-*.md (token system derivation)
 .claude/skills/              the pipeline skills (see below)
 tools/shoot-stories.mjs      Playwright screenshots of a running Storybook, for visual checks
+tools/check-use-parity.mjs   token sentences + scopes on the docs pages vs tokens-reference.md
+tools/api-audit/             Figma-doc gate: properties block vs catalog + code (check.py, dumps/)
+tools/token-audit/           Figma-doc gate: token column vs set + catalog + code (check.py, dumps/)
+tools/figma-doc/             doc-overrides.json — per-section roles/anatomy, read by the token audit
 ```
 
 ## Prerequisites
@@ -58,6 +64,9 @@ npm run check              # lint + tests + typecheck — the gate
 | `npm run check`              | lint + test + typecheck — **the gate**; test or lint alone do not typecheck     |
 | `npm run shoot -- <storyId>` | Screenshot a story from a *running* Storybook → `tools/screenshots/`            |
 | `npm run ui:add -- <name>`   | Pull a shadcn component source into `libs/ui` (see *Adding a component*)        |
+| `npm run audit:descriptions` | Token use-sentences + scopes on the Storybook pages match `tokens-reference.md` |
+| `npm run audit:api`          | Figma doc sections: properties block vs catalog + code (`tools/api-audit`)      |
+| `npm run audit:tokens`       | Figma doc sections: token column vs set + catalog + code (`tools/token-audit`)  |
 | `npm run graph`              | Nx project graph                                                                |
 
 Testing is **two Vitest projects** under one config (`libs/ui/vite.config.mts`): `@agentport/ui`

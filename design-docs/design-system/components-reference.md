@@ -134,7 +134,6 @@ variable_ids:   # VariableID:<id> of the semantic variables the components bind 
   corner-full: "3073:6"
   deleted: ["3038:5 (old shadcn Default/input)", "3116:2 (background-fixed)"]   # still resolvable by id, no bindings left — a hit on either is a regression
 open:
-  - "Page Artboards (1099:8958): reference screen 'Quiet' 1099:9710 (section 'Final') still carries content from the origin project — neutralise or remove before the file key is published."
   - "Figma debt across the input family: focus / invalid DROP_SHADOW effect colours are raw hex (unbound) instead of the ring / destructive variables; the code uses the role-correct tokens."
 ```
 
@@ -387,6 +386,7 @@ open:
     styles: [text:Body, text:Label/md]
     code_only_tokens:
       - { token: space-lg, code: "has-[>[data-align=block-end]]:[&>input]:pt-lg, has-[>[data-align=block-start]]:[&>input]:pb-lg", why: "when a toolbar addon stacks block-start/block-end, the group pushes matching padding onto the nested input/textarea so its text clears the toolbar; the Figma set draws block-start/block-end as separate static frames and doesn't model this compensating push, so there is no binding to point to." }
+      - { token: corner-none, code: "corner-none (InputGroupInput, InputGroupTextarea)", why: "the nested control drops its own radius so the group's border draws the corner; corner-none is a static utility with no Figma variable (tokens-reference: static), so the set cannot bind it — in Figma the nested Input instance simply sits inside the group's clipped frame." }
   skill: /shadcn-component-port; /component-sync
   description: "Fuses a control and its adornments (icons, buttons, text) into one field: the group owns border, focus and invalid treatment, the control inside goes borderless. Addons sit beside the control or as a bar above/below it. State always originates from the inner control — the group has none of its own, it mirrors."
   anatomy: "6-part composite: the GROUP owns surface + border + focus / invalid / disabled (has-[control:focus-visible] / has-[aria-invalid] / has-disabled); controls are borderless (border-0 bg-transparent, data-slot=input-group-control)."

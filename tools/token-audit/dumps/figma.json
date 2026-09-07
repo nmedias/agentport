@@ -1,0 +1,3215 @@
+{
+ "Badge": {
+  "bare": [
+   [
+    "8113:11501",
+    "space-2xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8113:11510",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8113:11519",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8113:11528",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8113:11356",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8113:11450",
+    "primary-fill",
+    "default fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11455",
+    "primary-ink",
+    "default label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11460",
+    "secondary-fill",
+    "secondary fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11465",
+    "secondary-ink",
+    "secondary label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11470",
+    "destructive",
+    "destructive fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11475",
+    "destructive-ink",
+    "destructive label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11480",
+    "border",
+    "outline border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11485",
+    "ink",
+    "outline / ghost label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11490",
+    "primary",
+    "link label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8113:11495",
+    "corner-full",
+    "pill radius",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Badge 3697:1016"
+  ],
+  "styles": [
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "corner-full",
+   "destructive",
+   "destructive-ink",
+   "ink",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "space-2xs",
+   "space-md",
+   "space-xs"
+  ]
+ },
+ "Breadcrumb": {
+  "bare": [
+   [
+    "8414:5738",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8414:5747",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8414:5756",
+    "text:Body",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8406:5650",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8414:5727",
+    "muted",
+    "link resting label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8414:5732",
+    "ink",
+    "link-hover label + current page",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Breadcrumb 3254:302",
+   "Segment 3250:308",
+   ".Separator 3251:302",
+   "Ellipsis 3251:305"
+  ],
+  "styles": [
+   "text:Body"
+  ],
+  "unroled": 1,
+  "vars": [
+   "ink",
+   "muted",
+   "space-sm",
+   "space-xs"
+  ]
+ },
+ "Button": {
+  "bare": [
+   [
+    "8110:3110",
+    "corner-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8110:3119",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8110:3128",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8110:3137",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8110:3146",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8110:3155",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8109:2928",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8110:3036",
+    "primary-fill",
+    "default fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3041",
+    "primary-ink",
+    "default label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8669:7448",
+    "muted-fill",
+    "hover/press tint on the default fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3046",
+    "secondary-fill",
+    "secondary fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3051",
+    "secondary-ink",
+    "secondary label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3056",
+    "destructive",
+    "destructive fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3061",
+    "destructive-ink",
+    "destructive label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3066",
+    "surface",
+    "outline resting surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3071",
+    "border",
+    "outline border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8669:7453",
+    "ink",
+    "outline / ghost resting label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3076",
+    "accent-fill",
+    "outline / ghost hover fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3081",
+    "accent-ink",
+    "outline / ghost hover label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8110:3086",
+    "primary",
+    "link label",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Button 3164:312",
+   ".Button/Base 3159:12",
+   ".Button/Base/.Button Icon 3516:1146"
+  ],
+  "styles": [
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "accent-fill",
+   "accent-ink",
+   "border",
+   "corner-lg",
+   "corner-md",
+   "destructive",
+   "destructive-ink",
+   "ink",
+   "muted-fill",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "space-md",
+   "space-sm",
+   "space-xs",
+   "surface"
+  ]
+ },
+ "Checkbox": {
+  "bare": [
+   [
+    "8081:2886",
+    "corner-sm",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8079:2759",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8080:11138",
+    "input-fill",
+    "resting box fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11143",
+    "input-border",
+    "resting box border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11148",
+    "primary-fill",
+    "checked / indeterminate fill + border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11153",
+    "primary-ink",
+    "check + dash glyph",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11158",
+    "destructive",
+    "invalid border · checked-invalid fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11163",
+    "destructive-ink",
+    "checked-invalid glyph",
+    "true",
+    "Token List"
+   ],
+   [
+    "8080:11168",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Checkbox 3795:1184"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "corner-sm",
+   "destructive",
+   "destructive-ink",
+   "input-border",
+   "input-fill",
+   "primary-fill",
+   "primary-ink",
+   "ring"
+  ]
+ },
+ "ChoiceCard": {
+  "bare": [
+   [
+    "8309:4951",
+    "corner-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8309:4960",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8309:4969",
+    "corner-full",
+    "false",
+    "unroled"
+   ],
+   [
+    "8309:4987",
+    "space-md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8306:4777",
+  "mby": {
+   "corner-full": [
+    "Field>RadioGroupItem",
+    "Field>Switch"
+   ],
+   "corner-sm": [
+    "Field>Checkbox"
+   ],
+   "destructive-ink": [
+    "Field>Checkbox",
+    "Field>RadioGroupItem"
+   ],
+   "ink": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ],
+   "input-border": [
+    "Field",
+    "Field>Checkbox",
+    "Field>Input",
+    "Field>RadioGroupItem"
+   ],
+   "input-fill-high": [
+    "Field>Switch"
+   ],
+   "input-ink-placeholder": [
+    "Field",
+    "Field>Input"
+   ],
+   "muted": [
+    "Field"
+   ],
+   "primary-ink": [
+    "Field>Checkbox",
+    "Field>RadioGroupItem"
+   ],
+   "space-2xs": [
+    "Field"
+   ],
+   "space-xs": [
+    "Field",
+    "Field>Input"
+   ],
+   "text:Body": [
+    "Field"
+   ],
+   "text:Label/md": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ]
+  },
+  "msrc": [
+   "Field"
+  ],
+  "mstyles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "mvars": [
+   "corner-full",
+   "corner-sm",
+   "destructive-ink",
+   "ink",
+   "input-border",
+   "input-fill-high",
+   "input-ink-placeholder",
+   "muted",
+   "primary-ink",
+   "space-2xs",
+   "space-xs"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8308:13141",
+    "accent-fill",
+    "checked card fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13146",
+    "accent-border",
+    "checked card border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13151",
+    "accent-ink",
+    "checked card title",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13156",
+    "primary-fill",
+    "nested control checked fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13161",
+    "primary-ink",
+    "nested control checked mark",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13166",
+    "input-fill",
+    "nested control resting fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13171",
+    "input-border",
+    "nested control resting border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8308:13176",
+    "destructive",
+    "nested control invalid border + fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8672:7354",
+    "surface",
+    "resting card surface + switch thumb",
+    "true",
+    "Token List"
+   ],
+   [
+    "8672:7359",
+    "border",
+    "resting card border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8672:7364",
+    "destructive-ink",
+    "nested control invalid glyph",
+    "true",
+    "Token List"
+   ],
+   [
+    "8672:7369",
+    "ring",
+    "nested control focus border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8672:7374",
+    "input-fill-high",
+    "nested switch track fill",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "ChoiceCardCheckbox 4112:1638",
+   "ChoiceCardSwitch 4119:1750",
+   "ChoiceCardRadio 4124:1862"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "accent-border",
+   "accent-fill",
+   "accent-ink",
+   "border",
+   "corner-lg",
+   "destructive",
+   "input-fill",
+   "primary-fill",
+   "ring",
+   "space-md",
+   "surface"
+  ]
+ },
+ "Command": {
+  "bare": [
+   [
+    "8382:5588",
+    "corner-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5597",
+    "corner-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5606",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5615",
+    "corner-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5624",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5633",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5642",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8382:5651",
+    "space-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8383:5620",
+    "space-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8383:5629",
+    "space-2xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8383:5638",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8383:5647",
+    "text:Data/lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8383:5656",
+    "text:Kbd",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8373:5402",
+  "mby": {
+   "destructive": [
+    "InputGroup"
+   ],
+   "inverse-ink": [
+    "Kbd"
+   ],
+   "muted-fill": [
+    "Kbd"
+   ],
+   "muted-ink": [
+    "Kbd"
+   ],
+   "ring": [
+    "InputGroup"
+   ],
+   "text:Label/md": [
+    "InputGroup",
+    "InputGroup>InputGroupInput",
+    "InputGroup>InputGroupTextarea"
+   ]
+  },
+  "msrc": [
+   "InputGroup",
+   "Kbd"
+  ],
+  "mstyles": [
+   "text:Label/md"
+  ],
+  "mvars": [
+   "destructive",
+   "inverse-ink",
+   "muted-fill",
+   "muted-ink",
+   "ring"
+  ],
+  "off": [
+   "Effect/elevation/blur|reference",
+   "Effect/elevation/color|reference",
+   "Effect/elevation/spread|reference",
+   "Effect/elevation/x|reference",
+   "Effect/elevation/y|reference",
+   "Effect/glow/blur|reference",
+   "Effect/glow/color|reference",
+   "Effect/glow/spread|reference",
+   "Effect/glow/x|reference",
+   "Effect/glow/y|reference"
+  ],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8380:5524",
+    "dialog-fill",
+    "panel surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5529",
+    "border",
+    "panel border + separator line",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5534",
+    "accent-fill",
+    "selected item fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5539",
+    "accent-ink",
+    "selected item label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5544",
+    "muted",
+    "group heading + quiet text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5549",
+    "card-fill",
+    "palette prompt row fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8380:5554",
+    "primary",
+    "palette caret bar fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7601",
+    "ink",
+    "search text + item label and icon",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7606",
+    "surface",
+    "icon frame surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7611",
+    "input-border",
+    "search field border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7616",
+    "input-fill",
+    "search field surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7621",
+    "input-ink-placeholder",
+    "search placeholder",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7626",
+    "inverse-fill",
+    "esc key chip surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7636",
+    "effect:Elevation",
+    "panel drop shadow",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7641",
+    "effect:Glow",
+    "palette caret bar glow",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Command 3642:2",
+   "CommandInput 3639:2",
+   "CommandGroup 3640:9",
+   "CommandItem 3559:2",
+   "CommandSeparator 3653:6",
+   "CommandGroup/CommandEmpty 3564:3",
+   ".Command/Icon/Calendar 3557:4",
+   ".Command/Icon/Emotion 3557:7",
+   ".Command/Icon/Calculator 3557:10",
+   ".Command/Icon/User 3557:13",
+   ".Command/Icon/Card 3557:16",
+   ".Command/Icon/Settings 3557:19",
+   ".Command/Icon/ArrowRight 3644:4",
+   ".Command/Icon/Swap 3644:7",
+   ".Command/Icon/Search 3644:10",
+   ".Command/Icon/Play 3644:13",
+   ".Command/Icon/Download 3644:16"
+  ],
+  "styles": [
+   "effect:Elevation",
+   "effect:Glow",
+   "text:Body",
+   "text:Data/lg",
+   "text:Kbd"
+  ],
+  "unroled": 1,
+  "vars": [
+   "accent-fill",
+   "accent-ink",
+   "border",
+   "card-fill",
+   "corner-lg",
+   "corner-md",
+   "corner-sm",
+   "corner-xl",
+   "dialog-fill",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "inverse-fill",
+   "muted",
+   "primary",
+   "space-2xl",
+   "space-lg",
+   "space-md",
+   "space-sm",
+   "space-xl",
+   "space-xs",
+   "surface"
+  ]
+ },
+ "Dialog": {
+  "bare": [
+   [
+    "8370:5368",
+    "corner-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8370:5386",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8370:5404",
+    "space-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8370:5413",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8370:5431",
+    "text:Title",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8362:5227",
+  "mby": {
+   "accent-fill": [
+    "Button"
+   ],
+   "accent-ink": [
+    "Button"
+   ],
+   "corner-lg": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "corner-md": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "destructive": [
+    "Button"
+   ],
+   "destructive-ink": [
+    "Button"
+   ],
+   "primary": [
+    "Button"
+   ],
+   "primary-fill": [
+    "Button"
+   ],
+   "primary-ink": [
+    "Button"
+   ],
+   "secondary-fill": [
+    "Button"
+   ],
+   "secondary-ink": [
+    "Button"
+   ],
+   "space-sm": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "space-xs": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "surface": [
+    "Button"
+   ],
+   "text:Label/md": [
+    "Button",
+    "Button>.Button/Base"
+   ]
+  },
+  "msrc": [
+   "Button"
+  ],
+  "mstyles": [
+   "text:Label/md"
+  ],
+  "mvars": [
+   "accent-fill",
+   "accent-ink",
+   "corner-lg",
+   "corner-md",
+   "destructive",
+   "destructive-ink",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "space-sm",
+   "space-xs",
+   "surface"
+  ],
+  "off": [
+   "Effect/elevation/blur|reference",
+   "Effect/elevation/color|reference",
+   "Effect/elevation/spread|reference",
+   "Effect/elevation/x|reference",
+   "Effect/elevation/y|reference"
+  ],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8368:5304",
+    "dialog-fill",
+    "panel surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5309",
+    "dialog-ink",
+    "panel title text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5314",
+    "border",
+    "panel + footer border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5319",
+    "scrim",
+    "backdrop fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5324",
+    "scrim-opacity",
+    "overlay layer opacity",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5329",
+    "muted",
+    "description text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8368:5334",
+    "muted-fill",
+    "footer band fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7558",
+    "ink",
+    "close icon",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7583",
+    "effect:Elevation",
+    "panel drop shadow",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Dialog 3592:794",
+   "DialogOverlay 3590:791",
+   "DialogFooter 3591:788",
+   ".Dialog/Icon/Close 3590:790"
+  ],
+  "styles": [
+   "effect:Elevation",
+   "text:Body",
+   "text:Title"
+  ],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "corner-xl",
+   "dialog-fill",
+   "dialog-ink",
+   "ink",
+   "muted",
+   "muted-fill",
+   "scrim",
+   "scrim-opacity",
+   "space-md",
+   "space-xl"
+  ]
+ },
+ "Field": {
+  "bare": [
+   [
+    "8212:4059",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8212:4068",
+    "space-2xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8212:4077",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8212:4086",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8212:4095",
+    "text:Body",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8211:3909",
+  "mby": {
+   "ink": [
+    "Input",
+    "Label"
+   ],
+   "input-ink-placeholder": [
+    "Input"
+   ],
+   "ring": [
+    "Input"
+   ],
+   "text:Label/md": [
+    "Input",
+    "Label"
+   ]
+  },
+  "msrc": [
+   "Input",
+   "Label"
+  ],
+  "mstyles": [
+   "text:Label/md"
+  ],
+  "mvars": [
+   "ink",
+   "input-ink-placeholder",
+   "ring"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8212:4028",
+    "input-fill",
+    "nested control fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8212:4033",
+    "input-border",
+    "nested control border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8212:4043",
+    "destructive",
+    "error text + invalid control",
+    "true",
+    "Token List"
+   ],
+   [
+    "8212:4048",
+    "muted",
+    "description text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Field 3716:1020"
+  ],
+  "styles": [
+   "text:Body"
+  ],
+  "unroled": 1,
+  "vars": [
+   "corner-lg",
+   "destructive",
+   "input-border",
+   "input-fill",
+   "muted",
+   "space-2xs",
+   "space-md",
+   "space-xs"
+  ]
+ },
+ "FieldGroup": {
+  "bare": [
+   [
+    "8242:4397",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8242:4406",
+    "space-xl",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8241:4228",
+  "mby": {
+   "corner-lg": [
+    "Field",
+    "Field>Input"
+   ],
+   "destructive": [
+    "Field",
+    "Field>Input"
+   ],
+   "ink": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ],
+   "input-border": [
+    "Field",
+    "Field>Input"
+   ],
+   "input-fill": [
+    "Field",
+    "Field>Input"
+   ],
+   "input-ink-placeholder": [
+    "Field",
+    "Field>Input"
+   ],
+   "muted": [
+    "Field"
+   ],
+   "ring": [
+    "Field>Input"
+   ],
+   "space-2xs": [
+    "Field"
+   ],
+   "space-xs": [
+    "Field",
+    "Field>Input"
+   ],
+   "text:Body": [
+    "Field"
+   ],
+   "text:Label/md": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ]
+  },
+  "msrc": [
+   "Field",
+   "Separator"
+  ],
+  "mstyles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "mvars": [
+   "corner-lg",
+   "destructive",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "muted",
+   "ring",
+   "space-2xs",
+   "space-xs"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8242:4355",
+    "border",
+    "separator line",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "FieldGroup 4285:1997"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "space-md",
+   "space-xl"
+  ]
+ },
+ "FieldLegend": {
+  "bare": [
+   [
+    "8221:4139",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8221:4148",
+    "text:Title",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8219:4046",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8221:4133",
+    "ink",
+    "legend / label text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "FieldLegend 3909:1246"
+  ],
+  "styles": [
+   "text:Label/md",
+   "text:Title"
+  ],
+  "unroled": 1,
+  "vars": [
+   "ink"
+  ]
+ },
+ "FieldSet": {
+  "bare": [
+   [
+    "8238:4264",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8238:4273",
+    "space-xl",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8235:4102",
+  "mby": {
+   "corner-lg": [
+    "Field>Input",
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "destructive": [
+    "Field>Input",
+    "FieldGroup>Field"
+   ],
+   "ink": [
+    "Field>Input",
+    "Field>Label",
+    "FieldGroup",
+    "FieldGroup>Field",
+    "FieldLegend"
+   ],
+   "input-border": [
+    "Field>Input",
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "input-fill": [
+    "Field>Input",
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "input-ink-placeholder": [
+    "Field>Input",
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "muted": [
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "ring": [
+    "Field>Input"
+   ],
+   "space-2xs": [
+    "FieldGroup>Field"
+   ],
+   "space-xs": [
+    "Field>Input",
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "text:Body": [
+    "FieldGroup",
+    "FieldGroup>Field"
+   ],
+   "text:Label/md": [
+    "Field>Input",
+    "Field>Label",
+    "FieldGroup",
+    "FieldGroup>Field",
+    "FieldLegend"
+   ],
+   "text:Title": [
+    "FieldLegend"
+   ]
+  },
+  "msrc": [
+   "Field",
+   "FieldGroup",
+   "FieldLegend"
+  ],
+  "mstyles": [
+   "text:Body",
+   "text:Label/md",
+   "text:Title"
+  ],
+  "mvars": [
+   "corner-lg",
+   "destructive",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "muted",
+   "ring",
+   "space-2xs",
+   "space-xs"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8687:6948",
+    "border",
+    "nested separator line",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "FieldSet 3739:1026"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "space-md",
+   "space-xl"
+  ]
+ },
+ "Input": {
+  "bare": [
+   [
+    "8175:3413",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8175:3422",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8175:3431",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8175:3440",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8173:3304",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8175:3378",
+    "input-fill",
+    "resting field surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8175:3383",
+    "input-border",
+    "resting field border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8175:3388",
+    "input-ink-placeholder",
+    "placeholder text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8175:3393",
+    "destructive",
+    "invalid border + ring",
+    "true",
+    "Token List"
+   ],
+   [
+    "8175:3398",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8175:3404",
+    "ink",
+    "entered value text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Input 3177:302"
+  ],
+  "styles": [
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "corner-lg",
+   "destructive",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "ring",
+   "space-md",
+   "space-xs"
+  ]
+ },
+ "InputGroup": {
+  "bare": [
+   [
+    "8182:11969",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8687:6953",
+    "corner-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8687:6958",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8182:11987",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8182:11996",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8182:12005",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8182:12014",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8180:3500",
+  "mby": {
+   "accent-fill": [
+    "Button"
+   ],
+   "accent-ink": [
+    "Button"
+   ],
+   "border": [
+    "Button"
+   ],
+   "corner-md": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "destructive-ink": [
+    "Button"
+   ],
+   "muted-fill": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "primary": [
+    "Button"
+   ],
+   "primary-fill": [
+    "Button"
+   ],
+   "primary-ink": [
+    "Button"
+   ],
+   "secondary-fill": [
+    "Button"
+   ],
+   "secondary-ink": [
+    "Button"
+   ],
+   "surface": [
+    "Button"
+   ]
+  },
+  "msrc": [
+   "Button"
+  ],
+  "mstyles": [],
+  "mvars": [
+   "accent-fill",
+   "accent-ink",
+   "border",
+   "corner-md",
+   "destructive-ink",
+   "muted-fill",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "surface"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8182:11884",
+    "input-fill",
+    "group surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11889",
+    "input-border",
+    "group border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11894",
+    "input-ink-placeholder",
+    "placeholder text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11899",
+    "destructive",
+    "invalid border + ring",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11904",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11909",
+    "muted",
+    "addon icon + prefix text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8182:11915",
+    "ink",
+    "entered text + addon button label",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "InputGroup 3525:622",
+   "InputGroupAddon 3520:606",
+   "InputGroupButton 3545:694",
+   "InputGroupInput 3522:590",
+   "InputGroupTextarea 3522:592",
+   "InputGroupText 3522:594",
+   ".InputGroupExampleIcon 3546:677"
+  ],
+  "styles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "corner-lg",
+   "corner-sm",
+   "destructive",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "muted",
+   "ring",
+   "space-md",
+   "space-sm",
+   "space-xs"
+  ]
+ },
+ "Item": {
+  "bare": [
+   [
+    "8447:6137",
+    "corner-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8447:6146",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8447:6155",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8447:6164",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8447:6173",
+    "space-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8447:6182",
+    "space-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8450:6151",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8450:6160",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8439:6008",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8446:6087",
+    "ink",
+    "title text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8446:6092",
+    "muted",
+    "description text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8446:6097",
+    "muted-fill",
+    "muted variant fill + link hover tint",
+    "true",
+    "Token List"
+   ],
+   [
+    "8446:6102",
+    "border",
+    "outline variant border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8669:7576",
+    "muted-ink",
+    "description text + glyph on the muted-fill variant",
+    "true",
+    "Token List"
+   ],
+   [
+    "8669:7581",
+    "secondary-fill",
+    "image placeholder fill",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Item 4498:2551",
+   "ItemMedia 4508:2544",
+   "ItemGroup 4511:2575"
+  ],
+  "styles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "corner-lg",
+   "corner-sm",
+   "ink",
+   "muted",
+   "muted-fill",
+   "muted-ink",
+   "secondary-fill",
+   "space-lg",
+   "space-md",
+   "space-xl",
+   "space-xs"
+  ]
+ },
+ "Kbd": {
+  "bare": [
+   [
+    "8115:11582",
+    "corner-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8115:11591",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8115:11600",
+    "text:Kbd",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8115:11474",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8115:11561",
+    "inverse-fill",
+    "high cap fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8115:11566",
+    "inverse-ink",
+    "high cap glyph",
+    "true",
+    "Token List"
+   ],
+   [
+    "8115:11571",
+    "muted-fill",
+    "low cap fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8115:11576",
+    "muted-ink",
+    "low cap glyph",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Kbd 3217:308"
+  ],
+  "styles": [
+   "text:Kbd"
+  ],
+  "unroled": 1,
+  "vars": [
+   "corner-sm",
+   "inverse-fill",
+   "inverse-ink",
+   "muted-fill",
+   "muted-ink",
+   "space-xs"
+  ]
+ },
+ "Label": {
+  "bare": [
+   [
+    "8209:3907",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8209:3916",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8205:3850",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8209:3901",
+    "ink",
+    "caption text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Label 3735:1024"
+  ],
+  "styles": [
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "ink",
+   "space-md"
+  ]
+ },
+ "Popover": {
+  "bare": [
+   [
+    "8358:5213",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8358:5222",
+    "space-2xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8359:5209",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8359:5218",
+    "space-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8359:5227",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8359:5236",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8351:5085",
+  "mby": {
+   "accent-fill": [
+    "Button"
+   ],
+   "accent-ink": [
+    "Button"
+   ],
+   "corner-md": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "destructive": [
+    "Button"
+   ],
+   "destructive-ink": [
+    "Button"
+   ],
+   "ink": [
+    "Button",
+    "Button>.Button/Base",
+    "Button>.Button/Base>.Button/Base/.Button Icon"
+   ],
+   "muted-fill": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "primary": [
+    "Button"
+   ],
+   "primary-fill": [
+    "Button"
+   ],
+   "primary-ink": [
+    "Button"
+   ],
+   "secondary-fill": [
+    "Button"
+   ],
+   "secondary-ink": [
+    "Button"
+   ],
+   "space-sm": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "space-xs": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "surface": [
+    "Button"
+   ]
+  },
+  "msrc": [
+   "Button"
+  ],
+  "mstyles": [],
+  "mvars": [
+   "accent-fill",
+   "accent-ink",
+   "corner-md",
+   "destructive",
+   "destructive-ink",
+   "ink",
+   "muted-fill",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "space-sm",
+   "space-xs",
+   "surface"
+  ],
+  "off": [
+   "Effect/elevation/blur|reference",
+   "Effect/elevation/color|reference",
+   "Effect/elevation/spread|reference",
+   "Effect/elevation/x|reference",
+   "Effect/elevation/y|reference"
+  ],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8357:5145",
+    "dialog-fill",
+    "panel surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8357:5150",
+    "dialog-ink",
+    "panel title text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8357:5155",
+    "border",
+    "panel border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8357:5160",
+    "muted",
+    "description text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7423",
+    "effect:Elevation",
+    "panel drop shadow",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "PopoverContent 4365:2255",
+   "PopoverHeader 4367:2253",
+   "Popover 4402:2589"
+  ],
+  "styles": [
+   "effect:Elevation",
+   "text:Body",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "corner-lg",
+   "dialog-fill",
+   "dialog-ink",
+   "muted",
+   "space-2xs",
+   "space-lg",
+   "space-md"
+  ]
+ },
+ "RadioGroup": {
+  "bare": [
+   [
+    "8301:4797",
+    "space-md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8298:4626",
+  "mby": {
+   "corner-lg": [
+    "Field",
+    "Field>Input"
+   ],
+   "ink": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ],
+   "input-ink-placeholder": [
+    "Field",
+    "Field>Input"
+   ],
+   "muted": [
+    "Field"
+   ],
+   "space-2xs": [
+    "Field"
+   ],
+   "space-xs": [
+    "Field",
+    "Field>Input"
+   ],
+   "text:Body": [
+    "Field"
+   ],
+   "text:Label/md": [
+    "Field",
+    "Field>Input",
+    "Field>Label"
+   ]
+  },
+  "msrc": [
+   "Field"
+  ],
+  "mstyles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "mvars": [
+   "corner-lg",
+   "ink",
+   "input-ink-placeholder",
+   "muted",
+   "space-2xs",
+   "space-xs"
+  ],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8301:4702",
+    "input-fill",
+    "resting circle fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4707",
+    "input-border",
+    "resting circle border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4712",
+    "primary-fill",
+    "checked circle fill + border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4717",
+    "primary-ink",
+    "checked dot",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4722",
+    "destructive",
+    "invalid border · checked-invalid fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4727",
+    "destructive-ink",
+    "checked-invalid dot",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4732",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8301:4737",
+    "corner-full",
+    "circle radius",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "RadioGroupItem 3852:1206",
+   "RadioGroup 4006:1499"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "corner-full",
+   "destructive",
+   "destructive-ink",
+   "input-border",
+   "input-fill",
+   "primary-fill",
+   "primary-ink",
+   "ring",
+   "space-md"
+  ]
+ },
+ "Select": {
+  "bare": [
+   [
+    "8199:3832",
+    "corner-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8199:3841",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8199:3850",
+    "space-xs",
+    "false",
+    "unroled"
+   ],
+   [
+    "8199:3859",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8199:3868",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8200:3849",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8189:3667",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [
+   "Effect/elevation/blur|reference",
+   "Effect/elevation/color|reference",
+   "Effect/elevation/spread|reference",
+   "Effect/elevation/x|reference",
+   "Effect/elevation/y|reference"
+  ],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8198:3776",
+    "input-fill",
+    "trigger resting fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3781",
+    "input-border",
+    "trigger resting border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3786",
+    "destructive",
+    "trigger invalid border + ring",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3791",
+    "ring",
+    "trigger focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3796",
+    "dialog-fill",
+    "content surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3801",
+    "border",
+    "content border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3806",
+    "accent-fill",
+    "item highlight fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8198:3811",
+    "accent-ink",
+    "item highlight label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8199:3808",
+    "muted",
+    "group heading + chevron icon",
+    "true",
+    "Token List"
+   ],
+   [
+    "8199:3814",
+    "ink",
+    "trigger value + item label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8199:3823",
+    "effect:Elevation",
+    "dropdown elevation",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "SelectTrigger 4308:2029",
+   "SelectItem 4313:2046",
+   "SelectContent 4314:1997",
+   "SelectGroup 4326:2371",
+   "Select 4326:2477"
+  ],
+  "styles": [
+   "effect:Elevation",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "accent-fill",
+   "accent-ink",
+   "border",
+   "corner-lg",
+   "corner-md",
+   "destructive",
+   "dialog-fill",
+   "ink",
+   "input-border",
+   "input-fill",
+   "muted",
+   "ring",
+   "space-md",
+   "space-sm",
+   "space-xs"
+  ]
+ },
+ "Separator": {
+  "bare": [],
+  "col": 1,
+  "id": "8417:5749",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8424:5782",
+    "border",
+    "divider line",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Separator 3676:1018"
+  ],
+  "styles": [],
+  "unroled": 0,
+  "vars": [
+   "border"
+  ]
+ },
+ "Slider": {
+  "bare": [],
+  "col": 1,
+  "id": "8291:4516",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8294:12874",
+    "input-fill-high",
+    "track rail fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8294:12879",
+    "primary-fill",
+    "range fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8294:12884",
+    "surface",
+    "thumb surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8294:12889",
+    "input-border",
+    "thumb border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8294:12894",
+    "corner-full",
+    "track / thumb radius",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Slider 4351:2225"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "corner-full",
+   "input-border",
+   "input-fill-high",
+   "primary-fill",
+   "surface"
+  ]
+ },
+ "Switch": {
+  "bare": [],
+  "col": 1,
+  "id": "8284:4385",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8287:12741",
+    "input-fill-high",
+    "unchecked track fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8287:12746",
+    "primary-fill",
+    "checked track fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8287:12751",
+    "surface",
+    "thumb surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8287:12756",
+    "destructive",
+    "invalid border · checked-invalid track",
+    "true",
+    "Token List"
+   ],
+   [
+    "8287:12761",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8287:12766",
+    "corner-full",
+    "track / thumb radius",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Switch 3839:2"
+  ],
+  "styles": [],
+  "unroled": 1,
+  "vars": [
+   "corner-full",
+   "destructive",
+   "input-fill-high",
+   "primary-fill",
+   "ring",
+   "surface"
+  ]
+ },
+ "Table": {
+  "bare": [
+   [
+    "8435:6021",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8436:5990",
+    "space-xl",
+    "false",
+    "unroled"
+   ],
+   [
+    "8436:5999",
+    "text:Body",
+    "false",
+    "unroled"
+   ],
+   [
+    "8436:6017",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8427:5788",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8434:5926",
+    "ink",
+    "head + cell text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8434:5931",
+    "border",
+    "row bottom border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8434:5936",
+    "muted-fill",
+    "hover row tint (50%)",
+    "true",
+    "Token List"
+   ],
+   [
+    "8434:5941",
+    "accent-fill",
+    "selected row tint",
+    "true",
+    "Token List"
+   ],
+   [
+    "8434:5946",
+    "muted",
+    "caption text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Table 4521:2597",
+   "TableHead 4515:2603",
+   "TableCell 4515:2610",
+   "TableRow 4520:2621"
+  ],
+  "styles": [
+   "text:Body",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "accent-fill",
+   "border",
+   "ink",
+   "muted",
+   "muted-fill",
+   "space-md",
+   "space-xl"
+  ]
+ },
+ "Textarea": {
+  "bare": [
+   [
+    "8178:11790",
+    "corner-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8178:11799",
+    "space-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8178:11808",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8178:3404",
+  "mby": {},
+  "msrc": [],
+  "mstyles": [],
+  "mvars": [],
+  "off": [],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8178:11755",
+    "input-fill",
+    "resting field surface",
+    "true",
+    "Token List"
+   ],
+   [
+    "8178:11760",
+    "input-border",
+    "resting field border",
+    "true",
+    "Token List"
+   ],
+   [
+    "8178:11765",
+    "input-ink-placeholder",
+    "placeholder text",
+    "true",
+    "Token List"
+   ],
+   [
+    "8178:11770",
+    "destructive",
+    "invalid border + ring",
+    "true",
+    "Token List"
+   ],
+   [
+    "8178:11775",
+    "ring",
+    "focus border + ring/50",
+    "true",
+    "Token List"
+   ],
+   [
+    "8178:11781",
+    "ink",
+    "entered text",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Textarea 3488:684"
+  ],
+  "styles": [
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "corner-lg",
+   "destructive",
+   "ink",
+   "input-border",
+   "input-fill",
+   "input-ink-placeholder",
+   "ring",
+   "space-md"
+  ]
+ },
+ "Tooltip": {
+  "bare": [
+   [
+    "8345:5056",
+    "corner-md",
+    "false",
+    "unroled"
+   ],
+   [
+    "8345:5083",
+    "space-sm",
+    "false",
+    "unroled"
+   ],
+   [
+    "8345:5101",
+    "space-lg",
+    "false",
+    "unroled"
+   ],
+   [
+    "8346:5079",
+    "text:Label/md",
+    "false",
+    "unroled"
+   ]
+  ],
+  "col": 1,
+  "id": "8337:4947",
+  "mby": {
+   "accent-fill": [
+    "Button"
+   ],
+   "accent-ink": [
+    "Button"
+   ],
+   "corner-lg": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "destructive": [
+    "Button"
+   ],
+   "destructive-ink": [
+    "Button"
+   ],
+   "ink": [
+    "Button",
+    "Button>.Button/Base",
+    "Button>.Button/Base>.Button/Base/.Button Icon"
+   ],
+   "muted-fill": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "primary": [
+    "Button"
+   ],
+   "primary-fill": [
+    "Button"
+   ],
+   "primary-ink": [
+    "Button"
+   ],
+   "secondary-fill": [
+    "Button"
+   ],
+   "secondary-ink": [
+    "Button"
+   ],
+   "space-md": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "space-xs": [
+    "Button",
+    "Button>.Button/Base"
+   ],
+   "surface": [
+    "Button"
+   ]
+  },
+  "msrc": [
+   "Button"
+  ],
+  "mstyles": [],
+  "mvars": [
+   "accent-fill",
+   "accent-ink",
+   "corner-lg",
+   "destructive",
+   "destructive-ink",
+   "ink",
+   "muted-fill",
+   "primary",
+   "primary-fill",
+   "primary-ink",
+   "secondary-fill",
+   "secondary-ink",
+   "space-md",
+   "space-xs",
+   "surface"
+  ],
+  "off": [
+   "Effect/elevation/blur|reference",
+   "Effect/elevation/color|reference",
+   "Effect/elevation/spread|reference",
+   "Effect/elevation/x|reference",
+   "Effect/elevation/y|reference"
+  ],
+  "other": [
+   [
+    "eyebrow",
+    "INSTANCE",
+    "tokens"
+   ]
+  ],
+  "roled": [
+   [
+    "8344:5015",
+    "dialog-fill",
+    "chip surface + arrow fill",
+    "true",
+    "Token List"
+   ],
+   [
+    "8344:5020",
+    "dialog-ink",
+    "chip label",
+    "true",
+    "Token List"
+   ],
+   [
+    "8344:5025",
+    "border",
+    "chip border + arrow stroke",
+    "true",
+    "Token List"
+   ],
+   [
+    "8670:7403",
+    "effect:Elevation",
+    "chip drop shadow",
+    "true",
+    "Token List"
+   ]
+  ],
+  "sources": [
+   "Tooltip 4441:73",
+   "Tooltip Root 4419:2781"
+  ],
+  "styles": [
+   "effect:Elevation",
+   "text:Label/md"
+  ],
+  "unroled": 1,
+  "vars": [
+   "border",
+   "corner-md",
+   "dialog-fill",
+   "dialog-ink",
+   "space-lg",
+   "space-sm"
+  ]
+ }
+}

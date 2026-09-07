@@ -1,0 +1,841 @@
+{
+  "Checkbox": {
+    "bare": [
+      [
+        "8081:2886",
+        "corner-sm",
+        "false",
+        "unroled"
+      ]
+    ],
+    "col": 1,
+    "id": "8079:2759",
+    "mby": {},
+    "msrc": [],
+    "mstyles": [],
+    "mvars": [],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8080:11138",
+        "input-fill",
+        "resting box fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11143",
+        "input-border",
+        "resting box border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11148",
+        "primary-fill",
+        "checked / indeterminate fill + border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11153",
+        "primary-ink",
+        "check + dash glyph",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11158",
+        "destructive",
+        "invalid border \u00b7 checked-invalid fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11163",
+        "destructive-ink",
+        "checked-invalid glyph",
+        "true",
+        "Token List"
+      ],
+      [
+        "8080:11168",
+        "ring",
+        "focus border + ring/50",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "Checkbox 3795:1184"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "corner-sm",
+      "destructive",
+      "destructive-ink",
+      "input-border",
+      "input-fill",
+      "primary-fill",
+      "primary-ink",
+      "ring"
+    ]
+  },
+  "ChoiceCard": {
+    "bare": [
+      [
+        "8309:4951",
+        "corner-sm",
+        "false",
+        "unroled"
+      ],
+      [
+        "8309:4960",
+        "corner-lg",
+        "false",
+        "unroled"
+      ],
+      [
+        "8309:4969",
+        "corner-full",
+        "false",
+        "unroled"
+      ],
+      [
+        "8309:4987",
+        "space-md",
+        "false",
+        "unroled"
+      ]
+    ],
+    "col": 1,
+    "id": "8306:4777",
+    "mby": {
+      "corner-full": [
+        "Field>RadioGroupItem",
+        "Field>Switch"
+      ],
+      "corner-sm": [
+        "Field>Checkbox"
+      ],
+      "destructive-ink": [
+        "Field>Checkbox",
+        "Field>RadioGroupItem"
+      ],
+      "ink": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ],
+      "input-border": [
+        "Field",
+        "Field>Checkbox",
+        "Field>Input",
+        "Field>RadioGroupItem"
+      ],
+      "input-fill-high": [
+        "Field>Switch"
+      ],
+      "input-ink-placeholder": [
+        "Field",
+        "Field>Input"
+      ],
+      "muted": [
+        "Field"
+      ],
+      "primary-ink": [
+        "Field>Checkbox",
+        "Field>RadioGroupItem"
+      ],
+      "space-2xs": [
+        "Field"
+      ],
+      "space-xs": [
+        "Field",
+        "Field>Input"
+      ],
+      "text:Body": [
+        "Field"
+      ],
+      "text:Label/md": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ]
+    },
+    "msrc": [
+      "Field"
+    ],
+    "mstyles": [
+      "text:Body",
+      "text:Label/md"
+    ],
+    "mvars": [
+      "corner-full",
+      "corner-sm",
+      "destructive-ink",
+      "ink",
+      "input-border",
+      "input-fill-high",
+      "input-ink-placeholder",
+      "muted",
+      "primary-ink",
+      "space-2xs",
+      "space-xs"
+    ],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8308:13141",
+        "accent-fill",
+        "checked card fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13146",
+        "accent-border",
+        "checked card border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13151",
+        "accent-ink",
+        "checked card title",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13156",
+        "primary-fill",
+        "nested control checked fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13161",
+        "primary-ink",
+        "nested control checked mark",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13166",
+        "input-fill",
+        "nested control resting fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13171",
+        "input-border",
+        "nested control resting border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8308:13176",
+        "destructive",
+        "nested control invalid border + fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8672:7354",
+        "surface",
+        "resting card surface + switch thumb",
+        "true",
+        "Token List"
+      ],
+      [
+        "8672:7359",
+        "border",
+        "resting card border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8672:7364",
+        "destructive-ink",
+        "nested control invalid glyph",
+        "true",
+        "Token List"
+      ],
+      [
+        "8672:7369",
+        "ring",
+        "nested control focus border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8672:7374",
+        "input-fill-high",
+        "nested switch track fill",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "ChoiceCardCheckbox 4112:1638",
+      "ChoiceCardSwitch 4119:1750",
+      "ChoiceCardRadio 4124:1862"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "accent-border",
+      "accent-fill",
+      "accent-ink",
+      "border",
+      "corner-lg",
+      "destructive",
+      "input-fill",
+      "primary-fill",
+      "ring",
+      "space-md",
+      "surface"
+    ]
+  },
+  "FieldGroup": {
+    "bare": [
+      [
+        "8242:4397",
+        "space-md",
+        "false",
+        "unroled"
+      ],
+      [
+        "8242:4406",
+        "space-xl",
+        "false",
+        "unroled"
+      ]
+    ],
+    "col": 1,
+    "id": "8241:4228",
+    "mby": {
+      "corner-lg": [
+        "Field",
+        "Field>Input"
+      ],
+      "destructive": [
+        "Field",
+        "Field>Input"
+      ],
+      "ink": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ],
+      "input-border": [
+        "Field",
+        "Field>Input"
+      ],
+      "input-fill": [
+        "Field",
+        "Field>Input"
+      ],
+      "input-ink-placeholder": [
+        "Field",
+        "Field>Input"
+      ],
+      "muted": [
+        "Field"
+      ],
+      "ring": [
+        "Field>Input"
+      ],
+      "space-2xs": [
+        "Field"
+      ],
+      "space-xs": [
+        "Field",
+        "Field>Input"
+      ],
+      "text:Body": [
+        "Field"
+      ],
+      "text:Label/md": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ]
+    },
+    "msrc": [
+      "Field",
+      "Separator"
+    ],
+    "mstyles": [
+      "text:Body",
+      "text:Label/md"
+    ],
+    "mvars": [
+      "corner-lg",
+      "destructive",
+      "ink",
+      "input-border",
+      "input-fill",
+      "input-ink-placeholder",
+      "muted",
+      "ring",
+      "space-2xs",
+      "space-xs"
+    ],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8242:4355",
+        "border",
+        "separator line",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "FieldGroup 4285:1997"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "border",
+      "space-md",
+      "space-xl"
+    ]
+  },
+  "FieldSet": {
+    "bare": [
+      [
+        "8238:4264",
+        "space-md",
+        "false",
+        "unroled"
+      ],
+      [
+        "8238:4273",
+        "space-xl",
+        "false",
+        "unroled"
+      ]
+    ],
+    "col": 1,
+    "id": "8235:4102",
+    "mby": {
+      "corner-lg": [
+        "Field>Input",
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "destructive": [
+        "Field>Input",
+        "FieldGroup>Field"
+      ],
+      "ink": [
+        "Field>Input",
+        "Field>Label",
+        "FieldGroup",
+        "FieldGroup>Field",
+        "FieldLegend"
+      ],
+      "input-border": [
+        "Field>Input",
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "input-fill": [
+        "Field>Input",
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "input-ink-placeholder": [
+        "Field>Input",
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "muted": [
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "ring": [
+        "Field>Input"
+      ],
+      "space-2xs": [
+        "FieldGroup>Field"
+      ],
+      "space-xs": [
+        "Field>Input",
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "text:Body": [
+        "FieldGroup",
+        "FieldGroup>Field"
+      ],
+      "text:Label/md": [
+        "Field>Input",
+        "Field>Label",
+        "FieldGroup",
+        "FieldGroup>Field",
+        "FieldLegend"
+      ],
+      "text:Title": [
+        "FieldLegend"
+      ]
+    },
+    "msrc": [
+      "Field",
+      "FieldGroup",
+      "FieldLegend"
+    ],
+    "mstyles": [
+      "text:Body",
+      "text:Label/md",
+      "text:Title"
+    ],
+    "mvars": [
+      "corner-lg",
+      "destructive",
+      "ink",
+      "input-border",
+      "input-fill",
+      "input-ink-placeholder",
+      "muted",
+      "ring",
+      "space-2xs",
+      "space-xs"
+    ],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8687:6948",
+        "border",
+        "nested separator line",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "FieldSet 3739:1026"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "border",
+      "space-md",
+      "space-xl"
+    ]
+  },
+  "RadioGroup": {
+    "bare": [
+      [
+        "8301:4797",
+        "space-md",
+        "false",
+        "unroled"
+      ]
+    ],
+    "col": 1,
+    "id": "8298:4626",
+    "mby": {
+      "corner-lg": [
+        "Field",
+        "Field>Input"
+      ],
+      "ink": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ],
+      "input-ink-placeholder": [
+        "Field",
+        "Field>Input"
+      ],
+      "muted": [
+        "Field"
+      ],
+      "space-2xs": [
+        "Field"
+      ],
+      "space-xs": [
+        "Field",
+        "Field>Input"
+      ],
+      "text:Body": [
+        "Field"
+      ],
+      "text:Label/md": [
+        "Field",
+        "Field>Input",
+        "Field>Label"
+      ]
+    },
+    "msrc": [
+      "Field"
+    ],
+    "mstyles": [
+      "text:Body",
+      "text:Label/md"
+    ],
+    "mvars": [
+      "corner-lg",
+      "ink",
+      "input-ink-placeholder",
+      "muted",
+      "space-2xs",
+      "space-xs"
+    ],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8301:4702",
+        "input-fill",
+        "resting circle fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4707",
+        "input-border",
+        "resting circle border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4712",
+        "primary-fill",
+        "checked circle fill + border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4717",
+        "primary-ink",
+        "checked dot",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4722",
+        "destructive",
+        "invalid border \u00b7 checked-invalid fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4727",
+        "destructive-ink",
+        "checked-invalid dot",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4732",
+        "ring",
+        "focus border + ring/50",
+        "true",
+        "Token List"
+      ],
+      [
+        "8301:4737",
+        "corner-full",
+        "circle radius",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "RadioGroupItem 3852:1206",
+      "RadioGroup 4006:1499"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "corner-full",
+      "destructive",
+      "destructive-ink",
+      "input-border",
+      "input-fill",
+      "primary-fill",
+      "primary-ink",
+      "ring",
+      "space-md"
+    ]
+  },
+  "Slider": {
+    "bare": [],
+    "col": 1,
+    "id": "8291:4516",
+    "mby": {},
+    "msrc": [],
+    "mstyles": [],
+    "mvars": [],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8294:12874",
+        "input-fill-high",
+        "track rail fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8294:12879",
+        "primary-fill",
+        "range fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8294:12884",
+        "surface",
+        "thumb surface",
+        "true",
+        "Token List"
+      ],
+      [
+        "8294:12889",
+        "input-border",
+        "thumb border",
+        "true",
+        "Token List"
+      ],
+      [
+        "8294:12894",
+        "corner-full",
+        "track / thumb radius",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "Slider 4351:2225"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "corner-full",
+      "input-border",
+      "input-fill-high",
+      "primary-fill",
+      "surface"
+    ]
+  },
+  "Switch": {
+    "bare": [],
+    "col": 1,
+    "id": "8284:4385",
+    "mby": {},
+    "msrc": [],
+    "mstyles": [],
+    "mvars": [],
+    "off": [],
+    "other": [
+      [
+        "eyebrow",
+        "INSTANCE",
+        "tokens"
+      ]
+    ],
+    "roled": [
+      [
+        "8287:12741",
+        "input-fill-high",
+        "unchecked track fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8287:12746",
+        "primary-fill",
+        "checked track fill",
+        "true",
+        "Token List"
+      ],
+      [
+        "8287:12751",
+        "surface",
+        "thumb surface",
+        "true",
+        "Token List"
+      ],
+      [
+        "8287:12756",
+        "destructive",
+        "invalid border \u00b7 checked-invalid track",
+        "true",
+        "Token List"
+      ],
+      [
+        "8287:12761",
+        "ring",
+        "focus border + ring/50",
+        "true",
+        "Token List"
+      ],
+      [
+        "8287:12766",
+        "corner-full",
+        "track / thumb radius",
+        "true",
+        "Token List"
+      ]
+    ],
+    "sources": [
+      "Switch 3839:2"
+    ],
+    "styles": [],
+    "unroled": 1,
+    "vars": [
+      "corner-full",
+      "destructive",
+      "input-fill-high",
+      "primary-fill",
+      "ring",
+      "surface"
+    ]
+  }
+}

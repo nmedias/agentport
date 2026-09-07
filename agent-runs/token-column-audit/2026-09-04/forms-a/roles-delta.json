@@ -1,0 +1,66 @@
+{
+  "Input": {
+    "roles": {
+      "input-fill": "resting field surface",
+      "input-border": "resting field border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "ink": "entered value text"
+    }
+  },
+  "Textarea": {
+    "roles": {
+      "input-fill": "resting field surface",
+      "input-border": "resting field border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "ink": "entered text"
+    }
+  },
+  "InputGroup": {
+    "roles": {
+      "input-fill": "group surface",
+      "input-border": "group border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "muted": "addon icon + prefix text",
+      "ink": "entered text + addon button label"
+    }
+  },
+  "Select": {
+    "roles": {
+      "input-fill": "trigger resting fill",
+      "input-border": "trigger resting border",
+      "destructive": "trigger invalid border + ring",
+      "ring": "trigger focus border + ring/50",
+      "dialog-fill": "content surface",
+      "border": "content border",
+      "accent-fill": "item highlight fill",
+      "accent-ink": "item highlight label",
+      "muted": "group heading + chevron icon",
+      "ink": "trigger value + item label",
+      "effect:Elevation": "dropdown elevation"
+    }
+  },
+  "Label": {
+    "roles": {
+      "ink": "caption text"
+    }
+  },
+  "Field": {
+    "roles": {
+      "input-fill": "nested control fill",
+      "input-border": "nested control border",
+      "destructive": "error text + invalid control",
+      "muted": "description text"
+    }
+  },
+  "FieldLegend": {
+    "roles": {
+      "ink": "legend / label text"
+    }
+  }
+}

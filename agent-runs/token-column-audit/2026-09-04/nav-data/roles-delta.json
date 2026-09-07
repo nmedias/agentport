@@ -1,0 +1,17 @@
+{
+  "Separator": {
+    "roles": {
+      "border": "divider line"
+    }
+  },
+  "Item": {
+    "roles": {
+      "ink": "title text",
+      "muted": "description text",
+      "muted-fill": "muted variant fill + link hover tint",
+      "border": "outline variant border",
+      "muted-ink": "description text + glyph on the muted-fill variant",
+      "secondary-fill": "image placeholder fill"
+    }
+  }
+}

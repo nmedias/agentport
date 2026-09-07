@@ -1,0 +1,2136 @@
+{
+ "decls": {
+  "badgeVariants": {
+   "file": "libs/ui/src/components/ui/badge/badge.tsx",
+   "classes": [
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-destructive",
+    "bg-primary-fill",
+    "bg-secondary-fill",
+    "border",
+    "border-border",
+    "border-transparent",
+    "corner-full",
+    "default",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-destructive/20",
+    "focus-visible:ring-ring/50",
+    "gap-xs",
+    "group/badge",
+    "h-5",
+    "has-data-[icon=inline-end]:pr-sm",
+    "has-data-[icon=inline-start]:pl-sm",
+    "hover:bg-muted-fill",
+    "hover:text-muted-ink",
+    "hover:underline",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "overflow-hidden",
+    "px-md",
+    "py-2xs",
+    "shrink-0",
+    "text-destructive-ink",
+    "text-format-label-md",
+    "text-ink",
+    "text-primary",
+    "text-primary-ink",
+    "text-secondary-ink",
+    "transition-all",
+    "underline-offset-4",
+    "w-fit",
+    "whitespace-nowrap"
+   ]
+  },
+  "Badge": {
+   "file": "libs/ui/src/components/ui/badge/badge.tsx",
+   "classes": [
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "badge",
+    "bg-destructive",
+    "bg-primary-fill",
+    "bg-secondary-fill",
+    "border",
+    "border-border",
+    "border-transparent",
+    "corner-full",
+    "default",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-destructive/20",
+    "focus-visible:ring-ring/50",
+    "gap-xs",
+    "group/badge",
+    "h-5",
+    "has-data-[icon=inline-end]:pr-sm",
+    "has-data-[icon=inline-start]:pl-sm",
+    "hover:bg-muted-fill",
+    "hover:text-muted-ink",
+    "hover:underline",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "overflow-hidden",
+    "px-md",
+    "py-2xs",
+    "shrink-0",
+    "span",
+    "text-destructive-ink",
+    "text-format-label-md",
+    "text-ink",
+    "text-primary",
+    "text-primary-ink",
+    "text-secondary-ink",
+    "transition-all",
+    "underline-offset-4",
+    "w-fit",
+    "whitespace-nowrap"
+   ]
+  },
+  "Breadcrumb": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb",
+    "nav"
+   ]
+  },
+  "BreadcrumbList": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-list",
+    "flex",
+    "flex-wrap",
+    "gap-sm",
+    "items-center",
+    "ol",
+    "text-format-body",
+    "text-muted",
+    "wrap-break-word"
+   ]
+  },
+  "BreadcrumbItem": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-item",
+    "gap-xs",
+    "inline-flex",
+    "items-center",
+    "li"
+   ]
+  },
+  "BreadcrumbLink": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-link",
+    "hover:text-ink",
+    "transition-colors"
+   ]
+  },
+  "BreadcrumbPage": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-page",
+    "link",
+    "page",
+    "span",
+    "text-ink",
+    "true"
+   ]
+  },
+  "BreadcrumbSeparator": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-separator",
+    "li",
+    "presentation",
+    "true"
+   ]
+  },
+  "BreadcrumbEllipsis": {
+   "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+   "classes": [
+    "breadcrumb-ellipsis",
+    "flex",
+    "items-center",
+    "justify-center",
+    "presentation",
+    "size-5",
+    "span",
+    "sr-only",
+    "true"
+   ]
+  },
+  "buttonVariants": {
+   "file": "libs/ui/src/components/ui/button/button.tsx",
+   "classes": [
+    "active:bg-accent-fill",
+    "active:bg-destructive/90",
+    "active:bg-primary-fill/90",
+    "active:bg-secondary-fill/80",
+    "active:text-accent-ink",
+    "active:translate-y-px",
+    "active:underline",
+    "aria-expanded:bg-accent-fill",
+    "aria-expanded:text-accent-ink",
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-destructive",
+    "bg-primary-fill",
+    "bg-secondary-fill",
+    "bg-surface",
+    "border",
+    "corner-lg",
+    "corner-md",
+    "default",
+    "disabled:opacity-50",
+    "disabled:pointer-events-none",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-destructive/20",
+    "focus-visible:ring-ring/50",
+    "gap-sm",
+    "gap-xs",
+    "h-6",
+    "h-7",
+    "h-8",
+    "h-9",
+    "has-[>svg]:px-sm",
+    "hover:bg-accent-fill",
+    "hover:bg-destructive/90",
+    "hover:bg-primary-fill/90",
+    "hover:bg-secondary-fill/80",
+    "hover:text-accent-ink",
+    "hover:underline",
+    "icon-lg",
+    "icon-sm",
+    "icon-xs",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "outline-none",
+    "px-md",
+    "px-sm",
+    "shrink-0",
+    "size-6",
+    "size-7",
+    "size-8",
+    "size-9",
+    "text-destructive-ink",
+    "text-format-label-md",
+    "text-primary",
+    "text-primary-ink",
+    "text-secondary-ink",
+    "transition-all",
+    "underline-offset-4",
+    "whitespace-nowrap"
+   ]
+  },
+  "Button": {
+   "file": "libs/ui/src/components/ui/button/button.tsx",
+   "classes": [
+    "active:bg-accent-fill",
+    "active:bg-destructive/90",
+    "active:bg-primary-fill/90",
+    "active:bg-secondary-fill/80",
+    "active:text-accent-ink",
+    "active:translate-y-px",
+    "active:underline",
+    "aria-expanded:bg-accent-fill",
+    "aria-expanded:text-accent-ink",
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-destructive",
+    "bg-primary-fill",
+    "bg-secondary-fill",
+    "bg-surface",
+    "border",
+    "button",
+    "corner-lg",
+    "corner-md",
+    "default",
+    "disabled:opacity-50",
+    "disabled:pointer-events-none",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-destructive/20",
+    "focus-visible:ring-ring/50",
+    "gap-sm",
+    "gap-xs",
+    "h-6",
+    "h-7",
+    "h-8",
+    "h-9",
+    "has-[>svg]:px-sm",
+    "hover:bg-accent-fill",
+    "hover:bg-destructive/90",
+    "hover:bg-primary-fill/90",
+    "hover:bg-secondary-fill/80",
+    "hover:text-accent-ink",
+    "hover:underline",
+    "icon",
+    "icon-",
+    "icon-lg",
+    "icon-sm",
+    "icon-xs",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "outline-none",
+    "px-md",
+    "px-sm",
+    "shrink-0",
+    "size-6",
+    "size-7",
+    "size-8",
+    "size-9",
+    "text-destructive-ink",
+    "text-format-label-md",
+    "text-primary",
+    "text-primary-ink",
+    "text-secondary-ink",
+    "transition-all",
+    "underline-offset-4",
+    "whitespace-nowrap"
+   ]
+  },
+  "Checkbox": {
+   "file": "libs/ui/src/components/ui/checkbox/checkbox.tsx",
+   "classes": [
+    "after:-inset-x-3",
+    "after:-inset-y-2",
+    "after:absolute",
+    "aria-invalid:aria-checked:bg-destructive",
+    "aria-invalid:aria-checked:border-destructive",
+    "aria-invalid:aria-checked:text-destructive-ink",
+    "aria-invalid:border-destructive",
+    "aria-invalid:data-[state=indeterminate]:bg-destructive",
+    "aria-invalid:data-[state=indeterminate]:border-destructive",
+    "aria-invalid:data-[state=indeterminate]:text-destructive-ink",
+    "aria-invalid:ring-destructive/20",
+    "bg-input-fill",
+    "border",
+    "border-input-border",
+    "checkbox",
+    "checkbox-indicator",
+    "corner-sm",
+    "data-[state=indeterminate]:bg-primary-fill",
+    "data-[state=indeterminate]:border-primary-fill",
+    "data-[state=indeterminate]:text-primary-ink",
+    "data-checked:bg-primary-fill",
+    "data-checked:border-primary-fill",
+    "data-checked:text-primary-ink",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "flex",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "grid",
+    "group-has-disabled/field:opacity-50",
+    "hidden",
+    "items-center",
+    "justify-center",
+    "outline-none",
+    "peer",
+    "place-content-center",
+    "relative",
+    "shrink-0",
+    "size-4",
+    "text-current",
+    "transition-colors",
+    "transition-none"
+   ]
+  },
+  "ChoiceCardCheckbox": {
+   "file": "libs/ui/src/components/ui/choice-card/choice-card-checkbox/choice-card-checkbox.tsx",
+   "classes": [
+    "-title",
+    "choice-card-checkbox"
+   ]
+  },
+  "ChoiceCardRadio": {
+   "file": "libs/ui/src/components/ui/choice-card/choice-card-radio/choice-card-radio.tsx",
+   "classes": [
+    "-title",
+    "choice-card-radio"
+   ]
+  },
+  "ChoiceCardShell": {
+   "file": "libs/ui/src/components/ui/choice-card/choice-card-shell/choice-card-shell.tsx",
+   "classes": [
+    "-title",
+    "horizontal"
+   ]
+  },
+  "ChoiceCardSwitch": {
+   "file": "libs/ui/src/components/ui/choice-card/choice-card-switch/choice-card-switch.tsx",
+   "classes": [
+    "-title",
+    "choice-card-switch"
+   ]
+  },
+  "CommandVariantContext": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "default"
+   ]
+  },
+  "commandVariants": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "border",
+    "border-[1.5px]",
+    "corner-md",
+    "corner-xl",
+    "default",
+    "flex",
+    "flex-col",
+    "overflow-hidden",
+    "p-xs",
+    "shadow-elevation",
+    "size-full",
+    "text-dialog-ink"
+   ]
+  },
+  "Command": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "border",
+    "border-[1.5px]",
+    "command",
+    "corner-md",
+    "corner-xl",
+    "default",
+    "flex",
+    "flex-col",
+    "overflow-hidden",
+    "p-xs",
+    "shadow-elevation",
+    "size-full",
+    "text-dialog-ink"
+   ]
+  },
+  "CommandDialog": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "-translate-y-1/2",
+    "Command",
+    "Palette",
+    "Search",
+    "bg-dialog-fill",
+    "border",
+    "border-0",
+    "border-[1.5px]",
+    "command",
+    "corner-md",
+    "corner-xl",
+    "default",
+    "flex",
+    "flex-col",
+    "for",
+    "overflow-hidden",
+    "p-0",
+    "p-xs",
+    "palette",
+    "shadow-elevation",
+    "shadow-none",
+    "size-full",
+    "sr-only",
+    "text-dialog-ink",
+    "to",
+    "top-1/2"
+   ]
+  },
+  "CommandInput": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "bg-card-fill",
+    "bg-primary",
+    "bg-transparent",
+    "border-b",
+    "command-input",
+    "command-input-wrapper",
+    "default",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "flex",
+    "flex-1",
+    "gap-lg",
+    "h-[18px]",
+    "items-center",
+    "min-w-0",
+    "outline-hidden",
+    "p-xl",
+    "p-xs",
+    "palette",
+    "pb-0",
+    "placeholder:text-input-ink-placeholder",
+    "shadow-glow",
+    "shrink-0",
+    "size-4",
+    "text-format-data-lg",
+    "text-format-label-md",
+    "text-ink",
+    "true",
+    "w-[2.5px]",
+    "w-full"
+   ]
+  },
+  "CommandList": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "command-list",
+    "default",
+    "max-h-96",
+    "no-scrollbar",
+    "outline-none",
+    "overflow-x-hidden",
+    "overflow-y-auto",
+    "palette",
+    "py-md",
+    "scroll-py-1"
+   ]
+  },
+  "CommandEmpty": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "command-empty",
+    "div",
+    "option",
+    "py-2xl",
+    "text-center",
+    "text-format-body",
+    "text-muted"
+   ]
+  },
+  "CommandGroup": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "command-group",
+    "default",
+    "overflow-hidden",
+    "p-xs",
+    "palette",
+    "px-md",
+    "text-ink"
+   ]
+  },
+  "CommandSeparator": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "-mx-xs",
+    "bg-border",
+    "command-separator",
+    "default",
+    "flex",
+    "flex-1",
+    "gap-md",
+    "h-px",
+    "items-center",
+    "palette",
+    "pb-sm",
+    "presentation",
+    "pt-lg",
+    "px-xl",
+    "text-format-eyebrow",
+    "text-muted",
+    "uppercase"
+   ]
+  },
+  "CommandItem": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "command-item",
+    "corner-sm",
+    "cursor-default",
+    "data-[disabled=true]:opacity-50",
+    "data-[disabled=true]:pointer-events-none",
+    "data-selected:*:[svg]:text-accent-ink",
+    "data-selected:bg-accent-fill",
+    "data-selected:text-accent-ink",
+    "flex",
+    "gap-md",
+    "group-data-[checked=true]/command-item:opacity-100",
+    "group-has-data-[slot=command-shortcut]/command-item:hidden",
+    "group/command-item",
+    "in-data-[slot=dialog-content]:corner-lg!",
+    "items-center",
+    "ml-auto",
+    "opacity-0",
+    "outline-hidden",
+    "px-md",
+    "py-sm",
+    "relative",
+    "select-none",
+    "text-format-body"
+   ]
+  },
+  "CommandShortcut": {
+   "file": "libs/ui/src/components/ui/command/command.tsx",
+   "classes": [
+    "command-shortcut",
+    "group-data-selected/command-item:text-accent-ink",
+    "ml-auto",
+    "span",
+    "text-format-kbd",
+    "text-muted"
+   ]
+  },
+  "Dialog": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog"
+   ]
+  },
+  "DialogTrigger": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-trigger"
+   ]
+  },
+  "DialogPortal": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-portal"
+   ]
+  },
+  "DialogClose": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-close"
+   ]
+  },
+  "DialogOverlay": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "bg-scrim",
+    "data-closed:animate-out",
+    "data-closed:fade-out-0",
+    "data-open:animate-in",
+    "data-open:fade-in-0",
+    "dialog-overlay",
+    "duration-100",
+    "fixed",
+    "inset-0",
+    "isolate",
+    "supports-backdrop-filter:backdrop-blur-xs",
+    "z-50"
+   ]
+  },
+  "DialogContent": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "-translate-x-1/2",
+    "-translate-y-1/2",
+    "Close",
+    "absolute",
+    "bg-dialog-fill",
+    "bg-scrim",
+    "border",
+    "corner-xl",
+    "data-closed:animate-out",
+    "data-closed:fade-out-0",
+    "data-closed:zoom-out-95",
+    "data-open:animate-in",
+    "data-open:fade-in-0",
+    "data-open:zoom-in-95",
+    "dialog-close",
+    "dialog-content",
+    "dialog-overlay",
+    "dialog-portal",
+    "duration-100",
+    "fixed",
+    "gap-xl",
+    "ghost",
+    "grid",
+    "inset-0",
+    "isolate",
+    "left-1/2",
+    "max-w-[calc(100%-2rem)]",
+    "outline-none",
+    "p-xl",
+    "right-2",
+    "shadow-elevation",
+    "sm",
+    "sm:max-w-sm",
+    "sr-only",
+    "supports-backdrop-filter:backdrop-blur-xs",
+    "text-dialog-ink",
+    "text-format-body",
+    "top-1/2",
+    "top-2",
+    "w-full",
+    "z-50"
+   ]
+  },
+  "DialogHeader": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-header",
+    "div",
+    "flex",
+    "flex-col",
+    "gap-md"
+   ]
+  },
+  "DialogFooter": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "-mb-xl",
+    "-mx-xl",
+    "bg-muted-fill/50",
+    "border-t",
+    "corner-b-xl",
+    "dialog-footer",
+    "flex",
+    "flex-col-reverse",
+    "gap-md",
+    "outline",
+    "p-xl",
+    "sm:flex-row",
+    "sm:justify-end"
+   ]
+  },
+  "DialogTitle": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-title",
+    "text-format-title"
+   ]
+  },
+  "DialogDescription": {
+   "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+   "classes": [
+    "dialog-description",
+    "text-format-body",
+    "text-muted"
+   ]
+  },
+  "FieldSet": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "field-set",
+    "fieldset",
+    "flex",
+    "flex-col",
+    "gap-xl",
+    "has-[>[data-slot=checkbox-group]]:gap-lg",
+    "has-[>[data-slot=radio-group]]:gap-lg"
+   ]
+  },
+  "FieldLegend": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "data-[variant=label]:text-format-label-md",
+    "data-[variant=legend]:text-format-title",
+    "field-legend",
+    "legend",
+    "mb-sm"
+   ]
+  },
+  "fieldGroupVariants": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "data-[slot=checkbox-group]:gap-lg",
+    "flex",
+    "flex-col",
+    "flex-row",
+    "flex-wrap",
+    "gap-xl",
+    "group/field-group",
+    "items-center",
+    "vertical",
+    "w-full"
+   ]
+  },
+  "FieldGroup": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "data-[slot=checkbox-group]:gap-lg",
+    "field-group",
+    "flex",
+    "flex-col",
+    "flex-row",
+    "flex-wrap",
+    "gap-xl",
+    "group/field-group",
+    "items-center",
+    "vertical",
+    "w-full"
+   ]
+  },
+  "fieldVariants": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "flex",
+    "flex-col",
+    "flex-row",
+    "gap-md",
+    "group/field",
+    "has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+    "has-[>[data-slot=field-content]]:items-start",
+    "items-center",
+    "vertical",
+    "w-full"
+   ]
+  },
+  "Field": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "field",
+    "flex",
+    "flex-col",
+    "flex-row",
+    "gap-md",
+    "group",
+    "group/field",
+    "has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px",
+    "has-[>[data-slot=field-content]]:items-start",
+    "items-center",
+    "vertical",
+    "w-full"
+   ]
+  },
+  "FieldContent": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "div",
+    "field-content",
+    "flex",
+    "flex-1",
+    "flex-col",
+    "gap-2xs",
+    "group/field-content"
+   ]
+  },
+  "FieldLabel": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "field-label",
+    "flex",
+    "gap-md",
+    "group-data-[disabled=true]/field:opacity-50",
+    "group/field-label",
+    "has-[>[data-slot=field]]:border",
+    "has-[>[data-slot=field]]:corner-lg",
+    "has-[>[data-slot=field]]:flex-col",
+    "has-[>[data-slot=field]]:w-full",
+    "has-data-checked:bg-accent-fill",
+    "has-data-checked:border-accent-border",
+    "peer/field-label",
+    "w-fit"
+   ]
+  },
+  "FieldTitle": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "div",
+    "field-title",
+    "flex",
+    "gap-md",
+    "group-data-[disabled=true]/field:opacity-50",
+    "group-has-data-checked/field-label:text-accent-ink",
+    "items-center",
+    "text-format-label-md",
+    "w-fit"
+   ]
+  },
+  "FieldDescription": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "field-description",
+    "group-has-data-horizontal/field:text-balance",
+    "last:mt-0",
+    "nth-last-2:-mt-xs",
+    "text-format-body",
+    "text-left",
+    "text-muted"
+   ]
+  },
+  "FieldSeparator": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "-my-md",
+    "absolute",
+    "bg-surface",
+    "block",
+    "div",
+    "field-separator",
+    "field-separator-content",
+    "group-data-[variant=outline]/field-group:-mb-md",
+    "h-5",
+    "inset-0",
+    "mx-auto",
+    "px-md",
+    "relative",
+    "text-format-body",
+    "text-muted",
+    "top-1/2",
+    "w-fit"
+   ]
+  },
+  "FieldError": {
+   "file": "libs/ui/src/components/ui/field/field.tsx",
+   "classes": [
+    "alert",
+    "field-error",
+    "flex",
+    "flex-col",
+    "gap-xs",
+    "list-disc",
+    "ml-xl",
+    "text-destructive",
+    "text-format-body"
+   ]
+  },
+  "Input": {
+   "file": "libs/ui/src/components/ui/input/input.tsx",
+   "classes": [
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-input-fill",
+    "border",
+    "border-input-border",
+    "corner-lg",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "disabled:pointer-events-none",
+    "file:bg-transparent",
+    "file:border-0",
+    "file:h-6",
+    "file:inline-flex",
+    "file:text-format-label-md",
+    "file:text-ink",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "h-8",
+    "input",
+    "min-w-0",
+    "outline-none",
+    "placeholder:text-input-ink-placeholder",
+    "px-md",
+    "py-xs",
+    "selection:bg-primary-fill",
+    "selection:text-primary-ink",
+    "text-format-label-md",
+    "transition-[color,box-shadow]",
+    "w-full"
+   ]
+  },
+  "InputGroup": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "bg-input-fill",
+    "border",
+    "border-input-border",
+    "corner-lg",
+    "div",
+    "flex",
+    "group",
+    "group/input-group",
+    "h-8",
+    "has-[:disabled]:opacity-50",
+    "has-[>[data-align=block-end]]:[&>input]:pt-lg",
+    "has-[>[data-align=block-end]]:flex-col",
+    "has-[>[data-align=block-end]]:h-auto",
+    "has-[>[data-align=block-start]]:[&>input]:pb-lg",
+    "has-[>[data-align=block-start]]:flex-col",
+    "has-[>[data-align=block-start]]:h-auto",
+    "has-[>[data-align=inline-end]]:[&>input]:pr-sm",
+    "has-[>[data-align=inline-start]]:[&>input]:pl-sm",
+    "has-[>textarea]:h-auto",
+    "has-[[data-slot=input-group-control]:focus-visible]:border-ring",
+    "has-[[data-slot=input-group-control]:focus-visible]:ring-[3px]",
+    "has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50",
+    "has-[[data-slot][aria-invalid=true]]:border-destructive",
+    "has-[[data-slot][aria-invalid=true]]:ring-[3px]",
+    "has-[[data-slot][aria-invalid=true]]:ring-destructive/20",
+    "input-group",
+    "items-center",
+    "min-w-0",
+    "outline-none",
+    "relative",
+    "transition-[color,box-shadow]",
+    "w-full"
+   ]
+  },
+  "inputGroupAddonVariants": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "block-end",
+    "block-start",
+    "cursor-text",
+    "flex",
+    "gap-md",
+    "group-data-[disabled=true]/input-group:opacity-50",
+    "group-has-[>input]/input-group:pb-md",
+    "group-has-[>input]/input-group:pt-md",
+    "h-auto",
+    "has-[>button]:ml-[-0.3rem]",
+    "has-[>button]:mr-[-0.3rem]",
+    "has-[>kbd]:ml-[-0.15rem]",
+    "has-[>kbd]:mr-[-0.15rem]",
+    "inline-end",
+    "inline-start",
+    "items-center",
+    "justify-center",
+    "justify-start",
+    "order-first",
+    "order-last",
+    "pb-md",
+    "pl-md",
+    "pr-md",
+    "pt-md",
+    "px-md",
+    "py-sm",
+    "select-none",
+    "text-format-label-md",
+    "text-muted",
+    "w-full"
+   ]
+  },
+  "InputGroupAddon": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "block-end",
+    "block-start",
+    "button",
+    "cursor-text",
+    "flex",
+    "gap-md",
+    "group",
+    "group-data-[disabled=true]/input-group:opacity-50",
+    "group-has-[>input]/input-group:pb-md",
+    "group-has-[>input]/input-group:pt-md",
+    "h-auto",
+    "has-[>button]:ml-[-0.3rem]",
+    "has-[>button]:mr-[-0.3rem]",
+    "has-[>kbd]:ml-[-0.15rem]",
+    "has-[>kbd]:mr-[-0.15rem]",
+    "inline-end",
+    "inline-start",
+    "input",
+    "input-group-addon",
+    "items-center",
+    "justify-center",
+    "justify-start",
+    "order-first",
+    "order-last",
+    "pb-md",
+    "pl-md",
+    "pr-md",
+    "pt-md",
+    "px-md",
+    "py-sm",
+    "select-none",
+    "text-format-label-md",
+    "text-muted",
+    "w-full"
+   ]
+  },
+  "inputGroupButtonVariants": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "corner-sm",
+    "icon-sm",
+    "icon-xs",
+    "xs"
+   ]
+  },
+  "igButtonToButton": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "default",
+    "icon-sm",
+    "icon-xs",
+    "sm",
+    "xs"
+   ]
+  },
+  "InputGroupButton": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "button",
+    "corner-sm",
+    "default",
+    "ghost",
+    "icon-sm",
+    "icon-xs",
+    "sm",
+    "xs"
+   ]
+  },
+  "InputGroupText": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "flex",
+    "gap-md",
+    "items-center",
+    "span",
+    "text-format-body",
+    "text-muted"
+   ]
+  },
+  "InputGroupInput": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "aria-invalid:ring-0",
+    "bg-transparent",
+    "border-0",
+    "corner-none",
+    "disabled:bg-transparent",
+    "flex-1",
+    "focus-visible:ring-0",
+    "input",
+    "input-group-control",
+    "ring-0"
+   ]
+  },
+  "InputGroupTextarea": {
+   "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+   "classes": [
+    "aria-invalid:ring-0",
+    "bg-transparent",
+    "border-0",
+    "corner-none",
+    "disabled:bg-transparent",
+    "flex-1",
+    "focus-visible:ring-0",
+    "input-group-control",
+    "py-md",
+    "resize-none",
+    "ring-0",
+    "textarea"
+   ]
+  },
+  "ItemGroup": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "div",
+    "flex",
+    "flex-col",
+    "gap-xl",
+    "group/item-group",
+    "has-data-[size=sm]:gap-lg",
+    "has-data-[size=xs]:gap-md",
+    "item-group",
+    "list",
+    "w-full"
+   ]
+  },
+  "ItemSeparator": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "horizontal",
+    "item-separator",
+    "my-md"
+   ]
+  },
+  "itemVariants": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "bg-muted-fill/50",
+    "border",
+    "border-border",
+    "border-transparent",
+    "corner-lg",
+    "default",
+    "duration-100",
+    "flex",
+    "flex-wrap",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "gap-lg",
+    "gap-md",
+    "group/item",
+    "in-data-[slot=dropdown-menu-content]:p-0",
+    "items-center",
+    "outline-none",
+    "px-lg",
+    "px-md",
+    "py-lg",
+    "py-md",
+    "text-format-body",
+    "transition-colors",
+    "w-full"
+   ]
+  },
+  "Item": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "bg-muted-fill/50",
+    "border",
+    "border-border",
+    "border-transparent",
+    "corner-lg",
+    "default",
+    "div",
+    "duration-100",
+    "flex",
+    "flex-wrap",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "gap-lg",
+    "gap-md",
+    "group/item",
+    "in-data-[slot=dropdown-menu-content]:p-0",
+    "item",
+    "items-center",
+    "outline-none",
+    "px-lg",
+    "px-md",
+    "py-lg",
+    "py-md",
+    "text-format-body",
+    "transition-colors",
+    "w-full"
+   ]
+  },
+  "itemMediaVariants": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "bg-transparent",
+    "corner-sm",
+    "default",
+    "flex",
+    "gap-md",
+    "group-data-[size=sm]/item:size-8",
+    "group-data-[size=xs]/item:size-6",
+    "group-has-data-[slot=item-description]/item:self-start",
+    "group-has-data-[slot=item-description]/item:translate-y-0.5",
+    "items-center",
+    "justify-center",
+    "overflow-hidden",
+    "shrink-0",
+    "size-10"
+   ]
+  },
+  "ItemMedia": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "bg-transparent",
+    "corner-sm",
+    "default",
+    "flex",
+    "gap-md",
+    "group-data-[size=sm]/item:size-8",
+    "group-data-[size=xs]/item:size-6",
+    "group-has-data-[slot=item-description]/item:self-start",
+    "group-has-data-[slot=item-description]/item:translate-y-0.5",
+    "item-media",
+    "items-center",
+    "justify-center",
+    "overflow-hidden",
+    "shrink-0",
+    "size-10"
+   ]
+  },
+  "ItemContent": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "div",
+    "flex",
+    "flex-1",
+    "flex-col",
+    "gap-xs",
+    "group-data-[size=xs]/item:gap-0",
+    "item-content"
+   ]
+  },
+  "ItemTitle": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "div",
+    "flex",
+    "gap-md",
+    "item-title",
+    "items-center",
+    "line-clamp-1",
+    "text-format-label-md",
+    "underline-offset-4",
+    "w-fit"
+   ]
+  },
+  "ItemDescription": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "item-description",
+    "line-clamp-2",
+    "text-format-body",
+    "text-left",
+    "text-muted"
+   ]
+  },
+  "ItemActions": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "div",
+    "flex",
+    "gap-md",
+    "item-actions",
+    "items-center"
+   ]
+  },
+  "ItemHeader": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "basis-full",
+    "div",
+    "flex",
+    "gap-md",
+    "item-header",
+    "items-center",
+    "justify-between"
+   ]
+  },
+  "ItemFooter": {
+   "file": "libs/ui/src/components/ui/item/item.tsx",
+   "classes": [
+    "basis-full",
+    "div",
+    "flex",
+    "gap-md",
+    "item-footer",
+    "items-center",
+    "justify-between"
+   ]
+  },
+  "kbdVariants": {
+   "file": "libs/ui/src/components/ui/kbd/kbd.tsx",
+   "classes": [
+    "bg-inverse-fill",
+    "bg-muted-fill",
+    "corner-sm",
+    "gap-xs",
+    "h-5",
+    "high",
+    "in-data-[slot=tooltip-content]:bg-muted-fill",
+    "in-data-[slot=tooltip-content]:text-ink",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "min-w-5",
+    "pointer-events-none",
+    "px-xs",
+    "select-none",
+    "text-format-kbd",
+    "text-inverse-ink",
+    "text-muted-ink",
+    "w-fit"
+   ]
+  },
+  "Kbd": {
+   "file": "libs/ui/src/components/ui/kbd/kbd.tsx",
+   "classes": [
+    "bg-inverse-fill",
+    "bg-muted-fill",
+    "corner-sm",
+    "gap-xs",
+    "h-5",
+    "high",
+    "in-data-[slot=tooltip-content]:bg-muted-fill",
+    "in-data-[slot=tooltip-content]:text-ink",
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "kbd",
+    "min-w-5",
+    "pointer-events-none",
+    "px-xs",
+    "select-none",
+    "text-format-kbd",
+    "text-inverse-ink",
+    "text-muted-ink",
+    "w-fit"
+   ]
+  },
+  "KbdGroup": {
+   "file": "libs/ui/src/components/ui/kbd/kbd.tsx",
+   "classes": [
+    "gap-xs",
+    "inline-flex",
+    "items-center",
+    "kbd",
+    "kbd-group"
+   ]
+  },
+  "Label": {
+   "file": "libs/ui/src/components/ui/label/label.tsx",
+   "classes": [
+    "flex",
+    "gap-md",
+    "group-data-[disabled=true]:opacity-50",
+    "group-data-[disabled=true]:pointer-events-none",
+    "items-center",
+    "label",
+    "peer-disabled:cursor-not-allowed",
+    "peer-disabled:opacity-50",
+    "select-none",
+    "text-format-label-md"
+   ]
+  },
+  "Popover": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "popover"
+   ]
+  },
+  "PopoverTrigger": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "popover-trigger"
+   ]
+  },
+  "PopoverContent": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "border",
+    "center",
+    "corner-lg",
+    "data-[side=bottom]:slide-in-from-top-2",
+    "data-[side=left]:slide-in-from-right-2",
+    "data-[side=right]:slide-in-from-left-2",
+    "data-[side=top]:slide-in-from-bottom-2",
+    "data-closed:animate-out",
+    "data-closed:fade-out-0",
+    "data-closed:zoom-out-95",
+    "data-open:animate-in",
+    "data-open:fade-in-0",
+    "data-open:zoom-in-95",
+    "duration-100",
+    "flex",
+    "flex-col",
+    "gap-md",
+    "origin-(--radix-popover-content-transform-origin)",
+    "outline-hidden",
+    "p-lg",
+    "popover-content",
+    "shadow-elevation",
+    "text-dialog-ink",
+    "text-format-body",
+    "w-72",
+    "z-50"
+   ]
+  },
+  "PopoverAnchor": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "popover-anchor"
+   ]
+  },
+  "PopoverHeader": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "div",
+    "flex",
+    "flex-col",
+    "gap-2xs",
+    "popover-header",
+    "text-format-body"
+   ]
+  },
+  "PopoverTitle": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "h2",
+    "popover-title",
+    "text-format-label-md"
+   ]
+  },
+  "PopoverDescription": {
+   "file": "libs/ui/src/components/ui/popover/popover.tsx",
+   "classes": [
+    "popover-description",
+    "text-format-body",
+    "text-muted"
+   ]
+  },
+  "RadioGroup": {
+   "file": "libs/ui/src/components/ui/radio-group/radio-group.tsx",
+   "classes": [
+    "data-[orientation=horizontal]:auto-cols-max",
+    "data-[orientation=horizontal]:grid-flow-col",
+    "data-[orientation=horizontal]:w-fit",
+    "gap-md",
+    "grid",
+    "radio-group",
+    "w-full"
+   ]
+  },
+  "RadioGroupItem": {
+   "file": "libs/ui/src/components/ui/radio-group/radio-group.tsx",
+   "classes": [
+    "-translate-x-1/2",
+    "-translate-y-1/2",
+    "absolute",
+    "after:-inset-x-3",
+    "after:-inset-y-2",
+    "after:absolute",
+    "aria-invalid:aria-checked:bg-destructive",
+    "aria-invalid:aria-checked:border-destructive",
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "aspect-square",
+    "bg-input-fill",
+    "bg-primary-ink",
+    "border",
+    "border-input-border",
+    "corner-full",
+    "data-checked:bg-primary-fill",
+    "data-checked:border-primary-fill",
+    "data-checked:text-primary-ink",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "flex",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "group-aria-invalid/radio-group-item:bg-destructive-ink",
+    "group/radio-group-item",
+    "items-center",
+    "justify-center",
+    "left-1/2",
+    "outline-none",
+    "peer",
+    "radio-group-indicator",
+    "radio-group-item",
+    "relative",
+    "shrink-0",
+    "size-2",
+    "size-4",
+    "top-1/2"
+   ]
+  },
+  "Select": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "select"
+   ]
+  },
+  "SelectGroup": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "select-group"
+   ]
+  },
+  "SelectValue": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "select-value"
+   ]
+  },
+  "SelectTrigger": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-input-fill",
+    "border",
+    "border-input-border",
+    "corner-lg",
+    "data-[size=default]:h-8",
+    "data-[size=sm]:corner-md",
+    "data-[size=sm]:h-7",
+    "data-placeholder:text-input-ink-placeholder",
+    "default",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "flex",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "gap-sm",
+    "items-center",
+    "justify-between",
+    "outline-none",
+    "pointer-events-none",
+    "px-md",
+    "py-md",
+    "select-none",
+    "select-trigger",
+    "size-4",
+    "text-format-label-md",
+    "text-muted",
+    "transition-colors",
+    "w-fit",
+    "whitespace-nowrap"
+   ]
+  },
+  "SelectContent": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "border",
+    "border-border",
+    "center",
+    "corner-lg",
+    "cursor-default",
+    "data-[align-trigger=true]:animate-none",
+    "data-[position=popper]:h-(--radix-select-trigger-height)",
+    "data-[position=popper]:min-w-(--radix-select-trigger-width)",
+    "data-[position=popper]:w-full",
+    "data-[side=bottom]:slide-in-from-top-2",
+    "data-[side=bottom]:translate-y-1",
+    "data-[side=left]:-translate-x-1",
+    "data-[side=left]:slide-in-from-right-2",
+    "data-[side=right]:slide-in-from-left-2",
+    "data-[side=right]:translate-x-1",
+    "data-[side=top]:-translate-y-1",
+    "data-[side=top]:slide-in-from-bottom-2",
+    "data-closed:animate-out",
+    "data-closed:fade-out-0",
+    "data-closed:zoom-out-95",
+    "data-open:animate-in",
+    "data-open:fade-in-0",
+    "data-open:zoom-in-95",
+    "duration-100",
+    "flex",
+    "item-aligned",
+    "items-center",
+    "justify-center",
+    "max-h-(--radix-select-content-available-height)",
+    "min-w-36",
+    "origin-(--radix-select-content-transform-origin)",
+    "overflow-x-hidden",
+    "overflow-y-auto",
+    "p-xs",
+    "popper",
+    "py-xs",
+    "relative",
+    "scroll-my-1",
+    "select-content",
+    "select-scroll-down-button",
+    "select-scroll-up-button",
+    "shadow-elevation",
+    "text-dialog-ink",
+    "z-10",
+    "z-50"
+   ]
+  },
+  "SelectLabel": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "px-sm",
+    "py-xs",
+    "select-label",
+    "text-format-label-md",
+    "text-muted"
+   ]
+  },
+  "SelectItem": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "absolute",
+    "corner-md",
+    "cursor-default",
+    "data-disabled:opacity-50",
+    "data-disabled:pointer-events-none",
+    "flex",
+    "focus:bg-accent-fill",
+    "focus:text-accent-ink",
+    "gap-sm",
+    "items-center",
+    "justify-center",
+    "outline-hidden",
+    "pl-sm",
+    "pointer-events-none",
+    "pr-3xl",
+    "py-xs",
+    "relative",
+    "right-md",
+    "select-item",
+    "select-none",
+    "size-4",
+    "text-format-label-md",
+    "w-full"
+   ]
+  },
+  "SelectSeparator": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "-mx-xs",
+    "bg-border",
+    "h-px",
+    "my-xs",
+    "pointer-events-none",
+    "select-separator"
+   ]
+  },
+  "SelectScrollUpButton": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "cursor-default",
+    "flex",
+    "items-center",
+    "justify-center",
+    "py-xs",
+    "select-scroll-up-button",
+    "z-10"
+   ]
+  },
+  "SelectScrollDownButton": {
+   "file": "libs/ui/src/components/ui/select/select.tsx",
+   "classes": [
+    "bg-dialog-fill",
+    "cursor-default",
+    "flex",
+    "items-center",
+    "justify-center",
+    "py-xs",
+    "select-scroll-down-button",
+    "z-10"
+   ]
+  },
+  "Separator": {
+   "file": "libs/ui/src/components/ui/separator/separator.tsx",
+   "classes": [
+    "bg-border",
+    "data-horizontal:h-px",
+    "data-horizontal:w-full",
+    "data-vertical:self-stretch",
+    "data-vertical:w-px",
+    "horizontal",
+    "separator",
+    "shrink-0"
+   ]
+  },
+  "Slider": {
+   "file": "libs/ui/src/components/ui/slider/slider.tsx",
+   "classes": [
+    "absolute",
+    "active:ring-[3px]",
+    "after:-inset-2",
+    "after:absolute",
+    "aria-label",
+    "aria-labelledby",
+    "bg-input-fill-high",
+    "bg-primary-fill",
+    "bg-surface",
+    "block",
+    "border",
+    "border-input-border",
+    "corner-full",
+    "data-disabled:opacity-50",
+    "data-horizontal:h-1",
+    "data-horizontal:h-full",
+    "data-horizontal:w-full",
+    "data-vertical:flex-col",
+    "data-vertical:h-full",
+    "data-vertical:min-h-40",
+    "data-vertical:w-1",
+    "data-vertical:w-auto",
+    "data-vertical:w-full",
+    "disabled:opacity-50",
+    "disabled:pointer-events-none",
+    "flex",
+    "focus-visible:outline-hidden",
+    "focus-visible:ring-[3px]",
+    "grow",
+    "hover:ring-[3px]",
+    "items-center",
+    "overflow-hidden",
+    "relative",
+    "ring-ring/50",
+    "select-none",
+    "shrink-0",
+    "size-3",
+    "slider",
+    "slider-range",
+    "slider-thumb",
+    "slider-track",
+    "touch-none",
+    "transition-[color,box-shadow]",
+    "w-full"
+   ]
+  },
+  "Switch": {
+   "file": "libs/ui/src/components/ui/switch/switch.tsx",
+   "classes": [
+    "after:-inset-x-3",
+    "after:-inset-y-2",
+    "after:absolute",
+    "aria-invalid:border-destructive",
+    "aria-invalid:data-checked:bg-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-surface",
+    "block",
+    "border",
+    "border-transparent",
+    "corner-full",
+    "data-[size=default]:h-[18.4px]",
+    "data-[size=default]:w-[32px]",
+    "data-[size=sm]:h-[14px]",
+    "data-[size=sm]:w-[24px]",
+    "data-checked:bg-primary-fill",
+    "data-disabled:cursor-not-allowed",
+    "data-disabled:opacity-50",
+    "data-unchecked:bg-input-fill-high",
+    "default",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "group-data-[size=default]/switch:data-checked:translate-x-[calc(100%-2px)]",
+    "group-data-[size=default]/switch:data-unchecked:translate-x-0",
+    "group-data-[size=default]/switch:size-4",
+    "group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%-2px)]",
+    "group-data-[size=sm]/switch:data-unchecked:translate-x-0",
+    "group-data-[size=sm]/switch:size-3",
+    "group/switch",
+    "inline-flex",
+    "items-center",
+    "outline-none",
+    "peer",
+    "pointer-events-none",
+    "relative",
+    "ring-0",
+    "shrink-0",
+    "switch",
+    "switch-thumb",
+    "transition-all",
+    "transition-transform"
+   ]
+  },
+  "Table": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "caption-bottom",
+    "overflow-x-auto",
+    "relative",
+    "table",
+    "table-container",
+    "text-format-body",
+    "w-full"
+   ]
+  },
+  "TableHeader": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "table-header",
+    "thead"
+   ]
+  },
+  "TableBody": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "table-body",
+    "tbody"
+   ]
+  },
+  "TableFooter": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "bg-muted-fill/50",
+    "border-t",
+    "table-footer",
+    "text-format-label-md",
+    "tfoot"
+   ]
+  },
+  "TableRow": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "border-b",
+    "data-[state=selected]:bg-accent-fill",
+    "has-aria-expanded:bg-muted-fill/50",
+    "hover:bg-muted-fill/50",
+    "table-row",
+    "tr",
+    "transition-colors"
+   ]
+  },
+  "TableHead": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "align-middle",
+    "h-10",
+    "px-md",
+    "table-head",
+    "text-format-label-md",
+    "text-ink",
+    "text-left",
+    "th",
+    "whitespace-nowrap"
+   ]
+  },
+  "TableCell": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "align-middle",
+    "p-md",
+    "table-cell",
+    "td",
+    "whitespace-nowrap"
+   ]
+  },
+  "TableCaption": {
+   "file": "libs/ui/src/components/ui/table/table.tsx",
+   "classes": [
+    "caption",
+    "mt-xl",
+    "table-caption",
+    "text-format-body",
+    "text-muted"
+   ]
+  },
+  "Textarea": {
+   "file": "libs/ui/src/components/ui/textarea/textarea.tsx",
+   "classes": [
+    "aria-invalid:border-destructive",
+    "aria-invalid:ring-destructive/20",
+    "bg-input-fill",
+    "border",
+    "border-input-border",
+    "corner-lg",
+    "disabled:cursor-not-allowed",
+    "disabled:opacity-50",
+    "disabled:pointer-events-none",
+    "field-sizing-content",
+    "focus-visible:border-ring",
+    "focus-visible:ring-[3px]",
+    "focus-visible:ring-ring/50",
+    "min-h-16",
+    "outline-none",
+    "placeholder:text-input-ink-placeholder",
+    "px-md",
+    "py-md",
+    "selection:bg-primary-fill",
+    "selection:text-primary-ink",
+    "text-format-label-md",
+    "textarea",
+    "transition-[color,box-shadow]",
+    "w-full"
+   ]
+  },
+  "TooltipProvider": {
+   "file": "libs/ui/src/components/ui/tooltip/tooltip.tsx",
+   "classes": [
+    "tooltip-provider"
+   ]
+  },
+  "Tooltip": {
+   "file": "libs/ui/src/components/ui/tooltip/tooltip.tsx",
+   "classes": [
+    "tooltip"
+   ]
+  },
+  "TooltipTrigger": {
+   "file": "libs/ui/src/components/ui/tooltip/tooltip.tsx",
+   "classes": [
+    "tooltip-trigger"
+   ]
+  },
+  "TooltipContent": {
+   "file": "libs/ui/src/components/ui/tooltip/tooltip.tsx",
+   "classes": [
+    "M0",
+    "bg-dialog-fill",
+    "block",
+    "border",
+    "corner-md",
+    "data-[side=bottom]:slide-in-from-top-2",
+    "data-[side=left]:slide-in-from-right-2",
+    "data-[side=right]:slide-in-from-left-2",
+    "data-[side=top]:slide-in-from-bottom-2",
+    "data-[state=delayed-open]:animate-in",
+    "data-[state=delayed-open]:fade-in-0",
+    "data-[state=delayed-open]:zoom-in-95",
+    "data-closed:animate-out",
+    "data-closed:fade-out-0",
+    "data-closed:zoom-out-95",
+    "data-open:animate-in",
+    "data-open:fade-in-0",
+    "data-open:zoom-in-95",
+    "fill-dialog-fill",
+    "fill-none",
+    "gap-sm",
+    "has-data-[slot=kbd]:pr-sm",
+    "inline-flex",
+    "items-center",
+    "max-w-xs",
+    "origin-(--radix-tooltip-content-transform-origin)",
+    "px-lg",
+    "py-sm",
+    "shadow-elevation",
+    "stroke-border",
+    "text-dialog-ink",
+    "text-format-label-md",
+    "tooltip-content",
+    "translate-y-[-1px]",
+    "w-fit",
+    "z-50"
+   ]
+  }
+ },
+ "byFile": {
+  "libs/ui/src/components/ui/badge/badge.tsx": [
+   "badgeVariants",
+   "Badge"
+  ],
+  "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx": [
+   "Breadcrumb",
+   "BreadcrumbList",
+   "BreadcrumbItem",
+   "BreadcrumbLink",
+   "BreadcrumbPage",
+   "BreadcrumbSeparator",
+   "BreadcrumbEllipsis"
+  ],
+  "libs/ui/src/components/ui/button/button.tsx": [
+   "buttonVariants",
+   "Button"
+  ],
+  "libs/ui/src/components/ui/checkbox/checkbox.tsx": [
+   "Checkbox"
+  ],
+  "libs/ui/src/components/ui/choice-card/choice-card-checkbox/choice-card-checkbox.tsx": [
+   "ChoiceCardCheckbox"
+  ],
+  "libs/ui/src/components/ui/choice-card/choice-card-radio/choice-card-radio.tsx": [
+   "ChoiceCardRadio"
+  ],
+  "libs/ui/src/components/ui/choice-card/choice-card-shell/choice-card-shell.tsx": [
+   "ChoiceCardShell"
+  ],
+  "libs/ui/src/components/ui/choice-card/choice-card-switch/choice-card-switch.tsx": [
+   "ChoiceCardSwitch"
+  ],
+  "libs/ui/src/components/ui/command/command.tsx": [
+   "CommandVariantContext",
+   "commandVariants",
+   "Command",
+   "CommandDialog",
+   "CommandInput",
+   "CommandList",
+   "CommandEmpty",
+   "CommandGroup",
+   "CommandSeparator",
+   "CommandItem",
+   "CommandShortcut"
+  ],
+  "libs/ui/src/components/ui/dialog/dialog.tsx": [
+   "Dialog",
+   "DialogTrigger",
+   "DialogPortal",
+   "DialogClose",
+   "DialogOverlay",
+   "DialogContent",
+   "DialogHeader",
+   "DialogFooter",
+   "DialogTitle",
+   "DialogDescription"
+  ],
+  "libs/ui/src/components/ui/field/field.tsx": [
+   "FieldSet",
+   "FieldLegend",
+   "fieldGroupVariants",
+   "FieldGroup",
+   "fieldVariants",
+   "Field",
+   "FieldContent",
+   "FieldLabel",
+   "FieldTitle",
+   "FieldDescription",
+   "FieldSeparator",
+   "FieldError"
+  ],
+  "libs/ui/src/components/ui/input/input.tsx": [
+   "Input"
+  ],
+  "libs/ui/src/components/ui/input-group/input-group.tsx": [
+   "InputGroup",
+   "inputGroupAddonVariants",
+   "InputGroupAddon",
+   "inputGroupButtonVariants",
+   "igButtonToButton",
+   "InputGroupButton",
+   "InputGroupText",
+   "InputGroupInput",
+   "InputGroupTextarea"
+  ],
+  "libs/ui/src/components/ui/item/item.tsx": [
+   "ItemGroup",
+   "ItemSeparator",
+   "itemVariants",
+   "Item",
+   "itemMediaVariants",
+   "ItemMedia",
+   "ItemContent",
+   "ItemTitle",
+   "ItemDescription",
+   "ItemActions",
+   "ItemHeader",
+   "ItemFooter"
+  ],
+  "libs/ui/src/components/ui/kbd/kbd.tsx": [
+   "kbdVariants",
+   "Kbd",
+   "KbdGroup"
+  ],
+  "libs/ui/src/components/ui/label/label.tsx": [
+   "Label"
+  ],
+  "libs/ui/src/components/ui/popover/popover.tsx": [
+   "Popover",
+   "PopoverTrigger",
+   "PopoverContent",
+   "PopoverAnchor",
+   "PopoverHeader",
+   "PopoverTitle",
+   "PopoverDescription"
+  ],
+  "libs/ui/src/components/ui/radio-group/radio-group.tsx": [
+   "RadioGroup",
+   "RadioGroupItem"
+  ],
+  "libs/ui/src/components/ui/select/select.tsx": [
+   "Select",
+   "SelectGroup",
+   "SelectValue",
+   "SelectTrigger",
+   "SelectContent",
+   "SelectLabel",
+   "SelectItem",
+   "SelectSeparator",
+   "SelectScrollUpButton",
+   "SelectScrollDownButton"
+  ],
+  "libs/ui/src/components/ui/separator/separator.tsx": [
+   "Separator"
+  ],
+  "libs/ui/src/components/ui/slider/slider.tsx": [
+   "Slider"
+  ],
+  "libs/ui/src/components/ui/switch/switch.tsx": [
+   "Switch"
+  ],
+  "libs/ui/src/components/ui/table/table.tsx": [
+   "Table",
+   "TableHeader",
+   "TableBody",
+   "TableFooter",
+   "TableRow",
+   "TableHead",
+   "TableCell",
+   "TableCaption"
+  ],
+  "libs/ui/src/components/ui/textarea/textarea.tsx": [
+   "Textarea"
+  ],
+  "libs/ui/src/components/ui/tooltip/tooltip.tsx": [
+   "TooltipProvider",
+   "Tooltip",
+   "TooltipTrigger",
+   "TooltipContent"
+  ]
+ }
+}

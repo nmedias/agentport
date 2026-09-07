@@ -17,7 +17,7 @@ Token-level history (renames, palette rework, dropped tokens) is in
 section-wide, so it listed tokens that only usage examples or a nested Button bound (Checkbox showed
 label text and group gaps its set never paints; Tooltip showed its trigger Button's `primary-fill`), and
 colour tokens without a hand-written role sat as bare chips. The gate of the round
-(`tools/token-audit/check.py` in the origin workspace) started at 146 failures over 22 of 25 sections.
+(`tools/token-audit/check.py`) started at 146 failures over 22 of 25 sections.
 
 **Catalog.** `figma.vars` / `figma.styles` of all 25 entries now list exactly what the section's
 **component set** binds — own bindings plus placement overrides the set applies inside a nested foreign
@@ -43,8 +43,7 @@ adjusted the day before).
 re-sorted, eyebrow counts refreshed); component sets untouched. Chips 368 → 246; roled rows 139 → 151.
 Gate on the merged catalog with a fresh dump: 3047 checks, ALL PASS (77 reviewer-only warnings:
 Effect primitives behind an effect style, chips without a 1:1 utility). Five family packages, each built
-by one agent and reviewed by an independent one (`agent-runs/token-column-audit/2026-09-04/` in the
-origin workspace: brief, notes, reviews, screenshots).
+by one agent and reviewed by an independent one (`agent-runs/token-column-audit/2026-09-04/`: brief, notes, reviews, screenshots).
 
 ## 2026-09-03 — Doc-section API block: Input migrated to `figma.api` + `code.props`
 
@@ -58,8 +57,7 @@ per Figma control, `code` = prop name | `live-state` + `triggers` | `none`), new
 from `input.tsx` JSDoc + the two curated a11y passthroughs, each with its Figma counterpart or `none`).
 Rules + Schema document the fields. Input was the reference; the other 24 entries followed the same day (four
 family batches, each built by one agent and reviewed by an independent one against a fresh Figma dump, a fresh
-TypeScript extract of the component sources and the deterministic gate `tools/api-audit/check.py` kept in the
-origin workspace — 1755 checks, all green on the merged catalog).
+TypeScript extract of the component sources and the deterministic gate `tools/api-audit/check.py` (`agent-runs/api-block-audit/2026-09-03/`) — 1755 checks, all green on the merged catalog).
 
 **Scope decision (user, same day).** The API block documents the **main component only**: the Figma component named
 like the section and the export named like the entry. Member components (SelectItem, InputGroupAddon, CommandItem,

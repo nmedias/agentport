@@ -1,0 +1,51 @@
+{
+  "Tooltip": {
+    "roles": {
+      "dialog-fill": "chip surface + arrow fill",
+      "dialog-ink": "chip label",
+      "border": "chip border + arrow stroke",
+      "effect:Elevation": "chip drop shadow"
+    }
+  },
+  "Popover": {
+    "roles": {
+      "dialog-fill": "panel surface",
+      "dialog-ink": "panel title text",
+      "border": "panel border",
+      "muted": "description text",
+      "effect:Elevation": "panel drop shadow"
+    }
+  },
+  "Dialog": {
+    "roles": {
+      "dialog-fill": "panel surface",
+      "dialog-ink": "panel title text",
+      "border": "panel + footer border",
+      "scrim": "backdrop fill",
+      "scrim-opacity": "overlay layer opacity",
+      "muted": "description text",
+      "muted-fill": "footer band fill",
+      "ink": "close icon",
+      "effect:Elevation": "panel drop shadow"
+    }
+  },
+  "Command": {
+    "roles": {
+      "dialog-fill": "panel surface",
+      "border": "panel border + separator line",
+      "accent-fill": "selected item fill",
+      "accent-ink": "selected item label",
+      "muted": "group heading + quiet text",
+      "card-fill": "palette prompt row fill",
+      "primary": "palette caret bar fill",
+      "ink": "search text + item label and icon",
+      "surface": "icon frame surface",
+      "input-border": "search field border",
+      "input-fill": "search field surface",
+      "input-ink-placeholder": "search placeholder",
+      "inverse-fill": "esc key chip surface",
+      "effect:Elevation": "panel drop shadow",
+      "effect:Glow": "palette caret bar glow"
+    }
+  }
+}

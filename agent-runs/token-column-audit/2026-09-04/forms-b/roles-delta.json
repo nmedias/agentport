@@ -1,0 +1,71 @@
+{
+  "FieldSet": {
+    "roles": {
+      "border": "nested separator line"
+    }
+  },
+  "FieldGroup": {
+    "roles": {
+      "border": "separator line"
+    }
+  },
+  "Checkbox": {
+    "roles": {
+      "input-fill": "resting box fill",
+      "input-border": "resting box border",
+      "primary-fill": "checked / indeterminate fill + border",
+      "primary-ink": "check + dash glyph",
+      "destructive": "invalid border · checked-invalid fill",
+      "destructive-ink": "checked-invalid glyph",
+      "ring": "focus border + ring/50"
+    }
+  },
+  "Switch": {
+    "roles": {
+      "input-fill-high": "unchecked track fill",
+      "primary-fill": "checked track fill",
+      "surface": "thumb surface",
+      "destructive": "invalid border · checked-invalid track",
+      "ring": "focus border + ring/50",
+      "corner-full": "track / thumb radius"
+    }
+  },
+  "Slider": {
+    "roles": {
+      "input-fill-high": "track rail fill",
+      "primary-fill": "range fill",
+      "surface": "thumb surface",
+      "input-border": "thumb border",
+      "corner-full": "track / thumb radius"
+    }
+  },
+  "RadioGroup": {
+    "roles": {
+      "input-fill": "resting circle fill",
+      "input-border": "resting circle border",
+      "primary-fill": "checked circle fill + border",
+      "primary-ink": "checked dot",
+      "destructive": "invalid border · checked-invalid fill",
+      "destructive-ink": "checked-invalid dot",
+      "ring": "focus border + ring/50",
+      "corner-full": "circle radius"
+    }
+  },
+  "ChoiceCard": {
+    "roles": {
+      "accent-fill": "checked card fill",
+      "accent-border": "checked card border",
+      "accent-ink": "checked card title",
+      "primary-fill": "nested control checked fill",
+      "primary-ink": "nested control checked mark",
+      "input-fill": "nested control resting fill",
+      "input-border": "nested control resting border",
+      "destructive": "nested control invalid border + fill",
+      "surface": "resting card surface + switch thumb",
+      "border": "resting card border",
+      "destructive-ink": "nested control invalid glyph",
+      "ring": "nested control focus border",
+      "input-fill-high": "nested switch track fill"
+    }
+  }
+}

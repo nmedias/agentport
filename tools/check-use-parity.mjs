@@ -97,7 +97,7 @@ for (const m of read('Typography.tsx').matchAll(/format: 'text-format-([a-z-]+)[
 
 // Shadows — the two role paragraphs, in page order
 const shadowRoles = [...read('Shadows.tsx').matchAll(
-  /mt-2xs text-format-body text-ink text-pretty">\s*([\s\S]*?)\s*<\/span>/g,
+  /mt-md text-format-body text-ink text-pretty">\s*([\s\S]*?)\s*<\/span>/g,
 )].map((m) => unquote(m[1]));
 ['shadow-glow', 'shadow-elevation'].forEach((t, i) => {
   if (shadowRoles[i]) pairs.push([t, shadowRoles[i]]);

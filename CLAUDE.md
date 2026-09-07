@@ -32,7 +32,14 @@ npm run test:unit                 # jsdom .spec units (@agentport/ui project)
 npm run test:stories              # stories as browser tests (storybook project → Chromium + axe)
 npm run shoot -- <storyId>        # screenshot a story from a RUNNING Storybook → tools/screenshots/
 npm run ui:add -- <component>     # add a shadcn component source into libs/ui (writes flat — see below)
+npm run audit:descriptions        # token use-sentences + scopes on the Storybook pages == tokens-reference.md
+npm run audit:api                 # Figma doc sections: properties block vs catalog + code (tools/api-audit)
+npm run audit:tokens              # Figma doc sections: token column vs set + catalog + code (tools/token-audit)
 ```
+
+The three audits are Figma-doc gates: they read the dumps under `tools/*/dumps/` (refresh them via the
+`figma-dump.js` in each folder before a re-check) and must be ALL PASS after any change to the Figma
+doc sections, the catalogs, or a token sentence.
 
 Visual verification: `npm run shoot -- <storyId>` drives headless Chromium over a running Storybook;
 look at the PNG yourself. `SELECTOR=.docblock-argstable` crops to one element.
@@ -51,11 +58,15 @@ libs/ui/            @agentport/ui — shadcn primitives + DS token layer (global
   src/blocks/                 blocks layer (organisms) — structure only, nothing ported yet
   src/docs/                   Storybook Introduction + Foundations pages
   src/styles/                 tokens.css (Figma export) + tw-theme / tw-utilities / tw-variants
-agent-runs/         component-port / component-sync run notes (one dated folder per run)
+agent-runs/         component-port / component-sync / api-block-audit / token-column-audit run notes
+                    (one dated folder per run)
 design-docs/        Machine-readable DS data: design-system/tokens-reference.md,
                     design-system/components-reference.md, token-analysis-*.md;
                     design-system/token-changelog.md = token history (human-readable, not a data source)
 tools/              shoot-stories.mjs — Playwright screenshots of a running Storybook (visual verify)
+                    check-use-parity.mjs — token sentences/scopes on the docs pages vs tokens-reference.md
+                    api-audit/ + token-audit/ — Figma-doc gates (check.py, extractors, dumps/)
+                    figma-doc/doc-overrides.json — per-section roles/anatomy, read by the token audit
 ```
 
 - shadcn internals use the `@/` alias (→ `libs/ui/src`); consumers import from `@agentport/ui`.

@@ -1,0 +1,2163 @@
+{
+  "_readme": "Per-component composition/editorial block for build-section.snippet.js. The Fill (tools/figma-doc/extract-fill.mjs) is a MECHANICAL extract and is regenerated — it therefore carries no hand-authored doc composition. Everything here is transcribed VERBATIM from the accepted template hull `.Doc Section / Shelf · full` 8040:8428 (sandbox page 8019:2759), never invented. Keys are FILL.name. Every field is optional; the builder falls back to a generic rule and reports the fallback in `fallbacks[]`.",
+  "_fields": {
+    "hero.cloneFrom": "node id of the accepted hero composition; cloned (source untouched). Fallback: set.defaultVariant.createInstance().",
+    "hero.x/y/width": "position of the hero row inside the INNER CONTAINER of the hero card. Coordinates are a SHARED LOCAL system on a 273×166 placeholder card (origin = the placeholder's 16px inset) — only the RELATIVE positions of hero row + pins matter, because the builder normalises the whole bbox afterwards (`fitCard`, 2026-09-01 fit rule: the card hugs its content with a uniform inset, size is no longer fixed). Reference: 25/85 for an 18 px control. Default y is DERIVED, not a literal: WITH anatomy (pins+legend present) it is PIN_TOP − heroHeight, where PIN_TOP = 166 − card.inset − 48 (the up-pin's height, on the placeholder) — WITHOUT anatomy the hero is centred in the Inner Container instead.",
+    "hero.card": "{ inset, minWidth, minHeight } — the card hugs hero + pins with a UNIFORM inset on all four sides (default inset 16, no minimums). Width/height are never set directly; they are derived per component from the content bbox + 2×inset (`fitCard`, `utility-ids.json build_notes.hero_card`). `minWidth`/`minHeight` only raise a floor when the content bbox is smaller than that.",
+    "pins[]": "Doc/Anatomy-Pin instances: number, leader (up = pin sits BELOW its part, down = pin sits ABOVE it), x/y/height inside the Inner Container. No fallback: pins are guaranteed non-empty by the anatomy gate (`hasAnatomy()` — needs FILL.anatomy AND a full pins+legend.rows pair) or the whole anatomy slot is skipped and reported in `fallbacks`; there is no derivation from the hero instance. x/y are on the same placeholder-relative local system as hero.x/y/width (see there) — up-pin 01 at y=PIN_TOP, down-pins at hero.y − 68; the card fit step normalises all of it into the final uniform-inset geometry once every pin exists.",
+    "legend": "Doc/Legend-Row block right of the hero card on the dark sheet, positioned by the plate row (no x/y): width + rows (number, part, detail). LENGTH CONVENTION (Teilplan 02 fix, C1): `detail` ~60-70 characters keeps a row single-line at 47px (the row's natural rhythm; Checkbox reference rows: 61-66 chars -> 47px). A `detail` over ~75-80 chars wraps to a 2nd line (62px row) — the hero plate hugs its content (`counterAxisSizingMode: AUTO` since Teilplan 02b) so a taller legend no longer overflows or clips, it just grows the row and the section with it; verified live on the Kbd rebuild (2×62px rows, no overflow). Longer details are allowed but make rows visually uneven — trim toward ~70 chars for a uniform block. `legend.width` also feeds the row-width formula the card fit step uses (`fitCard`): max(560, cardWidth + 12 + legendWidth). COLUMNS (2026-09-02): `legend.columns` (default 1) splits the rows over N side-by-side columns of `width` each, gap 24 — set it when the legend would otherwise grow taller than the hero card. A row with `slot: true` marks a SLOT: its number and part render in Doc/color/slot-marker (magenta), as does its pin. Only the ROOT component's own slots are listed; slots of nested components are not anatomy elements. A part that occurs more than once in the hero (e.g. both InputGroupAddons) gets one row and one pin PER occurrence, all carrying the same number.",
+    "roles": "token -> SHORT role phrase for Doc/Token-Chip. Tokens listed here render as showRole='true' rows, all remaining FILL.figma.vars + styles as showRole='false' chips. Fallback: IDS.roles (the tokens-reference `use` sentences) — those are 1-3 full sentences, so the fallback role text is set to wrap (textAutoResize HEIGHT) instead of clipping.",
+    "unroled": "Criterion (user decision 2026-09-04) for bare chips (showRole='false') in the `unroled` frame: (1) ONLY scale tokens may be bare — space-*, corner-* and text:* styles; their meaning is the reference's, not the component's. (2) Every colour token and every effect / opacity token bound by the component SET gets a `roles` entry — or is not a chip. (3) Tokens that reach the set only through a nested member instance (e.g. the Buttons inside Dialog) are not chips at all; they are documented in the member's own section — unless the member is listed in this section's `ownMembers`. (4) The truth set is the component set, not the section (usage examples do not add chips). (5) `unroled` may be empty or absent (Separator).",
+    "ownMembers": "[component names] — nested DS components that are part of THIS component's anatomy, so their bound tokens count as the section's own (roled chips) although the token gate's Figma dump walk stops at foreign instance boundaries (user decision 2026-09-04, second round). Default: none — a nested instance of another section's component (the trigger Button in Tooltip, the footer Buttons in Dialog) is a member, its tokens are documented there. ChoiceCard lists its controls (Checkbox, Switch, RadioGroupItem) and thereby keeps its 'nested control' roles; it does not list Field/Label, so the label text stays with Field. The gate reads the dump's provenance chains (`mby`) and fails a name that matches no nested member (T8-own-member-stale).",
+    "doDont": "{ do, dont } for Doc/Do-Dont-Card — EDITORIAL, written by hand per component. Fallback: a11y[0] split at the em dash (LEFT = dont, RIGHT = do) and ONLY when the left half is negatively phrased (no / not / has no / cannot); otherwise the slot is skipped. The gate exists because the split is calibrated on Checkbox: Dialog's a11y[0] would print a DON'T the source never said, InputGroup's a meaningless DO.",
+    "parts": "[{ label, id }] — the shelf content beyond `figma.set`. RULE R12 (user, 2026-09-01, supersedes the earlier \"editorial selection\" convention): EVERY component node of the old section moves into the new doc section — component sets, single components, compositions, member components without a variant axis, and leftover example instances. `parts` therefore lists ALL of them; the ORDER is editorial, the SELECTION is not. Composite sets sit NESTED in the fill (Select.trigger.set, ChoiceCard.checkbox.set, Popover.root.set, Table.head/cell/row.set, the InputGroup addons) or do not exist at all (FRAME compositions: Breadcrumb, Command, Dialog, InputGroup, Table); those nested keys are never auto-walked, so they are hand-transcribed here. The listed nodes are MOVED into the variants plate in list order, ids preserved — same semantics as the set path, and they are moved IN ADDITION to a set when the fill has one. The `shell` phase gates this: every non-TEXT child of the old section that neither set/examples/members nor `parts` covers is reported as `uncovered: …` in `fallbacks` and forces `oldDeletable: false`. Missing for a no-set component -> variants slot is skipped and reported.",
+    "description": "EDITORIAL lead sentence for the section header, and the only field here that OVERRIDES a mechanical fill value (`FILL.description`). It exists for components whose own story file carries no `docs.description.component` — the extractor deliberately returns nothing there rather than handing over a sibling component's text (final review C1: seven sections documented the wrong component). Transcribe from the catalog, one sentence, English, nothing invented.",
+    "sectionFill": "'white' (default, standalone section like the existing ones) or 'none' — transparent, for the family SHEET model where sheet background + grid have to show through and the dark hull carries the surface.",
+    "hull.width": "overrides the template width 880 (the header and every flow child follow via FILL).",
+    "usage.hideNodes": "node ids inside the MOVED usage content that are set visible=false after the move — the only permitted change inside moved content, reversible per node. Use: a group carrying its own big heading that the plate eyebrow already says."
+  },
+  "Checkbox": {
+    "hero": {
+      "cloneFrom": "8040:8290",
+      "x": 25,
+      "y": 85,
+      "width": 232
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 24,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 24,
+        "y": 16,
+        "height": 69
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 112,
+        "y": 16,
+        "height": 69
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The box itself. Its fill, border and every checked and interaction state are drawn on this one frame.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "indicator",
+          "detail": "The frame that carries the mark: a check when the box is on, a short dash when it is indeterminate, nothing when off.",
+          "slot": false
+        },
+        {
+          "number": "03",
+          "part": "Label",
+          "detail": "A real Label instance, placed beside the box by the field wrapped around them. The box on its own carries no name.",
+          "slot": false
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "A bare control has no accessible name.",
+      "do": "Compose it with Label / Field or pass aria-label (the stories do). Invalid is driven by aria-invalid (no prop)."
+    },
+    "usage": {
+      "hideNodes": [
+        "3822:3"
+      ]
+    },
+    "roles": {
+      "input-fill": "resting box fill",
+      "input-border": "resting box border",
+      "primary-fill": "checked / indeterminate fill + border",
+      "primary-ink": "check + dash glyph",
+      "destructive": "invalid border · checked-invalid fill",
+      "destructive-ink": "checked-invalid glyph",
+      "ring": "focus border + ring/50"
+    },
+    "description": "The binary choice control, with an explicit \"indeterminate\" for parent/group states. Checked, invalid, disabled and focus combine freely as live states. A bare box has no accessible name — it needs a Label/Field or an aria-label."
+  },
+  "Input": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 33,
+        "y": 116,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 65,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 65,
+        "y": 116,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The component root and the entire typing surface — all six states are drawn on this one frame, nothing inside it changes with them."
+        },
+        {
+          "number": "02",
+          "part": "Placeholder",
+          "detail": "Text property on the root. The hint shown while the field is empty; it stands in for content, never for a label."
+        },
+        {
+          "number": "03",
+          "part": "Value",
+          "detail": "Text property on the root, paired with the filled state. Stands for what the user has typed and takes the placeholder's place."
+        }
+      ]
+    },
+    "doDont": {
+      "dont": "aria-invalid has no corresponding prop — setting it alone shows no message.",
+      "do": "Pair it with Field / FieldError (see WithError) so the invalid ring comes with real error text."
+    },
+    "roles": {
+      "input-fill": "resting field surface",
+      "input-border": "resting field border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "ink": "entered value text"
+    },
+    "description": "The single-line text field. It has no variants — focus, invalid, disabled and filled are live states driven by the control itself, not props. On its own it is unlabeled: it becomes a real form field only composed with the Field family."
+  },
+  "Textarea": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 33,
+        "y": 154,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 65,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 65,
+        "y": 154,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The component root and the whole typing area — a box rather than a line, which grows with its content. All six states are drawn on this one frame."
+        },
+        {
+          "number": "02",
+          "part": "Placeholder",
+          "detail": "Text property on the root. The hint while the box is empty; it sits at the top edge, where typing starts."
+        },
+        {
+          "number": "03",
+          "part": "Value",
+          "detail": "Text property on the root, paired with the filled state. Stands for the typed content, which fills the box from the top down."
+        }
+      ]
+    },
+    "doDont": {
+      "dont": "aria-invalid has no corresponding prop — setting it alone shows no message.",
+      "do": "Pair it with Field / FieldError so the invalid ring comes with real error text (see Input)."
+    },
+    "roles": {
+      "input-fill": "resting field surface",
+      "input-border": "resting field border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "ink": "entered text"
+    },
+    "description": "The multiline sibling of Input — same state behaviour, a taller box that grows with its content. Like Input, label and error text come from composing it with the Field family."
+  },
+  "InputGroup": {
+    "hero": {
+      "cloneFrom": "3527:613",
+      "x": 25,
+      "y": 85,
+      "width": 340
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 186,
+        "y": 116,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 186,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 28,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 344,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 275,
+        "y": 16,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The shared surface. Border and state belong to this frame, not to the field inside — whatever sits in it reads as one control."
+        },
+        {
+          "number": "02",
+          "part": "content (Slot)",
+          "detail": "Takes the whole composition: any number of addons plus one control, in the order they should appear.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "InputGroupAddon",
+          "detail": "A flanking cell for an icon, a label or a button. Its align property decides which of the four edges it attaches to."
+        },
+        {
+          "number": "04",
+          "part": "Control",
+          "detail": "InputGroupInput, InputGroupTextarea or InputGroupText. Carries no border of its own and hands focus and error up to the group."
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "InputGroup has no invalid / disabled prop of its own — setting one on the group does nothing.",
+      "do": "Set aria-invalid / disabled on the inner control — the group's has-[…] selectors follow it automatically."
+    },
+    "usage": {
+      "hideNodes": [
+        "3533:672"
+      ]
+    },
+    "parts": [
+      {
+        "label": "InputGroup",
+        "id": "3525:622"
+      },
+      {
+        "label": "Addon",
+        "id": "3520:606"
+      },
+      {
+        "label": "Button",
+        "id": "3545:694"
+      },
+      {
+        "label": "Input",
+        "id": "3522:590"
+      },
+      {
+        "label": "Textarea",
+        "id": "3522:592"
+      },
+      {
+        "label": "Text",
+        "id": "3522:594"
+      },
+      {
+        "label": "Example icon",
+        "id": "3546:677"
+      }
+    ],
+    "roles": {
+      "input-fill": "group surface",
+      "input-border": "group border",
+      "input-ink-placeholder": "placeholder text",
+      "destructive": "invalid border + ring",
+      "ring": "focus border + ring/50",
+      "muted": "addon icon + prefix text",
+      "ink": "entered text + addon button label"
+    },
+    "description": "Fuses a control and its adornments (icons, buttons, text) into one field: the group owns border, focus and invalid treatment, the control inside goes borderless. Addons sit beside the control or as a bar above/below it. State always originates from the inner control — the group has none of its own, it mirrors."
+  },
+  "Select": {
+    "hero": {
+      "cloneFrom": "4326:2477",
+      "x": 25,
+      "y": 85,
+      "width": 256
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 25,
+        "y": 202,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 195,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 35,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 256,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "05",
+        "leader": "up",
+        "x": 235,
+        "y": 202,
+        "height": 48
+      },
+      {
+        "number": "06",
+        "leader": "up",
+        "x": 115,
+        "y": 146,
+        "height": 104
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The whole select — the closed trigger plus the panel it opens. In use the panel only appears once the trigger is opened; here both are drawn at once."
+        },
+        {
+          "number": "02",
+          "part": "SelectTrigger",
+          "detail": "The closed control and the only part visible until the list opens. It reads like a text field and carries the same states, plus a size."
+        },
+        {
+          "number": "03",
+          "part": "Value",
+          "detail": "Text property on the trigger. Shows the placeholder until a choice is made, then the chosen option’s label — the same two-layer switch as in Input."
+        },
+        {
+          "number": "04",
+          "part": "Chevron",
+          "detail": "The affordance that marks this as a field which opens a list rather than one you type into."
+        },
+        {
+          "number": "05",
+          "part": "SelectContent",
+          "detail": "The panel that opens over the page, anchored under the trigger. Figma cannot open it, so it is drawn permanently open here."
+        },
+        {
+          "number": "06",
+          "part": "SelectItem",
+          "detail": "One option. It has its own selected and focus states and takes a leading icon."
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "aria-invalid on the trigger has no dedicated prop — it must be set directly.",
+      "do": "Compose with Field (see the Invalid example) so aria-invalid and the error message travel together."
+    },
+    "parts": [
+      {
+        "label": "Trigger",
+        "id": "4308:2029"
+      },
+      {
+        "label": "Item",
+        "id": "4313:2046"
+      },
+      {
+        "label": "Content",
+        "id": "4314:1997"
+      },
+      {
+        "label": "Group",
+        "id": "4326:2371"
+      },
+      {
+        "label": "Open",
+        "id": "4326:2477"
+      }
+    ],
+    "roles": {
+      "input-fill": "trigger resting fill",
+      "input-border": "trigger resting border",
+      "destructive": "trigger invalid border + ring",
+      "ring": "trigger focus border + ring/50",
+      "dialog-fill": "content surface",
+      "border": "content border",
+      "accent-fill": "item highlight fill",
+      "accent-ink": "item highlight label",
+      "muted": "group heading + chevron icon",
+      "ink": "trigger value + item label",
+      "effect:Elevation": "dropdown elevation"
+    },
+    "description": "A picker whose closed trigger reads exactly like the sibling text fields (two sizes, same invalid/disabled behaviour), and whose open list is a raised overlay with highlighted options and a check on the current value. Compose with the Field family for label and error."
+  },
+  "Label": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 37,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 37,
+        "y": 16,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The entire component is this one text node. The disabled state only dims it; nothing inside it changes.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Label",
+          "detail": "Text property on the root. The caption that names a control — clicking it moves focus to that control.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "roles": {
+      "ink": "caption text"
+    },
+    "description": "The caption that names a control via the htmlFor↔id pairing: clicking it focuses or toggles the control, screen readers read it as the field name. It has no state of its own — it only dims in reaction to a disabled control."
+  },
+  "Field": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 225,
+        "y": 171,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 37,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 165,
+        "y": 142,
+        "height": 77
+      },
+      {
+        "number": "04",
+        "leader": "up",
+        "x": 65,
+        "y": 171,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The layout row itself. It brings no surface of its own — it stacks the parts and hands the orientation and invalid state down to them.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "label (Slot)",
+          "detail": "Takes the caption, normally a real Label instance. Above the control when vertical, beside it when horizontal.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "control (Slot)",
+          "detail": "Takes the actual control — an Input in this hero, but any form control fits. The field itself contributes nothing to its look.",
+          "slot": true
+        },
+        {
+          "number": "04",
+          "part": "description (Slot)",
+          "detail": "Takes the helper line under the control, switchable on the root. In the invalid variants a second slot for the error joins it.",
+          "slot": true
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "A <label for> cannot name a control through Field's role=group wrapper.",
+      "do": "Use the label slot (FieldLabel/Label), which pairs directly with the control — see ChoiceCard's aria-labelledby for the composite case."
+    },
+    "roles": {
+      "input-fill": "nested control fill",
+      "input-border": "nested control border",
+      "destructive": "error text + invalid control",
+      "muted": "description text"
+    },
+    "description": "The layout-and-semantics layer for form rows: label, description and error arranged around any control, vertically or horizontally. It draws no surface — the control keeps its own look. Caveat: the wrapper is a group, so a plain <label for> cannot name a control through it — use the label slot."
+  },
+  "FieldLegend": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 51,
+        "y": 107,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 51,
+        "y": 17,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The whole component is one text node. The variant switches it between a group caption and a plain field label.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Legend",
+          "detail": "Text property on the root. It names the group of fields underneath it rather than any single control.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "roles": {
+      "ink": "legend / label text"
+    },
+    "description": "The caption of a FieldSet: legend for a section title, label as the lighter form for nested sub-groups."
+  },
+  "FieldSet": {
+    "hero": {
+      "cloneFrom": "3739:1026",
+      "x": 25,
+      "y": 85,
+      "width": 320
+    },
+    "description": "Groups related Fields under a caption as a semantic <fieldset> — a pure structure part with no surface of its own.",
+    "pins": [
+      {
+        "number": "01",
+        "leader": "down",
+        "x": 265,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 37,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 176,
+        "y": 536,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The fieldset frame. It carries no surface of its own — it only sets the caption above the group and the rhythm between them.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "FieldLegend",
+          "detail": "A real FieldLegend instance, not a text property. It names the whole group, so it appears exactly once per fieldset.",
+          "slot": false
+        },
+        {
+          "number": "03",
+          "part": "Slot",
+          "detail": "Takes everything the fieldset groups — here a field group and two plain fields, in the order they should be read.",
+          "slot": true
+        }
+      ],
+      "columns": 1
+    },
+    "parts": [
+      {
+        "label": "FieldSet",
+        "id": "3739:1026"
+      },
+      {
+        "label": "Composed example",
+        "id": "3692:1436"
+      }
+    ],
+    "roles": {
+      "border": "nested separator line"
+    }
+  },
+  "FieldGroup": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "down",
+        "x": 305,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 265,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 37,
+        "y": 17,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 37,
+        "y": 291,
+        "height": 48
+      },
+      {
+        "number": "04",
+        "leader": "up",
+        "x": 176,
+        "y": 188,
+        "height": 151
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The group frame. It has no surface of its own — it only stacks what it is given and switches between a column and a row.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Slot",
+          "detail": "Takes the whole group content: any number of fields, with separators wherever a visual break belongs.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "Field",
+          "detail": "A real Field instance, nested rather than swapped in. Each one keeps its own label, control and description.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": "Separator",
+          "detail": "A real Separator instance — the group draws no rule of its own. It marks a break between two fields, never the outer edge.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "roles": {
+      "border": "separator line"
+    },
+    "description": "Stacks several Fields with a consistent rhythm — vertically by default, or as a wrapping horizontal row: the layout that checkbox and radio groups build on."
+  },
+  "Switch": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 32,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 25,
+        "y": 16,
+        "height": 69
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The track is the component itself — the pill’s fill and border carry the on/off state, and nothing sits inside it but the knob.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "thumb",
+          "detail": "The round knob, the only part that moves. It rests at the left edge when off and travels to the right edge when on.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "A bare control has no accessible name.",
+      "do": "Compose it with Label / Field or pass aria-label (the stories do). Invalid is driven by aria-invalid (no prop)."
+    },
+    "roles": {
+      "input-fill-high": "unchecked track fill",
+      "primary-fill": "checked track fill",
+      "surface": "thumb surface",
+      "destructive": "invalid border · checked-invalid track",
+      "ring": "focus border + ring/50",
+      "corner-full": "track / thumb radius"
+    },
+    "description": "An on/off toggle — track tints and thumb slides when checked; size adds a compact variant. Same composition rule as its siblings: the label comes from Label/Field, invalid is a live state, not a prop."
+  },
+  "Slider": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "down",
+        "x": 196,
+        "y": 16,
+        "height": 69
+      },
+      {
+        "number": "02",
+        "leader": "up",
+        "x": 196,
+        "y": 88,
+        "height": 48
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 72,
+        "y": 16,
+        "height": 69
+      },
+      {
+        "number": "04",
+        "leader": "up",
+        "x": 106,
+        "y": 92,
+        "height": 44
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The slider frame. Only four pixels tall — the handle overhangs it above and below — and it carries the focus and disabled states.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Track",
+          "detail": "The rail across the full width. The range is painted over it, so what stays visible is the stretch not yet reached.",
+          "slot": false
+        },
+        {
+          "number": "03",
+          "part": "Range",
+          "detail": "The filled stretch from the start of the scale to the handle. It is what makes the current value readable at a glance.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": "Thumb",
+          "detail": "The handle. There is one per value, so the range variant simply puts a second one on the same rail.",
+          "slot": false
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "A root label names nothing — role=slider sits on each thumb, not the container.",
+      "do": "The component forwards aria-label / aria-labelledby to every thumb automatically — pass it once."
+    },
+    "roles": {
+      "input-fill-high": "track rail fill",
+      "primary-fill": "range fill",
+      "surface": "thumb surface",
+      "input-border": "thumb border",
+      "corner-full": "track / thumb radius"
+    },
+    "description": "Value selection on a track, horizontal or vertical. Pass two values and it becomes a range — one thumb per value. Its accessible name must reach the thumbs, not the container; the component forwards one label to all of them."
+  },
+  "RadioGroup": {
+    "hero": {
+      "cloneFrom": "3850:1207",
+      "x": 25,
+      "y": 85,
+      "width": 16
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 24,
+        "y": 100,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 24,
+        "y": 16,
+        "height": 69
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "One radio item, not the group — the group around it is layout only. Border, fill and every state are drawn on this circle.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "dot",
+          "detail": "The small filled circle in the middle. It shows only when the item is selected and is the whole visual difference between on and off.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "A bare control has no accessible name.",
+      "do": "Compose it with Label / Field or pass aria-label (the stories do). Invalid is driven by aria-invalid (no prop)."
+    },
+    "parts": [
+      {
+        "label": "RadioGroup",
+        "id": "4006:1499"
+      }
+    ],
+    "roles": {
+      "input-fill": "resting circle fill",
+      "input-border": "resting circle border",
+      "primary-fill": "checked circle fill + border",
+      "primary-ink": "checked dot",
+      "destructive": "invalid border · checked-invalid fill",
+      "destructive-ink": "checked-invalid dot",
+      "ring": "focus border + ring/50",
+      "corner-full": "circle radius"
+    },
+    "description": "Single choice out of a set: the group carries the value and the layout, each RadioGroupItem is one option. Items behave like Checkbox — state-driven, named only through composition; the selection itself always lives on the group."
+  },
+  "ChoiceCard": {
+    "hero": {
+      "cloneFrom": "4110:1535",
+      "x": 25,
+      "y": 85,
+      "width": 360
+    },
+    "description": "Makes the whole card the click target for one choice — title, description and a checkbox, switch or radio in a single labelled surface that tints when checked. Stateless pass-through: controlled vs. uncontrolled is the consumer's decision; the radio form additionally needs its surrounding RadioGroup.",
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 196,
+        "y": 141,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "up",
+        "x": 316,
+        "y": 133,
+        "height": 56
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 41,
+        "y": 24,
+        "height": 69
+      },
+      {
+        "number": "04",
+        "leader": "up",
+        "x": 76,
+        "y": 133,
+        "height": 56
+      },
+      {
+        "number": "05",
+        "leader": "down",
+        "x": 360,
+        "y": 40,
+        "height": 69
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The card surface. Border, radius and the tint that marks a chosen card live here, along with all five interaction states.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Field",
+          "detail": "A real Field instance doing the layout: the text column on the left, the control on the right, aligned to the first line.",
+          "slot": false
+        },
+        {
+          "number": "03",
+          "part": "Label",
+          "detail": "The card’s headline, a real Label instance. It names the option and makes the whole card the clickable target for it.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": "description",
+          "detail": "The supporting line under the title. It carries the detail that would make the title too long to scan.",
+          "slot": false
+        },
+        {
+          "number": "05",
+          "part": "Checkbox",
+          "detail": "The control that holds the value. Swapping it for a switch or a radio gives the two sibling sets of this family.",
+          "slot": false
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "A <label for> cannot name the card's control through Field's role=group wrapper (axe button-name).",
+      "do": "Every wrapper sets aria-labelledby on the FieldTitle id automatically; ChoiceCardRadio also requires value on the RadioGroup ancestor."
+    },
+    "parts": [
+      {
+        "label": "Checkbox",
+        "id": "4112:1638"
+      },
+      {
+        "label": "Switch",
+        "id": "4119:1750"
+      },
+      {
+        "label": "Radio",
+        "id": "4124:1862"
+      }
+    ],
+    "ownMembers": [
+      "Checkbox",
+      "Switch",
+      "RadioGroupItem"
+    ],
+    "roles": {
+      "accent-fill": "checked card fill",
+      "accent-border": "checked card border",
+      "accent-ink": "checked card title",
+      "primary-fill": "nested control checked fill",
+      "primary-ink": "nested control checked mark",
+      "input-fill": "nested control resting fill",
+      "input-border": "nested control resting border",
+      "destructive": "nested control invalid border + fill",
+      "surface": "resting card surface + switch thumb",
+      "border": "resting card border",
+      "destructive-ink": "nested control invalid glyph",
+      "ring": "nested control focus border",
+      "input-fill-high": "nested switch track fill"
+    },
+    "hull": {
+      "width": 1272
+    },
+    "usage": {
+      "hideNodes": [
+        "4146:2081"
+      ]
+    }
+  },
+  "Button": {
+    "hero": {
+      "x": 25,
+      "y": 78
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 43,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 25,
+        "y": 10,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 61,
+        "y": 10,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The outer shell. It carries variant, size and state but draws nothing — everything visible sits in the base inside it.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": ".Button/Base",
+          "detail": "The nested component that draws the cap. Label and icon belong to it, and an overlay inside it produces hover and active.",
+          "slot": false
+        },
+        {
+          "number": "03",
+          "part": "Label",
+          "detail": "Text property on the base rather than on the button. The icon-only sizes drop it entirely and put an icon in its place.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "An icon-only button (icon boolean) has no visible label.",
+      "do": "Pass aria-label / aria-labelledby — with icon: true the type level requires it."
+    },
+    "roles": {
+      "primary-fill": "default fill",
+      "primary-ink": "default label",
+      "muted-fill": "hover/press tint on the default fill",
+      "secondary-fill": "secondary fill",
+      "secondary-ink": "secondary label",
+      "destructive": "destructive fill",
+      "destructive-ink": "destructive label",
+      "surface": "outline resting surface",
+      "border": "outline border",
+      "ink": "outline / ghost resting label",
+      "accent-fill": "outline / ghost hover fill",
+      "accent-ink": "outline / ghost hover label",
+      "primary": "link label"
+    },
+    "description": "The action trigger: variant sets the semantic weight (solid primary through quiet ghost and link), size the geometry scale. One component covers text, text-with-icon and square icon-only buttons — icon-only requires its own accessible name. Via asChild a link can wear the button look without losing its semantics."
+  },
+  "Badge": {
+    "hero": {
+      "x": 25,
+      "y": 82
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 53,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 30,
+        "y": 14,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 61,
+        "y": 14,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The pill itself and the badge's only frame. Variant is its single axis and sets fill, border and text tone together in one step.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "icon (Slot)",
+          "detail": "Root slot for a leading mark — an icon or a small dot. Optional: the badge is complete without it and never replaces the label.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "Label",
+          "detail": "Text property on the root and the badge's whole content — a word, a count or a short status; the pill hugs whatever it gets.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "A bare badge is a <span> — styling it like a link does not make it one.",
+      "do": "Use asChild to wrap a real <a> / <button>: the pill look stays, semantics come from the child."
+    },
+    "roles": {
+      "primary-fill": "default fill",
+      "primary-ink": "default label",
+      "secondary-fill": "secondary fill",
+      "secondary-ink": "secondary label",
+      "destructive": "destructive fill",
+      "destructive-ink": "destructive label",
+      "border": "outline border",
+      "ink": "outline / ghost label",
+      "primary": "link label",
+      "corner-full": "pill radius"
+    },
+    "description": "A compact status pill; variant carries the tone from solid emphasis to quiet outline/ghost. Informative by default — via asChild it wraps a real link or button and stays a pill."
+  },
+  "Kbd": {
+    "hero": {
+      "x": 25,
+      "y": 82
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 44,
+        "y": 102,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 44,
+        "y": 14,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "A single frame — the keycap itself. Emphasis switches the loud cap for a quiet one; either way it depicts a key, not a control.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "Label",
+          "detail": "Text property on the cap, holding the key's name. The content axis swaps it for an icon slot when a key is better drawn.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "The cap is display-only (pointer-events-none) — it never handles the shortcut it shows.",
+      "do": "Wire the shortcut in code; compose KbdGroup to spell a chord."
+    },
+    "roles": {
+      "inverse-fill": "high cap fill",
+      "inverse-ink": "high cap glyph",
+      "muted-fill": "low cap fill",
+      "muted-ink": "low cap glyph"
+    },
+    "description": "A keycap for spelling keyboard shortcuts in the UI; emphasis switches between the loud inverted cap and a quiet one. Display-only — it never receives interaction; chords are several caps in a KbdGroup."
+  },
+  "Dialog": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 25,
+        "y": 232,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 47,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 95,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 378,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "05",
+        "leader": "up",
+        "x": 336,
+        "y": 232,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "slot": false,
+          "detail": "The modal panel. Figma cannot open it, so it is drawn alone here, without the dimming overlay and with its optional body region empty."
+        },
+        {
+          "number": "02",
+          "part": "title",
+          "slot": false,
+          "detail": "Text property on the panel. Mandatory — it is the dialog's accessible name, so a modal without it announces nothing."
+        },
+        {
+          "number": "03",
+          "part": "description",
+          "slot": false,
+          "detail": "Text property under the title. One quiet line saying what the dialog is for; optional, but it carries the reason."
+        },
+        {
+          "number": "04",
+          "part": "close",
+          "slot": false,
+          "detail": "The corner dismiss button, and the one part here that can genuinely be switched off — a dialog may lean on its footer actions instead."
+        },
+        {
+          "number": "05",
+          "part": "DialogFooter",
+          "slot": false,
+          "detail": "Its own component: a tinted band across the bottom that takes the closing actions, so the buttons are composed case by case."
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "Without a DialogTitle the panel has no accessible name — Radix wires aria-labelledby to it.",
+      "do": "Always render a DialogTitle (DialogDescription feeds aria-describedby); the corner close carries a visually hidden 'Close' label."
+    },
+    "parts": [
+      {
+        "label": "Dialog",
+        "id": "3592:794"
+      },
+      {
+        "label": "DialogOverlay",
+        "id": "3590:791"
+      },
+      {
+        "label": "DialogFooter",
+        "id": "3591:788"
+      },
+      {
+        "label": "Icon/Close",
+        "id": "3590:790"
+      }
+    ],
+    "roles": {
+      "dialog-fill": "panel surface",
+      "dialog-ink": "panel title text",
+      "border": "panel + footer border",
+      "scrim": "backdrop fill",
+      "scrim-opacity": "overlay layer opacity",
+      "muted": "description text",
+      "muted-fill": "footer band fill",
+      "ink": "close icon",
+      "effect:Elevation": "panel drop shadow"
+    },
+    "hull": {
+      "width": 1664
+    },
+    "usage": {
+      "hideNodes": [
+        "3875:1230"
+      ]
+    },
+    "description": "The modal: scrim, focus trap, dismiss via corner close, footer close, Escape or overlay click. A DialogTitle is mandatory — it is the dialog's accessible name. The footer is its own part with an optional built-in close action."
+  },
+  "Command": {
+    "hero": {
+      "cloneFrom": "3566:2",
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 25,
+        "y": 391,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 37,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 406,
+        "y": 387,
+        "height": 52
+      },
+      {
+        "number": "04",
+        "leader": "up",
+        "x": 106,
+        "y": 387,
+        "height": 52
+      },
+      {
+        "number": "05",
+        "leader": "up",
+        "x": 226,
+        "y": 218,
+        "height": 221
+      },
+      {
+        "number": "06",
+        "leader": "up",
+        "x": 286,
+        "y": 256,
+        "height": 183
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "slot": false,
+          "detail": "The panel and the whole component. A variant switches it between the plain, embedded form and the raised launcher the app opens on a shortcut."
+        },
+        {
+          "number": "02",
+          "part": "CommandInput",
+          "slot": false,
+          "detail": "The search field at the top. What is typed here filters and re-ranks everything below it; the field itself never leaves the panel."
+        },
+        {
+          "number": "03",
+          "part": "list (Slot)",
+          "slot": true,
+          "detail": "Everything under the field is free — groups, items and separators go in here, in the order they should appear."
+        },
+        {
+          "number": "04",
+          "part": "CommandGroup",
+          "slot": false,
+          "detail": "A headed block of rows — two of them stack here, split by a rule. The heading names the block; the group also holds the empty-state message."
+        },
+        {
+          "number": "05",
+          "part": "CommandItem",
+          "slot": false,
+          "detail": "One selectable row: an icon, a label and room for a shortcut. It has selected, disabled and checked states — two of them are shown here."
+        },
+        {
+          "number": "06",
+          "part": "CommandSeparator",
+          "slot": false,
+          "detail": "The hairline between two blocks. It only divides; a second form of it can carry a small label instead of running plain."
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "CommandList renders role=listbox — arbitrary children are not allowed inside it.",
+      "do": "CommandSeparator renders role=presentation and CommandEmpty a disabled role=option, so the empty listbox keeps an allowed child."
+    },
+    "parts": [
+      {
+        "label": "Command",
+        "id": "3642:2"
+      },
+      {
+        "label": "CommandInput",
+        "id": "3639:2"
+      },
+      {
+        "label": "CommandGroup",
+        "id": "3640:9"
+      },
+      {
+        "label": "CommandItem",
+        "id": "3559:2"
+      },
+      {
+        "label": "CommandSeparator",
+        "id": "3653:6"
+      },
+      {
+        "label": "CommandEmpty",
+        "id": "3564:3"
+      },
+      {
+        "label": "Icon/Calendar",
+        "id": "3557:4"
+      },
+      {
+        "label": "Icon/Emotion",
+        "id": "3557:7"
+      },
+      {
+        "label": "Icon/Calculator",
+        "id": "3557:10"
+      },
+      {
+        "label": "Icon/User",
+        "id": "3557:13"
+      },
+      {
+        "label": "Icon/Card",
+        "id": "3557:16"
+      },
+      {
+        "label": "Icon/Settings",
+        "id": "3557:19"
+      },
+      {
+        "label": "Icon/ArrowRight",
+        "id": "3644:4"
+      },
+      {
+        "label": "Icon/Swap",
+        "id": "3644:7"
+      },
+      {
+        "label": "Icon/Search",
+        "id": "3644:10"
+      },
+      {
+        "label": "Icon/Play",
+        "id": "3644:13"
+      },
+      {
+        "label": "Icon/Download",
+        "id": "3644:16"
+      }
+    ],
+    "roles": {
+      "dialog-fill": "panel surface",
+      "border": "panel border + separator line",
+      "accent-fill": "selected item fill",
+      "accent-ink": "selected item label",
+      "muted": "group heading + quiet text",
+      "card-fill": "palette prompt row fill",
+      "primary": "palette caret bar fill",
+      "ink": "search text + item label and icon",
+      "surface": "icon frame surface",
+      "input-border": "search field border",
+      "input-fill": "search field surface",
+      "input-ink-placeholder": "search placeholder",
+      "inverse-fill": "esc key chip surface",
+      "effect:Elevation": "panel drop shadow",
+      "effect:Glow": "palette caret bar glow"
+    },
+    "hull": {
+      "width": 1288
+    },
+    "usage": {
+      "hideNodes": [
+        "3584:789"
+      ]
+    },
+    "description": "The command palette: typing filters and re-ranks the list, with a built-in empty state. Composed from input, list, groups, items, shortcuts and separators; the same palette runs inline or inside a modal as the app's ⌘K launcher, and variant=\"palette\" reshapes it into that launcher form."
+  },
+  "Popover": {
+    "hero": {
+      "cloneFrom": "4368:2258",
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 25,
+        "y": 191,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 306,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 306,
+        "y": 179,
+        "height": 60
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 37,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "05",
+        "leader": "up",
+        "x": 136,
+        "y": 179,
+        "height": 60
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "slot": false,
+          "detail": "The panel itself, and everything the popover is. Figma cannot open it on click, so here it is drawn permanently open."
+        },
+        {
+          "number": "02",
+          "part": "content (Slot)",
+          "slot": true,
+          "detail": "The whole inside of the panel is free — any content can be dropped in. The panel brings only its surface, border and padding."
+        },
+        {
+          "number": "03",
+          "part": "PopoverHeader",
+          "slot": false,
+          "detail": "The one ready-made filling for that slot: a title over a description, the pairing most popovers need. Anything else is composed by hand."
+        },
+        {
+          "number": "04",
+          "part": "title",
+          "slot": false,
+          "detail": "Text property on the header. A popover does not name itself, so this line is what tells the reader what has opened."
+        },
+        {
+          "number": "05",
+          "part": "description",
+          "slot": false,
+          "detail": "Text property on the header. The supporting line under the title, carrying the detail the trigger alone could not."
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "Radix gives the content role=dialog, but a Popover does not wire its title the way the modal Dialog does — axe aria-dialog-name fails.",
+      "do": "Pass an explicit aria-label / aria-labelledby on the open panel (documented in the JSDoc and the stories)."
+    },
+    "parts": [
+      {
+        "label": "PopoverContent",
+        "id": "4365:2255"
+      },
+      {
+        "label": "PopoverHeader",
+        "id": "4367:2253"
+      },
+      {
+        "label": "Popover Root",
+        "id": "4402:2589"
+      }
+    ],
+    "roles": {
+      "dialog-fill": "panel surface",
+      "dialog-ink": "panel title text",
+      "border": "panel border",
+      "muted": "description text",
+      "effect:Elevation": "panel drop shadow"
+    },
+    "description": "A raised panel anchored to its trigger — no scrim, no focus trap unless modal; outside click or Escape dismisses. Unlike Dialog it does not name itself: an open panel needs an explicit accessible name."
+  },
+  "Tooltip": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 22,
+        "y": 114,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 37,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 54,
+        "y": 120,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "slot": false,
+          "detail": "The chip, and the whole component. Its side property picks which edge of the trigger it points from; here it is drawn permanently open."
+        },
+        {
+          "number": "02",
+          "part": "content (Slot)",
+          "slot": true,
+          "detail": "Takes whatever the tooltip should say, usually one short line. A tooltip describes its trigger — it never stands in as its name."
+        },
+        {
+          "number": "03",
+          "part": "Arrow",
+          "slot": false,
+          "detail": "The pointer that ties the chip to its trigger. It sits outside the chip's edge and swings around with the side property."
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "A tooltip is a description, not a name — an icon-only trigger stays nameless if the chip is its only label.",
+      "do": "Give the trigger its own aria-label (the IconTrigger story does); the content is role=tooltip and Radix wires aria-describedby."
+    },
+    "parts": [
+      {
+        "label": "Tooltip",
+        "id": "4441:73"
+      },
+      {
+        "label": "Tooltip Root",
+        "id": "4419:2781"
+      }
+    ],
+    "roles": {
+      "dialog-fill": "chip surface + arrow fill",
+      "dialog-ink": "chip label",
+      "border": "chip border + arrow stroke",
+      "effect:Elevation": "chip drop shadow"
+    },
+    "usage": {
+      "hideNodes": [
+        "4385:2367"
+      ]
+    },
+    "description": "A hover/focus hint chip with a pointer arrow, delayed by the shared provider. It describes its trigger, it does not name it — an icon-only trigger still needs its own label."
+  },
+  "Breadcrumb": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 74,
+        "y": 105,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 74,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 33,
+        "y": 105,
+        "height": 48
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 155,
+        "y": 105,
+        "height": 48
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 125,
+        "y": 16,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The component root — a plain row that holds the whole trail. It carries no surface of its own; every visible mark comes from the parts inside it.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "items (Slot)",
+          "detail": "The root's only slot and the entire content of the trail: segments and separators are placed here in the order they should read.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "Segment",
+          "detail": "The clickable step and, in its page state, the leaf you are already on — one part with a state property, not two different components.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": ".Separator",
+          "detail": "A decorative chevron marking the gap between two segments. It carries no text and is skipped when the trail is read aloud.",
+          "slot": false
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "BreadcrumbLink has no current-page prop — the leaf is a different part.",
+      "do": "Render BreadcrumbPage (role=link + aria-current=page + aria-disabled); separator and ellipsis are aria-hidden, the ellipsis carries a hidden 'More' label."
+    },
+    "parts": [
+      {
+        "label": "Breadcrumb",
+        "id": "3254:302"
+      },
+      {
+        "label": "Segment",
+        "id": "3250:308"
+      },
+      {
+        "label": ".Separator",
+        "id": "3251:302"
+      },
+      {
+        "label": "Ellipsis",
+        "id": "3251:305"
+      }
+    ],
+    "roles": {
+      "muted": "link resting label",
+      "ink": "link-hover label + current page"
+    },
+    "description": "The path trail: composed from links, separators and the current-page leaf — no props, you assemble the parts. The key distinction is link vs. current page: the leaf is its own part carrying aria-current, not a styled link; an ellipsis part collapses long trails."
+  },
+  "Separator": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "down",
+        "x": 169,
+        "y": 16,
+        "height": 68
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The whole component: a hairline rule with nothing inside it. Its orientation decides whether it lies across a stack or stands between items in a row.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "roles": {
+      "border": "divider line"
+    },
+    "description": "A hairline divider, horizontal or vertical. decorative decides whether it is announced as a semantic separator or hidden from assistive tech — the line itself never changes."
+  },
+  "Table": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "up",
+        "x": 76,
+        "y": 309,
+        "height": 48
+      },
+      {
+        "number": "02",
+        "leader": "down",
+        "x": 116,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "03",
+        "leader": "up",
+        "x": 136,
+        "y": 235,
+        "height": 122
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 176,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "05",
+        "leader": "up",
+        "x": 476,
+        "y": 272,
+        "height": 85
+      },
+      {
+        "number": "06",
+        "leader": "up",
+        "x": 296,
+        "y": 309,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The composition frame: the table sits in its slot, the caption below it.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "content (Slot)",
+          "detail": "Holds the whole interior — header line, body lines and footer strip — as one block you can swap out.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "TableRow",
+          "detail": "One line of the table, the header line included. Its slot takes the cells; hover and selection tints live on its state.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": "TableHead",
+          "detail": "The column header cell. Its align property sets the alignment of a column.",
+          "slot": false
+        },
+        {
+          "number": "05",
+          "part": "TableCell",
+          "detail": "The data cell. It shows text by default, but its slot takes a component just as well — a checkbox, a badge, a button.",
+          "slot": false
+        },
+        {
+          "number": "06",
+          "part": "Caption",
+          "detail": "Text property under the table; a boolean on the root shows or hides it.",
+          "slot": false
+        }
+      ],
+      "columns": 1
+    },
+    "doDont": {
+      "dont": "TableRow has no hover or selected prop — neither state exists in code.",
+      "do": "Hover is CSS-only; a selected row comes from data-state=selected set at the call site (see Selectable)."
+    },
+    "parts": [
+      {
+        "label": "Table",
+        "id": "4521:2597"
+      },
+      {
+        "label": "TableHead",
+        "id": "4515:2603"
+      },
+      {
+        "label": "TableCell",
+        "id": "4515:2610"
+      },
+      {
+        "label": "TableRow",
+        "id": "4520:2621"
+      }
+    ],
+    "roles": {
+      "ink": "head + cell text",
+      "border": "row bottom border",
+      "muted-fill": "hover row tint (50%)",
+      "accent-fill": "selected row tint",
+      "muted": "caption text"
+    },
+    "hull": {
+      "width": 920
+    },
+    "description": "A data table whose API is pure composition: region, row and cell parts that pass everything through. Rows are the only interactive surface — neutral hover vs. accent-tinted selection, with selection set by the call site. Column alignment is applied per column on head and cells together."
+  },
+  "Item": {
+    "hero": {
+      "x": 25,
+      "y": 85
+    },
+    "pins": [
+      {
+        "number": "01",
+        "leader": "down",
+        "x": 50,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "02",
+        "leader": "up",
+        "x": 37,
+        "y": 126,
+        "height": 48
+      },
+      {
+        "number": "03",
+        "leader": "down",
+        "x": 316,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "04",
+        "leader": "down",
+        "x": 85,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "05",
+        "leader": "down",
+        "x": 116,
+        "y": 16,
+        "height": 68
+      },
+      {
+        "number": "06",
+        "leader": "up",
+        "x": 417,
+        "y": 126,
+        "height": 48
+      }
+    ],
+    "legend": {
+      "width": 236,
+      "rows": [
+        {
+          "number": "01",
+          "part": "Root",
+          "detail": "The row itself: variant makes it plain, bordered or tinted, size sets its density.",
+          "slot": false
+        },
+        {
+          "number": "02",
+          "part": "media (Slot)",
+          "detail": "The leading spot. It comes filled with an ItemMedia instance — swap it for whatever should lead the row.",
+          "slot": true
+        },
+        {
+          "number": "03",
+          "part": "ItemContent",
+          "detail": "The text block between media and actions. It stacks the two texts and takes whatever space the other two leave.",
+          "slot": false
+        },
+        {
+          "number": "04",
+          "part": "Title",
+          "detail": "Text property on the root — the row's name, set in the heavier label type so it reads before the description.",
+          "slot": false
+        },
+        {
+          "number": "05",
+          "part": "Description",
+          "detail": "Text property below the title, set in the quiet body type: supporting detail, never a second title.",
+          "slot": false
+        },
+        {
+          "number": "06",
+          "part": "actions (Slot)",
+          "detail": "Trailing spot for what the row offers: a chevron by default, a button as well.",
+          "slot": true
+        }
+      ],
+      "columns": 2
+    },
+    "doDont": {
+      "dont": "ItemGroup renders role=list, but its children get no role of their own.",
+      "do": "Set role=listitem on every row at the call site (axe aria-required-children)."
+    },
+    "parts": [
+      {
+        "label": "ItemMedia",
+        "id": "4508:2544"
+      },
+      {
+        "label": "ItemGroup",
+        "id": "4511:2575"
+      }
+    ],
+    "roles": {
+      "ink": "title text",
+      "muted": "description text",
+      "muted-fill": "muted variant fill + link hover tint",
+      "border": "outline variant border",
+      "muted-ink": "description text + glyph on the muted-fill variant",
+      "secondary-fill": "image placeholder fill"
+    },
+    "description": "The generic list row: leading media, title with description, trailing actions; variant and size scale it from a bordered card row to a dense line. It deliberately has no selected state — hover and focus exist only on its link form (asChild); selection stays a call-site concern."
+  }
+}

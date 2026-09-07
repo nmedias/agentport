@@ -1,0 +1,1921 @@
+{
+ "libs/ui/src/components/ui/badge/badge.tsx": {
+  "file": "libs/ui/src/components/ui/badge/badge.tsx",
+  "props": {
+   "BadgeProps": {
+    "extends": "React.ComponentProps<'span'>",
+    "members": [
+     {
+      "name": "variant",
+      "type": "BadgeVariant",
+      "optional": true,
+      "doc": "Visual style — solid DS fills (`default`/`secondary`/`destructive`), a bordered neutral (`outline`),\nor the Nova-baseline extras (`ghost`/`link`).",
+      "default": "\"default\""
+     },
+     {
+      "name": "asChild",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render the styling onto a single child element instead of a `<span>` (Radix Slot) — e.g. wrap an\n`<a>` to get a real link badge.",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {
+   "badgeVariants": {
+    "variants": {
+     "variant": [
+      "default",
+      "secondary",
+      "destructive",
+      "outline",
+      "ghost",
+      "link"
+     ]
+    },
+    "defaultVariants": {
+     "variant": "default"
+    }
+   }
+  },
+  "exports": [
+   "Badge",
+   "badgeVariants",
+   "BadgeProps"
+  ],
+  "components": {
+   "Badge": "BadgeProps"
+  }
+ },
+ "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx": {
+  "file": "libs/ui/src/components/ui/breadcrumb/breadcrumb.tsx",
+  "props": {
+   "BreadcrumbLinkProps": {
+    "extends": "React.ComponentProps<'a'>",
+    "members": [
+     {
+      "name": "asChild",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render the link styling onto a single child element instead of an `<a>` (Radix Slot) —\ne.g. wrap a router `<Link>`.",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Breadcrumb",
+   "BreadcrumbList",
+   "BreadcrumbItem",
+   "BreadcrumbLink",
+   "BreadcrumbPage",
+   "BreadcrumbSeparator",
+   "BreadcrumbEllipsis",
+   "BreadcrumbLinkProps"
+  ],
+  "components": {
+   "Breadcrumb": "React.ComponentProps<'nav'>",
+   "BreadcrumbList": "React.ComponentProps<'ol'>",
+   "BreadcrumbItem": "React.ComponentProps<'li'>",
+   "BreadcrumbLink": "BreadcrumbLinkProps",
+   "BreadcrumbPage": "React.ComponentProps<'span'>",
+   "BreadcrumbSeparator": "React.ComponentProps<'li'>",
+   "BreadcrumbEllipsis": "React.ComponentProps<'span'>"
+  }
+ },
+ "libs/ui/src/components/ui/button/button.tsx": {
+  "file": "libs/ui/src/components/ui/button/button.tsx",
+  "props": {
+   "ButtonOwnProps": {
+    "members": [
+     {
+      "name": "variant",
+      "type": "ButtonVariant",
+      "optional": true,
+      "doc": "Visual style — solid fills (`default`/`secondary`/`destructive`), tinted-on-interaction\n(`outline`/`ghost`), or `link`.",
+      "default": "\"default\""
+     },
+     {
+      "name": "size",
+      "type": "ButtonSize",
+      "optional": true,
+      "doc": "Size scale (geometry) — shared by text and icon-only buttons.",
+      "default": "\"default\""
+     },
+     {
+      "name": "asChild",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render the styling onto a single child element instead of a `<button>` (Radix Slot).",
+      "default": "false"
+     }
+    ]
+   },
+   "ButtonBaseProps": {
+    "alias": "Omit< React.ComponentProps<'button'>, 'aria-label' | 'aria-labelledby' > & ButtonOwnProps",
+    "members": []
+   },
+   "ButtonProps": {
+    "alias": "ButtonBaseProps & ( | { icon?: false; 'aria-label'?: string; 'aria-labelledby'?: string } | ({ icon: true } & AccessibleName) )",
+    "members": []
+   }
+  },
+  "cva": {
+   "buttonVariants": {
+    "variants": {
+     "variant": [
+      "default",
+      "destructive",
+      "outline",
+      "secondary",
+      "ghost",
+      "link"
+     ],
+     "size": [
+      "default",
+      "xs",
+      "sm",
+      "lg",
+      "icon",
+      "icon-xs",
+      "icon-sm",
+      "icon-lg"
+     ]
+    },
+    "defaultVariants": {
+     "variant": "default",
+     "size": "default"
+    }
+   }
+  },
+  "exports": [
+   "Button",
+   "buttonVariants",
+   "ButtonProps"
+  ],
+  "components": {
+   "Button": "ButtonProps"
+  }
+ },
+ "libs/ui/src/components/ui/checkbox/checkbox.tsx": {
+  "file": "libs/ui/src/components/ui/checkbox/checkbox.tsx",
+  "props": {
+   "CheckboxProps": {
+    "extends": "Omit< React.ComponentProps<typeof CheckboxPrimitive.Root>, 'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'required' | 'name' | 'value' >",
+    "members": [
+     {
+      "name": "checked",
+      "type": "boolean | 'indeterminate'",
+      "optional": true,
+      "doc": "Controlled checked state (pair with `onCheckedChange`). Accepts `\"indeterminate\"`."
+     },
+     {
+      "name": "defaultChecked",
+      "type": "boolean | 'indeterminate'",
+      "optional": true,
+      "doc": "Checked state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean | 'indeterminate') => void",
+      "optional": true,
+      "doc": "Called when the checked state changes."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Prevents interaction and dims the control (and its Field label via group styling).",
+      "default": "false"
+     },
+     {
+      "name": "required",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Marks the control required for native form validation.",
+      "default": "false"
+     },
+     {
+      "name": "name",
+      "type": "string",
+      "optional": true,
+      "doc": "Form field name submitted with the form."
+     },
+     {
+      "name": "value",
+      "type": "string",
+      "optional": true,
+      "doc": "Value submitted when checked.",
+      "default": "\"on\""
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Checkbox",
+   "CheckboxProps"
+  ],
+  "components": {
+   "Checkbox": "CheckboxProps"
+  }
+ },
+ "libs/ui/src/components/ui/choice-card/choice-card-checkbox/choice-card-checkbox.tsx": {
+  "file": "libs/ui/src/components/ui/choice-card/choice-card-checkbox/choice-card-checkbox.tsx",
+  "props": {
+   "ChoiceCardCheckboxProps": {
+    "extends": "Omit< React.ComponentProps<typeof Checkbox>, 'title' | 'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'id' >",
+    "members": [
+     {
+      "name": "title",
+      "type": "React.ReactNode",
+      "optional": false,
+      "doc": "Card heading (rendered as `FieldTitle`)."
+     },
+     {
+      "name": "description",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "Secondary line under the title (rendered as `FieldDescription`)."
+     },
+     {
+      "name": "error",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid."
+     },
+     {
+      "name": "checked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled checked state (pair with `onCheckedChange`). Binary — a leaf card has no `\"indeterminate\"` tri-state."
+     },
+     {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Checked state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "optional": true,
+      "doc": "Called when the checked state changes."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables the control and dims the whole card.",
+      "default": "false"
+     },
+     {
+      "name": "id",
+      "type": "string",
+      "optional": true,
+      "doc": "Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "ChoiceCardCheckbox",
+   "ChoiceCardCheckboxProps"
+  ],
+  "components": {
+   "ChoiceCardCheckbox": "ChoiceCardCheckboxProps"
+  }
+ },
+ "libs/ui/src/components/ui/choice-card/choice-card-radio/choice-card-radio.tsx": {
+  "file": "libs/ui/src/components/ui/choice-card/choice-card-radio/choice-card-radio.tsx",
+  "props": {
+   "ChoiceCardRadioProps": {
+    "extends": "Omit<React.ComponentProps<typeof RadioGroupItem>, 'title' | 'value' | 'disabled' | 'id'>",
+    "members": [
+     {
+      "name": "title",
+      "type": "React.ReactNode",
+      "optional": false,
+      "doc": "Card heading (rendered as `FieldTitle`)."
+     },
+     {
+      "name": "description",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "Secondary line under the title (rendered as `FieldDescription`)."
+     },
+     {
+      "name": "error",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid."
+     },
+     {
+      "name": "value",
+      "type": "string",
+      "optional": false,
+      "doc": "The value this item selects in its parent RadioGroup (required)."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables the control and dims the whole card.",
+      "default": "false"
+     },
+     {
+      "name": "id",
+      "type": "string",
+      "optional": true,
+      "doc": "Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "ChoiceCardRadio",
+   "ChoiceCardRadioProps"
+  ],
+  "components": {
+   "ChoiceCardRadio": "ChoiceCardRadioProps"
+  }
+ },
+ "libs/ui/src/components/ui/choice-card/choice-card-shell/choice-card-shell.tsx": {
+  "file": "libs/ui/src/components/ui/choice-card/choice-card-shell/choice-card-shell.tsx",
+  "props": {
+   "ChoiceCardShellProps": {
+    "members": [
+     {
+      "name": "title",
+      "type": "React.ReactNode",
+      "optional": false,
+      "doc": "Card heading — rendered as `FieldTitle` (its id wires the control's `aria-labelledby`)."
+     },
+     {
+      "name": "children",
+      "type": "React.ReactNode",
+      "optional": false,
+      "doc": "The control slotted next to the text column (a `Checkbox`, `RadioGroupItem`, or `Switch`)."
+     },
+     {
+      "name": "id",
+      "type": "string",
+      "optional": false,
+      "doc": "Links the `FieldLabel` (`htmlFor`) and the title id (`${id}-title`) to the control."
+     },
+     {
+      "name": "description",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "Secondary line under the title — rendered as `FieldDescription`."
+     },
+     {
+      "name": "error",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "When truthy, marks the card invalid: renders a `FieldError` and sets `data-invalid` on the Field."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Dims the card via the Field's `data-disabled` group styling.",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "ChoiceCardShell",
+   "ChoiceCardShellProps"
+  ],
+  "components": {
+   "ChoiceCardShell": "ChoiceCardShellProps"
+  }
+ },
+ "libs/ui/src/components/ui/choice-card/choice-card-switch/choice-card-switch.tsx": {
+  "file": "libs/ui/src/components/ui/choice-card/choice-card-switch/choice-card-switch.tsx",
+  "props": {
+   "ChoiceCardSwitchProps": {
+    "extends": "Omit< React.ComponentProps<typeof Switch>, 'title' | 'checked' | 'defaultChecked' | 'onCheckedChange' | 'size' | 'disabled' | 'id' >",
+    "members": [
+     {
+      "name": "title",
+      "type": "React.ReactNode",
+      "optional": false,
+      "doc": "Card heading (rendered as `FieldTitle`)."
+     },
+     {
+      "name": "description",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "Secondary line under the title (rendered as `FieldDescription`)."
+     },
+     {
+      "name": "error",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "When truthy, marks the card invalid: renders a `FieldError`, sets `data-invalid` on the Field and `aria-invalid` on the control. Empty/undefined = valid."
+     },
+     {
+      "name": "checked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled checked state (pair with onCheckedChange)."
+     },
+     {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Checked state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "optional": true,
+      "doc": "Called when the checked state changes."
+     },
+     {
+      "name": "size",
+      "type": "'sm' | 'default'",
+      "optional": true,
+      "doc": "Track size.",
+      "default": "\"default\""
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables the control and dims the whole card.",
+      "default": "false"
+     },
+     {
+      "name": "id",
+      "type": "string",
+      "optional": true,
+      "doc": "Links the label to the control (`htmlFor` ↔ `id`). Auto-generated via `useId` if omitted."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "ChoiceCardSwitch",
+   "ChoiceCardSwitchProps"
+  ],
+  "components": {
+   "ChoiceCardSwitch": "ChoiceCardSwitchProps"
+  }
+ },
+ "libs/ui/src/components/ui/command/command.tsx": {
+  "file": "libs/ui/src/components/ui/command/command.tsx",
+  "props": {
+   "CommandProps": {
+    "extends": "Omit< React.ComponentProps<typeof CommandPrimitive>, 'label' | 'shouldFilter' | 'loop' | 'value' | 'defaultValue' | 'onValueChange' | 'filter' >",
+    "members": [
+     {
+      "name": "variant",
+      "type": "CommandVariant",
+      "optional": true,
+      "doc": "DS surface variant. `default` is the elevated overlay panel; `palette` is the full-bleed Agentport terminal palette (set on the root only, flows to Input/List/Group/Separator via context).",
+      "default": "\"default\""
+     },
+     {
+      "name": "label",
+      "type": "string",
+      "optional": true,
+      "doc": "Accessible label for the command menu (cmdk renders it visually hidden)."
+     },
+     {
+      "name": "shouldFilter",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Whether cmdk filters + sorts items by the search query. Set `false` to render valid items yourself (server-side / async search).",
+      "default": "true"
+     },
+     {
+      "name": "loop",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Loop arrow-key navigation around the ends of the list.",
+      "default": "false"
+     },
+     {
+      "name": "value",
+      "type": "string",
+      "optional": true,
+      "doc": "Controlled value of the active item (pair with `onValueChange`)."
+     },
+     {
+      "name": "defaultValue",
+      "type": "string",
+      "optional": true,
+      "doc": "Active item value when uncontrolled."
+     },
+     {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "optional": true,
+      "doc": "Called when the active item changes."
+     },
+     {
+      "name": "filter",
+      "type": "(value: string, search: string, keywords?: string[]) => number",
+      "optional": true,
+      "doc": "Custom match function `(value, search, keywords) => number` (0 hidden … 1 best). Defaults to command-score."
+     }
+    ]
+   },
+   "CommandDialogProps": {
+    "extends": "Omit< React.ComponentProps<typeof Dialog>, 'open' | 'defaultOpen' | 'onOpenChange' | 'modal' >",
+    "members": [
+     {
+      "name": "title",
+      "type": "string",
+      "optional": true,
+      "doc": "Visually-hidden dialog title (the a11y name).",
+      "default": "\"Command Palette\""
+     },
+     {
+      "name": "description",
+      "type": "string",
+      "optional": true,
+      "doc": "Visually-hidden dialog description.",
+      "default": "\"Search for a command to run…\""
+     },
+     {
+      "name": "className",
+      "type": "string",
+      "optional": true,
+      "doc": "Extra classes merged onto the inner DialogContent panel."
+     },
+     {
+      "name": "showCloseButton",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Show the dialog's corner close button.",
+      "default": "false"
+     },
+     {
+      "name": "variant",
+      "type": "CommandVariant",
+      "optional": true,
+      "doc": "DS surface variant forwarded to the inner Command.",
+      "default": "\"default\""
+     },
+     {
+      "name": "shouldFilter",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Whether cmdk filters + re-sorts the inner Command by the query. Set `false` for a static/composed\nlist — a FLAT labeled-separator palette MUST set this, or cmdk's re-sort scrambles items across the\nscope-less separators.",
+      "default": "true"
+     },
+     {
+      "name": "open",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled open state (pair with `onOpenChange`). CommandDialog has no trigger — drive it here."
+     },
+     {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Open state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "optional": true,
+      "doc": "Called with the next open state whenever the palette opens or closes."
+     },
+     {
+      "name": "modal",
+      "type": "boolean",
+      "optional": true,
+      "doc": "When `true` the overlay blocks the page and traps focus; `false` leaves the rest interactive.",
+      "default": "true"
+     }
+    ]
+   },
+   "CommandSeparatorProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "label",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "When set, render the labeled-rule form (an eyebrow caption + hairline) instead of a plain line."
+     },
+     {
+      "name": "alwaysRender",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Keep the separator rendered while the user is filtering (by default it hides during search)."
+     }
+    ]
+   }
+  },
+  "cva": {
+   "commandVariants": {
+    "variants": {
+     "variant": [
+      "default",
+      "palette"
+     ]
+    },
+    "defaultVariants": {
+     "variant": "default"
+    }
+   }
+  },
+  "exports": [
+   "Command",
+   "CommandDialog",
+   "CommandInput",
+   "CommandList",
+   "CommandEmpty",
+   "CommandGroup",
+   "CommandItem",
+   "CommandShortcut",
+   "CommandSeparator",
+   "commandVariants",
+   "CommandProps",
+   "CommandDialogProps",
+   "CommandSeparatorProps"
+  ],
+  "components": {
+   "Command": "CommandProps",
+   "CommandDialog": "CommandDialogProps",
+   "CommandInput": "React.ComponentProps<typeof CommandPrimitive.Input>",
+   "CommandList": "React.ComponentProps<typeof CommandPrimitive.List>",
+   "CommandEmpty": "React.ComponentProps<'div'>",
+   "CommandGroup": "React.ComponentProps<typeof CommandPrimitive.Group>",
+   "CommandSeparator": "CommandSeparatorProps",
+   "CommandItem": "React.ComponentProps<typeof CommandPrimitive.Item>",
+   "CommandShortcut": "React.ComponentProps<'span'>"
+  }
+ },
+ "libs/ui/src/components/ui/dialog/dialog.tsx": {
+  "file": "libs/ui/src/components/ui/dialog/dialog.tsx",
+  "props": {
+   "DialogProps": {
+    "extends": "Omit< React.ComponentProps<typeof DialogPrimitive.Root>, 'open' | 'defaultOpen' | 'onOpenChange' | 'modal' >",
+    "members": [
+     {
+      "name": "open",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled open state (pair with `onOpenChange`). Leave unset for an uncontrolled dialog driven by the trigger."
+     },
+     {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Open state when uncontrolled — `true` renders the dialog open on mount.",
+      "default": "false"
+     },
+     {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "optional": true,
+      "doc": "Called with the next open state whenever the dialog opens or closes."
+     },
+     {
+      "name": "modal",
+      "type": "boolean",
+      "optional": true,
+      "doc": "When `true` (default) the overlay blocks pointer events and traps focus; `false` lets the rest of the page stay interactive.",
+      "default": "true"
+     }
+    ]
+   },
+   "DialogContentProps": {
+    "extends": "React.ComponentProps<typeof DialogPrimitive.Content>",
+    "members": [
+     {
+      "name": "showCloseButton",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render the corner close (×) button inside the panel.",
+      "default": "true"
+     }
+    ]
+   },
+   "DialogFooterProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "showCloseButton",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render a default \"Close\" button (a DialogClose) at the end of the footer.",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Dialog",
+   "DialogClose",
+   "DialogContent",
+   "DialogDescription",
+   "DialogFooter",
+   "DialogHeader",
+   "DialogOverlay",
+   "DialogPortal",
+   "DialogTitle",
+   "DialogTrigger",
+   "DialogProps",
+   "DialogContentProps",
+   "DialogFooterProps"
+  ],
+  "components": {
+   "Dialog": "DialogProps",
+   "DialogTrigger": "React.ComponentProps<typeof DialogPrimitive.Trigger>",
+   "DialogPortal": "React.ComponentProps<typeof DialogPrimitive.Portal>",
+   "DialogClose": "React.ComponentProps<typeof DialogPrimitive.Close>",
+   "DialogOverlay": "React.ComponentProps<typeof DialogPrimitive.Overlay>",
+   "DialogContent": "DialogContentProps",
+   "DialogHeader": "React.ComponentProps<'div'>",
+   "DialogFooter": "DialogFooterProps",
+   "DialogTitle": "React.ComponentProps<typeof DialogPrimitive.Title>",
+   "DialogDescription": "React.ComponentProps<typeof DialogPrimitive.Description>"
+  }
+ },
+ "libs/ui/src/components/ui/field/field.tsx": {
+  "file": "libs/ui/src/components/ui/field/field.tsx",
+  "props": {
+   "FieldLegendProps": {
+    "extends": "React.ComponentProps<'legend'>",
+    "members": [
+     {
+      "name": "variant",
+      "type": "'legend' | 'label'",
+      "optional": true,
+      "doc": "Caption style — `legend` (section title) or `label` (control-sized).",
+      "default": "\"legend\""
+     }
+    ]
+   },
+   "FieldGroupProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "orientation",
+      "type": "FieldGroupOrientation",
+      "optional": true,
+      "doc": "Layout axis for the stacked Fields — `vertical` stacks them, `horizontal` lays them in a\nwrapping row.",
+      "default": "\"vertical\""
+     }
+    ]
+   },
+   "FieldProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "orientation",
+      "type": "FieldOrientation",
+      "optional": true,
+      "doc": "Flex axis of the row — `vertical` stacks label → control → description; `horizontal` puts\nlabel + control on one row; `responsive` is column on narrow, row at `@md` (container query).",
+      "default": "\"vertical\""
+     }
+    ]
+   },
+   "FieldErrorProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "errors",
+      "type": "Array<{ message?: string } | undefined>",
+      "optional": true,
+      "doc": "Validation errors to render (dedup'd; one → text, many → bullet list). Omit when passing\n`children`."
+     }
+    ]
+   }
+  },
+  "cva": {
+   "fieldGroupVariants": {
+    "variants": {
+     "orientation": [
+      "vertical",
+      "horizontal"
+     ]
+    },
+    "defaultVariants": {
+     "orientation": "vertical"
+    }
+   },
+   "fieldVariants": {
+    "variants": {
+     "orientation": [
+      "vertical",
+      "horizontal",
+      "responsive"
+     ]
+    },
+    "defaultVariants": {
+     "orientation": "vertical"
+    }
+   }
+  },
+  "exports": [
+   "Field",
+   "FieldLabel",
+   "FieldDescription",
+   "FieldError",
+   "FieldGroup",
+   "FieldLegend",
+   "FieldSeparator",
+   "FieldSet",
+   "FieldContent",
+   "FieldTitle",
+   "FieldProps",
+   "FieldGroupProps",
+   "FieldLegendProps",
+   "FieldErrorProps"
+  ],
+  "components": {
+   "FieldSet": "React.ComponentProps<'fieldset'>",
+   "FieldLegend": "FieldLegendProps",
+   "FieldGroup": "FieldGroupProps",
+   "Field": "FieldProps",
+   "FieldContent": "React.ComponentProps<'div'>",
+   "FieldLabel": "React.ComponentProps<typeof Label>",
+   "FieldTitle": "React.ComponentProps<'div'>",
+   "FieldDescription": "React.ComponentProps<'p'>",
+   "FieldSeparator": "React.ComponentProps<'div'> & { children?: React.ReactNode; }",
+   "FieldError": "FieldErrorProps"
+  }
+ },
+ "libs/ui/src/components/ui/input/input.tsx": {
+  "file": "libs/ui/src/components/ui/input/input.tsx",
+  "props": {
+   "InputProps": {
+    "extends": "Omit< React.ComponentProps<'input'>, 'type' | 'placeholder' | 'defaultValue' | 'value' | 'disabled' | 'onChange' >",
+    "members": [
+     {
+      "name": "type",
+      "type": "React.HTMLInputTypeAttribute",
+      "optional": true,
+      "doc": "Native input type — drives the keyboard/affordance. `file` switches to the file picker anatomy.",
+      "default": "\"text\""
+     },
+     {
+      "name": "placeholder",
+      "type": "string",
+      "optional": true,
+      "doc": "Hint shown while empty — rendered in the dedicated `input-ink-placeholder` token. Not a label substitute."
+     },
+     {
+      "name": "defaultValue",
+      "type": "string | number | readonly string[]",
+      "optional": true,
+      "doc": "Initial value when uncontrolled (the \"filled\" state)."
+     },
+     {
+      "name": "value",
+      "type": "string | number | readonly string[]",
+      "optional": true,
+      "doc": "Controlled value (pair with `onChange`)."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Native disabled — blocks interaction and dims the field (`opacity-50`).",
+      "default": "false"
+     },
+     {
+      "name": "onChange",
+      "type": "React.ChangeEventHandler<HTMLInputElement>",
+      "optional": true,
+      "doc": "Change handler (required when controlling `value`)."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Input",
+   "InputProps"
+  ],
+  "components": {
+   "Input": "InputProps"
+  }
+ },
+ "libs/ui/src/components/ui/input-group/input-group.tsx": {
+  "file": "libs/ui/src/components/ui/input-group/input-group.tsx",
+  "props": {
+   "InputGroupAddonProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "align",
+      "type": "InputGroupAddonAlign",
+      "optional": true,
+      "doc": "Where the addon sits relative to the control — `inline-start`/`inline-end` beside it,\n`block-start`/`block-end` as a toolbar above/below (the group stacks vertically).",
+      "default": "\"inline-start\""
+     }
+    ]
+   },
+   "InputGroupButtonProps": {
+    "extends": "Omit<React.ComponentProps<typeof Button>, 'size' | 'icon'>",
+    "members": [
+     {
+      "name": "size",
+      "type": "InputGroupButtonSize",
+      "optional": true,
+      "doc": "Button size on the InputGroup's own scale — `xs`/`sm` text buttons, `icon-xs`/`icon-sm`\nicon-only. Mapped onto the DS Button's size + icon flag.",
+      "default": "\"xs\""
+     }
+    ]
+   }
+  },
+  "cva": {
+   "inputGroupAddonVariants": {
+    "variants": {
+     "align": [
+      "inline-start",
+      "inline-end",
+      "block-start",
+      "block-end"
+     ]
+    },
+    "defaultVariants": {
+     "align": "inline-start"
+    }
+   },
+   "inputGroupButtonVariants": {
+    "variants": {
+     "size": [
+      "xs",
+      "sm",
+      "icon-xs",
+      "icon-sm"
+     ]
+    },
+    "defaultVariants": {
+     "size": "xs"
+    }
+   }
+  },
+  "exports": [
+   "InputGroup",
+   "InputGroupAddon",
+   "InputGroupButton",
+   "InputGroupText",
+   "InputGroupInput",
+   "InputGroupTextarea",
+   "InputGroupAddonProps",
+   "InputGroupButtonProps"
+  ],
+  "components": {
+   "InputGroup": "React.ComponentProps<'div'>",
+   "InputGroupAddon": "InputGroupAddonProps",
+   "InputGroupButton": "InputGroupButtonProps",
+   "InputGroupText": "React.ComponentProps<'span'>",
+   "InputGroupInput": "React.ComponentProps<'input'>",
+   "InputGroupTextarea": "React.ComponentProps<'textarea'>"
+  }
+ },
+ "libs/ui/src/components/ui/item/item.tsx": {
+  "file": "libs/ui/src/components/ui/item/item.tsx",
+  "props": {
+   "ItemProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "variant",
+      "type": "ItemVariant",
+      "optional": true,
+      "doc": "Surface style — `default` is borderless (sits on the page), `outline` adds a hairline border,\n`muted` tints the row with a soft fill.",
+      "default": "\"default\""
+     },
+     {
+      "name": "size",
+      "type": "ItemSize",
+      "optional": true,
+      "doc": "Density — `default` is a comfortable row, `sm` matches it, `xs` is the compact menu-row spacing.",
+      "default": "\"default\""
+     },
+     {
+      "name": "asChild",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Render the styling onto a single child element instead of a `<div>` (Radix Slot) — e.g. wrap an\n`<a>` to get a fully clickable link row (adds the `[a]:hover` affordance).",
+      "default": "false"
+     }
+    ]
+   },
+   "ItemMediaProps": {
+    "extends": "React.ComponentProps<'div'>",
+    "members": [
+     {
+      "name": "variant",
+      "type": "ItemMediaVariant",
+      "optional": true,
+      "doc": "Media kind — `default` for a bare slot, `icon` sizes a leading glyph, `image` is a fixed-size,\ncover-cropped thumbnail/avatar that shrinks with the item `size`.",
+      "default": "\"default\""
+     }
+    ]
+   }
+  },
+  "cva": {
+   "itemVariants": {
+    "variants": {
+     "variant": [
+      "default",
+      "outline",
+      "muted"
+     ],
+     "size": [
+      "default",
+      "sm",
+      "xs"
+     ]
+    },
+    "defaultVariants": {
+     "variant": "default",
+     "size": "default"
+    }
+   },
+   "itemMediaVariants": {
+    "variants": {
+     "variant": [
+      "default",
+      "icon",
+      "image"
+     ]
+    },
+    "defaultVariants": {
+     "variant": "default"
+    }
+   }
+  },
+  "exports": [
+   "Item",
+   "ItemMedia",
+   "ItemContent",
+   "ItemActions",
+   "ItemGroup",
+   "ItemSeparator",
+   "ItemTitle",
+   "ItemDescription",
+   "ItemHeader",
+   "ItemFooter",
+   "itemVariants",
+   "itemMediaVariants",
+   "ItemProps",
+   "ItemMediaProps"
+  ],
+  "components": {
+   "ItemGroup": "React.ComponentProps<'div'>",
+   "ItemSeparator": "React.ComponentProps<typeof Separator>",
+   "Item": "ItemProps",
+   "ItemMedia": "ItemMediaProps",
+   "ItemContent": "React.ComponentProps<'div'>",
+   "ItemTitle": "React.ComponentProps<'div'>",
+   "ItemDescription": "React.ComponentProps<'p'>",
+   "ItemActions": "React.ComponentProps<'div'>",
+   "ItemHeader": "React.ComponentProps<'div'>",
+   "ItemFooter": "React.ComponentProps<'div'>"
+  }
+ },
+ "libs/ui/src/components/ui/kbd/kbd.tsx": {
+  "file": "libs/ui/src/components/ui/kbd/kbd.tsx",
+  "props": {
+   "KbdProps": {
+    "extends": "React.ComponentProps<'kbd'>",
+    "members": [
+     {
+      "name": "emphasis",
+      "type": "KbdEmphasis",
+      "optional": true,
+      "doc": "Keycap weight. `high` is the inverted dark cap (Inverse fill/ink); `low` is the quiet muted cap\n(the stock-shadcn look).",
+      "default": "\"high\""
+     }
+    ]
+   }
+  },
+  "cva": {
+   "kbdVariants": {
+    "variants": {
+     "emphasis": [
+      "high",
+      "low"
+     ]
+    },
+    "defaultVariants": {
+     "emphasis": "high"
+    }
+   }
+  },
+  "exports": [
+   "Kbd",
+   "KbdGroup",
+   "kbdVariants",
+   "KbdProps"
+  ],
+  "components": {
+   "Kbd": "KbdProps",
+   "KbdGroup": "React.ComponentProps<'kbd'>"
+  }
+ },
+ "libs/ui/src/components/ui/label/label.tsx": {
+  "file": "libs/ui/src/components/ui/label/label.tsx",
+  "props": {
+   "LabelProps": {
+    "extends": "Omit<React.ComponentProps<typeof LabelPrimitive.Root>, 'htmlFor'>",
+    "members": [
+     {
+      "name": "htmlFor",
+      "type": "string",
+      "optional": true,
+      "doc": "The `id` of the control this label names. Sets the native `for` association — clicking\nthe label focuses/toggles that control, and it becomes the control's accessible name.\nRequired for the a11y pairing."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Label",
+   "LabelProps"
+  ],
+  "components": {
+   "Label": "LabelProps"
+  }
+ },
+ "libs/ui/src/components/ui/popover/popover.tsx": {
+  "file": "libs/ui/src/components/ui/popover/popover.tsx",
+  "props": {
+   "PopoverProps": {
+    "extends": "Omit< React.ComponentProps<typeof PopoverPrimitive.Root>, 'open' | 'defaultOpen' | 'onOpenChange' | 'modal' >",
+    "members": [
+     {
+      "name": "open",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled open state (pair with `onOpenChange`)."
+     },
+     {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Open state on first render for an uncontrolled popover.",
+      "default": "false"
+     },
+     {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "optional": true,
+      "doc": "Fires when the open state changes (controlled or uncontrolled)."
+     },
+     {
+      "name": "modal",
+      "type": "boolean",
+      "optional": true,
+      "doc": "When `true`, blocks outside interaction and traps focus (the content gets `role=\"dialog\"`).",
+      "default": "false"
+     }
+    ]
+   },
+   "PopoverContentProps": {
+    "extends": "Omit< React.ComponentProps<typeof PopoverPrimitive.Content>, | 'side' | 'sideOffset' | 'align' | 'alignOffset' | 'avoidCollisions' | 'collisionPadding' | 'sticky' | 'hideWhenDetached' >",
+    "members": [
+     {
+      "name": "side",
+      "type": "'top' | 'right' | 'bottom' | 'left'",
+      "optional": true,
+      "doc": "Preferred side of the trigger to render on (flips to stay in view unless `avoidCollisions` is off).",
+      "default": "\"bottom\""
+     },
+     {
+      "name": "sideOffset",
+      "type": "number",
+      "optional": true,
+      "doc": "Gap in px between the panel and the trigger/anchor edge.",
+      "default": "4"
+     },
+     {
+      "name": "align",
+      "type": "'start' | 'center' | 'end'",
+      "optional": true,
+      "doc": "Edge alignment of the panel against the trigger/anchor.",
+      "default": "\"center\""
+     },
+     {
+      "name": "alignOffset",
+      "type": "number",
+      "optional": true,
+      "doc": "Offset in px from the `align` edge.",
+      "default": "0"
+     },
+     {
+      "name": "avoidCollisions",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Flip/shift the panel to keep it inside the viewport.",
+      "default": "true"
+     },
+     {
+      "name": "collisionPadding",
+      "type": "| number | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>",
+      "optional": true,
+      "doc": "Padding (px) kept from the viewport edge while avoiding collisions.",
+      "default": "0"
+     },
+     {
+      "name": "sticky",
+      "type": "'partial' | 'always'",
+      "optional": true,
+      "doc": "Keep the panel attached to the trigger while it is partially scrolled out of view.",
+      "default": "\"partial\""
+     },
+     {
+      "name": "hideWhenDetached",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Hide the panel when the trigger is fully occluded.",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Popover",
+   "PopoverAnchor",
+   "PopoverContent",
+   "PopoverDescription",
+   "PopoverHeader",
+   "PopoverTitle",
+   "PopoverTrigger",
+   "PopoverProps",
+   "PopoverContentProps"
+  ],
+  "components": {
+   "Popover": "PopoverProps",
+   "PopoverTrigger": "React.ComponentProps<typeof PopoverPrimitive.Trigger>",
+   "PopoverContent": "PopoverContentProps",
+   "PopoverAnchor": "React.ComponentProps<typeof PopoverPrimitive.Anchor>",
+   "PopoverHeader": "React.ComponentProps<'div'>",
+   "PopoverTitle": "React.ComponentProps<'h2'>",
+   "PopoverDescription": "React.ComponentProps<'p'>"
+  }
+ },
+ "libs/ui/src/components/ui/radio-group/radio-group.tsx": {
+  "file": "libs/ui/src/components/ui/radio-group/radio-group.tsx",
+  "props": {
+   "RadioGroupProps": {
+    "extends": "Omit< React.ComponentProps<typeof RadioGroupPrimitive.Root>, 'value' | 'defaultValue' | 'onValueChange' | 'disabled' | 'required' | 'name' | 'orientation' >",
+    "members": [
+     {
+      "name": "value",
+      "type": "string",
+      "optional": true,
+      "doc": "Controlled selected value (pair with `onValueChange`)."
+     },
+     {
+      "name": "defaultValue",
+      "type": "string",
+      "optional": true,
+      "doc": "Selected value when uncontrolled."
+     },
+     {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "optional": true,
+      "doc": "Called when the selected value changes."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables every item in the group.",
+      "default": "false"
+     },
+     {
+      "name": "required",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Marks the group required for native form validation.",
+      "default": "false"
+     },
+     {
+      "name": "name",
+      "type": "string",
+      "optional": true,
+      "doc": "Form field name submitted with the form."
+     },
+     {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "optional": true,
+      "doc": "Arrow-key navigation direction.",
+      "default": "\"vertical\""
+     }
+    ]
+   },
+   "RadioGroupItemProps": {
+    "extends": "Omit<React.ComponentProps<typeof RadioGroupPrimitive.Item>, 'value' | 'disabled' | 'id'>",
+    "members": [
+     {
+      "name": "value",
+      "type": "string",
+      "optional": false,
+      "doc": "Value selected (and form-submitted) when this item is chosen."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables just this item. (The whole group can be disabled via `RadioGroup`.)",
+      "default": "false"
+     },
+     {
+      "name": "id",
+      "type": "string",
+      "optional": true,
+      "doc": "Pairs the item with a `<label htmlFor>` for an accessible name."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "RadioGroup",
+   "RadioGroupItem",
+   "RadioGroupProps",
+   "RadioGroupItemProps"
+  ],
+  "components": {
+   "RadioGroup": "RadioGroupProps",
+   "RadioGroupItem": "RadioGroupItemProps"
+  }
+ },
+ "libs/ui/src/components/ui/select/select.tsx": {
+  "file": "libs/ui/src/components/ui/select/select.tsx",
+  "props": {
+   "SelectProps": {
+    "extends": "Omit< React.ComponentProps<typeof SelectPrimitive.Root>, 'value' | 'defaultValue' | 'onValueChange' | 'open' | 'defaultOpen' | 'onOpenChange' | 'disabled' | 'required' | 'name' >",
+    "members": [
+     {
+      "name": "value",
+      "type": "string",
+      "optional": true,
+      "doc": "Controlled selected value (pair with `onValueChange`)."
+     },
+     {
+      "name": "defaultValue",
+      "type": "string",
+      "optional": true,
+      "doc": "Selected value when uncontrolled."
+     },
+     {
+      "name": "onValueChange",
+      "type": "(value: string) => void",
+      "optional": true,
+      "doc": "Called when the selection changes."
+     },
+     {
+      "name": "open",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled open state of the dropdown."
+     },
+     {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Open state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "optional": true,
+      "doc": "Called when the dropdown opens or closes."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables the whole select.",
+      "default": "false"
+     },
+     {
+      "name": "required",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Marks the select required for native form validation.",
+      "default": "false"
+     },
+     {
+      "name": "name",
+      "type": "string",
+      "optional": true,
+      "doc": "Form field name submitted with the form."
+     }
+    ]
+   },
+   "SelectValueProps": {
+    "extends": "Omit<React.ComponentProps<typeof SelectPrimitive.Value>, 'placeholder'>",
+    "members": [
+     {
+      "name": "placeholder",
+      "type": "React.ReactNode",
+      "optional": true,
+      "doc": "Content shown while no value is selected (greyed via `data-placeholder` on the trigger)."
+     }
+    ]
+   },
+   "SelectTriggerProps": {
+    "extends": "Omit<React.ComponentProps<typeof SelectPrimitive.Trigger>, 'disabled'>",
+    "members": [
+     {
+      "name": "size",
+      "type": "SelectTriggerSize",
+      "optional": true,
+      "doc": "Trigger height — the default (`h-8`) or the compact `sm` (`h-7`).",
+      "default": "\"default\""
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Prevents opening the select and dims the trigger.",
+      "default": "false"
+     }
+    ]
+   },
+   "SelectContentProps": {
+    "extends": "Omit<React.ComponentProps<typeof SelectPrimitive.Content>, 'position' | 'align'>",
+    "members": [
+     {
+      "name": "position",
+      "type": "'item-aligned' | 'popper'",
+      "optional": true,
+      "doc": "Dropdown positioning — `item-aligned` overlaps the selected item onto the trigger; `popper`\nanchors below/above like a typical menu.",
+      "default": "\"item-aligned\""
+     },
+     {
+      "name": "align",
+      "type": "'start' | 'center' | 'end'",
+      "optional": true,
+      "doc": "Alignment against the trigger (popper positioning).",
+      "default": "\"center\""
+     }
+    ]
+   },
+   "SelectItemProps": {
+    "extends": "Omit<React.ComponentProps<typeof SelectPrimitive.Item>, 'value' | 'disabled' | 'textValue'>",
+    "members": [
+     {
+      "name": "value",
+      "type": "string",
+      "optional": false,
+      "doc": "The value submitted when this item is selected — required, unique within the select."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Disables the item — not selectable, dimmed.",
+      "default": "false"
+     },
+     {
+      "name": "textValue",
+      "type": "string",
+      "optional": true,
+      "doc": "Typeahead text when the item's content isn't plain text (so the keyboard search still matches)."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Select",
+   "SelectContent",
+   "SelectGroup",
+   "SelectItem",
+   "SelectLabel",
+   "SelectScrollDownButton",
+   "SelectScrollUpButton",
+   "SelectSeparator",
+   "SelectTrigger",
+   "SelectValue",
+   "SelectProps",
+   "SelectTriggerProps",
+   "SelectContentProps",
+   "SelectItemProps",
+   "SelectValueProps"
+  ],
+  "components": {
+   "Select": "SelectProps",
+   "SelectGroup": "React.ComponentProps<typeof SelectPrimitive.Group>",
+   "SelectValue": "SelectValueProps",
+   "SelectTrigger": "SelectTriggerProps",
+   "SelectContent": "SelectContentProps",
+   "SelectLabel": "React.ComponentProps<typeof SelectPrimitive.Label>",
+   "SelectItem": "SelectItemProps",
+   "SelectSeparator": "React.ComponentProps<typeof SelectPrimitive.Separator>",
+   "SelectScrollUpButton": "React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>",
+   "SelectScrollDownButton": "React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>"
+  }
+ },
+ "libs/ui/src/components/ui/separator/separator.tsx": {
+  "file": "libs/ui/src/components/ui/separator/separator.tsx",
+  "props": {
+   "SeparatorProps": {
+    "extends": "Omit<React.ComponentProps<typeof SeparatorPrimitive.Root>, 'orientation' | 'decorative'>",
+    "members": [
+     {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "optional": true,
+      "doc": "Axis of the hairline — `horizontal` is a full-width rule between stacked content,\n`vertical` a line that stretches to the row height between inline items.",
+      "default": "\"horizontal\""
+     },
+     {
+      "name": "decorative",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Semantic role only, not the look. `true` is non-semantic (`role=\"none\"`, aria-hidden)\nfor a purely visual divider; `false` exposes the ARIA `separator` role for assistive tech.",
+      "default": "true"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Separator",
+   "SeparatorProps"
+  ],
+  "components": {
+   "Separator": "SeparatorProps"
+  }
+ },
+ "libs/ui/src/components/ui/slider/slider.tsx": {
+  "file": "libs/ui/src/components/ui/slider/slider.tsx",
+  "props": {
+   "SliderProps": {
+    "extends": "Omit< React.ComponentProps<typeof SliderPrimitive.Root>, | 'value' | 'defaultValue' | 'onValueChange' | 'onValueCommit' | 'min' | 'max' | 'step' | 'minStepsBetweenThumbs' | 'orientation' | 'inverted' | 'disabled' | 'name' >",
+    "members": [
+     {
+      "name": "value",
+      "type": "number[]",
+      "optional": true,
+      "doc": "Controlled value — one number per thumb (two values render a range). Pair with `onValueChange`."
+     },
+     {
+      "name": "defaultValue",
+      "type": "number[]",
+      "optional": true,
+      "doc": "Uncontrolled value — one number per thumb (two values render a range).",
+      "default": "[min, max]"
+     },
+     {
+      "name": "onValueChange",
+      "type": "(value: number[]) => void",
+      "optional": true,
+      "doc": "Called as the value changes during a drag."
+     },
+     {
+      "name": "onValueCommit",
+      "type": "(value: number[]) => void",
+      "optional": true,
+      "doc": "Called once when the drag ends (commit)."
+     },
+     {
+      "name": "min",
+      "type": "number",
+      "optional": true,
+      "doc": "Lowest selectable value.",
+      "default": "0"
+     },
+     {
+      "name": "max",
+      "type": "number",
+      "optional": true,
+      "doc": "Highest selectable value.",
+      "default": "100"
+     },
+     {
+      "name": "step",
+      "type": "number",
+      "optional": true,
+      "doc": "Stepping interval.",
+      "default": "1"
+     },
+     {
+      "name": "minStepsBetweenThumbs",
+      "type": "number",
+      "optional": true,
+      "doc": "Minimum number of steps to keep between two thumbs of a range."
+     },
+     {
+      "name": "orientation",
+      "type": "'horizontal' | 'vertical'",
+      "optional": true,
+      "doc": "Track direction.",
+      "default": "\"horizontal\""
+     },
+     {
+      "name": "inverted",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Fills the track from the max end instead of the min end."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Prevents interaction and dims the control.",
+      "default": "false"
+     },
+     {
+      "name": "name",
+      "type": "string",
+      "optional": true,
+      "doc": "Form field name submitted with the form."
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Slider",
+   "SliderProps"
+  ],
+  "components": {
+   "Slider": "SliderProps"
+  }
+ },
+ "libs/ui/src/components/ui/switch/switch.tsx": {
+  "file": "libs/ui/src/components/ui/switch/switch.tsx",
+  "props": {
+   "SwitchProps": {
+    "extends": "Omit< React.ComponentProps<typeof SwitchPrimitive.Root>, 'checked' | 'defaultChecked' | 'onCheckedChange' | 'disabled' | 'required' | 'name' | 'value' >",
+    "members": [
+     {
+      "name": "size",
+      "type": "'sm' | 'default'",
+      "optional": true,
+      "doc": "DS size variant — sets the track + thumb geometry.",
+      "default": "\"default\""
+     },
+     {
+      "name": "checked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled on/off state (pair with `onCheckedChange`)."
+     },
+     {
+      "name": "defaultChecked",
+      "type": "boolean",
+      "optional": true,
+      "doc": "On/off state when uncontrolled.",
+      "default": "false"
+     },
+     {
+      "name": "onCheckedChange",
+      "type": "(checked: boolean) => void",
+      "optional": true,
+      "doc": "Called when the on/off state changes."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Prevents interaction and dims the control (and its Field label via group styling).",
+      "default": "false"
+     },
+     {
+      "name": "required",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Marks the control required for native form validation.",
+      "default": "false"
+     },
+     {
+      "name": "name",
+      "type": "string",
+      "optional": true,
+      "doc": "Form field name submitted with the form."
+     },
+     {
+      "name": "value",
+      "type": "string",
+      "optional": true,
+      "doc": "Value submitted when on.",
+      "default": "\"on\""
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Switch",
+   "SwitchProps"
+  ],
+  "components": {
+   "Switch": "SwitchProps"
+  }
+ },
+ "libs/ui/src/components/ui/table/table.tsx": {
+  "file": "libs/ui/src/components/ui/table/table.tsx",
+  "props": {},
+  "cva": {},
+  "exports": [
+   "Table",
+   "TableHeader",
+   "TableBody",
+   "TableFooter",
+   "TableHead",
+   "TableRow",
+   "TableCell",
+   "TableCaption"
+  ],
+  "components": {
+   "Table": "React.ComponentProps<\"table\">",
+   "TableHeader": "React.ComponentProps<\"thead\">",
+   "TableBody": "React.ComponentProps<\"tbody\">",
+   "TableFooter": "React.ComponentProps<\"tfoot\">",
+   "TableRow": "React.ComponentProps<\"tr\">",
+   "TableHead": "React.ComponentProps<\"th\">",
+   "TableCell": "React.ComponentProps<\"td\">",
+   "TableCaption": "React.ComponentProps<\"caption\">"
+  }
+ },
+ "libs/ui/src/components/ui/textarea/textarea.tsx": {
+  "file": "libs/ui/src/components/ui/textarea/textarea.tsx",
+  "props": {
+   "TextareaProps": {
+    "extends": "Omit<React.ComponentProps<'textarea'>, 'placeholder' | 'rows' | 'defaultValue' | 'disabled'>",
+    "members": [
+     {
+      "name": "placeholder",
+      "type": "string",
+      "optional": true,
+      "doc": "Placeholder shown while empty (`text-input-ink-placeholder`)."
+     },
+     {
+      "name": "rows",
+      "type": "number",
+      "optional": true,
+      "doc": "Initial visible text rows; the box still auto-grows with content."
+     },
+     {
+      "name": "defaultValue",
+      "type": "string | number | readonly string[]",
+      "optional": true,
+      "doc": "Initial value when uncontrolled (the filled state)."
+     },
+     {
+      "name": "disabled",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Prevents interaction and dims the control (opacity-50, no pointer events).",
+      "default": "false"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Textarea",
+   "TextareaProps"
+  ],
+  "components": {
+   "Textarea": "TextareaProps"
+  }
+ },
+ "libs/ui/src/components/ui/tooltip/tooltip.tsx": {
+  "file": "libs/ui/src/components/ui/tooltip/tooltip.tsx",
+  "props": {
+   "TooltipProps": {
+    "extends": "Omit< React.ComponentProps<typeof TooltipPrimitive.Root>, 'open' | 'defaultOpen' | 'onOpenChange' | 'delayDuration' >",
+    "members": [
+     {
+      "name": "open",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Controlled open state (pair with `onOpenChange`)."
+     },
+     {
+      "name": "defaultOpen",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Open state on first render for an uncontrolled tooltip.",
+      "default": "false"
+     },
+     {
+      "name": "onOpenChange",
+      "type": "(open: boolean) => void",
+      "optional": true,
+      "doc": "Fires when the open state changes (controlled or uncontrolled)."
+     },
+     {
+      "name": "delayDuration",
+      "type": "number",
+      "optional": true,
+      "doc": "Hover delay in ms before the tooltip opens; overrides the Provider's value for this tooltip."
+     }
+    ]
+   },
+   "TooltipContentProps": {
+    "extends": "Omit< React.ComponentProps<typeof TooltipPrimitive.Content>, | 'side' | 'sideOffset' | 'align' | 'alignOffset' | 'avoidCollisions' | 'collisionPadding' | 'sticky' | 'hideWhenDetached' | 'arrowPadding' >",
+    "members": [
+     {
+      "name": "side",
+      "type": "'top' | 'right' | 'bottom' | 'left'",
+      "optional": true,
+      "doc": "Preferred side of the trigger to render on (flips to stay in view unless `avoidCollisions` is off).",
+      "default": "\"top\""
+     },
+     {
+      "name": "sideOffset",
+      "type": "number",
+      "optional": true,
+      "doc": "Distance in px between the trigger and the tooltip.",
+      "default": "0"
+     },
+     {
+      "name": "align",
+      "type": "'start' | 'center' | 'end'",
+      "optional": true,
+      "doc": "Alignment against the trigger along the chosen side.",
+      "default": "\"center\""
+     },
+     {
+      "name": "alignOffset",
+      "type": "number",
+      "optional": true,
+      "doc": "Offset in px from the `align` edge.",
+      "default": "0"
+     },
+     {
+      "name": "avoidCollisions",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Flip/shift the tooltip to keep it inside the viewport.",
+      "default": "true"
+     },
+     {
+      "name": "collisionPadding",
+      "type": "| number | Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>",
+      "optional": true,
+      "doc": "Padding (px) kept from the viewport edge while avoiding collisions.",
+      "default": "0"
+     },
+     {
+      "name": "sticky",
+      "type": "'partial' | 'always'",
+      "optional": true,
+      "doc": "Keep the tooltip attached to the trigger while it is partially scrolled out of view.",
+      "default": "\"partial\""
+     },
+     {
+      "name": "hideWhenDetached",
+      "type": "boolean",
+      "optional": true,
+      "doc": "Hide the tooltip when the trigger is fully occluded.",
+      "default": "false"
+     },
+     {
+      "name": "arrowPadding",
+      "type": "number",
+      "optional": true,
+      "doc": "Padding (px) between the arrow and the content's rounded corners.",
+      "default": "0"
+     }
+    ]
+   }
+  },
+  "cva": {},
+  "exports": [
+   "Tooltip",
+   "TooltipContent",
+   "TooltipProvider",
+   "TooltipTrigger",
+   "TooltipProps",
+   "TooltipContentProps"
+  ],
+  "components": {
+   "TooltipProvider": "React.ComponentProps<typeof TooltipPrimitive.Provider>",
+   "Tooltip": "TooltipProps",
+   "TooltipTrigger": "React.ComponentProps<typeof TooltipPrimitive.Trigger>",
+   "TooltipContent": "TooltipContentProps"
+  }
+ }
+}

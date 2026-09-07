@@ -1,0 +1,41 @@
+{
+  "Button": {
+    "roles": {
+      "primary-fill": "default fill",
+      "primary-ink": "default label",
+      "muted-fill": "hover/press tint on the default fill",
+      "secondary-fill": "secondary fill",
+      "secondary-ink": "secondary label",
+      "destructive": "destructive fill",
+      "destructive-ink": "destructive label",
+      "surface": "outline resting surface",
+      "border": "outline border",
+      "ink": "outline / ghost resting label",
+      "accent-fill": "outline / ghost hover fill",
+      "accent-ink": "outline / ghost hover label",
+      "primary": "link label"
+    }
+  },
+  "Badge": {
+    "roles": {
+      "primary-fill": "default fill",
+      "primary-ink": "default label",
+      "secondary-fill": "secondary fill",
+      "secondary-ink": "secondary label",
+      "destructive": "destructive fill",
+      "destructive-ink": "destructive label",
+      "border": "outline border",
+      "ink": "outline / ghost label",
+      "primary": "link label",
+      "corner-full": "pill radius"
+    }
+  },
+  "Kbd": {
+    "roles": {
+      "inverse-fill": "high cap fill",
+      "inverse-ink": "high cap glyph",
+      "muted-fill": "low cap fill",
+      "muted-ink": "low cap glyph"
+    }
+  }
+}
