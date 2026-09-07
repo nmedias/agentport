@@ -165,7 +165,7 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 `libs/ui/src/index.ts` if new. Icons = `@remixicon/react`.
 
 - **Prop API docs**: annotate the `.tsx` so react-docgen surfaces the public props (Autodocs ArgsTable
-  **and** storybook MCP `get-documentation`) — flat JSDoc props, `Omit`+re-declare for the curated
+  **and** storybook MCP `docs-show`) — flat JSDoc props, `Omit`+re-declare for the curated
   Radix/DOM/CVA-derived props the docgen filter drops. Per **`/docgen-props`**.
 - **a11y — name the role element**: when the ARIA `role` widget sits on a **nested child** rather than
   the component root (e.g. a listbox option, a draggable handle), forward the consumer's
@@ -173,7 +173,7 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
   `aria-input-field-name` fails the gate. One name per role node (repeated role nodes may share it).
 - **Stories**: the T2.5 usage-example set, now running on DS tokens. **Reconcile them per
   `/storybook-rules`** (coverage: every variant×size/state in ≥1 story, overview story if the examples
-  miss any; a `play` test for interactive components; the `shoot` / `preview-stories` rendered-output
+  miss any; a `play` test for interactive components; the `shoot` / `stories-preview` rendered-output
   check).
 - **Headless lib** (e.g. Radix, cmdk): components that touch any browser API jsdom doesn't implement on
   mount (e.g. `ResizeObserver`, `Element.prototype.scrollIntoView`, `matchMedia`, …) need a stub/polyfill
@@ -187,7 +187,7 @@ Rewrite `components/ui/<component>/<component>.tsx` per the T3 table; re-export 
 Two artifacts — a port is **not done** until both exist:
 
 1. **Run notes** — `agent-runs/component-port/<date>-<component>/notes.md`: mapping table, Figma node +
-   variable ids, findings, gate state, `preview-stories` URLs, the **example-inventory** (each doc
+   variable ids, findings, gate state, `stories-preview` URLs, the **example-inventory** (each doc
    usage-example: kept-distinct / deduped-as-permutation-of-X / skipped-missing-dep — with reason; makes
    T5 auditable), open items (full matrix, missing states, placeholder ⚠ tokens). For each non-obvious
    mapping-table row record the **why** — the `use`/`avoid` reasoning that picked that token over a

@@ -36,7 +36,7 @@ S1 Locate   resolve the set .<Component> by NAME + the code file components/ui/<
 S2 Read     live per-member bindings/values (snippets/read-set-values.js): fills/strokes/text-style/radius/padding/effect/opacity/auto-layout
 S3 Diff     bound var → DS utility (§6 crosswalk, authoritative); use/avoid only for raw/wrong bindings → delta list
 S4 Apply    edit the code to the delta only (variant/state change → reconcile stories per /storybook-rules); token-faithful
-S5 Gate     nx test|typecheck|lint @agentport/ui green; DS typo class survives markup; storybook MCP up (:6006) → preview-stories, surface URLs
+S5 Gate     nx test|typecheck|lint @agentport/ui green; DS typo class survives markup; storybook MCP up (:6006) → stories-preview, surface URLs
 S6 Notes    delta + DEVIATIONS (code ≠ Figma binding) + auto-layout/variant changes → agent-runs notes.md
 ```
 
@@ -89,7 +89,7 @@ relevant). Keep the structure; change only what the diff demands.
 ### S5 — Gate
 
 `npx nx test|typecheck|lint @agentport/ui` green; confirm the DS typography class still survives the
-rendered markup (twMerge drops it otherwise). If the `storybook` MCP is up (:6006), `preview-stories`
+rendered markup (twMerge drops it otherwise). If the `storybook` MCP is up (:6006), `stories-preview`
 and surface every URL to the user for visual confirmation.
 
 ### S6 — Notes

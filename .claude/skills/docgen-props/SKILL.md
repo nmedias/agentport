@@ -1,20 +1,23 @@
 ---
 name: docgen-props
-description: "Annotate a component's .tsx so react-docgen extracts its public prop API — flat props with JSDoc descriptions, plus Omit+re-declare for the curated Radix/DOM/CVA-derived props the default docgen filter would drop — so the Storybook Autodocs ArgsTable AND the storybook MCP get-documentation surface the API natively, not from hand-curated argTypes. Trigger when porting a shadcn component (within /shadcn-component-port T6) or updating a component whose props must show up in autodocs / get-documentation. Component code ONLY — story control config + pass-through-prop defaults stay in /storybook-rules."
+description: "Annotate a component's .tsx so react-docgen extracts its public prop API — flat props with JSDoc descriptions, plus Omit+re-declare for the curated Radix/DOM/CVA-derived props the default docgen filter would drop — so the Storybook Autodocs ArgsTable AND the storybook MCP docs-show surface the API natively, not from hand-curated argTypes. Trigger when porting a shadcn component (within /shadcn-component-port T6) or updating a component whose props must show up in autodocs / docs-show. Component code ONLY — story control config + pass-through-prop defaults stay in /storybook-rules."
 ---
 
 # Docgen Props (component .tsx → react-docgen API)
 
 Make a component's public prop API extractable by **react-docgen** so the Storybook Autodocs
-ArgsTable **and** the storybook MCP `get-documentation` surface it natively — no hand-curated argType
+ArgsTable **and** the storybook MCP `docs-show` surface it natively — no hand-curated argType
 descriptions. **Component code only**; control config + pass-through defaults stay in `/storybook-rules`.
 
 Worked reference: `components/ui/switch/{switch.tsx,switch.stories.tsx}` (Radix case) — copy the shape.
 
 ## Why (the mechanism)
 
-- Autodocs ArgsTable **and** the storybook MCP `get-documentation` both read **react-docgen**, which
-  extracts from the component's **TS types + JSDoc** — *not* from the story's `argTypes`.
+- Autodocs ArgsTable **and** the storybook MCP `docs-show` both read **react-docgen**, which
+  extracts from the component's **TS types + JSDoc** — *not* from the story's `argTypes`. The MCP
+  side goes through the **component manifest** (`features.componentsManifest` in `main.ts`; live at
+  `/manifests/components.json`, debugger at `/manifests/components.html`) — its `reactDocgen.props`
+  block is exactly what this skill makes extractable.
 - The default propFilter drops every prop **declared in node_modules** → inherited DOM/Radix props and
   CVA-derived `VariantProps<…>` never surface. Only props declared **flat, in the component file** are
   extracted. So the public API must live there as flat own props with JSDoc.
@@ -83,7 +86,7 @@ a `type` **intersection** (`type XProps = ComponentProps<typeof Root> & { … }`
 | description | JSDoc comment text | `/** … */` on the prop |
 | type · enum | the TS type | flat literal union |
 | control type | inferred from the type | boolean→toggle · string→text · union→select |
-| default (→ MCP `get-documentation`) | `@default x` JSDoc tag | set it on every prop that has a default |
+| default (→ MCP `docs-show`) | `@default x` JSDoc tag | set it on every prop that has a default |
 
 The ArgsTable's Default column ignores `@default` → it's declared separately in the story argType (`/storybook-rules`).
 
@@ -97,11 +100,11 @@ The ArgsTable's Default column ignores `@default` → it's declared separately i
 
 | Lives on the component `.tsx` (this skill) | Lives in the story `argTypes` (`/storybook-rules`) |
 |---|---|
-| type · description · enum · `@default` (→ MCP `get-documentation`) | control-type **overrides** (e.g. `inline-radio` vs the inferred select) |
+| type · description · enum · `@default` (→ MCP `docs-show`) | control-type **overrides** (e.g. `inline-radio` vs the inferred select) |
 | | `table.defaultValue` for **every** defaulted prop (→ ArgsTable) |
 
 ## Verify
-- `get-documentation <id>` (storybook MCP) → the props appear with descriptions + `@default`.
+- `docs-show <id>` (storybook MCP, reads the component manifest) → the props appear with descriptions + `@default`.
 - `shoot -- <id>--docs` + `SELECTOR=.docblock-argstable` → ArgsTable complete (type · description ·
   control · default). (Storybook on :6006; the gate/typecheck never see the render — eyeball it.)
 - `npx nx typecheck @agentport/ui` green → the `Omit`+re-declare didn't break the inherited surface

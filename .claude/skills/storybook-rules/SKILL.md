@@ -11,7 +11,7 @@ file, or **update** an existing one after the component changed.
 
 > **Companion — the prop-annotation step (react-docgen).** Prop type · description · enum live on the
 > component `.tsx` via react-docgen, NOT in `argTypes`. If you're invoked standalone and the props
-> don't appear in the ArgsTable / storybook MCP `get-documentation`, the `.tsx` isn't annotated — run
+> don't appear in the ArgsTable / storybook MCP `docs-show`, the `.tsx` isn't annotated — run
 > the prop-annotation step first (that's component code, out of scope here). `argTypes` carries
 > control-type overrides + a `defaultValue` for every defaulted prop (the ArgsTable ignores the
 > `@default` tag) — see Meta block.
@@ -22,7 +22,7 @@ file, or **update** an existing one after the component changed.
 in   component: the target component (its folder + <name>.tsx)                          REQUIRED
      mode: author (no .stories.tsx yet) | update (exists, component drifted)
 out  <name>.stories.tsx to the pattern below; gate green (unit specs + storybook browser project)
-     storybook MCP up → preview-stories URLs surfaced
+     storybook MCP up → stories-preview URLs surfaced
 ```
 
 ## Imports (easy to get wrong)
@@ -191,7 +191,7 @@ S2 Meta      header contract comment; tags autodocs; args defaults; argTypes = c
 S3 Default   render: (args)=><X {...args}>…</X> — never {}; full ArgsTable (no include); play if interactive
 S4 Examples  one per structurally-distinct usage, real composition primitives; controls.disable by default — scoped include where a toggle reinforces the point / reaches a sub-part prop (§controls); a render that delegates to a stateful/helper wrapper → set docs.source.code to the real impl, else Show-code hides it (§invariants)
 S5 States    STATE_ROWS grid (primary axis = columns); focus via pseudo addon
-S6 Verify    gate green (unit specs + storybook browser: real browser + axe); preview/screenshot the story / preview-stories → surface URLs
+S6 Verify    gate green (unit specs + storybook browser: real browser + axe); preview/screenshot the story / stories-preview → surface URLs
 ```
 
 ### Update mode (component drifted) — S2–S5 become a diff, not a rewrite
@@ -210,6 +210,6 @@ U5 Keep       never delete the States gallery / Usage examples — permanent del
 Your story-test gate green — **test + typecheck + lint**. `test` runs **two project layers** — unit
 `.spec` specs (simulated DOM) **and** the `storybook` browser project (every story rendered in a
 real browser via `@storybook/addon-vitest` + axe). A story that throws/regresses, or an axe violation,
-fails the gate. Lint/typecheck don't see pixels → eyeball via a story screenshot / `preview-stories`.
+fails the gate. Lint/typecheck don't see pixels → eyeball via a story screenshot / `stories-preview`.
 Unit class-assertions don't see compiled CSS either — a utility that compiles to an unexpected value
 still passes; if a sizing/spacing value looks off, grep the compiled CSS to confirm.
