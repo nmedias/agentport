@@ -1,7 +1,7 @@
 import { Band, FoundationsPage, Group } from './foundations-kit';
 
 /*
-  Foundations / Reference — the raw values the semantic tokens alias, in the four
+  Foundations / Reference — the raw values behind the semantic layer, in the four
   groups of the Figma `reference` collection: Color (§1), Dimension (§2/§3), Font
   (§4) and Effect (§5). This is the one page where the reference vars ARE the
   subject, so specimens read them directly via var(--ap-<path>).
@@ -273,11 +273,11 @@ export function Reference() {
     <FoundationsPage
       eyebrow="Foundations · Reference"
       title="Reference"
-      intro="The raw values every semantic token points at, in the four groups of the Figma reference collection. They live in :root only and are not bridged into Tailwind — there is no bg-signal-400; build against the semantic layer instead."
+      intro="The raw values behind the semantic layer, in the four groups of the Figma reference collection. They live in :root only and are not bridged into Tailwind — there is no bg-signal-400; build against the semantic layer instead."
     >
       <Band
         name="Color"
-        note="Seven OKLCH ramps plus base/white and one opacity value. A semantic token names a step here, never a hex."
+        note="Seven OKLCH ramps plus base/white and one opacity value."
       >
         <Group name="base · white">
           <div className="grid gap-md [grid-template-columns:repeat(auto-fill,minmax(4.5rem,1fr))]">

@@ -4,7 +4,7 @@ import * as React from 'react';
   Foundations — shared specimen kit.
 
   Renders DS tokens live, each labelled by its real token name / utility classes /
-  value / role (all from tokens-reference.md — not invented).
+  reference token + value / role (all from tokens-reference.md — not invented).
   Token discipline:
   components use SEMANTIC tokens only; `primary` and `ink` are TEXT/STROKE tokens
   (no bg- frame fills). Geometry stays numeric.
@@ -61,7 +61,10 @@ export function Eyebrow({
   );
 }
 
-// A token group: eyebrow + optional note + its specimen rows.
+// A token group: heading + optional note + its specimen rows. The heading is a
+// real step in the ladder (page display > Band heading > Group heading-sm >
+// whatever a page titles inside a group) — not an eyebrow: on the Colour page
+// these names carry the whole structure.
 export function Group({
   name,
   note,
@@ -74,7 +77,10 @@ export function Group({
   return (
     <section className="flex flex-col gap-xl">
       <div className="flex flex-col gap-sm">
-        <Eyebrow>{name}</Eyebrow>
+        <h3 className="flex items-center gap-md text-format-heading-sm text-ink">
+          <span aria-hidden className="h-px w-6 bg-border-strong" />
+          {name}
+        </h3>
         {note && (
           <p className="max-w-[48rem] text-format-body text-ink text-pretty">
             {note}
@@ -101,7 +107,7 @@ export function Band({
   return (
     <section className="flex flex-col gap-2xl border-t border-border-emphasis pt-2xl">
       <div className="flex flex-col gap-sm">
-        <h2 className="text-format-heading-sm text-ink">{name}</h2>
+        <h2 className="text-format-heading text-ink">{name}</h2>
         {note && (
           <p className="max-w-[48rem] text-format-body text-ink text-pretty">
             {note}
@@ -128,16 +134,18 @@ export function Row({ children }: { children: React.ReactNode }) {
 // ── Token meta line ──────────────────────────────────────────────────────────
 
 // The shared label block under every specimen: the token NAME (mono, ink), the
-// possible utility CLASSES (mono, muted), the raw value, then the role. Which
-// reference token a semantic aliases lives in tokens-reference.md, not here.
+// possible utility CLASSES (mono, muted), the reference token it resolves to +
+// the raw value, then the role.
 function TokenMeta({
   token,
   utilities,
+  primitive,
   value,
   role,
 }: {
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role?: string;
 }) {
@@ -145,7 +153,9 @@ function TokenMeta({
     <div className="flex flex-col gap-2xs">
       <span className="text-format-data-sm text-ink">{token}</span>
       <span className="text-format-data-sm text-muted">{utilities}</span>
-      <span className="text-format-data-sm text-muted/60">{value}</span>
+      <span className="text-format-data-sm text-muted/60">
+        {primitive} · {value}
+      </span>
       {role && (
         <span className="mt-2xs text-format-body text-ink text-pretty">
           {role}
@@ -162,6 +172,7 @@ export function FillSwatch({
   bg,
   token,
   utilities,
+  primitive,
   value,
   role,
   border = false,
@@ -169,6 +180,7 @@ export function FillSwatch({
   bg: string;
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role: string;
   border?: boolean;
@@ -181,6 +193,7 @@ export function FillSwatch({
       <TokenMeta
         token={token}
         utilities={utilities}
+        primitive={primitive}
         value={value}
         role={role}
       />
@@ -193,6 +206,7 @@ export function TextSwatch({
   text,
   token,
   utilities,
+  primitive,
   value,
   role,
   onFill,
@@ -200,6 +214,7 @@ export function TextSwatch({
   text: string;
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role: string;
   // when the ink belongs ON a dark fill, preview it on that fill
@@ -217,6 +232,7 @@ export function TextSwatch({
       <TokenMeta
         token={token}
         utilities={utilities}
+        primitive={primitive}
         value={value}
         role={role}
       />
@@ -229,12 +245,14 @@ export function BorderSwatch({
   border,
   token,
   utilities,
+  primitive,
   value,
   role,
 }: {
   border: string;
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role: string;
 }) {
@@ -246,6 +264,7 @@ export function BorderSwatch({
       <TokenMeta
         token={token}
         utilities={utilities}
+        primitive={primitive}
         value={value}
         role={role}
       />
@@ -258,12 +277,14 @@ export function RingSwatch({
   ring,
   token,
   utilities,
+  primitive,
   value,
   role,
 }: {
   ring: string;
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role: string;
 }) {
@@ -279,6 +300,7 @@ export function RingSwatch({
       <TokenMeta
         token={token}
         utilities={utilities}
+        primitive={primitive}
         value={value}
         role={role}
       />
@@ -290,11 +312,13 @@ export function RingSwatch({
 export function ScrimSwatch({
   token,
   utilities,
+  primitive,
   value,
   role,
 }: {
   token: string;
   utilities: string;
+  primitive: string;
   value: string;
   role: string;
 }) {
@@ -309,6 +333,7 @@ export function ScrimSwatch({
       <TokenMeta
         token={token}
         utilities={utilities}
+        primitive={primitive}
         value={value}
         role={role}
       />
