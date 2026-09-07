@@ -2,9 +2,10 @@ import { FoundationsPage, Group } from './foundations-kit';
 
 /*
   Foundations / Spacing & Radius — the dimension scales (tokens-reference §2/§3).
-  Spacing: one t-shirt scale on a 4px base, feeding gap/padding/margin via named
-  utilities (numeric utilities also valid). Radius: the corner-* vocabulary; all
-  rounded-* are dead. Live samples read from the real semantic vars / utilities.
+  Live samples read the real semantic vars / utilities. The `role` texts are the
+  canonical `use` sentences from tokens-reference; the Spacing group note is the
+  `figma_suffix` that is appended to every Space/* description in Figma — both
+  are contract text, do not paraphrase.
 */
 
 const SPACING = [
@@ -34,11 +35,11 @@ export function SpacingRadius() {
     <FoundationsPage
       eyebrow="Foundations · Dimension"
       title="Spacing & Radius"
-      intro="One spacing scale serves gap, padding, and margin — t-shirt steps on a 4px base, applied via named utilities like gap-md / p-xl (numeric utilities such as p-4 stay valid for geometry). Radius is the corner-* vocabulary; the stock rounded-* utilities are dead. Pick a step by the size you need."
+      intro="One 4px-based scale serves gap, padding and margin; radius is the corner-* vocabulary. Pick the step by the distance or size you need, not by the element it sits on."
     >
       <Group
         name="Spacing"
-        note="gap-{step} · p{side}-{step} · m{side}-{step}. One scale for gap, padding and margin — pick the step by the distance needed. The bar width reads the real --ap-sys-space-{step} token."
+        note="gap-{step} · p{side}-{step} · m{side}-{step}. One scale for gap, padding and margin — pick the step by the distance needed."
       >
         <div className="flex flex-col gap-lg">
           {SPACING.map(({ step, px, role }) => (

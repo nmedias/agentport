@@ -16,7 +16,7 @@ any UI artifact for what the DS already covers and composing the screen out of i
 libs/ui/                     @agentport/ui — the library
   src/components/ui/<name>/  one folder per component: <name>.tsx + .stories.tsx + .spec.tsx + index.ts
   src/blocks/                blocks layer (organisms composed from primitives) — structure only, nothing ported yet
-  src/docs/                  Storybook Introduction + Foundations pages (Primitives, Colors, Typography, Spacing, Effects)
+  src/docs/                  Storybook Introduction + Foundations pages (Architecture, Colour, Typography, Spacing & Radius, Shadows, Reference)
   src/styles/                globals.css → tokens.css (Figma export) + tw-theme.css / tw-utilities.css / tw-variants.css
   .storybook/                Storybook 10 (react-vite) + addon-vitest + addon-a11y + addon-mcp
 agent-runs/component-port/   run notes per first-time port (date-component)

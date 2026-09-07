@@ -1,18 +1,17 @@
 import { FoundationsPage, Group } from './foundations-kit';
 
 /*
-  Foundations / Effects — the two DS shadows (tokens-reference §5). Glow is the
-  focus / active halo on small emphasised shapes (signal/400 @ 50%); elevation is
-  the drop shadow of floating surfaces (neutral/900 @ 18%). The system is otherwise flat: depth is implied,
-  not stacked — all stock shadow-xs/sm/md/lg are dead.
+  Foundations / Shadows — the two DS shadows (tokens-reference §5). The role
+  texts below are the canonical `use` sentences from tokens-reference; the
+  reference-layer parts they compose are on the Reference page.
 */
 
-export function Effects() {
+export function Shadows() {
   return (
     <FoundationsPage
-      eyebrow="Foundations · Effects"
-      title="Effects"
-      intro="Two shadows, each a single utility. Depth is implied, not stacked — the system is otherwise flat, and the stock shadow-xs/sm/md/lg utilities are dead. Use glow only as the focus / active halo on small emphasised shapes; use elevation only on surfaces floating above the layout."
+      eyebrow="Foundations · Shadows"
+      title="Shadows"
+      intro="Two shadows, one utility each — the system is otherwise flat, and depth is implied rather than stacked."
     >
       <Group name="Shadows">
         <div className="grid gap-2xl sm:grid-cols-2">
@@ -57,4 +56,4 @@ export function Effects() {
   );
 }
 
-export default Effects;
+export default Shadows;

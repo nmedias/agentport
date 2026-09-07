@@ -20,7 +20,7 @@ import { FIGMA_LIBRARY_URL, FigmaMark } from '../FigmaMark';
   sanctioned, isolated exception (authorised). Geometry stays numeric.
 */
 
-// ── Primitives ───────────────────────────────────────────────────────────────
+// ── Building blocks ──────────────────────────────────────────────────────────
 
 // Mono micro-label that opens each section — the DS eyebrow format. The leading
 // tick is a stroke/border line, not an area fill.
@@ -214,14 +214,28 @@ function Hero() {
 // ── Foundations pointer ──────────────────────────────────────────────────────
 
 const FOUNDATIONS: { label: string; id: string; note: string }[] = [
-  { label: 'Colour', id: 'foundations-colors--docs', note: 'Semantic tokens' },
-  { label: 'Typography', id: 'foundations-typography--docs', note: '12 formats' },
+  {
+    label: 'Architecture',
+    id: 'foundations-architecture--docs',
+    note: 'Three levels',
+  },
+  { label: 'Colour', id: 'foundations-colour--docs', note: 'Semantic tokens' },
+  { label: 'Typography', id: 'foundations-typography--docs', note: '14 formats' },
   {
     label: 'Spacing & Radius',
     id: 'foundations-spacing-radius--docs',
-    note: 'Dimension scales',
+    note: 'Space + corner',
   },
-  { label: 'Effects', id: 'foundations-effects--docs', note: 'Shadows' },
+  {
+    label: 'Shadows',
+    id: 'foundations-shadows--docs',
+    note: 'Glow + elevation',
+  },
+  {
+    label: 'Reference',
+    id: 'foundations-reference--docs',
+    note: 'The raw scales',
+  },
 ];
 
 function FoundationsPointer() {
@@ -230,9 +244,9 @@ function FoundationsPointer() {
       id="foundations"
       eyebrow="Foundations"
       title="The token layer"
-      lead="Colour, typography, dimension, and effects are documented as live, complete reference pages — every token rendered from its real utility and labelled by name, value, and role."
+      lead="Every token is documented on a live page, rendered from the real utility and labelled by name, value, and role. Architecture first — it holds the rules the other pages assume."
     >
-      <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-md sm:grid-cols-2 lg:grid-cols-3">
         {FOUNDATIONS.map((f) => (
           <a
             key={f.id}

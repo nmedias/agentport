@@ -14,7 +14,14 @@ const preview: Preview = {
         order: [
           'Introduction',
           'Foundations',
-          ['Primitives', 'Colors', 'Typography', 'Spacing & Radius', 'Effects'],
+          [
+            'Architecture',
+            'Colour',
+            'Typography',
+            'Spacing & Radius',
+            'Shadows',
+            'Reference',
+          ],
           'UI',
           'UI Blocks',
           '*',

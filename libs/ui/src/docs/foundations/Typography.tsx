@@ -3,8 +3,8 @@ import { FoundationsPage, Group, TypeSpecimen } from './foundations-kit';
 /*
   Foundations / Typography — all 14 composition formats (tokens-reference.md §4).
   Each is a single `text-format-*` utility composing family + size + weight +
-  line-height + tracking; the raw text-/font- utilities are dead. Specimen +
-  the 5 part values + role — the same sentence that sits on the Figma text style.
+  line-height + tracking. The `role` text is the canonical `use` sentence from
+  tokens-reference — the same string sits on the Figma text style.
 */
 
 const FORMATS = [
@@ -155,12 +155,9 @@ export function Typography() {
     <FoundationsPage
       eyebrow="Foundations · Typography"
       title="Typography"
-      intro="Two families — Hanken Grotesk (sans) for prose and headings, Geist Mono (mono) for eyebrows, data, keys, and command input. Sizes follow a 1.25 modular scale off a 14px body base. Each format is ONE composition utility (text-format-*) that sets family, size, weight, line-height, and tracking together; the raw text-/font- utilities are intentionally dead. Hierarchy comes from weight and scale, not colour."
+      intro="Two families: Hanken Grotesk for prose and headings, Geist Mono for eyebrows, data, keys and command input. Each format is one utility that sets family, size, weight, line-height and tracking together — never combine it with raw text- or font- classes."
     >
-      <Group
-        name="The format ladder"
-        note="Fourteen formats, each a single text-format-* utility. The five part values are shown beside every specimen."
-      >
+      <Group name="The format ladder">
         <div className="flex flex-col">
           {FORMATS.map((f) => (
             <TypeSpecimen key={f.format} {...f} />
