@@ -73,7 +73,7 @@ export function Colour() {
               utilities="bg-muted-fill"
               primitive="neutral/25"
               value="#f9fcfd"
-              role="Low-emphasis surface that recedes behind content — footer strips, row hover, quiet variants of a control. Content panels use card-fill instead."
+              role="Low-emphasis surface that recedes behind content — quiet strips, row hover, quiet variants of a control. Content panels use card-fill instead."
               border
             />
             <TextSwatch
@@ -122,7 +122,7 @@ export function Colour() {
               utilities="text-primary-ink"
               primitive="signal/100"
               value="#a4e5ff"
-              role="Text / icon on primary-fill only."
+              role="Text, icon or marker on primary-fill only (the marker inside a control, e.g. a radio dot)."
               onFill="bg-primary-fill"
             />
           </Row>
@@ -179,7 +179,7 @@ export function Colour() {
               utilities="bg-destructive · text-destructive · border-destructive · ring-destructive"
               primitive="error/600"
               value="#b01207"
-              role="Colour of irreversible actions and errors — delete buttons, invalid-field borders, error text, its focus ring. One token for fill, text and stroke. Not for warnings (no token yet). Pairs with destructive-ink when used as a surface."
+              role="Colour of irreversible actions and errors — delete buttons, invalid-field borders, error text, its focus ring. One token for fill, text and stroke. Not for warnings. Pairs with destructive-ink when used as a surface."
             />
             <TextSwatch
               text="text-destructive-ink"
@@ -187,7 +187,7 @@ export function Colour() {
               utilities="text-destructive-ink · border-destructive-ink"
               primitive="error/50"
               value="#ffe3d9"
-              role="Text / icon / edge on a destructive surface only."
+              role="Text, icon, edge or marker on a destructive surface only (e.g. the dot of an invalid radio)."
               onFill="bg-destructive"
             />
           </Row>
@@ -305,7 +305,7 @@ export function Colour() {
               utilities="bg-scrim"
               primitive="neutral/900 × opacity/10"
               value="#0d1016 @ 10%"
-              role="Colour of the backdrop that dims the page behind a modal dialog. Full-alpha alias; the strength comes from scrim-opacity on the overlay layer (CSS composes both via color-mix)."
+              role="Colour of the backdrop that dims the page behind a modal dialog. The strength is already composed in — never add an opacity modifier on top of bg-scrim."
             />
           </Row>
         </Rows>
@@ -320,7 +320,7 @@ export function Colour() {
               utilities="bg-inverse-fill"
               primitive="deep/950"
               value="#00121c"
-              role="Dark functional surface — icon rail, keyboard badges, dark chips. Not for brand moments (use brand-fill). Pairs with inverse-ink."
+              role="Dark functional surface — a navigation rail, keycaps, dark chips. Not for brand moments (use brand-fill). Pairs with inverse-ink."
             />
             <TextSwatch
               text="text-inverse-ink"
@@ -358,7 +358,7 @@ export function Colour() {
               utilities="bg-inverse-container-low"
               primitive="deep/900 @20%"
               value="#0d253133"
-              role="Idle / inactive inner panel on inverse-fill — deep/900 at 20 %."
+              role="Idle / inactive inner panel on inverse-fill."
             />
             <FillSwatch
               bg="bg-inverse-container"
@@ -366,7 +366,7 @@ export function Colour() {
               utilities="bg-inverse-container"
               primitive="deep/900 @30%"
               value="#0d25314d"
-              role="Resting inner panel on inverse-fill (card in the rail) — deep/900 at 30 %."
+              role="Resting inner panel on inverse-fill (card in the rail)."
             />
           </Row>
           <Row>
@@ -376,7 +376,7 @@ export function Colour() {
               utilities="bg-inverse-container-hover"
               primitive="deep/900 @70%"
               value="#0d2531b2"
-              role="Hovered / active inner panel on inverse-fill — deep/900 at 70 %."
+              role="Hovered / active inner panel on inverse-fill."
             />
           </Row>
         </Rows>
@@ -399,7 +399,7 @@ export function Colour() {
               utilities="text-brand-ink · bg-brand-ink (shape)"
               primitive="signal/400"
               value="#009fe3"
-              role="Signal-blue text, icon or marker on brand-fill only — the one place the full brand hue (signal/400) is used. On light surfaces use primary. Shape fill only — no frame fill."
+              role="Signal-blue text, icon or marker on brand-fill only. On light surfaces use primary. Shape fill only — no frame fill."
               onFill="bg-brand-fill"
             />
           </Row>

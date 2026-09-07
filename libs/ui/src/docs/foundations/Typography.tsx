@@ -186,7 +186,7 @@ const FORMATS = [
     weight: '500 medium',
     lineHeight: 'normal',
     tracking: '0.5px',
-    role: 'Micro mono value — meta, slugs, counters.',
+    role: 'Micro mono value — meta, slugs, counters. Same parts as eyebrow, which is the uppercase counterpart.',
     ref: {
       family: 'family/mono',
       size: 'size/step-neg2',

@@ -11,6 +11,36 @@ until 2026-08-31).
 
 ---
 
+## 2026-09-07 — Descriptions carry what a user needs, notes what an implementer needs
+
+The foundations rework surfaced a split that had drifted: five tokens kept an actionable rule in
+their `note` — invisible in Storybook, where only `use` is shown — while their `use` carried
+composition mechanics instead. Reversed for those five: `primary-ink` and `destructive-ink` now name
+the marker use (radio dot) that only their scope note mentioned; `scrim` states the rule that matters
+("never add an opacity modifier on top of `bg-scrim`") instead of how CSS composes it; `scrim-opacity`
+says it has no utility of its own; `data-sm` names `eyebrow` as its uppercase counterpart. Their notes
+are gone or reduced to the Figma facts. `destructive` lost a note that only repeated its `use`.
+
+Trimmed at the same time: `brand-ink` dropped the justification "the one place the full brand hue
+(signal/400) is used" (a rationale naming a primitive), `destructive` dropped the roadmap parenthesis
+"(no token yet)", and the three `inverse-container*` sentences dropped the "— deep/900 at NN %" tail
+that the foundations pages now print above the role anyway. `primary` and `ring` were reviewed for the
+same treatment and left alone — every clause in them carries a boundary or a build instruction.
+
+Two sentences lost screen-specific examples (`muted-fill` "footer strips", `inverse-fill` "icon rail").
+The rule they were measured against was softened in the same pass: a `use` leads with the abstract role
+and *may* illustrate with generic UI vocabulary — the blanket ban on component names was stricter than
+the practice that had proven itself over the ports.
+
+`corner-none` became a token entry. It had a role sentence in Storybook but no record here, the only
+rendered sentence in the system without a canonical source. Static utility, no Figma variable, no CSS var.
+
+Thirteen sentences changed; eleven of them need the Figma variable description pulled through
+(`corner-none` and `scrim-opacity` have no swatch / no description to push). `tools/check-use-parity.mjs`
+now covers all 82 rendered sentences.
+
+---
+
 ## 2026-09-04 — `ring` describes the focus border
 
 The `use` sentence of `ring` said "Not a border and not a selection edge". Figma draws the focused

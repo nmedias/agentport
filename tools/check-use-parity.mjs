@@ -55,7 +55,7 @@ for (const m of sr.matchAll(/\{ step: '([0-9a-z]+)', px: '\d+', role: '([^']+)' 
   pairs.push([`space-${m[1]}`, m[2]]);
 }
 for (const m of sr.matchAll(/\{ step: '(corner-[a-z]+)'[^}]*?role: '([^']+)' \}/g)) {
-  if (m[1] !== 'corner-none') pairs.push([m[1], m[2]]); // corner-none is a static utility, not a token
+  pairs.push([m[1], m[2]]);
 }
 
 // Typography — format records
