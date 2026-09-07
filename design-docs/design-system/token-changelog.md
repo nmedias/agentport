@@ -30,7 +30,10 @@ that one was legitimate). `corner-none` is recorded as CORNER_RADIUS with no Fig
 block-level `figma_scope:` lines in the corner / space utility blocks were removed as duplicates of the
 new field.
 
-`primary-fill` keeps STROKE_COLOR, now with the intent written down rather than left implicit. It was
+`primary-fill` was rewritten in the same pass: it is named as the **primary surface** of the main
+action rather than by its darkness, and the enumeration of checked / on control states (check box,
+radio dot, switch track, filled range) is gone — an application list, narrower than the role. It keeps
+STROKE_COLOR, now with the intent written down rather than left implicit. It was
 briefly narrowed in this pass, until the utilities/scopes cross-check showed `border-primary-fill` in
 use — the edge of a filled area taking the fill's own colour so the shape reads as one form, not as a
 fill sitting inside a lighter outline. That is a property of filled areas in general, not of check
