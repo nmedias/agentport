@@ -835,14 +835,6 @@ export function Workflow() {
             head={['Artefact', 'Scope', 'Verify']}
             rows={ARTEFACTS}
           />
-          <Prose>
-            <p>
-              What does not agree is in the catalog: 7 components with one open
-              Figma-to-code deviation each, among them the unbound Button focus
-              colour and a SelectTrigger placeholder bound to the wrong token,
-              plus one entry at file level.
-            </p>
-          </Prose>
         </Section>
 
         {/* 3 */}
