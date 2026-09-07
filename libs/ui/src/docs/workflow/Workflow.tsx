@@ -796,7 +796,7 @@ export function Workflow() {
             changelogs, the Claude Code prompt history, the session transcripts
             of the last ten days and a self-analysis from July 8.
             Every number that comes from the repo names the command or file it
-            was counted from. What cannot be verified is marked as an estimate.
+            was counted from.
           </p>
         </div>
       </header>
