@@ -96,7 +96,8 @@ function Section({
 // structure, not decoration) — both use a token colour at low alpha. Cyan is the
 // one accent (signal/400 via the authorised primitive); the wordmark is white.
 
-// An L-shaped corner crop-mark built from two borders on a corner.
+// An L-shaped corner crop-mark built from two borders on a corner. Hidden below
+// `md` — on narrow screens the marks collide with the copy instead of framing it.
 function CropMark({
   className,
   accent = false,
@@ -107,7 +108,7 @@ function CropMark({
   return (
     <span
       aria-hidden
-      className={`absolute h-7 w-7 ${className} ${
+      className={`absolute hidden h-7 w-7 md:block ${className} ${
         accent
           ? 'border-brand-ink'
           : 'border-inverse-ink/25'
