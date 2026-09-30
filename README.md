@@ -113,6 +113,11 @@ The split is the read-only boundary: coverage never writes, compose never decide
 audit cannot map becomes a named gap in the report rather than something quietly hand-drawn in the
 file — so a screen built this way doubles as a measurement of the system.
 
+The code-side counterpart is `/ds-usage`: when an agent builds UI that consumes `@agentport/ui`, it
+maps each need to a DS entry by its purpose in the component reference, copies that entry's story
+composition, and styles only from the token reference. What it cannot map is named as a gap, the
+same rule as above.
+
 Each run leaves a `notes.md` (and often a `skill-feedback.md`) under `agent-runs/`; the catalog
 `design-docs/design-system/components-reference.md` records where every component lives in
 Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
@@ -129,6 +134,7 @@ Figma (set/node IDs, variant axes) and in code (folder, exports, barrel).
 | `/figma-create-section`   | Canonical Section wrapper on a Figma page (used by the port skill)                   |
 | `/figma-coverage`         | Audit any UI artifact against the DS: part inventory, mapping, gaps → one report     |
 | `/figma-compose`          | Build a screen from that mapping — existing instances and bound tokens only          |
+| `/ds-usage`               | Build UI in code from `@agentport/ui`: need → DS entry by purpose → its stories      |
 | `/figma-verify`           | Deterministic pre-handoff check (icons are vectors, no clipping/overlap)             |
 | `/figma-status`           | Check Figma Desktop + Plugin MCP connection                                          |
 | `/skill-feedback`         | Toggle before a run to capture skill-improvement findings into the run notes         |
@@ -198,6 +204,7 @@ Plain-language requests trigger the same skills when they match the skill descri
 | Find out what of a screen the DS already covers            | `/figma-coverage <figma-url-or-file>`                                                             |
 | Same, in prose                                             | `Audit this mockup against the DS — what exists, what is missing, what needs extending?`          |
 | Rebuild an audited screen in Figma from the system         | `/figma-compose` with the coverage report as the mapping                                          |
+| Build a screen in code from the DS                         | `Build a notification-settings section from @agentport/ui.` (triggers `/ds-usage`)                |
 | Check the Figma link                                       | `/figma-status`                                                                                   |
 | Freeze the session for later                               | `/handoff popover-port en`                                                                        |
 

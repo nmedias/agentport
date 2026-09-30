@@ -140,6 +140,7 @@ Project-local under `.claude/skills/` (writing rules: `.claude/skills/CLAUDE.md`
 - `/component-sync` — reconcile a built component after a Figma change (Figma → code).
 - `/docgen-props` — annotate a component so react-docgen exposes its prop API.
 - `/storybook-rules` — author/update a component's `.stories.tsx` to the house pattern.
+- `/ds-usage` — build UI that consumes `@agentport/ui`: map each need to a DS entry by purpose, then copy its stories.
 - `/figma-build-rules`, `/figma-create-section`, `/figma-verify`, `/figma-status` — Figma build craft + checks.
 - `/skill-feedback [on|off]` — capture skill-improvement findings during a run.
 - `/handoff` — freeze the session into a resume doc.
